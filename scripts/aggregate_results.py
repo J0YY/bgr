@@ -52,6 +52,8 @@ METRICS = [
 
 ESTIMATOR_RUN = "estimator_full_v1"
 ABLATION_RUN = "grid_margin_ablation_v1"
+OPENVLA_RECOVERY_RUN = "libero_openvla_recovery_v1"
+OPENVLA_SELECTION_RUN = "libero_openvla_boundary_selection_v1"
 
 
 def main() -> None:
@@ -113,6 +115,13 @@ def main() -> None:
     if ablation_rows:
         write_csv(out_dir / "grid_margin_ablation_stats.csv", ablation_rows)
         write_ablation_table(out_dir / "grid_margin_ablation_table.tex", ablation_rows)
+    openvla_rows = load_openvla(
+        results_dir / OPENVLA_RECOVERY_RUN / "summary.csv",
+        results_dir / OPENVLA_SELECTION_RUN / "aggregate.csv",
+    )
+    if openvla_rows:
+        write_csv(out_dir / "openvla_stats.csv", openvla_rows)
+        write_openvla_table(out_dir / "openvla_table.tex", openvla_rows)
     try:
         make_figures(out_dir, summary_rows)
         if estimator_rows:
@@ -241,6 +250,62 @@ def write_ablation_table(path: Path, rows: list[dict]) -> None:
                 f"{float(row['rauc_mean']):.3f}$\\pm${float(row['rauc_sem']):.3f} & "
                 f"{float(row['r80_mean']):.3f}$\\pm${float(row['r80_sem']):.3f} & "
                 f"{float(row['aulc_mean']):.3f}$\\pm${float(row['aulc_sem']):.3f} \\\\\n"
+            )
+        handle.write("\\hline\n")
+        handle.write("\\end{tabular}\n")
+
+
+def load_openvla(recovery_path: Path, selection_path: Path) -> list[dict[str, str | float | int]]:
+    rows: list[dict[str, str | float | int]] = []
+    if recovery_path.exists():
+        recovery_rows = list(csv.DictReader(recovery_path.open("r", encoding="utf-8")))
+        for family in ["occlusion", "blur", "shift", "brightness"]:
+            items = [row for row in recovery_rows if row["family"] == family]
+            if not items:
+                continue
+            item = items[0]
+            rows.append(
+                {
+                    "audit": "Recovery",
+                    "name": family.title(),
+                    "metric_a": float(item["clean_mean"]),
+                    "metric_b": float(item["rauc_mean"]),
+                    "metric_c": float(item["r80_mean"]),
+                    "n": int(float(item["num_states"])),
+                }
+            )
+    if selection_path.exists():
+        selection_rows = list(csv.DictReader(selection_path.open("r", encoding="utf-8")))
+        display = {"proposal_guided": "Proposal-guided", "random_balanced": "Random-balanced"}
+        for method in ["proposal_guided", "random_balanced"]:
+            items = [row for row in selection_rows if row["method"] == method]
+            if not items:
+                continue
+            item = items[0]
+            rows.append(
+                {
+                    "audit": "Selection",
+                    "name": display[method],
+                    "metric_a": float(item["mean_observed_cf_rate"]),
+                    "metric_b": float(item["boundary_hit_rate"]),
+                    "metric_c": float(item["mean_abs_distance_to_half"]),
+                    "n": int(float(item["runs"])),
+                }
+            )
+    return rows
+
+
+def write_openvla_table(path: Path, rows: list[dict]) -> None:
+    with path.open("w", encoding="utf-8") as handle:
+        handle.write("\\begin{tabular}{llcccc}\n")
+        handle.write("\\hline\n")
+        handle.write("Audit & Family/Method & Clean/CF & RAUC/Hit & $r_{80}$/Dist & $n$ \\\\\n")
+        handle.write("\\hline\n")
+        for row in rows:
+            handle.write(
+                f"{row['audit']} & {row['name']} & "
+                f"{float(row['metric_a']):.3f} & {float(row['metric_b']):.3f} & "
+                f"{float(row['metric_c']):.3f} & {int(row['n'])} \\\\\n"
             )
         handle.write("\\hline\n")
         handle.write("\\end{tabular}\n")
