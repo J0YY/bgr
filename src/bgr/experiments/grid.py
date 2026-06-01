@@ -196,15 +196,32 @@ def _sample_training_pair(
     if method == "fixed":
         return int(rng.integers(len(records))), float(exp.get("fixed_radius", 0.75))
     if method == "failure_only":
-        candidates = rng.choice(len(records), size=min(32, len(records)), replace=False)
+        candidates = rng.choice(
+            len(records),
+            size=min(int(exp.get("baseline_candidates", 32)), len(records)),
+            replace=False,
+        )
         scores = []
         sigmas = rng.uniform(0.0, 1.0, size=len(candidates))
         for idx, sigma in zip(candidates, sigmas, strict=True):
-            scores.append(1.0 - _quick_success_rate(bench, int(idx), float(sigma), rng))
+            scores.append(
+                1.0
+                - _quick_success_rate(
+                    bench,
+                    int(idx),
+                    float(sigma),
+                    rng,
+                    trials=int(exp.get("failure_probe_trials", 3)),
+                )
+            )
         selected = int(np.argmax(scores))
         return int(candidates[selected]), float(sigmas[selected])
     if method == "plr_loss":
-        candidates = rng.choice(len(records), size=min(32, len(records)), replace=False)
+        candidates = rng.choice(
+            len(records),
+            size=min(int(exp.get("baseline_candidates", 32)), len(records)),
+            replace=False,
+        )
         sigmas = rng.uniform(0.0, 1.0, size=len(candidates))
         scores = [bench.loss_proxy(int(idx), float(sigma), rng) for idx, sigma in zip(candidates, sigmas, strict=True)]
         selected = int(np.argmax(scores))

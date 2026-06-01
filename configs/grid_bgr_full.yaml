@@ -17,6 +17,8 @@ experiment:
   learning_rate: 1.0
   fixed_radius: 0.75
   target_margin: 0.45
+  baseline_candidates: 32
+  failure_probe_trials: 3
 bgr:
   initial_probes: [0.0, 0.25, 0.5, 0.75, 1.0]
   refresh_per_eval: 64
