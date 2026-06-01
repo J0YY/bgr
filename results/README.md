@@ -502,6 +502,67 @@ and language. This verifies that the BGR-rendered examples can enter the
 unmodified OpenVLA-OFT RLDS loader; the remaining gap is scaling the render to a
 training-sized dataset and running LoRA fine-tuning/evaluation.
 
+### `openvla_teacher_oft_balanced64_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:40:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_balanced64_v1 --max-examples 64 --selection balanced_episodes --episodes-per-family 1 --max-steps-per-episode 16 --num-steps-wait 10 --env-image-size 256 --image-size 224
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780325448_898879565.out
+```
+
+Interpretation: this scales the renderer from four isolated smoke frames to
+four contiguous 16-step replay episodes, one per visual perturbation family.
+Each rendered row contains primary RGB, wrist RGB, 8D LIBERO state, 7D teacher
+action, and language.
+
+### `openvla_oft_pack_balanced64_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples runs/openvla_teacher_oft_balanced64_v1/examples.jsonl --out runs/openvla_oft_pack_balanced64_v1 --write-hdf5
+```
+
+Remote logs:
+
+```text
+/work/joy/bgr/logs/run_1780325655_972521234.out
+/work/joy/bgr/logs/run_1780325709_771885875.out
+```
+
+Interpretation: the balanced rendered rows pack into four HDF5 demos with
+`actions (16,7)`, `obs/agentview_rgb (16,224,224,3)`, wrist RGB, EEF states,
+and gripper states. This verifies episode-safe grouping for multi-step
+candidate replays.
+
+### `openvla_oft_tfds_libero_goal_balanced64_v1`
+
+Commands:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:20:00 /work/joy/bgr /work/joy/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples runs/openvla_teacher_oft_balanced64_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_balanced64_v1 --dataset-name libero_goal_no_noops --version 1.0.0
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 12G --time 00:15:00 /work/joy/bgr env PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python -c "from pathlib import Path; import tensorflow_datasets as tfds; from prismatic.vla.datasets.rlds.oxe.materialize import make_oxe_dataset_kwargs; from prismatic.vla.datasets.rlds.dataset import make_dataset_from_rlds; kw=make_oxe_dataset_kwargs('libero_goal_no_noops', Path('/work/joy/bgr/runs/openvla_oft_tfds_libero_goal_balanced64_v1'), load_camera_views=('primary','wrist'), load_proprio=True, load_language=True); ds, stats=make_dataset_from_rlds(train=True, shuffle=False, **kw); ex=next(iter(tfds.as_numpy(ds))); print('keys', sorted(ex.keys())); print('obs', {k:v.shape for k,v in ex['observation'].items()}); print('task', ex['task']['language_instruction'][0].decode()); print('action', ex['action'].shape); print('stats_action_mean', stats['action']['mean'].shape); print('stats_proprio_mean', stats['proprio']['mean'].shape)"
+```
+
+Remote logs:
+
+```text
+/work/joy/bgr/logs/run_1780325681_170623263.out
+/work/joy/bgr/logs/run_1780325731_654888892.out
+```
+
+Interpretation: this exports the 64-step balanced set under
+`libero_goal_no_noops` and validates it through OpenVLA-OFT's unmodified RLDS
+loader. The loader computes dataset statistics and yields trajectory chunks with
+primary/wrist image fields, proprio `(16,8)`, action `(16,7)`, and language.
+The remaining gap is now training-sized scale and LoRA fine-tuning/evaluation.
+
 ### `suffix_strategy_v1`
 
 Command:

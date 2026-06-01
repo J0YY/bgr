@@ -1,0 +1,7 @@
+{
+  "image_size": 224,
+  "manifest": "results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl",
+  "note": "PNG/NPZ action smoke set for the teacher-replay to RLDS path.",
+  "rendered_examples": 64,
+  "requested_examples": 64
+}
