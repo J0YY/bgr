@@ -456,6 +456,28 @@ with `actions`, `obs/agentview_rgb`, `obs/eye_in_hand_rgb`, `obs/ee_states`,
 and `obs/gripper_states`. This is the next bridge artifact toward RLDS
 conversion, not a completed RLDS dataset or fine-tuning run.
 
+### `openvla_oft_tfds_smoke_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:20:00 /work/joy/bgr /work/joy/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples results/openvla_teacher_oft_smoke_v1/examples.jsonl --out runs/openvla_oft_tfds_smoke_v1 --dataset-name bgr_libero_oft_smoke --version 1.0.0
+```
+
+Remote logs:
+
+```text
+/work/joy/bgr/logs/run_1780323827_280717056.out
+/work/joy/bgr/logs/run_1780323900_674014804.out
+```
+
+Interpretation: this exports the rendered OFT-field examples as a minimal
+RLDS-style TFDS dataset and verifies readback with `tfds.builder_from_directory`.
+The checked-in smoke dataset has four train episodes and four total steps, one
+per perturbation family, with primary RGB, wrist RGB, 8D state, 7D action, and
+language fields. This closes the smoke-tested TFDS conversion path, but it is
+not yet a full OpenVLA-OFT fine-tuning run.
+
 ### `suffix_strategy_v1`
 
 Command:
