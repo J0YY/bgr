@@ -1,0 +1,67 @@
+{
+  "commands": {
+    "free_h": {
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "total        used        free      shared  buff/cache   available\nMem:           503Gi        24Gi        85Gi        32Mi       393Gi       473Gi\nSwap:           15Gi       9.0Mi        15Gi"
+    },
+    "lscpu": {
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           43 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  64\nOn-line CPU(s) list:                     0-63\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7542 32-Core Processor\nCPU family:                              23\nModel:                                   49\nThread(s) per core:                      2\nCore(s) per socket:                      32\nSocket(s):                               1\nStepping:                                0\nFrequency boost:                         enabled\nCPU max MHz:                             2900.0000\nCPU min MHz:                             1500.0000\nBogoMIPS:                                5789.33\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local clzero irperf xsaveerptr rdpru wbnoinvd amd_ppin arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip rdpid overflow_recov succor smca sme sev sev_es ibpb_exit_to_user\nVirtualization:                          AMD-V\nL1d cache:                               1 MiB (32 instances)\nL1i cache:                               1 MiB (32 instances)\nL2 cache:                                16 MiB (32 instances)\nL3 cache:                                128 MiB (8 instances)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-63\nVulnerability Gather data sampling:      Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Mitigation; untrained return thunk; SMT enabled with STIBP protection\nVulnerability Spec rstack overflow:      Mitigation; safe RET\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl and seccomp\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; IBPB conditional; STIBP always-on; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Mitigation; IBPB before exit to userspace"
+    },
+    "lspci_nvidia": {
+      "available": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "01:00.0 VGA compatible controller: NVIDIA Corporation GA102GL [RTX A6000] (rev a1)\n01:00.1 Audio device: NVIDIA Corporation GA102 High Definition Audio Controller (rev a1)\n41:00.0 VGA compatible controller: NVIDIA Corporation GA102GL [RTX A6000] (rev a1)\n41:00.1 Audio device: NVIDIA Corporation GA102 High Definition Audio Controller (rev a1)\n81:00.0 VGA compatible controller: NVIDIA Corporation GA102GL [RTX A6000] (rev a1)\n81:00.1 Audio device: NVIDIA Corporation GA102 High Definition Audio Controller (rev a1)\nc1:00.0 VGA compatible controller: NVIDIA Corporation GA102GL [RTX A6000] (rev a1)\nc1:00.1 Audio device: NVIDIA Corporation GA102 High Definition Audio Controller (rev a1)"
+    },
+    "nvidia_proc": {
+      "available": true,
+      "entries": {
+        "/proc/driver/nvidia/gpus/0000:01:00.0/information": "Model: \t\t NVIDIA RTX A6000\nIRQ:   \t\t 334\nGPU UUID: \t GPU-810e3992-0fc9-2005-c511-459620b66239\nVideo BIOS: \t 94.02.5c.00.02\nBus Type: \t PCIe\nDMA Size: \t 47 bits\nDMA Mask: \t 0x7fffffffffff\nBus Location: \t 0000:01:00.0\nDevice Minor: \t 3\nGPU Excluded:\t No",
+        "/proc/driver/nvidia/gpus/0000:41:00.0/information": "Model: \t\t NVIDIA RTX A6000\nIRQ:   \t\t 333\nGPU UUID: \t GPU-48c9c8ea-425c-c6a0-bf3e-e6bc1d243e96\nVideo BIOS: \t 94.02.5c.00.02\nBus Type: \t PCIe\nDMA Size: \t 47 bits\nDMA Mask: \t 0x7fffffffffff\nBus Location: \t 0000:41:00.0\nDevice Minor: \t 2\nGPU Excluded:\t No",
+        "/proc/driver/nvidia/gpus/0000:81:00.0/information": "Model: \t\t NVIDIA RTX A6000\nIRQ:   \t\t 332\nGPU UUID: \t GPU-7553544b-683b-e733-0ab9-aa5c6b035e45\nVideo BIOS: \t 94.02.5c.00.02\nBus Type: \t PCIe\nDMA Size: \t 47 bits\nDMA Mask: \t 0x7fffffffffff\nBus Location: \t 0000:81:00.0\nDevice Minor: \t 1\nGPU Excluded:\t No",
+        "/proc/driver/nvidia/gpus/0000:c1:00.0/information": "Model: \t\t NVIDIA RTX A6000\nIRQ:   \t\t 331\nGPU UUID: \t GPU-e8b89e7d-61d2-7d0c-d4cb-585f518ccf2a\nVideo BIOS: \t 94.02.5c.00.02\nBus Type: \t PCIe\nDMA Size: \t 47 bits\nDMA Mask: \t 0x7fffffffffff\nBus Location: \t 0000:c1:00.0\nDevice Minor: \t 0\nGPU Excluded:\t No"
+      }
+    },
+    "nvidia_smi": {
+      "available": false
+    }
+  },
+  "environment": {
+    "CUDA_VISIBLE_DEVICES": "0",
+    "MUJOCO_GL": "egl",
+    "PYOPENGL_PLATFORM": "egl",
+    "SLURM_CLUSTER_NAME": "vgg-athena",
+    "SLURM_CPUS_ON_NODE": "4",
+    "SLURM_JOB_ID": "762528",
+    "SLURM_JOB_NAME": "bash",
+    "SLURM_JOB_NODELIST": "c1-g4-04",
+    "SLURM_JOB_PARTITION": "gpu",
+    "SLURM_MEM_PER_NODE": "16384"
+  },
+  "hostname": "c1-g4-04",
+  "packages": {
+    "gymnasium": "0.29.1",
+    "libero": "0.1.0",
+    "matplotlib": "3.10.8",
+    "mujoco": "3.5.0",
+    "numpy": "2.2.6",
+    "pyyaml": "6.0.3",
+    "robosuite": "1.4.1",
+    "torch": "2.7.1",
+    "transformers": "4.51.3"
+  },
+  "platform": {
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "python_executable": "/users/joy/miniconda3/envs/safesae/bin/python",
+    "python_version": "3.10.19 (main, Oct 21 2025, 16:43:05) [GCC 11.2.0]",
+    "release": "5.15.0-164-generic",
+    "system": "Linux",
+    "version": "#174-Ubuntu SMP Fri Nov 14 20:25:16 UTC 2025"
+  }
+}

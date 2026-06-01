@@ -4,6 +4,31 @@ All heavy runs are launched through `~/remote_srun.sh` and write outputs under `
 
 ## Completed Runs
 
+### `environment_v1`
+
+Commands:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/collect_environment.py --out runs/environment_v1/compute_environment.json
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:10:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/collect_environment.py --out runs/environment_v1/gpu_environment.json
+```
+
+Remote logs:
+
+```text
+/work/joy/bgr/logs/run_1780318399_415321575.out
+/work/joy/bgr/logs/run_1780318387_340655701.out
+```
+
+Checked-in snapshots:
+
+```text
+results/environment_v1/compute_environment.json
+results/environment_v1/gpu_environment.json
+```
+
+Interpretation: these snapshots record Slurm allocation details, hostnames, CPU model, host memory, OS/kernel, Python executable/version, selected package versions, and GPU hardware metadata for the LIBERO/EGL path. `nvidia-smi` is not on the job path, but the GPU node exposes NVIDIA RTX A6000 hardware through PCI/proc metadata.
+
 ### `toy_fast_v3`
 
 Command:
