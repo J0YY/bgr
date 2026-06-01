@@ -56,6 +56,15 @@ The cluster has LIBERO and robosuite available. This probe validates resettable 
 ~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 01:00:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/probe_libero_suffix_states.py --suite libero_goal --task-ids 0,1,2,3,4 --init-state-ids 0,1,2 --radii 0.0,0.25,0.5,0.75,1.0 --trials-per-radius 4 --settle-steps 5 --image-size 64 --out runs/libero_probe_v2
 ```
 
+## Robot Suffix Strategy Comparison
+
+This diagnostic compares BGR-Suffix radius distributions while keeping the same replay-state estimator.
+
+```bash
+~/remote_srun.sh --dry-run --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_suffix_experiment.py --config configs/suffix_strategy.yaml --out runs/suffix_strategy_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_suffix_experiment.py --config configs/suffix_strategy.yaml --out runs/suffix_strategy_v1
+```
+
 ## Procedural Grid Recovery
 
 The grid benchmarks are dependency-light procedural decision benchmarks with generated obstacle maps, replayable mid-path states, Manhattan-radius perturbations, and an exact shortest-path feasibility witness.

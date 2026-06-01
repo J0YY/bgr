@@ -206,3 +206,29 @@ Probe summary:
 | LIBERO-Goal | 5 | 3 | 5 | 4 | 1.0000 | 0.0000 |
 
 Interpretation: the cluster can instantiate LIBERO environments on GPU with `MUJOCO_GL=egl`, load trusted local init states after patching PyTorch 2.6's `torch.load(weights_only=True)` default, and apply object free-joint perturbations across resettable LIBERO states. This is infrastructure evidence for BGR-Suffix on real LIBERO simulator states, not a policy result: OpenVLA is not installed, the LIBERO demonstration dataset path is unset, and zero-action rollouts are not expected to solve tasks.
+
+### `suffix_strategy_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_suffix_experiment.py --config configs/suffix_strategy.yaml --out runs/suffix_strategy_v1
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780312179_117921719.out
+```
+
+Mean results over five seeds:
+
+| Method | Clean | Object RAUC | Median r80 | EE-transfer RAUC | RAUC AULC |
+|---|---:|---:|---:|---:|---:|
+| Uniform suffix | 0.8368 | 0.4854 | 0.5032 | 0.3081 | 0.3716 |
+| BGR-Suffix | 0.8738 | 0.4730 | 0.4534 | 0.3029 | 0.3745 |
+| BGR-Suffix Boundary | 0.8724 | 0.4519 | 0.4242 | 0.2872 | 0.3658 |
+| BGR-Suffix Broad | 0.8700 | 0.4815 | 0.4704 | 0.3175 | 0.3798 |
+| BGR-Suffix Hard | 0.8657 | 0.4749 | 0.4689 | 0.3292 | 0.3865 |
+
+Interpretation: in the suffix simulator, narrow boundary-only radius sampling undercovers high-radius recovery. BGR-Suffix Broad nearly closes the final object-RAUC gap to uniform while preserving much higher clean success and improving transfer RAUC and AULC. BGR-Suffix Hard gives the best transfer and learning-curve area but lower final object RAUC.

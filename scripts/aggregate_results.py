@@ -30,16 +30,15 @@ BENCHMARKS = {
             "fixed": "Fixed",
         },
     },
-    "suffix_full_v1": {
+    "suffix_strategy_v1": {
         "label": "RobotSuffix",
-        "primary": ["bgr", "uniform", "clean_ft", "failure_only", "loss_priority", "fixed"],
+        "primary": ["bgr_broad", "uniform", "bgr", "bgr_hard", "bgr_boundary"],
         "display": {
-            "bgr": "BGR-Suffix",
+            "bgr_broad": "BGR-Broad",
             "uniform": "Uniform",
-            "clean_ft": "Clean FT",
-            "failure_only": "Failure",
-            "loss_priority": "Loss-priority",
-            "fixed": "Fixed",
+            "bgr": "BGR",
+            "bgr_hard": "BGR-Hard",
+            "bgr_boundary": "BGR-Boundary",
         },
     },
 }
