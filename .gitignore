@@ -19,6 +19,7 @@ paper/*.log
 paper/*.out
 paper/*.pdf
 !paper/main.pdf
+!paper/ReproducibilityChecklist.pdf
 !paper/AuthorKit27/*.pdf
 !paper/AuthorKit27/Word/*.pdf
 !paper/AuthorKit27/Figures/*.pdf
