@@ -42,6 +42,12 @@ Our contributions are:
     \item a path to procedural RL and robot suffix-recovery experiments using the same estimator and priority interfaces.
 \end{itemize}
 
+\section{Related Work}
+
+BGR is closest in spirit to curriculum learning and level replay for reinforcement learning. Prioritized Level Replay samples levels by learning-potential proxies such as value loss \cite{jiang2021prioritized}, while PAIRED and ACCEL generate or mutate environments using regret and curriculum-frontier objectives \cite{dennis2020paired,parkerholder2022accel}. BGR is complementary: it can operate over fixed replayable states and prioritizes the local perturbation geometry of the current policy rather than a scalar difficulty or regret score. It also differs from broad curriculum schedules surveyed by \citet{narvekar2020curriculum}, because the unit of progress is recovery-margin expansion around each state.
+
+BGR also connects to robustness training and robotics generalization. Domain randomization improves transfer by broadening training distributions \cite{tobin2017domain}, but fixed perturbation distributions can oversample states that are already easy or currently infeasible. BGR instead estimates where each state's perturbation curve crosses from success to failure and trains near that radius. Our procedural experiments use resettable grid states in the style of lightweight grid benchmarks \cite{chevalierboisvert2023minigrid}; the suffix study is a diagnostic step toward manipulation settings such as LIBERO \cite{liu2023libero}.
+
 \section{Problem Setting}
 
 Let $\pi_\theta$ be a sequential decision policy and let $Y(\tau)\in\{0,1\}$ denote terminal success for rollout $\tau$. A replayable decision state $x\in\mathcal{X}$ is any object from which evaluation or training can restart, such as an environment seed, simulator checkpoint, task prefix, or robot suffix state.
