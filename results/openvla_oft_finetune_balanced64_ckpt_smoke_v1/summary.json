@@ -1,0 +1,27 @@
+{
+  "run_dir": "/work/joy/bgr/runs/openvla_oft_finetune_balanced64_ckpt_smoke_v1/openvla-7b+libero_goal_no_noops+b1+lr-0.0005+lora-r8+dropout-0.0--bgr-balanced64-ckpt-smoke",
+  "remote_log": "/work/joy/bgr/logs/run_1780326595_120788212.out",
+  "status": "completed",
+  "dataset_name": "libero_goal_no_noops",
+  "data_root_dir": "/work/joy/bgr/runs/openvla_oft_tfds_libero_goal_balanced64_v1",
+  "max_steps": 1,
+  "batch_size": 1,
+  "lora_rank": 8,
+  "num_images_in_input": 2,
+  "use_proprio": true,
+  "use_l1_regression": true,
+  "image_aug": false,
+  "merge_lora_during_training": false,
+  "checkpoint_size": "656M",
+  "saved_files": {
+    "lora_adapter/adapter_model.safetensors": 318215288,
+    "action_head--latest_checkpoint.pt": 302242674,
+    "proprio_projector--latest_checkpoint.pt": 67275256,
+    "dataset_statistics.json": 3078
+  },
+  "dataset_statistics": {
+    "num_transitions": 64,
+    "num_trajectories": 4
+  },
+  "note": "One-step OpenVLA-OFT LoRA training smoke on the BGR balanced64 TFDS dataset. Large checkpoint files remain on /work and are not checked into git."
+}
