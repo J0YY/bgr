@@ -8,8 +8,6 @@
 \usepackage{caption}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{algorithm}
-\usepackage{algorithmic}
 
 \pdfinfo{
 /TemplateVersion (2027.1)
@@ -65,23 +63,18 @@ We evaluate robustness with recovery AUC,
 
 BGR maintains a buffer of replayable states. For each state, it probes perturbation radii, fits a monotone recovery curve, estimates a critical radius, and assigns replay priority to states whose boundaries are feasible, sharp, uncertain, and near a trainable target band.
 
-\begin{algorithm}[t]
-\caption{Bifurcation-Guided Replay}
-\begin{algorithmic}[1]
-\STATE Initialize replay buffer $\mathcal{B}$ with replayable states
-\FORALL{$x\in\mathcal{B}$}
-    \STATE Probe $\sigma\in\{0,\sigma_{\min},\sigma_{\mathrm{mid}},\sigma_{\max}\}$
-    \STATE Fit monotone $\hat{R}(x,\sigma)$ and estimate $\hat{r}_\alpha(x)$
-\ENDFOR
-\FOR{training iteration $t=1,\ldots,T$}
-    \STATE Sample $x\sim q_{\mathcal{B}}(x)$ proportional to BGR priority
-    \STATE Sample $\sigma$ from a mixture centered at $\hat{r}_\alpha(x)$
-    \STATE Apply $\delta\sim\mathcal{P}_x(\sigma)$ and collect rollout or teacher recovery data
-    \STATE Update $\pi_\theta$ with the base learner
-    \STATE Periodically refresh stale curve estimates using active probes
-\ENDFOR
-\end{algorithmic}
-\end{algorithm}
+\begin{figure}[t]
+\small
+\centering
+\fbox{\begin{minipage}{0.93\columnwidth}
+\textbf{Bifurcation-Guided Replay}\\
+Initialize replay buffer $\mathcal{B}$ with replayable states.\\
+For each $x\in\mathcal{B}$, probe $\sigma\in\{0,\sigma_{\min},\sigma_{\mathrm{mid}},\sigma_{\max}\}$, fit monotone $\hat{R}(x,\sigma)$, and estimate $\hat{r}_\alpha(x)$.\\
+For each training iteration, sample $x\sim q_{\mathcal{B}}(x)$ proportional to BGR priority, sample $\sigma$ from a mixture centered at $\hat{r}_\alpha(x)$, apply $\delta\sim\mathcal{P}_x(\sigma)$, collect rollout or teacher recovery data, update $\pi_\theta$, and periodically refresh stale curve estimates.
+\end{minipage}}
+\caption{BGR training loop without domain-specific learner details.}
+\label{fig:bgr-loop}
+\end{figure}
 
 The priority for a record is a product of gates and soft utilities:
 \begin{equation}
