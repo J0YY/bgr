@@ -113,6 +113,7 @@ See [results/README.md](results/README.md) for the current run ledger. The origi
 
 ```bash
 python3 scripts/aggregate_results.py --results-dir results --out-dir paper/figures
+python3 scripts/analyze_significance.py --results-dir results --out-csv paper/figures/significance_tests.csv --out-tex paper/figures/significance_table.tex
 ```
 
 This writes CSV summaries, a LaTeX summary table, and bar-chart figures used by `paper/main.tex`.

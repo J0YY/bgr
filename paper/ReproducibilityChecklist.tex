@@ -169,7 +169,7 @@ yes.
 	yes. Aggregated tables include standard errors; experiments report median critical radius and AULC in addition to final means.
 
 	\question{The significance of any improvement or decrease in performance is judged using appropriate statistical tests (e.g., Wilcoxon signed-rank)}{(yes/partial/no)}
-	no. Current reporting uses seed means and standard errors, not formal hypothesis tests.
+	yes. The repository includes paired exact sign-flip tests for the reported seed-paired comparisons. Because the current diagnostic runs use only three or five seeds, the paper interprets these tests descriptively and does not overstate thresholded significance.
 
 	\question{This paper lists all final (hyper-)parameters used for each model/algorithm in the paper's experiments}{(yes/partial/no/NA)}
 	yes. Final hyperparameters are in the checked-in YAML configs under \texttt{configs/}.
