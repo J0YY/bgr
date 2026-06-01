@@ -53,7 +53,7 @@ METRICS = [
 ESTIMATOR_RUN = "estimator_full_v1"
 ABLATION_RUN = "grid_margin_ablation_v1"
 OPENVLA_RECOVERY_RUN = "libero_openvla_recovery_v1"
-OPENVLA_SELECTION_RUN = "libero_openvla_boundary_selection_v1"
+OPENVLA_SELECTION_RUN = "libero_openvla_boundary_selection_balanced_v1"
 
 
 def main() -> None:
@@ -276,8 +276,19 @@ def load_openvla(recovery_path: Path, selection_path: Path) -> list[dict[str, st
             )
     if selection_path.exists():
         selection_rows = list(csv.DictReader(selection_path.open("r", encoding="utf-8")))
-        display = {"proposal_guided": "Proposal-guided", "random_balanced": "Random-balanced"}
-        for method in ["proposal_guided", "random_balanced"]:
+        display = {
+            "proposal_guided": "Proposal-guided",
+            "bgr_boundary": "BGR-boundary",
+            "random_balanced": "Random-balanced",
+        }
+        method_order = ["bgr_boundary", "proposal_guided", "random_balanced"]
+        methods = [method for method in method_order if any(row["method"] == method for row in selection_rows)]
+        methods.extend(
+            method
+            for method in sorted({row["method"] for row in selection_rows})
+            if method not in methods
+        )
+        for method in methods:
             items = [row for row in selection_rows if row["method"] == method]
             if not items:
                 continue
@@ -285,7 +296,7 @@ def load_openvla(recovery_path: Path, selection_path: Path) -> list[dict[str, st
             rows.append(
                 {
                     "audit": "Selection",
-                    "name": display[method],
+                    "name": display.get(method, method.replace("_", "-").title()),
                     "metric_a": float(item["mean_observed_cf_rate"]),
                     "metric_b": float(item["boundary_hit_rate"]),
                     "metric_c": float(item["mean_abs_distance_to_half"]),

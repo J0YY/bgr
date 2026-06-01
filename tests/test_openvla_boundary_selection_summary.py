@@ -23,7 +23,14 @@ class OpenVLABoundarySelectionSummaryTest(unittest.TestCase):
                 json.dumps({"n_counterfactual_certificates": 3}),
                 encoding="utf-8",
             )
-            row = _summarize_dir(path, method="proposal_guided", lower=0.25, upper=0.75)
+            row = _summarize_dir(
+                path,
+                method="bgr_boundary",
+                lower=0.25,
+                upper=0.75,
+                summary_name="proposal_guided_summary.json",
+            )
+            self.assertEqual(row["method"], "bgr_boundary")
             self.assertEqual(row["boundary_hit_rate"], 0.5)
             self.assertEqual(row["mean_abs_distance_to_half"], 0.25)
             aggregate = _aggregate([row])

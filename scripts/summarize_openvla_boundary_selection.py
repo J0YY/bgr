@@ -17,6 +17,8 @@ def main() -> int:
     )
     parser.add_argument("--proposal-dir", action="append", default=[], help="Directory with proposal_guided_summary/top_k.")
     parser.add_argument("--random-dir", action="append", default=[], help="Directory with random_balanced_summary/top_k.")
+    parser.add_argument("--proposal-method-name", default="proposal_guided")
+    parser.add_argument("--random-method-name", default="random_balanced")
     parser.add_argument("--out", required=True)
     parser.add_argument("--lower", type=float, default=0.25)
     parser.add_argument("--upper", type=float, default=0.75)
@@ -24,9 +26,25 @@ def main() -> int:
 
     rows = []
     for path in args.proposal_dir:
-        rows.append(_summarize_dir(Path(path), method="proposal_guided", lower=args.lower, upper=args.upper))
+        rows.append(
+            _summarize_dir(
+                Path(path),
+                method=str(args.proposal_method_name),
+                lower=args.lower,
+                upper=args.upper,
+                summary_name="proposal_guided_summary.json",
+            )
+        )
     for path in args.random_dir:
-        rows.append(_summarize_dir(Path(path), method="random_balanced", lower=args.lower, upper=args.upper))
+        rows.append(
+            _summarize_dir(
+                Path(path),
+                method=str(args.random_method_name),
+                lower=args.lower,
+                upper=args.upper,
+                summary_name="random_balanced_summary.json",
+            )
+        )
     if not rows:
         raise SystemExit("No input directories provided.")
 
@@ -42,9 +60,10 @@ def main() -> int:
     return 0
 
 
-def _summarize_dir(path: Path, method: str, lower: float, upper: float) -> dict[str, Any]:
+def _summarize_dir(path: Path, method: str, lower: float, upper: float, summary_name: str | None = None) -> dict[str, Any]:
     candidates = json.loads((path / "top_k_candidates.json").read_text(encoding="utf-8"))
-    summary_name = "proposal_guided_summary.json" if method == "proposal_guided" else "random_balanced_summary.json"
+    if summary_name is None:
+        summary_name = "random_balanced_summary.json" if method == "random_balanced" else "proposal_guided_summary.json"
     summary = json.loads((path / summary_name).read_text(encoding="utf-8"))
     rates = [float(row.get("observed_cf_rate", 0.0)) for row in candidates]
     predictions = [float(row.get("predicted_cf_rate", np.nan)) for row in candidates if "predicted_cf_rate" in row]
