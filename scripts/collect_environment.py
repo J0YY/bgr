@@ -50,6 +50,19 @@ def command_output(args: list[str], timeout: int = 20) -> dict[str, Any]:
     }
 
 
+def read_nvidia_proc() -> dict[str, Any]:
+    gpu_dir = Path("/proc/driver/nvidia/gpus")
+    if not gpu_dir.exists():
+        return {"available": False}
+    entries: dict[str, str] = {}
+    for info_path in sorted(gpu_dir.glob("*/information")):
+        try:
+            entries[str(info_path)] = info_path.read_text(encoding="utf-8").strip()
+        except OSError as exc:  # pragma: no cover - depends on cluster tools.
+            entries[str(info_path)] = repr(exc)
+    return {"available": True, "entries": entries}
+
+
 def package_versions() -> dict[str, str | None]:
     versions: dict[str, str | None] = {}
     for package in PACKAGES:
@@ -96,6 +109,8 @@ def collect() -> dict[str, Any]:
                     "--format=csv,noheader",
                 ]
             ),
+            "lspci_nvidia": command_output(["bash", "-lc", "lspci | grep -i nvidia || true"]),
+            "nvidia_proc": read_nvidia_proc(),
         },
     }
 
