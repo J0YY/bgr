@@ -348,6 +348,71 @@ fine-tuning result, and the comparison is diagnostic because proposal-guided
 artifacts concentrate on blur/shift while random-balanced artifacts cover four
 families.
 
+### `libero_openvla_boundary_selection_balanced_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/summarize_openvla_boundary_selection.py --proposal-method-name bgr_boundary --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed1_lp2_h160 --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed2_lp2_h160 --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed3_lp2_h160 --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed4_lp2_h160 --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed5_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160 --out runs/libero_openvla_boundary_selection_balanced_v1
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780321470_140661271.out
+```
+
+| Method | Runs | Mean CF rate | Boundary hit rate | Mean `abs(CF-0.5)` | Certificates |
+|---|---:|---:|---:|---:|---:|
+| BGR-boundary | 5 | 0.5500 | 0.6250 | 0.2958 | 16.00 |
+| Random-balanced | 5 | 0.6438 | 0.5750 | 0.2563 | 20.60 |
+
+Interpretation: this is the paper-table OpenVLA selection audit because both
+methods cover the same four perturbation families over five runs. It supports
+boundary-discovery as a measurable learned-policy diagnostic, but not yet
+OpenVLA fine-tuning.
+
+### `openvla_bgr_finetune_manifest_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/export_openvla_bgr_finetune_manifest.py --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed1_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed2_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed3_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed4_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed5_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160 --out runs/openvla_bgr_finetune_manifest_v1
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780321861_807492940.out
+```
+
+Interpretation: this exports validated candidate-level manifests and OpenVLA-OFT
+LoRA command templates. It identified 80 candidates total; BGR-boundary has
+25/40 candidates in the boundary band, and random-balanced has 23/40. The
+OpenVLA-OFT trainer still requires RLDS episodes, so this is a fine-tuning
+scaffold rather than a completed fine-tuning result.
+
+### `openvla_teacher_replay_manifest_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 12G --time 00:15:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/export_openvla_teacher_replay_manifest.py --boundary-only --max-steps-per-episode 64 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed1_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed2_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed3_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed4_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed5_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160 --out runs/openvla_teacher_replay_manifest_v1
+```
+
+Remote logs:
+
+```text
+/work/joy/bgr/logs/run_1780322114_709717949.out
+/work/joy/bgr/logs/run_1780322189_156724835.out
+```
+
+Interpretation: this is the next bridge toward OpenVLA-OFT fine-tuning. It
+exports 11,776 step-level rows pairing validated boundary candidates with target
+actions from successful native OpenVLA rollouts. A downstream converter must
+replay the native action prefix in LIBERO, render observations, apply the
+candidate perturbation to the image stream, and write RLDS episodes.
+
 ### `suffix_strategy_v1`
 
 Command:

@@ -1,0 +1,37 @@
+{
+  "boundary_band": [
+    0.25,
+    0.75
+  ],
+  "max_steps_per_episode": 64,
+  "methods": {
+    "bgr_boundary": {
+      "boundary_rows": 5888,
+      "candidates": 24,
+      "episodes": 5,
+      "families": [
+        "blur",
+        "brightness",
+        "occlusion",
+        "shift"
+      ],
+      "mean_observed_cf_rate": 0.5543478260869565,
+      "rows": 5888
+    },
+    "random_balanced": {
+      "boundary_rows": 5888,
+      "candidates": 17,
+      "episodes": 4,
+      "families": [
+        "blur",
+        "brightness",
+        "occlusion",
+        "shift"
+      ],
+      "mean_observed_cf_rate": 0.5108695652173914,
+      "rows": 5888
+    }
+  },
+  "note": "Rows contain successful native OpenVLA actions paired with validated perturbation specs. A downstream converter must replay the native actions in LIBERO, render each step, apply the candidate observation perturbation, and write RLDS episodes for OpenVLA-OFT.",
+  "num_rows": 11776
+}
