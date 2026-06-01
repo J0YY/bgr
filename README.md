@@ -56,6 +56,14 @@ The positive procedural benchmark is `grid_margin_bgr`, which evaluates state-co
 
 See [results/README.md](results/README.md) for the current run ledger. The original tabular grid policy benchmark is retained as a negative diagnostic because broad replay saturates it after clean pretraining.
 
+## Result Aggregation and Paper Figures
+
+```bash
+python3 scripts/aggregate_results.py --results-dir results --out-dir paper/figures
+```
+
+This writes CSV summaries, a LaTeX summary table, and bar-chart figures used by `paper/main.tex`.
+
 ## AAAI Sources
 
 The official AAAI-27 page lists the 2027 timetable and links the AAAI-27 author kit. The kit in `paper/AuthorKit27` was downloaded from `https://aaai.org/authorkit27/` on 2026-06-01.
