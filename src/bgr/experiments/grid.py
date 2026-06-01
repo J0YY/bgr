@@ -50,14 +50,14 @@ def run_method(config: dict, method: str, seed: int) -> GridResult:
             metrics = evaluate(bench, eval_grid, alpha, int(exp.get("eval_trials_per_radius", 5)), rng)
             metrics["step"] = float(step)
             history.append(metrics)
-            if method == "bgr":
+            if _uses_bgr_records(method):
                 _refresh_records(bench, records, bgr_cfg, alpha, rng, step)
         if step == int(exp["iterations"]):
             break
         for _ in range(int(exp["train_batch_size"])):
             state_idx, sigma = _sample_training_pair(method, bench, records, scorer, config, rng, step)
             bench.train_step(state_idx, sigma, rng)
-            if method == "bgr":
+            if _uses_bgr_records(method):
                 success = bench.rollout(state_idx, sigma, rng)
                 records[state_idx].add_observation(sigma, success)
                 records[state_idx].replay_count += 1
@@ -237,7 +237,7 @@ def _sample_training_pair(
         scores = [bench.loss_proxy(int(idx), float(sigma), rng) for idx, sigma in zip(candidates, sigmas, strict=True)]
         selected = int(np.argmax(scores))
         return int(candidates[selected]), float(sigmas[selected])
-    if method == "bgr":
+    if _uses_bgr_records(method):
         target = float(exp.get("target_margin", 0.45))
         adaptive_scorer = BGRPriorityScorer(
             clean_threshold=0.05,
@@ -256,14 +256,35 @@ def _sample_training_pair(
             uniform_mix=float(config.get("bgr", {}).get("uniform_mix", 0.10)),
         )
         replay_idx = int(rng.choice(len(records), p=probs))
-        sigma = sample_boundary_radius(
-            rng,
-            records[replay_idx].r_alpha_hat,
-            1.0,
-            radius_noise=float(config.get("bgr", {}).get("radius_noise", 0.08)),
-        )
+        sigma = _sample_grid_bgr_radius(method, rng, records[replay_idx].r_alpha_hat, config.get("bgr", {}))
         return replay_idx, sigma
     raise ValueError(f"unknown method: {method}")
+
+
+def _uses_bgr_records(method: str) -> bool:
+    return method in {"bgr", "bgr_mixed"}
+
+
+def _sample_grid_bgr_radius(
+    method: str,
+    rng: np.random.Generator,
+    r_alpha: float,
+    bgr_cfg: dict,
+) -> float:
+    if method == "bgr_mixed":
+        clean_prob = float(bgr_cfg.get("mixed_clean_radius_prob", 0.20))
+        uniform_prob = float(bgr_cfg.get("mixed_uniform_radius_prob", 0.45))
+        draw = float(rng.random())
+        if draw < clean_prob:
+            return 0.0
+        if draw < clean_prob + uniform_prob:
+            return float(rng.uniform(0.0, 1.0))
+    return sample_boundary_radius(
+        rng,
+        r_alpha,
+        1.0,
+        radius_noise=float(bgr_cfg.get("radius_noise", 0.08)),
+    )
 
 
 def _quick_success_rate(
