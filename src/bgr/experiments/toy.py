@@ -168,7 +168,7 @@ def _sample_training_pair(
     if method == "uniform":
         return int(rng.integers(len(bench.states))), float(rng.uniform(0.0, sigma_max))
     if method == "fixed":
-        return int(rng.integers(len(bench.states))), float(exp.get("target_margin", 0.42))
+        return int(rng.integers(len(bench.states))), float(exp.get("fixed_radius", 0.5))
     if method == "failure_only":
         candidates = rng.choice(len(bench.states), size=min(32, len(bench.states)), replace=False)
         scores = []
@@ -185,7 +185,18 @@ def _sample_training_pair(
         selected = int(np.argmax(scores))
         return int(candidates[selected]), float(sigmas[selected])
     if method == "bgr":
-        priorities = np.array([scorer.score(record, step) for record in records], dtype=float)
+        target = float(np.quantile([record.r_alpha_hat for record in records], 0.60))
+        adaptive_scorer = BGRPriorityScorer(
+            clean_threshold=scorer.clean_threshold,
+            feasibility_threshold=scorer.feasibility_threshold,
+            target_radius=target,
+            radius_bandwidth=scorer.radius_bandwidth,
+            sharpness_power=scorer.sharpness_power,
+            uncertainty_power=scorer.uncertainty_power,
+            staleness_weight=scorer.staleness_weight,
+            min_priority=scorer.min_priority,
+        )
+        priorities = np.array([adaptive_scorer.score(record, step) for record in records], dtype=float)
         probs = mixed_priority_probs(
             priorities,
             temperature=float(config.get("bgr", {}).get("priority_temperature", 0.7)),

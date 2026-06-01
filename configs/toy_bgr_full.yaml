@@ -11,6 +11,7 @@ experiment:
   alpha: 0.8
   learning_rate: 0.035
   target_margin: 0.42
+  fixed_radius: 0.65
   output_curves: true
 bgr:
   initial_probes: [0.0, 0.25, 0.5, 0.75, 1.0]
