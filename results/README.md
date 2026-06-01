@@ -284,7 +284,41 @@ Probe summary:
 |---|---:|---:|---:|---:|---:|---:|
 | LIBERO-Goal | 5 | 3 | 5 | 4 | 1.0000 | 0.0000 |
 
-Interpretation: the cluster can instantiate LIBERO environments on GPU with `MUJOCO_GL=egl`, load trusted local init states after patching PyTorch 2.6's `torch.load(weights_only=True)` default, and apply object free-joint perturbations across resettable LIBERO states. This is infrastructure evidence for BGR-Suffix on real LIBERO simulator states, not a policy result: OpenVLA is not installed, the LIBERO demonstration dataset path is unset, and zero-action rollouts are not expected to solve tasks.
+Interpretation: the cluster can instantiate LIBERO environments on GPU with `MUJOCO_GL=egl`, load trusted local init states after patching PyTorch 2.6's `torch.load(weights_only=True)` default, and apply object free-joint perturbations across resettable LIBERO states. This is infrastructure evidence for BGR-Suffix on real LIBERO simulator states, not a policy result: this probe uses zero-action rollouts, which are not expected to solve tasks. A separate fixed-policy OpenVLA recovery summary is recorded in `libero_openvla_recovery_v1`.
+
+### `libero_openvla_recovery_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/summarize_libero_openvla_recovery.py --input-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_object3_h220_bash --out runs/libero_openvla_recovery_v1 --source-name libero_openvla_observation_object3_h220_bash
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780320300_854946446.out
+```
+
+Source artifact:
+
+```text
+/work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_object3_h220_bash
+```
+
+Mean recovery metrics over nine closed-loop OpenVLA LIBERO-Object replay states:
+
+| Perturbation family | Clean | RAUC | r80 | r50 |
+|---|---:|---:|---:|---:|
+| blur | 1.0000 | 0.4667 | 0.3067 | 0.4667 |
+| brightness | 1.0000 | 0.8000 | 0.7333 | 0.8000 |
+| occlusion | 1.0000 | 0.3889 | 0.2822 | 0.3889 |
+| shift | 1.0000 | 0.5148 | 0.3793 | 0.5148 |
+
+Interpretation: these are fixed-policy OpenVLA recovery curves, not BGR
+fine-tuning results. They show that the BGR recovery-curve object is measurable
+on learned VLA rollouts: the policy is clean-successful on the replay states,
+but success drops sharply under blur, occlusion, and image shift perturbations.
 
 ### `suffix_strategy_v1`
 

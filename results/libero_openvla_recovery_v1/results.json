@@ -1,0 +1,1367 @@
+{
+  "alpha": 0.8,
+  "curves": [
+    {
+      "family": "blur",
+      "sigma": 0.0,
+      "success_rate_monotone": 1.0,
+      "success_rate_raw": 1.0,
+      "trials": 9
+    },
+    {
+      "family": "blur",
+      "sigma": 0.6,
+      "success_rate_monotone": 0.3333333333333333,
+      "success_rate_raw": 0.3333333333333333,
+      "trials": 9
+    },
+    {
+      "family": "blur",
+      "sigma": 1.0,
+      "success_rate_monotone": 0.0,
+      "success_rate_raw": 0.0,
+      "trials": 9
+    },
+    {
+      "family": "brightness",
+      "sigma": 0.0,
+      "success_rate_monotone": 1.0,
+      "success_rate_raw": 1.0,
+      "trials": 9
+    },
+    {
+      "family": "brightness",
+      "sigma": 0.6000000000000001,
+      "success_rate_monotone": 0.7777777777777778,
+      "success_rate_raw": 0.7777777777777778,
+      "trials": 9
+    },
+    {
+      "family": "brightness",
+      "sigma": 1.0,
+      "success_rate_monotone": 0.6666666666666666,
+      "success_rate_raw": 0.6666666666666666,
+      "trials": 9
+    },
+    {
+      "family": "occlusion",
+      "sigma": 0.0,
+      "success_rate_monotone": 1.0,
+      "success_rate_raw": 1.0,
+      "trials": 9
+    },
+    {
+      "family": "occlusion",
+      "sigma": 0.4,
+      "success_rate_monotone": 0.4444444444444444,
+      "success_rate_raw": 0.4444444444444444,
+      "trials": 9
+    },
+    {
+      "family": "occlusion",
+      "sigma": 0.7,
+      "success_rate_monotone": 0.1111111111111111,
+      "success_rate_raw": 0.1111111111111111,
+      "trials": 9
+    },
+    {
+      "family": "occlusion",
+      "sigma": 1.0,
+      "success_rate_monotone": 0.0,
+      "success_rate_raw": 0.0,
+      "trials": 9
+    },
+    {
+      "family": "shift",
+      "sigma": 0.0,
+      "success_rate_monotone": 1.0,
+      "success_rate_raw": 1.0,
+      "trials": 9
+    },
+    {
+      "family": "shift",
+      "sigma": 0.5333333333333333,
+      "success_rate_monotone": 0.4444444444444444,
+      "success_rate_raw": 0.4444444444444444,
+      "trials": 9
+    },
+    {
+      "family": "shift",
+      "sigma": 1.0,
+      "success_rate_monotone": 0.2222222222222222,
+      "success_rate_raw": 0.2222222222222222,
+      "trials": 9
+    }
+  ],
+  "families": [
+    {
+      "clean_mean": 1.0,
+      "family": "blur",
+      "num_radii": 3,
+      "num_states": 9,
+      "r50_mean": 0.4666666666666667,
+      "r80_mean": 0.30666666666666664,
+      "r80_sem": 0.09333333333333332,
+      "rauc_mean": 0.4666666666666667,
+      "rauc_sem": 0.08333333333333333,
+      "source": "libero_openvla_observation_object3_h220_bash"
+    },
+    {
+      "clean_mean": 1.0,
+      "family": "brightness",
+      "num_radii": 3,
+      "num_states": 9,
+      "r50_mean": 0.8,
+      "r80_mean": 0.7333333333333334,
+      "r80_sem": 0.1243650540411842,
+      "rauc_mean": 0.8,
+      "rauc_sem": 0.09860132971832693,
+      "source": "libero_openvla_observation_object3_h220_bash"
+    },
+    {
+      "clean_mean": 1.0,
+      "family": "occlusion",
+      "num_radii": 4,
+      "num_states": 9,
+      "r50_mean": 0.3888888888888889,
+      "r80_mean": 0.2822222222222222,
+      "r80_sem": 0.08559883465227293,
+      "rauc_mean": 0.3888888888888889,
+      "rauc_sem": 0.0806991058129664,
+      "source": "libero_openvla_observation_object3_h220_bash"
+    },
+    {
+      "clean_mean": 1.0,
+      "family": "shift",
+      "num_radii": 3,
+      "num_states": 9,
+      "r50_mean": 0.5148148148148148,
+      "r80_mean": 0.37925925925925924,
+      "r80_sem": 0.11429031932717103,
+      "rauc_mean": 0.5148148148148148,
+      "rauc_sem": 0.10093866722156773,
+      "source": "libero_openvla_observation_object3_h220_bash"
+    }
+  ],
+  "num_episode_rows": 90,
+  "perturbations": [
+    {
+      "episode_idx": 0,
+      "family": "occlusion",
+      "init_state_idx": 0,
+      "perturbation_name": "occ_20",
+      "sigma": 0.4,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "occlusion",
+      "init_state_idx": 1,
+      "perturbation_name": "occ_20",
+      "sigma": 0.4,
+      "success": true,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "occlusion",
+      "init_state_idx": 2,
+      "perturbation_name": "occ_20",
+      "sigma": 0.4,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "occlusion",
+      "init_state_idx": 0,
+      "perturbation_name": "occ_20",
+      "sigma": 0.4,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "occlusion",
+      "init_state_idx": 1,
+      "perturbation_name": "occ_20",
+      "sigma": 0.4,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "occlusion",
+      "init_state_idx": 2,
+      "perturbation_name": "occ_20",
+      "sigma": 0.4,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "occlusion",
+      "init_state_idx": 0,
+      "perturbation_name": "occ_20",
+      "sigma": 0.4,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "occlusion",
+      "init_state_idx": 1,
+      "perturbation_name": "occ_20",
+      "sigma": 0.4,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "occlusion",
+      "init_state_idx": 2,
+      "perturbation_name": "occ_20",
+      "sigma": 0.4,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "occlusion",
+      "init_state_idx": 0,
+      "perturbation_name": "occ_35",
+      "sigma": 0.7,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "occlusion",
+      "init_state_idx": 1,
+      "perturbation_name": "occ_35",
+      "sigma": 0.7,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "occlusion",
+      "init_state_idx": 2,
+      "perturbation_name": "occ_35",
+      "sigma": 0.7,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "occlusion",
+      "init_state_idx": 0,
+      "perturbation_name": "occ_35",
+      "sigma": 0.7,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "occlusion",
+      "init_state_idx": 1,
+      "perturbation_name": "occ_35",
+      "sigma": 0.7,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "occlusion",
+      "init_state_idx": 2,
+      "perturbation_name": "occ_35",
+      "sigma": 0.7,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "occlusion",
+      "init_state_idx": 0,
+      "perturbation_name": "occ_35",
+      "sigma": 0.7,
+      "success": false,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "occlusion",
+      "init_state_idx": 1,
+      "perturbation_name": "occ_35",
+      "sigma": 0.7,
+      "success": false,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "occlusion",
+      "init_state_idx": 2,
+      "perturbation_name": "occ_35",
+      "sigma": 0.7,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "occlusion",
+      "init_state_idx": 0,
+      "perturbation_name": "occ_50",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "occlusion",
+      "init_state_idx": 1,
+      "perturbation_name": "occ_50",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "occlusion",
+      "init_state_idx": 2,
+      "perturbation_name": "occ_50",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "occlusion",
+      "init_state_idx": 0,
+      "perturbation_name": "occ_50",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "occlusion",
+      "init_state_idx": 1,
+      "perturbation_name": "occ_50",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "occlusion",
+      "init_state_idx": 2,
+      "perturbation_name": "occ_50",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "occlusion",
+      "init_state_idx": 0,
+      "perturbation_name": "occ_50",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "occlusion",
+      "init_state_idx": 1,
+      "perturbation_name": "occ_50",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "occlusion",
+      "init_state_idx": 2,
+      "perturbation_name": "occ_50",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "brightness",
+      "init_state_idx": 0,
+      "perturbation_name": "dim_70",
+      "sigma": 0.6000000000000001,
+      "success": true,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "brightness",
+      "init_state_idx": 1,
+      "perturbation_name": "dim_70",
+      "sigma": 0.6000000000000001,
+      "success": true,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "brightness",
+      "init_state_idx": 2,
+      "perturbation_name": "dim_70",
+      "sigma": 0.6000000000000001,
+      "success": true,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "brightness",
+      "init_state_idx": 0,
+      "perturbation_name": "dim_70",
+      "sigma": 0.6000000000000001,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "brightness",
+      "init_state_idx": 1,
+      "perturbation_name": "dim_70",
+      "sigma": 0.6000000000000001,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "brightness",
+      "init_state_idx": 2,
+      "perturbation_name": "dim_70",
+      "sigma": 0.6000000000000001,
+      "success": true,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "brightness",
+      "init_state_idx": 0,
+      "perturbation_name": "dim_70",
+      "sigma": 0.6000000000000001,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "brightness",
+      "init_state_idx": 1,
+      "perturbation_name": "dim_70",
+      "sigma": 0.6000000000000001,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "brightness",
+      "init_state_idx": 2,
+      "perturbation_name": "dim_70",
+      "sigma": 0.6000000000000001,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "brightness",
+      "init_state_idx": 0,
+      "perturbation_name": "dim_50",
+      "sigma": 1.0,
+      "success": true,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "brightness",
+      "init_state_idx": 1,
+      "perturbation_name": "dim_50",
+      "sigma": 1.0,
+      "success": true,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "brightness",
+      "init_state_idx": 2,
+      "perturbation_name": "dim_50",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "brightness",
+      "init_state_idx": 0,
+      "perturbation_name": "dim_50",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "brightness",
+      "init_state_idx": 1,
+      "perturbation_name": "dim_50",
+      "sigma": 1.0,
+      "success": true,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "brightness",
+      "init_state_idx": 2,
+      "perturbation_name": "dim_50",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "brightness",
+      "init_state_idx": 0,
+      "perturbation_name": "dim_50",
+      "sigma": 1.0,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "brightness",
+      "init_state_idx": 1,
+      "perturbation_name": "dim_50",
+      "sigma": 1.0,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "brightness",
+      "init_state_idx": 2,
+      "perturbation_name": "dim_50",
+      "sigma": 1.0,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "shift",
+      "init_state_idx": 0,
+      "perturbation_name": "shift_right_08",
+      "sigma": 0.5333333333333333,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "shift",
+      "init_state_idx": 1,
+      "perturbation_name": "shift_right_08",
+      "sigma": 0.5333333333333333,
+      "success": true,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "shift",
+      "init_state_idx": 2,
+      "perturbation_name": "shift_right_08",
+      "sigma": 0.5333333333333333,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "shift",
+      "init_state_idx": 0,
+      "perturbation_name": "shift_right_08",
+      "sigma": 0.5333333333333333,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "shift",
+      "init_state_idx": 1,
+      "perturbation_name": "shift_right_08",
+      "sigma": 0.5333333333333333,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "shift",
+      "init_state_idx": 2,
+      "perturbation_name": "shift_right_08",
+      "sigma": 0.5333333333333333,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "shift",
+      "init_state_idx": 0,
+      "perturbation_name": "shift_right_08",
+      "sigma": 0.5333333333333333,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "shift",
+      "init_state_idx": 1,
+      "perturbation_name": "shift_right_08",
+      "sigma": 0.5333333333333333,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "shift",
+      "init_state_idx": 2,
+      "perturbation_name": "shift_right_08",
+      "sigma": 0.5333333333333333,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "shift",
+      "init_state_idx": 0,
+      "perturbation_name": "shift_right_15",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "shift",
+      "init_state_idx": 1,
+      "perturbation_name": "shift_right_15",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "shift",
+      "init_state_idx": 2,
+      "perturbation_name": "shift_right_15",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "shift",
+      "init_state_idx": 0,
+      "perturbation_name": "shift_right_15",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "shift",
+      "init_state_idx": 1,
+      "perturbation_name": "shift_right_15",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "shift",
+      "init_state_idx": 2,
+      "perturbation_name": "shift_right_15",
+      "sigma": 1.0,
+      "success": true,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "shift",
+      "init_state_idx": 0,
+      "perturbation_name": "shift_right_15",
+      "sigma": 1.0,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "shift",
+      "init_state_idx": 1,
+      "perturbation_name": "shift_right_15",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "shift",
+      "init_state_idx": 2,
+      "perturbation_name": "shift_right_15",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "blur",
+      "init_state_idx": 0,
+      "perturbation_name": "blur_15",
+      "sigma": 0.6,
+      "success": true,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "blur",
+      "init_state_idx": 1,
+      "perturbation_name": "blur_15",
+      "sigma": 0.6,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "blur",
+      "init_state_idx": 2,
+      "perturbation_name": "blur_15",
+      "sigma": 0.6,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "blur",
+      "init_state_idx": 0,
+      "perturbation_name": "blur_15",
+      "sigma": 0.6,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "blur",
+      "init_state_idx": 1,
+      "perturbation_name": "blur_15",
+      "sigma": 0.6,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "blur",
+      "init_state_idx": 2,
+      "perturbation_name": "blur_15",
+      "sigma": 0.6,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "blur",
+      "init_state_idx": 0,
+      "perturbation_name": "blur_15",
+      "sigma": 0.6,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "blur",
+      "init_state_idx": 1,
+      "perturbation_name": "blur_15",
+      "sigma": 0.6,
+      "success": true,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "blur",
+      "init_state_idx": 2,
+      "perturbation_name": "blur_15",
+      "sigma": 0.6,
+      "success": false,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "blur",
+      "init_state_idx": 0,
+      "perturbation_name": "blur_25",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "blur",
+      "init_state_idx": 1,
+      "perturbation_name": "blur_25",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "blur",
+      "init_state_idx": 2,
+      "perturbation_name": "blur_25",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 0,
+      "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "blur",
+      "init_state_idx": 0,
+      "perturbation_name": "blur_25",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "blur",
+      "init_state_idx": 1,
+      "perturbation_name": "blur_25",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "blur",
+      "init_state_idx": 2,
+      "perturbation_name": "blur_25",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 1,
+      "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 0,
+      "family": "blur",
+      "init_state_idx": 0,
+      "perturbation_name": "blur_25",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 1,
+      "family": "blur",
+      "init_state_idx": 1,
+      "perturbation_name": "blur_25",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    },
+    {
+      "episode_idx": 2,
+      "family": "blur",
+      "init_state_idx": 2,
+      "perturbation_name": "blur_25",
+      "sigma": 1.0,
+      "success": false,
+      "suite": "object",
+      "task_idx": 4,
+      "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket"
+    }
+  ],
+  "source": "libero_openvla_observation_object3_h220_bash",
+  "states": [
+    {
+      "clean": 1.0,
+      "family": "blur",
+      "num_radii": 3,
+      "r50": 0.8,
+      "r80": 0.6799999999999999,
+      "rauc": 0.8,
+      "state_id": "object:0:pick_up_the_alphabet_soup_and_place_it_in_the_basket:episode=0:init=0"
+    },
+    {
+      "clean": 1.0,
+      "family": "blur",
+      "num_radii": 3,
+      "r50": 0.3,
+      "r80": 0.11999999999999997,
+      "rauc": 0.3,
+      "state_id": "object:0:pick_up_the_alphabet_soup_and_place_it_in_the_basket:episode=1:init=1"
+    },
+    {
+      "clean": 1.0,
+      "family": "blur",
+      "num_radii": 3,
+      "r50": 0.3,
+      "r80": 0.11999999999999997,
+      "rauc": 0.3,
+      "state_id": "object:0:pick_up_the_alphabet_soup_and_place_it_in_the_basket:episode=2:init=2"
+    },
+    {
+      "clean": 1.0,
+      "family": "blur",
+      "num_radii": 3,
+      "r50": 0.3,
+      "r80": 0.11999999999999997,
+      "rauc": 0.3,
+      "state_id": "object:1:pick_up_the_cream_cheese_and_place_it_in_the_basket:episode=0:init=0"
+    },
+    {
+      "clean": 1.0,
+      "family": "blur",
+      "num_radii": 3,
+      "r50": 0.3,
+      "r80": 0.11999999999999997,
+      "rauc": 0.3,
+      "state_id": "object:1:pick_up_the_cream_cheese_and_place_it_in_the_basket:episode=1:init=1"
+    },
+    {
+      "clean": 1.0,
+      "family": "blur",
+      "num_radii": 3,
+      "r50": 0.3,
+      "r80": 0.11999999999999997,
+      "rauc": 0.3,
+      "state_id": "object:1:pick_up_the_cream_cheese_and_place_it_in_the_basket:episode=2:init=2"
+    },
+    {
+      "clean": 1.0,
+      "family": "blur",
+      "num_radii": 3,
+      "r50": 0.8,
+      "r80": 0.6799999999999999,
+      "rauc": 0.8,
+      "state_id": "object:4:pick_up_the_ketchup_and_place_it_in_the_basket:episode=0:init=0"
+    },
+    {
+      "clean": 1.0,
+      "family": "blur",
+      "num_radii": 3,
+      "r50": 0.8,
+      "r80": 0.6799999999999999,
+      "rauc": 0.8,
+      "state_id": "object:4:pick_up_the_ketchup_and_place_it_in_the_basket:episode=1:init=1"
+    },
+    {
+      "clean": 1.0,
+      "family": "blur",
+      "num_radii": 3,
+      "r50": 0.3,
+      "r80": 0.11999999999999997,
+      "rauc": 0.3,
+      "state_id": "object:4:pick_up_the_ketchup_and_place_it_in_the_basket:episode=2:init=2"
+    },
+    {
+      "clean": 1.0,
+      "family": "brightness",
+      "num_radii": 3,
+      "r50": 1.0,
+      "r80": 1.0,
+      "rauc": 1.0,
+      "state_id": "object:0:pick_up_the_alphabet_soup_and_place_it_in_the_basket:episode=0:init=0"
+    },
+    {
+      "clean": 1.0,
+      "family": "brightness",
+      "num_radii": 3,
+      "r50": 1.0,
+      "r80": 1.0,
+      "rauc": 1.0,
+      "state_id": "object:0:pick_up_the_alphabet_soup_and_place_it_in_the_basket:episode=1:init=1"
+    },
+    {
+      "clean": 1.0,
+      "family": "brightness",
+      "num_radii": 3,
+      "r50": 0.8,
+      "r80": 0.68,
+      "rauc": 0.8,
+      "state_id": "object:0:pick_up_the_alphabet_soup_and_place_it_in_the_basket:episode=2:init=2"
+    },
+    {
+      "clean": 1.0,
+      "family": "brightness",
+      "num_radii": 3,
+      "r50": 0.30000000000000004,
+      "r80": 0.12,
+      "rauc": 0.30000000000000004,
+      "state_id": "object:1:pick_up_the_cream_cheese_and_place_it_in_the_basket:episode=0:init=0"
+    },
+    {
+      "clean": 1.0,
+      "family": "brightness",
+      "num_radii": 3,
+      "r50": 0.30000000000000004,
+      "r80": 0.12,
+      "rauc": 0.30000000000000004,
+      "state_id": "object:1:pick_up_the_cream_cheese_and_place_it_in_the_basket:episode=1:init=1"
+    },
+    {
+      "clean": 1.0,
+      "family": "brightness",
+      "num_radii": 3,
+      "r50": 0.8,
+      "r80": 0.68,
+      "rauc": 0.8,
+      "state_id": "object:1:pick_up_the_cream_cheese_and_place_it_in_the_basket:episode=2:init=2"
+    },
+    {
+      "clean": 1.0,
+      "family": "brightness",
+      "num_radii": 3,
+      "r50": 1.0,
+      "r80": 1.0,
+      "rauc": 1.0,
+      "state_id": "object:4:pick_up_the_ketchup_and_place_it_in_the_basket:episode=0:init=0"
+    },
+    {
+      "clean": 1.0,
+      "family": "brightness",
+      "num_radii": 3,
+      "r50": 1.0,
+      "r80": 1.0,
+      "rauc": 1.0,
+      "state_id": "object:4:pick_up_the_ketchup_and_place_it_in_the_basket:episode=1:init=1"
+    },
+    {
+      "clean": 1.0,
+      "family": "brightness",
+      "num_radii": 3,
+      "r50": 1.0,
+      "r80": 1.0,
+      "rauc": 1.0,
+      "state_id": "object:4:pick_up_the_ketchup_and_place_it_in_the_basket:episode=2:init=2"
+    },
+    {
+      "clean": 1.0,
+      "family": "occlusion",
+      "num_radii": 4,
+      "r50": 0.2,
+      "r80": 0.07999999999999999,
+      "rauc": 0.2,
+      "state_id": "object:0:pick_up_the_alphabet_soup_and_place_it_in_the_basket:episode=0:init=0"
+    },
+    {
+      "clean": 1.0,
+      "family": "occlusion",
+      "num_radii": 4,
+      "r50": 0.55,
+      "r80": 0.45999999999999996,
+      "rauc": 0.55,
+      "state_id": "object:0:pick_up_the_alphabet_soup_and_place_it_in_the_basket:episode=1:init=1"
+    },
+    {
+      "clean": 1.0,
+      "family": "occlusion",
+      "num_radii": 4,
+      "r50": 0.2,
+      "r80": 0.07999999999999999,
+      "rauc": 0.2,
+      "state_id": "object:0:pick_up_the_alphabet_soup_and_place_it_in_the_basket:episode=2:init=2"
+    },
+    {
+      "clean": 1.0,
+      "family": "occlusion",
+      "num_radii": 4,
+      "r50": 0.2,
+      "r80": 0.07999999999999999,
+      "rauc": 0.2,
+      "state_id": "object:1:pick_up_the_cream_cheese_and_place_it_in_the_basket:episode=0:init=0"
+    },
+    {
+      "clean": 1.0,
+      "family": "occlusion",
+      "num_radii": 4,
+      "r50": 0.2,
+      "r80": 0.07999999999999999,
+      "rauc": 0.2,
+      "state_id": "object:1:pick_up_the_cream_cheese_and_place_it_in_the_basket:episode=1:init=1"
+    },
+    {
+      "clean": 1.0,
+      "family": "occlusion",
+      "num_radii": 4,
+      "r50": 0.2,
+      "r80": 0.07999999999999999,
+      "rauc": 0.2,
+      "state_id": "object:1:pick_up_the_cream_cheese_and_place_it_in_the_basket:episode=2:init=2"
+    },
+    {
+      "clean": 1.0,
+      "family": "occlusion",
+      "num_radii": 4,
+      "r50": 0.55,
+      "r80": 0.45999999999999996,
+      "rauc": 0.55,
+      "state_id": "object:4:pick_up_the_ketchup_and_place_it_in_the_basket:episode=0:init=0"
+    },
+    {
+      "clean": 1.0,
+      "family": "occlusion",
+      "num_radii": 4,
+      "r50": 0.55,
+      "r80": 0.45999999999999996,
+      "rauc": 0.55,
+      "state_id": "object:4:pick_up_the_ketchup_and_place_it_in_the_basket:episode=1:init=1"
+    },
+    {
+      "clean": 1.0,
+      "family": "occlusion",
+      "num_radii": 4,
+      "r50": 0.85,
+      "r80": 0.76,
+      "rauc": 0.85,
+      "state_id": "object:4:pick_up_the_ketchup_and_place_it_in_the_basket:episode=2:init=2"
+    },
+    {
+      "clean": 1.0,
+      "family": "shift",
+      "num_radii": 3,
+      "r50": 0.26666666666666666,
+      "r80": 0.10666666666666665,
+      "rauc": 0.26666666666666666,
+      "state_id": "object:0:pick_up_the_alphabet_soup_and_place_it_in_the_basket:episode=0:init=0"
+    },
+    {
+      "clean": 1.0,
+      "family": "shift",
+      "num_radii": 3,
+      "r50": 0.7666666666666666,
+      "r80": 0.6266666666666666,
+      "rauc": 0.7666666666666666,
+      "state_id": "object:0:pick_up_the_alphabet_soup_and_place_it_in_the_basket:episode=1:init=1"
+    },
+    {
+      "clean": 1.0,
+      "family": "shift",
+      "num_radii": 3,
+      "r50": 0.26666666666666666,
+      "r80": 0.10666666666666665,
+      "rauc": 0.26666666666666666,
+      "state_id": "object:0:pick_up_the_alphabet_soup_and_place_it_in_the_basket:episode=2:init=2"
+    },
+    {
+      "clean": 1.0,
+      "family": "shift",
+      "num_radii": 3,
+      "r50": 0.26666666666666666,
+      "r80": 0.10666666666666665,
+      "rauc": 0.26666666666666666,
+      "state_id": "object:1:pick_up_the_cream_cheese_and_place_it_in_the_basket:episode=0:init=0"
+    },
+    {
+      "clean": 1.0,
+      "family": "shift",
+      "num_radii": 3,
+      "r50": 0.26666666666666666,
+      "r80": 0.10666666666666665,
+      "rauc": 0.26666666666666666,
+      "state_id": "object:1:pick_up_the_cream_cheese_and_place_it_in_the_basket:episode=1:init=1"
+    },
+    {
+      "clean": 1.0,
+      "family": "shift",
+      "num_radii": 3,
+      "r50": 0.26666666666666666,
+      "r80": 0.10666666666666665,
+      "rauc": 0.26666666666666666,
+      "state_id": "object:1:pick_up_the_cream_cheese_and_place_it_in_the_basket:episode=2:init=2"
+    },
+    {
+      "clean": 1.0,
+      "family": "shift",
+      "num_radii": 3,
+      "r50": 1.0,
+      "r80": 1.0,
+      "rauc": 1.0,
+      "state_id": "object:4:pick_up_the_ketchup_and_place_it_in_the_basket:episode=0:init=0"
+    },
+    {
+      "clean": 1.0,
+      "family": "shift",
+      "num_radii": 3,
+      "r50": 0.7666666666666666,
+      "r80": 0.6266666666666666,
+      "rauc": 0.7666666666666666,
+      "state_id": "object:4:pick_up_the_ketchup_and_place_it_in_the_basket:episode=1:init=1"
+    },
+    {
+      "clean": 1.0,
+      "family": "shift",
+      "num_radii": 3,
+      "r50": 0.7666666666666666,
+      "r80": 0.6266666666666666,
+      "rauc": 0.7666666666666666,
+      "state_id": "object:4:pick_up_the_ketchup_and_place_it_in_the_basket:episode=2:init=2"
+    }
+  ]
+}
