@@ -126,6 +126,7 @@ def _export_dir(
 
 def _load_successful_native_steps(path: Path, max_steps_per_episode: int) -> dict[tuple[Any, ...], list[dict[str, Any]]]:
     grouped: dict[tuple[Any, ...], list[dict[str, Any]]] = defaultdict(list)
+    successful_keys: set[tuple[Any, ...]] = set()
     with path.open(encoding="utf-8") as handle:
         for line in handle:
             row = json.loads(line)
@@ -134,13 +135,15 @@ def _load_successful_native_steps(path: Path, max_steps_per_episode: int) -> dic
             if not row.get("executed_action"):
                 continue
             key = _episode_key(row)
+            if bool(row.get("success_after_step", False)):
+                successful_keys.add(key)
             if len(grouped[key]) >= max_steps_per_episode:
                 continue
             grouped[key].append(row)
     return {
         key: sorted(items, key=lambda row: int(row["step_idx"]))
         for key, items in grouped.items()
-        if items and bool(items[-1].get("success_after_step", False))
+        if items and key in successful_keys
     }
 
 
