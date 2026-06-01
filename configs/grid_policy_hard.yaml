@@ -1,0 +1,29 @@
+experiment:
+  name: grid_policy_hard_v1
+  seeds: [0, 1, 2]
+  methods: [uniform, fixed, failure_only, plr_loss, bgr]
+  num_tasks: 48
+  grid_size: 11
+  obstacle_prob: 0.24
+  replay_states_per_task: 5
+  max_offset: 5
+  horizon: 34
+  iterations: 120
+  eval_every: 20
+  train_batch_size: 28
+  eval_trials_per_radius: 7
+  eval_grid_size: 9
+  alpha: 0.8
+  learning_rate: 0.45
+  clean_pretrain_steps: 2
+  fixed_radius: 0.70
+  target_margin: 0.35
+  baseline_candidates: 24
+  failure_probe_trials: 2
+bgr:
+  initial_probes: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+  refresh_per_eval: 96
+  min_trials: 3
+  radius_noise: 0.08
+  priority_temperature: 0.75
+  uniform_mix: 0.15
