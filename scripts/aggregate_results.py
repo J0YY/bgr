@@ -19,26 +19,20 @@ BENCHMARKS = {
             "plr_loss": "Loss-priority",
         },
     },
-    "grid_margin_full_v1": {
+    "grid_margin_pair_15seed_v1": {
         "label": "GridMargin",
-        "primary": ["bgr", "uniform", "failure_only", "plr_loss", "fixed"],
+        "primary": ["bgr", "uniform"],
         "display": {
             "bgr": "BGR",
             "uniform": "Uniform",
-            "failure_only": "Failure",
-            "plr_loss": "Loss-priority",
-            "fixed": "Fixed",
         },
     },
-    "suffix_strategy_v1": {
+    "suffix_strategy_pair_15seed_v1": {
         "label": "RobotSuffix",
-        "primary": ["bgr_broad", "uniform", "bgr", "bgr_hard", "bgr_boundary"],
+        "primary": ["bgr_broad", "uniform"],
         "display": {
             "bgr_broad": "BGR-Broad",
             "uniform": "Uniform",
-            "bgr": "BGR",
-            "bgr_hard": "BGR-Hard",
-            "bgr_boundary": "BGR-Boundary",
         },
     },
 }
@@ -50,7 +44,7 @@ METRICS = [
     ("rauc_aulc", "AULC"),
 ]
 
-ESTIMATOR_RUN = "estimator_full_v1"
+ESTIMATOR_RUN = "estimator_pair_15seed_v1"
 ABLATION_RUN = "grid_margin_ablation_v1"
 OPENVLA_RECOVERY_RUN = "libero_openvla_recovery_v1"
 OPENVLA_SELECTION_RUN = "libero_openvla_boundary_selection_balanced_v1"
@@ -89,14 +83,16 @@ def main() -> None:
                     }
                 )
 
-        for baseline in [m for m in spec["primary"] if m != "bgr"]:
+        treatment = "bgr" if "bgr" in spec["primary"] else spec["primary"][0]
+        for baseline in [m for m in spec["primary"] if m != treatment]:
             for metric, metric_label in METRICS:
-                bgr_vals = [float(row[metric]) for row in rows if row["method"] == "bgr"]
+                bgr_vals = [float(row[metric]) for row in rows if row["method"] == treatment]
                 base_vals = [float(row[metric]) for row in rows if row["method"] == baseline]
                 diffs = [a - b for a, b in zip(bgr_vals, base_vals, strict=True)]
                 effect_rows.append(
                     {
                         "benchmark": spec["label"],
+                        "treatment": spec["display"].get(treatment, treatment),
                         "baseline": spec["display"].get(baseline, baseline),
                         "metric": metric_label,
                         "mean_delta": mean(diffs),
@@ -134,7 +130,7 @@ def write_csv(path: Path, rows: list[dict]) -> None:
     if not rows:
         return
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 

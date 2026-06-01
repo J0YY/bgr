@@ -1,0 +1,348 @@
+{
+  "config": {
+    "experiment": {
+      "name": "estimator_probe_pair_15seed_v1",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "methods": [
+        "uniform",
+        "active"
+      ],
+      "num_states": 512,
+      "probes_per_state": 17,
+      "sigma_max": 1.0,
+      "true_grid_size": 201,
+      "coarse_grid_size": 7,
+      "alpha": 0.8,
+      "hit_tolerance": 0.08
+    },
+    "active": {
+      "initial_probes": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "initial_trials": 2,
+      "jitter": 0.05
+    }
+  },
+  "results": [
+    {
+      "method": "uniform",
+      "seed": 0,
+      "probes_per_state": 17,
+      "r80_mae": 0.11210878090010157,
+      "r80_bias": 0.07070984109140244,
+      "rauc_mae": 0.06512988816921762,
+      "boundary_hit_rate": 0.619140625,
+      "mean_uncertainty": 0.7071067811865477
+    },
+    {
+      "method": "uniform",
+      "seed": 1,
+      "probes_per_state": 17,
+      "r80_mae": 0.1025915219558283,
+      "r80_bias": 0.06312599202003155,
+      "rauc_mae": 0.06538176862052639,
+      "boundary_hit_rate": 0.6328125,
+      "mean_uncertainty": 0.7071067811865477
+    },
+    {
+      "method": "uniform",
+      "seed": 2,
+      "probes_per_state": 17,
+      "r80_mae": 0.10662479856986173,
+      "r80_bias": 0.05923797777328063,
+      "rauc_mae": 0.06353394292737291,
+      "boundary_hit_rate": 0.6015625,
+      "mean_uncertainty": 0.7071067811865477
+    },
+    {
+      "method": "uniform",
+      "seed": 3,
+      "probes_per_state": 17,
+      "r80_mae": 0.10239128657309322,
+      "r80_bias": 0.05891907904944153,
+      "rauc_mae": 0.06480190302303346,
+      "boundary_hit_rate": 0.625,
+      "mean_uncertainty": 0.7071067811865477
+    },
+    {
+      "method": "uniform",
+      "seed": 4,
+      "probes_per_state": 17,
+      "r80_mae": 0.1042613698498677,
+      "r80_bias": 0.06550754920363347,
+      "rauc_mae": 0.0644948966670221,
+      "boundary_hit_rate": 0.59765625,
+      "mean_uncertainty": 0.7071067811865477
+    },
+    {
+      "method": "uniform",
+      "seed": 5,
+      "probes_per_state": 17,
+      "r80_mae": 0.09257797762956094,
+      "r80_bias": 0.05252754346481963,
+      "rauc_mae": 0.06353625047132601,
+      "boundary_hit_rate": 0.626953125,
+      "mean_uncertainty": 0.7071067811865477
+    },
+    {
+      "method": "uniform",
+      "seed": 6,
+      "probes_per_state": 17,
+      "r80_mae": 0.10583207962452712,
+      "r80_bias": 0.06611816403131801,
+      "rauc_mae": 0.06913175345376055,
+      "boundary_hit_rate": 0.5859375,
+      "mean_uncertainty": 0.7070962380641221
+    },
+    {
+      "method": "uniform",
+      "seed": 7,
+      "probes_per_state": 17,
+      "r80_mae": 0.10304700105119594,
+      "r80_bias": 0.06313496809323559,
+      "rauc_mae": 0.06376200163527074,
+      "boundary_hit_rate": 0.609375,
+      "mean_uncertainty": 0.7071067811865477
+    },
+    {
+      "method": "uniform",
+      "seed": 8,
+      "probes_per_state": 17,
+      "r80_mae": 0.12086161021230221,
+      "r80_bias": 0.07933355350367916,
+      "rauc_mae": 0.06738132353089143,
+      "boundary_hit_rate": 0.55859375,
+      "mean_uncertainty": 0.7071067811865477
+    },
+    {
+      "method": "uniform",
+      "seed": 9,
+      "probes_per_state": 17,
+      "r80_mae": 0.10670995595801382,
+      "r80_bias": 0.06006616288978557,
+      "rauc_mae": 0.06585433281981037,
+      "boundary_hit_rate": 0.568359375,
+      "mean_uncertainty": 0.7071067811865477
+    },
+    {
+      "method": "uniform",
+      "seed": 10,
+      "probes_per_state": 17,
+      "r80_mae": 0.11423767086983055,
+      "r80_bias": 0.06725447909057955,
+      "rauc_mae": 0.06309382580983688,
+      "boundary_hit_rate": 0.58203125,
+      "mean_uncertainty": 0.7071067811865477
+    },
+    {
+      "method": "uniform",
+      "seed": 11,
+      "probes_per_state": 17,
+      "r80_mae": 0.1075873915997553,
+      "r80_bias": 0.0665070734673327,
+      "rauc_mae": 0.06796252937869522,
+      "boundary_hit_rate": 0.609375,
+      "mean_uncertainty": 0.7071067811865477
+    },
+    {
+      "method": "uniform",
+      "seed": 12,
+      "probes_per_state": 17,
+      "r80_mae": 0.10714504235002274,
+      "r80_bias": 0.06283234333806646,
+      "rauc_mae": 0.06478012350805636,
+      "boundary_hit_rate": 0.626953125,
+      "mean_uncertainty": 0.7070962380641221
+    },
+    {
+      "method": "uniform",
+      "seed": 13,
+      "probes_per_state": 17,
+      "r80_mae": 0.09835981391301102,
+      "r80_bias": 0.054399076770987,
+      "rauc_mae": 0.06664388130869514,
+      "boundary_hit_rate": 0.59375,
+      "mean_uncertainty": 0.7071067811865477
+    },
+    {
+      "method": "uniform",
+      "seed": 14,
+      "probes_per_state": 17,
+      "r80_mae": 0.11232117588267945,
+      "r80_bias": 0.0699943641599941,
+      "rauc_mae": 0.06882546661571942,
+      "boundary_hit_rate": 0.572265625,
+      "mean_uncertainty": 0.7071067811865477
+    },
+    {
+      "method": "active",
+      "seed": 0,
+      "probes_per_state": 17,
+      "r80_mae": 0.07748838251606846,
+      "r80_bias": 0.022535944324332136,
+      "rauc_mae": 0.0674568890686152,
+      "boundary_hit_rate": 0.6875,
+      "mean_uncertainty": 0.6565878182419038
+    },
+    {
+      "method": "active",
+      "seed": 1,
+      "probes_per_state": 17,
+      "r80_mae": 0.07958384906231412,
+      "r80_bias": 0.030305710203622493,
+      "rauc_mae": 0.06284164809463814,
+      "boundary_hit_rate": 0.693359375,
+      "mean_uncertainty": 0.6588229483582054
+    },
+    {
+      "method": "active",
+      "seed": 2,
+      "probes_per_state": 17,
+      "r80_mae": 0.07888188740550152,
+      "r80_bias": 0.02541662613181487,
+      "rauc_mae": 0.06684907512452438,
+      "boundary_hit_rate": 0.671875,
+      "mean_uncertainty": 0.6587284881993783
+    },
+    {
+      "method": "active",
+      "seed": 3,
+      "probes_per_state": 17,
+      "r80_mae": 0.07671527763259489,
+      "r80_bias": 0.023366185761182597,
+      "rauc_mae": 0.0673246712479302,
+      "boundary_hit_rate": 0.67578125,
+      "mean_uncertainty": 0.6574022895365408
+    },
+    {
+      "method": "active",
+      "seed": 4,
+      "probes_per_state": 17,
+      "r80_mae": 0.08091102119118973,
+      "r80_bias": 0.027949523273692017,
+      "rauc_mae": 0.06312557368799429,
+      "boundary_hit_rate": 0.68359375,
+      "mean_uncertainty": 0.6588017160576969
+    },
+    {
+      "method": "active",
+      "seed": 5,
+      "probes_per_state": 17,
+      "r80_mae": 0.07759245869271209,
+      "r80_bias": 0.02853595552459742,
+      "rauc_mae": 0.06192490919179782,
+      "boundary_hit_rate": 0.69140625,
+      "mean_uncertainty": 0.6590472066544264
+    },
+    {
+      "method": "active",
+      "seed": 6,
+      "probes_per_state": 17,
+      "r80_mae": 0.08076319532424558,
+      "r80_bias": 0.031099589364279857,
+      "rauc_mae": 0.06271451303102774,
+      "boundary_hit_rate": 0.685546875,
+      "mean_uncertainty": 0.6561203030848861
+    },
+    {
+      "method": "active",
+      "seed": 7,
+      "probes_per_state": 17,
+      "r80_mae": 0.08783135647141788,
+      "r80_bias": 0.031290845441556685,
+      "rauc_mae": 0.0675832191667694,
+      "boundary_hit_rate": 0.630859375,
+      "mean_uncertainty": 0.6573719969590174
+    },
+    {
+      "method": "active",
+      "seed": 8,
+      "probes_per_state": 17,
+      "r80_mae": 0.0799374588954689,
+      "r80_bias": 0.020035889109009334,
+      "rauc_mae": 0.06370860076976864,
+      "boundary_hit_rate": 0.65234375,
+      "mean_uncertainty": 0.6566497785135852
+    },
+    {
+      "method": "active",
+      "seed": 9,
+      "probes_per_state": 17,
+      "r80_mae": 0.06999686435722367,
+      "r80_bias": 0.014456280281813151,
+      "rauc_mae": 0.06405689012465016,
+      "boundary_hit_rate": 0.67578125,
+      "mean_uncertainty": 0.6597578102729799
+    },
+    {
+      "method": "active",
+      "seed": 10,
+      "probes_per_state": 17,
+      "r80_mae": 0.07834954284994503,
+      "r80_bias": 0.028593254642113458,
+      "rauc_mae": 0.06267764244184064,
+      "boundary_hit_rate": 0.7109375,
+      "mean_uncertainty": 0.6602456713062488
+    },
+    {
+      "method": "active",
+      "seed": 11,
+      "probes_per_state": 17,
+      "r80_mae": 0.09377162894413299,
+      "r80_bias": 0.04220266426255276,
+      "rauc_mae": 0.06367305461719394,
+      "boundary_hit_rate": 0.64453125,
+      "mean_uncertainty": 0.6566069372683255
+    },
+    {
+      "method": "active",
+      "seed": 12,
+      "probes_per_state": 17,
+      "r80_mae": 0.07045383489115928,
+      "r80_bias": 0.016591270694688947,
+      "rauc_mae": 0.06377564313536936,
+      "boundary_hit_rate": 0.689453125,
+      "mean_uncertainty": 0.6580817390882095
+    },
+    {
+      "method": "active",
+      "seed": 13,
+      "probes_per_state": 17,
+      "r80_mae": 0.07891660054286717,
+      "r80_bias": 0.03443586680808756,
+      "rauc_mae": 0.06590204096982064,
+      "boundary_hit_rate": 0.736328125,
+      "mean_uncertainty": 0.6577857287697446
+    },
+    {
+      "method": "active",
+      "seed": 14,
+      "probes_per_state": 17,
+      "r80_mae": 0.08702274099722436,
+      "r80_bias": 0.028549691167886092,
+      "rauc_mae": 0.06391946784591736,
+      "boundary_hit_rate": 0.6328125,
+      "mean_uncertainty": 0.6571453146351769
+    }
+  ]
+}

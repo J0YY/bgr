@@ -1,0 +1,13 @@
+benchmark,metric,treatment,baseline,n,mean_treatment_minus_baseline,paired_se,two_sided_sign_flip_p,direction,supports_treatment
+Synthetic margin,final_rauc,bgr,uniform,3,0.009686,0.007663,0.2500,higher,true
+Synthetic margin,rauc_aulc,bgr,uniform,3,0.018131,0.004277,0.2500,higher,true
+Grid margin 15-seed,final_rauc,bgr,uniform,15,0.038374,0.000618,0.0001,higher,true
+Grid margin 15-seed,rauc_aulc,bgr,uniform,15,0.039628,0.000512,0.0001,higher,true
+Grid margin 15-seed,final_clean,bgr,uniform,15,0.051773,0.000555,0.0001,higher,true
+Grid margin 15-seed,final_median_r80,bgr,uniform,15,0.012307,0.000896,0.0001,higher,true
+Robot suffix 15-seed,final_clean,bgr_broad,uniform,15,0.033317,0.000466,0.0001,higher,true
+Robot suffix 15-seed,final_transfer_rauc,bgr_broad,uniform,15,0.008903,0.000420,0.0001,higher,true
+Robot suffix 15-seed,rauc_aulc,bgr_broad,uniform,15,0.008292,0.000529,0.0001,higher,true
+Robot suffix 15-seed,final_rauc,bgr_broad,uniform,15,-0.002929,0.000708,0.0018,higher,false
+Estimator 15-seed,boundary_hit_rate,active,uniform,15,0.076823,0.008547,0.0001,higher,true
+Estimator 15-seed,r80_mae,active,uniform,15,-0.026563,0.002256,0.0001,lower,true

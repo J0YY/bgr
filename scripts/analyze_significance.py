@@ -24,14 +24,22 @@ class Comparison:
 COMPARISONS = [
     Comparison("Synthetic margin", "toy_fast_v3/summary.csv", "bgr", "uniform", "final_rauc"),
     Comparison("Synthetic margin", "toy_fast_v3/summary.csv", "bgr", "uniform", "rauc_aulc"),
-    Comparison("Grid margin", "grid_margin_full_v1/summary.csv", "bgr", "uniform", "final_rauc"),
-    Comparison("Grid margin", "grid_margin_full_v1/summary.csv", "bgr", "uniform", "rauc_aulc"),
-    Comparison("Grid margin", "grid_margin_full_v1/summary.csv", "bgr", "uniform", "final_clean"),
-    Comparison("Robot suffix", "suffix_strategy_v1/summary.csv", "bgr_broad", "uniform", "final_rauc"),
-    Comparison("Robot suffix", "suffix_strategy_v1/summary.csv", "bgr_broad", "uniform", "final_transfer_rauc"),
-    Comparison("Robot suffix", "suffix_strategy_v1/summary.csv", "bgr_broad", "uniform", "rauc_aulc"),
-    Comparison("Estimator", "estimator_full_v1/summary.csv", "active", "uniform", "boundary_hit_rate"),
-    Comparison("Estimator", "estimator_full_v1/summary.csv", "active", "uniform", "r80_mae", "lower"),
+    Comparison("Grid margin 15-seed", "grid_margin_pair_15seed_v1/summary.csv", "bgr", "uniform", "final_rauc"),
+    Comparison("Grid margin 15-seed", "grid_margin_pair_15seed_v1/summary.csv", "bgr", "uniform", "rauc_aulc"),
+    Comparison("Grid margin 15-seed", "grid_margin_pair_15seed_v1/summary.csv", "bgr", "uniform", "final_clean"),
+    Comparison("Grid margin 15-seed", "grid_margin_pair_15seed_v1/summary.csv", "bgr", "uniform", "final_median_r80"),
+    Comparison("Robot suffix 15-seed", "suffix_strategy_pair_15seed_v1/summary.csv", "bgr_broad", "uniform", "final_clean"),
+    Comparison(
+        "Robot suffix 15-seed",
+        "suffix_strategy_pair_15seed_v1/summary.csv",
+        "bgr_broad",
+        "uniform",
+        "final_transfer_rauc",
+    ),
+    Comparison("Robot suffix 15-seed", "suffix_strategy_pair_15seed_v1/summary.csv", "bgr_broad", "uniform", "rauc_aulc"),
+    Comparison("Robot suffix 15-seed", "suffix_strategy_pair_15seed_v1/summary.csv", "bgr_broad", "uniform", "final_rauc"),
+    Comparison("Estimator 15-seed", "estimator_pair_15seed_v1/summary.csv", "active", "uniform", "boundary_hit_rate"),
+    Comparison("Estimator 15-seed", "estimator_pair_15seed_v1/summary.csv", "active", "uniform", "r80_mae", "lower"),
 ]
 
 
@@ -104,7 +112,7 @@ def analyze(results_dir: Path) -> list[dict[str, str]]:
 def write_csv(rows: list[dict[str, str]], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -116,9 +124,9 @@ def write_latex(rows: list[dict[str, str]], path: Path) -> None:
         if (row["benchmark"], row["metric"])
         in {
             ("Synthetic margin", "final_rauc"),
-            ("Grid margin", "final_rauc"),
-            ("Robot suffix", "rauc_aulc"),
-            ("Estimator", "boundary_hit_rate"),
+            ("Grid margin 15-seed", "final_rauc"),
+            ("Robot suffix 15-seed", "rauc_aulc"),
+            ("Estimator 15-seed", "boundary_hit_rate"),
         }
     ]
     path.parent.mkdir(parents=True, exist_ok=True)
