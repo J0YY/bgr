@@ -435,6 +435,27 @@ brightness, shift, and occlusion. Each NPZ contains primary image
 language label. This is still a bridge artifact, not RLDS conversion or
 fine-tuning.
 
+### `openvla_oft_pack_smoke_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples results/openvla_teacher_oft_smoke_v1/examples.jsonl --out runs/openvla_oft_pack_smoke_v1 --write-hdf5
+```
+
+Remote logs:
+
+```text
+/work/joy/bgr/logs/run_1780323325_136783423.out
+/work/joy/bgr/logs/run_1780323386_780730416.out
+```
+
+Interpretation: this validates and packs the rendered OFT-field examples into a
+LIBERO-style HDF5 smoke dataset. The checked-in HDF5 has `data/demo_*` groups
+with `actions`, `obs/agentview_rgb`, `obs/eye_in_hand_rgb`, `obs/ee_states`,
+and `obs/gripper_states`. This is the next bridge artifact toward RLDS
+conversion, not a completed RLDS dataset or fine-tuning run.
+
 ### `suffix_strategy_v1`
 
 Command:
