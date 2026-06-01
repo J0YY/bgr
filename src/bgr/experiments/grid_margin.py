@@ -48,14 +48,14 @@ def run_method(config: dict, method: str, seed: int) -> GridMarginResult:
             metrics = evaluate(bench, eval_grid, alpha)
             metrics["step"] = float(step)
             history.append(metrics)
-            if method == "bgr":
+            if _uses_bgr_records(method):
                 _refresh_records(bench, records, bgr_cfg, alpha, rng, step)
         if step == int(exp["iterations"]):
             break
         for _ in range(int(exp["train_batch_size"])):
             replay_idx, sigma = _sample_training_pair(method, bench, records, scorer, config, rng, step)
             bench.train_step(replay_idx, sigma, rng)
-            if method == "bgr":
+            if _uses_bgr_records(method):
                 success = bench.rollout(replay_idx, sigma, rng)
                 records[replay_idx].add_observation(sigma, success)
                 records[replay_idx].replay_count += 1
@@ -184,32 +184,53 @@ def _sample_training_pair(
         scores = [bench.loss_proxy(int(idx), float(sigma), rng) for idx, sigma in zip(candidates, sigmas, strict=True)]
         selected = int(np.argmax(scores))
         return int(candidates[selected]), float(sigmas[selected])
-    if method == "bgr":
-        adaptive_scorer = BGRPriorityScorer(
-            clean_threshold=scorer.clean_threshold,
-            feasibility_threshold=scorer.feasibility_threshold,
-            target_radius=float(exp.get("target_margin", scorer.target_radius)),
-            radius_bandwidth=scorer.radius_bandwidth,
-            sharpness_power=scorer.sharpness_power,
-            uncertainty_power=scorer.uncertainty_power,
-            staleness_weight=scorer.staleness_weight,
-            min_priority=scorer.min_priority,
-        )
-        priorities = np.array([adaptive_scorer.score(record, step) for record in records], dtype=float)
-        probs = mixed_priority_probs(
-            priorities,
-            temperature=float(config.get("bgr", {}).get("priority_temperature", 0.7)),
-            uniform_mix=float(config.get("bgr", {}).get("uniform_mix", 0.08)),
-        )
-        replay_idx = int(rng.choice(len(records), p=probs))
+    if _uses_bgr_records(method):
+        return _sample_bgr_pair(method, records, scorer, config, rng, step)
+    raise ValueError(f"unknown method: {method}")
+
+
+def _uses_bgr_records(method: str) -> bool:
+    return method in {"bgr", "bgr_no_uncertainty", "bgr_no_sharpness", "bgr_uniform_radius"}
+
+
+def _sample_bgr_pair(
+    method: str,
+    records: list[LevelRecord],
+    scorer: BGRPriorityScorer,
+    config: dict,
+    rng: np.random.Generator,
+    step: int,
+) -> tuple[int, float]:
+    exp = config["experiment"]
+    uncertainty_power = 0.0 if method == "bgr_no_uncertainty" else scorer.uncertainty_power
+    sharpness_power = 0.0 if method == "bgr_no_sharpness" else scorer.sharpness_power
+    adaptive_scorer = BGRPriorityScorer(
+        clean_threshold=scorer.clean_threshold,
+        feasibility_threshold=scorer.feasibility_threshold,
+        target_radius=float(exp.get("target_margin", scorer.target_radius)),
+        radius_bandwidth=scorer.radius_bandwidth,
+        sharpness_power=sharpness_power,
+        uncertainty_power=uncertainty_power,
+        staleness_weight=scorer.staleness_weight,
+        min_priority=scorer.min_priority,
+    )
+    priorities = np.array([adaptive_scorer.score(record, step) for record in records], dtype=float)
+    probs = mixed_priority_probs(
+        priorities,
+        temperature=float(config.get("bgr", {}).get("priority_temperature", 0.7)),
+        uniform_mix=float(config.get("bgr", {}).get("uniform_mix", 0.08)),
+    )
+    replay_idx = int(rng.choice(len(records), p=probs))
+    if method == "bgr_uniform_radius":
+        sigma = float(rng.uniform(0.0, 1.0))
+    else:
         sigma = sample_boundary_radius(
             rng,
             records[replay_idx].r_alpha_hat,
             1.0,
             radius_noise=float(config.get("bgr", {}).get("radius_noise", 0.07)),
         )
-        return replay_idx, sigma
-    raise ValueError(f"unknown method: {method}")
+    return replay_idx, sigma
 
 
 def _quick_success_rate(
