@@ -413,25 +413,27 @@ actions from successful native OpenVLA rollouts. A downstream converter must
 replay the native action prefix in LIBERO, render observations, apply the
 candidate perturbation to the image stream, and write RLDS episodes.
 
-### `openvla_teacher_render_smoke_v2`
+### `openvla_teacher_oft_smoke_v1`
 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:20:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_render_smoke_v2 --max-examples 4 --selection first_per_family --num-steps-wait 10 --env-image-size 256 --image-size 224
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:20:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_smoke_v1 --max-examples 4 --selection first_per_family --num-steps-wait 10 --env-image-size 256 --image-size 224
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780322669_234668908.out
+/work/joy/bgr/logs/run_1780322998_166835773.out
 ```
 
 Interpretation: this validates that the teacher-replay manifest can be converted
-into rendered image/action examples under LIBERO GPU/EGL. The checked-in smoke
-artifact contains one perturbed PNG/action label for each visual perturbation
-family: blur, brightness, shift, and occlusion. This is still a bridge artifact,
-not RLDS conversion or fine-tuning.
+into rendered OpenVLA-OFT-style examples under LIBERO GPU/EGL. The checked-in
+smoke artifact contains one example for each visual perturbation family: blur,
+brightness, shift, and occlusion. Each NPZ contains primary image
+`(224,224,3)`, wrist image `(224,224,3)`, 8D LIBERO state, 7D action, and
+language label. This is still a bridge artifact, not RLDS conversion or
+fine-tuning.
 
 ### `suffix_strategy_v1`
 
