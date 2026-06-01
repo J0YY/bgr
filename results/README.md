@@ -238,6 +238,32 @@ Mean results over three seeds for the mixed run:
 
 Interpretation: this is a negative policy-level diagnostic. Adding clean/uniform radius coverage improves tabular BGR, but fixed-radius and loss-priority replay saturate the tabular oracle-imitation grid policy much faster. The main paper should continue using `grid_margin_full_v1` as the positive procedural result and treat this policy-level tabular setup as a benchmark-design failure, not as evidence for BGR.
 
+### `grid_policy_coverage_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 00:45:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_policy_coverage.yaml --out runs/grid_policy_coverage_v1
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780319352_975146235.out
+```
+
+Mean results over three seeds:
+
+| Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---|---:|---:|---:|---:|
+| BGR mixed coverage | 0.9592 | 0.9117 | 0.9000 | 0.6914 |
+| BGR | 0.9054 | 0.8730 | 0.8000 | 0.6448 |
+| Uniform | 0.9965 | 0.9641 | 0.9833 | 0.7838 |
+| Fixed radius | 0.9931 | 0.9771 | 1.0000 | 0.7999 |
+| PLR-loss proxy | 0.9991 | 0.9786 | 1.0000 | 0.7960 |
+
+Interpretation: coverage-aware BGR substantially improves the tabular policy diagnostic over the earlier mixed sampler (RAUC 0.9117 vs. 0.7589) and over narrow BGR in the same config (0.8730). The result still does not overturn the diagnostic failure: in this oracle-imitation grid policy, broad fixed-radius and loss-priority replay nearly saturate all states faster than BGR.
+
 ### `libero_probe_v2`
 
 Command:
