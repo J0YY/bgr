@@ -62,12 +62,11 @@ def main() -> int:
 def _episode_records(records: list[dict[str, Any]]) -> list[tuple[str, dict[str, Any]]]:
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for record in records:
-        metadata = record["metadata"]
-        key = f"{metadata['task_name']}::{metadata['candidate_name']}"
-        grouped[key].append(record)
+        grouped[_record_group_key(record)].append(record)
 
     episodes = []
     for episode_idx, (group_key, items) in enumerate(sorted(grouped.items())):
+        items = sorted(items, key=lambda item: int(item["metadata"].get("step_idx", 0)))
         steps = []
         for step_idx, item in enumerate(items):
             steps.append(_step_record(item, step_idx=step_idx, num_steps=len(items)))
@@ -84,6 +83,7 @@ def _episode_records(records: list[dict[str, Any]]) -> list[tuple[str, dict[str,
                         "task_name": metadata["task_name"],
                         "candidate_name": metadata["candidate_name"],
                         "perturbation_type": metadata["perturbation_type"],
+                        "episode_uid": metadata.get("episode_uid", ""),
                     },
                 },
             )
@@ -137,9 +137,24 @@ def _feature_spec(tfds: Any) -> Any:
                     "task_name": tfds.features.Text(),
                     "candidate_name": tfds.features.Text(),
                     "perturbation_type": tfds.features.Text(),
+                    "episode_uid": tfds.features.Text(),
                 }
             ),
         }
+    )
+
+
+def _record_group_key(record: dict[str, Any]) -> str:
+    metadata = record["metadata"]
+    return "::".join(
+        [
+            str(metadata.get("suite", "")),
+            str(metadata.get("task_idx", "")),
+            str(metadata.get("task_name", "")),
+            str(metadata.get("episode_idx", 0)),
+            str(metadata.get("init_state_idx", 0)),
+            str(metadata.get("candidate_name", "")),
+        ]
     )
 
 

@@ -21,7 +21,19 @@ def main() -> int:
     parser.add_argument("--manifest", required=True)
     parser.add_argument("--out", required=True)
     parser.add_argument("--max-examples", type=int, default=8)
-    parser.add_argument("--selection", choices=["first", "first_per_family"], default="first")
+    parser.add_argument("--selection", choices=["first", "first_per_family", "balanced_episodes"], default="first")
+    parser.add_argument(
+        "--episodes-per-family",
+        type=int,
+        default=1,
+        help="For --selection balanced_episodes, render this many replay episodes per perturbation family.",
+    )
+    parser.add_argument(
+        "--max-steps-per-episode",
+        type=int,
+        default=None,
+        help="For --selection balanced_episodes, truncate each selected replay episode to this many steps.",
+    )
     parser.add_argument("--num-steps-wait", type=int, default=10)
     parser.add_argument("--env-image-size", type=int, default=256)
     parser.add_argument("--image-size", type=int, default=224)
@@ -29,7 +41,13 @@ def main() -> int:
     parser.add_argument("--camera-key", default="agentview_image")
     args = parser.parse_args()
 
-    rows = _load_rows(Path(args.manifest), int(args.max_examples), str(args.selection))
+    rows = _load_rows(
+        Path(args.manifest),
+        int(args.max_examples),
+        str(args.selection),
+        episodes_per_family=int(args.episodes_per_family),
+        max_steps_per_episode=args.max_steps_per_episode,
+    )
     if not rows:
         raise SystemExit("No manifest rows found.")
 
@@ -73,26 +91,42 @@ def main() -> int:
     return 0
 
 
-def _load_rows(path: Path, max_examples: int, selection: str = "first") -> list[dict[str, Any]]:
+def _load_rows(
+    path: Path,
+    max_examples: int,
+    selection: str = "first",
+    *,
+    episodes_per_family: int = 1,
+    max_steps_per_episode: int | None = None,
+) -> list[dict[str, Any]]:
+    if selection == "balanced_episodes":
+        return _select_balanced_episode_rows(
+            list(_iter_rows(path)),
+            max_examples=max_examples,
+            episodes_per_family=episodes_per_family,
+            max_steps_per_episode=max_steps_per_episode,
+        )
+
     rows: list[dict[str, Any]] = []
     seen_families: set[str] = set()
+    for row in _iter_rows(path):
+        if _keep_row(row, selection, seen_families):
+            rows.append(row)
+        if len(rows) >= max_examples:
+            break
+    return rows
+
+
+def _iter_rows(path: Path):
     opener = path.open
     with opener(encoding="utf-8") as handle:
         if path.suffix == ".csv":
             for row in csv.DictReader(handle):
-                if _keep_row(dict(row), selection, seen_families):
-                    rows.append(dict(row))
-                if len(rows) >= max_examples:
-                    break
+                yield dict(row)
         else:
             for line in handle:
                 if line.strip():
-                    row = json.loads(line)
-                    if _keep_row(row, selection, seen_families):
-                        rows.append(row)
-                if len(rows) >= max_examples:
-                    break
-    return rows
+                    yield json.loads(line)
 
 
 def _keep_row(row: dict[str, Any], selection: str, seen_families: set[str]) -> bool:
@@ -103,6 +137,60 @@ def _keep_row(row: dict[str, Any], selection: str, seen_families: set[str]) -> b
         return False
     seen_families.add(family)
     return True
+
+
+def _select_balanced_episode_rows(
+    rows: list[dict[str, Any]],
+    *,
+    max_examples: int,
+    episodes_per_family: int,
+    max_steps_per_episode: int | None,
+) -> list[dict[str, Any]]:
+    if episodes_per_family <= 0:
+        raise ValueError("episodes_per_family must be positive.")
+    grouped: dict[tuple[Any, ...], list[dict[str, Any]]] = {}
+    order: list[tuple[Any, ...]] = []
+    for row in rows:
+        key = _render_episode_key(row)
+        if key not in grouped:
+            grouped[key] = []
+            order.append(key)
+        grouped[key].append(row)
+
+    selected: list[dict[str, Any]] = []
+    counts: dict[str, int] = {}
+    for key in order:
+        items = sorted(grouped[key], key=lambda item: int(item["step_idx"]))
+        if not items:
+            continue
+        family = str(items[0].get("perturbation_type", ""))
+        if counts.get(family, 0) >= episodes_per_family:
+            continue
+        if max_steps_per_episode is not None:
+            items = items[: int(max_steps_per_episode)]
+        if not items:
+            continue
+        if max_examples > 0 and len(selected) + len(items) > max_examples:
+            remaining = max_examples - len(selected)
+            if remaining <= 0:
+                break
+            items = items[:remaining]
+        selected.extend(items)
+        counts[family] = counts.get(family, 0) + 1
+        if max_examples > 0 and len(selected) >= max_examples:
+            break
+    return selected
+
+
+def _render_episode_key(row: dict[str, Any]) -> tuple[Any, ...]:
+    return (
+        str(row["suite"]),
+        int(row["task_idx"]),
+        str(row["task_name"]),
+        int(row["episode_idx"]),
+        int(row["init_state_idx"]),
+        str(row["candidate_name"]),
+    )
 
 
 def _render_examples(
@@ -185,6 +273,9 @@ def _render_examples(
                     "candidate_name": str(row["candidate_name"]),
                     "candidate_spec": str(row.get("candidate_spec", "")),
                     "perturbation_type": str(row.get("perturbation_type", "")),
+                    "method": str(row.get("method", "")),
+                    "run": str(row.get("run", "")),
+                    "episode_uid": str(row.get("episode_uid", "")),
                     "episode_key": str(episode_key),
                 }
             )

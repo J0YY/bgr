@@ -80,9 +80,15 @@ def _load_record(root: Path, row: dict[str, Any]) -> dict[str, Any]:
         "suite": str(row["suite"]),
         "task_idx": int(row["task_idx"]),
         "task_name": str(row["task_name"]),
+        "episode_idx": int(row.get("episode_idx", 0)),
+        "init_state_idx": int(row.get("init_state_idx", 0)),
+        "step_idx": int(row.get("step_idx", 0)),
         "candidate_name": str(row["candidate_name"]),
         "perturbation_type": str(row["perturbation_type"]),
         "instruction": str(row["instruction"]),
+        "method": str(row.get("method", "")),
+        "run": str(row.get("run", "")),
+        "episode_uid": str(row.get("episode_uid", "")),
     }
     return {
         "image": image,
@@ -121,9 +127,9 @@ def _write_hdf5(path: Path, records: list[dict[str, Any]]) -> None:
         data = handle.create_group("data")
         grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
         for record in records:
-            key = f"{record['metadata']['task_name']}::{record['metadata']['candidate_name']}"
-            grouped[key].append(record)
+            grouped[_record_group_key(record)].append(record)
         for demo_idx, (_key, items) in enumerate(sorted(grouped.items())):
+            items = sorted(items, key=lambda item: int(item["metadata"].get("step_idx", 0)))
             demo = data.create_group(f"demo_{demo_idx}")
             obs = demo.create_group("obs")
             actions = np.stack([item["action"] for item in items], axis=0).astype(np.float32)
@@ -144,6 +150,22 @@ def _write_hdf5(path: Path, records: list[dict[str, Any]]) -> None:
             demo.attrs["language_instruction"] = items[0]["language"]
             demo.attrs["task_name"] = items[0]["metadata"]["task_name"]
             demo.attrs["candidate_name"] = items[0]["metadata"]["candidate_name"]
+            demo.attrs["episode_idx"] = int(items[0]["metadata"].get("episode_idx", 0))
+            demo.attrs["init_state_idx"] = int(items[0]["metadata"].get("init_state_idx", 0))
+
+
+def _record_group_key(record: dict[str, Any]) -> str:
+    metadata = record["metadata"]
+    return "::".join(
+        [
+            str(metadata.get("suite", "")),
+            str(metadata.get("task_idx", "")),
+            str(metadata.get("task_name", "")),
+            str(metadata.get("episode_idx", 0)),
+            str(metadata.get("init_state_idx", 0)),
+            str(metadata.get("candidate_name", "")),
+        ]
+    )
 
 
 if __name__ == "__main__":

@@ -2,7 +2,13 @@ import unittest
 
 import numpy as np
 
-from scripts.render_openvla_teacher_examples import _apply_perturbation, _keep_row, _libero_oft_state, _suite_name
+from scripts.render_openvla_teacher_examples import (
+    _apply_perturbation,
+    _keep_row,
+    _libero_oft_state,
+    _select_balanced_episode_rows,
+    _suite_name,
+)
 
 
 class RenderOpenVLATeacherExamplesTest(unittest.TestCase):
@@ -22,6 +28,34 @@ class RenderOpenVLATeacherExamplesTest(unittest.TestCase):
         self.assertTrue(_keep_row({"perturbation_type": "blur"}, "first_per_family", seen))
         self.assertFalse(_keep_row({"perturbation_type": "blur"}, "first_per_family", seen))
         self.assertTrue(_keep_row({"perturbation_type": "shift"}, "first_per_family", seen))
+
+    def test_balanced_episode_selection_keeps_contiguous_steps(self):
+        rows = []
+        for episode_idx, family in enumerate(["blur", "shift", "blur"]):
+            candidate = f"{family}_{episode_idx}"
+            for step_idx in range(3):
+                rows.append(
+                    {
+                        "suite": "goal",
+                        "task_idx": 0,
+                        "task_name": "open_drawer",
+                        "episode_idx": episode_idx,
+                        "init_state_idx": 0,
+                        "candidate_name": candidate,
+                        "perturbation_type": family,
+                        "step_idx": step_idx,
+                    }
+                )
+
+        selected = _select_balanced_episode_rows(
+            rows,
+            max_examples=4,
+            episodes_per_family=1,
+            max_steps_per_episode=2,
+        )
+
+        self.assertEqual([row["perturbation_type"] for row in selected], ["blur", "blur", "shift", "shift"])
+        self.assertEqual([row["step_idx"] for row in selected], [0, 1, 0, 1])
 
     def test_libero_oft_state_shape(self):
         obs = {
