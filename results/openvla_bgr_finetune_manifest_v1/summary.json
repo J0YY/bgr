@@ -1,0 +1,34 @@
+{
+  "boundary_band": [
+    0.25,
+    0.75
+  ],
+  "methods": {
+    "bgr_boundary": {
+      "boundary_candidates": 25,
+      "candidates": 40,
+      "families": [
+        "blur",
+        "brightness",
+        "occlusion",
+        "shift"
+      ],
+      "mean_boundary_score": 0.4083333333333333,
+      "mean_observed_cf_rate": 0.55
+    },
+    "random_balanced": {
+      "boundary_candidates": 23,
+      "candidates": 40,
+      "families": [
+        "blur",
+        "brightness",
+        "occlusion",
+        "shift"
+      ],
+      "mean_boundary_score": 0.4875,
+      "mean_observed_cf_rate": 0.64375
+    }
+  },
+  "note": "Manifest identifies validated perturbation candidates. OpenVLA-OFT still requires converting replay states to an RLDS training dataset before LoRA fine-tuning.",
+  "num_candidates": 80
+}
