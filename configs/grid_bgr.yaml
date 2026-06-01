@@ -1,0 +1,26 @@
+experiment:
+  name: grid_recovery_v1
+  seeds: [0, 1, 2]
+  methods: [uniform, fixed, failure_only, plr_loss, bgr]
+  num_tasks: 36
+  grid_size: 9
+  obstacle_prob: 0.18
+  replay_states_per_task: 4
+  max_offset: 4
+  horizon: 24
+  iterations: 180
+  eval_every: 30
+  train_batch_size: 36
+  eval_trials_per_radius: 5
+  eval_grid_size: 9
+  alpha: 0.8
+  learning_rate: 1.0
+  fixed_radius: 0.75
+  target_margin: 0.45
+bgr:
+  initial_probes: [0.0, 0.25, 0.5, 0.75, 1.0]
+  refresh_per_eval: 64
+  min_trials: 2
+  radius_noise: 0.08
+  priority_temperature: 0.8
+  uniform_mix: 0.10
