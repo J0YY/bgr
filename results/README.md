@@ -586,6 +586,85 @@ git; checked-in metadata records the saved LoRA adapter, action head, proprio
 projector, and dataset statistics. This is still a smoke test, not a
 training-scale fine-tuning/evaluation result.
 
+### `openvla_teacher_oft_random_balanced64_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:40:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_random_balanced64_v1 --method random_balanced --max-examples 64 --selection balanced_episodes --episodes-per-family 1 --max-steps-per-episode 16 --num-steps-wait 10 --env-image-size 256 --image-size 224
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780327075_235451672.out
+```
+
+Interpretation: this renders the matched random-balanced baseline analog of
+the BGR balanced64 bridge. Validation found 64 rows, all `random_balanced`,
+split evenly across blur, brightness, shift, and occlusion with one 16-step
+episode per family.
+
+### `openvla_oft_pack_random_balanced64_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples runs/openvla_teacher_oft_random_balanced64_v1/examples.jsonl --out runs/openvla_oft_pack_random_balanced64_v1 --write-hdf5
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780327145_234510679.out
+```
+
+Interpretation: the random-balanced rendered rows pack into four HDF5 demos
+with 7D actions, 8D proprio/state, and primary/wrist image streams. This
+confirms the baseline uses the same episode-safe bridge as BGR.
+
+### `openvla_oft_tfds_libero_goal_random_balanced64_v1`
+
+Commands:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:20:00 /work/joy/bgr /work/joy/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples runs/openvla_teacher_oft_random_balanced64_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_random_balanced64_v1 --dataset-name libero_goal_no_noops --version 1.0.0
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 12G --time 00:15:00 /work/joy/bgr env PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python -c "from pathlib import Path; import tensorflow_datasets as tfds; from prismatic.vla.datasets.rlds.oxe.materialize import make_oxe_dataset_kwargs; from prismatic.vla.datasets.rlds.dataset import make_dataset_from_rlds; kw=make_oxe_dataset_kwargs('libero_goal_no_noops', Path('/work/joy/bgr/runs/openvla_oft_tfds_libero_goal_random_balanced64_v1'), load_camera_views=('primary','wrist'), load_proprio=True, load_language=True); ds, stats=make_dataset_from_rlds(train=True, shuffle=False, **kw); ex=next(iter(tfds.as_numpy(ds))); print('keys', sorted(ex.keys())); print('obs', {k:v.shape for k,v in ex['observation'].items()}); print('task', ex['task']['language_instruction'][0].decode()); print('action', ex['action'].shape); print('stats_action_mean', stats['action']['mean'].shape); print('stats_proprio_mean', stats['proprio']['mean'].shape)"
+```
+
+Remote logs:
+
+```text
+/work/joy/bgr/logs/run_1780327170_100921796.out
+/work/joy/bgr/logs/run_1780327240_909792233.out
+```
+
+Interpretation: this exports the matched random-balanced set under
+`libero_goal_no_noops` and validates it through OpenVLA-OFT's unmodified RLDS
+loader. The loader yields primary/wrist image fields, proprio `(16,8)`, action
+`(16,7)`, and language, matching the BGR bridge.
+
+### `openvla_oft_finetune_random_balanced64_ckpt_smoke_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 8 --mem 64G --time 01:00:00 /work/joy/bgr bash -lc 'cd /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/joy/cache_home/huggingface TRANSFORMERS_CACHE=/work/joy/cache_home/huggingface/hub PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/torchrun --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py --vla_path openvla/openvla-7b --data_root_dir /work/joy/bgr/runs/openvla_oft_tfds_libero_goal_random_balanced64_v1 --dataset_name libero_goal_no_noops --run_root_dir /work/joy/bgr/runs/openvla_oft_finetune_random_balanced64_ckpt_smoke_v1 --use_l1_regression True --use_diffusion False --use_film False --num_images_in_input 2 --use_proprio True --batch_size 1 --learning_rate 5e-4 --num_steps_before_decay 100000 --max_steps 1 --save_freq 1 --save_latest_checkpoint_only True --image_aug False --lora_rank 8 --merge_lora_during_training False --shuffle_buffer_size 16 --wandb_entity disabled --wandb_project bgr --run_id_note random-balanced64-ckpt-smoke --wandb_log_freq 1'
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780327341_446370402.out
+```
+
+Interpretation: this mirrors the BGR one-step OpenVLA-OFT checkpoint smoke on
+the matched random-balanced baseline. It loaded OpenVLA 7B, initialized LoRA
+rank 8 plus proprio and L1 action heads, loaded the baseline
+`libero_goal_no_noops` TFDS dataset, completed one optimizer step, and wrote the
+same class of checkpoint files under `/work/joy/bgr/runs`. The 656M checkpoint
+weights are not checked into git.
+
 ### `suffix_strategy_v1`
 
 Command:
