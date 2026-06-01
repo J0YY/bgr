@@ -25,6 +25,7 @@ def main() -> None:
     results = []
     for method in config["experiment"]["methods"]:
         for seed in config["experiment"]["seeds"]:
+            print(f"[run] method={method} seed={seed}", flush=True)
             result = run_method(config, method, int(seed))
             results.append(serialize_result(result))
             rows.append(
