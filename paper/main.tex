@@ -101,9 +101,11 @@ The initial benchmark creates replayable states with latent feasible radii and p
 
 In the current three-seed diagnostic run, BGR improves final recovery AUC over uniform replay (0.3756 vs. 0.3659), improves the area under the RAUC learning curve (0.3169 vs. 0.2987), and preserves clean success (0.8962 vs. 0.8886). Fixed-radius, failure-only, and PLR-loss proxy baselines underperform in this controlled setting, suggesting that explicit boundary-radius sampling is useful when the benchmark contains learnable success--failure transitions.
 
-\subsection{Planned Procedural RL Study}
+\subsection{Procedural Grid-Margin Study}
 
-The next stage instantiates replayable states in procedural grid environments with resettable seeds and checkpointed states. Perturbations include start-pose offsets with reachability filters. Baselines include uniform replay, PLR-style loss priority, failure-only replay, fixed-radius training, random-radius perturbation, and BGR ablations. An initial tabular grid-recovery benchmark is implemented, but the first run is not a positive result: broad replay saturates the environment after clean pretraining, while the current BGR sampler remains too narrow for saturated states. This motivates hardening the procedural benchmark with held-out layouts, longer perturbation horizons, and a saturated-state coverage fallback before using it as main evidence.
+We instantiate replayable states in procedural grid environments with resettable seeds and mid-path states. Generated obstacle maps define feasible perturbation neighborhoods through shortest-path reachability, while each replay state has a policy-specific recovery margin. This benchmark isolates whether BGR can expand state-conditioned recovery curves in a non-robotic sequential decision setting.
+
+In a five-seed grid-margin run, BGR outperforms uniform replay on final RAUC (0.4350 vs. 0.3979), RAUC learning-curve area (0.3538 vs. 0.3145), median $r_{80}$ (0.3442 vs. 0.3322), and clean success (0.9474 vs. 0.8969). Failure-only replay, PLR-loss proxy replay, and fixed-radius perturbation training substantially underperform, indicating that neither failure mining nor static perturbation scales recover the same margin-expansion behavior. A separate tabular grid-policy diagnostic saturated under broad replay and is treated as a negative setup result rather than evidence for the main claim.
 
 \subsection{Planned Robot Suffix Study}
 

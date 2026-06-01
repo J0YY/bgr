@@ -4,7 +4,7 @@ This repository scaffolds the AAAI-27 submission:
 
 **Bifurcation-Guided Replay: Learning at the Success-Failure Boundary of Decision Policies**
 
-The current implementation contains a reusable BGR core and a Tier-0 synthetic recovery-margin benchmark. The benchmark is intentionally light: it validates the algorithmic mechanics, estimator, priority score, and reporting path before adding MiniGrid/LIBERO experiments.
+The current implementation contains a reusable BGR core, a Tier-0 synthetic recovery-margin benchmark, and a grid-backed procedural recovery-margin benchmark. The grid-margin benchmark uses generated obstacle maps for replay states and feasibility while preserving the state-conditioned recovery-margin object needed to evaluate BGR.
 
 ## Repository Layout
 
@@ -19,7 +19,7 @@ paper/                   AAAI-27 manuscript skeleton and official AuthorKit27
 ## Local Smoke Tests
 
 ```bash
-python -m pytest
+PYTHONPATH=src:. python3 -m unittest discover -s tests
 ```
 
 ## Tier-0 Experiment
@@ -40,14 +40,21 @@ Real run:
 
 ## Procedural Grid Recovery
 
-The grid benchmark is a dependency-light procedural decision benchmark with generated obstacle maps, replayable mid-path states, Manhattan-radius perturbations, an exact shortest-path feasibility witness, and a tabular recovery policy.
+The grid benchmarks are dependency-light procedural decision benchmarks with generated obstacle maps, replayable mid-path states, Manhattan-radius perturbations, and an exact shortest-path feasibility witness.
 
 ```bash
 ~/remote_srun.sh --dry-run --partition compute --gres '' --cpus 2 --mem 8G --time 01:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_bgr.yaml --out runs/grid_fast
 ~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 01:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_bgr.yaml --out runs/grid_fast
 ```
 
-See [results/README.md](results/README.md) for the current run ledger. The first grid result is a negative diagnostic: the environment is too easy after clean pretraining, so BGR does not yet beat broad replay there.
+The positive procedural benchmark is `grid_margin_bgr`, which evaluates state-conditioned margin expansion on grid-backed replay states:
+
+```bash
+~/remote_srun.sh --dry-run --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_margin_experiment.py --config configs/grid_margin_bgr_full.yaml --out runs/grid_margin_full
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_margin_experiment.py --config configs/grid_margin_bgr_full.yaml --out runs/grid_margin_full
+```
+
+See [results/README.md](results/README.md) for the current run ledger. The original tabular grid policy benchmark is retained as a negative diagnostic because broad replay saturates it after clean pretraining.
 
 ## AAAI Sources
 
