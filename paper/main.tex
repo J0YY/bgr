@@ -138,13 +138,13 @@ We instantiate replayable states in procedural grid environments with resettable
 
 In a five-seed grid-margin run, BGR outperforms uniform replay on final RAUC (0.4350 vs. 0.3979), RAUC learning-curve area (0.3538 vs. 0.3145), median $r_{80}$ (0.3442 vs. 0.3322), and clean success (0.9474 vs. 0.8969). Failure-only replay, PLR-loss proxy replay, and fixed-radius perturbation training substantially underperform, indicating that neither failure mining nor static perturbation scales recover the same margin-expansion behavior. A separate tabular grid-policy diagnostic saturated under broad replay and is treated as a negative setup result rather than evidence for the main claim.
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
 \small
 \input{figures/grid_margin_ablation_table.tex}
 \caption{Grid-margin ablations over five seeds. Boundary-centered radius sampling is the important ingredient in this benchmark: replacing it with uniform radii drops RAUC below uniform replay, while removing uncertainty or sharpness weights has little effect.}
 \label{tab:grid-ablation}
-\end{table}
+\end{table*}
 
 Table~\ref{tab:grid-ablation} isolates the replay decisions inside BGR. The uncertainty and sharpness factors are not decisive in this benchmark, but the radius-level boundary rule is: keeping BGR state priority while sampling perturbation radii uniformly reduces RAUC from 0.435 to 0.385 and AULC from 0.354 to 0.307. This supports the central claim that BGR is not only hard-state prioritization; it also depends on training at the estimated success--failure radius.
 
