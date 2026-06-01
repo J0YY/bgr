@@ -35,10 +35,16 @@ def main() -> int:
 
     out_dir = Path(args.out)
     image_dir = out_dir / "images"
+    wrist_dir = out_dir / "wrist_images"
+    array_dir = out_dir / "arrays"
     image_dir.mkdir(parents=True, exist_ok=True)
+    wrist_dir.mkdir(parents=True, exist_ok=True)
+    array_dir.mkdir(parents=True, exist_ok=True)
     examples = _render_examples(
         rows=rows,
         image_dir=image_dir,
+        wrist_dir=wrist_dir,
+        array_dir=array_dir,
         num_steps_wait=int(args.num_steps_wait),
         env_image_size=int(args.env_image_size),
         image_size=int(args.image_size),
@@ -56,7 +62,7 @@ def main() -> int:
                 "rendered_examples": len(examples),
                 "manifest": str(args.manifest),
                 "image_size": int(args.image_size),
-                "note": "PNG/action smoke set for the teacher-replay to RLDS path.",
+                "note": "PNG/NPZ action smoke set for the teacher-replay to RLDS path.",
             },
             indent=2,
             sort_keys=True,
@@ -103,6 +109,8 @@ def _render_examples(
     *,
     rows: list[dict[str, Any]],
     image_dir: Path,
+    wrist_dir: Path,
+    array_dir: Path,
     num_steps_wait: int,
     env_image_size: int,
     image_size: int,
@@ -143,14 +151,30 @@ def _render_examples(
             while len(examples) > 0 and examples[-1].get("episode_key") == str(episode_key) and int(examples[-1]["step_idx"]) + 1 < target_step:
                 break
             base_image = _preprocess_image(np.asarray(obs[camera_key]), image_preprocess, image_size)
+            wrist_image = _preprocess_image(np.asarray(obs["robot0_eye_in_hand_image"]), image_preprocess, image_size)
             perturbed = _apply_perturbation(base_image, str(row.get("perturbation_type", "")), _json_dict(row.get("perturbation_params", {})))
             image_path = image_dir / f"example_{index:05d}.png"
+            wrist_path = wrist_dir / f"example_{index:05d}.png"
+            array_path = array_dir / f"example_{index:05d}.npz"
             Image.fromarray(perturbed).save(image_path)
+            Image.fromarray(wrist_image).save(wrist_path)
             action = _json_list(row["target_action"])
+            state = _libero_oft_state(obs)
+            np.savez_compressed(
+                array_path,
+                image=perturbed,
+                wrist_image=wrist_image,
+                state=state.astype(np.float32),
+                action=np.asarray(action, dtype=np.float32),
+                language_instruction=np.asarray(str(row["instruction"])),
+            )
             examples.append(
                 {
                     "image": str(image_path.relative_to(image_dir.parent)),
+                    "wrist_image": str(wrist_path.relative_to(image_dir.parent)),
+                    "array": str(array_path.relative_to(image_dir.parent)),
                     "target_action": action,
+                    "state": [float(x) for x in state.reshape(-1)],
                     "instruction": str(row["instruction"]),
                     "suite": str(row["suite"]),
                     "task_idx": int(row["task_idx"]),
@@ -212,6 +236,22 @@ def _preprocess_image(image: np.ndarray, mode: str, resize_size: int) -> np.ndar
     if pil.size != (resize_size, resize_size):
         pil = pil.resize((resize_size, resize_size), resample=Image.Resampling.LANCZOS)
     return np.asarray(pil, dtype=np.uint8)
+
+
+def _libero_oft_state(obs: dict[str, Any]) -> np.ndarray:
+    eef_pos = np.asarray(obs["robot0_eef_pos"], dtype=np.float32).reshape(-1)[:3]
+    axis_angle = _quat2axisangle(np.asarray(obs["robot0_eef_quat"], dtype=np.float32).reshape(-1))
+    gripper = np.asarray(obs["robot0_gripper_qpos"], dtype=np.float32).reshape(-1)[:2]
+    return np.concatenate([eef_pos, axis_angle.astype(np.float32), gripper], axis=0)
+
+
+def _quat2axisangle(quat: np.ndarray) -> np.ndarray:
+    quat = np.asarray(quat, dtype=np.float64).reshape(4).copy()
+    quat[3] = np.clip(quat[3], -1.0, 1.0)
+    den = np.sqrt(max(0.0, 1.0 - quat[3] * quat[3]))
+    if den < 1e-8:
+        return np.zeros(3, dtype=np.float32)
+    return (quat[:3] * (2.0 * np.arccos(quat[3]) / den)).astype(np.float32)
 
 
 def _apply_perturbation(image: np.ndarray, perturbation_type: str, params: dict[str, Any]) -> np.ndarray:
