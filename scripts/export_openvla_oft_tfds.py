@@ -25,6 +25,11 @@ def main() -> int:
     parser.add_argument("--out", required=True, help="TFDS data_dir output root.")
     parser.add_argument("--dataset-name", default="bgr_libero_oft_smoke")
     parser.add_argument("--version", default="1.0.0")
+    parser.add_argument(
+        "--disable-shuffling",
+        action="store_true",
+        help="Mark the TFDS dataset as ordered. Leave unset for OpenVLA-OFT DLataset compatibility.",
+    )
     args = parser.parse_args()
 
     examples_path = Path(args.examples)
@@ -44,7 +49,7 @@ def main() -> int:
             "BGR OpenVLA-OFT smoke dataset with LIBERO-style RGB, wrist RGB, "
             "state, action, and language fields."
         ),
-        disable_shuffling=True,
+        disable_shuffling=bool(args.disable_shuffling),
     )
     builder.download_and_prepare()
     builder_dir = Path(args.out) / args.dataset_name / args.version
