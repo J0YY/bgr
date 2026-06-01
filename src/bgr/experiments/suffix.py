@@ -46,14 +46,14 @@ def run_method(config: dict, method: str, seed: int) -> SuffixResult:
             metrics = evaluate(bench, eval_grid, alpha)
             metrics["step"] = float(step)
             history.append(metrics)
-            if method == "bgr":
+            if _uses_bgr_records(method):
                 _refresh_records(bench, records, bgr_cfg, alpha, rng, step)
         if step == int(exp["iterations"]):
             break
         for _ in range(int(exp["train_batch_size"])):
             state_idx, sigma = _sample_training_pair(method, bench, records, scorer, config, rng, step)
             bench.train_step(state_idx, sigma, rng, perturbation_family="object")
-            if method == "bgr":
+            if _uses_bgr_records(method):
                 success = bench.rollout(state_idx, sigma, rng, perturbation_family="object")
                 records[state_idx].add_observation(sigma, success)
                 records[state_idx].replay_count += 1
@@ -182,7 +182,7 @@ def _sample_training_pair(
         scores = [bench.loss_proxy(int(idx), float(sigma), rng, "object") for idx, sigma in zip(candidates, sigmas, strict=True)]
         selected = int(np.argmax(scores))
         return int(candidates[selected]), float(sigmas[selected])
-    if method == "bgr":
+    if _uses_bgr_records(method):
         bgr_scorer = BGRPriorityScorer(
             clean_threshold=scorer.clean_threshold,
             feasibility_threshold=scorer.feasibility_threshold,
@@ -201,12 +201,17 @@ def _sample_training_pair(
         )
         state_idx = int(rng.choice(len(records), p=probs))
         sigma = _sample_suffix_bgr_radius(
+            method,
             rng,
             records[state_idx].r_alpha_hat,
             config.get("bgr", {}),
         )
         return state_idx, sigma
     raise ValueError(f"unknown method: {method}")
+
+
+def _uses_bgr_records(method: str) -> bool:
+    return method in {"bgr", "bgr_boundary", "bgr_broad", "bgr_hard"}
 
 
 def _write_estimate(record: LevelRecord, estimate) -> None:
@@ -217,18 +222,33 @@ def _write_estimate(record: LevelRecord, estimate) -> None:
 
 
 def _sample_suffix_bgr_radius(
+    method: str,
     rng: np.random.Generator,
     r_alpha: float,
     bgr_cfg: dict,
 ) -> float:
-    clean_prob = float(bgr_cfg.get("clean_radius_prob", 0.15))
-    uniform_prob = float(bgr_cfg.get("uniform_radius_prob", 0.25))
+    if method == "bgr_boundary":
+        clean_prob = float(bgr_cfg.get("boundary_clean_radius_prob", 0.08))
+        uniform_prob = float(bgr_cfg.get("boundary_uniform_radius_prob", 0.05))
+        mode_probs = [0.75, 0.15, 0.10]
+    elif method == "bgr_broad":
+        clean_prob = float(bgr_cfg.get("broad_clean_radius_prob", 0.08))
+        uniform_prob = float(bgr_cfg.get("broad_uniform_radius_prob", 0.60))
+        mode_probs = [0.35, 0.05, 0.60]
+    elif method == "bgr_hard":
+        clean_prob = float(bgr_cfg.get("hard_clean_radius_prob", 0.06))
+        uniform_prob = float(bgr_cfg.get("hard_uniform_radius_prob", 0.20))
+        mode_probs = [0.30, 0.05, 0.65]
+    else:
+        clean_prob = float(bgr_cfg.get("clean_radius_prob", 0.15))
+        uniform_prob = float(bgr_cfg.get("uniform_radius_prob", 0.25))
+        mode_probs = [0.58, 0.17, 0.25]
     draw = float(rng.random())
     if draw < clean_prob:
         return 0.0
     if draw < clean_prob + uniform_prob:
         return float(rng.uniform(0.0, 1.0))
-    mode = rng.choice(["boundary", "easy", "hard"], p=[0.58, 0.17, 0.25])
+    mode = rng.choice(["boundary", "easy", "hard"], p=mode_probs)
     center = float(r_alpha)
     if mode == "easy":
         center *= 0.7
