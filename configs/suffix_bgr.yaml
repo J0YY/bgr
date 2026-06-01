@@ -1,0 +1,23 @@
+experiment:
+  name: robot_suffix_recovery_v1
+  seeds: [0, 1, 2]
+  methods: [clean_ft, uniform, fixed, failure_only, loss_priority, bgr]
+  num_tasks: 24
+  suffixes_per_task: 5
+  iterations: 160
+  eval_every: 20
+  train_batch_size: 40
+  eval_grid_size: 9
+  alpha: 0.8
+  learning_rate: 0.035
+  fixed_radius: 0.70
+  target_margin: 0.36
+  baseline_candidates: 12
+  failure_probe_trials: 1
+bgr:
+  initial_probes: [0.0, 0.25, 0.5, 0.75, 1.0]
+  refresh_per_eval: 72
+  min_trials: 3
+  radius_noise: 0.07
+  priority_temperature: 0.7
+  uniform_mix: 0.10
