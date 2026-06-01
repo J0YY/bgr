@@ -1,0 +1,9 @@
+method,run,n_candidates,n_counterfactual_certificates,mean_observed_cf_rate,boundary_hit_rate,mean_abs_distance_to_half,mean_predicted_cf_rate,families
+proposal_guided,libero_openvla_observation_proposal_guided_h160,8,25,0.5208333333333333,0.875,0.1875,0.596710935073004,blur;shift
+proposal_guided,libero_openvla_observation_proposal_guided_seed2_h160,8,26,0.5416666666666666,0.875,0.12499999999999999,0.6230001553277416,blur;shift
+proposal_guided,libero_openvla_observation_proposal_guided_seed3_h160,8,25,0.5208333333333333,0.875,0.1875,0.5977011494252873,blur;shift
+random_balanced,libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160,8,18,0.5625,0.625,0.25,,blur;brightness;occlusion;shift
+random_balanced,libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160,8,18,0.5625,0.375,0.3125,,blur;brightness;occlusion;shift
+random_balanced,libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160,8,21,0.65625,0.75,0.15625,,blur;brightness;occlusion;shift
+random_balanced,libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160,8,22,0.6875,0.75,0.1875,,blur;brightness;occlusion;shift
+random_balanced,libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160,8,24,0.75,0.375,0.375,,blur;brightness;occlusion;shift

@@ -1,0 +1,122 @@
+{
+  "aggregate": [
+    {
+      "boundary_hit_rate": 0.875,
+      "boundary_hit_rate_sem": 0.0,
+      "certificates_mean": 25.333333333333332,
+      "certificates_sem": 0.33333333333333337,
+      "mean_abs_distance_to_half": 0.16666666666666666,
+      "mean_abs_distance_to_half_sem": 0.020833333333333336,
+      "mean_observed_cf_rate": 0.5277777777777777,
+      "mean_observed_cf_rate_sem": 0.006944444444444457,
+      "method": "proposal_guided",
+      "runs": 3
+    },
+    {
+      "boundary_hit_rate": 0.575,
+      "boundary_hit_rate_sem": 0.08477912478906584,
+      "certificates_mean": 20.6,
+      "certificates_sem": 1.16619037896906,
+      "mean_abs_distance_to_half": 0.25625,
+      "mean_abs_distance_to_half_sem": 0.0400195264839553,
+      "mean_observed_cf_rate": 0.64375,
+      "mean_observed_cf_rate_sem": 0.036443449342783124,
+      "method": "random_balanced",
+      "runs": 5
+    }
+  ],
+  "boundary_band": [
+    0.25,
+    0.75
+  ],
+  "rows": [
+    {
+      "boundary_hit_rate": 0.875,
+      "families": "blur;shift",
+      "mean_abs_distance_to_half": 0.1875,
+      "mean_observed_cf_rate": 0.5208333333333333,
+      "mean_predicted_cf_rate": 0.596710935073004,
+      "method": "proposal_guided",
+      "n_candidates": 8,
+      "n_counterfactual_certificates": 25,
+      "run": "libero_openvla_observation_proposal_guided_h160"
+    },
+    {
+      "boundary_hit_rate": 0.875,
+      "families": "blur;shift",
+      "mean_abs_distance_to_half": 0.12499999999999999,
+      "mean_observed_cf_rate": 0.5416666666666666,
+      "mean_predicted_cf_rate": 0.6230001553277416,
+      "method": "proposal_guided",
+      "n_candidates": 8,
+      "n_counterfactual_certificates": 26,
+      "run": "libero_openvla_observation_proposal_guided_seed2_h160"
+    },
+    {
+      "boundary_hit_rate": 0.875,
+      "families": "blur;shift",
+      "mean_abs_distance_to_half": 0.1875,
+      "mean_observed_cf_rate": 0.5208333333333333,
+      "mean_predicted_cf_rate": 0.5977011494252873,
+      "method": "proposal_guided",
+      "n_candidates": 8,
+      "n_counterfactual_certificates": 25,
+      "run": "libero_openvla_observation_proposal_guided_seed3_h160"
+    },
+    {
+      "boundary_hit_rate": 0.625,
+      "families": "blur;brightness;occlusion;shift",
+      "mean_abs_distance_to_half": 0.25,
+      "mean_observed_cf_rate": 0.5625,
+      "mean_predicted_cf_rate": "",
+      "method": "random_balanced",
+      "n_candidates": 8,
+      "n_counterfactual_certificates": 18,
+      "run": "libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160"
+    },
+    {
+      "boundary_hit_rate": 0.375,
+      "families": "blur;brightness;occlusion;shift",
+      "mean_abs_distance_to_half": 0.3125,
+      "mean_observed_cf_rate": 0.5625,
+      "mean_predicted_cf_rate": "",
+      "method": "random_balanced",
+      "n_candidates": 8,
+      "n_counterfactual_certificates": 18,
+      "run": "libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160"
+    },
+    {
+      "boundary_hit_rate": 0.75,
+      "families": "blur;brightness;occlusion;shift",
+      "mean_abs_distance_to_half": 0.15625,
+      "mean_observed_cf_rate": 0.65625,
+      "mean_predicted_cf_rate": "",
+      "method": "random_balanced",
+      "n_candidates": 8,
+      "n_counterfactual_certificates": 21,
+      "run": "libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160"
+    },
+    {
+      "boundary_hit_rate": 0.75,
+      "families": "blur;brightness;occlusion;shift",
+      "mean_abs_distance_to_half": 0.1875,
+      "mean_observed_cf_rate": 0.6875,
+      "mean_predicted_cf_rate": "",
+      "method": "random_balanced",
+      "n_candidates": 8,
+      "n_counterfactual_certificates": 22,
+      "run": "libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160"
+    },
+    {
+      "boundary_hit_rate": 0.375,
+      "families": "blur;brightness;occlusion;shift",
+      "mean_abs_distance_to_half": 0.375,
+      "mean_observed_cf_rate": 0.75,
+      "mean_predicted_cf_rate": "",
+      "method": "random_balanced",
+      "n_candidates": 8,
+      "n_counterfactual_certificates": 24,
+      "run": "libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160"
+    }
+  ]
+}

@@ -320,6 +320,34 @@ fine-tuning results. They show that the BGR recovery-curve object is measurable
 on learned VLA rollouts: the policy is clean-successful on the replay states,
 but success drops sharply under blur, occlusion, and image shift perturbations.
 
+### `libero_openvla_boundary_selection_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/summarize_openvla_boundary_selection.py --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_guided_h160 --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_guided_seed2_h160 --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_guided_seed3_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160 --out runs/libero_openvla_boundary_selection_v1
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780320651_072406017.out
+```
+
+Boundary band is observed counterfactual failure rate in `[0.25, 0.75]`:
+
+| Method | Runs | Mean CF rate | Boundary hit rate | Mean `abs(CF-0.5)` | Certificates |
+|---|---:|---:|---:|---:|---:|
+| Proposal-guided | 3 | 0.5278 | 0.8750 | 0.1667 | 25.33 |
+| Random-balanced | 5 | 0.6438 | 0.5750 | 0.2563 | 20.60 |
+
+Interpretation: proposal-guided selection finds perturbations closer to the
+OpenVLA success-failure boundary than random-balanced selection. This supports
+BGR's boundary-discovery premise on learned VLA rollouts. It is not a
+fine-tuning result, and the comparison is diagnostic because proposal-guided
+artifacts concentrate on blur/shift while random-balanced artifacts cover four
+families.
+
 ### `suffix_strategy_v1`
 
 Command:
