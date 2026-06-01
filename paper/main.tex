@@ -99,9 +99,11 @@ We mix this distribution with uniform replay to prevent starvation.
 
 The initial benchmark creates replayable states with latent feasible radii and policy recovery margins. Success probability follows a sigmoid recovery curve, and training updates near the current margin expand that margin most efficiently. This diagnostic environment tests whether BGR's estimator and sampler recover the intended behavior before expensive RL or robotics runs.
 
+In the current three-seed diagnostic run, BGR improves final recovery AUC over uniform replay (0.3756 vs. 0.3659), improves the area under the RAUC learning curve (0.3169 vs. 0.2987), and preserves clean success (0.8962 vs. 0.8886). Fixed-radius, failure-only, and PLR-loss proxy baselines underperform in this controlled setting, suggesting that explicit boundary-radius sampling is useful when the benchmark contains learnable success--failure transitions.
+
 \subsection{Planned Procedural RL Study}
 
-The next stage instantiates replayable states in MiniGrid-style environments with resettable seeds and checkpointed states. Perturbations include start-pose offsets and instruction-preserving object edits with reachability filters. Baselines include uniform replay, PLR-style loss priority, failure-only replay, fixed-radius training, random-radius perturbation, and BGR ablations.
+The next stage instantiates replayable states in procedural grid environments with resettable seeds and checkpointed states. Perturbations include start-pose offsets with reachability filters. Baselines include uniform replay, PLR-style loss priority, failure-only replay, fixed-radius training, random-radius perturbation, and BGR ablations. An initial tabular grid-recovery benchmark is implemented, but the first run is not a positive result: broad replay saturates the environment after clean pretraining, while the current BGR sampler remains too narrow for saturated states. This motivates hardening the procedural benchmark with held-out layouts, longer perturbation horizons, and a saturated-state coverage fallback before using it as main evidence.
 
 \subsection{Planned Robot Suffix Study}
 

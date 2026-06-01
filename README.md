@@ -38,6 +38,17 @@ Real run:
 ~/remote_srun.sh --github-test --git-pull --log /work/joy/bgr python scripts/run_toy_experiment.py --config configs/toy_bgr.yaml --out runs/toy
 ```
 
+## Procedural Grid Recovery
+
+The grid benchmark is a dependency-light procedural decision benchmark with generated obstacle maps, replayable mid-path states, Manhattan-radius perturbations, an exact shortest-path feasibility witness, and a tabular recovery policy.
+
+```bash
+~/remote_srun.sh --dry-run --partition compute --gres '' --cpus 2 --mem 8G --time 01:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_bgr.yaml --out runs/grid_fast
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 01:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_bgr.yaml --out runs/grid_fast
+```
+
+See [results/README.md](results/README.md) for the current run ledger. The first grid result is a negative diagnostic: the environment is too easy after clean pretraining, so BGR does not yet beat broad replay there.
+
 ## AAAI Sources
 
 The official AAAI-27 page lists the 2027 timetable and links the AAAI-27 author kit. The kit in `paper/AuthorKit27` was downloaded from `https://aaai.org/authorkit27/` on 2026-06-01.
