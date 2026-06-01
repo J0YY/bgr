@@ -38,6 +38,7 @@ def run_method(config: dict, method: str, seed: int) -> GridResult:
         learning_rate=float(exp["learning_rate"]),
         seed=seed,
     )
+    _pretrain_clean_suffixes(bench, int(exp.get("clean_pretrain_steps", 0)), rng)
     alpha = float(exp.get("alpha", 0.8))
     eval_grid = np.linspace(0.0, 1.0, int(exp.get("eval_grid_size", 9)))
     records = _init_records(bench, bgr_cfg, alpha, rng)
@@ -104,6 +105,16 @@ def evaluate(
 
 def serialize_result(result: GridResult) -> dict:
     return asdict(result)
+
+
+def _pretrain_clean_suffixes(
+    bench: GridRecoveryBenchmark,
+    steps: int,
+    rng: np.random.Generator,
+) -> None:
+    for _ in range(max(0, steps)):
+        for replay_idx in range(len(bench.replay_states)):
+            bench.train_step(replay_idx, 0.0, rng)
 
 
 def _history_aulc(history: list[dict[str, float]], key: str) -> float:
