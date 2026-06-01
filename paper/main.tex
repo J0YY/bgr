@@ -52,7 +52,7 @@ BGR also connects to robustness training and robotics generalization. Domain ran
 
 Let $\pi_\theta$ be a sequential decision policy and let $Y(\tau)\in\{0,1\}$ denote terminal success for rollout $\tau$. A replayable decision state $x\in\mathcal{X}$ is any object from which evaluation or training can restart, such as an environment seed, simulator checkpoint, task prefix, or robot suffix state.
 
-For each $x$, a domain-valid perturbation family applies $\tilde{x}=T(x,\delta)$ with $\delta\sim\mathcal{P}_x(\sigma)$, where $\sigma\ge 0$ is a perturbation magnitude. The recovery curve is
+For each $x$, a domain-valid perturbation family applies $\tilde{x}=T(x,\delta)$ with $\delta\sim\mathcal{P}_x(\sigma)$, where $\sigma\ge 0$ is a perturbation magnitude. The perturbation family is part of the benchmark definition: grid perturbations preserve free cells and shortest-path reachability, suffix perturbations preserve teacher feasibility, and OpenVLA observation perturbations preserve the task instruction and simulator state while modifying the visual input stream. The recovery curve is
 \begin{equation}
 R_\pi(x,\sigma)=
 \Pr_{\delta,\tau}[Y(\tau)=1 \mid \tau \sim \pi(\cdot \mid T(x,\delta))].
@@ -66,9 +66,11 @@ We evaluate robustness with recovery AUC,
 \mathrm{RAUC}_\pi(x)=\frac{1}{\sigma_{\max}}\int_0^{\sigma_{\max}} R_\pi(x,\sigma)d\sigma.
 \end{equation}
 
+BGR also assumes a feasibility witness $F(x,\sigma)$ that estimates whether perturbed states remain meaningful and solvable by a reference process. In our experiments this witness is either an exact reachability check, a teacher/demo suffix model, a simulator validity check, or observed clean OpenVLA success. The witness is not an oracle for the learned policy; it filters invalid or impossible perturbations so replay focuses on recoverable boundaries rather than broken tasks.
+
 \section{Bifurcation-Guided Replay}
 
-BGR maintains a buffer of replayable states. For each state, it probes perturbation radii, fits a monotone recovery curve, estimates a critical radius, and assigns replay priority to states whose boundaries are feasible, sharp, uncertain, and near a trainable target band.
+BGR maintains a buffer of replayable states. For each state, it probes perturbation radii, fits a monotone recovery curve, estimates a critical radius, and assigns replay priority to states whose boundaries are feasible, sharp, uncertain, and near a trainable target band. The method therefore separates three decisions: whether a state is valid enough to replay, which replay state is currently informative, and which perturbation radius lies near that state's success--failure transition.
 
 \begin{figure}[t]
 \small
@@ -88,7 +90,7 @@ The priority for a record is a product of gates and soft utilities:
 P(x)=G(x)U_{\mathrm{boundary}}(x)U_{\mathrm{sharp}}(x)^\lambda
 U_{\mathrm{unc}}(x)^\beta U_{\mathrm{stale}}(x)^\eta.
 \end{equation}
-We mix this distribution with uniform replay to prevent starvation.
+Here $G(x)$ gates out states with low clean success or low witness feasibility, $U_{\mathrm{boundary}}$ prefers critical radii in a trainable band, $U_{\mathrm{sharp}}$ prefers informative transitions, $U_{\mathrm{unc}}$ refreshes uncertain curve estimates, and $U_{\mathrm{stale}}$ revisits old records as the policy changes. We mix this distribution with uniform replay to prevent starvation. For the radius-level decision, BGR samples from a mixture centered at $\hat r_\alpha(x)$ with clean, easier, harder, and broad-radius coverage components; ablations test which part is responsible for the gains.
 
 \section{Experiments}
 
