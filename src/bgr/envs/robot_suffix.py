@@ -70,21 +70,22 @@ class RobotSuffixRecoveryBenchmark:
             margin = state.margin_ee
         feasible = self.feasibility(state_idx, sigma, perturbation_family)
         boundary_signal = np.exp(-((sigma - margin) / 0.14) ** 2)
-        clean_signal = 0.20 * np.exp(-(sigma / 0.10) ** 2)
+        clean_signal = np.exp(-(sigma / 0.10) ** 2)
         teacher_signal = feasible * (0.75 + 0.25 * state.teacher_quality)
-        gain = self.learning_rate * teacher_signal * (boundary_signal + clean_signal)
+        margin_gain = self.learning_rate * teacher_signal * boundary_signal
 
         if perturbation_family == "object":
             cap = state.feasible_object_radius
-            state.margin_object = float(np.clip(state.margin_object + gain, 0.02, cap))
-            state.margin_ee = float(np.clip(state.margin_ee + 0.35 * gain, 0.02, state.feasible_ee_radius))
+            state.margin_object = float(np.clip(state.margin_object + margin_gain, 0.02, cap))
+            state.margin_ee = float(np.clip(state.margin_ee + 0.35 * margin_gain, 0.02, state.feasible_ee_radius))
         else:
             cap = state.feasible_ee_radius
-            state.margin_ee = float(np.clip(state.margin_ee + gain, 0.02, cap))
-            state.margin_object = float(np.clip(state.margin_object + 0.25 * gain, 0.02, state.feasible_object_radius))
+            state.margin_ee = float(np.clip(state.margin_ee + margin_gain, 0.02, cap))
+            state.margin_object = float(np.clip(state.margin_object + 0.25 * margin_gain, 0.02, state.feasible_object_radius))
 
-        state.clean_success = float(np.clip(state.clean_success + 0.012 * clean_signal - 0.0015 * max(0.0, sigma - margin), 0.70, 0.995))
-        return float(gain)
+        clean_gain = 0.010 * clean_signal
+        state.clean_success = float(np.clip(state.clean_success + clean_gain - 0.0015 * max(0.0, sigma - margin), 0.70, 0.995))
+        return float(margin_gain + clean_gain)
 
     def loss_proxy(self, state_idx: int, sigma: float, rng: np.random.Generator, perturbation_family: str = "object") -> float:
         state = self.states[state_idx]
