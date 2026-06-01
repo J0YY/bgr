@@ -185,6 +185,34 @@ Mean results over five seeds:
 
 Interpretation: on the grid-margin benchmark, radius-level boundary sampling is the main BGR ingredient. Removing uncertainty or sharpness weighting has little effect, while replacing boundary-centered perturbation radii with uniform radii drops below uniform replay.
 
+### `grid_policy_hard_fast_v1` and `grid_policy_mixed_v1`
+
+Commands:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 00:45:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_policy_hard_fast.yaml --out runs/grid_policy_hard_fast_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 00:45:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_policy_mixed.yaml --out runs/grid_policy_mixed_v1
+```
+
+Remote logs:
+
+```text
+/work/joy/bgr/logs/run_1780316465_289961157.out
+/work/joy/bgr/logs/run_1780317123_541002217.out
+```
+
+Mean results over three seeds for the mixed run:
+
+| Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---|---:|---:|---:|---:|
+| BGR | 0.7578 | 0.7096 | 0.7583 | 0.5473 |
+| BGR mixed | 0.7839 | 0.7589 | 0.8463 | 0.5861 |
+| Uniform | 0.9965 | 0.9641 | 0.9833 | 0.7838 |
+| Fixed radius | 0.9931 | 0.9771 | 1.0000 | 0.7999 |
+| PLR-loss proxy | 0.9991 | 0.9786 | 1.0000 | 0.7960 |
+
+Interpretation: this is a negative policy-level diagnostic. Adding clean/uniform radius coverage improves tabular BGR, but fixed-radius and loss-priority replay saturate the tabular oracle-imitation grid policy much faster. The main paper should continue using `grid_margin_full_v1` as the positive procedural result and treat this policy-level tabular setup as a benchmark-design failure, not as evidence for BGR.
+
 ### `libero_probe_v2`
 
 Command:
