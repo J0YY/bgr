@@ -1,0 +1,120 @@
+\documentclass[letterpaper]{article}
+\usepackage[submission]{AuthorKit27/aaai2027}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage[hyphens]{url}
+\usepackage{graphicx}
+\urlstyle{rm}
+\def\UrlFont{\rm}
+\usepackage{natbib}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\pdfinfo{
+/TemplateVersion (2027.1)
+}
+
+\setcounter{secnumdepth}{2}
+
+\title{Bifurcation-Guided Replay: Learning at the Success--Failure Boundary of Decision Policies}
+\author{Anonymous Submission}
+\affiliations{Paper under double-blind review}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Policies trained on nominal starts often fail under small deviations from the states encountered during training. Existing curriculum and level-replay methods prioritize difficult or high-regret levels, but they do not explicitly identify where a policy's behavior transitions from likely success to likely failure. We introduce Bifurcation-Guided Replay (BGR), a general replay method for sequential decision policies. For each replayable decision state, BGR estimates a recovery curve measuring success probability under perturbations of increasing scale, derives a critical radius at which performance crosses a success threshold, and samples training perturbations near this state-conditioned boundary. To make boundary estimation practical, BGR uses active probing, monotone curve fitting, uncertainty-aware refresh, and diversity-preserving replay. We evaluate BGR first in a diagnostic recovery-margin benchmark and then extend the same machinery to procedural decision tasks and robot suffix recovery. BGR improves recovery AUC and shifts critical-radius distributions toward larger margins compared with uniform replay, fixed-radius perturbation training, and failure-focused replay, while preserving clean success.
+\end{abstract}
+
+\section{Introduction}
+
+A policy can solve a task and still be brittle: a minor shift in object pose, grid layout, browser state, or trajectory prefix may move it outside its recovery basin. Standard success metrics hide this geometry. We ask a different question: for each replayable state, how far can the current policy be perturbed before success becomes failure?
+
+Existing replay and curriculum methods rank examples by difficulty, temporal-difference error, regret, novelty, or failure. These signals are useful, but they do not explicitly model the local response curve around a state. BGR instead estimates a state-conditioned recovery curve and trains near its success--failure transition.
+
+Our contributions are:
+\begin{itemize}
+    \item a domain-general replay formalism based on replayable decision states, perturbation families, recovery curves, critical radii, and recovery AUC;
+    \item an efficient BGR algorithm that actively estimates success--failure boundaries and samples both states and perturbation radii near those boundaries;
+    \item a diagnostic benchmark and experiment pipeline for measuring recovery-margin expansion under controlled replay strategies;
+    \item a path to procedural RL and robot suffix-recovery experiments using the same estimator and priority interfaces.
+\end{itemize}
+
+\section{Problem Setting}
+
+Let $\pi_\theta$ be a sequential decision policy and let $Y(\tau)\in\{0,1\}$ denote terminal success for rollout $\tau$. A replayable decision state $x\in\mathcal{X}$ is any object from which evaluation or training can restart, such as an environment seed, simulator checkpoint, task prefix, or robot suffix state.
+
+For each $x$, a domain-valid perturbation family applies $\tilde{x}=T(x,\delta)$ with $\delta\sim\mathcal{P}_x(\sigma)$, where $\sigma\ge 0$ is a perturbation magnitude. The recovery curve is
+\begin{equation}
+R_\pi(x,\sigma)=
+\Pr_{\delta,\tau}[Y(\tau)=1 \mid \tau \sim \pi(\cdot \mid T(x,\delta))].
+\end{equation}
+For threshold $\alpha$, the critical radius is
+\begin{equation}
+r_{\pi,\alpha}(x)=\sup\{\sigma: R_\pi(x,\sigma)\ge \alpha R_\pi(x,0)\}.
+\end{equation}
+We evaluate robustness with recovery AUC,
+\begin{equation}
+\mathrm{RAUC}_\pi(x)=\frac{1}{\sigma_{\max}}\int_0^{\sigma_{\max}} R_\pi(x,\sigma)d\sigma.
+\end{equation}
+
+\section{Bifurcation-Guided Replay}
+
+BGR maintains a buffer of replayable states. For each state, it probes perturbation radii, fits a monotone recovery curve, estimates a critical radius, and assigns replay priority to states whose boundaries are feasible, sharp, uncertain, and near a trainable target band.
+
+\begin{algorithm}[t]
+\caption{Bifurcation-Guided Replay}
+\begin{algorithmic}[1]
+\STATE Initialize replay buffer $\mathcal{B}$ with replayable states
+\FORALL{$x\in\mathcal{B}$}
+    \STATE Probe $\sigma\in\{0,\sigma_{\min},\sigma_{\mathrm{mid}},\sigma_{\max}\}$
+    \STATE Fit monotone $\hat{R}(x,\sigma)$ and estimate $\hat{r}_\alpha(x)$
+\ENDFOR
+\FOR{training iteration $t=1,\ldots,T$}
+    \STATE Sample $x\sim q_{\mathcal{B}}(x)$ proportional to BGR priority
+    \STATE Sample $\sigma$ from a mixture centered at $\hat{r}_\alpha(x)$
+    \STATE Apply $\delta\sim\mathcal{P}_x(\sigma)$ and collect rollout or teacher recovery data
+    \STATE Update $\pi_\theta$ with the base learner
+    \STATE Periodically refresh stale curve estimates using active probes
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+The priority for a record is a product of gates and soft utilities:
+\begin{equation}
+P(x)=G(x)U_{\mathrm{boundary}}(x)U_{\mathrm{sharp}}(x)^\lambda
+U_{\mathrm{unc}}(x)^\beta U_{\mathrm{stale}}(x)^\eta.
+\end{equation}
+We mix this distribution with uniform replay to prevent starvation.
+
+\section{Experiments}
+
+\subsection{Tier-0 Recovery-Margin Benchmark}
+
+The initial benchmark creates replayable states with latent feasible radii and policy recovery margins. Success probability follows a sigmoid recovery curve, and training updates near the current margin expand that margin most efficiently. This diagnostic environment tests whether BGR's estimator and sampler recover the intended behavior before expensive RL or robotics runs.
+
+\subsection{Planned Procedural RL Study}
+
+The next stage instantiates replayable states in MiniGrid-style environments with resettable seeds and checkpointed states. Perturbations include start-pose offsets and instruction-preserving object edits with reachability filters. Baselines include uniform replay, PLR-style loss priority, failure-only replay, fixed-radius training, random-radius perturbation, and BGR ablations.
+
+\subsection{Planned Robot Suffix Study}
+
+BGR-Suffix treats a robot demonstration suffix as a replayable decision state. Object pose and end-effector perturbations expose where a language-conditioned manipulation policy leaves its recovery basin. The planned evaluation reports clean task success, recovery AUC, $r_{80}$ distributions, held-out suffix performance, and perturbation-family transfer.
+
+\section{Limitations}
+
+BGR requires reset or replay access, a meaningful perturbation family, and extra rollouts for boundary estimation. It does not certify robustness, and the term bifurcation is used operationally for an observed success--failure transition rather than a formal dynamical-systems claim.
+
+\section{Conclusion}
+
+BGR converts recovery-margin measurement into a replay curriculum. By training at feasible success--failure boundaries, it targets the states and perturbation scales where policy improvement should most directly expand local recovery basins.
+
+\bibliography{references}
+
+\end{document}
