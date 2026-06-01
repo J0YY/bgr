@@ -52,6 +52,7 @@ METRICS = [
 ]
 
 ESTIMATOR_RUN = "estimator_full_v1"
+ABLATION_RUN = "grid_margin_ablation_v1"
 
 
 def main() -> None:
@@ -109,6 +110,10 @@ def main() -> None:
     if estimator_rows:
         write_csv(out_dir / "estimator_stats.csv", estimator_rows)
         write_estimator_table(out_dir / "estimator_table.tex", estimator_rows)
+    ablation_rows = load_ablation(results_dir / ABLATION_RUN / "summary.csv")
+    if ablation_rows:
+        write_csv(out_dir / "grid_margin_ablation_stats.csv", ablation_rows)
+        write_ablation_table(out_dir / "grid_margin_ablation_table.tex", ablation_rows)
     try:
         make_figures(out_dir, summary_rows)
         if estimator_rows:
@@ -186,6 +191,57 @@ def write_estimator_table(path: Path, rows: list[dict]) -> None:
                 f"{float(row['r80_mae_mean']):.3f}$\\pm${float(row['r80_mae_sem']):.3f} & "
                 f"{float(row['rauc_mae_mean']):.3f}$\\pm${float(row['rauc_mae_sem']):.3f} & "
                 f"{float(row['hit_rate_mean']):.3f}$\\pm${float(row['hit_rate_sem']):.3f} \\\\\n"
+            )
+        handle.write("\\hline\n")
+        handle.write("\\end{tabular}\n")
+
+
+def load_ablation(path: Path) -> list[dict[str, str | float | int]]:
+    if not path.exists():
+        return []
+    rows = list(csv.DictReader(path.open("r", encoding="utf-8")))
+    display = {
+        "bgr": "BGR",
+        "bgr_no_uncertainty": "No uncertainty",
+        "bgr_no_sharpness": "No sharpness",
+        "bgr_uniform_radius": "Uniform radius",
+        "uniform": "Uniform replay",
+    }
+    out: list[dict[str, str | float | int]] = []
+    for method in ["bgr", "bgr_no_uncertainty", "bgr_no_sharpness", "bgr_uniform_radius", "uniform"]:
+        items = [row for row in rows if row["method"] == method]
+        if not items:
+            continue
+        out.append(
+            {
+                "method": display[method],
+                "n": len(items),
+                "clean_mean": mean([float(row["final_clean"]) for row in items]),
+                "clean_sem": sem([float(row["final_clean"]) for row in items]),
+                "rauc_mean": mean([float(row["final_rauc"]) for row in items]),
+                "rauc_sem": sem([float(row["final_rauc"]) for row in items]),
+                "r80_mean": mean([float(row["final_median_r80"]) for row in items]),
+                "r80_sem": sem([float(row["final_median_r80"]) for row in items]),
+                "aulc_mean": mean([float(row["rauc_aulc"]) for row in items]),
+                "aulc_sem": sem([float(row["rauc_aulc"]) for row in items]),
+            }
+        )
+    return out
+
+
+def write_ablation_table(path: Path, rows: list[dict]) -> None:
+    with path.open("w", encoding="utf-8") as handle:
+        handle.write("\\begin{tabular}{lcccc}\n")
+        handle.write("\\hline\n")
+        handle.write("Method & Clean & RAUC & Median $r_{80}$ & AULC \\\\\n")
+        handle.write("\\hline\n")
+        for row in rows:
+            handle.write(
+                f"{row['method']} & "
+                f"{float(row['clean_mean']):.3f}$\\pm${float(row['clean_sem']):.3f} & "
+                f"{float(row['rauc_mean']):.3f}$\\pm${float(row['rauc_sem']):.3f} & "
+                f"{float(row['r80_mean']):.3f}$\\pm${float(row['r80_sem']):.3f} & "
+                f"{float(row['aulc_mean']):.3f}$\\pm${float(row['aulc_sem']):.3f} \\\\\n"
             )
         handle.write("\\hline\n")
         handle.write("\\end{tabular}\n")

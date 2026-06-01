@@ -158,3 +158,29 @@ Mean results over five seeds, with 17 Bernoulli probes per state and dense 201-p
 | Uniform random | 0.1056 | 0.0647 | 0.6152 |
 
 Interpretation: active probing improves boundary-hit rate over uniform and coarse probing under the same rollout budget. Coarse grids remain slightly better on mean absolute radius error in this one-dimensional synthetic setting, so the paper frames this as a probe-efficiency validation rather than as proof that active probing dominates all fixed grids.
+
+### `grid_margin_ablation_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_margin_experiment.py --config configs/grid_margin_ablation.yaml --out runs/grid_margin_ablation_v1
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780309573_174287695.out
+```
+
+Mean results over five seeds:
+
+| Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---|---:|---:|---:|---:|
+| BGR | 0.9474 | 0.4350 | 0.3442 | 0.3538 |
+| No uncertainty | 0.9467 | 0.4356 | 0.3429 | 0.3541 |
+| No sharpness | 0.9479 | 0.4355 | 0.3449 | 0.3539 |
+| Uniform radius | 0.8939 | 0.3845 | 0.3235 | 0.3068 |
+| Uniform replay | 0.8969 | 0.3979 | 0.3322 | 0.3145 |
+
+Interpretation: on the grid-margin benchmark, radius-level boundary sampling is the main BGR ingredient. Removing uncertainty or sharpness weighting has little effect, while replacing boundary-centered perturbation radii with uniform radii drops below uniform replay.
