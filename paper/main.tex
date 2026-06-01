@@ -95,6 +95,25 @@ We mix this distribution with uniform replay to prevent starvation.
 
 \section{Experiments}
 
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{l l c c c c}
+\hline
+Benchmark & Method & Clean & RAUC & Median $r_{80}$ & RAUC AULC \\
+\hline
+Synthetic margin & BGR & 0.8962 & 0.3756 & 0.2829 & 0.3169 \\
+Synthetic margin & Uniform & 0.8886 & 0.3659 & 0.2753 & 0.2987 \\
+Grid margin & BGR & 0.9474 & 0.4350 & 0.3442 & 0.3538 \\
+Grid margin & Uniform & 0.8969 & 0.3979 & 0.3322 & 0.3145 \\
+Robot suffix & BGR-Suffix & 0.8738 & 0.4730 & 0.4534 & 0.3745 \\
+Robot suffix & Uniform suffix & 0.8368 & 0.4854 & 0.5032 & 0.3716 \\
+\hline
+\end{tabular}
+\caption{Current diagnostic results. BGR is strongest in the synthetic and procedural grid-margin settings. In the lightweight robot-suffix simulator, BGR-Suffix improves clean success and sample efficiency over uniform suffix replay, but uniform has higher final object-perturbation RAUC.}
+\label{tab:current-results}
+\end{table*}
+
 \subsection{Tier-0 Recovery-Margin Benchmark}
 
 The initial benchmark creates replayable states with latent feasible radii and policy recovery margins. Success probability follows a sigmoid recovery curve, and training updates near the current margin expand that margin most efficiently. This diagnostic environment tests whether BGR's estimator and sampler recover the intended behavior before expensive RL or robotics runs.
@@ -107,9 +126,11 @@ We instantiate replayable states in procedural grid environments with resettable
 
 In a five-seed grid-margin run, BGR outperforms uniform replay on final RAUC (0.4350 vs. 0.3979), RAUC learning-curve area (0.3538 vs. 0.3145), median $r_{80}$ (0.3442 vs. 0.3322), and clean success (0.9474 vs. 0.8969). Failure-only replay, PLR-loss proxy replay, and fixed-radius perturbation training substantially underperform, indicating that neither failure mining nor static perturbation scales recover the same margin-expansion behavior. A separate tabular grid-policy diagnostic saturated under broad replay and is treated as a negative setup result rather than evidence for the main claim.
 
-\subsection{Planned Robot Suffix Study}
+\subsection{Robot Suffix Study}
 
-BGR-Suffix treats a robot demonstration suffix as a replayable decision state. Object pose and end-effector perturbations expose where a language-conditioned manipulation policy leaves its recovery basin. The planned evaluation reports clean task success, recovery AUC, $r_{80}$ distributions, held-out suffix performance, and perturbation-family transfer.
+BGR-Suffix treats a robot demonstration suffix as a replayable decision state. The current lightweight suffix simulator models language-conditioned manipulation families, demonstration suffix phase, object-pose perturbations, end-effector perturbations, teacher feasibility, and clean-demo regularization. Training uses object-pose offsets; end-effector offsets are used as a perturbation-family transfer diagnostic.
+
+In a five-seed suffix run, BGR-Suffix improves clean success over uniform suffix replay (0.8738 vs. 0.8368) and slightly improves RAUC learning-curve area (0.3745 vs. 0.3716), while substantially outperforming clean-only fine-tuning, fixed-radius recovery training, failure-only replay, and loss-priority replay. Uniform suffix replay currently has higher final object-perturbation RAUC (0.4854 vs. 0.4730), higher median $r_{80}$ (0.5032 vs. 0.4534), and slightly higher end-effector transfer RAUC (0.3081 vs. 0.3029). We therefore treat this suffix simulator as a diagnostic BGR-Suffix instantiation rather than final robotics evidence; the next step is a LIBERO/OpenVLA-style simulation run with real task rollouts.
 
 \section{Limitations}
 

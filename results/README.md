@@ -107,3 +107,30 @@ Mean results over five seeds:
 | Fixed radius | 0.7981 | 0.2107 | 0.1354 | 0.2138 |
 
 Interpretation: the larger five-seed procedural run preserves the BGR advantage. Compared with uniform replay, BGR improves final RAUC by 0.0371, RAUC AULC by 0.0393, median r80 by 0.0120, and clean success by 0.0505.
+
+### `suffix_full_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_suffix_experiment.py --config configs/suffix_bgr_full.yaml --out runs/suffix_full_v1
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780307573_760181637.out
+```
+
+Mean results over five seeds:
+
+| Method | Clean | Object RAUC | Median r80 | EE-transfer RAUC | RAUC AULC |
+|---|---:|---:|---:|---:|---:|
+| BGR-Suffix | 0.8738 | 0.4730 | 0.4534 | 0.3029 | 0.3745 |
+| Uniform suffix | 0.8368 | 0.4854 | 0.5032 | 0.3081 | 0.3716 |
+| Clean FT | 0.8652 | 0.2630 | 0.2068 | 0.1889 | 0.2389 |
+| Failure-only | 0.7582 | 0.4237 | 0.4761 | 0.2434 | 0.3031 |
+| Loss priority | 0.7120 | 0.1704 | 0.1285 | 0.1447 | 0.1694 |
+| Fixed radius | 0.6848 | 0.1585 | 0.1255 | 0.1379 | 0.1648 |
+
+Interpretation: BGR-Suffix strongly beats clean-only, fixed-radius, failure-only, and loss-priority recovery training. Compared with uniform suffix replay, it improves clean success and sample efficiency, but uniform retains higher final object RAUC and transfer RAUC in this lightweight suffix simulator. Treat this as a robotics-style diagnostic rather than the final LIBERO/OpenVLA evidence requested by the full spec.
