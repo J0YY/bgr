@@ -1,10 +1,13 @@
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import numpy as np
 
 from scripts.render_openvla_teacher_examples import (
     _apply_perturbation,
     _keep_row,
+    _load_rows,
     _libero_oft_state,
     _select_balanced_episode_rows,
     _suite_name,
@@ -56,6 +59,40 @@ class RenderOpenVLATeacherExamplesTest(unittest.TestCase):
 
         self.assertEqual([row["perturbation_type"] for row in selected], ["blur", "blur", "shift", "shift"])
         self.assertEqual([row["step_idx"] for row in selected], [0, 1, 0, 1])
+
+    def test_load_rows_filters_by_method_before_balancing(self):
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "manifest.jsonl"
+            rows = []
+            for method in ["bgr_boundary", "random_balanced"]:
+                for family in ["blur", "shift"]:
+                    for step_idx in range(2):
+                        rows.append(
+                            {
+                                "method": method,
+                                "suite": "goal",
+                                "task_idx": 0,
+                                "task_name": "open_drawer",
+                                "episode_idx": 0,
+                                "init_state_idx": 0,
+                                "candidate_name": f"{method}_{family}",
+                                "perturbation_type": family,
+                                "step_idx": step_idx,
+                            }
+                        )
+            path.write_text("\n".join(__import__("json").dumps(row) for row in rows) + "\n", encoding="utf-8")
+
+            selected = _load_rows(
+                path,
+                4,
+                "balanced_episodes",
+                methods=("random_balanced",),
+                episodes_per_family=1,
+                max_steps_per_episode=2,
+            )
+
+            self.assertEqual({row["method"] for row in selected}, {"random_balanced"})
+            self.assertEqual([row["perturbation_type"] for row in selected], ["blur", "blur", "shift", "shift"])
 
     def test_libero_oft_state_shape(self):
         obs = {

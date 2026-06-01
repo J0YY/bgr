@@ -20,6 +20,12 @@ def main() -> int:
     )
     parser.add_argument("--manifest", required=True)
     parser.add_argument("--out", required=True)
+    parser.add_argument(
+        "--method",
+        action="append",
+        default=[],
+        help="Optional manifest method filter. Can be passed multiple times, e.g. --method bgr_boundary.",
+    )
     parser.add_argument("--max-examples", type=int, default=8)
     parser.add_argument("--selection", choices=["first", "first_per_family", "balanced_episodes"], default="first")
     parser.add_argument(
@@ -45,6 +51,7 @@ def main() -> int:
         Path(args.manifest),
         int(args.max_examples),
         str(args.selection),
+        methods=tuple(str(method) for method in args.method),
         episodes_per_family=int(args.episodes_per_family),
         max_steps_per_episode=args.max_steps_per_episode,
     )
@@ -79,6 +86,7 @@ def main() -> int:
                 "requested_examples": int(args.max_examples),
                 "rendered_examples": len(examples),
                 "manifest": str(args.manifest),
+                "methods": [str(method) for method in args.method],
                 "image_size": int(args.image_size),
                 "note": "PNG/NPZ action smoke set for the teacher-replay to RLDS path.",
             },
@@ -96,12 +104,14 @@ def _load_rows(
     max_examples: int,
     selection: str = "first",
     *,
+    methods: tuple[str, ...] = (),
     episodes_per_family: int = 1,
     max_steps_per_episode: int | None = None,
 ) -> list[dict[str, Any]]:
+    all_rows = [row for row in _iter_rows(path) if _matches_filters(row, methods)]
     if selection == "balanced_episodes":
         return _select_balanced_episode_rows(
-            list(_iter_rows(path)),
+            all_rows,
             max_examples=max_examples,
             episodes_per_family=episodes_per_family,
             max_steps_per_episode=max_steps_per_episode,
@@ -109,12 +119,18 @@ def _load_rows(
 
     rows: list[dict[str, Any]] = []
     seen_families: set[str] = set()
-    for row in _iter_rows(path):
+    for row in all_rows:
         if _keep_row(row, selection, seen_families):
             rows.append(row)
         if len(rows) >= max_examples:
             break
     return rows
+
+
+def _matches_filters(row: dict[str, Any], methods: tuple[str, ...]) -> bool:
+    if methods and str(row.get("method", "")) not in set(methods):
+        return False
+    return True
 
 
 def _iter_rows(path: Path):
