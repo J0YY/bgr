@@ -9,7 +9,7 @@ from bgr.envs.robot_suffix import RobotSuffixRecoveryBenchmark
 from bgr.metrics import critical_radius, recovery_auc
 from bgr.priorities import BGRPriorityScorer
 from bgr.records import LevelRecord
-from bgr.samplers import mixed_priority_probs, sample_boundary_radius
+from bgr.samplers import mixed_priority_probs
 
 
 @dataclass(frozen=True, slots=True)
@@ -200,11 +200,10 @@ def _sample_training_pair(
             uniform_mix=float(config.get("bgr", {}).get("uniform_mix", 0.10)),
         )
         state_idx = int(rng.choice(len(records), p=probs))
-        sigma = sample_boundary_radius(
+        sigma = _sample_suffix_bgr_radius(
             rng,
             records[state_idx].r_alpha_hat,
-            1.0,
-            radius_noise=float(config.get("bgr", {}).get("radius_noise", 0.07)),
+            config.get("bgr", {}),
         )
         return state_idx, sigma
     raise ValueError(f"unknown method: {method}")
@@ -215,6 +214,28 @@ def _write_estimate(record: LevelRecord, estimate) -> None:
     record.sharpness_hat = estimate.sharpness
     record.uncertainty_hat = estimate.r_uncertainty
     record.recovery_curve_hat = estimate.recovery.tolist()
+
+
+def _sample_suffix_bgr_radius(
+    rng: np.random.Generator,
+    r_alpha: float,
+    bgr_cfg: dict,
+) -> float:
+    clean_prob = float(bgr_cfg.get("clean_radius_prob", 0.15))
+    uniform_prob = float(bgr_cfg.get("uniform_radius_prob", 0.25))
+    draw = float(rng.random())
+    if draw < clean_prob:
+        return 0.0
+    if draw < clean_prob + uniform_prob:
+        return float(rng.uniform(0.0, 1.0))
+    mode = rng.choice(["boundary", "easy", "hard"], p=[0.58, 0.17, 0.25])
+    center = float(r_alpha)
+    if mode == "easy":
+        center *= 0.7
+    elif mode == "hard":
+        center = min(1.0, center * 1.35 + 0.03)
+    sigma = rng.normal(center, float(bgr_cfg.get("radius_noise", 0.07)))
+    return float(np.clip(sigma, 0.0, 1.0))
 
 
 def _quick_success_rate(

@@ -19,5 +19,7 @@ bgr:
   refresh_per_eval: 128
   min_trials: 3
   radius_noise: 0.07
+  clean_radius_prob: 0.15
+  uniform_radius_prob: 0.25
   priority_temperature: 0.7
   uniform_mix: 0.10
