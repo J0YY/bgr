@@ -51,6 +51,8 @@ METRICS = [
     ("rauc_aulc", "AULC"),
 ]
 
+ESTIMATOR_RUN = "estimator_full_v1"
+
 
 def main() -> None:
     parser = argparse.ArgumentParser()
@@ -103,8 +105,14 @@ def main() -> None:
     write_csv(out_dir / "summary_stats.csv", summary_rows)
     write_csv(out_dir / "bgr_deltas.csv", effect_rows)
     write_latex_table(out_dir / "summary_table.tex", summary_rows)
+    estimator_rows = load_estimator(results_dir / ESTIMATOR_RUN / "summary.csv")
+    if estimator_rows:
+        write_csv(out_dir / "estimator_stats.csv", estimator_rows)
+        write_estimator_table(out_dir / "estimator_table.tex", estimator_rows)
     try:
         make_figures(out_dir, summary_rows)
+        if estimator_rows:
+            make_estimator_figure(out_dir, estimator_rows)
     except Exception as exc:  # pragma: no cover - optional plotting path.
         print(f"[warn] skipped figure generation: {exc}")
 
@@ -140,6 +148,49 @@ def write_latex_table(path: Path, rows: list[dict]) -> None:
         handle.write("\\end{tabular}\n")
 
 
+def load_estimator(path: Path) -> list[dict[str, str | float | int]]:
+    if not path.exists():
+        return []
+    rows = list(csv.DictReader(path.open("r", encoding="utf-8")))
+    out: list[dict[str, str | float | int]] = []
+    display = {"active": "Active BGR", "coarse": "Coarse", "uniform": "Uniform"}
+    for method in ["active", "coarse", "uniform"]:
+        items = [row for row in rows if row["method"] == method]
+        if not items:
+            continue
+        out.append(
+            {
+                "method": display[method],
+                "n": len(items),
+                "probes_per_state": int(float(items[0]["probes_per_state"])),
+                "r80_mae_mean": mean([float(row["r80_mae"]) for row in items]),
+                "r80_mae_sem": sem([float(row["r80_mae"]) for row in items]),
+                "rauc_mae_mean": mean([float(row["rauc_mae"]) for row in items]),
+                "rauc_mae_sem": sem([float(row["rauc_mae"]) for row in items]),
+                "hit_rate_mean": mean([float(row["boundary_hit_rate"]) for row in items]),
+                "hit_rate_sem": sem([float(row["boundary_hit_rate"]) for row in items]),
+            }
+        )
+    return out
+
+
+def write_estimator_table(path: Path, rows: list[dict]) -> None:
+    with path.open("w", encoding="utf-8") as handle:
+        handle.write("\\begin{tabular}{lccc}\n")
+        handle.write("\\hline\n")
+        handle.write("Estimator & $r_{80}$ MAE & RAUC MAE & Hit rate \\\\\n")
+        handle.write("\\hline\n")
+        for row in rows:
+            handle.write(
+                f"{row['method']} & "
+                f"{float(row['r80_mae_mean']):.3f}$\\pm${float(row['r80_mae_sem']):.3f} & "
+                f"{float(row['rauc_mae_mean']):.3f}$\\pm${float(row['rauc_mae_sem']):.3f} & "
+                f"{float(row['hit_rate_mean']):.3f}$\\pm${float(row['hit_rate_sem']):.3f} \\\\\n"
+            )
+        handle.write("\\hline\n")
+        handle.write("\\end{tabular}\n")
+
+
 def fmt(row: dict) -> str:
     return f"{float(row['mean']):.3f}$\\pm${float(row['sem']):.3f}"
 
@@ -166,6 +217,25 @@ def make_figures(out_dir: Path, rows: list[dict]) -> None:
         fig.savefig(out_dir / f"{metric.lower()}_bars.pdf")
         fig.savefig(out_dir / f"{metric.lower()}_bars.png", dpi=200)
         plt.close(fig)
+
+
+def make_estimator_figure(out_dir: Path, rows: list[dict]) -> None:
+    import matplotlib.pyplot as plt
+
+    labels = [str(row["method"]).replace("Active ", "") for row in rows]
+    means = [float(row["r80_mae_mean"]) for row in rows]
+    errors = [float(row["r80_mae_sem"]) for row in rows]
+    colors = ["#1f77b4" if "Active" in str(row["method"]) else "#b8b8b8" for row in rows]
+    fig, ax = plt.subplots(figsize=(3.8, 2.5))
+    ax.bar(range(len(rows)), means, yerr=errors, color=colors, edgecolor="#333333", linewidth=0.5, capsize=2)
+    ax.set_xticks(range(len(rows)))
+    ax.set_xticklabels(labels, rotation=25, ha="right", fontsize=8)
+    ax.set_ylabel("$r_{80}$ MAE")
+    ax.grid(axis="y", alpha=0.25, linewidth=0.5)
+    fig.tight_layout()
+    fig.savefig(out_dir / "estimator_r80_mae.pdf")
+    fig.savefig(out_dir / "estimator_r80_mae.png", dpi=200)
+    plt.close(fig)
 
 
 def short_label(label: str) -> str:
