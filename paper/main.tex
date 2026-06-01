@@ -160,9 +160,11 @@ BGR-Suffix treats a robot demonstration suffix as a replayable decision state. T
 
 In a five-seed suffix run, BGR-Suffix improves clean success over uniform suffix replay (0.8738 vs. 0.8368) and slightly improves RAUC learning-curve area (0.3745 vs. 0.3716), while substantially outperforming clean-only fine-tuning, fixed-radius recovery training, failure-only replay, and loss-priority replay. Uniform suffix replay currently has higher final object-perturbation RAUC (0.4854 vs. 0.4730), higher median $r_{80}$ (0.5032 vs. 0.4534), and slightly higher end-effector transfer RAUC (0.3081 vs. 0.3029). We therefore treat this suffix simulator as a diagnostic BGR-Suffix instantiation rather than final robotics evidence; the next step is a LIBERO/OpenVLA-style simulation run with real task rollouts.
 
+We also validated the real-simulator path for that next step. On five LIBERO-Goal tasks, three reset states per task, five object-perturbation radii, and four trials per radius, a GPU/EGL probe instantiated LIBERO environments, loaded benchmark init states, applied object free-joint perturbations up to 8cm, and completed zero-action rollouts without simulator errors (75/75 valid radius rows). This confirms that BGR-Suffix can be attached to resettable LIBERO states in the current cluster environment. It is not reported as a policy result because OpenVLA is not installed and the LIBERO demonstration dataset path is unset.
+
 \section{Limitations}
 
-BGR requires reset or replay access, a meaningful perturbation family, and extra rollouts for boundary estimation. It does not certify robustness, and the term bifurcation is used operationally for an observed success--failure transition rather than a formal dynamical-systems claim.
+BGR requires reset or replay access, a meaningful perturbation family, and extra rollouts for boundary estimation. It does not certify robustness, and the term bifurcation is used operationally for an observed success--failure transition rather than a formal dynamical-systems claim. The current robot evidence remains diagnostic until a learned LIBERO or VLA policy is evaluated under the same recovery-curve protocol.
 
 \section{Conclusion}
 

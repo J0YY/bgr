@@ -184,3 +184,25 @@ Mean results over five seeds:
 | Uniform replay | 0.8969 | 0.3979 | 0.3322 | 0.3145 |
 
 Interpretation: on the grid-margin benchmark, radius-level boundary sampling is the main BGR ingredient. Removing uncertainty or sharpness weighting has little effect, while replacing boundary-centered perturbation radii with uniform radii drops below uniform replay.
+
+### `libero_probe_v2`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 01:00:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/probe_libero_suffix_states.py --suite libero_goal --task-ids 0,1,2,3,4 --init-state-ids 0,1,2 --radii 0.0,0.25,0.5,0.75,1.0 --trials-per-radius 4 --settle-steps 5 --image-size 64 --out runs/libero_probe_v2
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780311860_935283441.out
+```
+
+Probe summary:
+
+| Suite | Tasks | Init states/task | Radii | Trials/radius | Valid rate | Zero-action success |
+|---|---:|---:|---:|---:|---:|---:|
+| LIBERO-Goal | 5 | 3 | 5 | 4 | 1.0000 | 0.0000 |
+
+Interpretation: the cluster can instantiate LIBERO environments on GPU with `MUJOCO_GL=egl`, load trusted local init states after patching PyTorch 2.6's `torch.load(weights_only=True)` default, and apply object free-joint perturbations across resettable LIBERO states. This is infrastructure evidence for BGR-Suffix on real LIBERO simulator states, not a policy result: OpenVLA is not installed, the LIBERO demonstration dataset path is unset, and zero-action rollouts are not expected to solve tasks.
