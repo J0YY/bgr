@@ -134,3 +134,27 @@ Mean results over five seeds:
 | Fixed radius | 0.6848 | 0.1585 | 0.1255 | 0.1379 | 0.1648 |
 
 Interpretation: BGR-Suffix strongly beats clean-only, fixed-radius, failure-only, and loss-priority recovery training. Compared with uniform suffix replay, it improves clean success and sample efficiency, but uniform retains higher final object RAUC and transfer RAUC in this lightweight suffix simulator. Treat this as a robotics-style diagnostic rather than the final LIBERO/OpenVLA evidence requested by the full spec.
+
+### `estimator_full_v1`
+
+Command:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 01:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_estimator_experiment.py --config configs/estimator_bgr_full.yaml --out runs/estimator_full_v1
+```
+
+Remote log:
+
+```text
+/work/joy/bgr/logs/run_1780309253_221712673.out
+```
+
+Mean results over five seeds, with 17 Bernoulli probes per state and dense 201-point curves used only as references:
+
+| Estimator | r80 MAE | RAUC MAE | Boundary hit rate |
+|---|---:|---:|---:|
+| Active BGR | 0.0787 | 0.0655 | 0.6824 |
+| Coarse grid | 0.0717 | 0.0598 | 0.6535 |
+| Uniform random | 0.1056 | 0.0647 | 0.6152 |
+
+Interpretation: active probing improves boundary-hit rate over uniform and coarse probing under the same rollout budget. Coarse grids remain slightly better on mean absolute radius error in this one-dimensional synthetic setting, so the paper frames this as a probe-efficiency validation rather than as proof that active probing dominates all fixed grids.
