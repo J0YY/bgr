@@ -1,0 +1,11 @@
+method,run,n_candidates,n_counterfactual_certificates,mean_observed_cf_rate,boundary_hit_rate,mean_abs_distance_to_half,mean_predicted_cf_rate,families
+bgr_boundary,libero_openvla_observation_proposal_balanced_expfit_seed1_lp2_h160,8,23,0.71875,0.5,0.28125,0.875,blur;brightness;occlusion;shift
+bgr_boundary,libero_openvla_observation_proposal_balanced_expfit_seed2_lp2_h160,8,16,0.5,0.625,0.3125,0.875,blur;brightness;occlusion;shift
+bgr_boundary,libero_openvla_observation_proposal_balanced_expfit_seed3_lp2_h160,8,14,0.5833333333333333,0.5,0.3333333333333333,0.875,blur;brightness;occlusion;shift
+bgr_boundary,libero_openvla_observation_proposal_balanced_expfit_seed4_lp2_h160,8,17,0.53125,1.0,0.21875,0.875,blur;brightness;occlusion;shift
+bgr_boundary,libero_openvla_observation_proposal_balanced_expfit_seed5_lp2_h160,8,10,0.41666666666666663,0.5,0.3333333333333333,0.875,blur;brightness;occlusion;shift
+random_balanced,libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160,8,18,0.5625,0.625,0.25,,blur;brightness;occlusion;shift
+random_balanced,libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160,8,18,0.5625,0.375,0.3125,,blur;brightness;occlusion;shift
+random_balanced,libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160,8,21,0.65625,0.75,0.15625,,blur;brightness;occlusion;shift
+random_balanced,libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160,8,22,0.6875,0.75,0.1875,,blur;brightness;occlusion;shift
+random_balanced,libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160,8,24,0.75,0.375,0.375,,blur;brightness;occlusion;shift
