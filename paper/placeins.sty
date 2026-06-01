@@ -1,0 +1,7 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{placeins}[2026/06/01 local build shim for minimal TeX installs]
+
+% Draft-build fallback for clusters without the placeins package. The official
+% AAAI style uses FloatBarrier before references; for inspection PDFs on this
+% minimal TeX install, a no-op barrier is sufficient.
+\newcommand{\FloatBarrier}{}
