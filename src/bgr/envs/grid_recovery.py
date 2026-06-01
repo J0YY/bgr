@@ -28,6 +28,16 @@ class GridReplayState:
     position: tuple[int, int]
 
 
+@dataclass(slots=True)
+class GridMarginState:
+    replay: GridReplayState
+    feasible_radius: float
+    margin: float
+    clean_success: float
+    temperature: float
+    loss_bias: float
+
+
 class TabularRecoveryPolicy:
     """Small policy used to test replay curricula in a procedural grid domain."""
 
@@ -206,6 +216,107 @@ class GridRecoveryBenchmark:
             for path_idx in path_indices:
                 states.append(GridReplayState(len(states), task.task_id, task.path[int(path_idx)]))
         return states
+
+
+class GridMarginRecoveryBenchmark:
+    """Grid-backed recovery-margin benchmark with exact perturbation validity.
+
+    The grid supplies procedural replay states and feasibility constraints. Each
+    replay state also has a policy-specific recovery margin that expands most
+    efficiently when training perturbations are sampled near the current margin.
+    """
+
+    def __init__(
+        self,
+        num_tasks: int,
+        grid_size: int,
+        obstacle_prob: float,
+        replay_states_per_task: int,
+        max_offset: int,
+        learning_rate: float,
+        seed: int,
+    ) -> None:
+        self.rng = np.random.default_rng(seed)
+        self.max_offset = int(max_offset)
+        self.learning_rate = float(learning_rate)
+        base = GridRecoveryBenchmark(
+            num_tasks=num_tasks,
+            grid_size=grid_size,
+            obstacle_prob=obstacle_prob,
+            replay_states_per_task=replay_states_per_task,
+            max_offset=max_offset,
+            horizon=max(2 * grid_size, 16),
+            learning_rate=1.0,
+            seed=seed,
+        )
+        self.tasks = base.tasks
+        self.replay_states = base.replay_states
+        self.states = self._make_margin_states()
+
+    def success_prob(self, replay_idx: int, sigma: float) -> float:
+        state = self.states[replay_idx]
+        feasible = self.feasibility(replay_idx, sigma)
+        transition = 1.0 / (1.0 + np.exp((sigma - state.margin) / state.temperature))
+        floor = 0.02 * feasible
+        return float(np.clip(floor + (state.clean_success - floor) * transition * feasible, 0.0, 1.0))
+
+    def rollout(self, replay_idx: int, sigma: float, rng: np.random.Generator) -> bool:
+        return bool(rng.random() < self.success_prob(replay_idx, sigma))
+
+    def train_step(self, replay_idx: int, sigma: float, rng: np.random.Generator) -> float:
+        state = self.states[replay_idx]
+        feasible = self.feasibility(replay_idx, sigma)
+        boundary_signal = np.exp(-((sigma - state.margin) / 0.15) ** 2)
+        clean_anchor = 0.25 * np.exp(-(sigma / 0.12) ** 2)
+        saturation = max(0.0, 1.0 - state.margin / max(state.feasible_radius, 1e-6))
+        gain = self.learning_rate * feasible * (boundary_signal + clean_anchor) * saturation
+        state.margin = float(np.clip(state.margin + gain, 0.0, state.feasible_radius))
+        state.clean_success = float(np.clip(state.clean_success + 0.02 * clean_anchor, 0.0, 0.995))
+        if sigma > state.margin + 0.2:
+            state.clean_success = float(np.clip(state.clean_success - 0.001 * (sigma - state.margin), 0.70, 0.995))
+        return float(gain)
+
+    def loss_proxy(self, replay_idx: int, sigma: float, rng: np.random.Generator) -> float:
+        state = self.states[replay_idx]
+        return float((1.0 - self.success_prob(replay_idx, sigma)) + state.loss_bias)
+
+    def feasibility(self, replay_idx: int, sigma: float) -> float:
+        state = self.states[replay_idx]
+        if sigma <= state.feasible_radius:
+            return 1.0
+        return float(np.exp(-10.0 * (sigma - state.feasible_radius)))
+
+    def _make_margin_states(self) -> list[GridMarginState]:
+        states: list[GridMarginState] = []
+        for replay in self.replay_states:
+            task = self.tasks[replay.task_id]
+            local_room = self._local_reachable_radius(task, replay.position)
+            path_fraction = float(task.distances[replay.position] / max(1.0, task.distances[task.start]))
+            feasible_radius = float(
+                np.clip(
+                    min(local_room / max(1, self.max_offset), 0.45 + 0.45 * path_fraction + self.rng.normal(0.0, 0.03)),
+                    0.35,
+                    0.95,
+                )
+            )
+            initial_margin = float(np.clip(0.12 + 0.22 * (1.0 - path_fraction) + self.rng.normal(0.0, 0.05), 0.05, 0.45))
+            clean = float(self.rng.uniform(0.80, 0.96))
+            temp = float(self.rng.uniform(0.045, 0.10))
+            loss_bias = float(self.rng.uniform(0.0, 0.15))
+            states.append(GridMarginState(replay, feasible_radius, initial_margin, clean, temp, loss_bias))
+        return states
+
+    def _local_reachable_radius(self, task: GridTask, position: tuple[int, int]) -> int:
+        best = 0
+        for row in range(task.walls.shape[0]):
+            for col in range(task.walls.shape[1]):
+                pos = (row, col)
+                if task.walls[pos] or not np.isfinite(task.distances[pos]):
+                    continue
+                dist = abs(row - position[0]) + abs(col - position[1])
+                if dist <= self.max_offset:
+                    best = max(best, dist)
+        return best
 
 
 def shortest_path_distances(walls: np.ndarray, goal: tuple[int, int]) -> np.ndarray:

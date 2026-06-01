@@ -1,0 +1,26 @@
+experiment:
+  name: grid_margin_recovery_v1
+  seeds: [0, 1, 2]
+  methods: [uniform, fixed, failure_only, plr_loss, bgr]
+  num_tasks: 36
+  grid_size: 9
+  obstacle_prob: 0.20
+  replay_states_per_task: 4
+  max_offset: 5
+  iterations: 140
+  eval_every: 20
+  train_batch_size: 36
+  eval_grid_size: 9
+  alpha: 0.8
+  learning_rate: 0.035
+  fixed_radius: 0.75
+  target_margin: 0.38
+  baseline_candidates: 12
+  failure_probe_trials: 1
+bgr:
+  initial_probes: [0.0, 0.25, 0.5, 0.75, 1.0]
+  refresh_per_eval: 72
+  min_trials: 3
+  radius_noise: 0.07
+  priority_temperature: 0.7
+  uniform_mix: 0.08
