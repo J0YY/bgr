@@ -21,6 +21,7 @@ def main() -> int:
     parser.add_argument("--manifest", required=True)
     parser.add_argument("--out", required=True)
     parser.add_argument("--max-examples", type=int, default=8)
+    parser.add_argument("--selection", choices=["first", "first_per_family"], default="first")
     parser.add_argument("--num-steps-wait", type=int, default=10)
     parser.add_argument("--env-image-size", type=int, default=256)
     parser.add_argument("--image-size", type=int, default=224)
@@ -28,7 +29,7 @@ def main() -> int:
     parser.add_argument("--camera-key", default="agentview_image")
     args = parser.parse_args()
 
-    rows = _load_rows(Path(args.manifest), int(args.max_examples))
+    rows = _load_rows(Path(args.manifest), int(args.max_examples), str(args.selection))
     if not rows:
         raise SystemExit("No manifest rows found.")
 
@@ -66,22 +67,36 @@ def main() -> int:
     return 0
 
 
-def _load_rows(path: Path, max_examples: int) -> list[dict[str, Any]]:
-    rows = []
+def _load_rows(path: Path, max_examples: int, selection: str = "first") -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    seen_families: set[str] = set()
     opener = path.open
     with opener(encoding="utf-8") as handle:
         if path.suffix == ".csv":
             for row in csv.DictReader(handle):
-                rows.append(dict(row))
+                if _keep_row(dict(row), selection, seen_families):
+                    rows.append(dict(row))
                 if len(rows) >= max_examples:
                     break
         else:
             for line in handle:
                 if line.strip():
-                    rows.append(json.loads(line))
+                    row = json.loads(line)
+                    if _keep_row(row, selection, seen_families):
+                        rows.append(row)
                 if len(rows) >= max_examples:
                     break
     return rows
+
+
+def _keep_row(row: dict[str, Any], selection: str, seen_families: set[str]) -> bool:
+    if selection == "first":
+        return True
+    family = str(row.get("perturbation_type", ""))
+    if family in seen_families:
+        return False
+    seen_families.add(family)
+    return True
 
 
 def _render_examples(

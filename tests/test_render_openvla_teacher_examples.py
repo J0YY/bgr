@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from scripts.render_openvla_teacher_examples import _apply_perturbation, _suite_name
+from scripts.render_openvla_teacher_examples import _apply_perturbation, _keep_row, _suite_name
 
 
 class RenderOpenVLATeacherExamplesTest(unittest.TestCase):
@@ -16,6 +16,12 @@ class RenderOpenVLATeacherExamplesTest(unittest.TestCase):
         self.assertEqual(out.shape, image.shape)
         self.assertEqual(int(out[5, 5, 0]), 0)
         self.assertEqual(int(out[0, 0, 0]), 255)
+
+    def test_first_per_family_selection(self):
+        seen = set()
+        self.assertTrue(_keep_row({"perturbation_type": "blur"}, "first_per_family", seen))
+        self.assertFalse(_keep_row({"perturbation_type": "blur"}, "first_per_family", seen))
+        self.assertTrue(_keep_row({"perturbation_type": "shift"}, "first_per_family", seen))
 
 
 if __name__ == "__main__":
