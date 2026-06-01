@@ -35,6 +35,7 @@ def main() -> None:
                     "final_clean": result.final_clean,
                     "final_rauc": result.final_rauc,
                     "final_median_r80": result.final_median_r80,
+                    "rauc_aulc": result.rauc_aulc,
                     "best_rauc": result.best_rauc,
                 }
             )
@@ -58,7 +59,7 @@ def _summary(rows: list[dict[str, float | str | int]]) -> str:
     by_method: dict[str, list[dict[str, float | str | int]]] = {}
     for row in rows:
         by_method.setdefault(str(row["method"]), []).append(row)
-    lines = ["method,final_clean_mean,final_rauc_mean,final_median_r80_mean,best_rauc_mean"]
+    lines = ["method,final_clean_mean,final_rauc_mean,final_median_r80_mean,rauc_aulc_mean,best_rauc_mean"]
     for method, items in sorted(by_method.items()):
         lines.append(
             ",".join(
@@ -67,6 +68,7 @@ def _summary(rows: list[dict[str, float | str | int]]) -> str:
                     f"{_mean(items, 'final_clean'):.4f}",
                     f"{_mean(items, 'final_rauc'):.4f}",
                     f"{_mean(items, 'final_median_r80'):.4f}",
+                    f"{_mean(items, 'rauc_aulc'):.4f}",
                     f"{_mean(items, 'best_rauc'):.4f}",
                 ]
             )

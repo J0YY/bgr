@@ -19,6 +19,7 @@ class ToyResult:
     final_clean: float
     final_rauc: float
     final_median_r80: float
+    rauc_aulc: float
     best_rauc: float
     history: list[dict[str, float]]
 
@@ -66,6 +67,7 @@ def run_method(config: dict, method: str, seed: int) -> ToyResult:
         final_clean=final["clean"],
         final_rauc=final["rauc"],
         final_median_r80=final["median_r80"],
+        rauc_aulc=_history_aulc(history, "rauc"),
         best_rauc=max(item["rauc"] for item in history),
         history=history,
     )
@@ -91,6 +93,17 @@ def evaluate(bench: SyntheticMarginBenchmark, eval_grid: np.ndarray, alpha: floa
 
 def serialize_result(result: ToyResult) -> dict:
     return asdict(result)
+
+
+def _history_aulc(history: list[dict[str, float]], key: str) -> float:
+    if len(history) == 1:
+        return float(history[0][key])
+    area = 0.0
+    for left, right in zip(history[:-1], history[1:], strict=True):
+        width = float(right["step"] - left["step"])
+        area += width * 0.5 * (float(left[key]) + float(right[key]))
+    horizon = float(history[-1]["step"] - history[0]["step"])
+    return area / max(horizon, 1e-9)
 
 
 def _init_records(
