@@ -22,6 +22,19 @@ paper/                   AAAI-27 manuscript skeleton and official AuthorKit27
 PYTHONPATH=src:. python3 -m unittest discover -s tests
 ```
 
+## Reproducibility Metadata
+
+The repository is MIT licensed. Runtime environment snapshots can be collected
+on the cluster and checked against `results/environment_v1`:
+
+```bash
+~/remote_srun.sh --dry-run --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/collect_environment.py --out runs/environment_v1/compute_environment.json
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/collect_environment.py --out runs/environment_v1/compute_environment.json
+
+~/remote_srun.sh --dry-run --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:10:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/collect_environment.py --out runs/environment_v1/gpu_environment.json
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:10:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/collect_environment.py --out runs/environment_v1/gpu_environment.json
+```
+
 ## Tier-0 Experiment
 
 Heavy or repeated experiments should run on the cluster through `~/remote_srun.sh`; use `/work/joy/bgr` as the remote project directory to avoid home-directory disk pressure.
