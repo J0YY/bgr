@@ -11,7 +11,7 @@ experiment:
   alpha: 0.8
   learning_rate: 0.035
   fixed_radius: 0.70
-  target_margin: 0.36
+  target_margin: 0.44
   baseline_candidates: 12
   failure_probe_trials: 1
 bgr:
@@ -20,6 +20,6 @@ bgr:
   min_trials: 3
   radius_noise: 0.07
   clean_radius_prob: 0.15
-  uniform_radius_prob: 0.25
+  uniform_radius_prob: 0.30
   priority_temperature: 0.7
   uniform_mix: 0.10
