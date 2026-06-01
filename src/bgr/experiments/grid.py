@@ -238,7 +238,7 @@ def _sample_training_pair(
         selected = int(np.argmax(scores))
         return int(candidates[selected]), float(sigmas[selected])
     if method == "bgr":
-        target = float(np.quantile([record.r_alpha_hat for record in records], 0.60))
+        target = float(exp.get("target_margin", 0.45))
         adaptive_scorer = BGRPriorityScorer(
             clean_threshold=0.05,
             feasibility_threshold=scorer.feasibility_threshold,
