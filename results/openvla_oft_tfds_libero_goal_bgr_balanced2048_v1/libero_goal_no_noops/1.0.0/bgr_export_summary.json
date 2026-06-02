@@ -1,0 +1,14 @@
+{
+  "builder_dir": "runs/openvla_oft_tfds_libero_goal_bgr_balanced2048_v1/libero_goal_no_noops/1.0.0",
+  "dataset_name": "libero_goal_no_noops",
+  "episodes": 32,
+  "load_hint": "tfds.builder_from_directory('runs/openvla_oft_tfds_libero_goal_bgr_balanced2048_v1/libero_goal_no_noops/1.0.0')",
+  "perturbation_types": [
+    "blur",
+    "brightness",
+    "occlusion",
+    "shift"
+  ],
+  "steps": 2048,
+  "version": "1.0.0"
+}

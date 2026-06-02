@@ -716,6 +716,76 @@ rank 8 plus proprio and L1 action heads, loaded the baseline
 same class of checkpoint files under `/work/joy/bgr/runs`. The 656M checkpoint
 weights are not checked into git.
 
+### `openvla_teacher_oft_bgr_balanced2048_v1` and `openvla_teacher_oft_random_balanced2048_v1`
+
+Commands:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 24G --time 01:30:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_bgr_balanced2048_v1 --method bgr_boundary --max-examples 2048 --selection balanced_episodes --episodes-per-family 8 --max-steps-per-episode 64 --num-steps-wait 10 --env-image-size 256 --image-size 224
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 24G --time 01:30:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_random_balanced2048_v1 --method random_balanced --max-examples 2048 --selection balanced_episodes --episodes-per-family 8 --max-steps-per-episode 64 --num-steps-wait 10 --env-image-size 256 --image-size 224
+```
+
+Remote logs:
+
+```text
+/work/joy/bgr/logs/run_1780379901_989185344.out
+/work/joy/bgr/logs/run_1780380209_343397743.out
+```
+
+Interpretation: this scales the OpenVLA render bridge to matched 2,048-step
+BGR-boundary and random-balanced datasets. Each render has 32 replay episodes,
+8 episodes per visual perturbation family, and 64 steps per episode. The full
+render trees are 492M and 524M under `/work` and are not checked into git.
+
+### `openvla_oft_pack_bgr_balanced2048_v1` and `openvla_oft_pack_random_balanced2048_v1`
+
+Commands:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 16G --time 00:30:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples runs/openvla_teacher_oft_bgr_balanced2048_v1/examples.jsonl --out runs/openvla_oft_pack_bgr_balanced2048_v1 --write-hdf5
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 16G --time 00:30:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples runs/openvla_teacher_oft_random_balanced2048_v1/examples.jsonl --out runs/openvla_oft_pack_random_balanced2048_v1 --write-hdf5
+```
+
+Remote logs:
+
+```text
+/work/joy/bgr/logs/run_1780380477_635336557.out
+/work/joy/bgr/logs/run_1780380526_513758944.out
+```
+
+Interpretation: both matched 2,048-step renders pack into LIBERO-style HDF5
+with 7D actions, 8D state, and primary/wrist image streams. The full HDF5 packs
+are 383M and 399M under `/work`.
+
+### `openvla_oft_tfds_libero_goal_bgr_balanced2048_v1`, `openvla_oft_tfds_libero_goal_random_balanced2048_v1`, and `openvla_oft_loader_balanced2048_v1`
+
+Commands:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 16G --time 01:00:00 /work/joy/bgr /work/joy/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples runs/openvla_teacher_oft_bgr_balanced2048_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_bgr_balanced2048_v1 --dataset-name libero_goal_no_noops --version 1.0.0
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 16G --time 01:00:00 /work/joy/bgr /work/joy/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples runs/openvla_teacher_oft_random_balanced2048_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_random_balanced2048_v1 --dataset-name libero_goal_no_noops --version 1.0.0
+```
+
+Loader validation uses OpenVLA-OFT's unmodified `make_oxe_dataset_kwargs` and
+`make_dataset_from_rlds` on each TFDS root.
+
+Remote logs:
+
+```text
+/work/joy/bgr/logs/run_1780380577_704261678.out
+/work/joy/bgr/logs/run_1780380831_695183835.out
+/work/joy/bgr/logs/run_1780381106_407628579.out
+/work/joy/bgr/logs/run_1780381221_375772232.out
+```
+
+Interpretation: both matched 2,048-step TFDS exports use the stock
+`libero_goal_no_noops` dataset name and load through OpenVLA-OFT's RLDS loader.
+The loader computes dataset statistics for 2,048 transitions and 32
+trajectories, then yields 64-step chunks with primary/wrist images, proprio
+`(64,8)`, action `(64,7)`, and language. This is a larger dataset
+compatibility gate; full LoRA fine-tuning/evaluation on these 2,048-step sets
+is still pending.
+
 ### `suffix_strategy_v1`
 
 Command:

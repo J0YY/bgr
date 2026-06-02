@@ -1,0 +1,35 @@
+{
+  "bgr_boundary": {
+    "data_root_dir": "/work/joy/bgr/runs/openvla_oft_tfds_libero_goal_bgr_balanced2048_v1",
+    "dataset_name": "libero_goal_no_noops",
+    "num_transitions": 2048,
+    "num_trajectories": 32,
+    "observation_shapes": {
+      "image_primary": [64],
+      "image_wrist": [64],
+      "proprio": [64, 8],
+      "timestep": [64]
+    },
+    "action_shape": [64, 7],
+    "stats_action_mean_shape": [7],
+    "stats_proprio_mean_shape": [8],
+    "remote_log": "/work/joy/bgr/logs/run_1780381106_407628579.out"
+  },
+  "random_balanced": {
+    "data_root_dir": "/work/joy/bgr/runs/openvla_oft_tfds_libero_goal_random_balanced2048_v1",
+    "dataset_name": "libero_goal_no_noops",
+    "num_transitions": 2048,
+    "num_trajectories": 32,
+    "observation_shapes": {
+      "image_primary": [64],
+      "image_wrist": [64],
+      "proprio": [64, 8],
+      "timestep": [64]
+    },
+    "action_shape": [64, 7],
+    "stats_action_mean_shape": [7],
+    "stats_proprio_mean_shape": [8],
+    "remote_log": "/work/joy/bgr/logs/run_1780381221_375772232.out"
+  },
+  "note": "Both matched 2,048-step TFDS exports load through the unmodified OpenVLA-OFT RLDS loader. This is a larger dataset compatibility gate; one-step LoRA checkpoint smokes currently remain on the 64-step datasets."
+}
