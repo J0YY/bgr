@@ -806,8 +806,40 @@ OpenVLA-OFT LoRA fine-tuning runs. Each run loads OpenVLA 7B, initializes LoRA
 rank 8 plus proprio and L1 action heads, trains for 10 optimizer steps, and
 writes a latest checkpoint under `/work/joy/bgr/runs`. The remote checkpoint
 trees are 656M each and are not checked into git. This upgrades the OpenVLA
-bridge from dataset compatibility to matched checkpoint generation; closed-loop
-LIBERO evaluation of these checkpoints remains pending.
+bridge from dataset compatibility to matched checkpoint generation.
+
+### `openvla_oft_eval_balanced2048_step10_smoke_v1`
+
+Commands:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition low-prio-gpu --gres gpu:a6000:1 --cpus 8 --mem 80G --time 02:00:00 /work/joy/bgr bash -lc 'cd /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/joy/cache_home/huggingface TRANSFORMERS_CACHE=/work/joy/cache_home/huggingface/hub PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python vla-scripts/merge_lora_weights_and_save.py --base_checkpoint openvla/openvla-7b --lora_finetuned_checkpoint_dir /work/joy/bgr/runs/openvla_oft_finetune_bgr_balanced2048_step10_v1/openvla-7b+libero_goal_no_noops+b1+lr-0.0005+lora-r8+dropout-0.0--bgr-balanced2048-step10'
+~/remote_srun.sh --github-test --git-pull --log --partition low-prio-gpu --gres gpu:a6000:1 --cpus 8 --mem 80G --time 02:00:00 /work/joy/bgr bash -lc 'cd /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/joy/cache_home/huggingface TRANSFORMERS_CACHE=/work/joy/cache_home/huggingface/hub PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python vla-scripts/merge_lora_weights_and_save.py --base_checkpoint openvla/openvla-7b --lora_finetuned_checkpoint_dir /work/joy/bgr/runs/openvla_oft_finetune_random_balanced2048_step10_v1/openvla-7b+libero_goal_no_noops+b1+lr-0.0005+lora-r8+dropout-0.0--random-balanced2048-step10'
+```
+
+Eval commands use `run_libero_eval.py` with the merged checkpoint roots,
+`task_suite_name=libero_goal`, `num_tasks=1`, `num_trials_per_task=1`, and
+`max_steps_override=20`. The required runtime path is:
+
+```text
+PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft:/athenahomes/joy/LIBERO:/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/lib/python3.10/site-packages
+```
+
+Remote logs:
+
+```text
+/work/joy/bgr/logs/run_1780382513_105504870.out
+/work/joy/bgr/logs/run_1780382656_581424411.out
+/work/joy/bgr/logs/run_1780383317_343334235.out
+/work/joy/bgr/logs/run_1780383458_588753145.out
+```
+
+Interpretation: this closes the next OpenVLA infrastructure gap. Both matched
+10-step LoRA checkpoints merge into 15G local OpenVLA checkpoint roots, load
+through the stock OpenVLA-OFT LIBERO eval script, instantiate LIBERO-Goal, run
+one closed-loop rollout, save a rollout video, and log final results. Both score
+0/1 in this tiny smoke, so this is not policy-quality evidence; it verifies the
+merge/load/closed-loop evaluation path needed for longer matched evaluations.
 
 ### `suffix_strategy_v1`
 

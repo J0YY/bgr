@@ -1,0 +1,45 @@
+{
+  "artifact": "openvla_oft_eval_balanced2048_step10_smoke_v1",
+  "dataset": "libero_goal_no_noops",
+  "base_checkpoint": "openvla/openvla-7b",
+  "eval_suite": "libero_goal",
+  "eval_task_offset": 0,
+  "eval_num_tasks": 1,
+  "eval_num_trials_per_task": 1,
+  "eval_max_steps_override": 20,
+  "eval_seed": 7,
+  "environment": {
+    "partition": "low-prio-gpu",
+    "gres": "gpu:a6000:1",
+    "node": "c2-g4-22",
+    "python": "remote_srun safesae conda python with OpenVLA-OFT, LIBERO, and OpenVLA-OFT venv paths on PYTHONPATH"
+  },
+  "methods": {
+    "bgr_boundary": {
+      "train_artifact": "openvla_oft_finetune_bgr_balanced2048_step10_v1",
+      "merge_log": "/work/joy/bgr/logs/run_1780382513_105504870.out",
+      "eval_log": "/work/joy/bgr/logs/run_1780383317_343334235.out",
+      "remote_checkpoint_dir": "/work/joy/bgr/runs/openvla_oft_finetune_bgr_balanced2048_step10_v1/openvla-7b+libero_goal_no_noops+b1+lr-0.0005+lora-r8+dropout-0.0--bgr-balanced2048-step10",
+      "remote_checkpoint_size": "15G",
+      "eval_log_local": "logs/bgr/EVAL-libero_goal-openvla-2026_06_02-07_56_05--bgr-balanced2048-step10-smoke.txt",
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0
+    },
+    "random_balanced": {
+      "train_artifact": "openvla_oft_finetune_random_balanced2048_step10_v1",
+      "merge_log": "/work/joy/bgr/logs/run_1780382656_581424411.out",
+      "eval_log": "/work/joy/bgr/logs/run_1780383458_588753145.out",
+      "remote_checkpoint_dir": "/work/joy/bgr/runs/openvla_oft_finetune_random_balanced2048_step10_v1/openvla-7b+libero_goal_no_noops+b1+lr-0.0005+lora-r8+dropout-0.0--random-balanced2048-step10",
+      "remote_checkpoint_size": "15G",
+      "eval_log_local": "logs/random/EVAL-libero_goal-openvla-2026_06_02-07_58_23--random-balanced2048-step10-smoke.txt",
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0
+    }
+  },
+  "closed_loop_eval": true,
+  "performance_claim": false,
+  "note": "This is a matched closed-loop eval smoke for 10-step checkpoints. It verifies the merge/load/rollout path, not policy quality."
+}
+
