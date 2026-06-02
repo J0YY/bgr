@@ -783,8 +783,31 @@ Interpretation: both matched 2,048-step TFDS exports use the stock
 The loader computes dataset statistics for 2,048 transitions and 32
 trajectories, then yields 64-step chunks with primary/wrist images, proprio
 `(64,8)`, action `(64,7)`, and language. This is a larger dataset
-compatibility gate; full LoRA fine-tuning/evaluation on these 2,048-step sets
-is still pending.
+compatibility gate.
+
+### `openvla_oft_finetune_bgr_balanced2048_step10_v1` and `openvla_oft_finetune_random_balanced2048_step10_v1`
+
+Commands:
+
+```bash
+~/remote_srun.sh --github-test --git-pull --log --partition low-prio-gpu --gres gpu:a6000:1 --cpus 8 --mem 64G --time 02:00:00 /work/joy/bgr bash -lc 'cd /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/joy/cache_home/huggingface TRANSFORMERS_CACHE=/work/joy/cache_home/huggingface/hub PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/torchrun --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py --vla_path openvla/openvla-7b --data_root_dir /work/joy/bgr/runs/openvla_oft_tfds_libero_goal_bgr_balanced2048_v1 --dataset_name libero_goal_no_noops --run_root_dir /work/joy/bgr/runs/openvla_oft_finetune_bgr_balanced2048_step10_v1 --use_l1_regression True --use_diffusion False --use_film False --num_images_in_input 2 --use_proprio True --batch_size 1 --learning_rate 5e-4 --num_steps_before_decay 100000 --max_steps 10 --save_freq 10 --save_latest_checkpoint_only True --image_aug False --lora_rank 8 --merge_lora_during_training False --shuffle_buffer_size 512 --wandb_entity disabled --wandb_project bgr --run_id_note bgr-balanced2048-step10 --wandb_log_freq 1'
+~/remote_srun.sh --github-test --git-pull --log --partition low-prio-gpu --gres gpu:a6000:1 --cpus 8 --mem 64G --time 02:00:00 /work/joy/bgr bash -lc 'cd /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/joy/cache_home/huggingface TRANSFORMERS_CACHE=/work/joy/cache_home/huggingface/hub PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/torchrun --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py --vla_path openvla/openvla-7b --data_root_dir /work/joy/bgr/runs/openvla_oft_tfds_libero_goal_random_balanced2048_v1 --dataset_name libero_goal_no_noops --run_root_dir /work/joy/bgr/runs/openvla_oft_finetune_random_balanced2048_step10_v1 --use_l1_regression True --use_diffusion False --use_film False --num_images_in_input 2 --use_proprio True --batch_size 1 --learning_rate 5e-4 --num_steps_before_decay 100000 --max_steps 10 --save_freq 10 --save_latest_checkpoint_only True --image_aug False --lora_rank 8 --merge_lora_during_training False --shuffle_buffer_size 512 --wandb_entity disabled --wandb_project bgr --run_id_note random-balanced2048-step10 --wandb_log_freq 1'
+```
+
+Remote logs:
+
+```text
+/work/joy/bgr/logs/run_1780381812_955203657.out
+/work/joy/bgr/logs/run_1780382026_303226869.out
+```
+
+Interpretation: both matched 2,048-step TFDS exports now complete bounded
+OpenVLA-OFT LoRA fine-tuning runs. Each run loads OpenVLA 7B, initializes LoRA
+rank 8 plus proprio and L1 action heads, trains for 10 optimizer steps, and
+writes a latest checkpoint under `/work/joy/bgr/runs`. The remote checkpoint
+trees are 656M each and are not checked into git. This upgrades the OpenVLA
+bridge from dataset compatibility to matched checkpoint generation; closed-loop
+LIBERO evaluation of these checkpoints remains pending.
 
 ### `suffix_strategy_v1`
 

@@ -1,0 +1,26 @@
+{
+  "artifact": "openvla_oft_finetune_random_balanced2048_step10_v1",
+  "method": "random_balanced",
+  "dataset_name": "libero_goal_no_noops",
+  "data_root_dir": "/work/joy/bgr/runs/openvla_oft_tfds_libero_goal_random_balanced2048_v1",
+  "run_root_dir": "/work/joy/bgr/runs/openvla_oft_finetune_random_balanced2048_step10_v1",
+  "remote_checkpoint_dir": "/work/joy/bgr/runs/openvla_oft_finetune_random_balanced2048_step10_v1/openvla-7b+libero_goal_no_noops+b1+lr-0.0005+lora-r8+dropout-0.0--random-balanced2048-step10",
+  "remote_log": "/work/joy/bgr/logs/run_1780382026_303226869.out",
+  "slurm_job_id": 763255,
+  "node": "c2-g4-22",
+  "partition": "low-prio-gpu",
+  "gres": "gpu:a6000:1",
+  "max_steps": 10,
+  "save_freq": 10,
+  "batch_size": 1,
+  "learning_rate": 0.0005,
+  "lora_rank": 8,
+  "shuffle_buffer_size": 512,
+  "num_transitions": 2048,
+  "num_trajectories": 32,
+  "remote_checkpoint_size": "656M",
+  "checkpoint_written": true,
+  "closed_loop_eval": false,
+  "note": "Matched 2,048-step OpenVLA-OFT LoRA checkpoint run. Large weights remain under /work and are not checked into git."
+}
+
