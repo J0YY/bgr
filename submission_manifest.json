@@ -31,6 +31,11 @@
       "size_bytes": 922
     },
     {
+      "path": "configs/frozenlake_recovery_focused_30seed.yaml",
+      "sha256": "854103df4f24f3084f903c58e212202c29f809f17c4ece4de05599474bfc1961",
+      "size_bytes": 930
+    },
+    {
       "path": "configs/grid_bgr.yaml",
       "sha256": "32641bd394aa6c09a3ef92aa0708f9c0c2f67fa3e00e1da971ec1ea678e94884",
       "size_bytes": 642
@@ -427,8 +432,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "ed68129171df02d714e7bb82c2a9eea07092a0143bc1eb19312f2a1c354392b1",
-      "size_bytes": 212819
+      "sha256": "bdf4028fd5235d50ba27826e76bd1876b9c0f4c25986c0aaa3b8b6efa0f1d390",
+      "size_bytes": 213627
     },
     {
       "path": "results/environment_v1/README.md",
@@ -454,6 +459,16 @@
       "path": "results/estimator_pair_30seed_v1/summary.csv",
       "sha256": "0824d3615c18523bc9d7c34a916fbfbf56b170baa2479a70679304eaf25701ac",
       "size_bytes": 6328
+    },
+    {
+      "path": "results/frozenlake_recovery_focused_30seed_v1/results.json",
+      "sha256": "39dbf7447309f1c7045da1404ab4bc9b1a4da6319b829b3d1f471fdbc68cd9fd",
+      "size_bytes": 400790
+    },
+    {
+      "path": "results/frozenlake_recovery_focused_30seed_v1/summary.csv",
+      "sha256": "28b8c7fc6effb0ffa8aaedab23cd5314e7810e0f546ff10583c12f25c6748ec8",
+      "size_bytes": 22887
     },
     {
       "path": "results/grid_margin_ablation_15seed_v1/summary.csv",
@@ -707,8 +722,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "ee7bb9ffcf782d32e50a96d56bbc595c24238e4ae43e2fcdf347bd3533fd012f",
-      "size_bytes": 223753
+      "sha256": "be3c7fc581ecbf875a3854c9032bbfdcc92373cd5e54d08b01824068dd75df81",
+      "size_bytes": 224129
     },
     {
       "path": "scripts/collect_environment.py",

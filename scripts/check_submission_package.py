@@ -336,6 +336,9 @@ GRID_MARGIN_REPLICATION_CONFIG = "configs/grid_margin_full_replication_30seed.ya
 GRID_MARGIN_REPLICATION_SUMMARY = "results/grid_margin_full_replication_30seed_v1/summary.csv"
 GRID_MARGIN_REPLICATION_RESULTS = "results/grid_margin_full_replication_30seed_v1/results.json"
 GRID_MARGIN_REPLICATION_METHODS = ["uniform", "bgr"]
+FROZENLAKE_FOCUSED_CONFIG = "configs/frozenlake_recovery_focused_30seed.yaml"
+FROZENLAKE_FOCUSED_SUMMARY = "results/frozenlake_recovery_focused_30seed_v1/summary.csv"
+FROZENLAKE_FOCUSED_RESULTS = "results/frozenlake_recovery_focused_30seed_v1/results.json"
 PAPER_FIGURE_ARTIFACTS = [
     "paper/figures/summary_stats.csv",
     "paper/figures/summary_table.tex",
@@ -3339,6 +3342,9 @@ def data_artifact_text_files() -> list[str]:
             GRID_MARGIN_REPLICATION_CONFIG,
             GRID_MARGIN_REPLICATION_SUMMARY,
             GRID_MARGIN_REPLICATION_RESULTS,
+            FROZENLAKE_FOCUSED_CONFIG,
+            FROZENLAKE_FOCUSED_SUMMARY,
+            FROZENLAKE_FOCUSED_RESULTS,
             SUFFIX_COVERAGE_FULL_CONFIG,
             SUFFIX_COVERAGE_FULL_SUMMARY,
             SUFFIX_STRATEGY_ABLATION_CONFIG,
