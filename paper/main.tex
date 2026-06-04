@@ -106,6 +106,8 @@ U_{\mathrm{unc}}(x)^\beta U_{\mathrm{stale}}(x)^\eta.
 \end{equation}
 Here $G(x)$ gates out states with low clean success or low witness feasibility, $U_{\mathrm{boundary}}$ prefers critical radii in a trainable band, $U_{\mathrm{sharp}}$ prefers informative transitions, $U_{\mathrm{unc}}$ refreshes uncertain curve estimates, and $U_{\mathrm{stale}}$ revisits old records as the policy changes. We mix this distribution with uniform replay to prevent starvation. For the radius-level decision, BGR samples from a mixture centered at $\hat r_\alpha(x)$ with clean, easier, harder, and broad-radius coverage components; ablations test which part is responsible for the gains.
 
+Two separations are important. First, BGR does not equate failure with usefulness: perturbations far beyond the current recovery radius can be valid but uninformative for margin expansion, while clean or near-clean states may already be saturated. Second, BGR separates replay-state priority from perturbation-radius choice. A state can be worth revisiting because its boundary is uncertain or sharp, but the training sample still needs to land near the recoverable transition rather than at an arbitrary radius. This distinction is what the radius-level ablation tests.
+
 The mechanism is simple under a local margin-update model.
 
 \textbf{Proposition 1.} Fix a replay state $x$ and let $r=r_{\pi,\alpha}(x)$. Suppose training at radius $\sigma$ gives an expected first-order RAUC gain $k_x(|\sigma-r|)$ for a nonincreasing kernel $k_x$. If a boundary sampler $p_b(\sigma\mid x)$ induces a distance-to-boundary random variable $D_b=|\sigma-r|$ satisfying $\Pr[D_b>t]\le\Pr[D_0>t]$ for every $t$ relative to a baseline sampler's distance $D_0$, then
