@@ -71,7 +71,9 @@ wins for final RAUC, RAUC AULC, and clean success under diffuse-boundary,
 low-feasibility, and sharp-low-margin stress cases, while leaving diffuse
 median r80 as a non-promoted caveat.
 A held-out seeds 30-59 grid-margin replication again gives BGR higher RAUC than
-uniform (0.4340 vs. 0.3967) with 30/0 paired wins. The robot-suffix simulator reports
+uniform (0.4340 vs. 0.3967) with 30/0 paired wins. Pooling the original and
+held-out grid sweeps gives 0.4342 vs. 0.3965 RAUC with 60/0 paired wins. The
+robot-suffix simulator reports
 a 30-seed coverage-aware BGR-Suffix variant that beats uniform on final object
 RAUC, clean success, transfer RAUC, and AULC, while still trailing uniform on median
 critical radius.
@@ -84,6 +86,9 @@ clean-only clean-success and uniform median-r80 caveats.
 A held-out seeds 30-59 replication is included in the anonymous artifact; it
 again gives BGR-Coverage higher final object RAUC than uniform (0.4972 vs.
 0.4859) with 30/0 paired wins, while preserving the median-r80 caveat.
+Pooling the original and held-out suffix sweeps gives object RAUC 0.4971 vs.
+0.4856, clean success 0.8642 vs. 0.8367, transfer RAUC 0.3150 vs. 0.3089, and
+AULC 0.3829 vs. 0.3717, while uniform remains higher on median r80.
 The OpenVLA-OFT bridge includes corrected clean-mix diagnostics that preserve
 competence while keeping the claim scoped. The pooled p1024
 visual-perturbation evidence gives BGR 0.8550 vs. 0.8400 for random, trailing

@@ -106,6 +106,23 @@ def pooled_success_rate(
     return total_successes / total_episodes
 
 
+def paired_wins(rows: list[dict[str, str]], treatment: str, baseline: str, metric: str) -> tuple[int, int, int]:
+    seeds = sorted({int(float(row["seed"])) for row in rows if row.get("method") in {treatment, baseline}})
+    wins = losses = ties = 0
+    for seed in seeds:
+        seed_rows = [row for row in rows if int(float(row["seed"])) == seed]
+        treatment_value = mean_metric(seed_rows, treatment, metric)
+        baseline_value = mean_metric(seed_rows, baseline, metric)
+        delta = treatment_value - baseline_value
+        if abs(delta) < 1e-12:
+            ties += 1
+        elif delta > 0.0:
+            wins += 1
+        else:
+            losses += 1
+    return wins, losses, ties
+
+
 def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     claims: list[Claim] = []
 
@@ -223,6 +240,21 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
                 f"vs. {fmt(mean_metric(grid_replication, 'uniform', 'final_rauc'), 4)} RAUC"
             ),
             "results/grid_margin_full_replication_30seed_v1/summary.csv",
+        )
+    )
+    grid_pooled = grid + grid_replication
+    if paired_wins(grid_pooled, "bgr", "uniform", "final_rauc") != (60, 0, 0):
+        raise ValueError("Expected pooled grid original+held-out RAUC comparison to have 60/0 BGR wins")
+    claims.append(
+        Claim(
+            "grid pooled 60-seed RAUC",
+            (
+                f"Pooling original and held-out grid sweeps gives "
+                f"{fmt(mean_metric(grid_pooled, 'bgr', 'final_rauc'), 4)} "
+                f"vs. {fmt(mean_metric(grid_pooled, 'uniform', 'final_rauc'), 4)} RAUC "
+                f"with 60/0 paired wins"
+            ),
+            "results/grid_margin_full_30seed_v1/summary.csv and grid_margin_full_replication_30seed_v1/summary.csv",
         )
     )
 
@@ -401,6 +433,48 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
                 f"vs. {fmt(mean_metric(suffix_replication, 'uniform', 'final_rauc'), 4)} RAUC"
             ),
             "results/suffix_strategy_coverage_replication_30seed_v1/summary.csv",
+        )
+    )
+    suffix_pooled = suffix + suffix_replication
+    for metric in ["final_rauc", "final_clean", "final_transfer_rauc", "rauc_aulc"]:
+        if paired_wins(suffix_pooled, "bgr_broad", "uniform", metric) != (60, 0, 0):
+            raise ValueError(f"Expected pooled suffix {metric} comparison to have 60/0 BGR wins")
+    if paired_wins(suffix_pooled, "bgr_broad", "uniform", "final_median_r80") != (1, 59, 0):
+        raise ValueError("Expected pooled suffix median-r80 caveat to have 1/59 BGR/uniform wins")
+    claims.append(
+        Claim(
+            "suffix pooled 60-seed object RAUC",
+            (
+                f"Pooling original and held-out suffix sweeps gives object RAUC "
+                f"{fmt(mean_metric(suffix_pooled, 'bgr_broad', 'final_rauc'), 4)} "
+                f"vs. {fmt(mean_metric(suffix_pooled, 'uniform', 'final_rauc'), 4)}"
+            ),
+            "results/suffix_strategy_coverage_30seed_v1/summary.csv and suffix_strategy_coverage_replication_30seed_v1/summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "suffix pooled 60-seed clean transfer AULC",
+            (
+                f"clean {fmt(mean_metric(suffix_pooled, 'bgr_broad', 'final_clean'), 4)} "
+                f"vs. {fmt(mean_metric(suffix_pooled, 'uniform', 'final_clean'), 4)}, "
+                f"transfer RAUC {fmt(mean_metric(suffix_pooled, 'bgr_broad', 'final_transfer_rauc'), 4)} "
+                f"vs. {fmt(mean_metric(suffix_pooled, 'uniform', 'final_transfer_rauc'), 4)}, "
+                f"and AULC {fmt(mean_metric(suffix_pooled, 'bgr_broad', 'rauc_aulc'), 4)} "
+                f"vs. {fmt(mean_metric(suffix_pooled, 'uniform', 'rauc_aulc'), 4)}"
+            ),
+            "results/suffix_strategy_coverage_30seed_v1/summary.csv and suffix_strategy_coverage_replication_30seed_v1/summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "suffix pooled median r80 caveat",
+            (
+                f"uniform remains higher on median $r_{{80}}$ "
+                f"({fmt(mean_metric(suffix_pooled, 'uniform', 'final_median_r80'), 4)} "
+                f"vs. {fmt(mean_metric(suffix_pooled, 'bgr_broad', 'final_median_r80'), 4)})"
+            ),
+            "results/suffix_strategy_coverage_30seed_v1/summary.csv and suffix_strategy_coverage_replication_30seed_v1/summary.csv",
         )
     )
 

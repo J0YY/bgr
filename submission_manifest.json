@@ -172,17 +172,17 @@
     },
     {
       "path": "paper/README.md",
-      "sha256": "22347bf146876af45f977d4efe2c9182aab81f2212b90280914606b80b8a2b42",
-      "size_bytes": 5740
+      "sha256": "d79a80ff4edb656a7fe5ffd49005242a9a593d353ac5866b4934d048f7d190fd",
+      "size_bytes": 6061
     },
     {
       "path": "paper/ReproducibilityChecklist.log",
-      "sha256": "8de2b1acd0adc8d7b5afe273a26d8419ed8b6600b47f124d39a1552a91a6769a",
+      "sha256": "a17d63f2e6da3bbc3280b0d9773a434dbbce1fb7d690c6e431f3eb5160d20aff",
       "size_bytes": 6650
     },
     {
       "path": "paper/ReproducibilityChecklist.pdf",
-      "sha256": "5d36ad9259e297ce6d9ad618b71f6966f6a5f3242bc016fda6909ec527924215",
+      "sha256": "72117636a214d6aa2a7659459d9478051331c911d2f64774479d6b24a174ddf0",
       "size_bytes": 48977
     },
     {
@@ -347,18 +347,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "f9a1890a010d6306b15f09c7435dfbf5a35e2624445798969cdcc32ed10dbd2c",
-      "size_bytes": 13991
+      "sha256": "6e76180197f4e3b7a488cddc6adb286b82d80ea276a8e2e51f2c0b327d40f3a8",
+      "size_bytes": 13917
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "143022548b2d6b66e3367d89db8903d5a6e65570cc357443dd69525e438d798d",
-      "size_bytes": 243761
+      "sha256": "d7c18ffc4a0e8ef07408ea2f7a745888a06e1966eb193799e6d14f6b99038e0a",
+      "size_bytes": 244121
     },
     {
       "path": "paper/main.tex",
-      "sha256": "8d033f8943047ab215db27c6de9de302ed381835535d0bceee6b03c292d9c62f",
-      "size_bytes": 24576
+      "sha256": "1d1335a411e8355e8d5c7fbba72df9745a46854459734e51ba0698ff8789db95",
+      "size_bytes": 24972
     },
     {
       "path": "paper/references.bib",
@@ -597,8 +597,8 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "879ec4363f7969162677dc4c1a8a660cd90a2dfcce7eadf68995ee4c56bdea27",
-      "size_bytes": 50977
+      "sha256": "d80dc1d67bc23ae236aa93f02fbf8509454a9c8aab4f2a35970a3dcb42460df1",
+      "size_bytes": 54770
     },
     {
       "path": "scripts/check_submission_package.py",
