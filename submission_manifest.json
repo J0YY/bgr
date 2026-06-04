@@ -917,8 +917,8 @@
     },
     {
       "path": "src/bgr/envs/frozenlake_recovery.py",
-      "sha256": "6e4d96e741a9385ab835875d10fb60939d41ade68855d64617f3739039bd29a2",
-      "size_bytes": 10343
+      "sha256": "b15e7c23499a98d51f078f79f05f1b5cb820ce185822db2908595f8d96b4f797",
+      "size_bytes": 10590
     },
     {
       "path": "src/bgr/envs/grid_recovery.py",
@@ -947,8 +947,8 @@
     },
     {
       "path": "src/bgr/experiments/frozenlake_recovery.py",
-      "sha256": "834e2c37d6c036459934963111ea9ca05efd3284d90c6e42e69c3662db3309ba",
-      "size_bytes": 10433
+      "sha256": "3c0f121a566792cdeab6f6ce6d8ee519c958ddafb54a916ffcbd0c03a312165c",
+      "size_bytes": 10634
     },
     {
       "path": "src/bgr/experiments/grid.py",
@@ -1042,8 +1042,8 @@
     },
     {
       "path": "tests/test_frozenlake_recovery.py",
-      "sha256": "de0e0ff23a1f9a4478c24256ecc4eecd46623aef1d71333f985d88796c676b95",
-      "size_bytes": 1930
+      "sha256": "ea0a2df9e33d6cddeca3cafa1efebd2d138da5120fb678b2a3845c49d82c9668",
+      "size_bytes": 2395
     },
     {
       "path": "tests/test_grid_margin.py",

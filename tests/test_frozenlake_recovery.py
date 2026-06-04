@@ -47,6 +47,16 @@ class FrozenLakeRecoveryTest(unittest.TestCase):
         after = bench.success_prob(0, 0.4)
         self.assertGreaterEqual(after, before - 1e-9)
 
+    def test_cached_success_values_match_direct_success_prob(self):
+        bench = FrozenLakeRecoveryBenchmark(replay_state_count=8, seed=2)
+        values = bench.current_success_values()
+        for replay_idx in range(4):
+            for sigma in (0.0, 0.5, 1.0):
+                self.assertAlmostEqual(
+                    bench.success_prob(replay_idx, sigma),
+                    bench.success_prob_from_values(replay_idx, sigma, values),
+                )
+
 
 if __name__ == "__main__":
     unittest.main()

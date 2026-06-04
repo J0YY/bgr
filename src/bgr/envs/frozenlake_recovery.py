@@ -68,8 +68,13 @@ class FrozenLakeRecoveryBenchmark:
         return self.success_prob(replay_idx, 0.0)
 
     def success_prob(self, replay_idx: int, sigma: float) -> float:
+        return self.success_prob_from_values(replay_idx, sigma, self.current_success_values())
+
+    def current_success_values(self) -> np.ndarray:
+        return self._policy_success_values(self._greedy_policy())
+
+    def success_prob_from_values(self, replay_idx: int, sigma: float, values: np.ndarray) -> float:
         starts = self.perturbation_states(replay_idx, sigma)
-        values = self._policy_success_values(self._greedy_policy())
         return float(np.mean([values[state] for state in starts]))
 
     def rollout(self, replay_idx: int, sigma: float, rng: np.random.Generator, max_steps: int = 96) -> bool:

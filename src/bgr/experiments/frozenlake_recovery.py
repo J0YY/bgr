@@ -78,8 +78,12 @@ def evaluate(bench: FrozenLakeRecoveryBenchmark, eval_grid: np.ndarray, alpha: f
     clean: list[float] = []
     raucs: list[float] = []
     radii: list[float] = []
+    values = bench.current_success_values()
     for replay_idx in range(len(bench.states)):
-        curve = np.array([bench.success_prob(replay_idx, float(sigma)) for sigma in eval_grid], dtype=float)
+        curve = np.array(
+            [bench.success_prob_from_values(replay_idx, float(sigma), values) for sigma in eval_grid],
+            dtype=float,
+        )
         clean.append(float(curve[0]))
         raucs.append(recovery_auc(eval_grid, curve, sigma_max=1.0))
         radii.append(critical_radius(eval_grid, curve, alpha=alpha))
@@ -177,7 +181,11 @@ def _sample_training_pair(
     if method == "failure_only":
         candidates = rng.choice(len(records), size=min(int(exp.get("baseline_candidates", 12)), len(records)), replace=False)
         sigmas = rng.uniform(0.0, 1.0, size=len(candidates))
-        scores = [1.0 - bench.success_prob(int(idx), float(sigma)) for idx, sigma in zip(candidates, sigmas, strict=True)]
+        values = bench.current_success_values()
+        scores = [
+            1.0 - bench.success_prob_from_values(int(idx), float(sigma), values)
+            for idx, sigma in zip(candidates, sigmas, strict=True)
+        ]
         selected = int(np.argmax(scores))
         return int(candidates[selected]), float(sigmas[selected])
     if method == "td_loss":
