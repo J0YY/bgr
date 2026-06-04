@@ -148,17 +148,18 @@ checkpoint writeability. It is infrastructure evidence only; the paper still
 treats OpenVLA as an audit because the learned adaptation does not stably beat
 both matched random selection and the official checkpoint.
 
-## Queued OpenVLA-OFT p2048 1,000-Step Low-LR Image-Augmentation Continuation
+## Completed OpenVLA-OFT p2048 1,000-Step Low-LR Image-Augmentation Continuation
 
-Queued on 2026-06-04 in response to the current review risk: the manuscript can
+Queued and completed on 2026-06-04 in response to the current review risk: the manuscript can
 only promote a learned-policy robotics claim if BGR beats both matched random
 selection and the unadapted official checkpoint on a standard LIBERO-Goal audit.
 This run keeps the p2048 clean-mix BGR/random datasets, official training/eval
 statistics, identity-LoRA entry point, image augmentation, and 10-task/10-trial
 evaluation scale from the completed 300-step audit, but reduces the adaptation
 learning rate to `1e-7` and extends the continuation to 1,000 optimizer steps
-(`MAX_STEPS=51000`). It should remain ledger-only unless completed summaries
-show a stable BGR improvement over both controls.
+(`MAX_STEPS=51000`). It remains ledger-only: the completed repair does not show
+a stable BGR improvement over either matched random selection or the official
+checkpoint.
 
 Submitted adaptation command shape:
 
@@ -240,6 +241,34 @@ complete summaries will not mix partial and repaired outputs:
 765640--765644  BGR repair1 identity -> blur -> brightness -> occlusion -> shift, afterok:765628
 765645--765649  random repair1 identity -> blur -> brightness -> occlusion -> shift, afterok:765631
 ```
+
+Repair completion outcome:
+
+```text
+765627  BGR repair1 adapt completed, 00:10:42
+765628  BGR repair1 merge completed, 00:01:44
+765629  BGR repair1 clean eval completed, 98/100 = 0.9800
+765630  random repair1 adapt completed, 00:10:44
+765631  random repair1 merge completed, 00:01:31
+765632  random repair1 clean eval completed, 99/100 = 0.9900
+765635--765639  official perturbation chain completed
+765640--765644  BGR perturbation chain completed
+765645--765649  random perturbation chain completed
+```
+
+| Method | Identity | Blur | Brightness | Occlusion | Shift | Perturbed mean |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Official OpenVLA-OFT | 0.9900 | 0.9700 | 0.9800 | 0.7400 | 0.9800 | 0.9320 |
+| BGR low-LR image-aug p2048 | 0.9800 | 0.9700 | 0.9800 | 0.7500 | 0.9600 | 0.9280 |
+| Random low-LR image-aug p2048 | 0.9900 | 0.9800 | 0.9800 | 0.7700 | 0.9700 | 0.9380 |
+
+Interpretation: this falsifies the low-learning-rate continuation as a
+robotics fine-tuning claim. BGR trails matched random on clean identity
+evaluation (98/100 vs. 99/100), trails the official checkpoint on aggregate
+perturbation success (464/500 vs. 466/500), and trails matched random more
+clearly (464/500 vs. 469/500). The only positive cell is a one-episode
+occlusion edge over official (75/100 vs. 74/100), which is not enough to
+promote into the paper.
 
 ## Completed OpenVLA-OFT p2048 300-Step Image-Augmentation Continuation
 
