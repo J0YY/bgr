@@ -127,7 +127,27 @@ The assumption is first-order stochastic dominance over distance to the boundary
 
 \section{Experiments}
 
-All experiments are driven by artifact YAML configs and scripts. The anonymous artifact records per-seed CSVs, aggregation code, paired exact sign tests, Slurm launch commands, run ledger files, compute/GPU environment snapshots, and an MIT license; the paper tables are generated from these artifacts rather than hand-edited results. We use three evidence tiers. The main claim is supported by controlled synthetic and procedural grid-margin experiments where the recovery-margin object is directly trainable and baselines share paired seeds; the grid result is replicated on held-out seeds and pooled over 60 paired comparisons. The robot-suffix simulator is a manipulation-style extension: a coverage-aware BGR variant improves final object RAUC, clean success, transfer RAUC, and AULC over uniform suffix replay across original and held-out sweeps and in four stress regimes, while still trailing uniform on median critical radius. The OpenVLA/LIBERO results are learned-policy audits and infrastructure checks, not BGR fine-tuning claims.
+All experiments are driven by artifact YAML configs and scripts. The anonymous artifact records per-seed CSVs, aggregation code, paired exact sign tests, Slurm launch commands, run ledger files, compute/GPU environment snapshots, and an MIT license; the paper tables are generated from these artifacts rather than hand-edited results.
+
+\begin{table}[t]
+\centering
+\small
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lll}
+\hline
+\textbf{Evidence tier} & \textbf{Supports} & \textbf{Does not support}\\
+\hline
+Synthetic & sampler/estimator sanity & independent benchmark win\\
+Grid-margin & boundary-radius mechanism & broad environment dominance\\
+Robot suffix & manipulation-style interface & final robotics fine-tuning claim\\
+FrozenLake/OpenVLA & scope and audit checks & promoted positive result\\
+\hline
+\end{tabular}}
+\caption{Evidence contract used throughout the experiments. The central claim is mechanism-level margin expansion when recovery curves are directly trainable; independent-benchmark and learned-policy wins remain open requirements rather than hidden claims.}
+\label{tab:evidence-contract}
+\end{table}
+
+Table~\ref{tab:evidence-contract} summarizes the claim boundary before the results. The main claim is supported by controlled synthetic and procedural grid-margin experiments where the recovery-margin object is directly trainable and baselines share paired seeds; the grid result is replicated on held-out seeds and pooled over 60 paired comparisons. The robot-suffix simulator is a manipulation-style extension: a coverage-aware BGR variant improves final object RAUC, clean success, transfer RAUC, and AULC over uniform suffix replay across original and held-out sweeps and in four stress regimes, while still trailing uniform on median critical radius. The FrozenLake and OpenVLA/LIBERO results are scope checks and learned-policy audits, not BGR fine-tuning claims.
 
 \subsection{Protocol and Metrics}
 

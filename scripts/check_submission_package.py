@@ -4012,14 +4012,15 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "Prioritized experience replay ranks transitions by temporal-difference error",
         "BGR is not an adversarial-training objective",
         "active learning selects informative labels under a query budget",
-        "We use three evidence tiers",
+        "Evidence contract used throughout the experiments",
+        "independent-benchmark and learned-policy wins remain open requirements rather than hidden claims",
         "The main claim is supported by controlled synthetic and procedural grid-margin experiments",
         "The robot-suffix simulator is a manipulation-style extension",
+        "The FrozenLake and OpenVLA/LIBERO results are scope checks and learned-policy audits, not BGR fine-tuning claims",
         "four stress regimes",
         "A four-condition 30-seed suffix stress sweep varies teacher quality",
         "while still trailing uniform on median critical radius",
         "Five-seed exploratory variants are reported only as exploratory evidence",
-        "OpenVLA/LIBERO results are learned-policy audits and infrastructure checks, not BGR fine-tuning claims",
         "OpenVLA is a learned-policy audit rather than a robotics training claim",
         "action-label/TFDS plumbing validates 2,048-transition matched BGR/random exports with 7D actions and 8D state",
         "matched action/TFDS construction",
@@ -4301,19 +4302,25 @@ def check_main_pdf(path: Path) -> list[str]:
     stale_rows = [snippet for snippet in forbidden_layout if snippet in layout_text]
     if stale_rows:
         raise ValueError(f"{path}: stale rendered significance table row(s): {', '.join(stale_rows)}")
-    rendered_order = [
-        "Table 3: Selected paired effect sizes",
-        "Table 4: Probe-efficiency validation",
+    required_order_snippets = [
+        "Table 4: Selected paired effect sizes",
+        "Table 5: Probe-efficiency validation",
         "Thirty-seed procedural grid-margin full-baseline comparison",
-        "Table 6: Grid-margin ablations over 30 seeds",
+        "Table 7: Grid-margin ablations over 30 seeds",
+        "Table 7 isolates the replay decisions inside BGR",
         "Robot Suffix Study",
     ]
-    positions = [normalized_text.find(snippet) for snippet in rendered_order]
-    missing_order = [snippet for snippet, position in zip(rendered_order, positions, strict=True) if position < 0]
+    positions = {snippet: normalized_text.find(snippet) for snippet in required_order_snippets}
+    missing_order = [snippet for snippet, position in positions.items() if position < 0]
     if missing_order:
         raise ValueError(f"{path}: missing rendered order snippet(s): {', '.join(missing_order)}")
-    if positions != sorted(positions):
-        raise ValueError(f"{path}: rendered grid table/order regression")
+    if positions["Table 7: Grid-margin ablations over 30 seeds"] > positions["Table 7 isolates the replay decisions inside BGR"]:
+        raise ValueError(f"{path}: rendered grid ablation table appears after its discussion")
+    if (
+        positions["Thirty-seed procedural grid-margin full-baseline comparison"] > positions["Robot Suffix Study"]
+        or positions["Table 7: Grid-margin ablations over 30 seeds"] > positions["Robot Suffix Study"]
+    ):
+        raise ValueError(f"{path}: rendered grid tables crossed into suffix section")
     messages.extend(check_embedded_checklist_text(path, text))
     messages.append(f"{path}: rendered title/framing ok")
     return messages
