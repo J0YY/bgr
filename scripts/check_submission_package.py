@@ -451,6 +451,7 @@ OPENVLA_BRIDGE_TEST_ARTIFACTS = [
     "tests/test_openvla_oft_perturb_eval_summary.py",
     "tests/test_openvla_teacher_replay_manifest.py",
     "tests/test_pack_openvla_oft_examples.py",
+    "tests/test_queue_openvla_oft_perturb_eval.py",
     "tests/test_render_openvla_teacher_examples.py",
 ]
 TEST_ARTIFACTS = [
@@ -482,6 +483,7 @@ TEST_ARTIFACTS = [
     "tests/test_openvla_teacher_replay_manifest.py",
     "tests/test_pack_openvla_oft_examples.py",
     "tests/test_priority_scores.py",
+    "tests/test_queue_openvla_oft_perturb_eval.py",
     "tests/test_render_openvla_teacher_examples.py",
     "tests/test_robot_suffix.py",
     "tests/test_submission_framing.py",

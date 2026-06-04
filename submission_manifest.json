@@ -602,8 +602,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "ca2505651be50f1779536abd65180a1769fdaeace04002d4329c40c73f85e70c",
-      "size_bytes": 201740
+      "sha256": "9fe69b40d039351da7718678b0b522da004b7c78c6897858468cde22b49ae4ab",
+      "size_bytes": 201844
     },
     {
       "path": "scripts/collect_environment.py",
@@ -989,6 +989,11 @@
       "path": "tests/test_priority_scores.py",
       "sha256": "7ce145e14f1ee1c71f6e97bc3fc1039a3df357795fa9abd3f437bc9dfcedc44d",
       "size_bytes": 1129
+    },
+    {
+      "path": "tests/test_queue_openvla_oft_perturb_eval.py",
+      "sha256": "fadd3ac6e57c0016fcf423aa9f37c1361080b907f222117b54cf5f051ad3d902",
+      "size_bytes": 1953
     },
     {
       "path": "tests/test_render_openvla_teacher_examples.py",
