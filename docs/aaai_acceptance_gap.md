@@ -135,6 +135,22 @@ Do not add another result to the manuscript if it has any of these properties:
      Queue perturbation evals only after BGR and random merge jobs exist, passing
      `BGR_DEPENDENCY=afterok:<bgr_merge>` and
      `RANDOM_DEPENDENCY=afterok:<random_merge>`.
+   - Submitted on 2026-06-04 under the live `/work/joy` cluster workspace after
+     the preregistration script was pushed. The archived anonymous paths from
+     `results/README.md` are not writable in the live account, so the submitted
+     jobs use `/work/joy/bgr`, `/work/joy/cache_home`, and
+     `/work/joy/external_validation`. Remote `/work/joy/bgr` is dirty and behind
+     `origin/main`, so the generated Slurm scripts were submitted with
+     `GIT_PULL=0`; this chain uses only the pre-existing TFDS data roots,
+     OpenVLA-OFT checkout, and official stats file.
+     - Adapt/merge/clean eval: BGR `765759 -> 765760 -> 765761`; random
+       `765762 -> 765763 -> 765764`.
+     - Perturb evals: official `765765 -> 765766 -> 765767 -> 765768 -> 765769`;
+       BGR `765770 -> 765771 -> 765772 -> 765773 -> 765774` after
+       `afterok:765760`; random `765775 -> 765776 -> 765777 -> 765778 -> 765779`
+       after `afterok:765763`.
+     - Initial `squeue` check showed all jobs pending with the intended
+       dependencies.
 
 ## Immediate Engineering Work
 
