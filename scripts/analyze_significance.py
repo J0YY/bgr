@@ -244,6 +244,8 @@ REGIME_SENSITIVITY_PATH = "grid_margin_regime_sensitivity_15seed_v1/summary.csv"
 REGIME_SENSITIVITY_30_PATH = "grid_margin_regime_sensitivity_30seed_v1/summary.csv"
 STRESS_SENSITIVITY_PATH = "grid_margin_stress_sensitivity_15seed_v1/summary.csv"
 STRESS_SENSITIVITY_30_PATH = "grid_margin_stress_sensitivity_30seed_v1/summary.csv"
+SUFFIX_STRESS_SENSITIVITY_PATH = "suffix_stress_sensitivity_15seed_v1/summary.csv"
+SUFFIX_STRESS_SENSITIVITY_30_PATH = "suffix_stress_sensitivity_30seed_v1/summary.csv"
 GRID_LEARNING_CURVE_PATH = "grid_margin_full_15seed_v1/results.json"
 
 
@@ -398,6 +400,8 @@ def analyze(results_dir: Path) -> list[dict[str, str]]:
     rows.extend(analyze_regime_sensitivity_30(results_dir))
     rows.extend(analyze_stress_sensitivity(results_dir))
     rows.extend(analyze_stress_sensitivity_30(results_dir))
+    rows.extend(analyze_suffix_stress_sensitivity(results_dir))
+    rows.extend(analyze_suffix_stress_sensitivity_30(results_dir))
     rows.extend(analyze_grid_learning_curve(results_dir))
     return rows
 
@@ -624,6 +628,55 @@ def analyze_stress_sensitivity_path(path: Path, benchmark: str) -> list[dict[str
                     f"stress_case={stress_case}",
                     metric,
                     "bgr",
+                    "uniform",
+                    differences,
+                    "higher",
+                )
+            )
+    return out
+
+
+def analyze_suffix_stress_sensitivity(results_dir: Path) -> list[dict[str, str]]:
+    return analyze_suffix_stress_sensitivity_path(
+        results_dir / SUFFIX_STRESS_SENSITIVITY_PATH,
+        "Robot suffix stress sensitivity 15-seed",
+    )
+
+
+def analyze_suffix_stress_sensitivity_30(results_dir: Path) -> list[dict[str, str]]:
+    return analyze_suffix_stress_sensitivity_path(
+        results_dir / SUFFIX_STRESS_SENSITIVITY_30_PATH,
+        "Robot suffix stress sensitivity 30-seed",
+    )
+
+
+def analyze_suffix_stress_sensitivity_path(path: Path, benchmark: str) -> list[dict[str, str]]:
+    if not path.exists():
+        return []
+
+    rows = read_rows(path)
+    out: list[dict[str, str]] = []
+    stress_cases = sorted({row["stress_case"] for row in rows})
+    for stress_case in stress_cases:
+        bgr = {
+            int(row["seed"]): row
+            for row in rows
+            if row["stress_case"] == stress_case and row["method"] == "bgr_broad"
+        }
+        uniform = {
+            int(row["seed"]): row
+            for row in rows
+            if row["stress_case"] == stress_case and row["method"] == "uniform"
+        }
+        seeds = sorted(set(bgr) & set(uniform))
+        for metric in ["final_clean", "final_rauc", "final_transfer_rauc", "rauc_aulc", "final_median_r80"]:
+            differences = [float(bgr[seed][metric]) - float(uniform[seed][metric]) for seed in seeds]
+            out.append(
+                result_row(
+                    benchmark,
+                    f"stress_case={stress_case}",
+                    metric,
+                    "bgr_broad",
                     "uniform",
                     differences,
                     "higher",

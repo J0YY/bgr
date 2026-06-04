@@ -87,6 +87,12 @@ again gives BGR-Coverage higher final object RAUC than uniform (0.4972 vs.
 Pooling the original and held-out suffix sweeps gives object RAUC 0.4971 vs.
 0.4856, clean success 0.8642 vs. 0.8367, transfer RAUC 0.3150 vs. 0.3089, and
 AULC 0.3829 vs. 0.3717, while uniform remains higher on median r80.
+The 30-seed suffix stress confirmation
+`results/suffix_stress_sensitivity_30seed_v1/summary.csv` varies teacher
+quality, clutter, feasible radii, and boundary sharpness. BGR-Coverage beats
+uniform with 30/0 paired wins on clean success, final object RAUC, transfer
+RAUC, and AULC in all four stress cases, while preserving the uniform
+median-r80 caveat.
 The OpenVLA-OFT bridge includes corrected clean-mix diagnostics that preserve
 competence while keeping the claim scoped. The pooled p1024
 visual-perturbation evidence gives BGR 0.8550 vs. 0.8400 for random, trailing

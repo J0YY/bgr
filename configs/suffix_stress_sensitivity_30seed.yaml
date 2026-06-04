@@ -1,0 +1,6 @@
+experiment:
+  name: suffix_stress_sensitivity_30seed_v1
+  base_config: configs/suffix_coverage_full_30seed.yaml
+  seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+  methods: [uniform, bgr_broad]
+  stress_cases: [{"name": "low_teacher", "teacher_quality_min": 0.58, "teacher_quality_max": 0.82}, {"name": "high_clutter", "clutter_min": 0.65, "clutter_max": 1.0}, {"name": "tight_feasible", "feasible_object_shift": -0.12, "feasible_ee_shift": -0.12}, {"name": "diffuse_boundary", "temperature_scale": 1.6}]

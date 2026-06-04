@@ -259,6 +259,18 @@ CORE_STUDY_ARTIFACTS = [
         "results/suffix_coverage_full_replication_30seed_v1/summary.csv",
         30,
     ),
+    (
+        "robot-suffix stress sensitivity 15-seed",
+        "configs/suffix_stress_sensitivity_15seed.yaml",
+        "results/suffix_stress_sensitivity_15seed_v1/summary.csv",
+        15,
+    ),
+    (
+        "robot-suffix stress sensitivity 30-seed",
+        "configs/suffix_stress_sensitivity_30seed.yaml",
+        "results/suffix_stress_sensitivity_30seed_v1/summary.csv",
+        30,
+    ),
 ]
 SUMMARY_METRIC_COLUMNS = {
     "seed",
@@ -289,6 +301,10 @@ SUFFIX_STRATEGY_ABLATION_CONFIG = "configs/suffix_strategy_ablation_30seed.yaml"
 SUFFIX_STRATEGY_ABLATION_SUMMARY = "results/suffix_strategy_ablation_30seed_v1/summary.csv"
 SUFFIX_STRATEGY_ABLATION_RESULTS = "results/suffix_strategy_ablation_30seed_v1/results.json"
 SUFFIX_STRATEGY_ABLATION_METHODS = ["uniform", "bgr_boundary", "bgr_broad", "bgr_hard"]
+SUFFIX_STRESS_30_CONFIG = "configs/suffix_stress_sensitivity_30seed.yaml"
+SUFFIX_STRESS_30_SUMMARY = "results/suffix_stress_sensitivity_30seed_v1/summary.csv"
+SUFFIX_STRESS_30_CASES = ["diffuse_boundary", "high_clutter", "low_teacher", "tight_feasible"]
+SUFFIX_STRESS_30_METHODS = ["uniform", "bgr_broad"]
 GRID_MARGIN_FULL_30_CONFIG = "configs/grid_margin_full_30seed.yaml"
 GRID_MARGIN_FULL_30_SUMMARY = "results/grid_margin_full_30seed_v1/summary.csv"
 GRID_MARGIN_FULL_30_METHODS = ["uniform", "fixed", "failure_only", "plr_loss", "bgr"]
@@ -340,6 +356,8 @@ PAPER_FIGURE_ARTIFACTS = [
     "paper/figures/grid_margin_regime_sensitivity_table.tex",
     "paper/figures/grid_margin_stress_sensitivity_stats.csv",
     "paper/figures/grid_margin_stress_sensitivity_table.tex",
+    "paper/figures/suffix_stress_sensitivity_stats.csv",
+    "paper/figures/suffix_stress_sensitivity_table.tex",
     "paper/figures/grid_margin_target_sensitivity_stats.csv",
     "paper/figures/grid_margin_target_sensitivity_table.tex",
     "paper/figures/openvla_stats.csv",
@@ -373,6 +391,8 @@ AGGREGATE_TEXT_ARTIFACTS = [
     "grid_margin_regime_sensitivity_table.tex",
     "grid_margin_stress_sensitivity_stats.csv",
     "grid_margin_stress_sensitivity_table.tex",
+    "suffix_stress_sensitivity_stats.csv",
+    "suffix_stress_sensitivity_table.tex",
     "grid_margin_learning_curve_stats.csv",
     "grid_margin_learning_curve_table.tex",
     "openvla_stats.csv",
@@ -403,6 +423,7 @@ CHECKED_CLAIM_ARTIFACTS = [
     "paper/figures/grid_margin_learning_rate_sensitivity_stats.csv",
     "paper/figures/grid_margin_regime_sensitivity_stats.csv",
     "paper/figures/grid_margin_stress_sensitivity_stats.csv",
+    "paper/figures/suffix_stress_sensitivity_stats.csv",
     "paper/figures/grid_margin_target_sensitivity_stats.csv",
     "paper/figures/openvla_stats.csv",
     "results/estimator_pair_30seed_v1/summary.csv",
@@ -433,6 +454,7 @@ CHECKED_CLAIM_ARTIFACTS = [
     "results/suffix_strategy_ablation_30seed_v1/summary.csv",
     "results/suffix_strategy_coverage_30seed_v1/summary.csv",
     "results/suffix_strategy_coverage_replication_30seed_v1/summary.csv",
+    "results/suffix_stress_sensitivity_30seed_v1/summary.csv",
     "results/toy_15seed_v1/summary.csv",
     "results/toy_30seed_v1/summary.csv",
 ]
@@ -505,6 +527,7 @@ TEST_ARTIFACTS = [
     "tests/test_render_openvla_teacher_examples.py",
     "tests/test_robot_suffix.py",
     "tests/test_submission_framing.py",
+    "tests/test_suffix_stress_sensitivity.py",
     "tests/test_suffix_strategy.py",
 ]
 SOURCE_ARTIFACTS = [
@@ -562,6 +585,7 @@ SUBMISSION_GATE_ARTIFACTS = [
     "scripts/run_grid_margin_target_sensitivity.py",
     "scripts/run_grid_margin_trial.py",
     "scripts/run_suffix_experiment.py",
+    "scripts/run_suffix_stress_sensitivity.py",
     "tests/test_aggregate_results.py",
     "tests/test_analyze_significance.py",
     "tests/test_check_paper_claims.py",
@@ -572,6 +596,7 @@ SUBMISSION_GATE_ARTIFACTS = [
     "tests/test_grid_margin_target_sensitivity.py",
     "tests/test_grid_margin_trial_merge.py",
     "tests/test_submission_framing.py",
+    "tests/test_suffix_stress_sensitivity.py",
 ]
 
 
@@ -1284,6 +1309,9 @@ def check_results_evidence_index(root: Path) -> list[str]:
         "results/suffix_strategy_coverage_30seed_v1/summary.csv",
         "results/suffix_strategy_coverage_replication_30seed_v1/summary.csv",
         "results/suffix_strategy_ablation_30seed_v1/summary.csv",
+        "results/suffix_stress_sensitivity_30seed_v1/summary.csv",
+        "30-seed suffix stress sweep",
+        "paper/figures/suffix_stress_sensitivity_stats.csv",
         "paper/figures/significance_tests.csv",
         "paper/figures/estimator_stats.csv",
         "paper/figures/estimator_table.tex",
@@ -1436,6 +1464,8 @@ def check_paper_readme_openvla_status(root: Path) -> list[str]:
     if stale:
         raise ValueError(f"{path}: stale OpenVLA paper README marker(s): {', '.join(stale)}")
     required = [
+        "The 30-seed suffix stress confirmation",
+        "BGR-Coverage beats uniform with 30/0 paired wins on clean success, final object RAUC, transfer RAUC, and AULC in all four stress cases",
         "OpenVLA-OFT bridge includes corrected clean-mix diagnostics that preserve competence while keeping the claim scoped",
         "pooled p1024 visual-perturbation evidence gives BGR 0.8550 vs. 0.8400 for random",
         "trailing official at 0.8700",
@@ -2084,6 +2114,95 @@ def check_suffix_strategy_ablation_status(root: Path) -> list[str]:
             + ", ".join(missing_completed)
         )
     return [f"{results_readme}: suffix strategy ablation completion ledger ok"]
+
+
+def check_suffix_stress_30_status(root: Path) -> list[str]:
+    config_path = root / SUFFIX_STRESS_30_CONFIG
+    summary_path = root / SUFFIX_STRESS_30_SUMMARY
+    results_readme = root / "results" / "README.md"
+    missing = [
+        str(path.relative_to(root))
+        for path in [config_path, summary_path]
+        if not path.exists()
+    ]
+    if missing:
+        raise ValueError(f"missing suffix stress 30-seed artifact(s): {', '.join(missing)}")
+
+    configured = configured_seeds(config_path)
+    expected_seed_labels = {str(seed) for seed in range(30)}
+    expected_seed_values = set(range(30))
+    if configured != expected_seed_labels:
+        raise ValueError(f"{config_path}: expected configured seeds 0-29, found {sorted(configured)}")
+    methods = configured_methods(config_path)
+    if methods != SUFFIX_STRESS_30_METHODS:
+        raise ValueError(f"{config_path}: unexpected suffix stress methods: {methods}")
+
+    rows = read_csv_rows(summary_path)
+    by_case_method: dict[tuple[str, str], dict[int, dict[str, str]]] = {}
+    for row in rows:
+        stress_case = row.get("stress_case", "")
+        method = row.get("method", "")
+        if stress_case not in SUFFIX_STRESS_30_CASES:
+            raise ValueError(f"{summary_path}: unexpected suffix stress case {stress_case!r}")
+        if method not in SUFFIX_STRESS_30_METHODS:
+            raise ValueError(f"{summary_path}: unexpected suffix stress method {method!r}")
+        seed_text = row.get("seed", "")
+        if not seed_text:
+            raise ValueError(f"{summary_path}: missing seed in suffix stress row")
+        by_case_method.setdefault((stress_case, method), {})[int(float(seed_text))] = row
+
+    for stress_case in SUFFIX_STRESS_30_CASES:
+        for method in SUFFIX_STRESS_30_METHODS:
+            seeds = set(by_case_method.get((stress_case, method), {}))
+            if seeds != expected_seed_values:
+                raise ValueError(
+                    f"{summary_path}: stress_case={stress_case} method={method} has seeds "
+                    f"{sorted(seeds)}, expected {sorted(expected_seed_values)}"
+                )
+
+    for stress_case in SUFFIX_STRESS_30_CASES:
+        bgr_rows = by_case_method[(stress_case, "bgr_broad")]
+        uniform_rows = by_case_method[(stress_case, "uniform")]
+        for metric in ["final_clean", "final_rauc", "final_transfer_rauc", "rauc_aulc"]:
+            wins = sum(
+                float(bgr_rows[seed][metric]) > float(uniform_rows[seed][metric])
+                for seed in expected_seed_values
+            )
+            if wins != 30:
+                raise ValueError(
+                    f"{summary_path}: expected 30/0 BGR-Coverage suffix stress wins over uniform on {metric} "
+                    f"for stress_case={stress_case}, found {wins}/30"
+                )
+        median_wins = sum(
+            float(bgr_rows[seed]["final_median_r80"]) > float(uniform_rows[seed]["final_median_r80"])
+            for seed in expected_seed_values
+        )
+        expected_median_wins = 3 if stress_case == "tight_feasible" else 1 if stress_case == "high_clutter" else 0
+        if median_wins != expected_median_wins:
+            raise ValueError(
+                f"{summary_path}: expected {expected_median_wins}/30 BGR-Coverage suffix stress median-r80 wins "
+                f"for stress_case={stress_case}, found {median_wins}/30"
+            )
+
+    if not results_readme.exists():
+        raise ValueError(f"{results_readme}: missing ledger for suffix stress run")
+    text = results_readme.read_text(encoding="utf-8")
+    normalized_text = normalize_space(text)
+    required = [
+        "Completed `suffix_stress_sensitivity_30seed_v1`",
+        "four stress cases: low-teacher quality, high clutter, tight feasibility, and diffuse boundaries",
+        "BGR-Coverage beats uniform with 30/0 paired wins on clean success, final object RAUC, EE-transfer RAUC, and RAUC AULC in every stress case",
+        "uniform retains the median-r80 caveat",
+    ]
+    missing_required = [
+        snippet for snippet in required if snippet not in normalized_text and snippet not in text
+    ]
+    if missing_required:
+        raise ValueError(
+            f"{results_readme}: missing suffix stress completion ledger snippet(s): "
+            + ", ".join(missing_required)
+        )
+    return [f"{results_readme}: suffix stress 30-seed completion ledger ok"]
 
 
 def check_grid_margin_full_30_status(root: Path) -> list[str]:
@@ -3542,13 +3661,14 @@ def check_root_readme_submission_framing(root: Path) -> list[str]:
         "anonymous AAAI-27 submission package",
         "SHA-256 submission manifest",
         "The main evidence includes a 30-seed synthetic mechanism check, active-estimator validation, a completed 30-seed procedural grid-margin full-baseline comparison, a held-out grid replication, a 30-seed robot-suffix coverage comparison, a held-out suffix full-baseline replication, and a held-out suffix BGR-vs-uniform replication",
+        "The package also includes a 30-seed suffix stress sweep over teacher quality, clutter, feasibility, and boundary sharpness",
         "30-seed robot-suffix coverage comparison",
         "OpenVLA/LIBERO results are included as recovery-curve, selection, and data-plumbing audits",
         "rather than robotics fine-tuning claims",
         "## Reviewer Navigation",
         "Start with `paper/main.pdf` for the anonymous manuscript",
         "results/README.md#submission-evidence-index",
-        "The primary evidence is the 30-seed synthetic mechanism check, the active-estimator validation, the 30-seed grid-margin comparison, the held-out grid replication, the 30-seed robot-suffix coverage comparison, the held-out suffix full-baseline replication, the held-out suffix BGR-vs-uniform replication, and `paper/figures/significance_tests.csv`",
+        "The primary evidence is the 30-seed synthetic mechanism check, the active-estimator validation, the 30-seed grid-margin comparison, the held-out grid replication, the 30-seed robot-suffix coverage comparison, the held-out suffix full-baseline replication, the held-out suffix BGR-vs-uniform replication, the suffix stress sweep, and `paper/figures/significance_tests.csv`",
         "OpenVLA/LIBERO entries are scoped audits and should not be read as robotics fine-tuning claims",
         "For the primary paired comparisons, competing methods share experiment configs, replayable-state pools, evaluation radius grids, learner/update budgets, and paired seeds",
         "the intended intervention is the replay state/radius selection rule",
@@ -3577,6 +3697,8 @@ def check_root_readme_submission_framing(root: Path) -> list[str]:
         "results/suffix_strategy_coverage_30seed_v1/summary.csv",
         "results/suffix_strategy_coverage_replication_30seed_v1/summary.csv",
         "results/suffix_strategy_ablation_30seed_v1/summary.csv",
+        "results/suffix_stress_sensitivity_30seed_v1/summary.csv",
+        "paper/figures/suffix_stress_sensitivity_stats.csv",
         "The learned-policy OpenVLA/LIBERO path is an audit, not a robotics fine-tuning claim",
         "packaged OpenVLA-OFT audit summaries listed below",
         "Grid-margin robustness/scope diagnostic artifacts",
@@ -3596,6 +3718,9 @@ def check_root_readme_submission_framing(root: Path) -> list[str]:
         "paper/figures/grid_margin_stress_sensitivity_stats.csv",
         "results/grid_margin_stress_sensitivity_15seed_v1/summary.csv",
         "results/grid_margin_stress_sensitivity_30seed_v1/summary.csv",
+        "paper/figures/suffix_stress_sensitivity_stats.csv",
+        "results/suffix_stress_sensitivity_15seed_v1/summary.csv",
+        "results/suffix_stress_sensitivity_30seed_v1/summary.csv",
         "OpenVLA-OFT packaged audit summaries",
         "OpenVLA recovery audit source",
         "OpenVLA selection audit source",
@@ -3846,6 +3971,8 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "We use three evidence tiers",
         "The main claim is supported by controlled synthetic and procedural grid-margin experiments",
         "The robot-suffix simulator is a manipulation-style extension",
+        "four stress regimes",
+        "A four-condition 30-seed suffix stress sweep varies teacher quality",
         "while still trailing uniform on median critical radius",
         "five-seed exploratory variants are reported only as exploratory evidence",
         "OpenVLA/LIBERO results are learned-policy audits and infrastructure checks, not BGR fine-tuning claims",
@@ -4360,6 +4487,7 @@ def check_package(root: Path) -> list[str]:
     messages.extend(check_suffix_coverage_full_replication_status(root))
     messages.extend(check_suffix_strategy_replication_status(root))
     messages.extend(check_suffix_strategy_ablation_status(root))
+    messages.extend(check_suffix_stress_30_status(root))
     messages.extend(check_generated_result_tables(root))
     messages.extend(check_aggregate_outputs_synced(root))
     messages.extend(check_significance_outputs_synced(root))

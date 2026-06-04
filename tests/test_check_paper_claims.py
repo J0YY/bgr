@@ -537,6 +537,38 @@ def expected_rows() -> list[tuple[str, str, str, str, str, bool, int, int]]:
                     0,
                 )
             )
+    suffix_stress_median_wins = {
+        "diffuse_boundary": 0,
+        "high_clutter": 1,
+        "low_teacher": 0,
+        "tight_feasible": 3,
+    }
+    for stress_case in ["diffuse_boundary", "high_clutter", "low_teacher", "tight_feasible"]:
+        for metric in ["final_clean", "final_rauc", "final_transfer_rauc", "rauc_aulc"]:
+            rows.append(
+                (
+                    "Robot suffix stress sensitivity 30-seed",
+                    f"stress_case={stress_case}",
+                    metric,
+                    "bgr_broad",
+                    "uniform",
+                    True,
+                    30,
+                    0,
+                )
+            )
+        rows.append(
+            (
+                "Robot suffix stress sensitivity 30-seed",
+                f"stress_case={stress_case}",
+                "final_median_r80",
+                "bgr_broad",
+                "uniform",
+                False,
+                suffix_stress_median_wins[stress_case],
+                30 - suffix_stress_median_wins[stress_case],
+            )
+        )
     for step in [30, 60, 90, 120, 150, 180, 210, 240, 270, 300]:
         rows.append(("Grid margin learning curve 15-seed", f"step={step}", "rauc", "bgr", "uniform", True, 15, 0))
     return rows

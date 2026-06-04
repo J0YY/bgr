@@ -26,6 +26,11 @@ Primary controlled evidence for the paper is:
   seeds 30--59 replication for the robot-suffix coverage comparison.
 - `results/suffix_strategy_ablation_30seed_v1/summary.csv`: 30-seed suffix
   strategy ablation explaining why BGR-Coverage is the promoted suffix variant.
+- `results/suffix_stress_sensitivity_30seed_v1/summary.csv`: 30-seed
+  suffix stress sweep over low-teacher-quality, high-clutter, tight-feasibility,
+  and diffuse-boundary regimes.
+- `paper/figures/suffix_stress_sensitivity_stats.csv`: generated suffix stress
+  table source used by the paper-facing claim checks.
 - `paper/figures/significance_tests.csv`: paired exact sign tests for the
   central claims, ablations, sensitivity sweeps, and replications.
 - `paper/figures/estimator_stats.csv` and `paper/figures/estimator_table.tex`:
@@ -2911,6 +2916,44 @@ uniform). Interpretation: the promoted suffix variant needs broad radius and
 uniform state coverage to maintain final object-recovery gains, while hard
 radius emphasis is useful for transfer/sample-efficiency but not the primary
 object-RAUC claim.
+
+### Completed `suffix_stress_sensitivity_30seed_v1`
+
+Completed locally on 2026-06-04 to test whether the promoted BGR-Coverage suffix
+result survives targeted simulator stress cases rather than only the nominal
+suffix generator. The sweep uses the same coverage-aware BGR and uniform suffix
+methods as the packaged suffix comparison, with four stress cases: low-teacher
+quality, high clutter, tight feasibility, and diffuse boundaries.
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_suffix_stress_sensitivity.py \
+  --config configs/suffix_stress_sensitivity_30seed.yaml \
+  --out results/suffix_stress_sensitivity_30seed_v1
+```
+
+Mean results over 30 paired seeds:
+
+| Stress case | Method | Clean | Object RAUC | Median r80 | EE-transfer RAUC | RAUC AULC |
+|---|---|---:|---:|---:|---:|---:|
+| Diffuse boundary | BGR-Coverage | 0.8594 | 0.4805 | 0.4420 | 0.3089 | 0.3737 |
+| Diffuse boundary | Uniform suffix | 0.8318 | 0.4693 | 0.4495 | 0.3037 | 0.3637 |
+| High clutter | BGR-Coverage | 0.8644 | 0.4971 | 0.4983 | 0.3142 | 0.3823 |
+| High clutter | Uniform suffix | 0.8364 | 0.4853 | 0.5047 | 0.3081 | 0.3709 |
+| Low teacher | BGR-Coverage | 0.6892 | 0.3806 | 0.4613 | 0.2267 | 0.2814 |
+| Low teacher | Uniform suffix | 0.6647 | 0.3755 | 0.4808 | 0.2205 | 0.2720 |
+| Tight feasible | BGR-Coverage | 0.8617 | 0.3987 | 0.3851 | 0.2379 | 0.3349 |
+| Tight feasible | Uniform suffix | 0.8325 | 0.3860 | 0.3863 | 0.2314 | 0.3241 |
+
+BGR-Coverage beats uniform with 30/0 paired wins on clean success, final object
+RAUC, EE-transfer RAUC, and RAUC AULC in every stress case. As in the nominal
+suffix runs, uniform retains the median-r80 caveat: BGR-Coverage has 0/30,
+1/29, 0/30, and 3/27 median-r80 paired splits in diffuse-boundary, high-clutter,
+low-teacher, and tight-feasibility cases. Interpretation: suffix stress tests
+strengthen the manipulation-style simulator evidence while preserving the
+critical-radius caveat and not converting the OpenVLA audit into a robotics
+fine-tuning claim.
 
 ### `suffix_strategy_coverage_15seed_v1`
 

@@ -523,6 +523,50 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             "results/suffix_strategy_coverage_30seed_v1/summary.csv and suffix_strategy_coverage_replication_30seed_v1/summary.csv",
         )
     )
+    suffix_stress = read_csv_rows(results_dir / "suffix_stress_sensitivity_30seed_v1" / "summary.csv")
+    stress_cases = sorted({row["stress_case"] for row in suffix_stress})
+    for stress_case in stress_cases:
+        case_rows = [row for row in suffix_stress if row["stress_case"] == stress_case]
+        for metric in ["final_clean", "final_rauc", "final_transfer_rauc", "rauc_aulc"]:
+            wins = paired_wins(case_rows, "bgr_broad", "uniform", metric)
+            if wins != (30, 0, 0):
+                raise ValueError(f"Expected suffix stress {stress_case} {metric} to have 30/0 BGR wins, found {wins}")
+    bgr_stress_raucs = [
+        mean_metric([row for row in suffix_stress if row["stress_case"] == stress_case], "bgr_broad", "final_rauc")
+        for stress_case in stress_cases
+    ]
+    uniform_stress_raucs = [
+        mean_metric([row for row in suffix_stress if row["stress_case"] == stress_case], "uniform", "final_rauc")
+        for stress_case in stress_cases
+    ]
+    bgr_stress_transfer = [
+        mean_metric([row for row in suffix_stress if row["stress_case"] == stress_case], "bgr_broad", "final_transfer_rauc")
+        for stress_case in stress_cases
+    ]
+    uniform_stress_transfer = [
+        mean_metric([row for row in suffix_stress if row["stress_case"] == stress_case], "uniform", "final_transfer_rauc")
+        for stress_case in stress_cases
+    ]
+    claims.extend(
+        [
+            Claim(
+                "suffix stress final object RAUC range",
+                (
+                    f"object RAUC {fmt(min(bgr_stress_raucs), 4)}--{fmt(max(bgr_stress_raucs), 4)} "
+                    f"vs. uniform {fmt(min(uniform_stress_raucs), 4)}--{fmt(max(uniform_stress_raucs), 4)}"
+                ),
+                "results/suffix_stress_sensitivity_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "suffix stress transfer RAUC range",
+                (
+                    f"transfer RAUC {fmt(min(bgr_stress_transfer), 4)}--{fmt(max(bgr_stress_transfer), 4)} "
+                    f"vs. {fmt(min(uniform_stress_transfer), 4)}--{fmt(max(uniform_stress_transfer), 4)}"
+                ),
+                "results/suffix_stress_sensitivity_30seed_v1/summary.csv",
+            ),
+        ]
+    )
 
     probe_rows = read_csv_rows(results_dir / "libero_probe_v2" / "summary.csv")
     valid_rows = sum(1 for row in probe_rows if float(row["valid_rate"]) == 1.0 and not row.get("error"))
@@ -1160,6 +1204,40 @@ def build_significance_checks() -> list[SignificanceCheck]:
                     0,
                 )
             )
+    suffix_stress_median_wins = {
+        "diffuse_boundary": 0,
+        "high_clutter": 1,
+        "low_teacher": 0,
+        "tight_feasible": 3,
+    }
+    for stress_case in ["diffuse_boundary", "high_clutter", "low_teacher", "tight_feasible"]:
+        for metric in ["final_clean", "final_rauc", "final_transfer_rauc", "rauc_aulc"]:
+            checks.append(
+                SignificanceCheck(
+                    f"suffix stress 30-seed {stress_case} {metric} confirmation",
+                    "Robot suffix stress sensitivity 30-seed",
+                    f"stress_case={stress_case}",
+                    metric,
+                    "bgr_broad",
+                    "uniform",
+                    True,
+                    30,
+                    0,
+                )
+            )
+        checks.append(
+            SignificanceCheck(
+                f"suffix stress 30-seed {stress_case} median-r80 caveat",
+                "Robot suffix stress sensitivity 30-seed",
+                f"stress_case={stress_case}",
+                "final_median_r80",
+                "bgr_broad",
+                "uniform",
+                False,
+                suffix_stress_median_wins[stress_case],
+                30 - suffix_stress_median_wins[stress_case],
+            )
+        )
     for step in [30, 60, 90, 120, 150, 180, 210, 240, 270, 300]:
         checks.append(
             SignificanceCheck(

@@ -14,6 +14,7 @@ from scripts.analyze_significance import (
     analyze_regime_sensitivity_30,
     analyze_stress_sensitivity,
     analyze_stress_sensitivity_30,
+    analyze_suffix_stress_sensitivity_30,
     analyze_target_sensitivity,
     analyze_target_sensitivity_30,
     format_pvalue_latex,
@@ -795,6 +796,46 @@ class AnalyzeSignificanceTest(unittest.TestCase):
             by_condition_metric[("stress_case=low_feasibility", "rauc_aulc")]["supports_treatment"],
             "true",
         )
+
+    def test_suffix_stress_sensitivity_30_compares_each_case(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            run_dir = root / "suffix_stress_sensitivity_30seed_v1"
+            run_dir.mkdir()
+            write_csv(
+                run_dir / "summary.csv",
+                [
+                    {
+                        "stress_case": "low_teacher",
+                        "method": "bgr_broad",
+                        "seed": "0",
+                        "final_clean": "0.72",
+                        "final_rauc": "0.42",
+                        "final_transfer_rauc": "0.25",
+                        "rauc_aulc": "0.33",
+                        "final_median_r80": "0.40",
+                    },
+                    {
+                        "stress_case": "low_teacher",
+                        "method": "uniform",
+                        "seed": "0",
+                        "final_clean": "0.70",
+                        "final_rauc": "0.38",
+                        "final_transfer_rauc": "0.23",
+                        "rauc_aulc": "0.30",
+                        "final_median_r80": "0.45",
+                    },
+                ],
+            )
+
+            rows = analyze_suffix_stress_sensitivity_30(root)
+
+        self.assertEqual(len(rows), 5)
+        self.assertTrue(all(row["benchmark"] == "Robot suffix stress sensitivity 30-seed" for row in rows))
+        by_metric = {row["metric"]: row for row in rows}
+        self.assertEqual(by_metric["final_rauc"]["mean_treatment_minus_baseline"], "0.040000")
+        self.assertEqual(by_metric["final_transfer_rauc"]["supports_treatment"], "true")
+        self.assertEqual(by_metric["final_median_r80"]["supports_treatment"], "false")
 
 
 def write_required_comparison_summaries(root: Path) -> None:

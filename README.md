@@ -12,6 +12,8 @@ validation, a completed 30-seed
 procedural grid-margin full-baseline comparison, a held-out grid replication, a
 30-seed robot-suffix coverage comparison, a held-out suffix full-baseline
 replication, and a held-out suffix BGR-vs-uniform replication.
+The package also includes a 30-seed suffix stress sweep over teacher quality,
+clutter, feasibility, and boundary sharpness.
 OpenVLA/LIBERO results are included as recovery-curve, selection, and
 data-plumbing audits rather than robotics fine-tuning claims.
 
@@ -39,7 +41,7 @@ evidence is the 30-seed synthetic mechanism check, the active-estimator
 validation, the 30-seed grid-margin
 comparison, the held-out grid replication, the 30-seed robot-suffix coverage
 comparison, the held-out suffix full-baseline replication, the held-out suffix
-BGR-vs-uniform replication, and
+BGR-vs-uniform replication, the suffix stress sweep, and
 `paper/figures/significance_tests.csv`. OpenVLA/LIBERO entries are scoped audits
 and should not be read as robotics fine-tuning claims.
 
@@ -57,7 +59,7 @@ summary artifacts listed in the evidence index.
 | Boundary-centered replay expands recovery margins in the main procedural setting. | `results/grid_margin_full_30seed_v1/summary.csv`, `results/grid_margin_full_replication_30seed_v1/summary.csv`, `paper/figures/grid_margin_full_table.tex`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the numeric prose; `scripts/check_submission_package.py` checks paired seeds, ledgers, generated tables, and manifest hashes. |
 | Active boundary probing estimates useful critical radii at a small fixed rollout budget. | `paper/figures/estimator_stats.csv`, `paper/figures/estimator_table.tex`, `results/estimator_pair_30seed_v1/summary.csv`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the estimator prose; `scripts/check_submission_package.py` checks the generated estimator table and the 30-seed estimator confirmation. |
 | Radius-level boundary sampling is the important BGR ablation in the grid-margin benchmark. | `results/grid_margin_ablation_30seed_v1/summary.csv`, `results/grid_margin_ablation_replication_30seed_v1/summary.csv`, `results/grid_margin_ablation_15seed_v1/summary.csv`, `paper/figures/grid_margin_ablation_table.tex`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the ablation prose against the original and held-out 30-seed summaries; `scripts/check_submission_package.py` checks the 30-seed mechanism confirmation and regenerates aggregate tables and significance artifacts exactly. |
-| Coverage-aware BGR-Suffix is positive manipulation-style evidence but not a final robotics claim. | `results/suffix_coverage_full_30seed_v1/summary.csv`, `results/suffix_coverage_full_replication_30seed_v1/summary.csv`, `results/suffix_strategy_coverage_30seed_v1/summary.csv`, `results/suffix_strategy_coverage_replication_30seed_v1/summary.csv`, `results/suffix_strategy_ablation_30seed_v1/summary.csv`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the full-baseline RAUC rows, strategy ablation, clean, transfer, AULC, and median-r80 caveat prose. |
+| Coverage-aware BGR-Suffix is positive manipulation-style evidence but not a final robotics claim. | `results/suffix_coverage_full_30seed_v1/summary.csv`, `results/suffix_coverage_full_replication_30seed_v1/summary.csv`, `results/suffix_strategy_coverage_30seed_v1/summary.csv`, `results/suffix_strategy_coverage_replication_30seed_v1/summary.csv`, `results/suffix_strategy_ablation_30seed_v1/summary.csv`, `results/suffix_stress_sensitivity_30seed_v1/summary.csv`, `paper/figures/suffix_stress_sensitivity_stats.csv`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the full-baseline RAUC rows, strategy ablation, stress sweep, clean, transfer, AULC, and median-r80 caveat prose. |
 | The learned-policy OpenVLA/LIBERO path is an audit, not a robotics fine-tuning claim. | `results/libero_probe_v2/summary.csv`, `results/openvla_teacher_replay_manifest_v1/summary.json`, and the packaged OpenVLA-OFT audit summaries listed below. | `scripts/check_submission_package.py` enforces paper-facing audit wording and keeps paper-negative scale-diagnostic outputs out of the anonymous manifest. |
 
 Grid-margin robustness/scope diagnostic artifacts:
@@ -70,6 +72,7 @@ Grid-margin robustness/scope diagnostic artifacts:
 - 30-seed learning-rate sweep table/source: `paper/figures/grid_margin_learning_rate_sensitivity_stats.csv`, `results/grid_margin_learning_rate_sensitivity_30seed_v1/summary.csv`; 15-seed provenance: `results/grid_margin_learning_rate_sensitivity_15seed_v1/summary.csv`
 - 30-seed regime sweep table/source: `paper/figures/grid_margin_regime_sensitivity_stats.csv`, `results/grid_margin_regime_sensitivity_30seed_v1/summary.csv`; 15-seed provenance: `results/grid_margin_regime_sensitivity_15seed_v1/summary.csv`
 - 30-seed stress sweep table/source: `paper/figures/grid_margin_stress_sensitivity_stats.csv`, `results/grid_margin_stress_sensitivity_30seed_v1/summary.csv`; 15-seed provenance: `results/grid_margin_stress_sensitivity_15seed_v1/summary.csv`
+- 30-seed suffix stress sweep table/source: `paper/figures/suffix_stress_sensitivity_stats.csv`, `results/suffix_stress_sensitivity_30seed_v1/summary.csv`; 15-seed provenance: `results/suffix_stress_sensitivity_15seed_v1/summary.csv`
 
 OpenVLA-OFT packaged audit summaries:
 

@@ -34,6 +34,16 @@ def run_method(config: dict, method: str, seed: int) -> SuffixResult:
         suffixes_per_task=int(exp["suffixes_per_task"]),
         learning_rate=float(exp["learning_rate"]),
         seed=seed,
+        feasible_object_shift=float(exp.get("feasible_object_shift", 0.0)),
+        feasible_ee_shift=float(exp.get("feasible_ee_shift", 0.0)),
+        margin_shift=float(exp.get("margin_shift", 0.0)),
+        margin_scale=float(exp.get("margin_scale", 1.0)),
+        temperature_scale=float(exp.get("temperature_scale", 1.0)),
+        teacher_quality_min=float(exp.get("teacher_quality_min", 0.78)),
+        teacher_quality_max=float(exp.get("teacher_quality_max", 0.98)),
+        clutter_min=float(exp.get("clutter_min", 0.0)),
+        clutter_max=float(exp.get("clutter_max", 1.0)),
+        transfer_gap_shift=float(exp.get("transfer_gap_shift", 0.0)),
     )
     alpha = float(exp.get("alpha", 0.8))
     eval_grid = np.linspace(0.0, 1.0, int(exp.get("eval_grid_size", 9)))

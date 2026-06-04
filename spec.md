@@ -21,7 +21,8 @@ The current evidence is tiered:
 - Robot-suffix experiments are positive manipulation-style evidence. The
   coverage-aware BGR-Suffix variant improves clean success, object RAUC,
   transfer RAUC, and AULC over uniform suffix replay across original and held-out
-  30-seed sweeps, while uniform remains higher on median critical radius.
+  30-seed sweeps and four suffix stress regimes, while uniform remains higher on
+  median critical radius.
 - OpenVLA/LIBERO experiments are audits of recovery-curve measurement,
   boundary selection, data plumbing, and bounded full-goal evaluation. They are
   not positive BGR fine-tuning evidence because BGR does not stably outperform

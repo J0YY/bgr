@@ -51,6 +51,7 @@ TARGET_SENSITIVITY_RUN = "grid_margin_target_sensitivity_30seed_v1"
 LEARNING_RATE_SENSITIVITY_RUN = "grid_margin_learning_rate_sensitivity_30seed_v1"
 REGIME_SENSITIVITY_RUN = "grid_margin_regime_sensitivity_30seed_v1"
 STRESS_SENSITIVITY_RUN = "grid_margin_stress_sensitivity_30seed_v1"
+SUFFIX_STRESS_SENSITIVITY_RUN = "suffix_stress_sensitivity_30seed_v1"
 GRID_LEARNING_CURVE_RUN = "grid_margin_full_15seed_v1"
 OPENVLA_RECOVERY_RUN = "libero_openvla_recovery_v1"
 OPENVLA_SELECTION_RUN = "libero_openvla_boundary_selection_balanced_v1"
@@ -147,6 +148,23 @@ def main() -> None:
         write_stress_sensitivity_table(
             out_dir / "grid_margin_stress_sensitivity_table.tex",
             stress_sensitivity_rows,
+        )
+    suffix_stress_sensitivity_rows = load_stress_sensitivity(
+        results_dir / SUFFIX_STRESS_SENSITIVITY_RUN / "summary.csv",
+        treatment_method="bgr_broad",
+        treatment_label="BGR-Coverage",
+        display={
+            "low_teacher": "Low teacher",
+            "high_clutter": "High clutter",
+            "tight_feasible": "Tight feasible",
+            "diffuse_boundary": "Diffuse boundary",
+        },
+    )
+    if suffix_stress_sensitivity_rows:
+        write_csv(out_dir / "suffix_stress_sensitivity_stats.csv", suffix_stress_sensitivity_rows)
+        write_stress_sensitivity_table(
+            out_dir / "suffix_stress_sensitivity_table.tex",
+            suffix_stress_sensitivity_rows,
         )
     learning_curve_rows = load_grid_learning_curve(results_dir / GRID_LEARNING_CURVE_RUN / "results.json")
     if learning_curve_rows:
@@ -497,30 +515,37 @@ def write_regime_sensitivity_table(path: Path, rows: list[dict]) -> None:
         handle.write("\\end{tabular}\n")
 
 
-def load_stress_sensitivity(path: Path) -> list[dict[str, str | float | int]]:
+def load_stress_sensitivity(
+    path: Path,
+    treatment_method: str = "bgr",
+    treatment_label: str = "BGR",
+    display: dict[str, str] | None = None,
+) -> list[dict[str, str | float | int]]:
     if not path.exists():
         return []
     with path.open("r", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
-    display = {
+    display_map = {
         "sharp_low_margin": "Sharp low-margin",
         "diffuse_boundary": "Diffuse boundary",
         "low_feasibility": "Low feasibility",
-        "bgr": "BGR",
+        treatment_method: treatment_label,
         "uniform": "Uniform",
     }
+    if display:
+        display_map.update(display)
     out: list[dict[str, str | float | int]] = []
     stress_cases = sorted({row["stress_case"] for row in rows})
     for stress_case in stress_cases:
-        for method in ["bgr", "uniform"]:
+        for method in [treatment_method, "uniform"]:
             items = [row for row in rows if row["stress_case"] == stress_case and row["method"] == method]
             if not items:
                 continue
             out.append(
                 {
                     "stress_case": stress_case,
-                    "stress_label": display.get(stress_case, stress_case.replace("_", " ").title()),
-                    "method": display[method],
+                    "stress_label": display_map.get(stress_case, stress_case.replace("_", " ").title()),
+                    "method": display_map[method],
                     "n": len(items),
                     "clean_mean": mean([float(row["final_clean"]) for row in items]),
                     "clean_sem": sem([float(row["final_clean"]) for row in items]),
@@ -528,6 +553,12 @@ def load_stress_sensitivity(path: Path) -> list[dict[str, str | float | int]]:
                     "rauc_sem": sem([float(row["final_rauc"]) for row in items]),
                     "r80_mean": mean([float(row["final_median_r80"]) for row in items]),
                     "r80_sem": sem([float(row["final_median_r80"]) for row in items]),
+                    "transfer_rauc_mean": mean([float(row.get("final_transfer_rauc", "nan")) for row in items])
+                    if "final_transfer_rauc" in items[0]
+                    else "",
+                    "transfer_rauc_sem": sem([float(row.get("final_transfer_rauc", "nan")) for row in items])
+                    if "final_transfer_rauc" in items[0]
+                    else "",
                     "aulc_mean": mean([float(row["rauc_aulc"]) for row in items]),
                     "aulc_sem": sem([float(row["rauc_aulc"]) for row in items]),
                 }
