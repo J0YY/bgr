@@ -90,6 +90,18 @@ Do not add another result to the manuscript if it has any of these properties:
      MountainCar out of the paper unless a new pre-registered protocol makes
      boundary-radius replay beat fixed-radius replay and the state-priority-only
      ablation without saturated radius metrics.
+   - CartPole-v1 recovery replay now has an internal diagnostic at
+     `tools/cartpole_recovery_probe.py`. The pre-promotion protocol uses
+     canonical CartPole dynamics, resettable perturbed states, and linear
+     teacher-action replay. A 4-seed diagnostic is also negative for promotion:
+     final RAUC is 0.9006 for failure-only, 0.9001 for TD-loss, 0.8987 for BGR,
+     0.8985 for fixed-radius, 0.8985 for uniform, and 0.8976 for
+     BGR-uniform-radius. Clean success is saturated at 1.0 for every method.
+     The promotion checker rejects it because BGR has only 2/4 wins over
+     uniform, a +0.0001 mean RAUC gap, loses to failure-only and TD-loss replay,
+     and has a lower median critical radius than uniform. Keep CartPole out of
+     the paper unless a pre-registered non-saturated protocol creates a
+     meaningful recovery-boundary metric before method comparison.
 3. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.
@@ -102,5 +114,7 @@ Do not add another result to the manuscript if it has any of these properties:
   only if the diagnostic is promoted into `src/`.
 - Treat the MountainCar probe as an internal negative unless a new protocol is
   pre-registered before rerunning; do not tune it into the paper post hoc.
+- Treat the CartPole probe as an internal negative unless a new protocol first
+  fixes clean-success saturation and defines a non-contradictory radius metric.
 - Keep scratch negative runs out of the anonymous package unless they are being
   used as explicit limitations.
