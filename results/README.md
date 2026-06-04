@@ -172,9 +172,9 @@ PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_perturb_eval.py \
   --out results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1
 ```
 
-## Queued OpenVLA-OFT p2048 Full-Goal Clean Identity Audit
+## Completed OpenVLA-OFT p2048 Full-Goal Clean Identity Audit
 
-Queued on 2026-06-04 after the p2048 10-trial perturbation variance audit tied
+Queued and completed on 2026-06-04 after the p2048 10-trial perturbation variance audit tied
 the unadapted official checkpoint and gave only a one-episode edge over matched
 random. This follow-up evaluates the p2048 BGR, matched-random, and official
 checkpoints under identity/no-perturbation observations across all 10
@@ -200,10 +200,23 @@ scripts/queue_openvla_oft_perturb_eval.sh --submit
 Initial Slurm jobs:
 
 ```text
-764778  official identity, running on submission
-764779  BGR identity, running on submission
-764780  random identity, running on submission
+764778  official identity, completed, 00:13:37, 99/100 = 0.9900
+764779  BGR identity, completed, 00:13:38, 99/100 = 0.9900
+764780  random identity, completed, 00:13:25, 99/100 = 0.9900
 ```
+
+Summary rows:
+
+| Method | Tasks | Episodes | Successes | Clean success |
+| --- | ---: | ---: | ---: | ---: |
+| BGR clean-mix p2048 | 10 | 100 | 99 | 0.9900 |
+| Official OpenVLA-OFT | 10 | 100 | 99 | 0.9900 |
+| Random clean-mix p2048 | 10 | 100 | 99 | 0.9900 |
+
+Interpretation: the full LIBERO-Goal identity audit confirms that the p2048
+BGR adaptation preserves clean competence across the 10-task suite. It remains a
+scoping audit rather than a promoted learned-policy improvement, because BGR
+ties both matched random and the unadapted official checkpoint.
 
 ## Completed OpenVLA-OFT p4096 Clean-Mix Scale Diagnostic
 
