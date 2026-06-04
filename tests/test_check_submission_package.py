@@ -76,6 +76,7 @@ from scripts.check_submission_package import (
     check_submission_scope_docs,
     check_suffix_coverage_full_status,
     check_suffix_coverage_full_replication_status,
+    check_suffix_strategy_ablation_status,
     check_suffix_strategy_replication_status,
     check_technical_page_limit,
     check_tex_dependencies_required,
@@ -879,6 +880,98 @@ class CheckSubmissionPackageTest(unittest.TestCase):
 
             with self.assertRaisesRegex(ValueError, "expected 30/0 BGR-Coverage wins"):
                 check_suffix_strategy_replication_status(root)
+
+    def test_suffix_strategy_ablation_accepts_completed_ledger(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            config = root / "configs" / "suffix_strategy_ablation_30seed.yaml"
+            config.parent.mkdir(parents=True)
+            config.write_text(
+                "experiment:\n"
+                "  seeds: ["
+                + ", ".join(str(seed) for seed in range(30))
+                + "]\n"
+                "  methods: [uniform, bgr_boundary, bgr_broad, bgr_hard]\n",
+                encoding="utf-8",
+            )
+            readme = root / "results" / "README.md"
+            readme.parent.mkdir(parents=True)
+            readme.write_text(
+                "### Completed `suffix_strategy_ablation_30seed_v1`\n"
+                "All 120 array tasks completed.\n"
+                "BGR-Coverage is the only suffix strategy that improves final object RAUC over uniform with 30/0 paired wins.\n"
+                "Boundary-heavy BGR undercovers object RAUC. Hard-radius BGR leads transfer RAUC and RAUC AULC.\n",
+                encoding="utf-8",
+            )
+            summary = root / "results" / "suffix_strategy_ablation_30seed_v1" / "summary.csv"
+            summary.parent.mkdir(parents=True)
+            rows = []
+            for seed in range(30):
+                rows.extend(
+                    [
+                        f"uniform,{seed},0.80,0.48,0.50,0.30,0.37\n",
+                        f"bgr_boundary,{seed},0.87,0.45,0.43,0.28,0.36\n",
+                        f"bgr_broad,{seed},0.86,0.50,0.49,0.31,0.38\n",
+                        f"bgr_hard,{seed},0.86,0.485,0.47,0.32,0.39\n",
+                    ]
+                )
+            summary.write_text(
+                "method,seed,final_clean,final_rauc,final_median_r80,final_transfer_rauc,rauc_aulc\n"
+                + "".join(rows),
+                encoding="utf-8",
+            )
+            results = root / "results" / "suffix_strategy_ablation_30seed_v1" / "results.json"
+            results.write_text('{"results": []}\n', encoding="utf-8")
+
+            self.assertEqual(
+                check_suffix_strategy_ablation_status(root),
+                [f"{readme}: suffix strategy ablation completion ledger ok"],
+            )
+
+    def test_suffix_strategy_ablation_rejects_weaker_coverage_variant(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            config = root / "configs" / "suffix_strategy_ablation_30seed.yaml"
+            config.parent.mkdir(parents=True)
+            config.write_text(
+                "experiment:\n"
+                "  seeds: ["
+                + ", ".join(str(seed) for seed in range(30))
+                + "]\n"
+                "  methods: [uniform, bgr_boundary, bgr_broad, bgr_hard]\n",
+                encoding="utf-8",
+            )
+            readme = root / "results" / "README.md"
+            readme.parent.mkdir(parents=True)
+            readme.write_text(
+                "### Completed `suffix_strategy_ablation_30seed_v1`\n"
+                "120 array tasks completed. BGR-Coverage is the only suffix strategy that improves final object RAUC over uniform with 30/0 paired wins. "
+                "Boundary-heavy BGR undercovers object RAUC. Hard-radius BGR leads transfer RAUC and RAUC AULC.\n",
+                encoding="utf-8",
+            )
+            summary = root / "results" / "suffix_strategy_ablation_30seed_v1" / "summary.csv"
+            summary.parent.mkdir(parents=True)
+            rows = []
+            for seed in range(30):
+                hard_rauc = 0.51 if seed == 0 else 0.485
+                rows.extend(
+                    [
+                        f"uniform,{seed},0.80,0.48,0.50,0.30,0.37\n",
+                        f"bgr_boundary,{seed},0.87,0.45,0.43,0.28,0.36\n",
+                        f"bgr_broad,{seed},0.86,0.50,0.49,0.31,0.38\n",
+                        f"bgr_hard,{seed},0.86,{hard_rauc},0.47,0.32,0.39\n",
+                    ]
+                )
+            summary.write_text(
+                "method,seed,final_clean,final_rauc,final_median_r80,final_transfer_rauc,rauc_aulc\n"
+                + "".join(rows),
+                encoding="utf-8",
+            )
+            results = root / "results" / "suffix_strategy_ablation_30seed_v1" / "results.json"
+            results.write_text('{"results": []}\n', encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "expected 30/0 BGR-Coverage final-RAUC wins over hard-radius"):
+                check_suffix_strategy_ablation_status(root)
 
     def test_grid_margin_full_30_accepts_in_progress_ledger(self):
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -1782,6 +1875,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                     "- `results/suffix_coverage_full_replication_30seed_v1/summary.csv`: held-out suffix full-baseline replication.",
                     "- `results/suffix_strategy_coverage_30seed_v1/summary.csv`: 30 paired seeds.",
                     "- `results/suffix_strategy_coverage_replication_30seed_v1/summary.csv`: held-out replication.",
+                    "- `results/suffix_strategy_ablation_30seed_v1/summary.csv`: 30-seed suffix strategy ablation.",
                     "- `paper/figures/significance_tests.csv`: paired exact sign tests.",
                     "- `paper/figures/estimator_stats.csv` and `paper/figures/estimator_table.tex`:",
                     "  method-validation evidence that active boundary probing estimates useful critical radii at a small fixed rollout budget.",
@@ -2723,6 +2817,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "results/suffix_coverage_full_replication_30seed_v1/summary.csv",
                         "results/suffix_strategy_coverage_30seed_v1/summary.csv",
                         "results/suffix_strategy_coverage_replication_30seed_v1/summary.csv",
+                        "results/suffix_strategy_ablation_30seed_v1/summary.csv",
                         "The learned-policy OpenVLA/LIBERO path is an audit, not a robotics fine-tuning claim.",
                         "packaged OpenVLA-OFT audit summaries listed below.",
                         "Grid-margin robustness/scope diagnostic artifacts",

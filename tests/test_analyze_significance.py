@@ -121,6 +121,20 @@ class AnalyzeSignificanceTest(unittest.TestCase):
         self.assertIn(("bgr_broad", "uniform", "final_transfer_rauc"), comparisons)
         self.assertIn(("bgr_broad", "uniform", "rauc_aulc"), comparisons)
 
+    def test_suffix_strategy_ablation_comparisons_are_declared(self):
+        comparisons = {
+            (comparison.treatment, comparison.baseline, comparison.metric, comparison.direction)
+            for comparison in COMPARISONS
+            if comparison.benchmark == "Robot suffix strategy ablation 30-seed"
+        }
+
+        self.assertIn(("bgr_broad", "uniform", "final_rauc", "higher"), comparisons)
+        self.assertIn(("bgr_boundary", "uniform", "final_rauc", "lower"), comparisons)
+        self.assertIn(("bgr_broad", "bgr_boundary", "final_rauc", "higher"), comparisons)
+        self.assertIn(("bgr_broad", "bgr_hard", "final_rauc", "higher"), comparisons)
+        self.assertIn(("bgr_hard", "uniform", "final_transfer_rauc", "higher"), comparisons)
+        self.assertIn(("bgr_hard", "uniform", "rauc_aulc", "higher"), comparisons)
+
     def test_grid_margin_full_30_comparisons_are_declared(self):
         comparisons = {
             (comparison.treatment, comparison.baseline, comparison.metric)
@@ -796,6 +810,7 @@ def write_required_comparison_summaries(root: Path) -> None:
         "grid_margin_ablation_replication_30seed_v1": ["bgr", "bgr_uniform_radius", "uniform", "bgr_no_uncertainty", "bgr_no_sharpness"],
         "suffix_full_15seed_v1": ["bgr", "clean_ft", "fixed", "failure_only", "loss_priority", "uniform"],
         "suffix_strategy_coverage_30seed_v1": ["bgr_broad", "uniform"],
+        "suffix_strategy_ablation_30seed_v1": ["bgr_broad", "bgr_boundary", "bgr_hard", "uniform"],
         "suffix_strategy_coverage_replication_30seed_v1": ["bgr_broad", "uniform"],
         "suffix_coverage_full_30seed_v1": ["bgr_broad", "clean_ft", "uniform", "fixed", "failure_only", "loss_priority"],
         "suffix_coverage_full_replication_30seed_v1": ["bgr_broad", "clean_ft", "uniform", "fixed", "failure_only", "loss_priority"],
@@ -808,15 +823,24 @@ def write_required_comparison_summaries(root: Path) -> None:
         rows = []
         for method in methods:
             for seed in range(2):
+                final_rauc = "0.50" if method in {"bgr", "bgr_broad", "active"} else "0.40"
+                final_transfer_rauc = "0.32" if method in {"bgr", "bgr_broad", "active"} else "0.30"
+                rauc_aulc = "0.38" if method in {"bgr", "bgr_broad", "active"} else "0.35"
+                if method == "bgr_boundary":
+                    final_rauc = "0.30"
+                if method == "bgr_hard":
+                    final_rauc = "0.45"
+                    final_transfer_rauc = "0.33"
+                    rauc_aulc = "0.39"
                 rows.append(
                     {
                         "method": method,
                         "seed": str(seed),
                         "final_clean": "0.90" if method in {"bgr", "bgr_broad", "active"} else "0.80",
-                        "final_rauc": "0.50" if method in {"bgr", "bgr_broad", "active"} else "0.40",
+                        "final_rauc": final_rauc,
                         "final_median_r80": "0.30" if method in {"bgr", "bgr_broad", "active"} else "0.20",
-                        "final_transfer_rauc": "0.32" if method in {"bgr", "bgr_broad", "active"} else "0.30",
-                        "rauc_aulc": "0.38" if method in {"bgr", "bgr_broad", "active"} else "0.35",
+                        "final_transfer_rauc": final_transfer_rauc,
+                        "rauc_aulc": rauc_aulc,
                         "boundary_hit_rate": "0.70" if method == "active" else "0.60",
                         "r80_mae": "0.08" if method == "active" else "0.10",
                         "rauc_mae": "0.06" if method == "active" else "0.07",

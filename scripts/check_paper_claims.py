@@ -399,6 +399,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     )
 
     suffix = read_csv_rows(results_dir / "suffix_strategy_coverage_30seed_v1" / "summary.csv")
+    suffix_ablation = read_csv_rows(results_dir / "suffix_strategy_ablation_30seed_v1" / "summary.csv")
     claims.extend(
         [
             Claim(
@@ -425,6 +426,24 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
                 "suffix median r80 caveat",
                 f"{fmt(mean_metric(suffix, 'uniform', 'final_median_r80'), 4)} vs. {fmt(mean_metric(suffix, 'bgr_broad', 'final_median_r80'), 4)}",
                 "results/suffix_strategy_coverage_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "suffix strategy ablation final object RAUC",
+                (
+                    f"strategy ablation gives {fmt(mean_metric(suffix_ablation, 'bgr_broad', 'final_rauc'), 4)} "
+                    f"vs. {fmt(mean_metric(suffix_ablation, 'bgr_boundary', 'final_rauc'), 4)} "
+                    f"and {fmt(mean_metric(suffix_ablation, 'bgr_hard', 'final_rauc'), 4)} final object RAUC"
+                ),
+                "results/suffix_strategy_ablation_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "suffix strategy hard transfer AULC caveat",
+                (
+                    f"hard-radius variant leads transfer RAUC and AULC "
+                    f"({fmt(mean_metric(suffix_ablation, 'bgr_hard', 'final_transfer_rauc'), 4)}, "
+                    f"{fmt(mean_metric(suffix_ablation, 'bgr_hard', 'rauc_aulc'), 4)})"
+                ),
+                "results/suffix_strategy_ablation_30seed_v1/summary.csv",
             ),
         ]
     )
@@ -974,6 +993,12 @@ def build_significance_checks() -> list[SignificanceCheck]:
         SignificanceCheck("suffix transfer sign test", "Robot suffix coverage 30-seed", "", "final_transfer_rauc", "bgr_broad", "uniform", True, 30, 0),
         SignificanceCheck("suffix AULC sign test", "Robot suffix coverage 30-seed", "", "rauc_aulc", "bgr_broad", "uniform", True, 30, 0),
         SignificanceCheck("suffix median r80 caveat", "Robot suffix coverage 30-seed", "", "final_median_r80", "bgr_broad", "uniform", False, 1, 29),
+        SignificanceCheck("suffix strategy ablation coverage final RAUC", "Robot suffix strategy ablation 30-seed", "", "final_rauc", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix strategy ablation boundary final RAUC caveat", "Robot suffix strategy ablation 30-seed", "", "final_rauc", "bgr_boundary", "uniform", True, 30, 0),
+        SignificanceCheck("suffix strategy ablation broad vs boundary", "Robot suffix strategy ablation 30-seed", "", "final_rauc", "bgr_broad", "bgr_boundary", True, 30, 0),
+        SignificanceCheck("suffix strategy ablation broad vs hard final RAUC", "Robot suffix strategy ablation 30-seed", "", "final_rauc", "bgr_broad", "bgr_hard", True, 30, 0),
+        SignificanceCheck("suffix strategy ablation hard transfer", "Robot suffix strategy ablation 30-seed", "", "final_transfer_rauc", "bgr_hard", "uniform", True, 30, 0),
+        SignificanceCheck("suffix strategy ablation hard AULC", "Robot suffix strategy ablation 30-seed", "", "rauc_aulc", "bgr_hard", "uniform", True, 30, 0),
         SignificanceCheck("suffix held-out replication clean sign test", "Robot suffix replication 30-seed", "", "final_clean", "bgr_broad", "uniform", True, 30, 0),
         SignificanceCheck("suffix held-out replication object RAUC sign test", "Robot suffix replication 30-seed", "", "final_rauc", "bgr_broad", "uniform", True, 30, 0),
         SignificanceCheck("suffix held-out replication transfer sign test", "Robot suffix replication 30-seed", "", "final_transfer_rauc", "bgr_broad", "uniform", True, 30, 0),

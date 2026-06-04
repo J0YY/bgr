@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 16:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 17:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -304,11 +304,7 @@ Underfull \hbox (badness 1297) in paragraph at lines 205--206
 \T1/ptm/m/n/10 rows and matched BGR/random TFDS datasets. The
  []
 
-
-Underfull \vbox (badness 5519) has occurred while \output is active []
-
- [5]
-(./main.bbl) [6] (./ReproducibilityChecklist.tex
+[5] (./main.bbl) [6] (./ReproducibilityChecklist.tex
 \c@checksubsection=\count306
 \c@checkitem=\count307
 LaTeX Font Info:    Trying to load font information for T1+pcr on input line 51
@@ -361,7 +357,7 @@ texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2026/texmf-di
 st/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/t
 ype1/urw/times/utmr8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/t
 imes/utmri8a.pfb>
-Output written on main.pdf (9 pages, 247194 bytes).
+Output written on main.pdf (9 pages, 247450 bytes).
 PDF statistics:
  135 PDF objects out of 1000 (max. 8388607)
  83 compressed objects within 1 object stream

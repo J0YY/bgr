@@ -285,6 +285,10 @@ SUFFIX_STRATEGY_REPLICATION_CONFIG = "configs/suffix_strategy_coverage_replicati
 SUFFIX_STRATEGY_REPLICATION_SUMMARY = "results/suffix_strategy_coverage_replication_30seed_v1/summary.csv"
 SUFFIX_STRATEGY_REPLICATION_RESULTS = "results/suffix_strategy_coverage_replication_30seed_v1/results.json"
 SUFFIX_STRATEGY_REPLICATION_METHODS = ["uniform", "bgr_broad"]
+SUFFIX_STRATEGY_ABLATION_CONFIG = "configs/suffix_strategy_ablation_30seed.yaml"
+SUFFIX_STRATEGY_ABLATION_SUMMARY = "results/suffix_strategy_ablation_30seed_v1/summary.csv"
+SUFFIX_STRATEGY_ABLATION_RESULTS = "results/suffix_strategy_ablation_30seed_v1/results.json"
+SUFFIX_STRATEGY_ABLATION_METHODS = ["uniform", "bgr_boundary", "bgr_broad", "bgr_hard"]
 GRID_MARGIN_FULL_30_CONFIG = "configs/grid_margin_full_30seed.yaml"
 GRID_MARGIN_FULL_30_SUMMARY = "results/grid_margin_full_30seed_v1/summary.csv"
 GRID_MARGIN_FULL_30_METHODS = ["uniform", "fixed", "failure_only", "plr_loss", "bgr"]
@@ -426,6 +430,7 @@ CHECKED_CLAIM_ARTIFACTS = [
     "results/openvla_teacher_replay_manifest_v1/summary.json",
     "results/suffix_coverage_full_30seed_v1/summary.csv",
     "results/suffix_coverage_full_replication_30seed_v1/summary.csv",
+    "results/suffix_strategy_ablation_30seed_v1/summary.csv",
     "results/suffix_strategy_coverage_30seed_v1/summary.csv",
     "results/suffix_strategy_coverage_replication_30seed_v1/summary.csv",
     "results/toy_15seed_v1/summary.csv",
@@ -1278,6 +1283,7 @@ def check_results_evidence_index(root: Path) -> list[str]:
         "held-out suffix full-baseline replication",
         "results/suffix_strategy_coverage_30seed_v1/summary.csv",
         "results/suffix_strategy_coverage_replication_30seed_v1/summary.csv",
+        "results/suffix_strategy_ablation_30seed_v1/summary.csv",
         "paper/figures/significance_tests.csv",
         "paper/figures/estimator_stats.csv",
         "paper/figures/estimator_table.tex",
@@ -1986,6 +1992,98 @@ def check_suffix_strategy_replication_status(root: Path) -> list[str]:
             + ", ".join(missing_completed)
         )
     return [f"{results_readme}: suffix strategy replication completion ledger ok"]
+
+
+def check_suffix_strategy_ablation_status(root: Path) -> list[str]:
+    config_path = root / SUFFIX_STRATEGY_ABLATION_CONFIG
+    summary_path = root / SUFFIX_STRATEGY_ABLATION_SUMMARY
+    results_path = root / SUFFIX_STRATEGY_ABLATION_RESULTS
+    results_readme = root / "results" / "README.md"
+    missing = [
+        str(path.relative_to(root))
+        for path in [config_path, summary_path, results_path]
+        if not path.exists()
+    ]
+    if missing:
+        raise ValueError(f"missing suffix strategy ablation artifact(s): {', '.join(missing)}")
+
+    configured = configured_seeds(config_path)
+    expected_seed_labels = {str(seed) for seed in range(30)}
+    expected_seed_values = set(range(30))
+    if configured != expected_seed_labels:
+        raise ValueError(f"{config_path}: expected configured seeds 0-29, found {sorted(configured)}")
+    methods = configured_methods(config_path)
+    if methods != SUFFIX_STRATEGY_ABLATION_METHODS:
+        raise ValueError(f"{config_path}: unexpected suffix strategy ablation methods: {methods}")
+
+    rows = read_csv_rows(summary_path)
+    by_method: dict[str, dict[int, dict[str, str]]] = {}
+    for row in rows:
+        method = row.get("method", "")
+        if method not in SUFFIX_STRATEGY_ABLATION_METHODS:
+            raise ValueError(f"{summary_path}: unexpected suffix strategy ablation method {method!r}")
+        seed_text = row.get("seed", "")
+        if not seed_text:
+            raise ValueError(f"{summary_path}: missing seed in suffix strategy ablation row")
+        by_method.setdefault(method, {})[int(float(seed_text))] = row
+    for method in SUFFIX_STRATEGY_ABLATION_METHODS:
+        seeds = set(by_method.get(method, {}))
+        if seeds != expected_seed_values:
+            raise ValueError(f"{summary_path}: method {method} has seeds {sorted(seeds)}, expected {sorted(expected_seed_values)}")
+
+    uniform_rows = by_method["uniform"]
+    boundary_rows = by_method["bgr_boundary"]
+    broad_rows = by_method["bgr_broad"]
+    hard_rows = by_method["bgr_hard"]
+    broad_uniform_wins = sum(
+        float(broad_rows[seed]["final_rauc"]) > float(uniform_rows[seed]["final_rauc"])
+        for seed in expected_seed_values
+    )
+    if broad_uniform_wins != 30:
+        raise ValueError(f"{summary_path}: expected 30/0 BGR-Coverage final-RAUC wins over uniform, found {broad_uniform_wins}/30")
+    boundary_losses = sum(
+        float(boundary_rows[seed]["final_rauc"]) < float(uniform_rows[seed]["final_rauc"])
+        for seed in expected_seed_values
+    )
+    if boundary_losses != 30:
+        raise ValueError(f"{summary_path}: expected 30/0 boundary-heavy final-RAUC losses to uniform, found {boundary_losses}/30")
+    for variant, variant_rows in [("boundary-heavy", boundary_rows), ("hard-radius", hard_rows)]:
+        wins = sum(
+            float(broad_rows[seed]["final_rauc"]) > float(variant_rows[seed]["final_rauc"])
+            for seed in expected_seed_values
+        )
+        if wins != 30:
+            raise ValueError(f"{summary_path}: expected 30/0 BGR-Coverage final-RAUC wins over {variant}, found {wins}/30")
+    for metric in ["final_transfer_rauc", "rauc_aulc"]:
+        hard_wins = sum(
+            float(hard_rows[seed][metric]) > float(uniform_rows[seed][metric])
+            for seed in expected_seed_values
+        )
+        if hard_wins != 30:
+            raise ValueError(f"{summary_path}: expected 30/0 hard-radius wins over uniform on {metric}, found {hard_wins}/30")
+
+    if not isinstance(read_json_dict(results_path), dict):
+        raise ValueError(f"{results_path}: expected JSON object for suffix strategy ablation results")
+    if not results_readme.exists():
+        raise ValueError(f"{results_readme}: missing ledger for suffix strategy ablation run")
+    text = results_readme.read_text(encoding="utf-8")
+    normalized_text = normalize_space(text)
+    required_completed = [
+        "Completed `suffix_strategy_ablation_30seed_v1`",
+        "120 array tasks completed",
+        "BGR-Coverage is the only suffix strategy that improves final object RAUC over uniform with 30/0 paired wins",
+        "Boundary-heavy BGR undercovers object RAUC",
+        "Hard-radius BGR leads transfer RAUC and RAUC AULC",
+    ]
+    missing_completed = [
+        snippet for snippet in required_completed if snippet not in normalized_text and snippet not in text
+    ]
+    if missing_completed:
+        raise ValueError(
+            f"{results_readme}: completed suffix strategy ablation ledger is missing snippet(s): "
+            + ", ".join(missing_completed)
+        )
+    return [f"{results_readme}: suffix strategy ablation completion ledger ok"]
 
 
 def check_grid_margin_full_30_status(root: Path) -> list[str]:
@@ -3101,6 +3199,9 @@ def data_artifact_text_files() -> list[str]:
             GRID_MARGIN_REPLICATION_RESULTS,
             SUFFIX_COVERAGE_FULL_CONFIG,
             SUFFIX_COVERAGE_FULL_SUMMARY,
+            SUFFIX_STRATEGY_ABLATION_CONFIG,
+            SUFFIX_STRATEGY_ABLATION_SUMMARY,
+            SUFFIX_STRATEGY_ABLATION_RESULTS,
             SUFFIX_STRATEGY_REPLICATION_CONFIG,
             SUFFIX_STRATEGY_REPLICATION_SUMMARY,
             SUFFIX_STRATEGY_REPLICATION_RESULTS,
@@ -3475,6 +3576,7 @@ def check_root_readme_submission_framing(root: Path) -> list[str]:
         "results/suffix_coverage_full_replication_30seed_v1/summary.csv",
         "results/suffix_strategy_coverage_30seed_v1/summary.csv",
         "results/suffix_strategy_coverage_replication_30seed_v1/summary.csv",
+        "results/suffix_strategy_ablation_30seed_v1/summary.csv",
         "The learned-policy OpenVLA/LIBERO path is an audit, not a robotics fine-tuning claim",
         "packaged OpenVLA-OFT audit summaries listed below",
         "Grid-margin robustness/scope diagnostic artifacts",
@@ -4257,6 +4359,7 @@ def check_package(root: Path) -> list[str]:
     messages.extend(check_suffix_coverage_full_status(root))
     messages.extend(check_suffix_coverage_full_replication_status(root))
     messages.extend(check_suffix_strategy_replication_status(root))
+    messages.extend(check_suffix_strategy_ablation_status(root))
     messages.extend(check_generated_result_tables(root))
     messages.extend(check_aggregate_outputs_synced(root))
     messages.extend(check_significance_outputs_synced(root))

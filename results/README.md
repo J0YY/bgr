@@ -24,6 +24,8 @@ Primary controlled evidence for the paper is:
   the coverage-aware robot-suffix comparison.
 - `results/suffix_strategy_coverage_replication_30seed_v1/summary.csv`: held-out
   seeds 30--59 replication for the robot-suffix coverage comparison.
+- `results/suffix_strategy_ablation_30seed_v1/summary.csv`: 30-seed suffix
+  strategy ablation explaining why BGR-Coverage is the promoted suffix variant.
 - `paper/figures/significance_tests.csv`: paired exact sign tests for the
   central claims, ablations, sensitivity sweeps, and replications.
 - `paper/figures/estimator_stats.csv` and `paper/figures/estimator_table.tex`:
@@ -2865,11 +2867,12 @@ wins. Interpretation: independent held-out seeds replicate the positive
 BGR-Coverage-vs-uniform suffix result and preserve the median-critical-radius
 caveat.
 
-### Queued `suffix_strategy_ablation_30seed_v1`
+### Completed `suffix_strategy_ablation_30seed_v1`
 
-Queued on 2026-06-04 to turn the suffix strategy scan into a paired 30-seed
-ablation. This tests whether the packaged BGR-Coverage result is specifically a
-coverage-aware replay strategy rather than a one-off tuned radius distribution.
+Queued and completed on 2026-06-04 to turn the suffix strategy scan into a
+paired 30-seed ablation. This tests whether the packaged BGR-Coverage result is
+specifically a coverage-aware replay strategy rather than a one-off tuned radius
+distribution.
 
 Command:
 
@@ -2883,21 +2886,31 @@ Slurm submission:
 
 ```text
 765450  first suffix strategy ablation submit from commit 25e85e5; failed immediately because the Slurm environment lacked `python`
-765452  repaired suffix strategy ablation submit from commit 25e85e5 using `python3`
+765452  repaired sequential submit from commit 25e85e5 using `python3`; canceled after normal progress because the 120-run ablation was better handled as an array
+765453  repaired array submit, tasks 0-119 with max 30 concurrent tasks
+765454  dependent merge job, afterok:765453
 ```
 
-Methods:
+All 120 array tasks completed and the dependent merge wrote the compact summary.
 
-- `uniform`: uniform suffix replay baseline.
-- `bgr_boundary`: boundary-heavy radius sampling with little uniform coverage.
-- `bgr_broad`: packaged coverage-aware BGR-Coverage setting.
-- `bgr_hard`: hard-radius-heavy BGR variant from the strategy scan.
+Mean results over 30 paired seeds:
 
-Expected interpretation if it strengthens the paper: BGR-Coverage should retain
-the clean-success, transfer-RAUC, and AULC gains over uniform while explaining
-why boundary-heavy or hard-heavy variants underperform on final object RAUC or
-coverage. If it does not separate cleanly, keep the paper's suffix claim scoped
-to the already replicated BGR-Coverage-vs-uniform result.
+| Method | Clean | Object RAUC | Median r80 | EE-transfer RAUC | RAUC AULC |
+|---|---:|---:|---:|---:|---:|
+| Uniform suffix | 0.8364 | 0.4854 | 0.5047 | 0.3083 | 0.3709 |
+| Boundary-heavy BGR | 0.8716 | 0.4587 | 0.4296 | 0.2825 | 0.3690 |
+| BGR-Coverage | 0.8644 | 0.4969 | 0.4982 | 0.3143 | 0.3825 |
+| Hard-radius BGR | 0.8659 | 0.4850 | 0.4740 | 0.3252 | 0.3928 |
+
+BGR-Coverage is the only suffix strategy that improves final object RAUC over
+uniform with 30/0 paired wins. Boundary-heavy BGR undercovers object RAUC
+(0.4587 vs. 0.4854 for uniform) with 30/0 paired losses. Hard-radius BGR leads
+transfer RAUC and RAUC AULC (0.3252 and 0.3928), both with 30/0 paired wins over
+uniform, but it does not improve final object RAUC (14/16 paired split vs.
+uniform). Interpretation: the promoted suffix variant needs broad radius and
+uniform state coverage to maintain final object-recovery gains, while hard
+radius emphasis is useful for transfer/sample-efficiency but not the primary
+object-RAUC claim.
 
 ### `suffix_strategy_coverage_15seed_v1`
 

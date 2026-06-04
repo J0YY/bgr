@@ -112,6 +112,12 @@ COMPARISONS = [
     Comparison("Robot suffix coverage 30-seed", "suffix_strategy_coverage_30seed_v1/summary.csv", "bgr_broad", "uniform", "rauc_aulc"),
     Comparison("Robot suffix coverage 30-seed", "suffix_strategy_coverage_30seed_v1/summary.csv", "bgr_broad", "uniform", "final_rauc"),
     Comparison("Robot suffix coverage 30-seed", "suffix_strategy_coverage_30seed_v1/summary.csv", "bgr_broad", "uniform", "final_median_r80"),
+    Comparison("Robot suffix strategy ablation 30-seed", "suffix_strategy_ablation_30seed_v1/summary.csv", "bgr_broad", "uniform", "final_rauc"),
+    Comparison("Robot suffix strategy ablation 30-seed", "suffix_strategy_ablation_30seed_v1/summary.csv", "bgr_boundary", "uniform", "final_rauc", "lower"),
+    Comparison("Robot suffix strategy ablation 30-seed", "suffix_strategy_ablation_30seed_v1/summary.csv", "bgr_broad", "bgr_boundary", "final_rauc"),
+    Comparison("Robot suffix strategy ablation 30-seed", "suffix_strategy_ablation_30seed_v1/summary.csv", "bgr_broad", "bgr_hard", "final_rauc"),
+    Comparison("Robot suffix strategy ablation 30-seed", "suffix_strategy_ablation_30seed_v1/summary.csv", "bgr_hard", "uniform", "final_transfer_rauc"),
+    Comparison("Robot suffix strategy ablation 30-seed", "suffix_strategy_ablation_30seed_v1/summary.csv", "bgr_hard", "uniform", "rauc_aulc"),
     Comparison("Robot suffix replication 30-seed", "suffix_strategy_coverage_replication_30seed_v1/summary.csv", "bgr_broad", "uniform", "final_clean"),
     Comparison("Robot suffix replication 30-seed", "suffix_strategy_coverage_replication_30seed_v1/summary.csv", "bgr_broad", "uniform", "final_rauc"),
     Comparison(

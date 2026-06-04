@@ -57,6 +57,12 @@ Robot suffix coverage 30-seed,,final_transfer_rauc,bgr_broad,uniform,30,0.006088
 Robot suffix coverage 30-seed,,rauc_aulc,bgr_broad,uniform,30,0.011515,0.000352,0.010795,0.012234,30,0,0,1.86265e-09,higher,true
 Robot suffix coverage 30-seed,,final_rauc,bgr_broad,uniform,30,0.011565,0.000332,0.010886,0.012244,30,0,0,1.86265e-09,higher,true
 Robot suffix coverage 30-seed,,final_median_r80,bgr_broad,uniform,30,-0.006547,0.000770,-0.008122,-0.004972,1,29,0,5.7742e-08,higher,false
+Robot suffix strategy ablation 30-seed,,final_rauc,bgr_broad,uniform,30,0.011565,0.000332,0.010886,0.012244,30,0,0,1.86265e-09,higher,true
+Robot suffix strategy ablation 30-seed,,final_rauc,bgr_boundary,uniform,30,-0.026648,0.000627,-0.027931,-0.025365,30,0,0,1.86265e-09,lower,true
+Robot suffix strategy ablation 30-seed,,final_rauc,bgr_broad,bgr_boundary,30,0.038213,0.000579,0.037030,0.039396,30,0,0,1.86265e-09,higher,true
+Robot suffix strategy ablation 30-seed,,final_rauc,bgr_broad,bgr_hard,30,0.011933,0.000437,0.011039,0.012828,30,0,0,1.86265e-09,higher,true
+Robot suffix strategy ablation 30-seed,,final_transfer_rauc,bgr_hard,uniform,30,0.016916,0.000544,0.015803,0.018030,30,0,0,1.86265e-09,higher,true
+Robot suffix strategy ablation 30-seed,,rauc_aulc,bgr_hard,uniform,30,0.021859,0.000354,0.021135,0.022583,30,0,0,1.86265e-09,higher,true
 Robot suffix replication 30-seed,,final_clean,bgr_broad,uniform,30,0.027094,0.000294,0.026492,0.027696,30,0,0,1.86265e-09,higher,true
 Robot suffix replication 30-seed,,final_rauc,bgr_broad,uniform,30,0.011305,0.000312,0.010666,0.011943,30,0,0,1.86265e-09,higher,true
 Robot suffix replication 30-seed,,final_transfer_rauc,bgr_broad,uniform,30,0.006087,0.000402,0.005265,0.006908,30,0,0,1.86265e-09,higher,true
