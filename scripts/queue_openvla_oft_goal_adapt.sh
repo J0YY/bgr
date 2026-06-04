@@ -22,6 +22,7 @@ EXCLUDE="${EXCLUDE:-c2-g4-21}"
 REMOTE_HOST="${REMOTE_HOST:-athena}"
 REMOTE_PROJECT="${REMOTE_PROJECT:-/work/anonymous/bgr}"
 REMOTE_LOG_DIR="${REMOTE_LOG_DIR:-/work/anonymous/bgr/logs}"
+REMOTE_RUN_ROOT="${REMOTE_RUN_ROOT:-/work/anonymous/bgr/runs}"
 REMOTE_HF_HOME="${REMOTE_HF_HOME:-/work/anonymous/cache_home/huggingface}"
 REMOTE_TRANSFORMERS_CACHE="${REMOTE_TRANSFORMERS_CACHE:-${REMOTE_HF_HOME}/hub}"
 OPENVLA_OFT_ROOT="${OPENVLA_OFT_ROOT:-/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft}"
@@ -66,6 +67,7 @@ Environment overrides:
   METHODS=bgr|random|bgr,random selects which branches to queue
   SERIAL_TRAIN=1 serializes paired train jobs to avoid shared HF config races
   IMAGE_AUG=True|False forwards OpenVLA-OFT image augmentation to finetune.py
+  REMOTE_RUN_ROOT sets the writable root for eval logs
   REMOTE_HF_HOME/REMOTE_TRANSFORMERS_CACHE set writable Hugging Face cache roots
   FINETUNE_SCRIPT selects an alternate OpenVLA-OFT fine-tuning entry point
   TRAIN_DATASET_STATISTICS_SOURCE forces official action/proprio stats during RLDS training normalization
@@ -283,7 +285,7 @@ write_eval_script() {
   local method="$1"
   local checkpoint_dir="$2"
   local script_path="$3"
-  local local_log_dir="/work/anonymous/bgr/runs/${EVAL_ARTIFACT}/logs/${method}"
+  local local_log_dir="${REMOTE_RUN_ROOT}/${EVAL_ARTIFACT}/logs/${method}"
   cat > "${script_path}" <<EOF
 #!/usr/bin/env bash
 #SBATCH --job-name=bgr-goal-eval-${method}-${TAG}

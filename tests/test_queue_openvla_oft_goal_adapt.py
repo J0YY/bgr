@@ -18,6 +18,7 @@ class QueueOpenVlaOftGoalAdaptTest(unittest.TestCase):
                 "EVAL_ARTIFACT": "unit_artifact",
                 "REMOTE_PROJECT": "/tmp/bgr",
                 "REMOTE_LOG_DIR": "/tmp/bgr-logs",
+                "REMOTE_RUN_ROOT": "/tmp/bgr-runs",
                 "REMOTE_HF_HOME": "/tmp/hf-home",
                 "REMOTE_TRANSFORMERS_CACHE": "/tmp/hf-home/hub",
                 "OPENVLA_OFT_ROOT": "/tmp/openvla-oft",
@@ -53,6 +54,11 @@ class QueueOpenVlaOftGoalAdaptTest(unittest.TestCase):
         output = self.run_dry()
         self.assertIn('HF_HOME="/tmp/hf-home"', output)
         self.assertIn('TRANSFORMERS_CACHE="/tmp/hf-home/hub"', output)
+
+    def test_dry_run_uses_remote_run_root_for_eval_logs(self) -> None:
+        output = self.run_dry()
+        self.assertIn('mkdir -p "/tmp/bgr-runs/unit_artifact/logs/bgr"', output)
+        self.assertIn('--local_log_dir "/tmp/bgr-runs/unit_artifact/logs/bgr"', output)
 
 
 if __name__ == "__main__":
