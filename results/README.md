@@ -107,9 +107,9 @@ Older troubleshooting sections may retain labels such as Queued command to
 record original Slurm submissions; those labels are provenance, not active
 experiment status.
 
-## Active OpenVLA-OFT p2048 Image-Augmentation Adaptation Audit
+## Completed OpenVLA-OFT p2048 Image-Augmentation Adaptation Audit
 
-Submitted on 2026-06-04 after the full-goal p2048 clean and perturbation audits
+Queued and completed on 2026-06-04 after the full-goal p2048 clean and perturbation audits
 showed no stable gain over matched random or the official checkpoint. This is a
 single-factor optimization test: it keeps the p2048 clean-mix data, identity-LoRA
 entry point, official training/eval statistics, low learning rate, and 100-step
@@ -167,11 +167,30 @@ Slurm IDs:
 764858--764862  random identity -> blur -> brightness -> occlusion -> shift, afterok:764839
 ```
 
-This active audit is not paper-facing evidence yet. It becomes useful only if the
-completed full-goal perturbation summary shows BGR beating both matched random
-selection and the unadapted official checkpoint under the same 10-task,
-100-episode evaluation. The perturbation identity rows serve as the clean
-full-goal check for this image-augmentation run.
+Final perturbation eval accounting:
+
+```text
+764819--764823  official identity/blur/brightness/occlusion/shift completed, exit 0:0, elapsed 16:07--21:19
+764853--764857  BGR identity/blur/brightness/occlusion/shift completed, exit 0:0, elapsed 11:40--15:04
+764858--764862  random identity/blur/brightness/occlusion/shift completed, exit 0:0, elapsed 16:01--20:48
+```
+
+Summary rows:
+
+| Method | Identity | Blur | Brightness | Occlusion | Shift | Mean perturbed |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| BGR image-aug p2048 | 0.9900 | 0.9800 | 0.9800 | 0.7300 | 0.9800 | 0.9175 |
+| Official OpenVLA-OFT | 0.9900 | 0.9700 | 0.9800 | 0.7400 | 0.9800 | 0.9175 |
+| Random image-aug p2048 | 0.9800 | 0.9800 | 0.9600 | 0.7500 | 0.9400 | 0.9075 |
+
+Interpretation: image augmentation gives BGR a small aggregate edge over the
+matched random selector (+4/400 perturbed episodes, plus +1/100 identity
+episode), but BGR ties the unadapted official checkpoint on both identity and
+mean perturbed success. Relative to the previous no-image-augmentation full-goal
+BGR audit, the perturbed mean is unchanged at 0.9175; occlusion decreases from
+0.7500 to 0.7300 while shift increases from 0.9600 to 0.9800. This is therefore
+paper-negative as a robotics fine-tuning claim and remains a ledger-only
+optimization audit.
 
 ## Completed OpenVLA-OFT p2048 10-Trial Perturbation Follow-Up
 
