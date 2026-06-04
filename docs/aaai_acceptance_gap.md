@@ -164,6 +164,23 @@ Do not add another result to the manuscript if it has any of these properties:
        the expected step50500 output directories have not appeared yet. There
        are therefore no new preregistered OpenVLA results to incorporate into
        `paper/main.tex` as of this poll.
+     - Follow-up poll while the queue was running showed BGR adapt `765759`
+       completed and BGR merge `765760` completed. Random adapt `765762` had
+       started, with random merge `765763` still pending on it. The original
+       official identity perturb eval `765765` failed immediately with
+       `ModuleNotFoundError: No module named 'libero'` because the generated
+       live scripts used `LIBERO_ROOT=/home/joy/LIBERO`, which is absent on the
+       compute node; the valid live path is `/users/joy/LIBERO`. The pending
+       clean-eval and perturb-eval jobs generated with the bad path were
+       canceled (`765761`, `765764`, `765766`--`765779`). Repaired perturb evals
+       were submitted with the same preregistered checkpoint paths, perturbation
+       families, 10-task x 10-trial protocol, seed, and promotion gate, changing
+       only `LIBERO_ROOT=/users/joy/LIBERO`: official
+       `765782 -> 765785 -> 765787 -> 765791 -> 765795`; BGR
+       `765783 -> 765786 -> 765789 -> 765792 -> 765794`; random
+       `765781 -> 765784 -> 765788 -> 765790 -> 765793` after
+       `afterok:765763`. `scontrol` confirmed the repaired scripts include
+       `/users/joy/LIBERO` in `PYTHONPATH`.
 
 ## Immediate Engineering Work
 
