@@ -91,6 +91,10 @@ Packaged OpenVLA audit artifacts are:
   p2048 offset-3 perturbation audit.
 - `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/summary.csv`:
   p2048 10-trial perturbation variance audit.
+- `results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv`:
+  p2048 full-goal clean identity audit.
+- `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv`:
+  p2048 full-goal visual perturbation audit.
 
 The p4096 and common-availability sections below are retained as paper-negative
 diagnostics in this ledger only. Their summary CSVs are not part of the

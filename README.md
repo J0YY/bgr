@@ -84,6 +84,8 @@ OpenVLA-OFT packaged audit summaries:
 - p2048 original perturbation audit: `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv`
 - p2048 offset-3 perturbation audit: `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv`
 - p2048 10-trial perturbation variance audit: `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/summary.csv`
+- p2048 full-goal clean identity audit: `results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv`
+- p2048 full-goal visual perturbation audit: `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv`
 
 ## Repository Layout
 
@@ -302,12 +304,11 @@ The packaged useful audit scale is p1024/p2048 clean-mix adaptation with officia
 training statistics, identity LoRA initialization, and low learning rate. At
 p1024, BGR and matched random tie clean at 14/15; pooling the original and
 offset-3 visual perturbation evals gives BGR 0.8550 vs. 0.8400 for random,
-still trailing the unadapted official checkpoint at 0.8700. At p2048, BGR and
-matched random again tie clean at 14/15 each; original p2048 visual
-perturbations give BGR 0.8167 vs. 0.8000 for random, tying official at 0.8167,
-but the offset-3 follow-up gives BGR 0.8714 vs. 0.8714 for random, with
-official at 0.8929. Pooling p2048 gives BGR 0.8550 vs. 0.8500 for random,
-trailing official at 0.8700.
+still trailing the unadapted official checkpoint at 0.8700. At p2048, the
+full-goal identity audit gives 99/100 clean successes for BGR, matched random,
+and the official checkpoint. The 10-task visual perturbation audit gives BGR
+367/400 perturbed successes, tying official and trailing matched random by one
+episode (368/400).
 
 ## AAAI Sources
 

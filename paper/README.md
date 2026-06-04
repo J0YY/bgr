@@ -90,10 +90,9 @@ AULC 0.3829 vs. 0.3717, while uniform remains higher on median r80.
 The OpenVLA-OFT bridge includes corrected clean-mix diagnostics that preserve
 competence while keeping the claim scoped. The pooled p1024
 visual-perturbation evidence gives BGR 0.8550 vs. 0.8400 for random, trailing
-official at 0.8700. At p2048, BGR and matched random again tie clean at 14/15
-each; original p2048 visual perturbations give BGR 0.8167 vs. 0.8000 for random,
-tying official at 0.8167, but the offset-3 follow-up gives BGR 0.8714 vs. 0.8714
-for random, with official at 0.8929. Pooling p2048 gives BGR 0.8550 vs. 0.8500
-for random, trailing official at 0.8700. OpenVLA therefore remains an audit of
-recovery curves, matched data construction, and OpenVLA-OFT plumbing rather than
-a robotics success claim.
+official at 0.8700. At p2048, the full-goal identity audit gives 99/100 clean
+successes for BGR, matched random, and the official checkpoint. The 10-task
+visual perturbation audit gives BGR 367/400 perturbed successes, tying official
+and trailing matched random by one episode (368/400). OpenVLA therefore remains
+an audit of recovery curves, matched data construction, and OpenVLA-OFT plumbing
+rather than a robotics success claim.

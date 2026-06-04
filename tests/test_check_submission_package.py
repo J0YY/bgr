@@ -1723,6 +1723,8 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                     "- `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv`: p2048 original perturbation audit.",
                     "- `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv`: p2048 offset-3 perturbation audit.",
                     "- `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/summary.csv`: p2048 10-trial perturbation variance audit.",
+                    "- `results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv`: p2048 full-goal clean identity audit.",
+                    "- `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv`: p2048 full-goal visual perturbation audit.",
                     "The p4096 and common-availability sections below are retained as paper-negative diagnostics in this ledger only.",
                     "Their summary CSVs are not part of the anonymous submission manifest or archive.",
                     "",
@@ -2661,11 +2663,15 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "p2048 original perturbation audit",
                         "p2048 offset-3 perturbation audit",
                         "p2048 10-trial perturbation variance audit",
+                        "p2048 full-goal clean identity audit",
+                        "p2048 full-goal visual perturbation audit",
                         "paper/figures/openvla_stats.csv",
                         "results/libero_openvla_recovery_v1/summary.csv",
                         "results/libero_openvla_boundary_selection_balanced_v1/aggregate.csv",
                         "results/openvla_oft_sanity_eval_sanity_v1/summary.csv",
                         "results/openvla_oft_eval_balanced2048_step1000_v1/summary.csv",
+                        "results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
+                        "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
                         "results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
                         "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
                         "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/summary.csv",
@@ -4128,10 +4134,9 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "The packaged useful audit scale is p1024/p2048 clean-mix adaptation.",
                         "At p1024, BGR and matched random tie clean at 14/15",
                         "pooling the original and offset-3 visual perturbation evals gives BGR 0.8550 vs. 0.8400 for random",
-                        "At p2048, BGR and matched random again tie clean at 14/15 each",
-                        "original p2048 visual perturbations give BGR 0.8167 vs. 0.8000 for random",
-                        "offset-3 follow-up gives BGR 0.8714 vs. 0.8714 for random, with official at 0.8929",
-                        "Pooling p2048 gives BGR 0.8550 vs. 0.8500 for random, trailing official at 0.8700",
+                        "At p2048, the full-goal identity audit gives 99/100 clean successes",
+                        "The 10-task visual perturbation audit gives BGR 367/400 perturbed successes",
+                        "trailing matched random by one episode (368/400)",
                     ]
                 ),
                 encoding="utf-8",
@@ -4249,10 +4254,9 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "OpenVLA-OFT bridge includes corrected clean-mix diagnostics that preserve competence while keeping the claim scoped",
                         "pooled p1024 visual-perturbation evidence gives BGR 0.8550 vs. 0.8400 for random",
                         "trailing official at 0.8700",
-                        "At p2048, BGR and matched random again tie clean at 14/15 each",
-                        "original p2048 visual perturbations give BGR 0.8167 vs. 0.8000 for random",
-                        "offset-3 follow-up gives BGR 0.8714 vs. 0.8714 for random, with official at 0.8929",
-                        "Pooling p2048 gives BGR 0.8550 vs. 0.8500 for random, trailing official at 0.8700",
+                        "At p2048, the full-goal identity audit gives 99/100 clean successes",
+                        "The 10-task visual perturbation audit gives BGR 367/400 perturbed successes",
+                        "trailing matched random by one episode (368/400)",
                     ]
                 ),
                 encoding="utf-8",
@@ -5802,7 +5806,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
         rendered = (
             "p1024 diagnostic success 0.8333 vs. 0.8000 at official 0.8167; "
             "pooled 0.8550 vs. 0.8400 at official 0.8700; "
-            "p2048 scale-up 14/15 each with 0.8714, 0.8500, and 0.8929"
+            "p2048 full-goal audit 99/100 clean and 367/400 vs. 368/400 perturbed"
         )
         with mock.patch.object(Path, "read_text", return_value=source), mock.patch(
             "scripts.check_submission_package.pdf_text",

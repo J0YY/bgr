@@ -387,6 +387,8 @@ OPENVLA_CLAIM_ARTIFACTS = [
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/summary.csv",
+    "results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
+    "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
 ]
 CHECKED_CLAIM_ARTIFACTS = [
     "paper/figures/estimator_stats.csv",
@@ -414,6 +416,8 @@ CHECKED_CLAIM_ARTIFACTS = [
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/summary.csv",
+    "results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
+    "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_sanity_eval_sanity_v1/summary.csv",
     "results/openvla_teacher_replay_manifest_v1/summary.json",
     "results/suffix_coverage_full_30seed_v1/summary.csv",
@@ -1316,6 +1320,8 @@ def check_results_evidence_index(root: Path) -> list[str]:
         "p2048 original perturbation audit",
         "p2048 offset-3 perturbation audit",
         "p2048 10-trial perturbation variance audit",
+        "p2048 full-goal clean identity audit",
+        "p2048 full-goal visual perturbation audit",
         "results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
         "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
         "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
@@ -1323,6 +1329,8 @@ def check_results_evidence_index(root: Path) -> list[str]:
         "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
         "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
         "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/summary.csv",
+        "results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
+        "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
         "p4096 and common-availability sections below are retained as paper-negative diagnostics in this ledger only",
         "not part of the anonymous submission manifest or archive",
         "The detailed sections below are a historical provenance ledger",
@@ -1385,10 +1393,9 @@ def check_root_readme_openvla_status(root: Path) -> list[str]:
         "The packaged useful audit scale is p1024/p2048 clean-mix adaptation",
         "At p1024, BGR and matched random tie clean at 14/15",
         "pooling the original and offset-3 visual perturbation evals gives BGR 0.8550 vs. 0.8400 for random",
-        "At p2048, BGR and matched random again tie clean at 14/15 each",
-        "original p2048 visual perturbations give BGR 0.8167 vs. 0.8000 for random",
-        "offset-3 follow-up gives BGR 0.8714 vs. 0.8714 for random, with official at 0.8929",
-        "Pooling p2048 gives BGR 0.8550 vs. 0.8500 for random, trailing official at 0.8700",
+        "At p2048, the full-goal identity audit gives 99/100 clean successes",
+        "The 10-task visual perturbation audit gives BGR 367/400 perturbed successes",
+        "trailing matched random by one episode (368/400)",
     ]
     missing = [snippet for snippet in required if snippet not in normalized_text]
     if missing:
@@ -1421,10 +1428,9 @@ def check_paper_readme_openvla_status(root: Path) -> list[str]:
         "OpenVLA-OFT bridge includes corrected clean-mix diagnostics that preserve competence while keeping the claim scoped",
         "pooled p1024 visual-perturbation evidence gives BGR 0.8550 vs. 0.8400 for random",
         "trailing official at 0.8700",
-        "At p2048, BGR and matched random again tie clean at 14/15 each",
-        "original p2048 visual perturbations give BGR 0.8167 vs. 0.8000 for random",
-        "offset-3 follow-up gives BGR 0.8714 vs. 0.8714 for random, with official at 0.8929",
-        "Pooling p2048 gives BGR 0.8550 vs. 0.8500 for random, trailing official at 0.8700",
+        "At p2048, the full-goal identity audit gives 99/100 clean successes",
+        "The 10-task visual perturbation audit gives BGR 367/400 perturbed successes",
+        "trailing matched random by one episode (368/400)",
     ]
     missing = [snippet for snippet in required if snippet not in normalized_text]
     if missing:
@@ -4009,7 +4015,7 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
         raise ValueError(f"{pdf_path}: stale rendered OpenVLA snippet(s): {', '.join(stale)}")
     required = ["p1024", "0.8333", "0.8000", "0.8167", "0.8550", "0.8400", "0.8700"]
     if "p2048" in source_text:
-        required.extend(["p2048", "14/15 each", "0.8714", "0.8500", "0.8929"])
+        required.extend(["p2048", "99/100", "367/400", "368/400"])
     missing = [snippet for snippet in required if snippet not in normalized_rendered_text]
     if missing:
         raise ValueError(f"{pdf_path}: missing rendered OpenVLA snippet(s): {', '.join(missing)}")

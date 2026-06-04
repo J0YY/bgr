@@ -677,6 +677,68 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv and offset3 summary.csv",
         )
     )
+
+    p2048_fullgoal_clean = read_csv_rows(
+        results_dir
+        / "openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1"
+        / "summary.csv"
+    )
+    fullgoal_clean_ratios = {
+        method: ratio(
+            one_row(p2048_fullgoal_clean, "method", method)["successes"],
+            one_row(p2048_fullgoal_clean, "method", method)["episodes"],
+        )
+        for method in ["bgr", "random", "official"]
+    }
+    if len(set(fullgoal_clean_ratios.values())) != 1:
+        raise ValueError("Expected p2048 full-goal clean identity audit to tie BGR, random, and official")
+    claims.append(
+        Claim(
+            "OpenVLA p2048 full-goal clean audit",
+            (
+                f"full-goal identity audit gives {fullgoal_clean_ratios['bgr']} clean successes "
+                "for BGR, matched random, and the official checkpoint"
+            ),
+            "results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
+        )
+    )
+
+    p2048_fullgoal_perturb = read_csv_rows(
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1"
+        / "summary.csv"
+    )
+
+    def perturbed_total(method: str) -> tuple[int, int]:
+        rows = [
+            row
+            for row in p2048_fullgoal_perturb
+            if row["method"] == method and row["perturbation"] != "identity"
+        ]
+        return (
+            sum(int(row["successes"]) for row in rows),
+            sum(int(row["episodes"]) for row in rows),
+        )
+
+    bgr_successes, bgr_episodes = perturbed_total("bgr")
+    official_successes, official_episodes = perturbed_total("official")
+    random_successes, random_episodes = perturbed_total("random")
+    if not (
+        bgr_episodes == official_episodes == random_episodes
+        and bgr_successes == official_successes
+        and random_successes == bgr_successes + 1
+    ):
+        raise ValueError("Expected p2048 full-goal perturbation audit to tie official and trail random by one episode")
+    claims.append(
+        Claim(
+            "OpenVLA p2048 full-goal visual perturbation audit",
+            (
+                f"BGR {bgr_successes}/{bgr_episodes} perturbed successes, tying official "
+                f"and trailing matched random by one episode ({random_successes}/{random_episodes})"
+            ),
+            "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
+        )
+    )
     if not (p1024_pooled_bgr > p1024_pooled_random and p2048_pooled_bgr >= p2048_pooled_random):
         raise ValueError("Expected corrected OpenVLA diagnostics to show a p1024 edge and non-worse p2048 pooled comparison")
     if not (p1024_pooled_bgr < p1024_pooled_official and p2048_pooled_bgr < p2048_pooled_official):
@@ -744,6 +806,14 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
         / "openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1"
         / "summary.csv",
     ]
+    p2048_fullgoal_summary_paths = [
+        results_dir
+        / "openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1"
+        / "summary.csv",
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1"
+        / "summary.csv",
+    ]
     guarded_results = {
         "cleanmix_p1024": p1024_summary_paths,
         "p1024 clean-mix": p1024_summary_paths,
@@ -754,6 +824,9 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
         "p2048 ties": p2048_summary_paths,
         "p2048 offset": p2048_offset_summary_paths,
         "Pooling p2048": p2048_summary_paths + p2048_offset_summary_paths,
+        "full-goal identity audit": p2048_fullgoal_summary_paths,
+        "10-task visual perturbation audit": p2048_fullgoal_summary_paths,
+        "367/400": p2048_fullgoal_summary_paths,
     }
     missing: list[str] = []
     for token, required_paths in guarded_results.items():
