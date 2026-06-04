@@ -2879,6 +2879,13 @@ PYTHONPATH=src:. python3 scripts/run_suffix_experiment.py \
   --out results/suffix_strategy_ablation_30seed_v1
 ```
 
+Slurm submission:
+
+```text
+765450  first suffix strategy ablation submit from commit 25e85e5; failed immediately because the Slurm environment lacked `python`
+765452  repaired suffix strategy ablation submit from commit 25e85e5 using `python3`
+```
+
 Methods:
 
 - `uniform`: uniform suffix replay baseline.
