@@ -218,11 +218,11 @@ BGR adaptation preserves clean competence across the 10-task suite. It remains a
 scoping audit rather than a promoted learned-policy improvement, because BGR
 ties both matched random and the unadapted official checkpoint.
 
-## Queued OpenVLA-OFT p2048 Full-Goal Visual Perturbation Audit
+## Completed OpenVLA-OFT p2048 Full-Goal Visual Perturbation Audit
 
-Queued on 2026-06-04 after the full-goal clean identity audit tied all methods
-at 99/100. This follow-up runs the same 10 LIBERO-Goal tasks with 10 initial
-states for identity, blur, brightness, occlusion, and shift. The launcher now
+Queued and completed on 2026-06-04 after the full-goal clean identity audit tied
+all methods at 99/100. This follow-up runs the same 10 LIBERO-Goal tasks with 10
+initial states for identity, blur, brightness, occlusion, and shift. The launcher
 serializes perturbations within each checkpoint chain, avoiding the shared
 checkpoint config mutation race observed in the earlier p2048 10-trial audit,
 while still running official, BGR, and random chains in parallel.
@@ -245,10 +245,25 @@ scripts/queue_openvla_oft_perturb_eval.sh --submit
 Initial Slurm jobs:
 
 ```text
-764781--764785  official identity -> blur -> brightness -> occlusion -> shift
-764786--764790  BGR identity -> blur -> brightness -> occlusion -> shift
-764791--764795  random identity -> blur -> brightness -> occlusion -> shift
+764781--764785  official identity -> blur -> brightness -> occlusion -> shift completed
+764786--764790  BGR identity -> blur -> brightness -> occlusion -> shift completed
+764791--764795  random identity -> blur -> brightness -> occlusion -> shift completed
 ```
+
+Summary rows:
+
+| Method | Identity | Blur | Brightness | Occlusion | Shift | Mean perturbed |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| BGR clean-mix p2048 | 0.9900 | 0.9800 | 0.9800 | 0.7500 | 0.9600 | 0.9175 |
+| Official OpenVLA-OFT | 0.9900 | 0.9700 | 0.9800 | 0.7400 | 0.9800 | 0.9175 |
+| Random clean-mix p2048 | 0.9900 | 0.9900 | 0.9700 | 0.7400 | 0.9800 | 0.9200 |
+
+Interpretation: the full-goal perturbation audit preserves the bounded OpenVLA
+story. BGR is one episode above official and random on occlusion, but one below
+random on blur and two below official/random on shift. Aggregated over the four
+perturbed conditions, BGR ties official at 367/400 successes and trails matched
+random by one episode at 368/400. This is useful robustness instrumentation and
+variance evidence, not a promoted robotics fine-tuning gain.
 
 ## Completed OpenVLA-OFT p4096 Clean-Mix Scale Diagnostic
 
