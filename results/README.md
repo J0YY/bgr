@@ -2986,6 +2986,15 @@ PYTHONPATH=src:. python3 scripts/run_grid_margin_experiment.py \
   --out results/grid_margin_ablation_replication_30seed_v1
 ```
 
+Slurm submission:
+
+```text
+765072  first 150-task method/seed array failed immediately because the Slurm wrapper used Bash array syntax under `/bin/sh`
+765073  first merge job became DependencyNeverSatisfied and was cancelled
+765223  repaired 150-task method/seed array, `0-149%30`, running with early tasks completing exit 0:0
+765224  repaired merge job, afterok:765223
+```
+
 Expected interpretation if it matches the original ablation: BGR should beat
 the uniform-radius ablation on final RAUC and RAUC AULC, and the uniform-radius
 ablation should remain worse than uniform replay. Until the summary is complete
