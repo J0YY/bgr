@@ -59,6 +59,7 @@ class QueueOpenVlaOftGoalAdaptTest(unittest.TestCase):
         output = self.run_dry()
         self.assertIn('mkdir -p "/tmp/bgr-runs/unit_artifact/logs/bgr"', output)
         self.assertIn('--local_log_dir "/tmp/bgr-runs/unit_artifact/logs/bgr"', output)
+        self.assertIn('BGR_EVAL_ROLLOUT_DIR="/tmp/bgr-runs/unit_artifact/logs/bgr/rollouts"', output)
 
 
 if __name__ == "__main__":

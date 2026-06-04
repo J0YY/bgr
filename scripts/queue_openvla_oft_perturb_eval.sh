@@ -213,14 +213,28 @@ $(exclude_directive)
 
 set -euo pipefail
 source ~/.bashrc || true
-mkdir -p "${local_log_dir}"
+mkdir -p "${local_log_dir}" "${local_log_dir}/rollouts"
 cd "${OPENVLA_OFT_ROOT}"
+echo "Routing rollout videos to ${local_log_dir}/rollouts"
+"${OPENVLA_OFT_PY}" - <<'PY'
+from pathlib import Path
+
+path = Path("experiments/robot/libero/libero_utils.py")
+src = path.read_text()
+old = '    rollout_dir = f"./rollouts/{DATE}"'
+new = '    rollout_dir = os.environ.get("BGR_EVAL_ROLLOUT_DIR", f"./rollouts/{DATE}")'
+if old in src:
+    path.write_text(src.replace(old, new))
+elif new not in src:
+    raise RuntimeError("Could not patch LIBERO rollout directory")
+PY
 echo "Evaluating ${method} perturbation=${perturbation_name} type=${perturbation_type} params=${perturbation_params} on \$(hostname) at \$(date -Is)"
 env WANDB_MODE=disabled \\
   HF_HOME="${REMOTE_HF_HOME}" \\
   TRANSFORMERS_CACHE="${REMOTE_TRANSFORMERS_CACHE}" \\
   MUJOCO_GL=egl \\
   PYOPENGL_PLATFORM=egl \\
+  BGR_EVAL_ROLLOUT_DIR="${local_log_dir}/rollouts" \\
   BGR_EVAL_PERTURBATION_TYPE='${perturbation_type}' \\
   BGR_EVAL_PERTURBATION_PARAMS='${perturbation_params}' \\
   PYTHONPATH="${OPENVLA_OFT_ROOT}:${LIBERO_ROOT}:${OPENVLA_OFT_SITE}" \\

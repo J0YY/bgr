@@ -183,6 +183,40 @@ Repaired Slurm submission:
 764970--764974  random identity -> blur -> brightness -> occlusion -> shift, afterok:764963
 ```
 
+Failure accounting and storage repair:
+
+```text
+764944  official identity eval failed on c2-g4-22 at 2026-06-04T15:22:48 after 43:57, before a final summary
+764961  BGR clean eval failed on c2-g4-22 at 2026-06-04T15:22:48 after 35:30, before a final summary
+764963  random merge failed on c2-g4-22 at 2026-06-04T15:22:48 after 33:07, after partial merged checkpoint shards
+764965  BGR identity perturb eval failed on c2-g4-22 at 2026-06-04T15:22:48 after 35:30, before a final summary
+764945--764948, 764964, 764966--764974  cancelled because their dependencies no longer had complete evidence
+```
+
+The failed logs did not contain Python tracebacks, out-of-memory signatures, or
+complete `Overall success rate` summaries. A follow-up quota check showed the
+shared run filesystem at 100% use, with partial merged checkpoint shards and
+checkout-level rollout videos consuming writable space. Obsolete raw merged
+checkpoint roots from superseded OpenVLA sweeps were removed after their
+summaries had already been copied into the package ledger; the filesystem then
+reported roughly 386 GB free. The clean and perturbation queue launchers now
+route rollout videos through `BGR_EVAL_ROLLOUT_DIR` under each job's
+`local_log_dir` instead of the shared OpenVLA-OFT checkout `./rollouts` path.
+
+Second repair submission:
+
+```text
+764976  random repair1 adapt failed immediately while the filesystem was still full
+764977--764978  cancelled after 764976 failed
+764980  random repair1 adapt, running at ledger update
+764981  random repair1 merge, afterok:764980
+764982  random repair1 clean eval, afterok:764981
+764983--764997  first repair1 perturb chain superseded because the submitted LIBERO path was invalid; identity jobs failed before evaluation
+764998--765002  official repair2 identity -> blur -> brightness -> occlusion -> shift
+765003--765007  BGR repair2 identity -> blur -> brightness -> occlusion -> shift
+765008--765012  random repair2 identity -> blur -> brightness -> occlusion -> shift, afterok:764981
+```
+
 ## Completed OpenVLA-OFT p2048 Image-Augmentation Adaptation Audit
 
 Queued and completed on 2026-06-04 after the full-goal p2048 clean and perturbation audits
