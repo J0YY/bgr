@@ -51,9 +51,12 @@ Do not add another result to the manuscript if it has any of these properties:
 ## Next Experiment Candidates
 
 1. Taxi-v3 recovery replay, with taxi-position perturbations and fixed
-   passenger/destination state. This is promising because the environment is
-   canonical, resettable, and has exact feasibility, but the scratch prototype
-   must be optimized before it can produce reliable evidence.
+   passenger/destination state. An optimized internal probe now exists at
+   `tools/taxi_recovery_probe.py`, but the first 4-seed diagnostic is negative
+   for promotion: at 120 iterations, final RAUC is 0.9963 for uniform, 1.0000
+   for failure-only, 0.9960 for TD-loss, 0.9763 for BGR-uniform-radius, 0.9650
+   for BGR-coverage, and 0.9578 for BGR. This protocol saturates simple
+   baselines and should not be added to the paper.
 2. A faster discrete control benchmark with exact reset states and a
    pre-registered perturbation family. CliffWalking and FrozenLake currently
    look negative for BGR under the tested protocols.
@@ -63,8 +66,9 @@ Do not add another result to the manuscript if it has any of these properties:
 
 ## Immediate Engineering Work
 
-- Implement a cached Taxi-v3 diagnostic before running more seeds.
+- If Taxi is revisited, change the pre-registered perturbation/training budget
+  first, then rerun a small diagnostic before any 30-seed scale-up.
 - Add a small smoke test for Taxi transition dynamics against the Gym Taxi map
-  if the diagnostic is promoted.
+  only if the diagnostic is promoted into `src/`.
 - Keep scratch negative runs out of the anonymous package unless they are being
   used as explicit limitations.
