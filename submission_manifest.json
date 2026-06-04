@@ -26,6 +26,11 @@
       "size_bytes": 426
     },
     {
+      "path": "configs/frozenlake_recovery_30seed.yaml",
+      "sha256": "825b4fa140b7d86c06f99b4553bb13a450d91db8a98b4c062503304218bc07b4",
+      "size_bytes": 922
+    },
+    {
       "path": "configs/grid_bgr.yaml",
       "sha256": "32641bd394aa6c09a3ef92aa0708f9c0c2f67fa3e00e1da971ec1ea678e94884",
       "size_bytes": 642
@@ -412,8 +417,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "f11c1f11a8d6982da89f48b407c06d2daf77eaff11594f28a851d613749fe9b0",
-      "size_bytes": 211537
+      "sha256": "83ad46f8c88ffc4944f0002955410017a0247ec6764b06f74feb4a6059d1a77e",
+      "size_bytes": 212753
     },
     {
       "path": "results/environment_v1/README.md",
@@ -692,8 +697,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "042ac1ae6f729531a1cac20771f90d1adbb536fcf7b00511e778f136904982c9",
-      "size_bytes": 223415
+      "sha256": "f1e1b9b3b24a552756be625bb364d685f7204539cc43ab250084798695f55ffc",
+      "size_bytes": 223649
     },
     {
       "path": "scripts/collect_environment.py",
@@ -786,6 +791,11 @@
       "size_bytes": 4573
     },
     {
+      "path": "scripts/run_frozenlake_recovery_experiment.py",
+      "sha256": "aa3cefd5651bb2814356b9e9ef27ad8351aa5a784f010741ad02d8c92076f728",
+      "size_bytes": 2800
+    },
+    {
       "path": "scripts/run_grid_experiment.py",
       "sha256": "a700c87e83ea3a3bf93eee69b2483d35325b4ffa4dadd99f7f6509b2eec6f041",
       "size_bytes": 2752
@@ -876,6 +886,11 @@
       "size_bytes": 58
     },
     {
+      "path": "src/bgr/envs/frozenlake_recovery.py",
+      "sha256": "6e4d96e741a9385ab835875d10fb60939d41ade68855d64617f3739039bd29a2",
+      "size_bytes": 10343
+    },
+    {
       "path": "src/bgr/envs/grid_recovery.py",
       "sha256": "f89bf283dce096bd48aa5245f2af42c85546944aaaea20b4509c86f48d941904",
       "size_bytes": 17168
@@ -899,6 +914,11 @@
       "path": "src/bgr/experiments/estimator.py",
       "sha256": "635797d7fce43917ec1f5c66bec228289442afc47a304fd72f863fea1f5c6e8c",
       "size_bytes": 3964
+    },
+    {
+      "path": "src/bgr/experiments/frozenlake_recovery.py",
+      "sha256": "834e2c37d6c036459934963111ea9ca05efd3284d90c6e42e69c3662db3309ba",
+      "size_bytes": 10433
     },
     {
       "path": "src/bgr/experiments/grid.py",
@@ -989,6 +1009,11 @@
       "path": "tests/test_filter_openvla_oft_examples.py",
       "sha256": "0420223459744bad0c38c63cf4c7d9053625d34ead7fe3586d5d17c073d9d875",
       "size_bytes": 2115
+    },
+    {
+      "path": "tests/test_frozenlake_recovery.py",
+      "sha256": "de0e0ff23a1f9a4478c24256ecc4eecd46623aef1d71333f985d88796c676b95",
+      "size_bytes": 1930
     },
     {
       "path": "tests/test_grid_margin.py",

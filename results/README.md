@@ -201,6 +201,31 @@ Initial Slurm submission:
 765601--765605  random identity -> blur -> brightness -> occlusion -> shift, afterok:765589
 ```
 
+Initial submission outcome:
+
+```text
+765585  BGR adapt completed, exit 0:0, elapsed 00:10:39
+765586  BGR merge cancelled on c2-g4-19 during model load before a Python traceback or merged checkpoint
+765587--765590  dependent BGR clean eval and random train/merge/eval cancelled after the merge cancellation
+765591  official identity comparator completed, 99/100 successes
+765592--765605  remaining official/BGR/random perturbation jobs cancelled before complete evidence
+```
+
+Repair submission excludes the cancelled merge node and uses a fresh tag so
+complete summaries will not mix partial and repaired outputs:
+
+```text
+765627  BGR repair1 adapt
+765628  BGR repair1 merge, afterok:765627
+765629  BGR repair1 clean 10-task/10-trial eval, afterok:765628
+765630  random repair1 adapt, afterok:765627
+765631  random repair1 merge, afterok:765630
+765632  random repair1 clean 10-task/10-trial eval, afterok:765631
+765635--765639  official repair1 identity -> blur -> brightness -> occlusion -> shift comparator chain
+765640--765644  BGR repair1 identity -> blur -> brightness -> occlusion -> shift, afterok:765628
+765645--765649  random repair1 identity -> blur -> brightness -> occlusion -> shift, afterok:765631
+```
+
 ## Completed OpenVLA-OFT p2048 300-Step Image-Augmentation Continuation
 
 Launched on 2026-06-04 after the 100-step p2048 image-augmentation audit
