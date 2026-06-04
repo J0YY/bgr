@@ -178,6 +178,7 @@ def main() -> None:
         write_csv(out_dir / "openvla_stats.csv", openvla_rows)
         write_openvla_table(out_dir / "openvla_table.tex", openvla_rows)
     try:
+        make_boundary_intuition_figure(out_dir)
         make_figures(out_dir, summary_rows)
         if estimator_rows:
             make_estimator_figure(out_dir, estimator_rows)
@@ -712,6 +713,7 @@ def fmt(row: dict) -> str:
 def make_figures(out_dir: Path, rows: list[dict]) -> None:
     import matplotlib.pyplot as plt
 
+    configure_matplotlib_pdf_fonts(plt)
     for metric in ["RAUC", "AULC", "Clean"]:
         fig, axes = plt.subplots(1, 3, figsize=(8.2, 2.4), sharey=False)
         for ax, benchmark in zip(axes, ["Synthetic", "GridMargin", "RobotSuffix"], strict=True):
@@ -733,9 +735,58 @@ def make_figures(out_dir: Path, rows: list[dict]) -> None:
         plt.close(fig)
 
 
+def make_boundary_intuition_figure(out_dir: Path) -> None:
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    configure_matplotlib_pdf_fonts(plt)
+    sigma = np.linspace(0.0, 1.0, 240)
+    clean = 0.94
+    radius = 0.42
+    recovery = clean / (1.0 + np.exp((sigma - radius) / 0.055))
+    alpha = 0.8
+    threshold = alpha * clean
+    boundary_density = np.exp(-0.5 * ((sigma - radius) / 0.075) ** 2)
+    boundary_density = 0.26 * boundary_density / boundary_density.max()
+    uniform_density = np.full_like(sigma, 0.055)
+
+    fig, axes = plt.subplots(1, 2, figsize=(6.4, 2.1))
+    ax = axes[0]
+    ax.plot(sigma, recovery, color="#1f77b4", linewidth=2.0, label="Recovery curve")
+    ax.axhline(threshold, color="#666666", linestyle="--", linewidth=1.0, label=r"$0.8 R(0)$")
+    ax.axvline(radius, color="#d62728", linestyle=":", linewidth=1.4, label=r"$r_{80}$")
+    ax.fill_between(sigma, recovery, color="#1f77b4", alpha=0.16)
+    ax.set_xlabel("Perturbation radius")
+    ax.set_ylabel("Success probability")
+    ax.set_ylim(0, 1.02)
+    ax.set_xlim(0, 1.0)
+    ax.grid(alpha=0.22, linewidth=0.5)
+    ax.legend(loc="upper right", fontsize=6.7, frameon=False)
+
+    ax = axes[1]
+    ax.fill_between(sigma, boundary_density, color="#1f77b4", alpha=0.42, label="Boundary-centered")
+    ax.plot(sigma, boundary_density, color="#1f77b4", linewidth=1.6)
+    ax.fill_between(sigma, uniform_density, color="#b8b8b8", alpha=0.55, label="Uniform radius")
+    ax.plot(sigma, uniform_density, color="#666666", linewidth=1.1)
+    ax.axvline(radius, color="#d62728", linestyle=":", linewidth=1.4)
+    ax.set_xlabel("Training perturbation radius")
+    ax.set_ylabel("Sampling mass")
+    ax.set_ylim(0, 0.30)
+    ax.set_xlim(0, 1.0)
+    ax.set_yticks([])
+    ax.grid(axis="x", alpha=0.22, linewidth=0.5)
+    ax.legend(loc="upper right", fontsize=6.7, frameon=False)
+
+    fig.tight_layout(w_pad=1.2)
+    fig.savefig(out_dir / "boundary_intuition.pdf")
+    fig.savefig(out_dir / "boundary_intuition.png", dpi=200)
+    plt.close(fig)
+
+
 def make_estimator_figure(out_dir: Path, rows: list[dict]) -> None:
     import matplotlib.pyplot as plt
 
+    configure_matplotlib_pdf_fonts(plt)
     labels = [str(row["method"]).replace("Active ", "") for row in rows]
     means = [float(row["r80_mae_mean"]) for row in rows]
     errors = [float(row["r80_mae_sem"]) for row in rows]
@@ -760,6 +811,10 @@ def short_label(label: str) -> str:
         "BGR-Suffix": "BGR",
         "Clean FT": "Clean",
     }.get(label, label)
+
+
+def configure_matplotlib_pdf_fonts(plt) -> None:
+    plt.rcParams.update({"pdf.fonttype": 42, "ps.fonttype": 42})
 
 
 def mean(vals: list[float]) -> float:

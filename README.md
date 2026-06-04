@@ -15,7 +15,9 @@ replication, and a held-out suffix BGR-vs-uniform replication.
 The package also includes a 30-seed suffix stress sweep over teacher quality,
 clutter, feasibility, and boundary sharpness.
 OpenVLA/LIBERO results are included as recovery-curve, selection, and
-data-plumbing audits rather than robotics fine-tuning claims.
+data-plumbing audits rather than robotics fine-tuning claims. The packaged
+action-label/TFDS plumbing audit validates 2,048-transition matched BGR/random
+exports with 7D actions and 8D state, but does not claim a stable policy gain.
 
 The anonymous submission archive contains `submission_manifest.json` plus the
 files it declares. Only those archive entries should be treated as the anonymous
@@ -60,7 +62,7 @@ summary artifacts listed in the evidence index.
 | Active boundary probing estimates useful critical radii at a small fixed rollout budget. | `paper/figures/estimator_stats.csv`, `paper/figures/estimator_table.tex`, `results/estimator_pair_30seed_v1/summary.csv`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the estimator prose; `scripts/check_submission_package.py` checks the generated estimator table and the 30-seed estimator confirmation. |
 | Radius-level boundary sampling is the important BGR ablation in the grid-margin benchmark. | `results/grid_margin_ablation_30seed_v1/summary.csv`, `results/grid_margin_ablation_replication_30seed_v1/summary.csv`, `results/grid_margin_ablation_15seed_v1/summary.csv`, `paper/figures/grid_margin_ablation_table.tex`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the ablation prose against the original and held-out 30-seed summaries; `scripts/check_submission_package.py` checks the 30-seed mechanism confirmation and regenerates aggregate tables and significance artifacts exactly. |
 | Coverage-aware BGR-Suffix is positive manipulation-style evidence but not a final robotics claim. | `results/suffix_coverage_full_30seed_v1/summary.csv`, `results/suffix_coverage_full_replication_30seed_v1/summary.csv`, `results/suffix_strategy_coverage_30seed_v1/summary.csv`, `results/suffix_strategy_coverage_replication_30seed_v1/summary.csv`, `results/suffix_strategy_ablation_30seed_v1/summary.csv`, `results/suffix_stress_sensitivity_30seed_v1/summary.csv`, `paper/figures/suffix_stress_sensitivity_stats.csv`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the full-baseline RAUC rows, strategy ablation, stress sweep, clean, transfer, AULC, and median-r80 caveat prose. |
-| The learned-policy OpenVLA/LIBERO path is an audit, not a robotics fine-tuning claim. | `results/libero_probe_v2/summary.csv`, `results/openvla_teacher_replay_manifest_v1/summary.json`, and the packaged OpenVLA-OFT audit summaries listed below. | `scripts/check_submission_package.py` enforces paper-facing audit wording and keeps paper-negative scale-diagnostic outputs out of the anonymous manifest. |
+| The learned-policy OpenVLA/LIBERO path is an audit, not a robotics fine-tuning claim. | `results/libero_probe_v2/summary.csv`, `results/openvla_teacher_replay_manifest_v1/summary.json`, `results/openvla_action_tfds_validation_v1/summary.json`, and the packaged OpenVLA-OFT audit summaries listed below. | `scripts/check_submission_package.py` enforces paper-facing audit wording and keeps paper-negative scale-diagnostic outputs out of the anonymous manifest. |
 
 Grid-margin robustness/scope diagnostic artifacts:
 
@@ -79,6 +81,7 @@ OpenVLA-OFT packaged audit summaries:
 - OpenVLA selection/audit stats: `paper/figures/openvla_stats.csv`
 - OpenVLA recovery audit source: `results/libero_openvla_recovery_v1/summary.csv`
 - OpenVLA selection audit source: `results/libero_openvla_boundary_selection_balanced_v1/aggregate.csv`
+- OpenVLA action-label/TFDS validation source: `results/openvla_action_tfds_validation_v1/summary.json`
 - official-checkpoint sanity audit: `results/openvla_oft_sanity_eval_sanity_v1/summary.csv`
 - 1,000-step balanced2048 data-plumbing audit: `results/openvla_oft_eval_balanced2048_step1000_v1/summary.csv`
 - p1024 clean adaptation audit: `results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv`

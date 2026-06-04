@@ -597,6 +597,38 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             "results/openvla_teacher_replay_manifest_v1/summary.json",
         )
     )
+    action_tfds = read_json(results_dir / "openvla_action_tfds_validation_v1" / "summary.json")
+    expected_action_tfds = {
+        "teacher_action_rows": 11776,
+        "matched_tfds_transitions_per_method": 2048,
+        "matched_tfds_trajectories_per_method": 32,
+        "action_dim": 7,
+        "state_dim": 8,
+    }
+    for key, value in expected_action_tfds.items():
+        if int(action_tfds[key]) != value:
+            raise ValueError(f"Expected OpenVLA action/TFDS validation {key}={value}")
+    if action_tfds["loader_validation"]["action_shape"] != [64, 7]:
+        raise ValueError("Expected OpenVLA loader action shape [64, 7]")
+    if action_tfds["loader_validation"]["proprio_shape"] != [64, 8]:
+        raise ValueError("Expected OpenVLA loader proprio shape [64, 8]")
+    if action_tfds["loader_validation"]["stats_action_mean_shape"] != [7]:
+        raise ValueError("Expected OpenVLA action-stat shape [7]")
+    if action_tfds["loader_validation"]["stats_proprio_mean_shape"] != [8]:
+        raise ValueError("Expected OpenVLA proprio-stat shape [8]")
+    if action_tfds["lora_smoke"]["max_steps"] != 10 or not all(
+        action_tfds["lora_smoke"]["checkpoint_written"].values()
+    ):
+        raise ValueError("Expected matched OpenVLA 10-step LoRA checkpoint smokes")
+    if action_tfds["closed_loop_finetuning_gain_claim"] is not False:
+        raise ValueError("OpenVLA action/TFDS validation artifact must not claim a fine-tuning gain")
+    claims.append(
+        Claim(
+            "OpenVLA action/TFDS validation",
+            "action-label/TFDS plumbing validates 2,048-transition matched BGR/random exports with 7D actions and 8D state",
+            "results/openvla_action_tfds_validation_v1/summary.json",
+        )
+    )
 
     sanity = read_csv_rows(results_dir / "openvla_oft_sanity_eval_sanity_v1" / "summary.csv")
     official = one_row(sanity, "method", "oft-goal")
@@ -943,6 +975,9 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
         / "openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1"
         / "summary.csv",
     ]
+    action_tfds_summary_paths = [
+        results_dir / "openvla_action_tfds_validation_v1" / "summary.json",
+    ]
     guarded_results = {
         "cleanmix_p1024": p1024_summary_paths,
         "p1024 clean-mix": p1024_summary_paths,
@@ -958,6 +993,8 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
         "367/400": p2048_fullgoal_summary_paths,
         "300-step image-augmentation continuation": p2048_imageaug_300_summary_paths,
         "368/400": p2048_imageaug_300_summary_paths,
+        "action-label/TFDS plumbing validates": action_tfds_summary_paths,
+        "2,048-transition matched BGR/random exports": action_tfds_summary_paths,
     }
     missing: list[str] = []
     for token, required_paths in guarded_results.items():

@@ -94,7 +94,9 @@ uniform with 30/0 paired wins on clean success, final object RAUC, transfer
 RAUC, and AULC in all four stress cases, while preserving the uniform
 median-r80 caveat.
 The OpenVLA-OFT bridge includes corrected clean-mix diagnostics that preserve
-competence while keeping the claim scoped. The pooled p1024
+competence while keeping the claim scoped. The packaged action-label/TFDS
+plumbing audit validates 2,048-transition matched BGR/random exports with 7D
+actions and 8D state. The pooled p1024
 visual-perturbation evidence gives BGR 0.8550 vs. 0.8400 for random, trailing
 official at 0.8700. At p2048, the full-goal identity audit gives 99/100 clean
 successes for BGR, matched random, and the official checkpoint. The 10-task
@@ -103,5 +105,5 @@ and trailing matched random by one episode (368/400). The 300-step
 image-augmentation continuation gives BGR and matched random 368/400 perturbed
 successes each, only one episode above official (367/400), while BGR trails both
 on identity. OpenVLA therefore remains
-an audit of recovery curves, matched data construction, and OpenVLA-OFT plumbing
+an audit of recovery curves, matched action/TFDS construction, and OpenVLA-OFT plumbing
 rather than a robotics success claim.

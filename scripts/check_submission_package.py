@@ -366,6 +366,8 @@ PAPER_FIGURE_ARTIFACTS = [
 PAPER_GENERATED_VISUAL_ARTIFACTS = [
     "paper/figures/aulc_bars.pdf",
     "paper/figures/aulc_bars.png",
+    "paper/figures/boundary_intuition.pdf",
+    "paper/figures/boundary_intuition.png",
     "paper/figures/clean_bars.pdf",
     "paper/figures/clean_bars.png",
     "paper/figures/estimator_r80_mae.pdf",
@@ -405,6 +407,7 @@ SIGNIFICANCE_TEXT_ARTIFACTS = [
 OPENVLA_CLAIM_ARTIFACTS = [
     "results/libero_probe_v2/summary.csv",
     "results/openvla_teacher_replay_manifest_v1/summary.json",
+    "results/openvla_action_tfds_validation_v1/summary.json",
     "results/openvla_oft_sanity_eval_sanity_v1/summary.csv",
     "results/openvla_oft_eval_balanced2048_step1000_v1/summary.csv",
     "results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
@@ -450,6 +453,7 @@ CHECKED_CLAIM_ARTIFACTS = [
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_sanity_eval_sanity_v1/summary.csv",
+    "results/openvla_action_tfds_validation_v1/summary.json",
     "results/openvla_teacher_replay_manifest_v1/summary.json",
     "results/suffix_coverage_full_30seed_v1/summary.csv",
     "results/suffix_coverage_full_replication_30seed_v1/summary.csv",
@@ -1350,8 +1354,11 @@ def check_results_evidence_index(root: Path) -> list[str]:
         "results/libero_openvla_recovery_v1/summary.csv",
         "results/libero_openvla_boundary_selection_balanced_v1/aggregate.csv",
         "results/openvla_teacher_replay_manifest_v1/summary.json",
+        "results/openvla_action_tfds_validation_v1/summary.json",
         "results/openvla_oft_sanity_eval_sanity_v1/summary.csv",
         "results/openvla_oft_eval_balanced2048_step1000_v1/summary.csv",
+        "action-label/TFDS plumbing audit",
+        "2,048-transition matched BGR/random exports",
         "official-checkpoint sanity audit",
         "1,000-step balanced2048 data-plumbing audit",
         "p1024 clean adaptation audit",
@@ -1433,6 +1440,7 @@ def check_root_readme_openvla_status(root: Path) -> list[str]:
         "Detailed OpenVLA commands, Slurm IDs, copied artifacts, and summaries are in `results/README.md`",
         "The top-level claim is scoped",
         "rather than robotics fine-tuning performance",
+        "action-label/TFDS plumbing audit validates 2,048-transition matched BGR/random exports with 7D actions and 8D state",
         "The packaged useful audit scale is p1024/p2048 clean-mix adaptation",
         "At p1024, BGR and matched random tie clean at 14/15",
         "pooling the original and offset-3 visual perturbation evals gives BGR 0.8550 vs. 0.8400 for random",
@@ -1473,6 +1481,7 @@ def check_paper_readme_openvla_status(root: Path) -> list[str]:
         "The 30-seed suffix stress confirmation",
         "BGR-Coverage beats uniform with 30/0 paired wins on clean success, final object RAUC, transfer RAUC, and AULC in all four stress cases",
         "OpenVLA-OFT bridge includes corrected clean-mix diagnostics that preserve competence while keeping the claim scoped",
+        "packaged action-label/TFDS plumbing audit validates 2,048-transition matched BGR/random exports with 7D actions and 8D state",
         "pooled p1024 visual-perturbation evidence gives BGR 0.8550 vs. 0.8400 for random",
         "trailing official at 0.8700",
         "At p2048, the full-goal identity audit gives 99/100 clean successes",
@@ -1591,7 +1600,8 @@ def check_paper_readme_submission_framing(root: Path) -> list[str]:
         "procedural grid-margin section reports the completed 30-seed full-baseline confirmation",
         "robot-suffix simulator reports a 30-seed coverage-aware BGR-Suffix variant",
         "OpenVLA-OFT bridge includes corrected clean-mix diagnostics",
-        "OpenVLA therefore remains an audit of recovery curves, matched data construction, and OpenVLA-OFT plumbing rather than a robotics success claim",
+        "action-label/TFDS plumbing audit validates 2,048-transition matched BGR/random exports with 7D actions and 8D state",
+        "OpenVLA therefore remains an audit of recovery curves, matched action/TFDS construction, and OpenVLA-OFT plumbing rather than a robotics success claim",
     ]
     normalized_text = normalize_space(text)
     missing = [snippet for snippet in required if snippet not in normalized_text]
@@ -3671,6 +3681,7 @@ def check_root_readme_submission_framing(root: Path) -> list[str]:
         "30-seed robot-suffix coverage comparison",
         "OpenVLA/LIBERO results are included as recovery-curve, selection, and data-plumbing audits",
         "rather than robotics fine-tuning claims",
+        "action-label/TFDS plumbing audit validates 2,048-transition matched BGR/random exports with 7D actions and 8D state",
         "## Reviewer Navigation",
         "Start with `paper/main.pdf` for the anonymous manuscript",
         "results/README.md#submission-evidence-index",
@@ -3707,6 +3718,7 @@ def check_root_readme_submission_framing(root: Path) -> list[str]:
         "paper/figures/suffix_stress_sensitivity_stats.csv",
         "The learned-policy OpenVLA/LIBERO path is an audit, not a robotics fine-tuning claim",
         "packaged OpenVLA-OFT audit summaries listed below",
+        "results/openvla_action_tfds_validation_v1/summary.json",
         "Grid-margin robustness/scope diagnostic artifacts",
         "paper/figures/grid_margin_learning_curve_stats.csv",
         "results/grid_margin_full_15seed_v1/results.json",
@@ -3730,6 +3742,7 @@ def check_root_readme_submission_framing(root: Path) -> list[str]:
         "OpenVLA-OFT packaged audit summaries",
         "OpenVLA recovery audit source",
         "OpenVLA selection audit source",
+        "OpenVLA action-label/TFDS validation source",
         "official-checkpoint sanity audit",
         "1,000-step balanced2048 data-plumbing audit",
         "p1024 clean adaptation audit",
@@ -3742,6 +3755,7 @@ def check_root_readme_submission_framing(root: Path) -> list[str]:
         "paper/figures/openvla_stats.csv",
         "results/libero_openvla_recovery_v1/summary.csv",
         "results/libero_openvla_boundary_selection_balanced_v1/aggregate.csv",
+        "results/openvla_action_tfds_validation_v1/summary.json",
         "results/openvla_oft_sanity_eval_sanity_v1/summary.csv",
         "results/openvla_oft_eval_balanced2048_step1000_v1/summary.csv",
         "results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
@@ -3956,6 +3970,7 @@ def check_manuscript_framing(path: Path) -> list[str]:
             "over uniform and coarse probing",
             "close to the coarse sweep",
             "The current strongest evidence is controlled procedural margin expansion",
+            "full robotics claim still requires action-label validation",
         ]
         if snippet in normalized_text
     ]
@@ -3964,7 +3979,7 @@ def check_manuscript_framing(path: Path) -> list[str]:
     if "local margin-update model.\n\\textbf{Proposition 1.}" in text:
         raise ValueError(f"{path}: Proposition 1 should start a new paragraph in the rendered manuscript")
     required = [
-        "in a robot-suffix simulator, a coverage-aware BGR variant improves",
+        "In a robot-suffix simulator, a coverage-aware BGR variant improves",
         "coverage-aware boundary replay expand recovery margins",
         "Instantiations of the BGR interface",
         "The first three rows are training experiments",
@@ -3980,14 +3995,22 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "four stress regimes",
         "A four-condition 30-seed suffix stress sweep varies teacher quality",
         "while still trailing uniform on median critical radius",
-        "five-seed exploratory variants are reported only as exploratory evidence",
+        "Five-seed exploratory variants are reported only as exploratory evidence",
         "OpenVLA/LIBERO results are learned-policy audits and infrastructure checks, not BGR fine-tuning claims",
         "OpenVLA is a learned-policy audit rather than a robotics training claim",
+        "action-label/TFDS plumbing validates 2,048-transition matched BGR/random exports with 7D actions and 8D state",
+        "matched action/TFDS construction",
+        "Geometric intuition for BGR",
+        "We treat exact paired sign tests as consistency checks over shared seeds, not as substitutes for effect size",
+        "The following local argument is intuition for the radius sampler, not a convergence or global robustness theorem",
+        "BGR depends on a feasibility witness",
+        "synthetic and grid-margin benchmarks are constructed to expose recovery curves",
+        "RAUC and AULC are useful for measuring curve expansion, but they are author-defined integrals",
         "300-step image-augmentation continuation",
         "measure learned-policy brittleness and build matched fine-tuning datasets",
-        "report them as audits, not as final robotics fine-tuning claims",
+        "current adaptation does not establish stable gains over the official checkpoint",
         "BGR converts recovery-margin measurement into a replay curriculum",
-        "OpenVLA/LIBERO audits make the learned-policy path concrete while bounding the current claim",
+        "current learned-policy evidence remains an audit, not the final robotics result",
         "Active BGR improves boundary-hit rate over uniform probing at the same rollout budget",
     ]
     missing = [snippet for snippet in required if snippet not in normalized_text]
@@ -4338,7 +4361,15 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
     required = ["p1024", "0.8333", "0.8000", "0.8167", "0.8550", "0.8400", "0.8700"]
     if "p2048" in source_text:
         required.extend(["p2048", "99/100", "367/400", "368/400"])
+    if "action-label/TFDS plumbing" in source_text:
+        required.extend(["action-label/TFDS plumbing", "7D actions", "8D state"])
     missing = [snippet for snippet in required if snippet not in normalized_rendered_text]
+    if (
+        "action-label/TFDS plumbing" in source_text
+        and "2,048-transition" not in normalized_rendered_text
+        and "2,048transition" not in normalized_rendered_text
+    ):
+        missing.append("2,048-transition")
     if missing:
         raise ValueError(f"{pdf_path}: missing rendered OpenVLA snippet(s): {', '.join(missing)}")
     suffix = "/p2048" if "p2048" in source_text else ""

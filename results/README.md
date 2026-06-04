@@ -82,6 +82,10 @@ Packaged OpenVLA audit artifacts are:
   source selection summary used to generate the OpenVLA audit stats.
 - `results/openvla_teacher_replay_manifest_v1/summary.json`: teacher-replay
   data-plumbing audit.
+- `results/openvla_action_tfds_validation_v1/summary.json`: compact
+  action-label/TFDS plumbing audit validating 2,048-transition matched
+  BGR/random exports with 7D actions, 8D state, stock loader ingestion, and
+  matched 10-step checkpoint smokes.
 - `results/openvla_oft_sanity_eval_sanity_v1/summary.csv`: official-checkpoint
   sanity audit.
 - `results/openvla_oft_eval_balanced2048_step1000_v1/summary.csv`: 1,000-step
@@ -117,6 +121,17 @@ diagnostic sections are included for auditability.
 Older troubleshooting sections may retain labels such as Queued command to
 record original Slurm submissions; those labels are provenance, not active
 experiment status.
+
+## Packaged OpenVLA Action/TFDS Validation
+
+`results/openvla_action_tfds_validation_v1/summary.json` is a compact,
+path-free summary derived from the teacher-replay manifest, matched 2048-step
+packing summaries, stock OpenVLA-OFT loader validation, and matched 10-step LoRA
+checkpoint smokes. It validates OpenVLA teacher actions, 7D action labels, 8D
+state/proprio fields, matched BGR/random TFDS exports, loader/stat shapes, and
+checkpoint writeability. It is infrastructure evidence only; the paper still
+treats OpenVLA as an audit because the learned adaptation does not stably beat
+both matched random selection and the official checkpoint.
 
 ## Completed OpenVLA-OFT p2048 300-Step Image-Augmentation Continuation
 

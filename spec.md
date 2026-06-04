@@ -24,7 +24,9 @@ The current evidence is tiered:
   30-seed sweeps and four suffix stress regimes, while uniform remains higher on
   median critical radius.
 - OpenVLA/LIBERO experiments are audits of recovery-curve measurement,
-  boundary selection, data plumbing, and bounded full-goal evaluation. They are
+  boundary selection, action-label/TFDS plumbing, and bounded full-goal
+  evaluation. The compact OpenVLA validation artifact verifies 2,048-transition
+  matched BGR/random exports with 7D actions and 8D state, but these audits are
   not positive BGR fine-tuning evidence because BGR does not stably outperform
   both matched random selection and the unadapted official checkpoint.
 

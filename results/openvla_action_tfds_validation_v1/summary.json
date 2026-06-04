@@ -1,0 +1,60 @@
+{
+  "source_artifacts": [
+    "results/openvla_teacher_replay_manifest_v1/summary.json",
+    "results/openvla_oft_pack_bgr_balanced2048_v1/summary.json",
+    "results/openvla_oft_pack_random_balanced2048_v1/summary.json",
+    "results/openvla_oft_loader_balanced2048_v1/summary.json",
+    "results/openvla_oft_finetune_bgr_balanced2048_step10_v1/summary.json",
+    "results/openvla_oft_finetune_random_balanced2048_step10_v1/summary.json"
+  ],
+  "teacher_action_rows": 11776,
+  "methods": [
+    "bgr_boundary",
+    "random_balanced"
+  ],
+  "boundary_rows_per_method": {
+    "bgr_boundary": 5888,
+    "random_balanced": 5888
+  },
+  "perturbation_families": [
+    "blur",
+    "brightness",
+    "occlusion",
+    "shift"
+  ],
+  "matched_tfds_transitions_per_method": 2048,
+  "matched_tfds_trajectories_per_method": 32,
+  "action_dim": 7,
+  "state_dim": 8,
+  "image_shape": [
+    224,
+    224,
+    3
+  ],
+  "loader_validation": {
+    "dataset_name": "libero_goal_no_noops",
+    "action_shape": [
+      64,
+      7
+    ],
+    "proprio_shape": [
+      64,
+      8
+    ],
+    "stats_action_mean_shape": [
+      7
+    ],
+    "stats_proprio_mean_shape": [
+      8
+    ]
+  },
+  "lora_smoke": {
+    "max_steps": 10,
+    "checkpoint_written": {
+      "bgr_boundary": true,
+      "random_balanced": true
+    }
+  },
+  "closed_loop_finetuning_gain_claim": false,
+  "interpretation": "Compact path-free validation summary for OpenVLA teacher actions, matched TFDS export, OpenVLA-OFT loader ingestion, and 10-step checkpoint smoke. This validates action-label/TFDS plumbing only; it is not evidence of a positive robotics fine-tuning gain."
+}
