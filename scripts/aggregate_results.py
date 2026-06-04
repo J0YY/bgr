@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 BENCHMARKS = {
-    "toy_15seed_v1": {
+    "toy_30seed_v1": {
         "label": "Synthetic",
         "primary": ["bgr", "uniform", "fixed", "failure_only", "plr_loss"],
         "display": {

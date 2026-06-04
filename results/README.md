@@ -7,10 +7,10 @@ All heavy runs are launched through `~/remote_srun.sh` and write outputs under
 
 Primary controlled evidence for the paper is:
 
-- `results/toy_15seed_v1/summary.csv`: 15 paired seeds for the controlled
+- `results/toy_30seed_v1/summary.csv`: 30 paired seeds for the controlled
   synthetic recovery-margin benchmark.
-- `results/toy_30seed_v1/summary.csv`: 30-seed synthetic mechanism
-  confirmation.
+- `results/toy_15seed_v1/summary.csv`: original 15 paired-seed synthetic
+  mechanism run retained for provenance.
 - `results/grid_margin_full_30seed_v1/summary.csv`: 30 paired seeds for the
   procedural grid-margin full-baseline comparison.
 - `results/grid_margin_full_replication_30seed_v1/summary.csv`: held-out seeds

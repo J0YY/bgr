@@ -46,7 +46,7 @@ class AnalyzeSignificanceTest(unittest.TestCase):
 
     def test_latex_table_includes_suffix_full_baselines_when_available(self):
         rows = [
-            result_row("Synthetic margin 15-seed", "", "final_rauc", "bgr", "uniform", [0.1, 0.2], "higher"),
+            result_row("Synthetic margin 30-seed", "", "final_rauc", "bgr", "uniform", [0.1, 0.2], "higher"),
             result_row("Grid margin 15-seed", "", "final_rauc", "bgr", "uniform", [0.1, 0.2], "higher"),
             result_row("Estimator 30-seed", "", "boundary_hit_rate", "active", "uniform", [0.1, 0.2], "higher"),
         ]

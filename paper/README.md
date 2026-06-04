@@ -41,9 +41,8 @@ PYTHONPATH=src:. python3 scripts/check_submission_package.py --root .
 The packaged `main.tex` is an anonymous AAAI submission manuscript with
 synthetic mechanism, estimator-validation, procedural grid-margin, grid-scope
 diagnostic, OpenVLA audit, and embedded checklist evidence. The rendered
-synthetic table checks the intended recovery-margin sampler over 15 paired
-seeds, and the anonymous artifact also includes the 30-seed confirmation
-`results/toy_30seed_v1/summary.csv` for reviewer inspection. The rendered
+synthetic table checks the intended recovery-margin sampler over 30 paired
+seeds from `results/toy_30seed_v1/summary.csv`. The rendered
 active-estimator validation checks that boundary-focused probes recover useful
 critical radii at a small fixed rollout budget over 30 paired seeds from
 `results/estimator_pair_30seed_v1/summary.csv`. The procedural grid-margin

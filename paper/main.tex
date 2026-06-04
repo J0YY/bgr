@@ -120,7 +120,7 @@ All experiments are driven by artifact YAML configs and scripts. The anonymous a
 
 \subsection{Protocol and Metrics}
 
-We report clean success, recovery AUC (RAUC), median $r_{80}$, and area under the RAUC learning curve (AULC). RAUC and $r_{80}$ are evaluated on dense held-out radius grids rather than on the probes used by BGR during training. The synthetic and grid learning-curve diagnostics use 15 paired seeds; estimator validation and packaged grid full-baseline, ablation, sensitivity, and suffix coverage confirmations use 30. We report exact two-sided paired sign tests; five-seed exploratory variants are reported only as exploratory evidence.
+We report clean success, recovery AUC (RAUC), median $r_{80}$, and area under the RAUC learning curve (AULC). RAUC and $r_{80}$ are evaluated on dense held-out radius grids rather than on the probes used by BGR during training. Synthetic training, estimator validation, and packaged grid full-baseline, ablation, sensitivity, and suffix coverage confirmations use 30 paired seeds; grid learning-curve diagnostics use 15. We report exact two-sided paired sign tests; five-seed exploratory variants are reported only as exploratory evidence.
 
 Baselines are matched to the decisions BGR changes. Uniform replay samples replay states and perturbation radii without recovery-boundary information. Fixed-radius replay uses the same learner and feasibility filters at one configured perturbation scale. Failure-only replay prioritizes states with observed failures without estimating a crossing radius. PLR-loss and loss-priority baselines replace BGR's recovery-curve priority with learner-loss proxies. Clean-only suffix training regularizes on unperturbed suffixes. Paired comparisons share seeds, rollout budgets, evaluation grids, and validity filters.
 
@@ -128,7 +128,7 @@ Baselines are matched to the decisions BGR changes. Uniform replay samples repla
 \centering
 \small
 \resizebox{\textwidth}{!}{\input{figures/summary_table.tex}}
-\caption{Results generated from anonymous artifact CSVs. Synthetic comparisons use 15 paired seeds; the grid-margin full-baseline and robot-suffix coverage comparisons use 30 paired seeds, with held-out 30-seed BGR-vs-uniform replications reported in text. BGR is strongest in the synthetic and procedural grid-margin settings. In the lightweight robot-suffix simulator, the coverage-aware BGR-Suffix variant improves clean success, final object RAUC, transfer RAUC, and AULC over uniform suffix replay, but uniform retains a higher median critical radius.}
+\caption{Results generated from anonymous artifact CSVs. Synthetic, grid-margin full-baseline, and robot-suffix coverage comparisons use 30 paired seeds, with held-out 30-seed BGR-vs-uniform replications reported in text for grid and suffix. BGR is strongest in the synthetic and procedural grid-margin settings. In the lightweight robot-suffix simulator, the coverage-aware BGR-Suffix variant improves clean success, final object RAUC, transfer RAUC, and AULC over uniform suffix replay, but uniform retains a higher median critical radius.}
 \label{tab:current-results}
 \end{table*}
 
@@ -136,7 +136,7 @@ Baselines are matched to the decisions BGR changes. Uniform replay samples repla
 \centering
 \small
 \resizebox{\textwidth}{!}{\input{figures/significance_table.tex}}
-\caption{Selected paired effect sizes for the central claims, including the completed 30-seed estimator, grid, and suffix full-baseline confirmations. Mean differences and 95\% confidence intervals are computed over paired seeds; W/L/T counts paired wins, losses, and ties in the declared improvement direction; $p$ is the exact two-sided paired sign-test value. The synthetic comparison uses 15 paired seeds; estimator, grid full-baseline, and suffix coverage-full comparisons use 30 paired seeds.}
+\caption{Selected paired effect sizes for the central claims, including the completed 30-seed synthetic, estimator, grid, and suffix full-baseline confirmations. Mean differences and 95\% confidence intervals are computed over paired seeds; W/L/T counts paired wins, losses, and ties in the declared improvement direction; $p$ is the exact two-sided paired sign-test value. Synthetic, estimator, grid full-baseline, and suffix coverage-full comparisons use 30 paired seeds.}
 \label{tab:significance}
 \end{table*}
 
@@ -160,7 +160,7 @@ Table~\ref{tab:estimator} shows over 30 paired seeds that active BGR finds the b
 
 The synthetic benchmark creates replayable states with latent feasible radii and policy recovery margins. Success probability follows a sigmoid recovery curve, and training updates near the current margin expand that margin most efficiently. This controlled environment tests whether BGR's estimator and sampler recover the intended behavior before higher-cost sequential or robotics runs.
 
-In the 15-seed run, BGR improves final recovery AUC over uniform replay (0.3726 vs. 0.3642), improves the area under the RAUC learning curve (0.3151 vs. 0.2987), and preserves clean success (0.8920 vs. 0.8860), with exact sign tests supporting the RAUC and AULC comparisons ($p=0.0001$). Fixed-radius, failure-only, and PLR-loss proxy baselines underperform substantially in this controlled setting, suggesting that explicit boundary-radius sampling is useful when the benchmark contains learnable success--failure transitions.
+In the 30-seed run, BGR improves final recovery AUC over uniform replay (0.3716 vs. 0.3633), improves the area under the RAUC learning curve (0.3149 vs. 0.2984), and preserves clean success (0.8899 vs. 0.8838), with exact sign tests supporting the RAUC and AULC comparisons (Table~\ref{tab:significance}). Fixed-radius, failure-only, and PLR-loss proxy baselines underperform substantially in this controlled setting, suggesting that explicit boundary-radius sampling is useful when the benchmark contains learnable success--failure transitions.
 
 \subsection{Procedural Grid-Margin Study}
 

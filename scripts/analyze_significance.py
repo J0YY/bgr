@@ -638,7 +638,7 @@ def write_csv(rows: list[dict[str, str]], path: Path) -> None:
 
 def write_latex(rows: list[dict[str, str]], path: Path) -> None:
     table_keys = [
-        ("Synthetic margin 15-seed", "final_rauc", "uniform"),
+        ("Synthetic margin 30-seed", "final_rauc", "uniform"),
         ("Grid margin full 30-seed", "final_rauc", "uniform"),
         ("Robot suffix coverage-full 30-seed", "final_rauc", "clean_ft"),
         ("Robot suffix coverage-full 30-seed", "final_rauc", "fixed"),
@@ -681,7 +681,7 @@ def write_latex(rows: list[dict[str, str]], path: Path) -> None:
 
 
 def latex_comparison_label(row: dict[str, str]) -> str:
-    if row["benchmark"] == "Synthetic margin 15-seed":
+    if row["benchmark"] in {"Synthetic margin 15-seed", "Synthetic margin 30-seed"}:
         return "Synthetic vs uniform"
     if row["benchmark"] in {"Grid margin 15-seed", "Grid margin full 30-seed"}:
         return "Grid vs uniform"

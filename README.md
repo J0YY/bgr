@@ -7,8 +7,8 @@ This repository contains the anonymous AAAI-27 submission package for:
 The included artifact contains the reusable BGR core, versioned experiment
 configs, per-seed result summaries, generated paper tables/figures, OpenVLA
 audit scripts, environment snapshots, and a SHA-256 submission manifest. The
-main evidence includes a 15-seed synthetic mechanism check with a 30-seed
-synthetic confirmation, active-estimator validation, a completed 30-seed
+main evidence includes a 30-seed synthetic mechanism check, active-estimator
+validation, a completed 30-seed
 procedural grid-margin full-baseline comparison, a held-out grid replication, a
 30-seed robot-suffix coverage comparison, a held-out suffix full-baseline
 replication, and a held-out suffix BGR-vs-uniform replication.
@@ -35,8 +35,8 @@ PYTHONPATH=src:. python3 scripts/check_submission_package.py --root . --write-su
 
 Start with `paper/main.pdf` for the anonymous manuscript, then use
 `results/README.md#submission-evidence-index` for the evidence map. The primary
-evidence is the 15-seed synthetic mechanism check with a 30-seed synthetic
-confirmation, the active-estimator validation, the 30-seed grid-margin
+evidence is the 30-seed synthetic mechanism check, the active-estimator
+validation, the 30-seed grid-margin
 comparison, the held-out grid replication, the 30-seed robot-suffix coverage
 comparison, the held-out suffix full-baseline replication, the held-out suffix
 BGR-vs-uniform replication, and
@@ -53,7 +53,7 @@ summary artifacts listed in the evidence index.
 
 | Paper claim | Primary artifact evidence | Verification hook |
 | --- | --- | --- |
-| Controlled synthetic recovery-margin training validates the intended BGR sampler before higher-cost runs. | `results/toy_15seed_v1/summary.csv`, `results/toy_30seed_v1/summary.csv`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the synthetic RAUC, AULC, clean-success, and sign-test prose; `scripts/check_submission_package.py` checks the 30-seed synthetic confirmation. |
+| Controlled synthetic recovery-margin training validates the intended BGR sampler before higher-cost runs. | `results/toy_30seed_v1/summary.csv`, `results/toy_15seed_v1/summary.csv`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the synthetic RAUC, AULC, clean-success, and sign-test prose; `scripts/check_submission_package.py` checks the 30-seed synthetic comparison. |
 | Boundary-centered replay expands recovery margins in the main procedural setting. | `results/grid_margin_full_30seed_v1/summary.csv`, `results/grid_margin_full_replication_30seed_v1/summary.csv`, `paper/figures/grid_margin_full_table.tex`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the numeric prose; `scripts/check_submission_package.py` checks paired seeds, ledgers, generated tables, and manifest hashes. |
 | Active boundary probing estimates useful critical radii at a small fixed rollout budget. | `paper/figures/estimator_stats.csv`, `paper/figures/estimator_table.tex`, `results/estimator_pair_30seed_v1/summary.csv`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the estimator prose; `scripts/check_submission_package.py` checks the generated estimator table and the 30-seed estimator confirmation. |
 | Radius-level boundary sampling is the important BGR ablation in the grid-margin benchmark. | `results/grid_margin_ablation_15seed_v1/summary.csv`, `results/grid_margin_ablation_30seed_v1/summary.csv`, `paper/figures/grid_margin_ablation_table.tex`, `paper/figures/significance_tests.csv` | `scripts/check_submission_package.py` checks the 30-seed mechanism confirmation and regenerates aggregate tables and significance artifacts exactly. |

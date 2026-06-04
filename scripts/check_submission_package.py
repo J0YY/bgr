@@ -128,6 +128,7 @@ STALE_CHECKLIST_CLAIM_FRAMING = [
     "training-loop figure",
     "main synthetic, grid-margin, suffix, and estimator comparisons use 15 paired seeds",
     "synthetic/estimator and grid learning-curve diagnostics: 15 seed pairs",
+    "synthetic and grid learning-curve diagnostics use 15 seed pairs",
     "Grid sensitivity, ablation, and learning-curve diagnostics use 15 paired seeds",
     "grid sensitivity, ablation, and learning-curve diagnostics use 15 paired seeds",
 ]
@@ -135,9 +136,10 @@ REQUIRED_CHECKLIST_CLAIM_FRAMING = [
     "training-loop method box",
     "method section defines replayable states and recovery curves",
     "states critical radii, BGR priority",
-    "synthetic and grid learning-curve diagnostics use 15 seed pairs",
-    "estimator validation, grid-margin full-baseline, grid ablation, grid sensitivity confirmations, and robot-suffix coverage comparisons use 30 paired seeds",
+    "synthetic training, estimator validation, grid-margin full-baseline, grid ablation, grid sensitivity confirmations, and robot-suffix coverage comparisons use 30 paired seeds",
+    "grid learning-curve diagnostics use 15 seed pairs",
 ]
+CHECKLIST_CLAIM_NORMALIZATION = str.maketrans({"-": "", "\u2010": "", "\u2011": "", "\u2012": "", "\u2013": "", "\u2014": ""})
 CHECKLIST_BAD_ANSWER_SPACING = re.compile(r"\)(yes|partial|no|NA)\b")
 PAPER_FACING_OPENVLA_STALE_PHRASES = [
     "latest p1024 diagnostic",
@@ -742,6 +744,10 @@ def normalize_space(text: str) -> str:
     return " ".join(text.split())
 
 
+def normalize_checklist_claim_text(text: str) -> str:
+    return normalize_space(text).translate(CHECKLIST_CLAIM_NORMALIZATION)
+
+
 def latex_mean_sem(mean_value: str, sem_value: str) -> str:
     return f"{float(mean_value):.3f}$\\pm${float(sem_value):.3f}"
 
@@ -1253,10 +1259,10 @@ def check_results_evidence_index(root: Path) -> list[str]:
     required = [
         "## Submission Evidence Index",
         "Primary controlled evidence for the paper is:",
-        "results/toy_15seed_v1/summary.csv",
-        "controlled synthetic recovery-margin benchmark",
         "results/toy_30seed_v1/summary.csv",
-        "30-seed synthetic mechanism confirmation",
+        "30 paired seeds for the controlled synthetic recovery-margin benchmark",
+        "results/toy_15seed_v1/summary.csv",
+        "original 15 paired-seed synthetic mechanism run retained for provenance",
         "results/grid_margin_full_30seed_v1/summary.csv",
         "results/grid_margin_full_replication_30seed_v1/summary.csv",
         "results/suffix_coverage_full_30seed_v1/summary.csv",
@@ -1515,6 +1521,8 @@ def check_paper_readme_submission_framing(root: Path) -> list[str]:
             "bridge now has corrected",
             "synthetic mechanism, estimator-validation, procedural, diagnostic, OpenVLA audit",
             "The synthetic benchmark checks the intended recovery-margin sampler over 15 paired seeds",
+            "The rendered synthetic table checks the intended recovery-margin sampler over 15 paired seeds",
+            "the anonymous artifact also includes the 30-seed confirmation `results/toy_30seed_v1/summary.csv`",
             "The active-estimator validation checks that boundary-focused probes recover useful critical radii at a small fixed rollout budget over 15 paired seeds",
             "the artifact also includes the 30-seed confirmation `results/estimator_pair_30seed_v1/summary.csv`",
         ]
@@ -1525,8 +1533,7 @@ def check_paper_readme_submission_framing(root: Path) -> list[str]:
     required = [
         "The packaged `main.tex` is an anonymous AAAI submission manuscript",
         "synthetic mechanism, estimator-validation, procedural grid-margin, grid-scope diagnostic, OpenVLA audit, and embedded checklist evidence",
-        "The rendered synthetic table checks the intended recovery-margin sampler over 15 paired seeds",
-        "the anonymous artifact also includes the 30-seed confirmation `results/toy_30seed_v1/summary.csv`",
+        "The rendered synthetic table checks the intended recovery-margin sampler over 30 paired seeds from `results/toy_30seed_v1/summary.csv`",
         "The rendered active-estimator validation checks that boundary-focused probes recover useful critical radii at a small fixed rollout budget over 30 paired seeds from `results/estimator_pair_30seed_v1/summary.csv`",
         "procedural grid-margin section reports the completed 30-seed full-baseline confirmation",
         "robot-suffix simulator reports a 30-seed coverage-aware BGR-Suffix variant",
@@ -3320,6 +3327,8 @@ def check_root_readme_submission_framing(root: Path) -> list[str]:
             "p1024/p2048 OpenVLA-OFT summary CSVs listed in `results/README.md#submission-evidence-index`",
             "The primary evidence is the 30-seed grid-margin comparison, the held-out grid replication, the 30-seed robot-suffix coverage comparison, the held-out suffix full-baseline replication, the held-out suffix BGR-vs-uniform replication, and `paper/figures/significance_tests.csv`",
             "The main controlled evidence is a completed 30-seed procedural grid-margin full-baseline comparison plus a 30-seed robot-suffix coverage comparison",
+            "The main evidence includes a 15-seed synthetic mechanism check with a 30-seed synthetic confirmation",
+            "The primary evidence is the 15-seed synthetic mechanism check with a 30-seed synthetic confirmation",
             "official AAAI-27 page lists the 2027 timetable",
             "current strongest grid comparison",
             "The current `obstacle_prob`/`max_offset` sweep mostly reproduces",
@@ -3340,14 +3349,14 @@ def check_root_readme_submission_framing(root: Path) -> list[str]:
     required = [
         "anonymous AAAI-27 submission package",
         "SHA-256 submission manifest",
-        "The main evidence includes a 15-seed synthetic mechanism check with a 30-seed synthetic confirmation, active-estimator validation, a completed 30-seed procedural grid-margin full-baseline comparison, a held-out grid replication, a 30-seed robot-suffix coverage comparison, a held-out suffix full-baseline replication, and a held-out suffix BGR-vs-uniform replication",
+        "The main evidence includes a 30-seed synthetic mechanism check, active-estimator validation, a completed 30-seed procedural grid-margin full-baseline comparison, a held-out grid replication, a 30-seed robot-suffix coverage comparison, a held-out suffix full-baseline replication, and a held-out suffix BGR-vs-uniform replication",
         "30-seed robot-suffix coverage comparison",
         "OpenVLA/LIBERO results are included as recovery-curve, selection, and data-plumbing audits",
         "rather than robotics fine-tuning claims",
         "## Reviewer Navigation",
         "Start with `paper/main.pdf` for the anonymous manuscript",
         "results/README.md#submission-evidence-index",
-        "The primary evidence is the 15-seed synthetic mechanism check with a 30-seed synthetic confirmation, the active-estimator validation, the 30-seed grid-margin comparison, the held-out grid replication, the 30-seed robot-suffix coverage comparison, the held-out suffix full-baseline replication, the held-out suffix BGR-vs-uniform replication, and `paper/figures/significance_tests.csv`",
+        "The primary evidence is the 30-seed synthetic mechanism check, the active-estimator validation, the 30-seed grid-margin comparison, the held-out grid replication, the 30-seed robot-suffix coverage comparison, the held-out suffix full-baseline replication, the held-out suffix BGR-vs-uniform replication, and `paper/figures/significance_tests.csv`",
         "OpenVLA/LIBERO entries are scoped audits and should not be read as robotics fine-tuning claims",
         "For the primary paired comparisons, competing methods share experiment configs, replayable-state pools, evaluation radius grids, learner/update budgets, and paired seeds",
         "the intended intervention is the replay state/radius selection rule",
@@ -3887,7 +3896,7 @@ def check_main_pdf(path: Path) -> list[str]:
         "OpenVLA/LIBERO audits",
         "not BGR fine-tuning claims",
         "run ledger files",
-        "30-seed estimator, grid, and suffix",
+        "30-seed synthetic, estimator, grid, and suffix",
         "Suffix RAUC vs clean-only",
         "Suffix RAUC vs loss-priority",
         "Suffix transfer vs uniform",
@@ -4010,6 +4019,7 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
 
 def check_embedded_checklist_text(path: Path, text: str) -> list[str]:
     normalized_text = normalize_space(text)
+    normalized_claim_text = normalize_checklist_claim_text(text)
     if "Reproducibility Checklist" not in text:
         raise ValueError(f"{path}: missing embedded Reproducibility Checklist after references")
     bad_spacing = sorted(set(CHECKLIST_BAD_ANSWER_SPACING.findall(text)))
@@ -4020,10 +4030,14 @@ def check_embedded_checklist_text(path: Path, text: str) -> list[str]:
     stale_artifact_framing = [snippet for snippet in STALE_CHECKLIST_ARTIFACT_FRAMING if snippet in text]
     if stale_artifact_framing:
         raise ValueError(f"{path}: stale rendered checklist artifact framing: {', '.join(stale_artifact_framing)}")
-    stale_claim_framing = [snippet for snippet in STALE_CHECKLIST_CLAIM_FRAMING if snippet in normalized_text]
+    stale_claim_framing = [
+        snippet for snippet in STALE_CHECKLIST_CLAIM_FRAMING if normalize_checklist_claim_text(snippet) in normalized_claim_text
+    ]
     if stale_claim_framing:
         raise ValueError(f"{path}: stale rendered checklist claim framing: {', '.join(stale_claim_framing)}")
-    missing_claim_framing = [snippet for snippet in REQUIRED_CHECKLIST_CLAIM_FRAMING if snippet not in normalized_text]
+    missing_claim_framing = [
+        snippet for snippet in REQUIRED_CHECKLIST_CLAIM_FRAMING if normalize_checklist_claim_text(snippet) not in normalized_claim_text
+    ]
     if missing_claim_framing:
         raise ValueError(f"{path}: missing rendered checklist claim framing: {', '.join(missing_claim_framing)}")
     if "run ledgers are in the anonymous artifact" not in text:
@@ -4047,6 +4061,7 @@ def check_checklist_pdf(path: Path) -> list[str]:
     messages = assert_letter_pdf("reproducibility checklist PDF", path)
     text = pdf_text(path)
     normalized_text = normalize_space(text)
+    normalized_claim_text = normalize_checklist_claim_text(text)
     bad = forbidden_terms(text)
     if bad:
         raise ValueError(f"{path}: forbidden old method term(s) in rendered PDF: {', '.join(bad)}")
@@ -4062,10 +4077,14 @@ def check_checklist_pdf(path: Path) -> list[str]:
     stale_artifact_framing = [snippet for snippet in STALE_CHECKLIST_ARTIFACT_FRAMING if snippet in text]
     if stale_artifact_framing:
         raise ValueError(f"{path}: stale rendered checklist artifact framing: {', '.join(stale_artifact_framing)}")
-    stale_claim_framing = [snippet for snippet in STALE_CHECKLIST_CLAIM_FRAMING if snippet in normalized_text]
+    stale_claim_framing = [
+        snippet for snippet in STALE_CHECKLIST_CLAIM_FRAMING if normalize_checklist_claim_text(snippet) in normalized_claim_text
+    ]
     if stale_claim_framing:
         raise ValueError(f"{path}: stale rendered checklist claim framing: {', '.join(stale_claim_framing)}")
-    missing_claim_framing = [snippet for snippet in REQUIRED_CHECKLIST_CLAIM_FRAMING if snippet not in normalized_text]
+    missing_claim_framing = [
+        snippet for snippet in REQUIRED_CHECKLIST_CLAIM_FRAMING if normalize_checklist_claim_text(snippet) not in normalized_claim_text
+    ]
     if missing_claim_framing:
         raise ValueError(f"{path}: missing rendered checklist claim framing: {', '.join(missing_claim_framing)}")
     if "run ledgers are in the anonymous artifact" not in text:

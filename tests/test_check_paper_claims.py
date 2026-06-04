@@ -348,7 +348,6 @@ def grid_margin_full_30_rows() -> list[dict[str, str]]:
 
 def expected_rows() -> list[tuple[str, str, str, str, str, bool, int, int]]:
     rows = [
-        ("Synthetic margin 15-seed", "", "final_rauc", "bgr", "uniform", True, 15, 0),
         ("Synthetic margin 30-seed", "", "final_rauc", "bgr", "uniform", True, 29, 1),
         ("Synthetic margin 30-seed", "", "rauc_aulc", "bgr", "uniform", True, 30, 0),
         ("Synthetic margin 30-seed", "", "final_clean", "bgr", "uniform", True, 30, 0),

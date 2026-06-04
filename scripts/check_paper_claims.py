@@ -144,23 +144,23 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
-    toy = read_csv_rows(results_dir / "toy_15seed_v1" / "summary.csv")
+    toy = read_csv_rows(results_dir / "toy_30seed_v1" / "summary.csv")
     claims.extend(
         [
             Claim(
                 "toy final RAUC",
                 f"{fmt(mean_metric(toy, 'bgr', 'final_rauc'), 4)} vs. {fmt(mean_metric(toy, 'uniform', 'final_rauc'), 4)}",
-                "results/toy_15seed_v1/summary.csv",
+                "results/toy_30seed_v1/summary.csv",
             ),
             Claim(
                 "toy AULC",
                 f"{fmt(mean_metric(toy, 'bgr', 'rauc_aulc'), 4)} vs. {fmt(mean_metric(toy, 'uniform', 'rauc_aulc'), 4)}",
-                "results/toy_15seed_v1/summary.csv",
+                "results/toy_30seed_v1/summary.csv",
             ),
             Claim(
                 "toy clean success",
                 f"{fmt(mean_metric(toy, 'bgr', 'final_clean'), 4)} vs. {fmt(mean_metric(toy, 'uniform', 'final_clean'), 4)}",
-                "results/toy_15seed_v1/summary.csv",
+                "results/toy_30seed_v1/summary.csv",
             ),
         ]
     )
@@ -798,8 +798,7 @@ def find_significance_row(
 
 def build_significance_checks() -> list[SignificanceCheck]:
     checks = [
-        SignificanceCheck("synthetic final RAUC sign test", "Synthetic margin 15-seed", "", "final_rauc", "bgr", "uniform", True, 15, 0),
-        SignificanceCheck("synthetic 30-seed final RAUC confirmation", "Synthetic margin 30-seed", "", "final_rauc", "bgr", "uniform", True, 29, 1),
+        SignificanceCheck("synthetic final RAUC sign test", "Synthetic margin 30-seed", "", "final_rauc", "bgr", "uniform", True, 29, 1),
         SignificanceCheck("synthetic 30-seed AULC confirmation", "Synthetic margin 30-seed", "", "rauc_aulc", "bgr", "uniform", True, 30, 0),
         SignificanceCheck("synthetic 30-seed clean confirmation", "Synthetic margin 30-seed", "", "final_clean", "bgr", "uniform", True, 30, 0),
         SignificanceCheck("synthetic 30-seed fixed RAUC confirmation", "Synthetic margin 30-seed", "", "final_rauc", "bgr", "fixed", True, 30, 0),
