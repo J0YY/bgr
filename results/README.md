@@ -107,6 +107,70 @@ Older troubleshooting sections may retain labels such as Queued command to
 record original Slurm submissions; those labels are provenance, not active
 experiment status.
 
+## Active OpenVLA-OFT p2048 Image-Augmentation Adaptation Audit
+
+Submitted on 2026-06-04 after the full-goal p2048 clean and perturbation audits
+showed no stable gain over matched random or the official checkpoint. This is a
+single-factor optimization test: it keeps the p2048 clean-mix data, identity-LoRA
+entry point, official training/eval statistics, low learning rate, and 100-step
+adaptation recipe fixed, and changes only OpenVLA-OFT `--image_aug` from `False`
+to `True`.
+
+Submitted adaptation command shape:
+
+```bash
+REMOTE_HF_HOME=/work/anonymous/cache_home/huggingface \
+REMOTE_TRANSFORMERS_CACHE=/work/anonymous/cache_home/huggingface/hub \
+TRAIN_DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/.../dataset_statistics.json \
+DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/.../dataset_statistics.json \
+FINETUNE_SCRIPT=vla-scripts/finetune_identity_lora.py \
+ADAPT_STEPS=100 LR=1e-6 IMAGE_AUG=True \
+TAG=cleanmix_p2048_step50100_lr1em6_identitylora_imageaug_officialtrainstats_v1 \
+EVAL_ARTIFACT=openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_imageaug_officialtrainstats_v1 \
+BGR_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_bgr_cleanmix_p2048_v1 \
+RANDOM_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_cleanmix_p2048_v1 \
+BGR_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048_step50100_lr1em6_identitylora_imageaug_officialtrainstats_v1 \
+RANDOM_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048_step50100_lr1em6_identitylora_imageaug_officialtrainstats_v1 \
+EVAL_TASKS=10 EVAL_TRIALS=10 EVAL_SEED=29 \
+scripts/queue_openvla_oft_goal_adapt.sh --submit
+```
+
+Submitted perturbation-audit command shape:
+
+```bash
+REMOTE_HF_HOME=/work/anonymous/cache_home/huggingface \
+REMOTE_TRANSFORMERS_CACHE=/work/anonymous/cache_home/huggingface/hub \
+TAG=cleanmix_p2048_step50100_lr1em6_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1 \
+BGR_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048_step50100_lr1em6_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048_step50100_lr1em6_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+BGR_DEPENDENCY=afterok:764837 RANDOM_DEPENDENCY=afterok:764840 \
+EVAL_TASKS=10 EVAL_TRIALS=10 EVAL_SEED=29 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Slurm IDs:
+
+```text
+764813  BGR image-aug adapt, failed before training because the launcher still used an unwritable anonymous HF cache
+764814--764818  first dependent merge/eval/random chain, cancelled after 764813 failed
+764835  BGR image-aug adapt repair with REMOTE_HF_HOME/REMOTE_TRANSFORMERS_CACHE
+764836  BGR image-aug merge, afterok:764835
+764837  BGR image-aug clean eval, afterok:764836
+764838  random image-aug adapt repair, afterok:764835
+764839  random image-aug merge, afterok:764838
+764840  random image-aug clean eval, afterok:764839
+764819--764823  official identity -> blur -> brightness -> occlusion -> shift
+764824--764833  first BGR/random perturbation chain, cancelled after the first adaptation chain failed
+764841--764845  BGR identity -> blur -> brightness -> occlusion -> shift, afterok:764837
+764846--764850  random identity -> blur -> brightness -> occlusion -> shift, afterok:764840
+```
+
+This active audit is not paper-facing evidence yet. It becomes useful only if the
+completed full-goal perturbation summary shows BGR beating both matched random
+selection and the unadapted official checkpoint under the same 10-task,
+100-episode evaluation.
+
 ## Completed OpenVLA-OFT p2048 10-Trial Perturbation Follow-Up
 
 Queued and completed on 2026-06-04 to reduce variance in the p2048 perturbation

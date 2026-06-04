@@ -9,6 +9,7 @@ SAVE_FREQ="${SAVE_FREQ:-${ADAPT_STEPS}}"
 LR="${LR:-1e-5}"
 LORA_RANK="${LORA_RANK:-32}"
 BATCH_SIZE="${BATCH_SIZE:-1}"
+IMAGE_AUG="${IMAGE_AUG:-False}"
 SHUFFLE_BUFFER_SIZE="${SHUFFLE_BUFFER_SIZE:-2048}"
 PARTITION="${PARTITION:-low-prio-gpu}"
 GRES="${GRES:-gpu:a6000:1}"
@@ -21,6 +22,8 @@ EXCLUDE="${EXCLUDE:-c2-g4-21}"
 REMOTE_HOST="${REMOTE_HOST:-athena}"
 REMOTE_PROJECT="${REMOTE_PROJECT:-/work/anonymous/bgr}"
 REMOTE_LOG_DIR="${REMOTE_LOG_DIR:-/work/anonymous/bgr/logs}"
+REMOTE_HF_HOME="${REMOTE_HF_HOME:-/work/anonymous/cache_home/huggingface}"
+REMOTE_TRANSFORMERS_CACHE="${REMOTE_TRANSFORMERS_CACHE:-${REMOTE_HF_HOME}/hub}"
 OPENVLA_OFT_ROOT="${OPENVLA_OFT_ROOT:-/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft}"
 OPENVLA_OFT_TORCHRUN="${OPENVLA_OFT_TORCHRUN:-${OPENVLA_OFT_ROOT}/.venv-oft/bin/torchrun}"
 OPENVLA_OFT_PY="${OPENVLA_OFT_PY:-${OPENVLA_OFT_ROOT}/.venv-oft/bin/python}"
@@ -62,6 +65,8 @@ Queues a matched BGR-boundary vs random-balanced OpenVLA-OFT adaptation smoke:
 Environment overrides:
   METHODS=bgr|random|bgr,random selects which branches to queue
   SERIAL_TRAIN=1 serializes paired train jobs to avoid shared HF config races
+  IMAGE_AUG=True|False forwards OpenVLA-OFT image augmentation to finetune.py
+  REMOTE_HF_HOME/REMOTE_TRANSFORMERS_CACHE set writable Hugging Face cache roots
   FINETUNE_SCRIPT selects an alternate OpenVLA-OFT fine-tuning entry point
   TRAIN_DATASET_STATISTICS_SOURCE forces official action/proprio stats during RLDS training normalization
   DATASET_STATISTICS_SOURCE copies known-good action stats into the checkpoint after merge
@@ -208,8 +213,8 @@ PY
 fi
 
 env WANDB_MODE=disabled \\
-  HF_HOME=/work/anonymous/cache_home/huggingface \\
-  TRANSFORMERS_CACHE=/work/anonymous/cache_home/huggingface/hub \\
+  HF_HOME="${REMOTE_HF_HOME}" \\
+  TRANSFORMERS_CACHE="${REMOTE_TRANSFORMERS_CACHE}" \\
   PYTHONPATH="${OPENVLA_OFT_ROOT}" \\
   "${OPENVLA_OFT_TORCHRUN}" --standalone --nnodes 1 --nproc-per-node 1 "\${FINETUNE_ENTRYPOINT}" \\
     --vla_path "${BASE_CHECKPOINT}" \\
@@ -229,7 +234,7 @@ env WANDB_MODE=disabled \\
     --save_latest_checkpoint_only True \\
     --resume True \\
     --resume_step "${RESUME_STEP}" \\
-    --image_aug False \\
+    --image_aug "${IMAGE_AUG}" \\
     --lora_rank "${LORA_RANK}" \\
     --merge_lora_during_training False \\
     --shuffle_buffer_size "${SHUFFLE_BUFFER_SIZE}" \\
@@ -260,8 +265,8 @@ source ~/.bashrc || true
 cd "${OPENVLA_OFT_ROOT}"
 echo "Merging ${method} official-goal adaptation checkpoint on \$(hostname) at \$(date -Is)"
 env WANDB_MODE=disabled \\
-  HF_HOME=/work/anonymous/cache_home/huggingface \\
-  TRANSFORMERS_CACHE=/work/anonymous/cache_home/huggingface/hub \\
+  HF_HOME="${REMOTE_HF_HOME}" \\
+  TRANSFORMERS_CACHE="${REMOTE_TRANSFORMERS_CACHE}" \\
   PYTHONPATH="${OPENVLA_OFT_ROOT}" \\
   "${OPENVLA_OFT_PY}" vla-scripts/merge_lora_weights_and_save.py \\
     --base_checkpoint "${BASE_CHECKPOINT}" \\
@@ -296,8 +301,8 @@ mkdir -p "${local_log_dir}"
 cd "${OPENVLA_OFT_ROOT}"
 echo "Evaluating ${method} official-goal adaptation checkpoint on \$(hostname) at \$(date -Is)"
 env WANDB_MODE=disabled \\
-  HF_HOME=/work/anonymous/cache_home/huggingface \\
-  TRANSFORMERS_CACHE=/work/anonymous/cache_home/huggingface/hub \\
+  HF_HOME="${REMOTE_HF_HOME}" \\
+  TRANSFORMERS_CACHE="${REMOTE_TRANSFORMERS_CACHE}" \\
   MUJOCO_GL=egl \\
   PYOPENGL_PLATFORM=egl \\
   PYTHONPATH="${OPENVLA_OFT_ROOT}:${LIBERO_ROOT}:${OPENVLA_OFT_SITE}" \\
