@@ -5,7 +5,6 @@
 \urlstyle{rm}
 \def\UrlFont{\rm}
 \usepackage{natbib}
-\usepackage{caption}
 \usepackage{amsmath}
 \usepackage{amssymb}
 
@@ -15,16 +14,16 @@
 
 \setcounter{secnumdepth}{2}
 
-\title{Bifurcation-Guided Replay: Learning at the Success--Failure Boundary of Decision Policies}
+\title{Boundary-Guided Replay: Learning at the Success--Failure Boundary of Decision Policies}
 \author{Anonymous Submission}
-\affiliations{Paper under double-blind review}
+\affiliations{}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-Policies trained on nominal starts often fail under small deviations from the states encountered during training. Existing curriculum and level-replay methods prioritize difficult or high-regret levels, but they do not explicitly identify where a policy's behavior transitions from likely success to likely failure. We introduce Bifurcation-Guided Replay (BGR), a general replay method for sequential decision policies. For each replayable decision state, BGR estimates a recovery curve measuring success probability under perturbations of increasing scale, derives a critical radius at which performance crosses a success threshold, and samples training perturbations near this state-conditioned boundary. To make boundary estimation practical, BGR uses active probing, monotone curve fitting, uncertainty-aware refresh, and diversity-preserving replay. We evaluate BGR first in a diagnostic recovery-margin benchmark and then extend the same machinery to procedural decision tasks and robot suffix recovery. BGR improves recovery AUC and shifts critical-radius distributions toward larger margins compared with uniform replay, fixed-radius perturbation training, and failure-focused replay, while preserving clean success.
+Policies trained on nominal starts often fail under small deviations from the states encountered during training. Existing curriculum and level-replay methods prioritize difficult or high-regret levels, but they do not explicitly identify where a policy's behavior transitions from likely success to likely failure. We introduce Boundary-Guided Replay (BGR), a replay method for resettable or replayable sequential decision settings. For each replayable decision state, BGR estimates a recovery curve measuring success probability under perturbations of increasing scale, derives a critical radius at which performance crosses a success threshold, and samples training perturbations near this state-conditioned boundary. To make boundary estimation practical, BGR uses active probing, monotone curve fitting, uncertainty-aware refresh, and diversity-preserving replay. In synthetic and procedural grid-margin benchmarks, BGR improves recovery AUC, clean success, and learning-curve area over uniform replay, with the grid full-baseline comparison confirmed over 30 paired seeds; in a robot-suffix simulator, a coverage-aware BGR variant improves final object recovery AUC, clean success, transfer recovery AUC, and learning-curve area. Fixed-radius, failure-focused, and loss-priority baselines underperform in the controlled sweeps. OpenVLA/LIBERO audits show that the same recovery-margin interface can measure learned-policy brittleness and build matched fine-tuning datasets, but current adaptation runs give only small matched-random edges and no stable improvement over the unadapted official checkpoint. We therefore report them as audits, not as final robotics fine-tuning claims.
 \end{abstract}
 
 \section{Introduction}
@@ -35,18 +34,20 @@ Existing replay and curriculum methods rank examples by difficulty, temporal-dif
 
 Our contributions are:
 \begin{itemize}
-    \item a domain-general replay formalism based on replayable decision states, perturbation families, recovery curves, critical radii, and recovery AUC;
+    \item a domain-agnostic replay interface based on replayable decision states, perturbation families, recovery curves, critical radii, and recovery AUC;
     \item an efficient BGR algorithm that actively estimates success--failure boundaries and samples both states and perturbation radii near those boundaries;
     \item an active-estimation validation showing that boundary-focused probes recover critical radii with small fixed budgets rather than dense sweeps;
-    \item a diagnostic benchmark and experiment pipeline for measuring recovery-margin expansion under controlled replay strategies;
-    \item a path to procedural RL and robot suffix-recovery experiments using the same estimator and priority interfaces.
+    \item synthetic, procedural grid-margin, and robot-suffix simulator benchmarks showing where boundary replay and coverage-aware boundary replay expand recovery margins under paired-seed comparisons;
+    \item OpenVLA/LIBERO audits that define the practical scope of the current learned-policy evidence and separate recovery-margin measurement from robotics fine-tuning claims.
 \end{itemize}
 
 \section{Related Work}
 
 BGR is closest in spirit to curriculum learning and level replay for reinforcement learning. Prioritized Level Replay samples levels by learning-potential proxies such as value loss \cite{jiang2021prioritized}, while PAIRED and ACCEL generate or mutate environments using regret and curriculum-frontier objectives \cite{dennis2020paired,parkerholder2022accel}. BGR is complementary: it can operate over fixed replayable states and prioritizes the local perturbation geometry of the current policy rather than a scalar difficulty or regret score. It also differs from broad curriculum schedules surveyed by \citet{narvekar2020curriculum}, because the unit of progress is recovery-margin expansion around each state.
 
-BGR also connects to robustness training and robotics generalization. Domain randomization improves transfer by broadening training distributions \cite{tobin2017domain}, but fixed perturbation distributions can oversample states that are already easy or currently infeasible. BGR instead estimates where each state's perturbation curve crosses from success to failure and trains near that radius. Our procedural experiments use resettable grid states in the style of lightweight grid benchmarks \cite{chevalierboisvert2023minigrid}; the suffix study is a diagnostic step toward manipulation settings such as LIBERO \cite{liu2023libero} and vision-language-action policies such as OpenVLA \cite{kim2024openvla}.
+Prioritized experience replay ranks transitions by temporal-difference error \cite{schaul2016prioritized}, and active learning selects informative labels under a query budget \cite{settles2009active}. BGR borrows the budgeted-query spirit but changes the target: it actively estimates a success-probability curve around a replay state, then trains at a state-conditioned perturbation radius. It is also distinct from adversarial-example training \cite{goodfellow2015explaining,madry2018towards}: BGR is not an adversarial-training objective and does not solve a worst-case inner maximization; it samples feasible perturbation scales near the observed recovery boundary to expand a policy's local margin.
+
+BGR also connects to robustness training and robotics generalization. Domain randomization improves transfer by broadening training distributions \cite{tobin2017domain}, but fixed perturbation distributions can oversample states that are already easy or currently infeasible. BGR instead estimates where each state's perturbation curve crosses from success to failure and trains near that radius. Our procedural experiments use resettable grid states in the style of lightweight grid benchmarks \cite{chevalierboisvert2023minigrid}; the suffix study instantiates the same interface for manipulation-style states related to LIBERO \cite{liu2023libero} and vision-language-action policies such as OpenVLA \cite{kim2024openvla}.
 
 \section{Problem Setting}
 
@@ -68,22 +69,35 @@ We evaluate robustness with recovery AUC,
 
 BGR also assumes a feasibility witness $F(x,\sigma)$ that estimates whether perturbed states remain meaningful and solvable by a reference process. In our experiments this witness is either an exact reachability check, a teacher/demo suffix model, a simulator validity check, or observed clean OpenVLA success. The witness is not an oracle for the learned policy; it filters invalid or impossible perturbations so replay focuses on recoverable boundaries rather than broken tasks.
 
-\section{Bifurcation-Guided Replay}
+\begin{table}[t]
+\centering
+\small
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llll}
+\textbf{Study} & \textbf{Replay state} & \textbf{Perturbation} & \textbf{Witness/eval}\\
+Synthetic & latent recovery state & scalar radius & dense curve\\
+Grid-margin & mid-path grid state & valid radius shifts & reachability\\
+Robot suffix & demo suffix phase & object/EEF offsets & teacher feasibility\\
+OpenVLA audit & LIBERO state & object/visual changes & simulator success\\
+\end{tabular}}
+\caption{Instantiations of the BGR interface. The first three rows are training experiments; the OpenVLA row is an audit of recovery curves and data plumbing, not a fine-tuning claim.}
+\label{tab:interface}
+\end{table}
+
+\section{Boundary-Guided Replay}
 
 BGR maintains a buffer of replayable states. For each state, it probes perturbation radii, fits a monotone recovery curve, estimates a critical radius, and assigns replay priority to states whose boundaries are feasible, sharp, uncertain, and near a trainable target band. The method therefore separates three decisions: whether a state is valid enough to replay, which replay state is currently informative, and which perturbation radius lies near that state's success--failure transition.
 
-\begin{figure}[t]
+\begin{center}
 \small
-\centering
 \fbox{\begin{minipage}{0.93\columnwidth}
-\textbf{Bifurcation-Guided Replay}\\
+\textbf{Boundary-Guided Replay}\\
 Initialize replay buffer $\mathcal{B}$ with replayable states.\\
 For each $x\in\mathcal{B}$, probe $\sigma\in\{0,\sigma_{\min},\sigma_{\mathrm{mid}},\sigma_{\max}\}$, fit monotone $\hat{R}(x,\sigma)$, and estimate $\hat{r}_\alpha(x)$.\\
 For each training iteration, sample $x\sim q_{\mathcal{B}}(x)$ proportional to BGR priority, sample $\sigma$ from a mixture centered at $\hat{r}_\alpha(x)$, apply $\delta\sim\mathcal{P}_x(\sigma)$, collect rollout or teacher recovery data, update $\pi_\theta$, and periodically refresh stale curve estimates.
 \end{minipage}}
-\caption{BGR training loop without domain-specific learner details.}
-\label{fig:bgr-loop}
-\end{figure}
+\noindent\textit{Method box: BGR training loop without domain-specific learner details.}
+\end{center}
 
 The priority for a record is a product of gates and soft utilities:
 \begin{equation}
@@ -92,96 +106,109 @@ U_{\mathrm{unc}}(x)^\beta U_{\mathrm{stale}}(x)^\eta.
 \end{equation}
 Here $G(x)$ gates out states with low clean success or low witness feasibility, $U_{\mathrm{boundary}}$ prefers critical radii in a trainable band, $U_{\mathrm{sharp}}$ prefers informative transitions, $U_{\mathrm{unc}}$ refreshes uncertain curve estimates, and $U_{\mathrm{stale}}$ revisits old records as the policy changes. We mix this distribution with uniform replay to prevent starvation. For the radius-level decision, BGR samples from a mixture centered at $\hat r_\alpha(x)$ with clean, easier, harder, and broad-radius coverage components; ablations test which part is responsible for the gains.
 
+The mechanism is simple under a local margin-update model.
+
+\textbf{Proposition 1.} Fix a replay state $x$ and let $r=r_{\pi,\alpha}(x)$. Suppose training at radius $\sigma$ gives an expected first-order RAUC gain $k_x(|\sigma-r|)$ for a nonincreasing kernel $k_x$. If a boundary sampler $p_b(\sigma\mid x)$ induces a distance-to-boundary random variable $D_b=|\sigma-r|$ satisfying $\Pr[D_b>t]\le\Pr[D_0>t]$ for every $t$ relative to a baseline sampler's distance $D_0$, then
+\begin{equation}
+\mathbb{E}_{p_b}[k_x(|\sigma-r|)] \ge \mathbb{E}_{p_0}[k_x(|\sigma-r|)].
+\end{equation}
+The assumption is first-order stochastic dominance over distance to the boundary. By the quantile coupling for stochastic orders \cite{shaked2007stochastic}, there exists a coupling with $D'_b\le D'_0$ almost surely and with the same marginals as $D_b,D_0$; monotonicity of $k_x$ then gives $\mathbb{E}[k_x(D'_b)]\ge \mathbb{E}[k_x(D'_0)]$, which is the stated inequality. Thus, when recovery-margin updates are local, placing more probability near the current critical radius improves expected margin expansion over uniform or fixed-radius replay. BGR uses boundary-centered sampling as this local default, while retaining clean, easier, harder, broad-radius, and uniform components because real learners can violate the local model through saturation, noisy labels, or unstable optimization.
+
 \section{Experiments}
 
-All experiments are driven by checked-in YAML configs and scripts. The repository records per-seed CSVs, aggregation code, paired exact sign-flip tests, Slurm launch commands, remote log paths, compute/GPU environment snapshots, and an MIT license; the paper tables are generated from these artifacts rather than hand-edited results.
+All experiments are driven by artifact YAML configs and scripts. The anonymous artifact records per-seed CSVs, aggregation code, paired exact sign tests, Slurm launch commands, run ledger files, compute/GPU environment snapshots, and an MIT license; the paper tables are generated from these artifacts rather than hand-edited results. We use three evidence tiers. The main claim is supported by controlled synthetic and procedural grid-margin experiments where the recovery-margin object is directly trainable and baselines share paired seeds. The robot-suffix simulator is a manipulation-style extension: a coverage-aware BGR variant improves final object RAUC, clean success, transfer RAUC, and AULC over uniform suffix replay, while still trailing uniform on median critical radius. The OpenVLA/LIBERO results are learned-policy audits and infrastructure checks, not BGR fine-tuning claims.
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.94\textwidth]{figures/rauc_bars.pdf}
-\caption{Final recovery AUC across the current diagnostic benchmarks. Bars show means over seeds and error bars show standard error. BGR improves RAUC in the synthetic and grid-margin studies; the suffix simulator exposes a remaining tradeoff where BGR-Suffix improves clean success and sample efficiency but not final object-perturbation RAUC relative to uniform suffix replay.}
-\label{fig:rauc-bars}
-\end{figure*}
+\subsection{Protocol and Metrics}
+
+We report clean success, recovery AUC (RAUC), median $r_{80}$, and area under the RAUC learning curve (AULC). RAUC and $r_{80}$ are evaluated on dense held-out radius grids rather than on the probes used by BGR during training. The synthetic, estimator, and grid learning-curve diagnostics use 15 paired seeds; packaged grid full-baseline, ablation, sensitivity, and suffix coverage confirmations use 30. We report exact two-sided paired sign tests; five-seed exploratory variants are reported only as exploratory evidence.
 
 \begin{table*}[t]
 \centering
 \small
-\begin{tabular}{l l c c c c}
-\hline
-Benchmark & Method & Clean & RAUC & Median $r_{80}$ & RAUC AULC \\
-\hline
-Synthetic margin & BGR & 0.8962 & 0.3756 & 0.2829 & 0.3169 \\
-Synthetic margin & Uniform & 0.8886 & 0.3659 & 0.2753 & 0.2987 \\
-Grid margin & BGR & 0.9461 & 0.4345 & 0.3441 & 0.3525 \\
-Grid margin & Uniform & 0.8943 & 0.3961 & 0.3318 & 0.3129 \\
-Robot suffix & BGR-Suffix Broad & 0.8691 & 0.4815 & 0.4703 & 0.3790 \\
-Robot suffix & Uniform suffix & 0.8358 & 0.4844 & 0.5046 & 0.3707 \\
-\hline
-\end{tabular}
-\caption{Current diagnostic results, reported as seed means. Synthetic uses three seeds; grid-margin and robot-suffix comparisons use 15 paired seeds. Full per-seed CSVs, standard-error summaries, and paired exact sign-flip tests are generated by the repository scripts. BGR is strongest in the synthetic and procedural grid-margin settings. In the lightweight robot-suffix simulator, a broad-radius BGR-Suffix variant improves clean success and sample efficiency over uniform suffix replay, but uniform still has slightly higher final object-perturbation RAUC.}
+\resizebox{\textwidth}{!}{\input{figures/summary_table.tex}}
+\caption{Results generated from anonymous artifact CSVs. Synthetic comparisons use 15 paired seeds; the grid-margin full-baseline and robot-suffix coverage comparisons use 30 paired seeds. BGR is strongest in the synthetic and procedural grid-margin settings. In the lightweight robot-suffix simulator, the coverage-aware BGR-Suffix variant improves clean success, final object RAUC, transfer RAUC, and AULC over uniform suffix replay, but uniform retains a higher median critical radius.}
 \label{tab:current-results}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+\small
+\resizebox{\textwidth}{!}{\input{figures/significance_table.tex}}
+\caption{Selected paired effect sizes for the central claims, including the completed 30-seed confirmations for the grid and suffix full-baseline runs. Mean differences and 95\% confidence intervals are computed over paired seeds; W/L/T counts paired wins, losses, and ties in the declared improvement direction; $p$ is the exact two-sided paired sign-test value. Synthetic and estimator comparisons use 15 paired seeds; grid full-baseline and suffix coverage-full comparisons use 30 paired seeds.}
+\label{tab:significance}
 \end{table*}
 
 \begin{table}[t]
 \centering
 \small
 \input{figures/estimator_table.tex}
-\caption{Probe-efficiency validation on synthetic recovery curves. All methods use 17 Bernoulli probes per state and are evaluated against dense 201-point curves. Active BGR improves boundary-hit rate over uniform and coarse probing, while keeping critical-radius error close to the coarse sweep.}
+\caption{Probe-efficiency validation on synthetic recovery curves. Both methods use 17 Bernoulli probes per state and are evaluated against dense 201-point curves. Active BGR improves boundary-hit rate over uniform probing at the same rollout budget, while keeping critical-radius and RAUC error comparable.}
 \label{tab:estimator}
 \end{table}
+
+\FloatBarrier
 
 \subsection{Active Boundary Estimation}
 
 BGR is useful only if recovery boundaries can be estimated without evaluating dense curves for every replay state. We therefore validate the training-time estimator separately from the replay experiments. For each synthetic state, we compute a dense 201-point reference curve for evaluation only, then compare 17-probe estimators: uniform random radii and active BGR probing initialized with a coarse sweep and then focused near the current critical-radius estimate.
 
-Table~\ref{tab:estimator} shows over 15 paired seeds that active BGR finds the boundary within $\pm0.08$ radius units more often than uniform probing (0.677 vs. 0.601) and lowers mean $r_{80}$ error (0.080 vs. 0.106). Paired exact sign-flip tests support both effects ($p<10^{-3}$). This result does not claim that active probing dominates every fixed grid in this simple one-dimensional setting; rather, it verifies that BGR's boundary estimates are usable at a small fixed rollout budget before final dense-curve evaluation.
+Table~\ref{tab:estimator} shows over 15 paired seeds that active BGR finds the boundary within $\pm0.08$ radius units more often than uniform probing (0.677 vs. 0.601) and lowers mean $r_{80}$ error (0.080 vs. 0.106). Paired exact sign tests support both effects ($p<10^{-3}$). This result does not claim that active probing dominates every fixed grid in this simple one-dimensional setting; rather, it verifies that BGR's boundary estimates are usable at a small fixed rollout budget before final dense-curve evaluation.
 
-\subsection{Tier-0 Recovery-Margin Benchmark}
+\subsection{Synthetic Recovery-Margin Benchmark}
 
-The initial benchmark creates replayable states with latent feasible radii and policy recovery margins. Success probability follows a sigmoid recovery curve, and training updates near the current margin expand that margin most efficiently. This diagnostic environment tests whether BGR's estimator and sampler recover the intended behavior before expensive RL or robotics runs.
+The synthetic benchmark creates replayable states with latent feasible radii and policy recovery margins. Success probability follows a sigmoid recovery curve, and training updates near the current margin expand that margin most efficiently. This controlled environment tests whether BGR's estimator and sampler recover the intended behavior before higher-cost sequential or robotics runs.
 
-In the current three-seed diagnostic run, BGR improves final recovery AUC over uniform replay (0.3756 vs. 0.3659), improves the area under the RAUC learning curve (0.3169 vs. 0.2987), and preserves clean success (0.8962 vs. 0.8886). Fixed-radius, failure-only, and PLR-loss proxy baselines underperform in this controlled setting, suggesting that explicit boundary-radius sampling is useful when the benchmark contains learnable success--failure transitions.
+In the 15-seed run, BGR improves final recovery AUC over uniform replay (0.3726 vs. 0.3642), improves the area under the RAUC learning curve (0.3151 vs. 0.2987), and preserves clean success (0.8920 vs. 0.8860), with exact sign tests supporting the RAUC and AULC comparisons ($p=0.0001$). Fixed-radius, failure-only, and PLR-loss proxy baselines underperform substantially in this controlled setting, suggesting that explicit boundary-radius sampling is useful when the benchmark contains learnable success--failure transitions.
 
 \subsection{Procedural Grid-Margin Study}
 
 We instantiate replayable states in procedural grid environments with resettable seeds and mid-path states. Generated obstacle maps define feasible perturbation neighborhoods through shortest-path reachability, while each replay state has a policy-specific recovery margin. This benchmark isolates whether BGR can expand state-conditioned recovery curves in a non-robotic sequential decision setting.
 
-In a 15-seed paired grid-margin run, BGR outperforms uniform replay on final RAUC (0.4345 vs. 0.3961), RAUC learning-curve area (0.3525 vs. 0.3129), median $r_{80}$ (0.3441 vs. 0.3318), and clean success (0.9461 vs. 0.8943), with paired exact sign-flip tests supporting each comparison ($p<10^{-3}$). Five-seed full-baseline diagnostics show that failure-only replay, PLR-loss proxy replay, and fixed-radius perturbation training substantially underperform, indicating that neither failure mining nor static perturbation scales recover the same margin-expansion behavior. Separate tabular grid-policy diagnostics either saturate under broad replay or undertrain BGR relative to fixed-radius oracle imitation. A coverage-aware BGR variant improves the policy diagnostic substantially over narrow BGR, but still trails broad fixed/loss-priority replay; we therefore treat this policy-level tabular setup as a negative setup result rather than evidence for the main claim.
+In a completed 30-seed paired grid-margin full-baseline run, BGR outperforms uniform replay on final RAUC (0.4344 vs. 0.3963), RAUC learning-curve area (0.3526 vs. 0.3132), median $r_{80}$ (0.3447 vs. 0.3321), and clean success (0.9455 vs. 0.8939), with paired exact sign tests supporting the RAUC comparison (Table~\ref{tab:significance}). A held-out seeds 30--59 BGR-vs-uniform replication gives 0.4340 vs. 0.3967 RAUC, also with 30/0 wins. The same sweep shows that failure-only replay (RAUC 0.2909), PLR-loss proxy replay (0.2109), and fixed-radius perturbation training (0.2097) substantially underperform BGR (0.4344), with exact sign tests supporting all three RAUC deltas.
 
-\begin{table*}[t]
-\centering
+Stored 15-seed learning curves show BGR ahead of uniform on RAUC for all paired seeds at every post-update checkpoint (steps 30--300; $p=0.0001$). The 15-seed sensitivity tables give the same pattern: target margins 0.26--0.54 yield RAUC 0.415--0.443 vs. uniform 0.396; obstacle regimes yield BGR RAUC 0.434--0.435 vs. uniform 0.396; and geometry stresses give stress RAUC 0.362--0.457 vs. uniform 0.324--0.430. Packaged 30-seed target/regime/stress confirmations preserve RAUC/AULC wins; the learning-rate confirmation preserves the high-rate final-RAUC caveat. The reported 0.38 margin is not the best tuned value.
+
+A learning-rate sweep is a scope diagnostic: BGR wins final RAUC at 0.015 and 0.030 (0.382 vs. 0.320; 0.435 vs. 0.396) and AULC at all three rates, but high learning rate flips final RAUC to uniform (0.486 vs. 0.491). Thus neither failure mining nor static perturbation scales recover the same margin-expansion behavior, while aggressive optimization can saturate uniform final RAUC. A separate tabular grid-policy setup either saturates under broad replay or undertrains BGR relative to fixed-radius oracle imitation; we therefore keep the main procedural claim on the margin-expansion benchmark.
+
+\begin{center}
 \small
-\input{figures/grid_margin_ablation_table.tex}
-\caption{Grid-margin ablations over five seeds. Boundary-centered radius sampling is the important ingredient in this benchmark: replacing it with uniform radii drops RAUC below uniform replay, while removing uncertainty or sharpness weights has little effect.}
-\label{tab:grid-ablation}
-\end{table*}
+\resizebox{\columnwidth}{!}{\input{figures/grid_margin_full_table.tex}}
+\refstepcounter{table}\label{tab:grid-full}
+{\footnotesize Table~\thetable: Thirty-seed procedural grid-margin full-baseline comparison. Boundary-centered replay is the only method that both preserves clean success and expands recovery margins.}
+\end{center}
 
-Table~\ref{tab:grid-ablation} isolates the replay decisions inside BGR. The uncertainty and sharpness factors are not decisive in this benchmark, but the radius-level boundary rule is: keeping BGR state priority while sampling perturbation radii uniformly reduces RAUC from 0.435 to 0.385 and AULC from 0.354 to 0.307. This supports the central claim that BGR is not only hard-state prioritization; it also depends on training at the estimated success--failure radius.
+\begin{center}
+\small
+\resizebox{\columnwidth}{!}{\input{figures/grid_margin_ablation_table.tex}}
+\refstepcounter{table}\label{tab:grid-ablation}
+{\footnotesize Table~\thetable: Grid-margin ablations over 15 seeds. Boundary-centered radius sampling is the important ingredient in this benchmark: replacing it with uniform radii drops RAUC below uniform replay, while removing uncertainty or sharpness weights has little effect.}
+\end{center}
+
+Table~\ref{tab:grid-ablation} isolates the replay decisions inside BGR. The uncertainty and sharpness factors are not decisive in this benchmark, but the radius-level boundary rule is: keeping BGR state priority while sampling perturbation radii uniformly reduces RAUC from 0.435 to 0.382 and AULC from 0.353 to 0.305, even below uniform replay's 0.396 RAUC. Paired exact sign tests support both the BGR-over-uniform-radius gap and the uniform-radius-below-uniform gap ($p=0.0001$). This supports the central claim that BGR is not only hard-state prioritization; it also depends on training at the estimated success--failure radius.
+
+\FloatBarrier
 
 \subsection{Robot Suffix Study}
 
-BGR-Suffix treats a robot demonstration suffix as a replayable decision state. The current lightweight suffix simulator models language-conditioned manipulation families, demonstration suffix phase, object-pose perturbations, end-effector perturbations, teacher feasibility, and clean-demo regularization. Training uses object-pose offsets; end-effector offsets are used as a perturbation-family transfer diagnostic.
+BGR-Suffix treats a robot demonstration suffix as a replayable state. The lightweight suffix simulator models language-conditioned manipulation families, suffix phase, object-pose and end-effector perturbations, teacher feasibility, and clean-demo regularization. Training uses object-pose offsets; end-effector offsets are a perturbation-family transfer test.
 
-In a five-seed suffix run, the original boundary-heavy BGR-Suffix improves clean success over uniform suffix replay (0.8738 vs. 0.8368) and slightly improves RAUC learning-curve area (0.3745 vs. 0.3716), but uniform has higher final object-perturbation RAUC. A 15-seed paired strategy extension shows that the issue is radius coverage rather than state priority: a broad-radius BGR-Suffix variant reaches final object RAUC 0.4815, close to but below uniform's 0.4844, while retaining much higher clean success (0.8691 vs. 0.8358), higher end-effector transfer RAUC (0.3165 vs. 0.3075), and higher RAUC AULC (0.3790 vs. 0.3707), with paired exact sign-flip tests supporting the clean, transfer, and AULC effects ($p<10^{-3}$). A hard-biased variant gives the best transfer and sample efficiency in the five-seed diagnostic (transfer RAUC 0.3292, AULC 0.3865) but lower object RAUC. We therefore treat this suffix simulator as a diagnostic BGR-Suffix instantiation rather than final robotics evidence.
+The first 15-seed run showed that boundary-heavy BGR-Suffix undercovered high-radius recovery. The 30-seed coverage-aware run fixes this: BGR-Coverage raises final object RAUC over uniform (0.4969 vs. 0.4854), failure-only (0.4229), clean-only (0.2631), loss-priority (0.1694), and fixed-radius replay (0.1583), with 30/0 paired wins. A held-out seeds 30--59 replication gives 0.4972 vs. 0.4859 RAUC, also with 30/0 wins. It also improves clean success (0.8644 vs. 0.8364), end-effector transfer RAUC (0.3143 vs. 0.3083), and RAUC AULC (0.3825 vs. 0.3709) over uniform. Clean-only has a negligible clean-success edge (0.8646 vs. 0.8644), and uniform still has a higher median $r_{80}$ (0.5047 vs. 0.4982), so we treat this as positive manipulation-style evidence rather than final robotics evidence.
 
-\begin{table*}[t]
-\centering
-\small
-\input{figures/openvla_table.tex}
-\caption{Learned-policy OpenVLA audits. Recovery rows report clean success, recovery AUC, and $r_{80}$ over nine LIBERO-Object replay states. Selection rows report mean observed counterfactual-failure rate (CF), fraction of candidates in the boundary band $[0.25,0.75]$ (Hit), and mean distance from the ideal boundary rate 0.5 (Dist). These audits support the recovery-curve and boundary-selection premises, but they are not BGR fine-tuning results.}
-\label{tab:openvla}
-\end{table*}
+We also audited the real-simulator path as premise validation. A GPU/EGL LIBERO-Goal probe completed 75/75 valid radius rows over five tasks, three reset states, five object-perturbation radii, and four trials per radius. Fixed-policy OpenVLA audits show clean replay success of 1.0, recovery curves that drop under occlusion, blur, and shift, and BGR-boundary selection landing in the observed counterfactual-failure band $[0.25,0.75]$ slightly more often than random-balanced selection (0.625 vs. 0.575).
 
-We also validated the real-simulator path for that next step. On five LIBERO-Goal tasks, three reset states per task, five object-perturbation radii, and four trials per radius, a GPU/EGL probe instantiated LIBERO environments, loaded benchmark init states, applied object free-joint perturbations up to 8cm, and completed zero-action rollouts without simulator errors (75/75 valid radius rows). Table~\ref{tab:openvla} adds learned-policy evidence from existing closed-loop OpenVLA/LIBERO object-task rollouts: the fixed OpenVLA policy had clean success 1.0 on the replay states, but its recovery curves dropped sharply under occlusion, blur, and image shift. A balanced OpenVLA boundary-selection audit found BGR-boundary candidates in the observed counterfactual-failure band $[0.25,0.75]$ slightly more often than random-balanced selection (0.625 vs. 0.575), while random-balanced had a smaller mean distance to the ideal 0.5 failure rate. To make the fine-tuning path concrete, the repository exports validated boundary candidates into 11,776 step-level teacher-action rows and renders matched BGR-boundary and random-balanced OpenVLA-OFT datasets with 32 GPU/EGL replay episodes, 2,048 teacher-action steps, four visual perturbation families, LIBERO-style HDF5 packs, and LIBERO-named TFDS exports that load through the unmodified OpenVLA-OFT RLDS loader. Both matched 2,048-step exports now also complete bounded OpenVLA-OFT LoRA runs that load OpenVLA 7B, train for 10 optimizer steps, merge into local OpenVLA checkpoints, and run a one-episode LIBERO-Goal closed-loop smoke under the stock evaluation script. Both smokes score 0/1, as expected for such short training, so this is infrastructure evidence rather than policy-quality evidence. This shows that recovery curves expose VLA brittleness and that boundary-seeking selection is measurable, but a full OpenVLA claim still requires longer matched fine-tuning and multi-task closed-loop evaluation.
+The OpenVLA-OFT bridge exports 11,776 teacher-action rows and matched BGR/random TFDS datasets. The official checkpoint scores 14/15 under the same eval. In p1024, BGR and matched random both score 14/15 clean episodes; perturbations give 0.8333 vs. 0.8000 for random and 0.8167 for official. The offset-3 follow-up gives 0.8643 vs. 0.8571, but official reaches 0.8929. Pooling gives BGR 0.8550 vs. 0.8400 for random, trailing the unadapted official checkpoint at 0.8700. At p2048, BGR and random tie clean (14/15 each); original perturbations give 0.8167 vs. 0.8000 random, tying official at 0.8167. Offset-3 gives 0.8714 vs. 0.8714 random; official reaches 0.8929. Pooling p2048 gives BGR 0.8550 vs. 0.8500 random, trailing official at 0.8700; no stable official improvement.
 
 \section{Limitations}
 
-BGR requires reset or replay access, a meaningful perturbation family, and extra rollouts for boundary estimation. It does not certify robustness, and the term bifurcation is used operationally for an observed success--failure transition rather than a formal dynamical-systems claim. The current OpenVLA result evaluates recovery curves for a fixed learned policy; a full robotics claim still requires BGR-Suffix fine-tuning and baselines on the same learned-policy protocol.
+BGR requires reset or replay access, a meaningful perturbation family, and extra rollouts for boundary estimation. It targets an observed success--failure boundary, not a formal robustness certificate. The strongest evidence is controlled procedural margin expansion; the suffix simulator is positive on final RAUC, clean success, transfer RAUC, and AULC, but still trails uniform on median critical radius. OpenVLA is a learned-policy audit rather than a robotics training claim. A full robotics claim still requires action-label validation, stable optimization, clean-data scale, and multi-task LIBERO gains over both matched random selection and the official checkpoint.
 
 \section{Conclusion}
 
-BGR converts recovery-margin measurement into a replay curriculum. By training at feasible success--failure boundaries, it targets the states and perturbation scales where policy improvement should most directly expand local recovery basins.
+BGR converts recovery-margin measurement into a replay curriculum. Synthetic and grid-margin studies show that boundary-centered replay expands directly trainable recovery curves, and the suffix simulator shows that radius coverage carries the interface to manipulation-style replay states. The OpenVLA/LIBERO audits make the learned-policy path concrete while bounding the current claim.
 
 \bibliography{references}
+
+\onecolumn
+\input{ReproducibilityChecklist.tex}
 
 \end{document}

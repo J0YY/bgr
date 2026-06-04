@@ -1,0 +1,22 @@
+experiment:
+  name: toy_margin_15seed_v1
+  seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+  methods: [uniform, fixed, failure_only, plr_loss, bgr]
+  num_states: 96
+  iterations: 120
+  eval_every: 30
+  train_batch_size: 20
+  sigma_max: 1.0
+  eval_grid_size: 11
+  alpha: 0.8
+  learning_rate: 0.035
+  target_margin: 0.42
+  fixed_radius: 0.65
+  output_curves: true
+bgr:
+  initial_probes: [0.0, 0.25, 0.5, 0.75, 1.0]
+  refresh_per_eval: 32
+  min_trials: 3
+  radius_noise: 0.07
+  priority_temperature: 0.7
+  uniform_mix: 0.08

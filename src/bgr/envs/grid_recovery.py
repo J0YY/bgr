@@ -235,10 +235,38 @@ class GridMarginRecoveryBenchmark:
         max_offset: int,
         learning_rate: float,
         seed: int,
+        feasible_radius_floor: float = 0.35,
+        feasible_radius_base: float = 0.45,
+        feasible_radius_path_scale: float = 0.45,
+        feasible_radius_noise: float = 0.03,
+        initial_margin_base: float = 0.12,
+        initial_margin_path_scale: float = 0.22,
+        initial_margin_noise: float = 0.05,
+        initial_margin_min: float = 0.05,
+        initial_margin_max: float = 0.45,
+        clean_success_min: float = 0.80,
+        clean_success_max: float = 0.96,
+        temperature_min: float = 0.045,
+        temperature_max: float = 0.10,
+        boundary_width: float = 0.15,
     ) -> None:
         self.rng = np.random.default_rng(seed)
         self.max_offset = int(max_offset)
         self.learning_rate = float(learning_rate)
+        self.feasible_radius_floor = float(feasible_radius_floor)
+        self.feasible_radius_base = float(feasible_radius_base)
+        self.feasible_radius_path_scale = float(feasible_radius_path_scale)
+        self.feasible_radius_noise = float(feasible_radius_noise)
+        self.initial_margin_base = float(initial_margin_base)
+        self.initial_margin_path_scale = float(initial_margin_path_scale)
+        self.initial_margin_noise = float(initial_margin_noise)
+        self.initial_margin_min = float(initial_margin_min)
+        self.initial_margin_max = float(initial_margin_max)
+        self.clean_success_min = float(clean_success_min)
+        self.clean_success_max = float(clean_success_max)
+        self.temperature_min = float(temperature_min)
+        self.temperature_max = float(temperature_max)
+        self.boundary_width = float(boundary_width)
         base = GridRecoveryBenchmark(
             num_tasks=num_tasks,
             grid_size=grid_size,
@@ -266,7 +294,7 @@ class GridMarginRecoveryBenchmark:
     def train_step(self, replay_idx: int, sigma: float, rng: np.random.Generator) -> float:
         state = self.states[replay_idx]
         feasible = self.feasibility(replay_idx, sigma)
-        boundary_signal = np.exp(-((sigma - state.margin) / 0.15) ** 2)
+        boundary_signal = np.exp(-((sigma - state.margin) / self.boundary_width) ** 2)
         clean_anchor = 0.25 * np.exp(-(sigma / 0.12) ** 2)
         saturation = max(0.0, 1.0 - state.margin / max(state.feasible_radius, 1e-6))
         gain = self.learning_rate * feasible * (boundary_signal + clean_anchor) * saturation
@@ -294,14 +322,27 @@ class GridMarginRecoveryBenchmark:
             path_fraction = float(task.distances[replay.position] / max(1.0, task.distances[task.start]))
             feasible_radius = float(
                 np.clip(
-                    min(local_room / max(1, self.max_offset), 0.45 + 0.45 * path_fraction + self.rng.normal(0.0, 0.03)),
-                    0.35,
+                    min(
+                        local_room / max(1, self.max_offset),
+                        self.feasible_radius_base
+                        + self.feasible_radius_path_scale * path_fraction
+                        + self.rng.normal(0.0, self.feasible_radius_noise),
+                    ),
+                    self.feasible_radius_floor,
                     0.95,
                 )
             )
-            initial_margin = float(np.clip(0.12 + 0.22 * (1.0 - path_fraction) + self.rng.normal(0.0, 0.05), 0.05, 0.45))
-            clean = float(self.rng.uniform(0.80, 0.96))
-            temp = float(self.rng.uniform(0.045, 0.10))
+            initial_margin = float(
+                np.clip(
+                    self.initial_margin_base
+                    + self.initial_margin_path_scale * (1.0 - path_fraction)
+                    + self.rng.normal(0.0, self.initial_margin_noise),
+                    self.initial_margin_min,
+                    self.initial_margin_max,
+                )
+            )
+            clean = float(self.rng.uniform(self.clean_success_min, self.clean_success_max))
+            temp = float(self.rng.uniform(self.temperature_min, self.temperature_max))
             loss_bias = float(self.rng.uniform(0.0, 0.15))
             states.append(GridMarginState(replay, feasible_radius, initial_margin, clean, temp, loss_bias))
         return states

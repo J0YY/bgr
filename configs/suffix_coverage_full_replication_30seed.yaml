@@ -1,0 +1,31 @@
+experiment:
+  name: robot_suffix_coverage_full_replication_30seed_v1
+  seeds: [30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+  methods: [clean_ft, uniform, fixed, failure_only, loss_priority, bgr_broad]
+  num_tasks: 40
+  suffixes_per_task: 6
+  iterations: 320
+  eval_every: 40
+  train_batch_size: 72
+  eval_grid_size: 11
+  alpha: 0.8
+  learning_rate: 0.03
+  fixed_radius: 0.70
+  target_margin: 0.44
+  baseline_candidates: 24
+  failure_probe_trials: 2
+bgr:
+  initial_probes: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+  refresh_per_eval: 128
+  min_trials: 3
+  radius_noise: 0.07
+  clean_radius_prob: 0.10
+  uniform_radius_prob: 0.45
+  boundary_clean_radius_prob: 0.08
+  boundary_uniform_radius_prob: 0.05
+  broad_clean_radius_prob: 0.05
+  broad_uniform_radius_prob: 0.80
+  hard_clean_radius_prob: 0.06
+  hard_uniform_radius_prob: 0.20
+  priority_temperature: 0.7
+  uniform_mix: 0.75

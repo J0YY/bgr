@@ -1,0 +1,6 @@
+experiment:
+  name: grid_margin_target_sensitivity_15seed_v1
+  base_config: configs/grid_margin_full_15seed.yaml
+  seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+  method: bgr
+  target_margins: [0.26, 0.32, 0.38, 0.46, 0.54]

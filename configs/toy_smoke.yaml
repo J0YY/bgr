@@ -1,0 +1,22 @@
+experiment:
+  name: toy_margin_smoke
+  seeds: [0]
+  methods: [uniform, bgr]
+  num_states: 12
+  iterations: 4
+  eval_every: 2
+  train_batch_size: 4
+  sigma_max: 1.0
+  eval_grid_size: 7
+  alpha: 0.8
+  learning_rate: 0.03
+  target_margin: 0.42
+  fixed_radius: 0.65
+  output_curves: false
+bgr:
+  initial_probes: [0.0, 0.5, 1.0]
+  refresh_per_eval: 4
+  min_trials: 1
+  radius_noise: 0.05
+  priority_temperature: 0.7
+  uniform_mix: 0.08

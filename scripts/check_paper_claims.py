@@ -1,0 +1,1107 @@
+"""Check headline manuscript claims against generated result artifacts."""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+from dataclasses import dataclass
+from pathlib import Path
+from statistics import mean
+
+
+@dataclass(frozen=True)
+class Claim:
+    label: str
+    snippet: str
+    source: str
+
+
+@dataclass(frozen=True)
+class SignificanceCheck:
+    label: str
+    benchmark: str
+    condition: str
+    metric: str
+    treatment: str
+    baseline: str
+    supports_treatment: bool
+    wins: int
+    losses: int
+    ties: int = 0
+    max_p: float = 0.001
+
+
+def read_csv_rows(path: Path) -> list[dict[str, str]]:
+    with path.open(newline="", encoding="utf-8") as handle:
+        return list(csv.DictReader(handle))
+
+
+def read_json(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def mean_metric(rows: list[dict[str, str]], method: str, metric: str) -> float:
+    values = [float(row[metric]) for row in rows if row.get("method") == method]
+    if not values:
+        raise ValueError(f"No rows for method={method!r}, metric={metric!r}")
+    return mean(values)
+
+
+def one_row(rows: list[dict[str, str]], column: str, value: str) -> dict[str, str]:
+    matches = [row for row in rows if row.get(column) == value]
+    if len(matches) != 1:
+        raise ValueError(f"Expected one {column}={value!r} row, found {len(matches)}")
+    return matches[0]
+
+
+def fmt(value: float, digits: int) -> str:
+    return f"{value:.{digits}f}"
+
+
+def fmt_pvalue(value: float) -> str:
+    if value < 0.0001:
+        return "<0.0001"
+    return f"{value:.4f}"
+
+
+def ratio(successes: int | str, episodes: int | str) -> str:
+    return f"{int(successes)}/{int(episodes)}"
+
+
+def mean_success_rate(
+    rows: list[dict[str, str]],
+    method: str,
+    *,
+    exclude_perturbations: set[str] | None = None,
+) -> float:
+    excluded = exclude_perturbations or set()
+    values = [
+        int(row["successes"]) / int(row["episodes"]) if "successes" in row and "episodes" in row else float(row["success_rate"])
+        for row in rows
+        if row.get("method") == method and row.get("perturbation", "") not in excluded
+    ]
+    if not values:
+        raise ValueError(f"No success-rate rows for method={method!r}")
+    return mean(values)
+
+
+def pooled_success_rate(
+    row_groups: list[list[dict[str, str]]],
+    method: str,
+    *,
+    exclude_perturbations: set[str] | None = None,
+) -> float:
+    excluded = exclude_perturbations or set()
+    total_successes = 0
+    total_episodes = 0
+    for rows in row_groups:
+        for row in rows:
+            if row.get("method") != method or row.get("perturbation", "") in excluded:
+                continue
+            total_successes += int(row["successes"])
+            total_episodes += int(row["episodes"])
+    if total_episodes == 0:
+        raise ValueError(f"No pooled success-rate rows for method={method!r}")
+    return total_successes / total_episodes
+
+
+def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
+    claims: list[Claim] = []
+
+    estimator = read_csv_rows(figures_dir / "estimator_stats.csv")
+    active = one_row(estimator, "method", "Active BGR")
+    uniform_est = one_row(estimator, "method", "Uniform")
+    claims.append(
+        Claim(
+            "estimator boundary hit",
+            f"{fmt(float(active['hit_rate_mean']), 3)} vs. {fmt(float(uniform_est['hit_rate_mean']), 3)}",
+            "paper/figures/estimator_stats.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "estimator r80 error",
+            f"{fmt(float(active['r80_mae_mean']), 3)} vs. {fmt(float(uniform_est['r80_mae_mean']), 3)}",
+            "paper/figures/estimator_stats.csv",
+        )
+    )
+
+    toy = read_csv_rows(results_dir / "toy_15seed_v1" / "summary.csv")
+    claims.extend(
+        [
+            Claim(
+                "toy final RAUC",
+                f"{fmt(mean_metric(toy, 'bgr', 'final_rauc'), 4)} vs. {fmt(mean_metric(toy, 'uniform', 'final_rauc'), 4)}",
+                "results/toy_15seed_v1/summary.csv",
+            ),
+            Claim(
+                "toy AULC",
+                f"{fmt(mean_metric(toy, 'bgr', 'rauc_aulc'), 4)} vs. {fmt(mean_metric(toy, 'uniform', 'rauc_aulc'), 4)}",
+                "results/toy_15seed_v1/summary.csv",
+            ),
+            Claim(
+                "toy clean success",
+                f"{fmt(mean_metric(toy, 'bgr', 'final_clean'), 4)} vs. {fmt(mean_metric(toy, 'uniform', 'final_clean'), 4)}",
+                "results/toy_15seed_v1/summary.csv",
+            ),
+        ]
+    )
+
+    grid_summary = results_dir / "grid_margin_full_30seed_v1" / "summary.csv"
+    if not grid_summary.exists():
+        grid_summary = results_dir / "grid_margin_full_15seed_v1" / "summary.csv"
+    grid = read_csv_rows(grid_summary)
+    claims.extend(
+        [
+            Claim(
+                "grid final RAUC",
+                f"{fmt(mean_metric(grid, 'bgr', 'final_rauc'), 4)} vs. {fmt(mean_metric(grid, 'uniform', 'final_rauc'), 4)}",
+                str(grid_summary.relative_to(results_dir.parent)),
+            ),
+            Claim(
+                "grid AULC",
+                f"{fmt(mean_metric(grid, 'bgr', 'rauc_aulc'), 4)} vs. {fmt(mean_metric(grid, 'uniform', 'rauc_aulc'), 4)}",
+                str(grid_summary.relative_to(results_dir.parent)),
+            ),
+            Claim(
+                "grid median r80",
+                f"{fmt(mean_metric(grid, 'bgr', 'final_median_r80'), 4)} vs. {fmt(mean_metric(grid, 'uniform', 'final_median_r80'), 4)}",
+                str(grid_summary.relative_to(results_dir.parent)),
+            ),
+            Claim(
+                "grid clean success",
+                f"{fmt(mean_metric(grid, 'bgr', 'final_clean'), 4)} vs. {fmt(mean_metric(grid, 'uniform', 'final_clean'), 4)}",
+                str(grid_summary.relative_to(results_dir.parent)),
+            ),
+            Claim(
+                "grid failure-only baseline",
+                f"RAUC {fmt(mean_metric(grid, 'failure_only', 'final_rauc'), 4)}",
+                str(grid_summary.relative_to(results_dir.parent)),
+            ),
+            Claim(
+                "grid PLR baseline",
+                f"({fmt(mean_metric(grid, 'plr_loss', 'final_rauc'), 4)})",
+                str(grid_summary.relative_to(results_dir.parent)),
+            ),
+            Claim(
+                "grid fixed-radius baseline",
+                f"({fmt(mean_metric(grid, 'fixed', 'final_rauc'), 4)})",
+                str(grid_summary.relative_to(results_dir.parent)),
+            ),
+        ]
+    )
+    grid_replication = read_csv_rows(results_dir / "grid_margin_full_replication_30seed_v1" / "summary.csv")
+    grid_replication_seeds = {
+        int(float(row["seed"]))
+        for row in grid_replication
+        if row.get("method") in {"bgr", "uniform"}
+    }
+    if grid_replication_seeds != set(range(30, 60)):
+        raise ValueError(f"Expected grid replication seeds 30-59, found {sorted(grid_replication_seeds)}")
+    grid_replication_wins = sum(
+        mean_metric(
+            [row for row in grid_replication if int(float(row["seed"])) == seed],
+            "bgr",
+            "final_rauc",
+        )
+        > mean_metric(
+            [row for row in grid_replication if int(float(row["seed"])) == seed],
+            "uniform",
+            "final_rauc",
+        )
+        for seed in grid_replication_seeds
+    )
+    if grid_replication_wins != 30:
+        raise ValueError(f"Expected grid held-out replication to have 30/0 BGR RAUC wins, found {grid_replication_wins}/30")
+    claims.append(
+        Claim(
+            "grid held-out replication RAUC",
+            (
+                f"held-out seeds 30--59 BGR-vs-uniform replication gives "
+                f"{fmt(mean_metric(grid_replication, 'bgr', 'final_rauc'), 4)} "
+                f"vs. {fmt(mean_metric(grid_replication, 'uniform', 'final_rauc'), 4)} RAUC"
+            ),
+            "results/grid_margin_full_replication_30seed_v1/summary.csv",
+        )
+    )
+
+    target = read_csv_rows(figures_dir / "grid_margin_target_sensitivity_stats.csv")
+    target_raucs = [float(row["rauc_mean"]) for row in target]
+    claims.append(
+        Claim(
+            "grid target sensitivity",
+            (
+                f"RAUC {fmt(min(target_raucs), 3)}--{fmt(max(target_raucs), 3)} "
+                f"vs. uniform {fmt(mean_metric(grid, 'uniform', 'final_rauc'), 3)}"
+            ),
+            "paper/figures/grid_margin_target_sensitivity_stats.csv",
+        )
+    )
+
+    regime = read_csv_rows(figures_dir / "grid_margin_regime_sensitivity_stats.csv")
+    regime_bgr_raucs = [float(row["rauc_mean"]) for row in regime if row["method"] == "BGR"]
+    regime_uniform_raucs = [float(row["rauc_mean"]) for row in regime if row["method"] == "Uniform"]
+    if not regime_bgr_raucs or not regime_uniform_raucs:
+        raise ValueError("Grid regime sensitivity stats are missing BGR or uniform rows")
+    claims.append(
+        Claim(
+            "grid regime sensitivity",
+            (
+                f"BGR RAUC {fmt(min(regime_bgr_raucs), 3)}--{fmt(max(regime_bgr_raucs), 3)} "
+                f"vs. uniform {fmt(mean(regime_uniform_raucs), 3)}"
+            ),
+            "paper/figures/grid_margin_regime_sensitivity_stats.csv",
+        )
+    )
+
+    stress = read_csv_rows(figures_dir / "grid_margin_stress_sensitivity_stats.csv")
+    stress_bgr_raucs = [float(row["rauc_mean"]) for row in stress if row["method"] == "BGR"]
+    stress_uniform_raucs = [float(row["rauc_mean"]) for row in stress if row["method"] == "Uniform"]
+    if not stress_bgr_raucs or not stress_uniform_raucs:
+        raise ValueError("Grid stress sensitivity stats are missing BGR or uniform rows")
+    claims.append(
+        Claim(
+            "grid stress sensitivity",
+            (
+                f"stress RAUC {fmt(min(stress_bgr_raucs), 3)}--{fmt(max(stress_bgr_raucs), 3)} "
+                f"vs. uniform {fmt(min(stress_uniform_raucs), 3)}--{fmt(max(stress_uniform_raucs), 3)}"
+            ),
+            "paper/figures/grid_margin_stress_sensitivity_stats.csv",
+        )
+    )
+
+    learning = read_csv_rows(figures_dir / "grid_margin_learning_curve_stats.csv")
+    post_update_steps = [int(float(row["step"])) for row in learning if int(float(row["step"])) > 0]
+    if not post_update_steps:
+        raise ValueError("Grid learning-curve stats contain no post-update checkpoints")
+    negative = [row for row in learning if int(float(row["step"])) > 0 and float(row["delta_mean"]) <= 0]
+    if negative:
+        steps = ", ".join(row["step"] for row in negative)
+        raise ValueError(f"BGR is not ahead of uniform at grid learning-curve step(s): {steps}")
+    claims.append(
+        Claim(
+            "grid learning-curve span",
+            f"steps {min(post_update_steps)}--{max(post_update_steps)}",
+            "paper/figures/grid_margin_learning_curve_stats.csv",
+        )
+    )
+
+    lr_stats = read_csv_rows(figures_dir / "grid_margin_learning_rate_sensitivity_stats.csv")
+
+    def lr_metric(learning_rate: float, method: str, metric: str) -> float:
+        row = one_row(
+            [item for item in lr_stats if fmt(float(item["learning_rate"]), 3) == fmt(learning_rate, 3)],
+            "method",
+            method,
+        )
+        return float(row[metric])
+
+    claims.append(
+        Claim(
+            "grid learning-rate final RAUC scope",
+            (
+                f"{fmt(lr_metric(0.015, 'BGR', 'rauc_mean'), 3)} vs. {fmt(lr_metric(0.015, 'Uniform', 'rauc_mean'), 3)}; "
+                f"{fmt(lr_metric(0.030, 'BGR', 'rauc_mean'), 3)} vs. {fmt(lr_metric(0.030, 'Uniform', 'rauc_mean'), 3)}"
+            ),
+            "paper/figures/grid_margin_learning_rate_sensitivity_stats.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "grid high learning-rate final RAUC caveat",
+            (
+                f"high learning rate flips final RAUC to uniform "
+                f"({fmt(lr_metric(0.060, 'BGR', 'rauc_mean'), 3)} vs. {fmt(lr_metric(0.060, 'Uniform', 'rauc_mean'), 3)})"
+            ),
+            "paper/figures/grid_margin_learning_rate_sensitivity_stats.csv",
+        )
+    )
+
+    ablation = read_csv_rows(results_dir / "grid_margin_ablation_15seed_v1" / "summary.csv")
+    claims.extend(
+        [
+            Claim(
+                "grid ablation RAUC drop",
+                f"{fmt(mean_metric(ablation, 'bgr', 'final_rauc'), 3)} to {fmt(mean_metric(ablation, 'bgr_uniform_radius', 'final_rauc'), 3)}",
+                "results/grid_margin_ablation_15seed_v1/summary.csv",
+            ),
+            Claim(
+                "grid ablation AULC drop",
+                f"{fmt(mean_metric(ablation, 'bgr', 'rauc_aulc'), 3)} to {fmt(mean_metric(ablation, 'bgr_uniform_radius', 'rauc_aulc'), 3)}",
+                "results/grid_margin_ablation_15seed_v1/summary.csv",
+            ),
+            Claim(
+                "grid ablation uniform RAUC",
+                f"{fmt(mean_metric(ablation, 'uniform', 'final_rauc'), 3)} RAUC",
+                "results/grid_margin_ablation_15seed_v1/summary.csv",
+            ),
+        ]
+    )
+
+    suffix = read_csv_rows(results_dir / "suffix_strategy_coverage_30seed_v1" / "summary.csv")
+    claims.extend(
+        [
+            Claim(
+                "suffix final object RAUC",
+                f"{fmt(mean_metric(suffix, 'bgr_broad', 'final_rauc'), 4)} vs. {fmt(mean_metric(suffix, 'uniform', 'final_rauc'), 4)}",
+                "results/suffix_strategy_coverage_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "suffix clean success",
+                f"{fmt(mean_metric(suffix, 'bgr_broad', 'final_clean'), 4)} vs. {fmt(mean_metric(suffix, 'uniform', 'final_clean'), 4)}",
+                "results/suffix_strategy_coverage_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "suffix transfer RAUC",
+                f"{fmt(mean_metric(suffix, 'bgr_broad', 'final_transfer_rauc'), 4)} vs. {fmt(mean_metric(suffix, 'uniform', 'final_transfer_rauc'), 4)}",
+                "results/suffix_strategy_coverage_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "suffix AULC",
+                f"{fmt(mean_metric(suffix, 'bgr_broad', 'rauc_aulc'), 4)} vs. {fmt(mean_metric(suffix, 'uniform', 'rauc_aulc'), 4)}",
+                "results/suffix_strategy_coverage_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "suffix median r80 caveat",
+                f"{fmt(mean_metric(suffix, 'uniform', 'final_median_r80'), 4)} vs. {fmt(mean_metric(suffix, 'bgr_broad', 'final_median_r80'), 4)}",
+                "results/suffix_strategy_coverage_30seed_v1/summary.csv",
+            ),
+        ]
+    )
+    suffix_replication = read_csv_rows(results_dir / "suffix_strategy_coverage_replication_30seed_v1" / "summary.csv")
+    replication_seeds = {
+        int(float(row["seed"]))
+        for row in suffix_replication
+        if row.get("method") in {"bgr_broad", "uniform"}
+    }
+    if replication_seeds != set(range(30, 60)):
+        raise ValueError(f"Expected suffix replication seeds 30-59, found {sorted(replication_seeds)}")
+    replication_wins = sum(
+        mean_metric(
+            [row for row in suffix_replication if int(float(row["seed"])) == seed],
+            "bgr_broad",
+            "final_rauc",
+        )
+        > mean_metric(
+            [row for row in suffix_replication if int(float(row["seed"])) == seed],
+            "uniform",
+            "final_rauc",
+        )
+        for seed in replication_seeds
+    )
+    if replication_wins != 30:
+        raise ValueError(f"Expected suffix held-out replication to have 30/0 BGR RAUC wins, found {replication_wins}/30")
+    claims.append(
+        Claim(
+            "suffix held-out replication RAUC",
+            (
+                f"held-out seeds 30--59 replication gives "
+                f"{fmt(mean_metric(suffix_replication, 'bgr_broad', 'final_rauc'), 4)} "
+                f"vs. {fmt(mean_metric(suffix_replication, 'uniform', 'final_rauc'), 4)} RAUC"
+            ),
+            "results/suffix_strategy_coverage_replication_30seed_v1/summary.csv",
+        )
+    )
+
+    probe_rows = read_csv_rows(results_dir / "libero_probe_v2" / "summary.csv")
+    valid_rows = sum(1 for row in probe_rows if float(row["valid_rate"]) == 1.0 and not row.get("error"))
+    claims.append(
+        Claim(
+            "LIBERO valid radius rows",
+            f"{valid_rows}/{len(probe_rows)} valid radius rows",
+            "results/libero_probe_v2/summary.csv",
+        )
+    )
+
+    openvla = read_csv_rows(figures_dir / "openvla_stats.csv")
+    bgr_sel = one_row([row for row in openvla if row["audit"] == "Selection"], "name", "BGR-boundary")
+    random_sel = one_row([row for row in openvla if row["audit"] == "Selection"], "name", "Random-balanced")
+    claims.append(
+        Claim(
+            "OpenVLA selection boundary hit",
+            f"{fmt(float(bgr_sel['metric_b']), 3)} vs. {fmt(float(random_sel['metric_b']), 3)}",
+            "paper/figures/openvla_stats.csv",
+        )
+    )
+
+    teacher_summary = read_json(results_dir / "openvla_teacher_replay_manifest_v1" / "summary.json")
+    claims.append(
+        Claim(
+            "OpenVLA teacher rows",
+            f"{int(teacher_summary['num_rows']):,} teacher-action rows",
+            "results/openvla_teacher_replay_manifest_v1/summary.json",
+        )
+    )
+
+    sanity = read_csv_rows(results_dir / "openvla_oft_sanity_eval_sanity_v1" / "summary.csv")
+    official = one_row(sanity, "method", "oft-goal")
+    claims.append(
+        Claim(
+            "OpenVLA official checkpoint success",
+            ratio(official["successes"], official["episodes"]),
+            "results/openvla_oft_sanity_eval_sanity_v1/summary.csv",
+        )
+    )
+
+    final_clean = read_csv_rows(
+        results_dir
+        / "openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1"
+        / "summary.csv"
+    )
+    final_bgr_clean = one_row(final_clean, "method", "bgr")
+    final_random_clean = one_row(final_clean, "method", "random")
+    if ratio(final_bgr_clean["successes"], final_bgr_clean["episodes"]) != ratio(
+        final_random_clean["successes"], final_random_clean["episodes"]
+    ):
+        raise ValueError("Expected p1024 BGR/random clean success ratios to match")
+    claims.append(
+        Claim(
+            "OpenVLA final clean BGR vs random",
+            f"BGR and matched random both score {ratio(final_bgr_clean['successes'], final_bgr_clean['episodes'])} clean episodes",
+            "results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
+        )
+    )
+
+    final_perturb = read_csv_rows(
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1"
+        / "summary.csv"
+    )
+    offset_perturb = read_csv_rows(
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1"
+        / "summary.csv"
+    )
+    claims.append(
+        Claim(
+            "OpenVLA original mean visual perturbation BGR vs random",
+            (
+                f"{fmt(mean_success_rate(final_perturb, 'bgr', exclude_perturbations={'identity'}), 4)} "
+                f"vs. {fmt(mean_success_rate(final_perturb, 'random', exclude_perturbations={'identity'}), 4)}"
+            ),
+            "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "OpenVLA offset mean visual perturbation BGR vs random",
+            (
+                f"{fmt(mean_success_rate(offset_perturb, 'bgr', exclude_perturbations={'identity'}), 4)} "
+                f"vs. {fmt(mean_success_rate(offset_perturb, 'random', exclude_perturbations={'identity'}), 4)}"
+            ),
+            "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "OpenVLA offset official mean visual perturbation",
+            f"official reaches {fmt(mean_success_rate(offset_perturb, 'official', exclude_perturbations={'identity'}), 4)}",
+            "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
+        )
+    )
+    p1024_pooled_bgr = pooled_success_rate([final_perturb, offset_perturb], "bgr", exclude_perturbations={"identity"})
+    p1024_pooled_random = pooled_success_rate(
+        [final_perturb, offset_perturb], "random", exclude_perturbations={"identity"}
+    )
+    p1024_pooled_official = pooled_success_rate(
+        [final_perturb, offset_perturb], "official", exclude_perturbations={"identity"}
+    )
+    claims.append(
+        Claim(
+            "OpenVLA pooled mean visual perturbation BGR vs random",
+            (
+                f"{fmt(p1024_pooled_bgr, 4)} "
+                f"vs. {fmt(p1024_pooled_random, 4)} "
+                f"for random"
+            ),
+            "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv and offset3 summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "OpenVLA pooled official mean visual perturbation",
+            f"trailing the unadapted official checkpoint at {fmt(p1024_pooled_official, 4)}",
+            "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv and offset3 summary.csv",
+        )
+    )
+
+    p2048_clean = read_csv_rows(
+        results_dir
+        / "openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1"
+        / "summary.csv"
+    )
+    p2048_bgr_clean = one_row(p2048_clean, "method", "bgr")
+    p2048_random_clean = one_row(p2048_clean, "method", "random")
+    if ratio(p2048_bgr_clean["successes"], p2048_bgr_clean["episodes"]) != ratio(
+        p2048_random_clean["successes"], p2048_random_clean["episodes"]
+    ):
+        raise ValueError("Expected p2048 BGR/random clean success ratios to match")
+    claims.append(
+        Claim(
+            "OpenVLA p2048 clean BGR vs random",
+            f"BGR and random tie clean ({ratio(p2048_bgr_clean['successes'], p2048_bgr_clean['episodes'])} each)",
+            "results/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
+        )
+    )
+
+    p2048_perturb = read_csv_rows(
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1"
+        / "summary.csv"
+    )
+    p2048_offset_perturb = read_csv_rows(
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1"
+        / "summary.csv"
+    )
+    p2048_bgr_visual = mean_success_rate(p2048_perturb, "bgr", exclude_perturbations={"identity"})
+    p2048_random_visual = mean_success_rate(p2048_perturb, "random", exclude_perturbations={"identity"})
+    p2048_official_visual = mean_success_rate(p2048_perturb, "official", exclude_perturbations={"identity"})
+    claims.append(
+        Claim(
+            "OpenVLA original p2048 mean visual perturbation BGR vs random vs official",
+            (
+                f"original perturbations give {fmt(p2048_bgr_visual, 4)} "
+                f"vs. {fmt(p2048_random_visual, 4)} "
+                f"random, tying official at {fmt(p2048_official_visual, 4)}"
+            ),
+            "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
+        )
+    )
+    p2048_offset_bgr = mean_success_rate(p2048_offset_perturb, "bgr", exclude_perturbations={"identity"})
+    p2048_offset_random = mean_success_rate(p2048_offset_perturb, "random", exclude_perturbations={"identity"})
+    p2048_offset_official = mean_success_rate(p2048_offset_perturb, "official", exclude_perturbations={"identity"})
+    claims.append(
+        Claim(
+            "OpenVLA p2048 offset mean visual perturbation BGR vs random vs official",
+            (
+                f"Offset-3 gives {fmt(p2048_offset_bgr, 4)} "
+                f"vs. {fmt(p2048_offset_random, 4)} random; "
+                f"official reaches {fmt(p2048_offset_official, 4)}"
+            ),
+            "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
+        )
+    )
+    p2048_pooled_bgr = pooled_success_rate(
+        [p2048_perturb, p2048_offset_perturb], "bgr", exclude_perturbations={"identity"}
+    )
+    p2048_pooled_random = pooled_success_rate(
+        [p2048_perturb, p2048_offset_perturb], "random", exclude_perturbations={"identity"}
+    )
+    p2048_pooled_official = pooled_success_rate(
+        [p2048_perturb, p2048_offset_perturb], "official", exclude_perturbations={"identity"}
+    )
+    claims.append(
+        Claim(
+            "OpenVLA p2048 pooled mean visual perturbation BGR vs random vs official",
+            (
+                f"Pooling p2048 gives BGR {fmt(p2048_pooled_bgr, 4)} "
+                f"vs. {fmt(p2048_pooled_random, 4)} random, "
+                f"trailing official at {fmt(p2048_pooled_official, 4)}"
+            ),
+            "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv and offset3 summary.csv",
+        )
+    )
+    if not (p1024_pooled_bgr > p1024_pooled_random and p2048_pooled_bgr >= p2048_pooled_random):
+        raise ValueError("Expected corrected OpenVLA diagnostics to show a p1024 edge and non-worse p2048 pooled comparison")
+    if not (p1024_pooled_bgr < p1024_pooled_official and p2048_pooled_bgr < p2048_pooled_official):
+        raise ValueError("Expected corrected OpenVLA diagnostics not to beat the official checkpoint")
+    claims.extend(
+        [
+            Claim(
+                "OpenVLA corrected diagnostic limitation",
+                "no stable official improvement",
+                "p1024/p2048 clean and perturbation summary CSVs",
+            ),
+            Claim(
+                "OpenVLA no official-checkpoint improvement",
+                "no stable official improvement",
+                "p1024/p2048 perturbation summary CSVs",
+            ),
+        ]
+    )
+
+    return claims
+
+
+def missing_claims(paper_text: str, claims: list[Claim]) -> list[Claim]:
+    return [claim for claim in claims if claim.snippet not in paper_text]
+
+
+def forbidden_terms(paper_text: str) -> list[str]:
+    return [
+        term
+        for term in [
+            "Bifurcation",
+            "bifurcation",
+            r"\input{figures/openvla_table.tex}",
+            r"\label{tab:openvla}",
+            r"Table~\ref{tab:openvla}",
+        ]
+        if term in paper_text
+    ]
+
+
+def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
+    p1024_summary_paths = [
+        results_dir
+        / "openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1"
+        / "summary.csv",
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1"
+        / "summary.csv",
+    ]
+    p1024_offset_summary_paths = [
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1"
+        / "summary.csv",
+    ]
+    p2048_summary_paths = [
+        results_dir
+        / "openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1"
+        / "summary.csv",
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1"
+        / "summary.csv",
+    ]
+    p2048_offset_summary_paths = [
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1"
+        / "summary.csv",
+    ]
+    guarded_results = {
+        "cleanmix_p1024": p1024_summary_paths,
+        "p1024 clean-mix": p1024_summary_paths,
+        "latest p1024 diagnostic": p1024_summary_paths,
+        "offset-3 follow-up": p1024_offset_summary_paths,
+        "0.8550": p1024_summary_paths + p1024_offset_summary_paths,
+        "p2048 scale-up": p2048_summary_paths,
+        "p2048 ties": p2048_summary_paths,
+        "p2048 offset": p2048_offset_summary_paths,
+        "Pooling p2048": p2048_summary_paths + p2048_offset_summary_paths,
+    }
+    missing: list[str] = []
+    for token, required_paths in guarded_results.items():
+        if token not in paper_text:
+            continue
+        absent = [path for path in required_paths if not path.exists()]
+        if absent:
+            missing.append(f"{token}: missing local summaries {', '.join(str(path) for path in absent)}")
+    return missing
+
+
+def forbidden_paper_negative_claims(paper_text: str) -> list[str]:
+    forbidden_tokens = ["p4096", "4096-step", "4096 scale", "common-availability"]
+    return [token for token in forbidden_tokens if token in paper_text]
+
+
+def find_significance_row(
+    rows: list[dict[str, str]],
+    *,
+    benchmark: str,
+    condition: str,
+    metric: str,
+    treatment: str,
+    baseline: str,
+) -> dict[str, str]:
+    matches = [
+        row
+        for row in rows
+        if row["benchmark"] == benchmark
+        and row["condition"] == condition
+        and row["metric"] == metric
+        and row["treatment"] == treatment
+        and row["baseline"] == baseline
+    ]
+    if len(matches) != 1:
+        raise ValueError(
+            "Expected one significance row for "
+            f"{benchmark}/{condition}/{metric}/{treatment}/{baseline}, found {len(matches)}"
+        )
+    return matches[0]
+
+
+def build_significance_checks() -> list[SignificanceCheck]:
+    checks = [
+        SignificanceCheck("synthetic final RAUC sign test", "Synthetic margin 15-seed", "", "final_rauc", "bgr", "uniform", True, 15, 0),
+        SignificanceCheck("synthetic 30-seed final RAUC confirmation", "Synthetic margin 30-seed", "", "final_rauc", "bgr", "uniform", True, 29, 1),
+        SignificanceCheck("synthetic 30-seed AULC confirmation", "Synthetic margin 30-seed", "", "rauc_aulc", "bgr", "uniform", True, 30, 0),
+        SignificanceCheck("synthetic 30-seed clean confirmation", "Synthetic margin 30-seed", "", "final_clean", "bgr", "uniform", True, 30, 0),
+        SignificanceCheck("synthetic 30-seed fixed RAUC confirmation", "Synthetic margin 30-seed", "", "final_rauc", "bgr", "fixed", True, 30, 0),
+        SignificanceCheck("synthetic 30-seed failure RAUC confirmation", "Synthetic margin 30-seed", "", "final_rauc", "bgr", "failure_only", True, 30, 0),
+        SignificanceCheck("synthetic 30-seed PLR RAUC confirmation", "Synthetic margin 30-seed", "", "final_rauc", "bgr", "plr_loss", True, 30, 0),
+        SignificanceCheck("grid 15-seed diagnostic final RAUC sign test", "Grid margin 15-seed", "", "final_rauc", "bgr", "uniform", True, 15, 0),
+        SignificanceCheck("grid 15-seed diagnostic fixed baseline sign test", "Grid margin full 15-seed", "", "final_rauc", "bgr", "fixed", True, 15, 0),
+        SignificanceCheck("grid 15-seed diagnostic failure baseline sign test", "Grid margin full 15-seed", "", "final_rauc", "bgr", "failure_only", True, 15, 0),
+        SignificanceCheck("grid 15-seed diagnostic PLR baseline sign test", "Grid margin full 15-seed", "", "final_rauc", "bgr", "plr_loss", True, 15, 0),
+        SignificanceCheck("grid 30-seed final RAUC sign test", "Grid margin full 30-seed", "", "final_rauc", "bgr", "uniform", True, 30, 0),
+        SignificanceCheck("grid 30-seed AULC sign test", "Grid margin full 30-seed", "", "rauc_aulc", "bgr", "uniform", True, 30, 0),
+        SignificanceCheck("grid 30-seed clean sign test", "Grid margin full 30-seed", "", "final_clean", "bgr", "uniform", True, 30, 0),
+        SignificanceCheck("grid 30-seed median r80 sign test", "Grid margin full 30-seed", "", "final_median_r80", "bgr", "uniform", True, 30, 0),
+        SignificanceCheck("grid 30-seed fixed RAUC sign test", "Grid margin full 30-seed", "", "final_rauc", "bgr", "fixed", True, 30, 0),
+        SignificanceCheck("grid 30-seed failure RAUC sign test", "Grid margin full 30-seed", "", "final_rauc", "bgr", "failure_only", True, 30, 0),
+        SignificanceCheck("grid 30-seed PLR RAUC sign test", "Grid margin full 30-seed", "", "final_rauc", "bgr", "plr_loss", True, 30, 0),
+        SignificanceCheck("grid 30-seed fixed AULC sign test", "Grid margin full 30-seed", "", "rauc_aulc", "bgr", "fixed", True, 30, 0),
+        SignificanceCheck("grid 30-seed failure AULC sign test", "Grid margin full 30-seed", "", "rauc_aulc", "bgr", "failure_only", True, 30, 0),
+        SignificanceCheck("grid 30-seed PLR AULC sign test", "Grid margin full 30-seed", "", "rauc_aulc", "bgr", "plr_loss", True, 30, 0),
+        SignificanceCheck("grid held-out replication final RAUC sign test", "Grid margin replication 30-seed", "", "final_rauc", "bgr", "uniform", True, 30, 0),
+        SignificanceCheck("grid held-out replication AULC sign test", "Grid margin replication 30-seed", "", "rauc_aulc", "bgr", "uniform", True, 30, 0),
+        SignificanceCheck("grid held-out replication clean sign test", "Grid margin replication 30-seed", "", "final_clean", "bgr", "uniform", True, 30, 0),
+        SignificanceCheck("grid ablation boundary-radius sign test", "Grid margin ablation 15-seed", "", "final_rauc", "bgr", "bgr_uniform_radius", True, 15, 0),
+        SignificanceCheck("grid ablation uniform-radius caveat", "Grid margin ablation 15-seed", "", "final_rauc", "bgr_uniform_radius", "uniform", False, 0, 15),
+        SignificanceCheck("suffix clean sign test", "Robot suffix coverage 30-seed", "", "final_clean", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix object RAUC sign test", "Robot suffix coverage 30-seed", "", "final_rauc", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix transfer sign test", "Robot suffix coverage 30-seed", "", "final_transfer_rauc", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix AULC sign test", "Robot suffix coverage 30-seed", "", "rauc_aulc", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix median r80 caveat", "Robot suffix coverage 30-seed", "", "final_median_r80", "bgr_broad", "uniform", False, 1, 29),
+        SignificanceCheck("suffix held-out replication clean sign test", "Robot suffix replication 30-seed", "", "final_clean", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix held-out replication object RAUC sign test", "Robot suffix replication 30-seed", "", "final_rauc", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix held-out replication transfer sign test", "Robot suffix replication 30-seed", "", "final_transfer_rauc", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix held-out replication AULC sign test", "Robot suffix replication 30-seed", "", "rauc_aulc", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix full 30-seed RAUC vs clean-only sign test", "Robot suffix coverage-full 30-seed", "", "final_rauc", "bgr_broad", "clean_ft", True, 30, 0),
+        SignificanceCheck("suffix full 30-seed RAUC vs fixed sign test", "Robot suffix coverage-full 30-seed", "", "final_rauc", "bgr_broad", "fixed", True, 30, 0),
+        SignificanceCheck("suffix full 30-seed RAUC vs failure-only sign test", "Robot suffix coverage-full 30-seed", "", "final_rauc", "bgr_broad", "failure_only", True, 30, 0),
+        SignificanceCheck("suffix full 30-seed RAUC vs loss-priority sign test", "Robot suffix coverage-full 30-seed", "", "final_rauc", "bgr_broad", "loss_priority", True, 30, 0),
+        SignificanceCheck("suffix full 30-seed RAUC vs uniform sign test", "Robot suffix coverage-full 30-seed", "", "final_rauc", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix full 30-seed transfer sign test", "Robot suffix coverage-full 30-seed", "", "final_transfer_rauc", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix full 30-seed AULC sign test", "Robot suffix coverage-full 30-seed", "", "rauc_aulc", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix full held-out 30-seed RAUC vs clean-only sign test", "Robot suffix coverage-full replication 30-seed", "", "final_rauc", "bgr_broad", "clean_ft", True, 30, 0),
+        SignificanceCheck("suffix full held-out 30-seed RAUC vs fixed sign test", "Robot suffix coverage-full replication 30-seed", "", "final_rauc", "bgr_broad", "fixed", True, 30, 0),
+        SignificanceCheck("suffix full held-out 30-seed RAUC vs failure-only sign test", "Robot suffix coverage-full replication 30-seed", "", "final_rauc", "bgr_broad", "failure_only", True, 30, 0),
+        SignificanceCheck("suffix full held-out 30-seed RAUC vs loss-priority sign test", "Robot suffix coverage-full replication 30-seed", "", "final_rauc", "bgr_broad", "loss_priority", True, 30, 0),
+        SignificanceCheck("suffix full held-out 30-seed RAUC vs uniform sign test", "Robot suffix coverage-full replication 30-seed", "", "final_rauc", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix full held-out 30-seed transfer sign test", "Robot suffix coverage-full replication 30-seed", "", "final_transfer_rauc", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("suffix full held-out 30-seed AULC sign test", "Robot suffix coverage-full replication 30-seed", "", "rauc_aulc", "bgr_broad", "uniform", True, 30, 0),
+        SignificanceCheck("estimator boundary hit sign test", "Estimator 15-seed", "", "boundary_hit_rate", "active", "uniform", True, 15, 0),
+        SignificanceCheck("estimator 30-seed boundary-hit confirmation", "Estimator 30-seed", "", "boundary_hit_rate", "active", "uniform", True, 30, 0),
+        SignificanceCheck("estimator 30-seed r80 MAE confirmation", "Estimator 30-seed", "", "r80_mae", "active", "uniform", True, 30, 0),
+        SignificanceCheck("estimator 30-seed RAUC MAE confirmation", "Estimator 30-seed", "", "rauc_mae", "active", "uniform", True, 24, 6, 0, 0.002),
+    ]
+    for target_margin in [0.26, 0.32, 0.38, 0.46, 0.54]:
+        for metric in ["final_rauc", "rauc_aulc"]:
+            checks.append(
+                SignificanceCheck(
+                    f"grid target {target_margin:.2f} {metric} sign test",
+                    "Grid margin target sensitivity 15-seed",
+                    f"target_margin={target_margin:.2f}",
+                    metric,
+                    f"bgr_target_{target_margin:.2f}",
+                    "uniform",
+                    True,
+                    15,
+                    0,
+                )
+            )
+        for metric in ["final_rauc", "rauc_aulc", "final_clean"]:
+            checks.append(
+                SignificanceCheck(
+                    f"grid target 30-seed {target_margin:.2f} {metric} confirmation",
+                    "Grid margin target sensitivity 30-seed",
+                    f"target_margin={target_margin:.2f}",
+                    metric,
+                    f"bgr_target_{target_margin:.2f}",
+                    "uniform",
+                    True,
+                    30,
+                    0,
+                )
+            )
+    for regime in ["high_obstacle", "low_obstacle", "nominal"]:
+        for metric in ["final_rauc", "rauc_aulc"]:
+            checks.append(
+                SignificanceCheck(
+                    f"grid regime {regime} {metric} sign test",
+                    "Grid margin regime sensitivity 15-seed",
+                    f"regime={regime}",
+                    metric,
+                    "bgr",
+                    "uniform",
+                    True,
+                    15,
+                    0,
+                )
+            )
+            checks.append(
+                SignificanceCheck(
+                    f"grid regime 30-seed {regime} {metric} confirmation",
+                    "Grid margin regime sensitivity 30-seed",
+                    f"regime={regime}",
+                    metric,
+                    "bgr",
+                    "uniform",
+                    True,
+                    30,
+                    0,
+                )
+            )
+    for learning_rate, supports_final_rauc in [(0.015, True), (0.030, True), (0.060, False)]:
+        checks.append(
+            SignificanceCheck(
+                f"grid learning-rate {learning_rate:.3f} final_rauc sign test",
+                "Grid margin learning-rate sensitivity 15-seed",
+                f"learning_rate={learning_rate:.3f}",
+                "final_rauc",
+                "bgr",
+                "uniform",
+                supports_final_rauc,
+                15 if supports_final_rauc else 1,
+                0 if supports_final_rauc else 14,
+            )
+        )
+        checks.append(
+            SignificanceCheck(
+                f"grid learning-rate {learning_rate:.3f} AULC sign test",
+                "Grid margin learning-rate sensitivity 15-seed",
+                f"learning_rate={learning_rate:.3f}",
+                "rauc_aulc",
+                "bgr",
+                "uniform",
+                True,
+                15,
+                0,
+            )
+        )
+        checks.append(
+            SignificanceCheck(
+                f"grid learning-rate 30-seed {learning_rate:.3f} final_rauc confirmation",
+                "Grid margin learning-rate sensitivity 30-seed",
+                f"learning_rate={learning_rate:.3f}",
+                "final_rauc",
+                "bgr",
+                "uniform",
+                supports_final_rauc,
+                30 if supports_final_rauc else 1,
+                0 if supports_final_rauc else 29,
+            )
+        )
+        checks.append(
+            SignificanceCheck(
+                f"grid learning-rate 30-seed {learning_rate:.3f} AULC confirmation",
+                "Grid margin learning-rate sensitivity 30-seed",
+                f"learning_rate={learning_rate:.3f}",
+                "rauc_aulc",
+                "bgr",
+                "uniform",
+                True,
+                30,
+                0,
+            )
+        )
+    for stress_case in ["diffuse_boundary", "low_feasibility", "sharp_low_margin"]:
+        for metric in ["final_rauc", "rauc_aulc"]:
+            checks.append(
+                SignificanceCheck(
+                    f"grid stress {stress_case} {metric} sign test",
+                    "Grid margin stress sensitivity 15-seed",
+                    f"stress_case={stress_case}",
+                    metric,
+                    "bgr",
+                    "uniform",
+                    True,
+                    15,
+                    0,
+                )
+            )
+            checks.append(
+                SignificanceCheck(
+                    f"grid stress 30-seed {stress_case} {metric} confirmation",
+                    "Grid margin stress sensitivity 30-seed",
+                    f"stress_case={stress_case}",
+                    metric,
+                    "bgr",
+                    "uniform",
+                    True,
+                    30,
+                    0,
+                )
+            )
+    for step in [30, 60, 90, 120, 150, 180, 210, 240, 270, 300]:
+        checks.append(
+            SignificanceCheck(
+                f"grid learning curve step {step} sign test",
+                "Grid margin learning curve 15-seed",
+                f"step={step}",
+                "rauc",
+                "bgr",
+                "uniform",
+                True,
+                15,
+                0,
+            )
+        )
+    return checks
+
+
+def validate_significance_checks(figures_dir: Path) -> list[str]:
+    rows = read_csv_rows(figures_dir / "significance_tests.csv")
+    messages: list[str] = []
+    for check in build_significance_checks():
+        row = find_significance_row(
+            rows,
+            benchmark=check.benchmark,
+            condition=check.condition,
+            metric=check.metric,
+            treatment=check.treatment,
+            baseline=check.baseline,
+        )
+        supports = row["supports_treatment"] == "true"
+        wins = int(row["paired_wins"])
+        losses = int(row["paired_losses"])
+        ties = int(row["paired_ties"])
+        p_value = float(row["two_sided_sign_test_p"])
+        if supports != check.supports_treatment:
+            raise ValueError(f"{check.label}: expected supports_treatment={check.supports_treatment}, got {supports}")
+        if (wins, losses, ties) != (check.wins, check.losses, check.ties):
+            raise ValueError(f"{check.label}: expected W/L/T {check.wins}/{check.losses}/{check.ties}, got {wins}/{losses}/{ties}")
+        if p_value > check.max_p:
+            raise ValueError(f"{check.label}: expected p <= {check.max_p}, got {p_value}")
+        messages.append(f"{check.label}: W/L/T {wins}/{losses}/{ties}, p={fmt_pvalue(p_value)}")
+    messages.extend(validate_grid_margin_full_30_significance(rows))
+    messages.extend(validate_suffix_coverage_full_significance(rows))
+    return messages
+
+
+def validate_grid_margin_full_30_significance(rows: list[dict[str, str]]) -> list[str]:
+    benchmark = "Grid margin full 30-seed"
+    grid_rows = [row for row in rows if row["benchmark"] == benchmark]
+    expected = {
+        ("final_rauc", "uniform"),
+        ("rauc_aulc", "uniform"),
+        ("final_clean", "uniform"),
+        ("final_median_r80", "uniform"),
+        ("final_rauc", "fixed"),
+        ("final_rauc", "failure_only"),
+        ("final_rauc", "plr_loss"),
+        ("rauc_aulc", "fixed"),
+        ("rauc_aulc", "failure_only"),
+        ("rauc_aulc", "plr_loss"),
+    }
+    found = {(row["metric"], row["baseline"]) for row in grid_rows}
+    missing = expected - found
+    extra = found - expected
+    if missing or extra:
+        raise ValueError(
+            "Grid margin full 30-seed significance rows mismatch: "
+            f"missing={sorted(missing)}, extra={sorted(extra)}"
+        )
+    bad_n = [
+        f"{row['metric']}/{row['baseline']} n={row['n']}"
+        for row in grid_rows
+        if int(row["n"]) != 30
+    ]
+    if bad_n:
+        raise ValueError(f"Grid margin full 30-seed significance rows must use 30 seeds: {', '.join(bad_n)}")
+    unsupported = [
+        f"{row['metric']}/{row['baseline']} supports={row['supports_treatment']} W/L/T={row['paired_wins']}/{row['paired_losses']}/{row['paired_ties']}"
+        for row in grid_rows
+        if row["supports_treatment"] != "true"
+        or row["paired_wins"] != "30"
+        or row["paired_losses"] != "0"
+        or row["paired_ties"] != "0"
+    ]
+    if unsupported:
+        raise ValueError(
+            "Grid margin full 30-seed significance rows must support BGR: "
+            + ", ".join(unsupported)
+        )
+    return ["Grid margin full 30-seed significance rows use complete positive 30-seed comparisons"]
+
+
+def validate_suffix_coverage_full_significance(rows: list[dict[str, str]]) -> list[str]:
+    expected = {
+        ("final_rauc", "clean_ft"),
+        ("final_rauc", "fixed"),
+        ("final_rauc", "failure_only"),
+        ("final_rauc", "loss_priority"),
+        ("final_rauc", "uniform"),
+        ("final_transfer_rauc", "uniform"),
+        ("rauc_aulc", "uniform"),
+    }
+    benchmarks = [
+        "Robot suffix coverage-full 30-seed",
+        "Robot suffix coverage-full replication 30-seed",
+    ]
+    for benchmark in benchmarks:
+        suffix_rows = [row for row in rows if row["benchmark"] == benchmark]
+        found = {(row["metric"], row["baseline"]) for row in suffix_rows}
+        missing = expected - found
+        extra = found - expected
+        if missing or extra:
+            raise ValueError(
+                f"{benchmark} significance rows mismatch: "
+                f"missing={sorted(missing)}, extra={sorted(extra)}"
+            )
+        bad_n = [
+            f"{row['metric']}/{row['baseline']} n={row['n']}"
+            for row in suffix_rows
+            if int(row["n"]) != 30
+        ]
+        if bad_n:
+            raise ValueError(f"{benchmark} significance rows must use 30 seeds: {', '.join(bad_n)}")
+        unsupported = [
+            f"{row['metric']}/{row['baseline']} supports={row['supports_treatment']} W/L/T={row['paired_wins']}/{row['paired_losses']}/{row['paired_ties']}"
+            for row in suffix_rows
+            if row["supports_treatment"] != "true"
+            or row["paired_wins"] != "30"
+            or row["paired_losses"] != "0"
+            or row["paired_ties"] != "0"
+        ]
+        if unsupported:
+            raise ValueError(
+                f"{benchmark} significance rows must support BGR-Coverage: "
+                + ", ".join(unsupported)
+            )
+    return ["Robot suffix coverage-full significance rows use complete positive original and held-out 30-seed comparisons"]
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--paper", type=Path, default=Path("paper/main.tex"))
+    parser.add_argument("--results-dir", type=Path, default=Path("results"))
+    parser.add_argument("--figures-dir", type=Path, default=Path("paper/figures"))
+    args = parser.parse_args()
+
+    paper_text = args.paper.read_text(encoding="utf-8")
+    claims = build_claims(args.results_dir, args.figures_dir)
+    missing = missing_claims(paper_text, claims)
+    if missing:
+        print("Paper claim check failed:")
+        for claim in missing:
+            print(f"- {claim.label}: missing {claim.snippet!r} from {claim.source}")
+        return 1
+    forbidden = forbidden_terms(paper_text)
+    if forbidden:
+        print("Paper framing check failed:")
+        for term in forbidden:
+            print(f"- forbidden term remains in paper: {term!r}")
+        return 1
+    unverified = unverified_result_claims(paper_text, args.results_dir)
+    if unverified:
+        print("Paper unverified-result check failed:")
+        for item in unverified:
+            print(f"- {item}")
+        return 1
+    paper_negative = forbidden_paper_negative_claims(paper_text)
+    if paper_negative:
+        print("Paper paper-negative diagnostic check failed:")
+        for token in paper_negative:
+            print(f"- paper-negative OpenVLA diagnostic appears in paper: {token!r}")
+        return 1
+
+    try:
+        significance_messages = validate_significance_checks(args.figures_dir)
+    except ValueError as exc:
+        print("Paper significance check failed:")
+        print(f"- {exc}")
+        return 1
+
+    for claim in claims:
+        print(f"[ok] {claim.label}: {claim.snippet} ({claim.source})")
+    for message in significance_messages:
+        print(f"[ok] {message} (paper/figures/significance_tests.csv)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -16,6 +16,8 @@ paper/*.blg
 paper/*.fdb_latexmk
 paper/*.fls
 paper/*.log
+!paper/main.log
+!paper/ReproducibilityChecklist.log
 paper/*.out
 paper/*.pdf
 !paper/main.pdf

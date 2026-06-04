@@ -1,0 +1,2 @@
+method,log,episodes,successes,success_rate,task_success_rates,num_tasks
+oft-goal,results/openvla_oft_sanity_eval_sanity_v1/logs/oft-goal/EVAL-libero_goal-openvla-2026_06_02-17_22_54--oft-goal-sanity_v1.txt,15,14,0.9333,"[1.0, 0.6666666666666666, 1.0, 1.0, 1.0]",5

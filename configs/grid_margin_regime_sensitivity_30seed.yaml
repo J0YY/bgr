@@ -1,0 +1,9 @@
+experiment:
+  name: grid_margin_regime_sensitivity_30seed_v1
+  base_config: configs/grid_margin_full_30seed.yaml
+  seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+  methods: [uniform, bgr]
+  regime_names: [low_obstacle, nominal, high_obstacle]
+  obstacle_probs: [0.14, 0.22, 0.30]
+  grid_sizes: [11, 11, 11]
+  max_offsets: [5, 6, 7]

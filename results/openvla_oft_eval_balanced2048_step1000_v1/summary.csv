@@ -1,0 +1,3 @@
+method,log,episodes,successes,success_rate,task_success_rates,num_tasks
+bgr,results/openvla_oft_eval_balanced2048_step1000_v1/logs/bgr/EVAL-libero_goal-openvla-2026_06_02-17_10_15--bgr-step1000.txt,15,0,0.0,"[0.0, 0.0, 0.0, 0.0, 0.0]",5
+random,results/openvla_oft_eval_balanced2048_step1000_v1/logs/random/EVAL-libero_goal-openvla-2026_06_02-17_09_58--random-step1000.txt,15,0,0.0,"[0.0, 0.0, 0.0, 0.0, 0.0]",5

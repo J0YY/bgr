@@ -1,4 +1,4 @@
-"""Bifurcation-Guided Replay core package."""
+"""Boundary-Guided Replay core package."""
 
 from bgr.curve_estimators import CurveEstimate, IsotonicCurveEstimator
 from bgr.metrics import critical_radius, recovery_auc

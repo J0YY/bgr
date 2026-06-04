@@ -36,6 +36,20 @@ def run_method(config: dict, method: str, seed: int) -> GridMarginResult:
         max_offset=int(exp["max_offset"]),
         learning_rate=float(exp["learning_rate"]),
         seed=seed,
+        feasible_radius_floor=float(exp.get("feasible_radius_floor", 0.35)),
+        feasible_radius_base=float(exp.get("feasible_radius_base", 0.45)),
+        feasible_radius_path_scale=float(exp.get("feasible_radius_path_scale", 0.45)),
+        feasible_radius_noise=float(exp.get("feasible_radius_noise", 0.03)),
+        initial_margin_base=float(exp.get("initial_margin_base", 0.12)),
+        initial_margin_path_scale=float(exp.get("initial_margin_path_scale", 0.22)),
+        initial_margin_noise=float(exp.get("initial_margin_noise", 0.05)),
+        initial_margin_min=float(exp.get("initial_margin_min", 0.05)),
+        initial_margin_max=float(exp.get("initial_margin_max", 0.45)),
+        clean_success_min=float(exp.get("clean_success_min", 0.80)),
+        clean_success_max=float(exp.get("clean_success_max", 0.96)),
+        temperature_min=float(exp.get("temperature_min", 0.045)),
+        temperature_max=float(exp.get("temperature_max", 0.10)),
+        boundary_width=float(exp.get("boundary_width", 0.15)),
     )
     alpha = float(exp.get("alpha", 0.8))
     eval_grid = np.linspace(0.0, 1.0, int(exp.get("eval_grid_size", 9)))

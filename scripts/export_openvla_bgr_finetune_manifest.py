@@ -20,9 +20,9 @@ def main() -> int:
     parser.add_argument("--out", required=True)
     parser.add_argument("--lower", type=float, default=0.25)
     parser.add_argument("--upper", type=float, default=0.75)
-    parser.add_argument("--openvla-oft-root", default="/work/joy/external_validation/openvla_oft_smoke_746787/openvla-oft")
-    parser.add_argument("--rlds-root", default="/work/joy/bgr/openvla_rlds")
-    parser.add_argument("--run-root", default="/work/joy/bgr/openvla_oft_runs")
+    parser.add_argument("--openvla-oft-root", default="/work/anonymous/external_validation/openvla_oft_smoke_746787/openvla-oft")
+    parser.add_argument("--rlds-root", default="/work/anonymous/bgr/openvla_rlds")
+    parser.add_argument("--run-root", default="/work/anonymous/bgr/openvla_oft_runs")
     parser.add_argument("--base-checkpoint", default="openvla/openvla-7b-finetuned-libero-object")
     args = parser.parse_args()
 

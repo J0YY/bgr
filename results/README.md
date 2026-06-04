@@ -1,6 +1,1732 @@
 # Experiment Results Ledger
 
-All heavy runs are launched through `~/remote_srun.sh` and write outputs under `/work/joy/bgr/runs`.
+All heavy runs are launched through `~/remote_srun.sh` and write outputs under
+`/work/anonymous/bgr/runs`.
+
+## Submission Evidence Index
+
+Primary controlled evidence for the paper is:
+
+- `results/toy_15seed_v1/summary.csv`: 15 paired seeds for the controlled
+  synthetic recovery-margin benchmark.
+- `results/toy_30seed_v1/summary.csv`: 30-seed synthetic mechanism
+  confirmation.
+- `results/grid_margin_full_30seed_v1/summary.csv`: 30 paired seeds for the
+  procedural grid-margin full-baseline comparison.
+- `results/grid_margin_full_replication_30seed_v1/summary.csv`: held-out seeds
+  30--59 replication for the grid-margin BGR-vs-uniform comparison.
+- `results/suffix_coverage_full_30seed_v1/summary.csv`: 30 paired seeds for the
+  coverage-aware robot-suffix full-baseline comparison against clean-only,
+  fixed-radius, failure-only, loss-priority, and uniform replay.
+- `results/suffix_coverage_full_replication_30seed_v1/summary.csv`: held-out
+  seeds 30--59 suffix full-baseline replication.
+- `results/suffix_strategy_coverage_30seed_v1/summary.csv`: 30 paired seeds for
+  the coverage-aware robot-suffix comparison.
+- `results/suffix_strategy_coverage_replication_30seed_v1/summary.csv`: held-out
+  seeds 30--59 replication for the robot-suffix coverage comparison.
+- `paper/figures/significance_tests.csv`: paired exact sign tests for the
+  central claims, ablations, sensitivity sweeps, and replications.
+- `paper/figures/estimator_stats.csv` and `paper/figures/estimator_table.tex`:
+  method-validation evidence that active boundary probing estimates useful
+  critical radii at a small fixed rollout budget.
+- `results/estimator_pair_30seed_v1/summary.csv`: 30-seed active-estimator
+  confirmation.
+
+Packaged grid-margin robustness/scope diagnostics are:
+
+- `results/grid_margin_ablation_15seed_v1/summary.csv`: original radius-level
+  ablation showing that boundary-radius sampling is the important BGR component.
+- `results/grid_margin_ablation_30seed_v1/summary.csv`: 30-seed radius-level
+  ablation confirmation.
+- `paper/figures/grid_margin_learning_curve_stats.csv` and
+  `results/grid_margin_full_15seed_v1/results.json`: stored 15-seed
+  learning-curve history and generated stats.
+- `paper/figures/grid_margin_target_sensitivity_stats.csv` and
+  `results/grid_margin_target_sensitivity_15seed_v1/summary.csv`: target-margin
+  sweep.
+- `results/grid_margin_target_sensitivity_30seed_v1/summary.csv`: 30-seed
+  target-margin confirmation.
+- `paper/figures/grid_margin_learning_rate_sensitivity_stats.csv` and
+  `results/grid_margin_learning_rate_sensitivity_15seed_v1/summary.csv`:
+  learning-rate scope diagnostic.
+- `results/grid_margin_learning_rate_sensitivity_30seed_v1/summary.csv`:
+  30-seed learning-rate confirmation.
+- `paper/figures/grid_margin_regime_sensitivity_stats.csv` and
+  `results/grid_margin_regime_sensitivity_15seed_v1/summary.csv`: regime
+  sensitivity diagnostic.
+- `results/grid_margin_regime_sensitivity_30seed_v1/summary.csv`: 30-seed
+  regime diagnostic confirmation.
+- `paper/figures/grid_margin_stress_sensitivity_stats.csv` and
+  `results/grid_margin_stress_sensitivity_15seed_v1/summary.csv`: geometry
+  stress diagnostic.
+- `results/grid_margin_stress_sensitivity_30seed_v1/summary.csv`: 30-seed
+  stress confirmation.
+
+Secondary diagnostics are included to scope the claim rather than expand it.
+OpenVLA/LIBERO rows are recovery-curve, selection, and data-plumbing audits; the
+paper does not claim a stable OpenVLA fine-tuning gain over the official
+checkpoint.
+
+Packaged OpenVLA audit artifacts are:
+
+- `results/libero_probe_v2/summary.csv`: resettable LIBERO radius-probe audit.
+- `paper/figures/openvla_stats.csv`: OpenVLA recovery and selection audit stats.
+- `results/libero_openvla_recovery_v1/summary.csv`: source recovery summary
+  used to generate the OpenVLA audit stats.
+- `results/libero_openvla_boundary_selection_balanced_v1/aggregate.csv`:
+  source selection summary used to generate the OpenVLA audit stats.
+- `results/openvla_teacher_replay_manifest_v1/summary.json`: teacher-replay
+  data-plumbing audit.
+- `results/openvla_oft_sanity_eval_sanity_v1/summary.csv`: official-checkpoint
+  sanity audit.
+- `results/openvla_oft_eval_balanced2048_step1000_v1/summary.csv`: 1,000-step
+  balanced2048 data-plumbing audit.
+- `results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv`:
+  p1024 clean adaptation audit.
+- `results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv`:
+  p1024 original perturbation audit.
+- `results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv`:
+  p1024 offset-3 perturbation audit.
+- `results/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv`:
+  p2048 clean adaptation audit.
+- `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv`:
+  p2048 original perturbation audit.
+- `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv`:
+  p2048 offset-3 perturbation audit.
+
+The p4096 and common-availability sections below are retained as paper-negative
+diagnostics in this ledger only. Their summary CSVs are not part of the
+anonymous submission manifest or archive.
+
+The detailed sections below are a historical provenance ledger. Reviewer-facing
+evidence should be read from the index above and the anonymous manuscript; later
+diagnostic sections are included for auditability.
+Older troubleshooting sections may retain labels such as Queued command to
+record original Slurm submissions; those labels are provenance, not active
+experiment status.
+
+## Completed OpenVLA-OFT p4096 Clean-Mix Scale Diagnostic
+
+Launched on 2026-06-02 after p2048 again tied matched random on clean success and
+gave only a one-episode perturbation edge over matched random while tying the
+unadapted official checkpoint. This run doubles the perturbation subset again,
+to 4,096 rendered perturbation examples with sixteen perturbation episodes per
+family, using the same corrected identity-LoRA and official-training-statistics
+recipe as p1024/p2048. Treat it as a falsification/scale diagnostic for the
+OpenVLA audit, not as a promised robotics claim.
+
+Submitted prep/TFDS command:
+
+```bash
+TAG=p4096 \
+MAX_PERTURB_EXAMPLES=4096 \
+PERTURB_EPISODES_PER_FAMILY=16 \
+TIME=16:00:00 \
+scripts/queue_openvla_oft_clean_mix_prep.sh --submit
+```
+
+Submitted clean adaptation/eval continuation:
+
+```bash
+TRAIN_DEPENDENCY=afterok:763725 \
+TRAIN_DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/c2d0f9fbbd82674683b397ff923168a12f6a307b/dataset_statistics.json \
+DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/c2d0f9fbbd82674683b397ff923168a12f6a307b/dataset_statistics.json \
+FINETUNE_SCRIPT=vla-scripts/finetune_identity_lora.py \
+ADAPT_STEPS=100 LR=1e-6 \
+TAG=cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+EVAL_ARTIFACT=openvla_oft_goal_adapt_eval_cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+BGR_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_bgr_cleanmix_p4096_v1 \
+RANDOM_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_cleanmix_p4096_v1 \
+BGR_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+RANDOM_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+TRAIN_TIME=05:00:00 \
+EVAL_TIME=06:00:00 \
+scripts/queue_openvla_oft_goal_adapt.sh --submit
+```
+
+Submitted perturbation eval command:
+
+```bash
+TAG=cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+BGR_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+BGR_DEPENDENCY=afterok:763727 \
+RANDOM_DEPENDENCY=afterok:763730 \
+EVAL_TIME=06:00:00 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Slurm chain:
+
+```text
+763725  bgr-cleanmix-prep-p4096                                                               completed, 00:25:03; TFDS roots valid but perturb counts imbalanced
+763726  bgr-goal-adapt-bgr-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1     afterok:763725
+763727  bgr-goal-merge-bgr-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1     afterok:763726
+763728  bgr-goal-eval-bgr-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1      afterok:763727
+763729  bgr-goal-adapt-random-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1  afterok:763725, afterok:763726
+763730  bgr-goal-merge-random-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1  afterok:763729
+763731  bgr-goal-eval-random-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1   afterok:763730
+763732--763736  official perturb evals, submitted immediately
+763737--763741  BGR perturb evals, afterok:763727
+763742--763746  random perturb evals, afterok:763730
+```
+
+Live status checked 2026-06-03:
+
+```text
+763725  bgr-cleanmix-prep-p4096                                                               completed, 00:25:03
+763726  bgr-goal-adapt-bgr-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1     completed, 00:01:43
+763727  bgr-goal-merge-bgr-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1     completed, 00:01:23
+763728  bgr-goal-eval-bgr-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1      completed, 00:02:27, 14/15 = 0.9333
+763729  bgr-goal-adapt-random-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1  completed, 00:01:43
+763730  bgr-goal-merge-random-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1  completed, 00:01:26
+763731  bgr-goal-eval-random-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1   completed, 00:02:24, 14/15 = 0.9333
+763737  bgr-pert-eval-bgr-identity-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1  completed, 00:03:34, 14/15 = 0.9333
+763738  bgr-pert-eval-bgr-blur-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1      completed, 00:02:10, 14/15 = 0.9333
+763739  bgr-pert-eval-bgr-brightness-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1 completed, 00:02:32, 13/15 = 0.8667
+763740  bgr-pert-eval-bgr-occlusion-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1  completed, 00:02:59, 6/15 = 0.4000
+763741  bgr-pert-eval-bgr-shift-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1      completed, 00:02:16, 15/15 = 1.0000
+763742  bgr-pert-eval-random-identity-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1 completed, 00:02:28, 14/15 = 0.9333
+763743  bgr-pert-eval-random-blur-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1     completed, 00:03:33, 14/15 = 0.9333
+763744  bgr-pert-eval-random-brightness-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1 completed, 00:02:29, 14/15 = 0.9333
+763745  bgr-pert-eval-random-occlusion-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1 completed, 00:02:52, 7/15 = 0.4667
+763746  bgr-pert-eval-random-shift-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1     completed, 00:02:27, 14/15 = 0.9333
+763732  bgr-pert-eval-official-identity-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1  completed, 00:02:06, 14/15 = 0.9333
+763733  bgr-pert-eval-official-blur-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1      completed, 00:02:11, 14/15 = 0.9333
+763734  bgr-pert-eval-official-brightness-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1 completed, 00:02:07, 14/15 = 0.9333
+763735  bgr-pert-eval-official-occlusion-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1  completed, 00:02:54, 7/15 = 0.4667
+763736  bgr-pert-eval-official-shift-cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1      completed, 00:02:08, 14/15 = 0.9333
+```
+
+Prep completed at 2026-06-03T03:41:20+01:00. Local prep metadata is mirrored
+under `results/openvla_oft_cleanmix_p4096_v1/`. The original diagnostic TFDS
+roots are valid but imbalanced: BGR has 82 episodes / 5,248 steps, while random
+has 76 episodes / 4,864 steps because random has only 512 available occlusion
+perturbation examples. Treat this chain as informational; use the
+common-availability repair below for a fair p4096 matched comparison.
+
+Clean eval logs are mirrored under
+`results/openvla_oft_goal_adapt_eval_cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1/`.
+BGR and matched random again tie clean at 14/15 each. Perturbation evals are
+complete, but this chain remains imbalanced because the original random TFDS
+has fewer perturbation examples than BGR.
+
+Perturbation logs are mirrored under
+`results/openvla_oft_perturb_eval_cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1/`.
+The local summary gives identity 0.9333 for official, BGR, and random. Mean
+perturbed success across blur, brightness, occlusion, and shift is 0.8167 for
+official, 0.8000 for BGR, and 0.8167 for random. This is still not a fair
+matched p4096 BGR/random perturbation comparison; use the common-availability
+repair below for that.
+
+TFDS roots:
+
+```text
+/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_bgr_cleanmix_p4096_v1
+/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_cleanmix_p4096_v1
+```
+
+Local collection paths:
+
+```text
+results/openvla_oft_cleanmix_p4096_v1/
+results/openvla_oft_goal_adapt_eval_cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1/
+results/openvla_oft_perturb_eval_cleanmix_p4096_step50100_lr1em6_identitylora_officialtrainstats_v1/
+```
+
+## Completed OpenVLA-OFT p4096 Common-Availability Repair
+
+Launched on 2026-06-03 after the p4096 scale diagnostic revealed a perturbation
+availability imbalance: BGR rendered 4,096/4,096 perturb examples, but matched
+random rendered 3,584/4,096 because the random replay manifest contains only
+eight occlusion episodes, or 512 occlusion examples, at 64 steps each. The
+original p4096 chain remains an imbalanced diagnostic. This repair creates a
+fair matched comparison from the already-rendered examples by capping both
+methods to the common perturbation availability:
+
+```text
+blur:       1,024 examples
+brightness: 1,024 examples
+occlusion:    512 examples
+shift:      1,024 examples
+total:      3,584 perturb examples per method
+```
+
+Clean examples remain the native clean-anchor counts, matching prior clean-mix
+runs: 1,152 BGR clean examples and 1,280 random clean examples. The fair repair
+therefore tests common perturbation availability rather than equal total clean
+steps.
+
+Submitted common-availability chain:
+
+```text
+763748  bgr-cleanmix-commonavail-p4096                                                        prep/filter/combine/TFDS export
+763749  bgr-goal-adapt-bgr-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1     afterok:763748
+763750  bgr-goal-merge-bgr-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1     afterok:763749
+763751  bgr-goal-eval-bgr-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1      afterok:763750
+763752  bgr-goal-adapt-random-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1  afterok:763748, afterok:763749
+763753  bgr-goal-merge-random-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1  afterok:763752
+763754  bgr-goal-eval-random-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1   afterok:763753
+763755--763759  official perturb evals for common-availability tag, submitted immediately
+763760--763764  BGR perturb evals for common-availability tag, afterok:763750
+763765--763769  random perturb evals for common-availability tag, afterok:763753
+```
+
+Live status checked 2026-06-03:
+
+```text
+763748  bgr-cleanmix-commonavail-p4096  completed, 00:07:59; local prep metadata mirrored
+763749  bgr-goal-adapt-bgr-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1     completed, 00:01:48
+763750  bgr-goal-merge-bgr-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1     completed, 00:01:09
+763751  bgr-goal-eval-bgr-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1      completed, 00:02:06, 14/15 = 0.9333
+763752  bgr-goal-adapt-random-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1  completed, 00:01:47
+763753  bgr-goal-merge-random-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1  completed, 00:01:20
+763754  bgr-goal-eval-random-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1   completed, 00:02:15, 15/15 = 1.0000
+763755  bgr-pert-eval-official-identity-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1    completed, 00:02:28, 14/15 = 0.9333
+763756  bgr-pert-eval-official-blur-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1        completed, 00:02:10, 14/15 = 0.9333
+763757  bgr-pert-eval-official-brightness-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1  completed, 00:02:31, 14/15 = 0.9333
+763758  bgr-pert-eval-official-occlusion-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1   completed, 00:02:53, 7/15 = 0.4667
+763759  bgr-pert-eval-official-shift-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1       completed, 00:02:06, 14/15 = 0.9333
+763760  bgr-pert-eval-bgr-identity-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1         completed, 00:02:04, 14/15 = 0.9333
+763761  bgr-pert-eval-bgr-blur-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1             completed, 00:02:08, 14/15 = 0.9333
+763762  bgr-pert-eval-bgr-brightness-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1       completed, 00:04:09, 13/15 = 0.8667
+763763  bgr-pert-eval-bgr-occlusion-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1        completed, 00:02:56, 7/15 = 0.4667
+763764  bgr-pert-eval-bgr-shift-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1            completed, 00:01:55, 15/15 = 1.0000
+763765  bgr-pert-eval-random-identity-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1      completed, 00:02:23, 15/15 = 1.0000
+763766  bgr-pert-eval-random-blur-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1          completed, 00:03:18, 14/15 = 0.9333
+763767  bgr-pert-eval-random-brightness-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1    completed, 00:02:30, 14/15 = 0.9333
+763768  bgr-pert-eval-random-occlusion-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1     completed, 00:03:26, 7/15 = 0.4667
+763769  bgr-pert-eval-random-shift-cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1         completed, 00:01:56, 15/15 = 1.0000
+```
+
+Common-availability prep completed at 2026-06-03T03:48:15+01:00. Local prep
+metadata is mirrored under `results/openvla_oft_cleanmix_p4096_commonavail_v1/`.
+Both methods have 3,584 perturb examples with matched perturbation family
+counts. BGR TFDS has 74 episodes / 4,736 steps; random TFDS has 76 episodes /
+4,864 steps because the native clean-anchor counts remain 1,152 vs. 1,280.
+Perturbation logs are mirrored under
+`results/openvla_oft_perturb_eval_cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1/`;
+official identity is 0.9333 and official mean perturbed is 0.8167. Clean-eval
+logs are mirrored under
+`results/openvla_oft_goal_adapt_eval_cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1/`;
+BGR clean is 14/15 = 0.9333; random clean is 15/15 = 1.0000. Mean perturbed
+success is 0.8167 for official, 0.8167 for BGR, and 0.8333 for random. The
+fair p4096 repair is therefore a negative/diagnostic OpenVLA-OFT result rather
+than paper-facing evidence for BGR.
+
+Common-availability collection paths:
+
+```text
+results/openvla_oft_cleanmix_p4096_commonavail_v1/
+results/openvla_oft_goal_adapt_eval_cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1/
+results/openvla_oft_perturb_eval_cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1/
+```
+
+## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
+
+Launched on 2026-06-02 after the p1024 offset-3 follow-up showed only a small
+BGR-over-random perturbation edge and no official-checkpoint improvement. The
+p2048 run tests whether doubling the perturbation subset again, to 2,048
+rendered perturbation examples with eight perturbation episodes per family,
+improves the matched adapted checkpoints or confirms that OpenVLA-OFT remains a
+diagnostic audit in the paper.
+
+Submitted prep/TFDS command:
+
+```bash
+TAG=p2048 \
+MAX_PERTURB_EXAMPLES=2048 \
+PERTURB_EPISODES_PER_FAMILY=8 \
+TIME=12:00:00 \
+scripts/queue_openvla_oft_clean_mix_prep.sh --submit
+```
+
+Slurm chain:
+
+```text
+763698  bgr-cleanmix-prep-p2048  completed, 00:19:18; TFDS roots valid
+```
+
+TFDS roots:
+
+```text
+/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_bgr_cleanmix_p2048_v1
+/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_cleanmix_p2048_v1
+```
+
+Completed prep outputs:
+
+```text
+BGR cleanmix examples:    3,200 = 1,152 clean + 2,048 perturb
+Random cleanmix examples: 3,328 = 1,280 clean + 2,048 perturb
+Perturbation balance: 512 examples each for blur, brightness, occlusion, and shift
+BGR TFDS:    50 episodes, 3,200 steps, libero_goal_no_noops/1.0.0
+Random TFDS: 52 episodes, 3,328 steps, libero_goal_no_noops/1.0.0
+```
+
+Local copied prep artifacts:
+
+```text
+results/openvla_oft_cleanmix_p2048_v1/render/bgr_clean_summary.json
+results/openvla_oft_cleanmix_p2048_v1/render/random_clean_summary.json
+results/openvla_oft_cleanmix_p2048_v1/render/bgr_perturb_summary.json
+results/openvla_oft_cleanmix_p2048_v1/render/random_perturb_summary.json
+results/openvla_oft_cleanmix_p2048_v1/render/bgr_cleanmix_summary.json
+results/openvla_oft_cleanmix_p2048_v1/render/random_cleanmix_summary.json
+results/openvla_oft_cleanmix_p2048_v1/tfds/bgr/bgr_export_summary.json
+results/openvla_oft_cleanmix_p2048_v1/tfds/bgr/dataset_info.json
+results/openvla_oft_cleanmix_p2048_v1/tfds/bgr/features.json
+results/openvla_oft_cleanmix_p2048_v1/tfds/random/bgr_export_summary.json
+results/openvla_oft_cleanmix_p2048_v1/tfds/random/dataset_info.json
+results/openvla_oft_cleanmix_p2048_v1/tfds/random/features.json
+results/openvla_oft_cleanmix_p2048_v1/slurm/bgr-cleanmix-prep-p2048-763698.out
+```
+
+Submitted clean adaptation/eval continuation:
+
+```bash
+TRAIN_DEPENDENCY=afterok:763698 \
+TRAIN_DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/c2d0f9fbbd82674683b397ff923168a12f6a307b/dataset_statistics.json \
+DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/c2d0f9fbbd82674683b397ff923168a12f6a307b/dataset_statistics.json \
+FINETUNE_SCRIPT=vla-scripts/finetune_identity_lora.py \
+ADAPT_STEPS=100 LR=1e-6 \
+TAG=cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+EVAL_ARTIFACT=openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+BGR_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_bgr_cleanmix_p2048_v1 \
+RANDOM_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_cleanmix_p2048_v1 \
+BGR_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+RANDOM_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+TRAIN_TIME=05:00:00 \
+EVAL_TIME=06:00:00 \
+scripts/queue_openvla_oft_goal_adapt.sh --submit
+```
+
+Submitted perturbation eval command:
+
+```bash
+TAG=cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+BGR_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+BGR_DEPENDENCY=afterok:763700 \
+RANDOM_DEPENDENCY=afterok:763703 \
+EVAL_TIME=06:00:00 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Completed Slurm jobs:
+
+```text
+763699  bgr-goal-adapt-bgr-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1        completed, 00:02:14
+763700  bgr-goal-merge-bgr-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1        completed, 00:01:44
+763701  bgr-goal-eval-bgr-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1         completed, 00:03:07, 14/15 = 0.9333
+763702  bgr-goal-adapt-random-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1     completed, 00:02:14
+763703  bgr-goal-merge-random-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1     completed, 00:01:40
+763704  bgr-goal-eval-random-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1      completed, 00:03:54, 14/15 = 0.9333
+763705  bgr-pert-eval-official-identity-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1   completed, 00:03:09, 14/15 = 0.9333
+763706  bgr-pert-eval-official-blur-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1       completed, 00:03:14, 14/15 = 0.9333
+763707  bgr-pert-eval-official-brightness-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1 completed, 00:03:12, 14/15 = 0.9333
+763708  bgr-pert-eval-official-occlusion-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1  completed, 00:04:14, 7/15 = 0.4667
+763709  bgr-pert-eval-official-shift-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1      completed, 00:03:12, 14/15 = 0.9333
+763710  bgr-pert-eval-bgr-identity-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1        completed, 00:03:08, 14/15 = 0.9333
+763711  bgr-pert-eval-bgr-blur-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1            completed, 00:03:13, 14/15 = 0.9333
+763712  bgr-pert-eval-bgr-brightness-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1      completed, 00:03:08, 14/15 = 0.9333
+763713  bgr-pert-eval-bgr-occlusion-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1       completed, 00:04:12, 7/15 = 0.4667
+763714  bgr-pert-eval-bgr-shift-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1           completed, 00:03:05, 14/15 = 0.9333
+763715  bgr-pert-eval-random-identity-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1     completed, 00:03:08, 14/15 = 0.9333
+763716  bgr-pert-eval-random-blur-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1         completed, 00:03:16, 14/15 = 0.9333
+763717  bgr-pert-eval-random-brightness-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1   completed, 00:02:50, 14/15 = 0.9333
+763718  bgr-pert-eval-random-occlusion-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1    completed, 00:03:59, 6/15 = 0.4000
+763719  bgr-pert-eval-random-shift-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1        completed, 00:02:49, 14/15 = 0.9333
+```
+
+Completed p2048 perturb calibration:
+
+| Method | Identity | Blur | Brightness | Occlusion | Shift | Mean perturbed |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Official OpenVLA-OFT | 0.9333 | 0.9333 | 0.9333 | 0.4667 | 0.9333 | 0.8167 |
+| BGR-boundary | 0.9333 | 0.9333 | 0.9333 | 0.4667 | 0.9333 | 0.8167 |
+| Matched random | 0.9333 | 0.9333 | 0.9333 | 0.4000 | 0.9333 | 0.8000 |
+
+Local copied perturb artifacts:
+
+```text
+results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/logs/
+results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/slurm/
+results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv
+results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.json
+```
+
+Completed p2048 clean adapted eval:
+
+| Method | Clean success |
+| --- | ---: |
+| BGR-boundary | 14/15 = 0.9333 |
+| Matched random | 14/15 = 0.9333 |
+
+Local copied clean adapted artifacts:
+
+```text
+results/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/logs/
+results/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/slurm/
+results/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv
+results/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.json
+```
+
+Collection/summarization commands used:
+
+```bash
+rsync -az athena:/work/anonymous/bgr/runs/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/ \
+  results/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/
+rsync -az athena:/work/anonymous/bgr/runs/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/ \
+  results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/
+PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_eval.py \
+  --method-log-dir bgr=results/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/logs/bgr \
+  --method-log-dir random=results/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/logs/random \
+  --out results/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1
+PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_perturb_eval.py \
+  --logs-root results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/logs \
+  --out results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1
+```
+
+## Completed OpenVLA-OFT p2048 Offset-3 Perturbation Eval
+
+Launched and completed on 2026-06-03 as the p2048 counterpart to the completed p1024 offset-3
+follow-up. This reuses the completed p2048 BGR/random adapted checkpoints and
+the unadapted official checkpoint, but evaluates seven trials per task starting
+at init-state offset 3. Each method therefore gets 35 episodes per perturbation
+and 175 episodes across identity, blur, brightness, occlusion, and shift. All
+15 corrected jobs completed with Slurm exit code 0:0, and local summaries were
+generated from the copied eval logs.
+
+The first live submission, 763962--763976, was superseded before usable eval
+logs were produced: jobs 763962--763969 failed immediately or after one second
+because the generated Slurm scripts still used the anonymized output/cache root,
+and jobs 763970--763976 were cancelled before starting. The corrected queue
+script exposes live output/cache root overrides while retaining anonymized
+defaults for reproducible command text.
+
+Corrected submitted command:
+
+```bash
+TAG=cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1 \
+BGR_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+EVAL_TRIALS=7 \
+EVAL_INIT_STATE_OFFSET=3 \
+EVAL_SEED=17 \
+EVAL_TIME=08:00:00 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Corrected Slurm chain:
+
+```text
+763978  bgr-pert-eval-official-identity-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials    completed, 00:04:08
+763979  bgr-pert-eval-official-blur-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials        completed, 00:05:38
+763980  bgr-pert-eval-official-brightness-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials  completed, 00:06:43
+763981  bgr-pert-eval-official-occlusion-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials   completed, 00:07:17
+763982  bgr-pert-eval-official-shift-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials       completed, 00:04:03
+763983  bgr-pert-eval-bgr-identity-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials         completed, 00:05:32
+763984  bgr-pert-eval-bgr-blur-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials             completed, 00:06:52
+763985  bgr-pert-eval-bgr-brightness-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials       completed, 00:04:36
+763986  bgr-pert-eval-bgr-occlusion-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials        completed, 00:07:23
+763987  bgr-pert-eval-bgr-shift-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials            completed, 00:05:14
+763989  bgr-pert-eval-random-identity-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials      completed, 00:04:25
+763990  bgr-pert-eval-random-blur-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials          completed, 00:06:53
+763991  bgr-pert-eval-random-brightness-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials    completed, 00:05:47
+763992  bgr-pert-eval-random-occlusion-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials     completed, 00:07:06
+763993  bgr-pert-eval-random-shift-cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials         completed, 00:05:00
+```
+
+Offset-3 visual perturbation results:
+
+| Method | Identity | Blur | Brightness | Occlusion | Shift | Mean perturbed |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| BGR-boundary | 0.9714 | 1.0000 | 0.9714 | 0.5714 | 0.9429 | 0.8714 |
+| Official OpenVLA-OFT | 0.9714 | 1.0000 | 1.0000 | 0.6000 | 0.9714 | 0.8929 |
+| Random-balanced | 1.0000 | 0.9714 | 0.9714 | 0.5714 | 0.9714 | 0.8714 |
+
+Pooled with the original 15-episode p2048 perturbation eval, excluding identity
+perturbations:
+
+| Method | Successes / episodes | Mean perturbed success |
+| --- | ---: | ---: |
+| BGR-boundary | 171 / 200 | 0.8550 |
+| Official OpenVLA-OFT | 174 / 200 | 0.8700 |
+| Random-balanced | 170 / 200 | 0.8500 |
+
+Local copied artifacts:
+
+```text
+results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/logs/
+results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/slurm/
+results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv
+results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.json
+```
+
+Collection/summarization commands used:
+
+```bash
+rsync -az athena:/work/anonymous/bgr/runs/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/ \
+  results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/
+PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_perturb_eval.py \
+  --logs-root results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/logs \
+  --out results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1
+```
+
+## Completed OpenVLA-OFT p1024 Offset-3 Perturbation Eval
+
+### `openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1`
+
+Launched on 2026-06-02 to test whether the observed p1024 one-episode occlusion
+edge survives out-of-sample LIBERO init states. This reuses the completed
+p1024 BGR/random adapted checkpoints and the unadapted official checkpoint, but
+evaluates seven additional trials per task starting at init-state offset 3
+instead of repeating the original three-trial diagnostic. Each method therefore
+gets 35 episodes per perturbation and 175 episodes across identity, blur,
+brightness, occlusion, and shift. All 15 jobs completed with Slurm exit code
+0:0, and local summaries were generated from the copied eval logs.
+
+Submitted command:
+
+```bash
+TAG=cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1 \
+BGR_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+EVAL_TRIALS=7 \
+EVAL_INIT_STATE_OFFSET=3 \
+EVAL_SEED=17 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Slurm chain:
+
+```text
+763678  bgr-pert-eval-official-identity-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1   completed, 00:04:38
+763679  bgr-pert-eval-official-blur-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1       completed, 00:04:48
+763680  bgr-pert-eval-official-brightness-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1 completed, 00:04:37
+763681  bgr-pert-eval-official-occlusion-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1  completed, 00:05:53
+763682  bgr-pert-eval-official-shift-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1      completed, 00:05:55
+763683  bgr-pert-eval-bgr-identity-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1        completed, 00:06:00
+763684  bgr-pert-eval-bgr-blur-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1            completed, 00:04:46
+763685  bgr-pert-eval-bgr-brightness-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1      completed, 00:04:39
+763686  bgr-pert-eval-bgr-occlusion-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1       completed, 00:06:24
+763687  bgr-pert-eval-bgr-shift-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1           completed, 00:04:27
+763688  bgr-pert-eval-random-identity-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1     completed, 00:05:46
+763689  bgr-pert-eval-random-blur-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1         completed, 00:06:02
+763690  bgr-pert-eval-random-brightness-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1   completed, 00:04:50
+763691  bgr-pert-eval-random-occlusion-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1    completed, 00:06:42
+763692  bgr-pert-eval-random-shift-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1        completed, 00:04:24
+```
+
+Local copied artifacts:
+
+```text
+results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/logs/
+results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/slurm/
+results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv
+results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.json
+```
+
+Collection/summarization command used:
+
+```bash
+rsync -az athena:/work/anonymous/bgr/runs/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/ \
+  results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/
+PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_perturb_eval.py \
+  --logs-root results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/logs \
+  --out results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1
+```
+
+Offset-3 visual perturbation results:
+
+| Method | Identity | Blur | Brightness | Occlusion | Shift | Mean perturbed |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| BGR-boundary | 0.9714 | 0.9714 | 1.0000 | 0.5714 | 0.9143 | 0.8643 |
+| Official OpenVLA-OFT | 0.9714 | 1.0000 | 1.0000 | 0.6000 | 0.9714 | 0.8929 |
+| Random-balanced | 1.0000 | 1.0000 | 0.9429 | 0.5429 | 0.9429 | 0.8571 |
+
+Pooled with the original 15-episode p1024 perturbation eval, excluding identity
+perturbations:
+
+| Method | Successes / episodes | Mean perturbed success |
+| --- | ---: | ---: |
+| BGR-boundary | 171 / 200 | 0.8550 |
+| Official OpenVLA-OFT | 174 / 200 | 0.8700 |
+| Random-balanced | 168 / 200 | 0.8400 |
+
+Interpretation: the offset-3 follow-up preserves only a very small BGR edge over
+matched random selection and removes the earlier one-episode edge over the
+unadapted official checkpoint. The honest OpenVLA framing is therefore:
+diagnostic data plumbing and a small matched-random perturbation edge, not a
+robotics fine-tuning improvement over the official checkpoint. Slurm logs include
+post-final-result EGL destructor warnings, but all jobs completed with exit code
+0:0 and each local eval log contains final results.
+
+## Completed OpenVLA-OFT p1024 Perturbation-Mix Diagnostic
+
+### `openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1`
+
+Launched on 2026-06-02 after the completed p512 diagnostic tied matched random
+on clean LIBERO-Goal success and had a small matched-random perturbation edge,
+but only matched the unadapted official checkpoint. This p1024 run keeps the
+same official-checkpoint resume, identity-LoRA wrapper, official training/eval
+statistics, low learning rate, 100-step adaptation, clean eval, and matched
+visual-perturbation protocol. The only intended experimental change was
+doubling the perturbation subset again, from 512 to 1,024 rendered examples, by
+allowing four perturbation episodes per family. Prep, combine, TFDS export,
+matched BGR/random adaptation, clean evals, and matched visual-perturbation
+evals all completed.
+
+Submitted prep command:
+
+```bash
+TAG=p1024 \
+MAX_PERTURB_EXAMPLES=1024 \
+PERTURB_EPISODES_PER_FAMILY=4 \
+TIME=10:00:00 \
+scripts/queue_openvla_oft_clean_mix_prep.sh --submit
+```
+
+Submitted TFDS continuation command:
+
+```bash
+TAG=p1024 \
+PREP_DEPENDENCY=afterany:763655 \
+TIME=03:00:00 \
+scripts/queue_openvla_oft_clean_mix_tfds_export.sh --submit
+```
+
+Submitted clean eval command:
+
+```bash
+TRAIN_DEPENDENCY=afterok:763656 \
+TRAIN_DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/c2d0f9fbbd82674683b397ff923168a12f6a307b/dataset_statistics.json \
+DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/c2d0f9fbbd82674683b397ff923168a12f6a307b/dataset_statistics.json \
+FINETUNE_SCRIPT=vla-scripts/finetune_identity_lora.py \
+ADAPT_STEPS=100 LR=1e-6 \
+TAG=cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+EVAL_ARTIFACT=openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+BGR_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_bgr_cleanmix_p1024_v1 \
+RANDOM_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_cleanmix_p1024_v1 \
+BGR_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+RANDOM_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+TRAIN_TIME=05:00:00 \
+EVAL_TIME=06:00:00 \
+scripts/queue_openvla_oft_goal_adapt.sh --submit
+```
+
+Submitted visual-perturbation eval command:
+
+```bash
+METHODS=bgr,random \
+BGR_DEPENDENCY=afterok:763658 \
+RANDOM_DEPENDENCY=afterok:763661 \
+TAG=cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+BGR_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+EVAL_TIME=06:00:00 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Submitted official visual-perturbation comparator:
+
+```bash
+METHODS=official \
+TAG=cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+EVAL_TIME=06:00:00 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Slurm chain:
+
+```text
+763655  bgr-cleanmix-prep-p1024                                                         completed
+763656  bgr-cleanmix-tfds-p1024                                                         completed, TFDS roots already valid
+763657  bgr-goal-adapt-bgr-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1    completed, checkpoint saved at step 50100
+763658  bgr-goal-merge-bgr-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1    completed
+763659  bgr-goal-eval-bgr-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1     completed
+763660  bgr-goal-adapt-random-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1 completed, checkpoint saved at step 50100
+763661  bgr-goal-merge-random-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1 completed
+763662  bgr-goal-eval-random-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1  completed
+
+763663  bgr perturb identity      completed
+763664  bgr perturb blur          completed
+763665  bgr perturb brightness    completed
+763666  bgr perturb occlusion     completed
+763667  bgr perturb shift         completed
+763668  random perturb identity   completed
+763669  random perturb blur       completed
+763670  random perturb brightness completed
+763671  random perturb occlusion  completed
+763672  random perturb shift      completed
+763673  official perturb identity completed
+763674  official perturb blur     completed
+763675  official perturb brightness completed
+763676  official perturb occlusion completed
+763677  official perturb shift    completed
+```
+
+Local copied artifacts:
+
+```text
+results/openvla_oft_cleanmix_p1024_v1/render/bgr_cleanmix_summary.json
+results/openvla_oft_cleanmix_p1024_v1/render/random_cleanmix_summary.json
+results/openvla_oft_cleanmix_p1024_v1/tfds/bgr_export_summary.json
+results/openvla_oft_cleanmix_p1024_v1/tfds/random_export_summary.json
+results/openvla_oft_cleanmix_p1024_v1/slurm/bgr-cleanmix-prep-p1024-763655.out
+results/openvla_oft_cleanmix_p1024_v1/slurm/bgr-cleanmix-tfds-p1024-763656.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/slurm/bgr-goal-adapt-bgr-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1-763657.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/slurm/bgr-goal-merge-bgr-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1-763658.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/slurm/bgr-goal-eval-bgr-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1-763659.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/slurm/bgr-goal-adapt-random-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1-763660.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/slurm/bgr-goal-merge-random-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1-763661.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/slurm/bgr-goal-eval-random-cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1-763662.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/logs/
+results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv
+results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.json
+results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/logs/
+results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/slurm/
+results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv
+results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.json
+```
+
+Prepared p1024 dataset sizes:
+
+| Method | Rendered clean | Rendered perturb | TFDS episodes | TFDS steps |
+|---|---:|---:|---:|---:|
+| BGR-boundary | 1,152 | 1,024 | 34 | 2,176 |
+| Random-balanced | 1,280 | 1,024 | 36 | 2,304 |
+
+Clean LIBERO-Goal eval results:
+
+| Method | Episodes | Successes | Success rate | Task success rates |
+|---|---:|---:|---:|---|
+| BGR-boundary | 15 | 14 | 0.9333 | `[1.0, 0.6666666666666666, 1.0, 1.0, 1.0]` |
+| Random-balanced | 15 | 14 | 0.9333 | `[1.0, 0.6666666666666666, 1.0, 1.0, 1.0]` |
+
+Visual-perturbation results:
+
+| Method | Identity | Blur | Brightness | Occlusion | Shift | Mean perturbed |
+|---|---:|---:|---:|---:|---:|---:|
+| BGR-boundary | 0.9333 | 0.9333 | 0.9333 | 0.5333 | 0.9333 | 0.8333 |
+| Official OpenVLA-OFT | 0.9333 | 0.9333 | 0.9333 | 0.4667 | 0.9333 | 0.8167 |
+| Random-balanced | 0.9333 | 0.9333 | 0.9333 | 0.4000 | 0.9333 | 0.8000 |
+
+Interpretation: p1024 is a useful intermediate OpenVLA-OFT diagnostic. Clean
+success ties matched random at 14/15. Under visual perturbations, BGR has a
+one-episode occlusion edge over both matched random and the unadapted official
+checkpoint, giving mean perturbed success 0.8333 vs. 0.8000 for random and
+0.8167 for official. This is still a small 15-episode diagnostic and should be
+read as recovery-margin/data-plumbing evidence rather than as a final
+robotics fine-tuning claim.
+
+## Completed OpenVLA-OFT Perturbation-Mix Diagnostic
+
+### `openvla_oft_goal_adapt_eval_cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1`
+
+Launched on 2026-06-02 as a completed OpenVLA-OFT scale-control diagnostic after
+the p256 official-train-stats run was negative. This run keeps the same
+identity-LoRA finetune wrapper, official LIBERO-Goal train/eval statistics,
+100-step low-LR adaptation, clean LIBERO-Goal eval, and matched visual
+perturbation eval protocol. The only intended experimental change is the
+clean-mix dataset: the perturbation subset is doubled from 256 to 512 rendered
+examples by allowing two perturbation episodes per family.
+
+Queued prep command:
+
+```bash
+TAG=p512 \
+MAX_PERTURB_EXAMPLES=512 \
+PERTURB_EPISODES_PER_FAMILY=2 \
+scripts/queue_openvla_oft_clean_mix_prep.sh --submit
+```
+
+The original prep finished successfully but was close enough to walltime that
+the pending dependent chain was replaced with a continuation-safe graph. Jobs
+`763615`--`763630` were canceled before starting. The TFDS continuation job
+waited on `afterany:763614`, validated the rendered p512 TFDS roots, found them
+complete, and exited without rebuilding.
+
+Queued TFDS continuation command:
+
+```bash
+TAG=p512 \
+PREP_DEPENDENCY=afterany:763614 \
+scripts/queue_openvla_oft_clean_mix_tfds_export.sh --submit
+```
+
+Replacement clean eval command:
+
+```bash
+TRAIN_DEPENDENCY=afterok:763636 \
+TRAIN_DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/c2d0f9fbbd82674683b397ff923168a12f6a307b/dataset_statistics.json \
+DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/c2d0f9fbbd82674683b397ff923168a12f6a307b/dataset_statistics.json \
+FINETUNE_SCRIPT=vla-scripts/finetune_identity_lora.py \
+ADAPT_STEPS=100 LR=1e-6 \
+TAG=cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+EVAL_ARTIFACT=openvla_oft_goal_adapt_eval_cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+BGR_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_bgr_cleanmix_p512_v1 \
+RANDOM_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_cleanmix_p512_v1 \
+BGR_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+RANDOM_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+scripts/queue_openvla_oft_goal_adapt.sh --submit
+```
+
+Replacement visual-perturbation eval command:
+
+```bash
+METHODS=bgr,random \
+BGR_DEPENDENCY=afterok:763638 \
+RANDOM_DEPENDENCY=afterok:763641 \
+TAG=cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+BGR_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Queued official visual-perturbation comparator:
+
+```bash
+METHODS=official \
+TAG=cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Slurm chain:
+
+```text
+763614  bgr-cleanmix-prep-p512                                                           completed
+763615--763630 original BGR/random train/eval/perturb chain                              canceled before start
+763636  bgr-cleanmix-tfds-p512                                                           completed, TFDS roots already valid
+763637  bgr-goal-adapt-bgr-cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1    completed
+763638  bgr-goal-merge-bgr-cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1    completed
+763639  bgr-goal-eval-bgr-cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1     completed
+763640  bgr-goal-adapt-random-cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1 completed
+763641  bgr-goal-merge-random-cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1 completed
+763642  bgr-goal-eval-random-cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1  completed
+
+763643  bgr perturb identity      completed
+763644  bgr perturb blur          completed
+763645  bgr perturb brightness    completed
+763646  bgr perturb occlusion     completed
+763647  bgr perturb shift         completed
+763648  random perturb identity   completed
+763649  random perturb blur       completed
+763650  random perturb brightness completed
+763651  random perturb occlusion  completed
+763652  random perturb shift      completed
+763631  official perturb identity completed
+763632  official perturb blur     completed
+763633  official perturb brightness completed
+763634  official perturb occlusion completed
+763635  official perturb shift    completed
+```
+
+Local copied interim artifacts:
+
+```text
+results/openvla_oft_cleanmix_p512_v1/render/bgr_cleanmix_summary.json
+results/openvla_oft_cleanmix_p512_v1/render/random_cleanmix_summary.json
+results/openvla_oft_cleanmix_p512_v1/tfds/bgr_export_summary.json
+results/openvla_oft_cleanmix_p512_v1/tfds/random_export_summary.json
+results/openvla_oft_cleanmix_p512_v1/slurm/bgr-cleanmix-prep-p512-763614.out
+results/openvla_oft_cleanmix_p512_v1/slurm/bgr-cleanmix-tfds-p512-763636.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv
+results/openvla_oft_perturb_eval_cleanmix_p512_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv
+```
+
+Prepared p512 dataset sizes:
+
+| Method | Rendered clean | Rendered perturb | TFDS episodes | TFDS steps |
+|---|---:|---:|---:|---:|
+| BGR-boundary | 1,152 | 512 | 26 | 1,664 |
+| Random-balanced | 1,280 | 512 | 28 | 1,792 |
+
+Clean LIBERO-Goal results:
+
+| Method | Episodes | Successes | Success Rate | Task Rates |
+|---|---:|---:|---:|---|
+| BGR-boundary, p512 | 15 | 14 | 0.9333 | `[1.0, 0.6666666666666666, 1.0, 1.0, 1.0]` |
+| Random-balanced, p512 | 15 | 14 | 0.9333 | `[1.0, 0.6666666666666666, 1.0, 1.0, 1.0]` |
+
+Visual-perturbation results:
+
+| Method | Identity | Blur | Brightness | Occlusion | Shift | Mean perturbed |
+|---|---:|---:|---:|---:|---:|---:|
+| BGR-boundary | 0.9333 | 0.9333 | 0.9333 | 0.4667 | 0.9333 | 0.8167 |
+| Official OpenVLA-OFT | 0.9333 | 0.9333 | 0.9333 | 0.4667 | 0.9333 | 0.8167 |
+| Random-balanced | 0.9333 | 0.9333 | 0.9333 | 0.4000 | 0.9333 | 0.8000 |
+
+Interpretation: p512 improves the OpenVLA diagnostic relative to the negative
+p256 final-control run. Clean success ties matched random at 14/15, and BGR
+has a one-episode edge over random under occlusion, giving mean perturbed
+success 0.8167 vs. 0.8000. However, BGR only matches the unadapted official
+checkpoint's mean perturbed success and does not exceed it. The result is
+therefore a learned-policy bridge/audit with a modest matched-random
+robustness edge, not as final robotics fine-tuning evidence.
+
+## Superseded OpenVLA-OFT Training-Stats Diagnostic
+
+### `openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2`
+
+Queued and completed on 2026-06-02 as an OpenVLA-OFT normalization-control
+diagnostic: whether corrected clean-mix adaptation changes when the official
+LIBERO-Goal action/proprio statistics are forced during RLDS training
+normalization, not only restored after merge for evaluation. The launcher
+uses `TRAIN_DATASET_STATISTICS_SOURCE` to create a temporary wrapper around the
+OpenVLA-OFT finetune script. The wrapper extracts the per-dataset inner stats
+object expected by `make_dataset_from_rlds` and monkey-patches that loader
+function, leaving the external OpenVLA-OFT checkout unchanged.
+
+Two earlier wrapper attempts were canceled as plumbing failures, not model
+results: job `763424` passed the outer keyed stats JSON directly and failed with
+`KeyError: 'action'`; job `763441` injected `dataset_statistics` into
+`dataset_kwargs_list` and failed with a duplicate-keyword error on the second
+loader pass. The repaired `_v2` train jobs reached the training loop, forced
+the inner stats path, saved step-50100 checkpoints, merged, and completed clean
+evals plus matched BGR/random/official visual-perturbation evals successfully.
+
+Queued clean eval command:
+
+```bash
+TRAIN_DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/c2d0f9fbbd82674683b397ff923168a12f6a307b/dataset_statistics.json \
+DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/c2d0f9fbbd82674683b397ff923168a12f6a307b/dataset_statistics.json \
+FINETUNE_SCRIPT=vla-scripts/finetune_identity_lora.py \
+ADAPT_STEPS=100 LR=1e-6 \
+TAG=cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2 \
+EVAL_ARTIFACT=openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2 \
+BGR_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_bgr_cleanmix_p256_v1 \
+RANDOM_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_cleanmix_p256_v1 \
+BGR_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2 \
+RANDOM_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2 \
+scripts/queue_openvla_oft_goal_adapt.sh --submit
+```
+
+Queued visual-perturbation eval command:
+
+```bash
+METHODS=bgr,random \
+BGR_DEPENDENCY=afterok:763458 \
+RANDOM_DEPENDENCY=afterok:763461 \
+TAG=cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2 \
+BGR_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2/openvla-7b-oft-finetuned-libero-goal \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Queued official visual-perturbation comparator:
+
+```bash
+METHODS=official \
+TAG=cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Slurm chain:
+
+```text
+763457  bgr-goal-adapt-bgr-cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2    completed
+763458  bgr-goal-merge-bgr-cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2    completed
+763459  bgr-goal-eval-bgr-cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2     completed
+763460  bgr-goal-adapt-random-cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2 completed
+763461  bgr-goal-merge-random-cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2 completed
+763463  bgr-goal-eval-random-cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2  completed
+
+763464  bgr perturb identity      completed
+763465  bgr perturb blur          completed
+763466  bgr perturb brightness    completed
+763467  bgr perturb occlusion     completed
+763468  bgr perturb shift         completed
+763469  random perturb identity   completed
+763470  random perturb blur       completed
+763471  random perturb brightness completed
+763472  random perturb occlusion  completed
+763473  random perturb shift      completed
+763603  official perturb identity completed
+763604  official perturb blur     completed
+763605  official perturb brightness completed
+763606  official perturb occlusion completed
+763607  official perturb shift    completed
+```
+
+Local copied summaries:
+
+```text
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2/summary.csv
+results/openvla_oft_perturb_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialtrainstats_v2/summary.csv
+```
+
+Clean LIBERO-Goal results:
+
+| Method | Episodes | Successes | Success Rate | Task Rates |
+|---|---:|---:|---:|---|
+| BGR-boundary, official train stats | 15 | 14 | 0.9333 | `[1.0, 0.6666666666666666, 1.0, 1.0, 1.0]` |
+| Random-balanced, official train stats | 15 | 15 | 1.0000 | `[1.0, 1.0, 1.0, 1.0, 1.0]` |
+
+Visual-perturbation results:
+
+| Method | Identity | Blur | Brightness | Occlusion | Shift | Mean perturbed |
+|---|---:|---:|---:|---:|---:|---:|
+| BGR-boundary | 0.9333 | 0.9333 | 0.9333 | 0.4667 | 0.8667 | 0.8000 |
+| Official OpenVLA-OFT | 0.9333 | 0.9333 | 0.9333 | 0.4667 | 0.9333 | 0.8167 |
+| Random-balanced | 1.0000 | 0.9333 | 0.9333 | 0.4667 | 0.9333 | 0.8167 |
+
+Interpretation: forcing official statistics during training closes the last
+obvious normalization-control question, but it does not produce a BGR advantage.
+BGR ties random and the official checkpoint on blur, brightness, and occlusion,
+but is one episode lower on shift and one episode lower than random on clean
+identity. The completed BGR/random/official comparison reinforces the main-paper
+decision to treat OpenVLA as a recovery-curve and data-plumbing audit rather
+than as robotics fine-tuning evidence.
+
+## Superseded OpenVLA-OFT Clean-Mix Adaptation
+
+### `openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_v1`
+
+Submitted on 2026-06-02 as a clean-mix adaptation diagnostic after the
+perturbation-only official-checkpoint adaptation degraded clean competence. The
+prep job completed successfully: it exported successful native OpenVLA replay
+episodes as `identity` clean anchors, rendered one perturbation episode per
+family for BGR and random, combined clean and perturbed rendered examples, and
+exported OpenVLA-OFT TFDS datasets. The dependent train, merge, and eval jobs
+all completed successfully.
+
+Submitted commands:
+
+```bash
+scripts/queue_openvla_oft_clean_mix_prep.sh --submit
+
+TRAIN_DEPENDENCY=afterok:763352 \
+TAG=cleanmix_p256_step50100 \
+EVAL_ARTIFACT=openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_v1 \
+BGR_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_bgr_cleanmix_p256_v1 \
+RANDOM_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_cleanmix_p256_v1 \
+BGR_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p256_step50100_v1 \
+RANDOM_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p256_step50100_v1 \
+scripts/queue_openvla_oft_goal_adapt.sh --submit
+```
+
+Slurm chain:
+
+```text
+763352  bgr-cleanmix-prep-p256                   render/export clean-mix TFDS
+763353  bgr-goal-adapt-bgr-cleanmix_p256_step50100     afterok:763352
+763354  bgr-goal-merge-bgr-cleanmix_p256_step50100     afterok:763353
+763355  bgr-goal-eval-bgr-cleanmix_p256_step50100      afterok:763354
+763356  bgr-goal-adapt-random-cleanmix_p256_step50100  afterok:763352
+763357  bgr-goal-merge-random-cleanmix_p256_step50100  afterok:763356
+763358  bgr-goal-eval-random-cleanmix_p256_step50100   afterok:763357
+```
+
+Local copied prep summaries and Slurm log:
+
+```text
+results/openvla_oft_cleanmix_p256_v1/manifests/clean_anchor_summary.json
+results/openvla_oft_cleanmix_p256_v1/render/bgr_cleanmix_summary.json
+results/openvla_oft_cleanmix_p256_v1/render/random_cleanmix_summary.json
+results/openvla_oft_cleanmix_p256_v1/tfds/bgr_export_summary.json
+results/openvla_oft_cleanmix_p256_v1/tfds/random_export_summary.json
+results/openvla_oft_cleanmix_p256_v1/slurm/bgr-cleanmix-prep-p256-763352.out
+```
+
+Clean-anchor manifest:
+
+| Method | Clean Steps | Perturbation |
+|---|---:|---|
+| BGR-boundary | 1,152 | `identity` |
+| Random-balanced | 1,280 | `identity` |
+
+Clean-mix TFDS datasets:
+
+| Method | Episodes | Steps | Mix |
+|---|---:|---:|---|
+| BGR-boundary | 22 | 1,408 | 1,152 clean + 256 perturb |
+| Random-balanced | 24 | 1,536 | 1,280 clean + 256 perturb |
+
+Local copied eval logs and parsed summary:
+
+```text
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_v1/logs/bgr/EVAL-libero_goal-openvla-2026_06_02-18_07_59--bgr-cleanmix_p256_step50100.txt
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_v1/logs/random/EVAL-libero_goal-openvla-2026_06_02-18_07_59--random-cleanmix_p256_step50100.txt
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_v1/slurm/bgr-goal-adapt-bgr-cleanmix_p256_step50100-763353.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_v1/slurm/bgr-goal-merge-bgr-cleanmix_p256_step50100-763354.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_v1/slurm/bgr-goal-eval-bgr-cleanmix_p256_step50100-763355.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_v1/slurm/bgr-goal-adapt-random-cleanmix_p256_step50100-763356.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_v1/slurm/bgr-goal-merge-random-cleanmix_p256_step50100-763357.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_v1/slurm/bgr-goal-eval-random-cleanmix_p256_step50100-763358.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_v1/summary.csv
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_v1/summary.json
+```
+
+Parsed closed-loop LIBERO-Goal results:
+
+| Method | Episodes | Successes | Success Rate | Task Rates |
+|---|---:|---:|---:|---|
+| BGR-boundary clean-mix official-adapt | 15 | 0 | 0.0000 | `[0.0, 0.0, 0.0, 0.0, 0.0]` |
+| Random-balanced clean-mix official-adapt | 15 | 0 | 0.0000 | `[0.0, 0.0, 0.0, 0.0, 0.0]` |
+
+Interpretation, superseded by the zero-change diagnostics below: this run used
+OpenVLA-OFT's default Gaussian LoRA initialization and wrote clean-mix dataset
+statistics into the merged checkpoint. Later no-change controls show those two
+checkpoint-plumbing choices are sufficient to collapse LIBERO-Goal success even
+when the optimizer learning rate is zero. Treat this 0/15 result as a flawed
+adaptation setup, not evidence that clean anchors are harmful.
+
+### `openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_v1`
+
+Submitted on 2026-06-02 after the 100-step clean-mix run collapsed. This diagnostic
+keeps the same clean-mix TFDS roots but reduces update strength to 10 optimizer
+steps at learning rate `1e-6`.
+
+Submitted command:
+
+```bash
+ADAPT_STEPS=10 \
+LR=1e-6 \
+SAVE_FREQ=10 \
+TRAIN_TIME=01:00:00 \
+TAG=cleanmix_p256_step50010_lr1em6 \
+EVAL_ARTIFACT=openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_v1 \
+BGR_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_bgr_cleanmix_p256_v1 \
+RANDOM_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_cleanmix_p256_v1 \
+BGR_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p256_step50010_lr1em6_v1 \
+RANDOM_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p256_step50010_lr1em6_v1 \
+scripts/queue_openvla_oft_goal_adapt.sh --submit
+```
+
+Slurm chain:
+
+```text
+763359  bgr-goal-adapt-bgr-cleanmix_p256_step50010_lr1em6     failed before data loading
+763360  bgr-goal-merge-bgr-cleanmix_p256_step50010_lr1em6     canceled
+763361  bgr-goal-eval-bgr-cleanmix_p256_step50010_lr1em6      canceled
+763362  bgr-goal-adapt-random-cleanmix_p256_step50010_lr1em6  completed
+763363  bgr-goal-merge-random-cleanmix_p256_step50010_lr1em6  completed
+763364  bgr-goal-eval-random-cleanmix_p256_step50010_lr1em6   completed
+763365  bgr-goal-adapt-bgr-cleanmix_p256_step50010_lr1em6     completed rerun
+763366  bgr-goal-merge-bgr-cleanmix_p256_step50010_lr1em6     completed rerun
+763367  bgr-goal-eval-bgr-cleanmix_p256_step50010_lr1em6      completed rerun
+```
+
+The first BGR train job failed because concurrent train jobs both called
+OpenVLA-OFT's `update_auto_map` on the shared Hugging Face checkpoint
+`config.json`; the random train job succeeded. The launcher uses
+`SERIAL_TRAIN=1` and supports `METHODS=bgr` or `METHODS=random` for
+single-branch reruns. The BGR branch was rerun after random finished.
+
+Local copied logs and parsed summary:
+
+```text
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_v1/logs/bgr/EVAL-libero_goal-openvla-2026_06_02-18_23_58--bgr-cleanmix_p256_step50010_lr1em6.txt
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_v1/logs/random/EVAL-libero_goal-openvla-2026_06_02-18_21_00--random-cleanmix_p256_step50010_lr1em6.txt
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_v1/slurm/bgr-goal-adapt-bgr-cleanmix_p256_step50010_lr1em6-763359.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_v1/slurm/bgr-goal-adapt-bgr-cleanmix_p256_step50010_lr1em6-763365.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_v1/slurm/bgr-goal-adapt-random-cleanmix_p256_step50010_lr1em6-763362.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_v1/slurm/bgr-goal-merge-bgr-cleanmix_p256_step50010_lr1em6-763366.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_v1/slurm/bgr-goal-merge-random-cleanmix_p256_step50010_lr1em6-763363.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_v1/slurm/bgr-goal-eval-bgr-cleanmix_p256_step50010_lr1em6-763367.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_v1/slurm/bgr-goal-eval-random-cleanmix_p256_step50010_lr1em6-763364.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_v1/summary.csv
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_v1/summary.json
+```
+
+Parsed closed-loop LIBERO-Goal results:
+
+| Method | Episodes | Successes | Success Rate | Task Rates |
+|---|---:|---:|---:|---|
+| BGR-boundary clean-mix weak official-adapt | 15 | 0 | 0.0000 | `[0.0, 0.0, 0.0, 0.0, 0.0]` |
+| Random-balanced clean-mix weak official-adapt | 15 | 0 | 0.0000 | `[0.0, 0.0, 0.0, 0.0, 0.0]` |
+
+Interpretation, superseded by the zero-change diagnostics below: reducing the
+update to 10 steps at `1e-6` was not enough because the run still used Gaussian
+LoRA initialization and clean-mix action statistics in the eval checkpoint.
+
+### OpenVLA-OFT zero-change checkpoint diagnostics
+
+Submitted on 2026-06-02 to isolate why clean-mix adaptation collapsed despite the
+official checkpoint scoring 14/15. Each row starts from the official
+LIBERO-Goal checkpoint, trains for 10 batches with learning rate `0`, merges,
+and evaluates the BGR branch only.
+
+| Artifact | LoRA Init | Eval Action Stats | Episodes | Successes | Success Rate | Task Rates |
+|---|---|---|---:|---:|---:|---|
+| `openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr0_v1` | Gaussian default | clean-mix | 15 | 0 | 0.0000 | `[0.0, 0.0, 0.0, 0.0, 0.0]` |
+| `openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr0_identitylora_v1` | identity/default PEFT | clean-mix | 15 | 0 | 0.0000 | `[0.0, 0.0, 0.0, 0.0, 0.0]` |
+| `openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr0_identitylora_officialstats_v1` | identity/default PEFT | official LIBERO-Goal | 15 | 14 | 0.9333 | `[1.0, 0.6666666666666666, 1.0, 1.0, 1.0]` |
+
+Slurm chains:
+
+```text
+763368  bgr-goal-adapt-bgr-cleanmix_p256_step50010_lr0
+763369  bgr-goal-merge-bgr-cleanmix_p256_step50010_lr0
+763370  bgr-goal-eval-bgr-cleanmix_p256_step50010_lr0
+763372  bgr-goal-adapt-bgr-cleanmix_p256_step50010_lr0_identitylora
+763373  bgr-goal-merge-bgr-cleanmix_p256_step50010_lr0_identitylora
+763374  bgr-goal-eval-bgr-cleanmix_p256_step50010_lr0_identitylora
+763375  bgr-goal-adapt-bgr-cleanmix_p256_step50010_lr0_identitylora_officialstats
+763376  bgr-goal-merge-bgr-cleanmix_p256_step50010_lr0_identitylora_officialstats
+763377  bgr-goal-eval-bgr-cleanmix_p256_step50010_lr0_identitylora_officialstats
+```
+
+Local summaries:
+
+```text
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr0_v1/summary.json
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr0_identitylora_v1/summary.json
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr0_identitylora_officialstats_v1/summary.json
+```
+
+Interpretation: the collapse is reproducible without any parameter update when
+the default OpenVLA-OFT script merges a Gaussian-initialized LoRA adapter, and it
+also persists with identity LoRA if the eval checkpoint uses clean-mix action
+normalization statistics. Identity LoRA plus the official LIBERO-Goal action
+statistics restores the exact official-checkpoint result, 14/15. Corrected BGR
+experiments use `FINETUNE_SCRIPT=vla-scripts/finetune_identity_lora.py` and
+restore `dataset_statistics.json` from the official checkpoint after merge.
+
+### `openvla_oft_goal_adapt_eval_cleanmix_p256_step50010_lr1em6_identitylora_officialstats_v1`
+
+Submitted on 2026-06-02 as the first corrected matched adaptation: 10 optimizer
+steps at learning rate `1e-6`, identity/default PEFT LoRA initialization, and
+official LIBERO-Goal action statistics restored after merge.
+
+Slurm chain:
+
+```text
+763378  bgr-goal-adapt-bgr-cleanmix_p256_step50010_lr1em6_identitylora_officialstats
+763379  bgr-goal-merge-bgr-cleanmix_p256_step50010_lr1em6_identitylora_officialstats
+763380  bgr-goal-eval-bgr-cleanmix_p256_step50010_lr1em6_identitylora_officialstats
+763381  bgr-goal-adapt-random-cleanmix_p256_step50010_lr1em6_identitylora_officialstats
+763382  bgr-goal-merge-random-cleanmix_p256_step50010_lr1em6_identitylora_officialstats
+763383  bgr-goal-eval-random-cleanmix_p256_step50010_lr1em6_identitylora_officialstats
+```
+
+Parsed closed-loop LIBERO-Goal results:
+
+| Method | Episodes | Successes | Success Rate | Task Rates |
+|---|---:|---:|---:|---|
+| BGR-boundary corrected clean-mix adapt | 15 | 14 | 0.9333 | `[1.0, 0.6666666666666666, 1.0, 1.0, 1.0]` |
+| Random-balanced corrected clean-mix adapt | 15 | 14 | 0.9333 | `[1.0, 0.6666666666666666, 1.0, 1.0, 1.0]` |
+
+Interpretation: the corrected adaptation path preserves official checkpoint
+competence but does not show a BGR advantage.
+
+### `openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1`
+
+Submitted on 2026-06-02 as a stronger corrected matched adaptation: 100 optimizer
+steps at learning rate `1e-6`, identity/default PEFT LoRA initialization, and
+official LIBERO-Goal action statistics restored after merge.
+
+```text
+763384  bgr-goal-adapt-bgr-cleanmix_p256_step50100_lr1em6_identitylora_officialstats
+763385  bgr-goal-merge-bgr-cleanmix_p256_step50100_lr1em6_identitylora_officialstats
+763386  bgr-goal-eval-bgr-cleanmix_p256_step50100_lr1em6_identitylora_officialstats
+763387  bgr-goal-adapt-random-cleanmix_p256_step50100_lr1em6_identitylora_officialstats
+763388  bgr-goal-merge-random-cleanmix_p256_step50100_lr1em6_identitylora_officialstats
+763389  bgr-goal-eval-random-cleanmix_p256_step50100_lr1em6_identitylora_officialstats
+```
+
+Local copied logs and parsed summary:
+
+```text
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/logs/bgr/EVAL-libero_goal-openvla-2026_06_02-19_05_47--bgr-cleanmix_p256_step50100_lr1em6_identitylora_officialstats.txt
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/logs/random/EVAL-libero_goal-openvla-2026_06_02-19_08_01--random-cleanmix_p256_step50100_lr1em6_identitylora_officialstats.txt
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/slurm/bgr-goal-adapt-bgr-cleanmix_p256_step50100_lr1em6_identitylora_officialstats-763384.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/slurm/bgr-goal-merge-bgr-cleanmix_p256_step50100_lr1em6_identitylora_officialstats-763385.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/slurm/bgr-goal-eval-bgr-cleanmix_p256_step50100_lr1em6_identitylora_officialstats-763386.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/slurm/bgr-goal-adapt-random-cleanmix_p256_step50100_lr1em6_identitylora_officialstats-763387.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/slurm/bgr-goal-merge-random-cleanmix_p256_step50100_lr1em6_identitylora_officialstats-763388.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/slurm/bgr-goal-eval-random-cleanmix_p256_step50100_lr1em6_identitylora_officialstats-763389.out
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/summary.csv
+results/openvla_oft_goal_adapt_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/summary.json
+```
+
+Parsed closed-loop LIBERO-Goal results:
+
+| Method | Episodes | Successes | Success Rate | Task Rates |
+|---|---:|---:|---:|---|
+| BGR-boundary corrected clean-mix adapt, 100 steps | 15 | 13 | 0.8667 | `[1.0, 0.6666666666666666, 1.0, 0.6666666666666666, 1.0]` |
+| Random-balanced corrected clean-mix adapt, 100 steps | 15 | 14 | 0.9333 | `[1.0, 0.6666666666666666, 1.0, 1.0, 1.0]` |
+
+Interpretation: 100 corrected steps at `1e-6` remain stable relative to the
+flawed 0/15 runs, but BGR does not beat random on clean LIBERO-Goal success and
+is one episode worse. Clean closed-loop success is probably the wrong metric for
+the BGR robustness claim; the visual-perturbation and official-statistics
+controls below keep this result as a troubleshooting record rather than a
+paper-facing claim.
+
+### `openvla_oft_perturb_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1`
+
+Submitted on 2026-06-02 to evaluate the corrected 100-step BGR and random
+checkpoints, plus the official checkpoint, under matched visual perturbations.
+The patched eval modifies only the primary camera image before policy
+preprocessing; wrist images, simulator state, task instructions, and init states
+remain unchanged. A single official identity smoke job (`763406`) first matched
+the known baseline at 14/15, then the full 15-job sweep completed successfully.
+
+Submitted command:
+
+```bash
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Slurm jobs:
+
+```text
+763407  official identity
+763408  official blur
+763409  official brightness
+763410  official occlusion
+763411  official shift
+763412  bgr identity
+763413  bgr blur
+763414  bgr brightness
+763415  bgr occlusion
+763416  bgr shift
+763417  random identity
+763418  random blur
+763419  random brightness
+763420  random occlusion
+763421  random shift
+```
+
+Local copied logs and parsed summary:
+
+```text
+results/openvla_oft_perturb_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/logs/
+results/openvla_oft_perturb_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/slurm/
+results/openvla_oft_perturb_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/summary.csv
+results/openvla_oft_perturb_eval_cleanmix_p256_step50100_lr1em6_identitylora_officialstats_v1/summary.json
+```
+
+Parsed closed-loop LIBERO-Goal results:
+
+| Method | Perturbation | Episodes | Successes | Success Rate |
+|---|---|---:|---:|---:|
+| BGR-boundary corrected adapt | identity | 15 | 13 | 0.8667 |
+| BGR-boundary corrected adapt | blur | 15 | 14 | 0.9333 |
+| BGR-boundary corrected adapt | brightness | 15 | 14 | 0.9333 |
+| BGR-boundary corrected adapt | occlusion | 15 | 7 | 0.4667 |
+| BGR-boundary corrected adapt | shift | 15 | 14 | 0.9333 |
+| Official OpenVLA-OFT | identity | 15 | 14 | 0.9333 |
+| Official OpenVLA-OFT | blur | 15 | 14 | 0.9333 |
+| Official OpenVLA-OFT | brightness | 15 | 14 | 0.9333 |
+| Official OpenVLA-OFT | occlusion | 15 | 7 | 0.4667 |
+| Official OpenVLA-OFT | shift | 15 | 14 | 0.9333 |
+| Random-balanced corrected adapt | identity | 15 | 14 | 0.9333 |
+| Random-balanced corrected adapt | blur | 15 | 14 | 0.9333 |
+| Random-balanced corrected adapt | brightness | 15 | 14 | 0.9333 |
+| Random-balanced corrected adapt | occlusion | 15 | 7 | 0.4667 |
+| Random-balanced corrected adapt | shift | 15 | 14 | 0.9333 |
+
+Aggregate: BGR identity success is 0.8667, official and random identity are
+0.9333, and all three methods have identical mean perturbed success 0.8167
+over blur, brightness, occlusion, and shift. Interpretation: this falsifies a
+near-term OpenVLA robustness advantage from the tested BGR-selected clean-mix
+adaptation. Occlusion exposes shared brittleness, but BGR does not improve it
+over matched random selection or the unadapted official checkpoint.
+
+## Completed OpenVLA-OFT Sanity Check
+
+### `openvla_oft_sanity_eval_sanity_v1`
+
+Submitted on 2026-06-02 with:
+
+```bash
+scripts/queue_openvla_sanity_eval.sh --submit
+```
+
+Slurm jobs:
+
+```text
+763343  bgr-sanity-base-sanity_v1
+763344  bgr-sanity-oft-goal-sanity_v1
+763345  bgr-sanity-base-sanity_base_retry_v1
+```
+
+Evaluation scope matches the 1,000-step BGR/random pilot: LIBERO-Goal, five
+tasks, three default init states per task, full suite horizon, and seed 7.
+The `base` job evaluates `openvla/openvla-7b` with native single-image
+OpenVLA action decoding (`use_l1_regression=False`, `use_proprio=False`,
+`num_images_in_input=1`). The `oft-goal` job evaluates the official
+`moojink/openvla-7b-oft-finetuned-libero-goal` checkpoint with the L1/proprio
+two-image OpenVLA-OFT path.
+
+Logs:
+
+```text
+/work/anonymous/bgr/logs/bgr-sanity-base-sanity_v1-763343.out
+/work/anonymous/bgr/logs/bgr-sanity-oft-goal-sanity_v1-763344.out
+/work/anonymous/bgr/logs/bgr-sanity-base-sanity_base_retry_v1-763345.out
+/work/anonymous/bgr/runs/openvla_oft_sanity_eval_sanity_v1/logs/base
+/work/anonymous/bgr/runs/openvla_oft_sanity_eval_sanity_v1/logs/oft-goal
+```
+
+Startup note: `763343` failed before evaluation because loading the
+`openvla/openvla-7b` Hugging Face Hub repo used the original OpenVLA modeling
+code, whose vision backbone lacks the OpenVLA-OFT fork's
+`set_num_images_in_input` method. The retry `763345` uses the patched local
+cached OpenVLA snapshot:
+
+```text
+/work/anonymous/cache_home/huggingface/hub/models--openvla--openvla-7b/snapshots/47a0ec7fc4ec123775a391911046cf33cf9ed83f
+```
+
+That retry also failed before evaluation because the base OpenVLA checkpoint has
+no LIBERO-Goal action unnormalization statistics:
+
+```text
+AssertionError: Action un-norm key libero_goal not found in VLA `norm_stats`!
+```
+
+Local copied logs and parsed summary:
+
+```text
+results/openvla_oft_sanity_eval_sanity_v1/logs/oft-goal/EVAL-libero_goal-openvla-2026_06_02-17_22_54--oft-goal-sanity_v1.txt
+results/openvla_oft_sanity_eval_sanity_v1/slurm/bgr-sanity-base-sanity_v1-763343.out
+results/openvla_oft_sanity_eval_sanity_v1/slurm/bgr-sanity-base-sanity_base_retry_v1-763345.out
+results/openvla_oft_sanity_eval_sanity_v1/slurm/bgr-sanity-oft-goal-sanity_v1-763344.out
+results/openvla_oft_sanity_eval_sanity_v1/summary.csv
+results/openvla_oft_sanity_eval_sanity_v1/summary.json
+```
+
+Parsed closed-loop LIBERO-Goal result:
+
+| Method | Episodes | Successes | Success Rate | Task Rates |
+|---|---:|---:|---:|---|
+| Official OpenVLA-OFT LIBERO-Goal | 15 | 14 | 0.9333 | `[1.0, 0.6666666666666666, 1.0, 1.0, 1.0]` |
+
+Interpretation: the official OpenVLA-OFT LIBERO-Goal checkpoint succeeds under
+the same five-task, three-init-state protocol. The 0/15 BGR/random pilot
+therefore reflects the then-tested data/optimization setup, not a broken LIBERO
+runtime. Later clean-mix audits adapt from a LIBERO-Goal-competent OpenVLA-OFT
+checkpoint and keep the result scoped as a data-plumbing diagnostic.
+
+## Superseded Official-Checkpoint Adaptation
+
+### `openvla_oft_goal_adapt_{bgr,random}_balanced2048_step50100_v1`
+
+Submitted on 2026-06-02 with:
+
+```bash
+scripts/queue_openvla_oft_goal_adapt.sh --submit
+```
+
+This is a short adaptation smoke from the official
+`moojink/openvla-7b-oft-finetuned-libero-goal` checkpoint. Unlike the 1,000-step
+pilot from raw `openvla/openvla-7b`, it runs the OpenVLA-OFT fine-tune script in
+resume mode (`resume_step=50000`) so the official L1 action head and proprio
+projector are loaded before applying 100 additional optimizer steps on the
+matched BGR-boundary and random-balanced 2,048-step datasets.
+
+Slurm chain:
+
+```text
+763346  bgr-goal-adapt-bgr-step50100       train, after official step 50000
+763347  bgr-goal-merge-bgr-step50100       afterok:763346
+763348  bgr-goal-eval-bgr-step50100        afterok:763347
+763349  bgr-goal-adapt-random-step50100    train, after official step 50000
+763350  bgr-goal-merge-random-step50100    afterok:763349
+763351  bgr-goal-eval-random-step50100     afterok:763350
+```
+
+Checkpoint roots:
+
+```text
+/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_balanced2048_step50100_v1/openvla-7b-oft-finetuned-libero-goal
+/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_balanced2048_step50100_v1/openvla-7b-oft-finetuned-libero-goal
+```
+
+Local copied logs and parsed summary:
+
+```text
+results/openvla_oft_goal_adapt_eval_step50100_v1/logs/bgr/EVAL-libero_goal-openvla-2026_06_02-17_39_01--bgr-step50100.txt
+results/openvla_oft_goal_adapt_eval_step50100_v1/logs/random/EVAL-libero_goal-openvla-2026_06_02-17_39_20--random-step50100.txt
+results/openvla_oft_goal_adapt_eval_step50100_v1/slurm/bgr-goal-adapt-bgr-step50100-763346.out
+results/openvla_oft_goal_adapt_eval_step50100_v1/slurm/bgr-goal-adapt-random-step50100-763349.out
+results/openvla_oft_goal_adapt_eval_step50100_v1/slurm/bgr-goal-merge-bgr-step50100-763347.out
+results/openvla_oft_goal_adapt_eval_step50100_v1/slurm/bgr-goal-merge-random-step50100-763350.out
+results/openvla_oft_goal_adapt_eval_step50100_v1/slurm/bgr-goal-eval-bgr-step50100-763348.out
+results/openvla_oft_goal_adapt_eval_step50100_v1/slurm/bgr-goal-eval-random-step50100-763351.out
+results/openvla_oft_goal_adapt_eval_step50100_v1/summary.csv
+results/openvla_oft_goal_adapt_eval_step50100_v1/summary.json
+```
+
+Parsed closed-loop LIBERO-Goal results:
+
+| Method | Episodes | Successes | Success Rate | Task Rates |
+|---|---:|---:|---:|---|
+| BGR-boundary official-adapt | 15 | 2 | 0.1333 | `[0.6666666666666666, 0.0, 0.0, 0.0, 0.0]` |
+| Random-balanced official-adapt | 15 | 1 | 0.0667 | `[0.3333333333333333, 0.0, 0.0, 0.0, 0.0]` |
+
+Interpretation: the resume-mode setup is technically correct: both training
+logs load the official `proprio_projector--50000_checkpoint.pt` and
+`action_head--50000_checkpoint.pt`, save step-50100 checkpoints, merge LoRA
+weights, and complete the same LIBERO-Goal eval. However, 100 low-LR adaptation
+steps on the tested 2,048-step perturbation datasets severely degrade the
+official checkpoint from 14/15 to 2/15 for BGR and 1/15 for random. BGR has a
+small edge over random in this destructive regime, but this is not usable
+robotics evidence. Subsequent clean-mix and identity-LoRA controls preserve
+clean official-policy behavior and supersede this destructive adaptation setup.
+
+## Superseded OpenVLA-OFT Pilot
+
+### `openvla_oft_finetune_{bgr,random}_balanced2048_step1000_v1`
+
+Submitted on 2026-06-02 with:
+
+```bash
+MAX_STEPS=1000 SAVE_FREQ=500 scripts/queue_openvla_oft_long_run.sh --submit
+```
+
+Initial Slurm jobs:
+
+```text
+763317  bgr-oft-bgr_boundary-step1000
+763318  bgr-oft-random_balanced-step1000
+```
+
+These first attempts ran on `c2-g4-21` and failed immediately because CUDA
+reported no usable GPU and Slurm logged `Failed to get device handle for GPU 0`.
+Logs:
+
+```text
+/work/anonymous/bgr/logs/bgr-oft-bgr_boundary-step1000-763317.out
+/work/anonymous/bgr/logs/bgr-oft-random_balanced-step1000-763318.out
+```
+
+The retry excluded `c2-g4-21`. The first retry jobs:
+
+```text
+763319  bgr-oft-bgr_boundary-step1000
+763320  bgr-oft-random_balanced-step1000
+```
+
+These failed in preflight because the remote workspace's branch configuration
+made `git pull --ff-only` report `fatal: Cannot fast-forward to multiple
+branches`. The successful retry used the copied batch script and existing
+validated remote datasets instead of a remote git pull.
+
+Successful retry Slurm jobs:
+
+```text
+763329  bgr-oft-bgr_boundary-step1000
+763330  bgr-oft-random_balanced-step1000
+```
+
+Final retry state: both completed under `low-prio-gpu` despite the nominal
+8-hour time limit. `763329` ran on `c2-g4-24` for 11:55 and `763330` ran on
+`c1-g4-01` for 10:59. Run roots:
+
+```text
+/work/anonymous/bgr/runs/openvla_oft_finetune_bgr_balanced2048_step1000_v1
+/work/anonymous/bgr/runs/openvla_oft_finetune_random_balanced2048_step1000_v1
+```
+
+Slurm logs:
+
+```text
+/work/anonymous/bgr/logs/bgr-oft-bgr_boundary-step1000-763329.out
+/work/anonymous/bgr/logs/bgr-oft-random_balanced-step1000-763330.out
+```
+
+Both logs passed preflight, reached OpenVLA/LIBERO startup, saved the first
+checkpoint, and then reached `Max step 1000 reached! Stopping training...`.
+Final checkpoint roots:
+
+```text
+/work/anonymous/bgr/runs/openvla_oft_finetune_bgr_balanced2048_step1000_v1/openvla-7b+libero_goal_no_noops+b1+lr-0.0005+lora-r8+dropout-0.0--bgr-balanced2048-step1000
+/work/anonymous/bgr/runs/openvla_oft_finetune_random_balanced2048_step1000_v1/openvla-7b+libero_goal_no_noops+b1+lr-0.0005+lora-r8+dropout-0.0--random-balanced2048-step1000
+```
+
+Each checkpoint root contains `lora_adapter/adapter_model.safetensors`,
+`action_head--latest_checkpoint.pt`, and `proprio_projector--latest_checkpoint.pt`.
+
+### `openvla_oft_eval_balanced2048_step1000_v1`
+
+Submitted on 2026-06-02 with:
+
+```bash
+BGR_TRAIN_JOB_ID=763329 RANDOM_TRAIN_JOB_ID=763330 scripts/queue_openvla_oft_eval.sh --submit
+```
+
+Dependent Slurm jobs:
+
+```text
+763331  bgr-merge-bgr-step1000       afterok:763329
+763332  bgr-merge-random-step1000    afterok:763330
+763333  bgr-eval-bgr-step1000        afterok:763331
+763334  bgr-eval-random-step1000     afterok:763332
+```
+
+Because the training jobs initially looked unlikely to finish all 1,000 steps
+before walltime, an additional afterany salvage chain was submitted with
+`TRAIN_DEPENDENCY_TYPE=afterany` after both latest checkpoints were present:
+
+```bash
+BGR_TRAIN_JOB_ID=763329 RANDOM_TRAIN_JOB_ID=763330 TRAIN_DEPENDENCY_TYPE=afterany scripts/queue_openvla_oft_eval.sh --submit
+```
+
+Salvage Slurm jobs:
+
+```text
+763335  bgr-merge-bgr-step1000       afterany:763329
+763336  bgr-merge-random-step1000    afterany:763330
+763337  bgr-eval-bgr-step1000        afterok:763335
+763338  bgr-eval-random-step1000     afterok:763336
+```
+
+Evaluation scope is LIBERO-Goal, five tasks, three official init states per
+task, full suite horizon (`max_steps_override=-1`), seed 7, and matched
+OpenVLA-OFT checkpoints from the 1,000-step BGR-boundary and random-balanced
+training runs. Eval log roots:
+
+```text
+/work/anonymous/bgr/runs/openvla_oft_eval_balanced2048_step1000_v1/logs/bgr
+/work/anonymous/bgr/runs/openvla_oft_eval_balanced2048_step1000_v1/logs/random
+```
+
+Final state: both training jobs completed cleanly, so the original `afterok`
+chain was used. The salvage merge jobs `763335` and `763336` had just started
+after the completed training jobs; they were cancelled along with dependent eval
+jobs `763337` and `763338` to avoid duplicate writes to the same checkpoint and
+log roots. Original merge jobs `763331` and `763332` completed successfully,
+then eval jobs `763333` and `763334` completed successfully.
+
+Local eval logs and parsed summaries:
+
+```text
+results/openvla_oft_eval_balanced2048_step1000_v1/logs/bgr/EVAL-libero_goal-openvla-2026_06_02-17_10_15--bgr-step1000.txt
+results/openvla_oft_eval_balanced2048_step1000_v1/logs/random/EVAL-libero_goal-openvla-2026_06_02-17_09_58--random-step1000.txt
+results/openvla_oft_eval_balanced2048_step1000_v1/summary.csv
+results/openvla_oft_eval_balanced2048_step1000_v1/summary.json
+```
+
+Parsed closed-loop LIBERO-Goal results:
+
+| Method | Episodes | Successes | Success Rate | Task Rates |
+|---|---:|---:|---:|---|
+| BGR-boundary | 15 | 0 | 0.0000 | `[0.0, 0.0, 0.0, 0.0, 0.0]` |
+| Random-balanced | 15 | 0 | 0.0000 | `[0.0, 0.0, 0.0, 0.0, 0.0]` |
+
+Interpretation: this completes the first matched 1,000-step
+OpenVLA-OFT train/merge/eval pipeline over five LIBERO-Goal tasks and three
+default init states per task. It is not policy-quality evidence for BGR:
+neither BGR-boundary nor random-balanced fine-tuning produced a successful
+closed-loop task. The result identifies data scale, task coverage, and
+OpenVLA-OFT optimization as the limiting factors rather than missing
+infrastructure.
 
 ## Completed Runs
 
@@ -9,18 +1735,18 @@ All heavy runs are launched through `~/remote_srun.sh` and write outputs under `
 Commands:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/collect_environment.py --out runs/environment_v1/compute_environment.json
-~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:10:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/collect_environment.py --out runs/environment_v1/gpu_environment.json
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/collect_environment.py --out runs/environment_v1/compute_environment.json
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:10:00 /work/anonymous/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/collect_environment.py --out runs/environment_v1/gpu_environment.json
 ```
 
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780318399_415321575.out
-/work/joy/bgr/logs/run_1780318387_340655701.out
+/work/anonymous/bgr/logs/run_1780318399_415321575.out
+/work/anonymous/bgr/logs/run_1780318387_340655701.out
 ```
 
-Checked-in snapshots:
+Included snapshots:
 
 ```text
 results/environment_v1/compute_environment.json
@@ -34,13 +1760,13 @@ Interpretation: these snapshots record Slurm allocation details, hostnames, CPU 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 01:00:00 /work/joy/bgr env PYTHONPATH=src python scripts/run_toy_experiment.py --config configs/toy_bgr.yaml --out runs/toy_fast_v3
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 01:00:00 /work/anonymous/bgr env PYTHONPATH=src python scripts/run_toy_experiment.py --config configs/toy_bgr.yaml --out runs/toy_fast_v3
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780304197_887365905.out
+/work/anonymous/bgr/logs/run_1780304197_887365905.out
 ```
 
 Mean results over three seeds:
@@ -55,18 +1781,75 @@ Mean results over three seeds:
 
 Interpretation: this diagnostic benchmark supports the core BGR claim under a controlled recovery-margin model.
 
+### `toy_15seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_toy_experiment.py \
+  --config configs/toy_bgr_15seed.yaml \
+  --out results/toy_15seed_v1
+```
+
+Mean results over 15 paired seeds:
+
+| Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---|---:|---:|---:|---:|
+| BGR | 0.8920 | 0.3726 | 0.2864 | 0.3151 |
+| Uniform | 0.8860 | 0.3642 | 0.2813 | 0.2987 |
+| Failure-only | 0.8188 | 0.2324 | 0.1343 | 0.2306 |
+| Fixed radius | 0.8219 | 0.2294 | 0.1304 | 0.2291 |
+| PLR-loss proxy | 0.8207 | 0.2288 | 0.1328 | 0.2290 |
+
+Paired exact sign tests support BGR over uniform on final RAUC
+(+0.0083, p=0.0001) and RAUC AULC (+0.0163, p=0.0001). BGR also beats fixed,
+failure-only, and PLR-loss baselines on final RAUC with p=0.0001. Interpretation:
+this replaces the earlier three-seed Tier-0 result in the paper tables and
+removes the weak synthetic significance row.
+
+### Completed `toy_30seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_toy_experiment.py \
+  --config configs/toy_bgr_30seed.yaml \
+  --out results/toy_30seed_v1
+```
+
+Completed locally on 2026-06-04 to confirm the controlled synthetic
+recovery-margin mechanism at 30 paired seeds under the same protocol as the
+15-seed paper table.
+
+Mean results over 30 paired seeds:
+
+| Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---|---:|---:|---:|---:|
+| BGR | 0.8899 | 0.3716 | 0.2860 | 0.3149 |
+| Uniform | 0.8838 | 0.3633 | 0.2816 | 0.2984 |
+| Failure-only | 0.8175 | 0.2331 | 0.1347 | 0.2312 |
+| Fixed radius | 0.8205 | 0.2298 | 0.1309 | 0.2295 |
+| PLR-loss proxy | 0.8190 | 0.2289 | 0.1336 | 0.2292 |
+
+BGR improves final RAUC over uniform (0.3716 vs. 0.3633) with 29/1 paired
+wins, while BGR improves RAUC AULC (0.3149 vs. 0.2984) and clean success
+(0.8899 vs. 0.8838) with 30/0 paired wins on both metrics. BGR also beats
+fixed-radius, failure-only, and PLR-loss baselines on final RAUC with 30/0
+paired wins. Interpretation: this strengthens the controlled synthetic
+mechanism check while preserving the paper-table claim scope.
+
 ### `grid_fast_v4`
 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 01:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_bgr.yaml --out runs/grid_fast_v4
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 01:00:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_bgr.yaml --out runs/grid_fast_v4
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780305363_531953871.out
+/work/anonymous/bgr/logs/run_1780305363_531953871.out
 ```
 
 Mean results over three seeds:
@@ -79,20 +1862,25 @@ Mean results over three seeds:
 | Failure-only | 1.0000 | 0.9928 | 1.0000 | 0.8785 |
 | PLR-loss proxy | 1.0000 | 0.9936 | 1.0000 | 0.8810 |
 
-Interpretation: this procedural grid setup is currently too easy after clean-suffix pretraining, and the BGR sampler is too narrow for saturated states. Do not use this as a positive main-paper result without changing the benchmark or sampler. The next iteration should either harden perturbations/generalization or add a saturated-state fallback that preserves coverage.
+Interpretation, superseded by the grid-margin studies below: this procedural
+grid setup is too easy after clean-suffix pretraining, and the BGR sampler is
+too narrow for saturated states. Treat this historical run as a benchmark-design
+diagnostic. The reviewer-facing procedural evidence is the completed 30-seed
+grid-margin full-baseline comparison, held-out grid replication, and scoped
+sensitivity diagnostics listed in the Submission Evidence Index.
 
 ### `grid_margin_v1`
 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 01:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_margin_experiment.py --config configs/grid_margin_bgr.yaml --out runs/grid_margin_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 01:00:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_grid_margin_experiment.py --config configs/grid_margin_bgr.yaml --out runs/grid_margin_v1
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780305895_462068628.out
+/work/anonymous/bgr/logs/run_1780305895_462068628.out
 ```
 
 Mean results over three seeds:
@@ -112,13 +1900,13 @@ Interpretation: this grid-backed margin benchmark is the first positive procedur
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_margin_experiment.py --config configs/grid_margin_bgr_full.yaml --out runs/grid_margin_full_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_grid_margin_experiment.py --config configs/grid_margin_bgr_full.yaml --out runs/grid_margin_full_v1
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780305974_747225749.out
+/work/anonymous/bgr/logs/run_1780305974_747225749.out
 ```
 
 Mean results over five seeds:
@@ -133,18 +1921,375 @@ Mean results over five seeds:
 
 Interpretation: the larger five-seed procedural run preserves the BGR advantage. Compared with uniform replay, BGR improves final RAUC by 0.0371, RAUC AULC by 0.0393, median r80 by 0.0120, and clean success by 0.0505.
 
+### `grid_margin_full_15seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_experiment.py \
+  --config configs/grid_margin_full_15seed.yaml \
+  --out results/grid_margin_full_15seed_v1
+```
+
+Mean results over 15 paired seeds:
+
+| Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---|---:|---:|---:|---:|
+| BGR | 0.9461 | 0.4345 | 0.3441 | 0.3525 |
+| Uniform | 0.8943 | 0.3961 | 0.3318 | 0.3129 |
+| Failure-only | 0.8453 | 0.2910 | 0.2307 | 0.2537 |
+| PLR-loss proxy | 0.7977 | 0.2106 | 0.1367 | 0.2127 |
+| Fixed radius | 0.7945 | 0.2094 | 0.1358 | 0.2124 |
+
+Paired exact sign tests from `results/significance_tests_v3` support BGR
+over fixed, failure-only, and PLR-loss baselines on final RAUC and RAUC AULC
+with p=0.0001 for each comparison. Final RAUC deltas are +0.2251 vs fixed,
++0.1435 vs failure-only, and +0.2239 vs PLR-loss. Interpretation: the stronger
+procedural full-baseline result supports the main mechanism claim at the same
+15-seed level as the BGR-vs-uniform comparison. Neither hard failure mining,
+loss-priority replay, nor a static fixed perturbation radius expands recovery
+margins comparably to boundary-centered replay.
+
+### Completed `grid_margin_full_30seed_v1`
+
+Submitted and completed on 2026-06-03 to confirm the procedural grid-margin
+full-baseline result at the same 30 paired-seed level used by the suffix
+confirmation. This was
+a high-value check because the main mechanism claim previously rested on a
+15-seed grid full-baseline sweep plus sensitivity runs.
+
+Completed on 2026-06-03 with 30 paired seeds for each configured method
+(`uniform`, `fixed`, `failure_only`, `plr_loss`, and `bgr`). BGR confirms the
+15-seed full-baseline pattern:
+
+```text
+method        clean   RAUC    median r80  AULC
+BGR           0.9455  0.4344  0.3447      0.3526
+Uniform       0.8939  0.3963  0.3321      0.3132
+Failure-only  0.8449  0.2909  0.2314      0.2540
+Loss-priority 0.7974  0.2109  0.1373      0.2130
+Fixed radius  0.7944  0.2097  0.1362      0.2128
+```
+
+Exact paired sign tests from `paper/figures/significance_tests.csv` support all
+10 configured 30-seed grid comparisons: BGR beats uniform on final RAUC, AULC,
+clean success, and median $r_{80}$, and beats fixed, failure-only, and PLR-loss
+on final RAUC and AULC. Every comparison has 30 paired BGR wins, 0 losses, 0
+ties, and two-sided sign-test p-value `1.86265e-09`.
+
+Serial command attempted first:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_experiment.py \
+  --config configs/grid_margin_full_30seed.yaml \
+  --out results/grid_margin_full_30seed_v1
+```
+
+Earlier job `763779` failed immediately before producing rows because the
+remote grid environment source was stale. Serial job `763780` was then canceled
+after reaching `fixed` seed 5 before it wrote a summary, and the run was
+replaced with a Slurm array to shorten turnaround and preserve per-trial
+artifacts.
+
+Replacement array command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_trial.py \
+  --config configs/grid_margin_full_30seed.yaml \
+  --out results/grid_margin_full_30seed_v1 \
+  --method METHOD \
+  --seed SEED
+```
+
+Array job `763781` runs the 150 method/seed trials as `0-149%30`, writing
+per-trial JSON files under
+`/work/anonymous/bgr/results/grid_margin_full_30seed_v1/trials`. Merge job `763782`
+depends on `afterok:763781` and runs:
+
+```bash
+PYTHONPATH=src:. python3 scripts/merge_grid_margin_trials.py \
+  --config configs/grid_margin_full_30seed.yaml \
+  --out results/grid_margin_full_30seed_v1
+```
+
+Slurm output is under
+`/work/anonymous/bgr/runs/slurm/bgr-grid-full30-array-763781_*.out` and
+`/work/anonymous/bgr/runs/slurm/bgr-grid-full30-merge-763782.out`.
+
+### Completed `grid_margin_full_replication_30seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_trial.py \
+  --config configs/grid_margin_full_replication_30seed.yaml \
+  --out results/grid_margin_full_replication_30seed_v1 \
+  --method METHOD \
+  --seed SEED
+PYTHONPATH=src:. python3 scripts/merge_grid_margin_trials.py \
+  --config configs/grid_margin_full_replication_30seed.yaml \
+  --out results/grid_margin_full_replication_30seed_v1
+```
+
+This local held-out replication reruns the headline BGR-vs-uniform
+grid-margin comparison on seeds 30-59, disjoint from the original 30 paired
+seeds, while keeping the same grid-margin full-baseline hyperparameters.
+
+Mean results over 30 paired seeds:
+
+| Method | Clean | RAUC | Median r80 | AULC |
+|---|---:|---:|---:|---:|
+| BGR | 0.9453 | 0.4340 | 0.3446 | 0.3523 |
+| Uniform | 0.8934 | 0.3967 | 0.3327 | 0.3137 |
+
+Per-seed paired signs give 30/0 paired wins for BGR over uniform on clean
+success, final RAUC (0.4340 vs. 0.3967), median r80, AULC, and best RAUC. Interpretation:
+independent held-out seeds replicate the central procedural margin-expansion
+claim before the paper moves to suffix and OpenVLA audits.
+
+Stored learning-curve histories in `results.json` also show that BGR leads
+uniform at every evaluation checkpoint after the first update. These rows are
+exported by `scripts/aggregate_results.py` to
+`paper/figures/grid_margin_learning_curve_stats.csv`, and exact sign tests
+for every checkpoint are included in `paper/figures/significance_tests.csv`.
+
+| Step | BGR RAUC | Uniform RAUC | Delta |
+|---:|---:|---:|---:|
+| 30 | 0.2607 | 0.2372 | +0.0235 |
+| 60 | 0.2952 | 0.2583 | +0.0369 |
+| 90 | 0.3226 | 0.2786 | +0.0440 |
+| 120 | 0.3454 | 0.2979 | +0.0474 |
+| 150 | 0.3649 | 0.3167 | +0.0482 |
+| 180 | 0.3817 | 0.3344 | +0.0473 |
+| 210 | 0.3967 | 0.3511 | +0.0456 |
+| 240 | 0.4103 | 0.3670 | +0.0433 |
+| 270 | 0.4229 | 0.3820 | +0.0408 |
+| 300 | 0.4345 | 0.3961 | +0.0384 |
+
+Each stepwise RAUC delta is positive on all 15 paired seeds; exact two-sided
+sign tests report p=0.0001 after CSV formatting for every checkpoint.
+
+### `grid_margin_target_sensitivity_15seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_target_sensitivity.py \
+  --config configs/grid_margin_target_sensitivity_15seed.yaml \
+  --out results/grid_margin_target_sensitivity_15seed_v1
+```
+
+Mean BGR results over 15 seeds for each target margin:
+
+| Target margin | Clean | RAUC | Median r80 | RAUC AULC |
+|---:|---:|---:|---:|---:|
+| 0.26 | 0.9512 | 0.4429 | 0.3514 | 0.3587 |
+| 0.32 | 0.9493 | 0.4390 | 0.3488 | 0.3558 |
+| 0.38 | 0.9461 | 0.4345 | 0.3441 | 0.3525 |
+| 0.46 | 0.9414 | 0.4266 | 0.3363 | 0.3467 |
+| 0.54 | 0.9350 | 0.4152 | 0.3295 | 0.3388 |
+
+Against the paired uniform rows from `grid_margin_full_15seed_v1`, every target
+margin improves final RAUC and RAUC AULC on all 15 seeds. The robustness rows
+are included in `paper/figures/significance_tests.csv`; mean final RAUC deltas
+range from +0.0191 at target margin 0.54 to +0.0468 at target margin 0.26, with
+exact two-sided sign-test p=0.0001 after CSV formatting for every target/metric
+comparison. Interpretation: the reported 0.38 target is not a cherry-picked
+optimum; lower targets perform even better in this benchmark, and BGR remains
+above uniform across the tested 0.26--0.54 range.
+
+### Completed `grid_margin_target_sensitivity_30seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_target_sensitivity.py \
+  --config configs/grid_margin_target_sensitivity_30seed.yaml \
+  --out results/grid_margin_target_sensitivity_30seed_v1
+```
+
+Completed locally on 2026-06-04 to confirm the grid-margin target-margin sweep
+at 30 paired seeds against the completed full-baseline uniform rows.
+
+Mean BGR results over 30 paired seeds:
+
+| Target margin | Clean | RAUC | Median r80 | RAUC AULC |
+|---:|---:|---:|---:|---:|
+| 0.26 | 0.9507 | 0.4427 | 0.3516 | 0.3587 |
+| 0.32 | 0.9488 | 0.4391 | 0.3488 | 0.3560 |
+| 0.38 | 0.9455 | 0.4344 | 0.3447 | 0.3526 |
+| 0.46 | 0.9405 | 0.4264 | 0.3376 | 0.3468 |
+| 0.54 | 0.9344 | 0.4157 | 0.3302 | 0.3393 |
+
+Against the paired uniform rows from `grid_margin_full_30seed_v1`, BGR improves
+final RAUC, RAUC AULC, and clean success over the 30-seed uniform baseline with
+30/0 paired wins at every target margin. Final RAUC mean deltas range from
++0.0194 at target 0.54 to +0.0463 at target 0.26, and RAUC AULC mean deltas
+range from +0.0261 to +0.0455. Interpretation: target 0.38 is not a
+cherry-picked optimum; lower targets perform even better while all tested
+targets remain above uniform on the paper-facing RAUC/AULC/clean metrics.
+Median r80 is not a promoted target-sensitivity claim: high target margins
+soften that metric (0.46 gives 27/3 paired wins and 0.54 gives 9/21).
+
+### `grid_margin_learning_rate_sensitivity_15seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_learning_rate_sensitivity.py \
+  --config configs/grid_margin_learning_rate_sensitivity_15seed.yaml \
+  --out results/grid_margin_learning_rate_sensitivity_15seed_v1
+```
+
+Mean BGR-vs-uniform results over 15 paired seeds:
+
+| Learning rate | Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---:|---|---:|---:|---:|---:|
+| 0.015 | BGR | 0.9457 | 0.3821 | 0.2999 | 0.3124 |
+| 0.015 | Uniform | 0.8846 | 0.3198 | 0.2485 | 0.2689 |
+| 0.030 | BGR | 0.9461 | 0.4345 | 0.3441 | 0.3525 |
+| 0.030 | Uniform | 0.8943 | 0.3961 | 0.3318 | 0.3129 |
+| 0.060 | BGR | 0.9442 | 0.4856 | 0.4076 | 0.3962 |
+| 0.060 | Uniform | 0.8993 | 0.4908 | 0.4397 | 0.3785 |
+
+Paired exact sign-test rows are included in
+`paper/figures/significance_tests.csv` for clean, final RAUC, median r80, and
+RAUC AULC at each learning rate. BGR improves final RAUC at low and nominal
+rates (+0.0623 and +0.0384, 15/0 wins), while the high learning rate lets
+uniform overtake final RAUC (-0.0052, 1/14 wins) and median r80 (-0.0321, 0/15
+wins). BGR still improves clean success and RAUC AULC at all three rates, with
+15/0 paired wins on those metrics. Interpretation: this is a scope diagnostic,
+not a new robustness headline; high learning rate can saturate uniform replay
+enough to erase BGR's final-RAUC advantage.
+
+### Completed `grid_margin_learning_rate_sensitivity_30seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_learning_rate_sensitivity.py \
+  --config configs/grid_margin_learning_rate_sensitivity_30seed.yaml \
+  --out results/grid_margin_learning_rate_sensitivity_30seed_v1
+```
+
+Completed locally on 2026-06-04 to confirm the learning-rate scope diagnostic
+over 30 paired seeds.
+
+Mean BGR-vs-uniform results over 30 paired seeds:
+
+| Learning rate | Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---:|---|---:|---:|---:|---:|
+| 0.015 | BGR | 0.9453 | 0.3820 | 0.2997 | 0.3124 |
+| 0.015 | Uniform | 0.8843 | 0.3200 | 0.2491 | 0.2693 |
+| 0.030 | BGR | 0.9455 | 0.4344 | 0.3447 | 0.3526 |
+| 0.030 | Uniform | 0.8939 | 0.3963 | 0.3321 | 0.3132 |
+| 0.060 | BGR | 0.9437 | 0.4854 | 0.4077 | 0.3961 |
+| 0.060 | Uniform | 0.8989 | 0.4908 | 0.4400 | 0.3787 |
+
+At low and nominal learning rates, BGR improves final RAUC, RAUC AULC, clean
+success, and median r80 with 30/0 paired wins. At learning rate 0.060, uniform
+remains higher on final RAUC with 29/1 paired wins and median r80 with 30/0
+paired wins. BGR still improves RAUC AULC and clean success at 0.060 with 30/0
+paired wins. Interpretation: the 30-seed confirmation preserves the
+optimization-scope caveat rather than turning the learning-rate sweep into a
+new robustness headline.
+
+### Completed `grid_margin_stress_sensitivity_30seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_stress_sensitivity.py \
+  --config configs/grid_margin_stress_sensitivity_30seed.yaml \
+  --out results/grid_margin_stress_sensitivity_30seed_v1
+```
+
+Completed locally on 2026-06-04 to confirm the geometry-stress diagnostic over
+30 paired seeds.
+
+Mean BGR-vs-uniform results over 30 paired seeds:
+
+| Stress case | Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---|---|---:|---:|---:|---:|
+| diffuse_boundary | BGR | 0.9282 | 0.4573 | 0.3260 | 0.3734 |
+| diffuse_boundary | Uniform | 0.8785 | 0.4299 | 0.3261 | 0.3387 |
+| low_feasibility | BGR | 0.9451 | 0.3616 | 0.2852 | 0.3047 |
+| low_feasibility | Uniform | 0.8875 | 0.3234 | 0.2616 | 0.2708 |
+| sharp_low_margin | BGR | 0.9621 | 0.3980 | 0.3293 | 0.3076 |
+| sharp_low_margin | Uniform | 0.8938 | 0.3250 | 0.2919 | 0.2451 |
+
+BGR improves final RAUC, RAUC AULC, and clean success with 30/0 paired wins in
+every stress case. Median r80 is not a promoted stress-sensitivity claim:
+diffuse-boundary median r80 is not promoted because it has a 14/16 paired split,
+while low-feasibility and sharp-low-margin have 30/0 BGR wins. Interpretation:
+the 30-seed confirmation strengthens the geometry-stress diagnostic on
+paper-facing recovery metrics without overstating median-r80 behavior.
+
+### `grid_margin_regime_sensitivity_15seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_regime_sensitivity.py \
+  --config configs/grid_margin_regime_sensitivity_15seed.yaml \
+  --out results/grid_margin_regime_sensitivity_15seed_v1
+```
+
+Mean BGR-vs-uniform results over 15 paired seeds:
+
+| Regime | Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---|---|---:|---:|---:|---:|
+| low_obstacle | BGR | 0.9461 | 0.4345 | 0.3444 | 0.3526 |
+| low_obstacle | Uniform | 0.8943 | 0.3961 | 0.3318 | 0.3129 |
+| nominal | BGR | 0.9461 | 0.4345 | 0.3441 | 0.3525 |
+| nominal | Uniform | 0.8943 | 0.3961 | 0.3318 | 0.3129 |
+| high_obstacle | BGR | 0.9458 | 0.4344 | 0.3445 | 0.3524 |
+| high_obstacle | Uniform | 0.8943 | 0.3961 | 0.3318 | 0.3129 |
+
+Interpretation: this is an inconclusive robustness diagnostic, not a main-paper
+claim. Changing `obstacle_prob` and `max_offset` over this range barely changes
+the procedural margin distribution after feasibility clipping, so the run mostly
+reproduces the nominal BGR-vs-uniform result rather than demonstrating a
+meaningfully different grid regime.
+
+### Completed `grid_margin_regime_sensitivity_30seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_regime_sensitivity.py \
+  --config configs/grid_margin_regime_sensitivity_30seed.yaml \
+  --out results/grid_margin_regime_sensitivity_30seed_v1
+```
+
+Mean BGR-vs-uniform results over 30 paired seeds:
+
+| Regime | Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---|---|---:|---:|---:|---:|
+| high_obstacle | BGR | 0.9454 | 0.4346 | 0.3446 | 0.3526 |
+| high_obstacle | Uniform | 0.8939 | 0.3963 | 0.3320 | 0.3132 |
+| low_obstacle | BGR | 0.9456 | 0.4345 | 0.3448 | 0.3526 |
+| low_obstacle | Uniform | 0.8939 | 0.3963 | 0.3321 | 0.3132 |
+| nominal | BGR | 0.9455 | 0.4344 | 0.3447 | 0.3526 |
+| nominal | Uniform | 0.8939 | 0.3963 | 0.3321 | 0.3132 |
+
+BGR improves final RAUC, RAUC AULC, clean success, and median r80 with 30/0
+paired wins in every regime. Interpretation: this remains a diagnostic rather
+than separate robustness evidence because the sweep mostly reproduces the
+nominal margin dynamics.
+
 ### `grid_margin_pair_15seed_v1`
 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 04:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_margin_experiment.py --config configs/grid_margin_pair_15seed.yaml --out runs/grid_margin_pair_15seed_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 04:00:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_grid_margin_experiment.py --config configs/grid_margin_pair_15seed.yaml --out runs/grid_margin_pair_15seed_v1
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780328088_151681007.out
+/work/anonymous/bgr/logs/run_1780328088_151681007.out
 ```
 
 Mean results over 15 paired seeds:
@@ -156,7 +2301,7 @@ Mean results over 15 paired seeds:
 
 Interpretation: this strengthens the primary procedural claim. BGR improves
 all four reported metrics over uniform on every paired seed; paired exact
-sign-flip tests give p=0.00006 for clean success, RAUC, median r80, and RAUC
+sign tests give p=0.00006 for clean success, RAUC, median r80, and RAUC
 AULC.
 
 ### `suffix_full_v1`
@@ -164,13 +2309,13 @@ AULC.
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_suffix_experiment.py --config configs/suffix_bgr_full.yaml --out runs/suffix_full_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_suffix_experiment.py --config configs/suffix_bgr_full.yaml --out runs/suffix_full_v1
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780307573_760181637.out
+/work/anonymous/bgr/logs/run_1780307573_760181637.out
 ```
 
 Mean results over five seeds:
@@ -184,20 +2329,213 @@ Mean results over five seeds:
 | Loss priority | 0.7120 | 0.1704 | 0.1285 | 0.1447 | 0.1694 |
 | Fixed radius | 0.6848 | 0.1585 | 0.1255 | 0.1379 | 0.1648 |
 
-Interpretation: BGR-Suffix strongly beats clean-only, fixed-radius, failure-only, and loss-priority recovery training. Compared with uniform suffix replay, it improves clean success and sample efficiency, but uniform retains higher final object RAUC and transfer RAUC in this lightweight suffix simulator. Treat this as a robotics-style diagnostic rather than the final LIBERO/OpenVLA evidence requested by the full spec.
+Interpretation, superseded by the coverage-aware 30-seed suffix results above:
+BGR-Suffix strongly beats clean-only, fixed-radius, failure-only, and
+loss-priority recovery training. Compared with uniform suffix replay, it
+improves clean success and sample efficiency, but uniform retains higher final
+object RAUC and transfer RAUC in this lightweight suffix simulator. Treat this
+historical run as a suffix-design diagnostic, not as the packaged
+manipulation-style evidence.
+
+### `suffix_full_15seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_suffix_experiment.py \
+  --config configs/suffix_full_15seed.yaml \
+  --out results/suffix_full_15seed_v1
+```
+
+Mean results over 15 paired seeds:
+
+| Method | Clean | Object RAUC | Median r80 | EE-transfer RAUC | RAUC AULC |
+|---|---:|---:|---:|---:|---:|
+| BGR-Suffix | 0.8734 | 0.4723 | 0.4530 | 0.3015 | 0.3739 |
+| Uniform suffix | 0.8358 | 0.4844 | 0.5046 | 0.3075 | 0.3707 |
+| Clean FT | 0.8645 | 0.2629 | 0.2067 | 0.1886 | 0.2388 |
+| Failure-only | 0.7571 | 0.4228 | 0.4742 | 0.2430 | 0.3026 |
+| Loss priority | 0.7105 | 0.1695 | 0.1283 | 0.1441 | 0.1690 |
+| Fixed radius | 0.6838 | 0.1583 | 0.1244 | 0.1375 | 0.1646 |
+
+Paired exact sign tests support BGR-Suffix over clean-only, fixed-radius,
+failure-only, and loss-priority recovery training on object RAUC, transfer RAUC,
+and RAUC AULC (p=0.0001 for each object-RAUC comparison). Compared with uniform,
+BGR-Suffix has higher clean success (+0.0376, p=0.0001) and higher AULC
+(+0.0032, p=0.0003), but lower final object RAUC (-0.0122, p=0.0001) and lower
+transfer RAUC (-0.0061, p=0.0001). Interpretation: this upgrades the suffix
+full-baseline evidence to 15 seeds while preserving the honest diagnostic
+tradeoff that motivated the broad-radius strategy run.
+
+### Completed `suffix_coverage_full_30seed_v1`
+
+Completed on 2026-06-03 to test the coverage-aware BGR-Coverage setting against
+the full suffix baseline set, not only uniform suffix replay. This replaces the
+mixed narrative where boundary-heavy BGR-Suffix is compared to
+clean/fixed/failure/loss baselines and BGR-Coverage is compared only to uniform.
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_suffix_experiment.py \
+  --config configs/suffix_coverage_full_30seed.yaml \
+  --out results/suffix_coverage_full_30seed_v1
+```
+
+Cluster job `763773` completed on `cnode301` with Slurm output at
+`/work/anonymous/bgr/runs/slurm/bgr-suffix-covfull30-763773.out`.
+
+Mean results over 30 paired seeds:
+
+| Method | Clean | Object RAUC | Median r80 | EE-transfer RAUC | RAUC AULC |
+|---|---:|---:|---:|---:|---:|
+| BGR-Coverage | 0.8644 | 0.4969 | 0.4982 | 0.3143 | 0.3825 |
+| Uniform suffix | 0.8364 | 0.4854 | 0.5047 | 0.3083 | 0.3709 |
+| Clean FT | 0.8646 | 0.2631 | 0.2065 | 0.1896 | 0.2389 |
+| Failure-only | 0.7573 | 0.4229 | 0.4734 | 0.2434 | 0.3024 |
+| Loss priority | 0.7110 | 0.1694 | 0.1279 | 0.1449 | 0.1689 |
+| Fixed radius | 0.6841 | 0.1583 | 0.1239 | 0.1382 | 0.1646 |
+
+Exact paired sign tests in `paper/figures/significance_tests.csv` give 30/0
+paired wins for BGR-Coverage over clean-only, fixed-radius, failure-only,
+loss-priority, and uniform suffix replay on final object RAUC. BGR-Coverage also
+beats uniform on EE-transfer RAUC and RAUC AULC with 30/0 paired wins. Clean-only
+has a negligible clean-success edge (0.8646 vs. 0.8644), and uniform remains
+higher on median r80 (0.5047 vs. 0.4982), so this is a strong positive suffix
+simulator result with the median-critical-radius caveat preserved.
+
+### Completed `suffix_coverage_full_replication_30seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_suffix_experiment.py \
+  --config configs/suffix_coverage_full_replication_30seed.yaml \
+  --out results/suffix_coverage_full_replication_30seed_v1
+```
+
+This held-out suffix full-baseline replication reruns the six-method
+coverage-aware suffix comparison on seeds 30-59.
+
+Mean results over 30 paired seeds:
+
+| Method | Clean | Object RAUC | Median r80 | EE-transfer RAUC | RAUC AULC |
+|---|---:|---:|---:|---:|---:|
+| BGR-Coverage | 0.8641 | 0.4972 | 0.4989 | 0.3156 | 0.3833 |
+| Uniform suffix | 0.8370 | 0.4859 | 0.5049 | 0.3096 | 0.3724 |
+| Clean FT | 0.8650 | 0.2634 | 0.2073 | 0.1899 | 0.2394 |
+| Failure-only | 0.7577 | 0.4237 | 0.4749 | 0.2441 | 0.3035 |
+| Loss priority | 0.7115 | 0.1699 | 0.1291 | 0.1452 | 0.1696 |
+| Fixed radius | 0.6852 | 0.1590 | 0.1247 | 0.1387 | 0.1654 |
+
+BGR-Coverage beats clean-only, fixed-radius, failure-only, loss-priority, and
+uniform suffix replay on final object RAUC, EE-transfer RAUC, and RAUC AULC with
+30/0 paired wins. It also beats fixed-radius, failure-only, loss-priority, and
+uniform on clean success with 30/0 paired wins. As in the original full-baseline
+run, clean-only retains a tiny clean-success edge (0.8650 vs. 0.8641; 22/8
+paired split), and uniform remains higher on median r80 with 30/0 paired wins.
+Interpretation: held-out seeds independently replicate the full suffix
+comparator ordering while preserving the clean-only and median-r80 caveats.
+
+### `suffix_strategy_coverage_30seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_suffix_experiment.py \
+  --config configs/suffix_strategy_coverage_30seed.yaml \
+  --out results/suffix_strategy_coverage_30seed_v1
+```
+
+Cluster job `763770` completed on 2026-06-03 through the same suffix simulator
+and coverage-aware BGR-Coverage settings as the 15-seed run, expanded to 30
+paired seeds.
+
+Mean results over 30 paired seeds:
+
+| Method | Clean | Object RAUC | Median r80 | EE-transfer RAUC | RAUC AULC |
+|---|---:|---:|---:|---:|---:|
+| BGR-Coverage | 0.8644 | 0.4969 | 0.4982 | 0.3143 | 0.3825 |
+| Uniform suffix | 0.8364 | 0.4854 | 0.5047 | 0.3083 | 0.3709 |
+
+Paired exact sign tests in `paper/figures/significance_tests.csv` support
+BGR-Coverage over uniform on clean success, final object RAUC, EE-transfer
+RAUC, and RAUC AULC with 30/0 paired wins on each metric. Uniform remains
+higher on median r80 with 29/1 paired wins. Interpretation: this upgrades the
+coverage-aware suffix simulator evidence from a 15-seed positive diagnostic to
+a 30-seed positive manipulation-style confirmation, while preserving the median
+critical-radius caveat.
+
+### Completed `suffix_strategy_coverage_replication_30seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_suffix_experiment.py \
+  --config configs/suffix_strategy_coverage_replication_30seed.yaml \
+  --out results/suffix_strategy_coverage_replication_30seed_v1
+```
+
+This local held-out replication reruns the two-method coverage-aware suffix
+comparison on seeds 30-59, disjoint from the original 30 paired seeds.
+
+Mean results over 30 paired seeds:
+
+| Method | Clean | Object RAUC | Median r80 | EE-transfer RAUC | RAUC AULC |
+|---|---:|---:|---:|---:|---:|
+| BGR-Coverage | 0.8641 | 0.4972 | 0.4989 | 0.3156 | 0.3833 |
+| Uniform suffix | 0.8370 | 0.4859 | 0.5049 | 0.3096 | 0.3724 |
+
+Per-seed paired signs give 30/0 paired wins for BGR-Coverage over uniform on
+clean success, final object RAUC, EE-transfer RAUC, and RAUC AULC. As in the
+original 30-seed run, uniform remains higher on median r80 with 30/0 paired
+wins. Interpretation: independent held-out seeds replicate the positive
+BGR-Coverage-vs-uniform suffix result and preserve the median-critical-radius
+caveat.
+
+### `suffix_strategy_coverage_15seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_suffix_experiment.py \
+  --config configs/suffix_strategy_coverage_15seed.yaml \
+  --out results/suffix_strategy_coverage_15seed_v1
+```
+
+This run keeps the same suffix simulator and 15 paired seeds as
+`suffix_strategy_pair_15seed_v1`, but uses a coverage-aware BGR-Broad setting:
+`broad_uniform_radius_prob=0.80`, `broad_clean_radius_prob=0.05`, and
+`uniform_mix=0.75`.
+
+Mean results over 15 paired seeds:
+
+| Method | Clean | Object RAUC | Median r80 | EE-transfer RAUC | RAUC AULC |
+|---|---:|---:|---:|---:|---:|
+| BGR-Coverage | 0.8638 | 0.4961 | 0.4970 | 0.3139 | 0.3821 |
+| Uniform suffix | 0.8358 | 0.4844 | 0.5046 | 0.3075 | 0.3707 |
+
+Paired exact sign tests in `paper/figures/significance_tests.csv` support
+BGR-Coverage over uniform on clean success (+0.0280), final object RAUC
+(+0.0116), EE-transfer RAUC (+0.0064), and RAUC AULC (+0.0114), with p=0.0001
+after CSV formatting for each comparison. Uniform remains higher on median r80
+(BGR-Coverage delta -0.0076, p=0.0001). Interpretation: the suffix simulator is
+positive on final object RAUC and learning-curve area once BGR keeps enough broad
+radius and uniform state coverage, but it remains a diagnostic simulator rather
+than a real-robot/OpenVLA fine-tuning result.
 
 ### `estimator_full_v1`
 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 01:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_estimator_experiment.py --config configs/estimator_bgr_full.yaml --out runs/estimator_full_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 01:00:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_estimator_experiment.py --config configs/estimator_bgr_full.yaml --out runs/estimator_full_v1
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780309253_221712673.out
+/work/anonymous/bgr/logs/run_1780309253_221712673.out
 ```
 
 Mean results over five seeds, with 17 Bernoulli probes per state and dense 201-point curves used only as references:
@@ -215,13 +2553,13 @@ Interpretation: active probing improves boundary-hit rate over uniform and coars
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:30:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_estimator_experiment.py --config configs/estimator_pair_15seed.yaml --out runs/estimator_pair_15seed_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:30:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_estimator_experiment.py --config configs/estimator_pair_15seed.yaml --out runs/estimator_pair_15seed_v1
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780327938_068713790.out
+/work/anonymous/bgr/logs/run_1780327938_068713790.out
 ```
 
 Mean results over 15 paired seeds:
@@ -232,21 +2570,109 @@ Mean results over 15 paired seeds:
 | Uniform | 0.1064 | 0.0656 | 0.6007 |
 
 Interpretation: active probing improves boundary-hit rate and lowers r80 error
-relative to uniform under the same 17-probe budget. Paired exact sign-flip
-tests give p=0.00006 for both effects.
+relative to uniform under the same 17-probe budget. Paired exact sign tests give
+p=0.00006 for both effects.
+
+### Completed `estimator_pair_30seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_estimator_experiment.py \
+  --config configs/estimator_pair_30seed.yaml \
+  --out results/estimator_pair_30seed_v1
+```
+
+Completed locally on 2026-06-04 to confirm the active-estimator validation at
+30 paired seeds under the same 17-probe budget and 512-state protocol as the
+paper table.
+
+Mean results over 30 paired seeds:
+
+| Estimator | r80 MAE | RAUC MAE | Boundary hit rate |
+|---|---:|---:|---:|
+| Active BGR | 0.0806 | 0.0645 | 0.6701 |
+| Uniform | 0.1055 | 0.0661 | 0.5949 |
+
+The 30-seed confirmation shows active probing improves boundary-hit rate
+(0.6701 vs. 0.5949) and lowers mean r80 error (0.0806 vs. 0.1055) with 30/0
+paired wins on both effects. RAUC MAE is similar, with active slightly lower on
+average (0.0645 vs. 0.0661) and 24/6 paired wins. Interpretation: this
+strengthens the method-validation claim without changing the paper table or
+claim scope.
+
+### Completed `grid_margin_ablation_30seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_experiment.py \
+  --config configs/grid_margin_ablation_30seed.yaml \
+  --out results/grid_margin_ablation_30seed_v1
+```
+
+Completed locally on 2026-06-04 to confirm the radius-level mechanism ablation
+at the same 30 paired-seed level as the headline grid full-baseline result.
+
+Mean results over 30 paired seeds:
+
+| Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---|---:|---:|---:|---:|
+| BGR | 0.9455 | 0.4344 | 0.3447 | 0.3526 |
+| No uncertainty | 0.9455 | 0.4349 | 0.3443 | 0.3528 |
+| No sharpness | 0.9464 | 0.4346 | 0.3444 | 0.3528 |
+| Uniform radius | 0.8910 | 0.3819 | 0.3223 | 0.3051 |
+| Uniform replay | 0.8939 | 0.3963 | 0.3321 | 0.3132 |
+
+BGR beats the uniform-radius ablation by +0.0525 final RAUC and +0.0475 RAUC
+AULC with 30/0 paired wins on both metrics. The uniform-radius ablation is also
+worse than uniform replay by -0.0144 final RAUC and -0.0081 RAUC AULC, again
+with 30/0 paired wins in the lower-is-expected direction. The no-uncertainty and
+no-sharpness variants remain effectively tied with BGR, matching the original
+15-seed diagnosis. Interpretation: this confirms at 30 paired seeds that
+radius-level boundary sampling, not merely hard-state priority, drives the
+procedural grid-margin gains.
+
+### `grid_margin_ablation_15seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_experiment.py \
+  --config configs/grid_margin_ablation_15seed.yaml \
+  --out results/grid_margin_ablation_15seed_v1
+```
+
+Mean results over 15 paired seeds:
+
+| Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---|---:|---:|---:|---:|
+| BGR | 0.9461 | 0.4345 | 0.3441 | 0.3525 |
+| No uncertainty | 0.9460 | 0.4345 | 0.3438 | 0.3525 |
+| No sharpness | 0.9468 | 0.4342 | 0.3441 | 0.3523 |
+| Uniform radius | 0.8910 | 0.3816 | 0.3217 | 0.3046 |
+| Uniform replay | 0.8943 | 0.3961 | 0.3318 | 0.3129 |
+
+Paired exact sign tests show that BGR beats the uniform-radius ablation on
+final RAUC by +0.0529 and RAUC AULC by +0.0479 (p=0.0001). The uniform-radius
+ablation is also worse than uniform replay on final RAUC by -0.0145 (p=0.0001).
+BGR is statistically indistinguishable from the no-uncertainty and no-sharpness
+variants on final RAUC. Interpretation: this 15-seed ablation strengthens the
+mechanism claim that radius-level boundary sampling, not merely hard-state
+priority, drives the procedural grid-margin gains.
 
 ### `grid_margin_ablation_v1`
 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_margin_experiment.py --config configs/grid_margin_ablation.yaml --out runs/grid_margin_ablation_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_grid_margin_experiment.py --config configs/grid_margin_ablation.yaml --out runs/grid_margin_ablation_v1
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780309573_174287695.out
+/work/anonymous/bgr/logs/run_1780309573_174287695.out
 ```
 
 Mean results over five seeds:
@@ -266,15 +2692,15 @@ Interpretation: on the grid-margin benchmark, radius-level boundary sampling is 
 Commands:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 00:45:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_policy_hard_fast.yaml --out runs/grid_policy_hard_fast_v1
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 00:45:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_policy_mixed.yaml --out runs/grid_policy_mixed_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 00:45:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_policy_hard_fast.yaml --out runs/grid_policy_hard_fast_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 00:45:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_policy_mixed.yaml --out runs/grid_policy_mixed_v1
 ```
 
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780316465_289961157.out
-/work/joy/bgr/logs/run_1780317123_541002217.out
+/work/anonymous/bgr/logs/run_1780316465_289961157.out
+/work/anonymous/bgr/logs/run_1780317123_541002217.out
 ```
 
 Mean results over three seeds for the mixed run:
@@ -287,20 +2713,26 @@ Mean results over three seeds for the mixed run:
 | Fixed radius | 0.9931 | 0.9771 | 1.0000 | 0.7999 |
 | PLR-loss proxy | 0.9991 | 0.9786 | 1.0000 | 0.7960 |
 
-Interpretation: this is a negative policy-level diagnostic. Adding clean/uniform radius coverage improves tabular BGR, but fixed-radius and loss-priority replay saturate the tabular oracle-imitation grid policy much faster. The main paper should continue using `grid_margin_full_v1` as the positive procedural result and treat this policy-level tabular setup as a benchmark-design failure, not as evidence for BGR.
+Interpretation: this is a negative policy-level diagnostic. Adding clean/uniform
+radius coverage improves tabular BGR, but fixed-radius and loss-priority replay
+saturate the tabular oracle-imitation grid policy much faster. This historical
+policy-level setup is a benchmark-design failure, not evidence for BGR; the
+reviewer-facing procedural claim is the completed 30-seed grid-margin
+full-baseline comparison plus held-out grid replication listed in the Submission
+Evidence Index.
 
 ### `grid_policy_coverage_v1`
 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 00:45:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_policy_coverage.yaml --out runs/grid_policy_coverage_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 00:45:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_policy_coverage.yaml --out runs/grid_policy_coverage_v1
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780319352_975146235.out
+/work/anonymous/bgr/logs/run_1780319352_975146235.out
 ```
 
 Mean results over three seeds:
@@ -320,13 +2752,13 @@ Interpretation: coverage-aware BGR substantially improves the tabular policy dia
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 01:00:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/probe_libero_suffix_states.py --suite libero_goal --task-ids 0,1,2,3,4 --init-state-ids 0,1,2 --radii 0.0,0.25,0.5,0.75,1.0 --trials-per-radius 4 --settle-steps 5 --image-size 64 --out runs/libero_probe_v2
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 01:00:00 /work/anonymous/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/probe_libero_suffix_states.py --suite libero_goal --task-ids 0,1,2,3,4 --init-state-ids 0,1,2 --radii 0.0,0.25,0.5,0.75,1.0 --trials-per-radius 4 --settle-steps 5 --image-size 64 --out runs/libero_probe_v2
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780311860_935283441.out
+/work/anonymous/bgr/logs/run_1780311860_935283441.out
 ```
 
 Probe summary:
@@ -342,19 +2774,19 @@ Interpretation: the cluster can instantiate LIBERO environments on GPU with `MUJ
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/summarize_libero_openvla_recovery.py --input-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_object3_h220_bash --out runs/libero_openvla_recovery_v1 --source-name libero_openvla_observation_object3_h220_bash
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/summarize_libero_openvla_recovery.py --input-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_object3_h220_bash --out runs/libero_openvla_recovery_v1 --source-name libero_openvla_observation_object3_h220_bash
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780320300_854946446.out
+/work/anonymous/bgr/logs/run_1780320300_854946446.out
 ```
 
 Source artifact:
 
 ```text
-/work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_object3_h220_bash
+/work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_object3_h220_bash
 ```
 
 Mean recovery metrics over nine closed-loop OpenVLA LIBERO-Object replay states:
@@ -376,13 +2808,13 @@ but success drops sharply under blur, occlusion, and image shift perturbations.
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/summarize_openvla_boundary_selection.py --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_guided_h160 --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_guided_seed2_h160 --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_guided_seed3_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160 --out runs/libero_openvla_boundary_selection_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/summarize_openvla_boundary_selection.py --proposal-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_guided_h160 --proposal-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_guided_seed2_h160 --proposal-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_guided_seed3_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160 --out runs/libero_openvla_boundary_selection_v1
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780320651_072406017.out
+/work/anonymous/bgr/logs/run_1780320651_072406017.out
 ```
 
 Boundary band is observed counterfactual failure rate in `[0.25, 0.75]`:
@@ -404,13 +2836,13 @@ families.
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/summarize_openvla_boundary_selection.py --proposal-method-name bgr_boundary --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed1_lp2_h160 --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed2_lp2_h160 --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed3_lp2_h160 --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed4_lp2_h160 --proposal-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed5_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160 --out runs/libero_openvla_boundary_selection_balanced_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/summarize_openvla_boundary_selection.py --proposal-method-name bgr_boundary --proposal-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed1_lp2_h160 --proposal-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed2_lp2_h160 --proposal-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed3_lp2_h160 --proposal-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed4_lp2_h160 --proposal-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed5_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160 --out runs/libero_openvla_boundary_selection_balanced_v1
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780321470_140661271.out
+/work/anonymous/bgr/logs/run_1780321470_140661271.out
 ```
 
 | Method | Runs | Mean CF rate | Boundary hit rate | Mean `abs(CF-0.5)` | Certificates |
@@ -420,66 +2852,65 @@ Remote log:
 
 Interpretation: this is the paper-table OpenVLA selection audit because both
 methods cover the same four perturbation families over five runs. It supports
-boundary-discovery as a measurable learned-policy diagnostic, but not yet
-OpenVLA fine-tuning.
+boundary-discovery as a measurable learned-policy diagnostic while staying
+separate from the later OpenVLA-OFT fine-tuning smoke and audit results.
 
 ### `openvla_bgr_finetune_manifest_v1`
 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/export_openvla_bgr_finetune_manifest.py --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed1_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed2_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed3_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed4_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed5_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160 --out runs/openvla_bgr_finetune_manifest_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/export_openvla_bgr_finetune_manifest.py --bgr-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed1_lp2_h160 --bgr-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed2_lp2_h160 --bgr-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed3_lp2_h160 --bgr-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed4_lp2_h160 --bgr-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed5_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160 --out runs/openvla_bgr_finetune_manifest_v1
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780321861_807492940.out
+/work/anonymous/bgr/logs/run_1780321861_807492940.out
 ```
 
 Interpretation: this exports validated candidate-level manifests and OpenVLA-OFT
 LoRA command templates. It identified 80 candidates total; BGR-boundary has
 25/40 candidates in the boundary band, and random-balanced has 23/40. The
-OpenVLA-OFT trainer still requires RLDS episodes, so this is a fine-tuning
-scaffold rather than a completed fine-tuning result.
+later teacher-replay, TFDS, and LoRA smoke sections supersede this as a
+fine-tuning-readiness milestone.
 
 ### `openvla_teacher_replay_manifest_v1`
 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 12G --time 00:15:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/export_openvla_teacher_replay_manifest.py --boundary-only --max-steps-per-episode 64 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed1_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed2_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed3_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed4_lp2_h160 --bgr-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed5_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160 --random-dir /work/joy/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160 --out runs/openvla_teacher_replay_manifest_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 12G --time 00:15:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/export_openvla_teacher_replay_manifest.py --boundary-only --max-steps-per-episode 64 --bgr-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed1_lp2_h160 --bgr-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed2_lp2_h160 --bgr-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed3_lp2_h160 --bgr-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed4_lp2_h160 --bgr-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed5_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160 --random-dir /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160 --out runs/openvla_teacher_replay_manifest_v1
 ```
 
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780322114_709717949.out
-/work/joy/bgr/logs/run_1780322189_156724835.out
+/work/anonymous/bgr/logs/run_1780322114_709717949.out
+/work/anonymous/bgr/logs/run_1780322189_156724835.out
 ```
 
-Interpretation: this is the next bridge toward OpenVLA-OFT fine-tuning. It
-exports 11,776 step-level rows pairing validated boundary candidates with target
-actions from successful native OpenVLA rollouts. A downstream converter must
-replay the native action prefix in LIBERO, render observations, apply the
-candidate perturbation to the image stream, and write RLDS episodes.
+Interpretation: this bridge artifact exports 11,776 step-level rows pairing
+validated boundary candidates with target actions from successful native OpenVLA
+rollouts. Later renderer, packing, TFDS, and LoRA smoke sections close the
+downstream conversion path needed for OpenVLA-OFT audits.
 
 ### `openvla_teacher_oft_smoke_v1`
 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:20:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_smoke_v1 --max-examples 4 --selection first_per_family --num-steps-wait 10 --env-image-size 256 --image-size 224
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:20:00 /work/anonymous/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_smoke_v1 --max-examples 4 --selection first_per_family --num-steps-wait 10 --env-image-size 256 --image-size 224
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780322998_166835773.out
+/work/anonymous/bgr/logs/run_1780322998_166835773.out
 ```
 
 Interpretation: this validates that the teacher-replay manifest can be converted
-into rendered OpenVLA-OFT-style examples under LIBERO GPU/EGL. The checked-in
+into rendered OpenVLA-OFT-style examples under LIBERO GPU/EGL. The included
 smoke artifact contains one example for each visual perturbation family: blur,
 brightness, shift, and occlusion. Each NPZ contains primary image
 `(224,224,3)`, wrist image `(224,224,3)`, 8D LIBERO state, 7D action, and
@@ -491,58 +2922,58 @@ fine-tuning.
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples results/openvla_teacher_oft_smoke_v1/examples.jsonl --out runs/openvla_oft_pack_smoke_v1 --write-hdf5
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples results/openvla_teacher_oft_smoke_v1/examples.jsonl --out runs/openvla_oft_pack_smoke_v1 --write-hdf5
 ```
 
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780323325_136783423.out
-/work/joy/bgr/logs/run_1780323386_780730416.out
+/work/anonymous/bgr/logs/run_1780323325_136783423.out
+/work/anonymous/bgr/logs/run_1780323386_780730416.out
 ```
 
 Interpretation: this validates and packs the rendered OFT-field examples into a
-LIBERO-style HDF5 smoke dataset. The checked-in HDF5 has `data/demo_*` groups
+LIBERO-style HDF5 smoke dataset. The included HDF5 has `data/demo_*` groups
 with `actions`, `obs/agentview_rgb`, `obs/eye_in_hand_rgb`, `obs/ee_states`,
-and `obs/gripper_states`. This is the next bridge artifact toward RLDS
-conversion, not a completed RLDS dataset or fine-tuning run.
+and `obs/gripper_states`. Later TFDS exports supersede this HDF5 smoke as the
+OpenVLA-OFT loader-facing artifact.
 
 ### `openvla_oft_tfds_smoke_v1`
 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:20:00 /work/joy/bgr /work/joy/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples results/openvla_teacher_oft_smoke_v1/examples.jsonl --out runs/openvla_oft_tfds_smoke_v1 --dataset-name bgr_libero_oft_smoke --version 1.0.0
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:20:00 /work/anonymous/bgr /work/anonymous/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples results/openvla_teacher_oft_smoke_v1/examples.jsonl --out runs/openvla_oft_tfds_smoke_v1 --dataset-name bgr_libero_oft_smoke --version 1.0.0
 ```
 
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780323827_280717056.out
-/work/joy/bgr/logs/run_1780323900_674014804.out
+/work/anonymous/bgr/logs/run_1780323827_280717056.out
+/work/anonymous/bgr/logs/run_1780323900_674014804.out
 ```
 
 Interpretation: this exports the rendered OFT-field examples as a minimal
 RLDS-style TFDS dataset and verifies readback with `tfds.builder_from_directory`.
-The checked-in smoke dataset has four train episodes and four total steps, one
+The included smoke dataset has four train episodes and four total steps, one
 per perturbation family, with primary RGB, wrist RGB, 8D state, 7D action, and
 language fields. This closes the smoke-tested TFDS conversion path, but it is
-not yet a full OpenVLA-OFT fine-tuning run.
+a TFDS compatibility check rather than a full OpenVLA-OFT fine-tuning run.
 
 ### `openvla_oft_tfds_libero_goal_smoke_v2`
 
 Commands:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:20:00 /work/joy/bgr /work/joy/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples results/openvla_teacher_oft_smoke_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_smoke_v2 --dataset-name libero_goal_no_noops --version 1.0.0
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 12G --time 00:15:00 /work/joy/bgr env PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python -c "from pathlib import Path; import tensorflow_datasets as tfds; from prismatic.vla.datasets.rlds.oxe.materialize import make_oxe_dataset_kwargs; from prismatic.vla.datasets.rlds.dataset import make_dataset_from_rlds; kw=make_oxe_dataset_kwargs('libero_goal_no_noops', Path('/work/joy/bgr/runs/openvla_oft_tfds_libero_goal_smoke_v2'), load_camera_views=('primary','wrist'), load_proprio=True, load_language=True); ds, stats=make_dataset_from_rlds(train=True, shuffle=False, **kw); ex=next(iter(tfds.as_numpy(ds))); print('keys', sorted(ex.keys())); print('obs', {k:v.shape for k,v in ex['observation'].items()}); print('task', ex['task']['language_instruction'][0].decode()); print('action', ex['action'].shape); print('stats_action_mean', stats['action']['mean'].shape); print('stats_proprio_mean', stats['proprio']['mean'].shape)"
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:20:00 /work/anonymous/bgr /work/anonymous/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples results/openvla_teacher_oft_smoke_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_smoke_v2 --dataset-name libero_goal_no_noops --version 1.0.0
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 12G --time 00:15:00 /work/anonymous/bgr env PYTHONPATH=/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python -c "from pathlib import Path; import tensorflow_datasets as tfds; from prismatic.vla.datasets.rlds.oxe.materialize import make_oxe_dataset_kwargs; from prismatic.vla.datasets.rlds.dataset import make_dataset_from_rlds; kw=make_oxe_dataset_kwargs('libero_goal_no_noops', Path('/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_smoke_v2'), load_camera_views=('primary','wrist'), load_proprio=True, load_language=True); ds, stats=make_dataset_from_rlds(train=True, shuffle=False, **kw); ex=next(iter(tfds.as_numpy(ds))); print('keys', sorted(ex.keys())); print('obs', {k:v.shape for k,v in ex['observation'].items()}); print('task', ex['task']['language_instruction'][0].decode()); print('action', ex['action'].shape); print('stats_action_mean', stats['action']['mean'].shape); print('stats_proprio_mean', stats['proprio']['mean'].shape)"
 ```
 
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780324900_610846337.out
-/work/joy/bgr/logs/run_1780324943_628488822.out
+/work/anonymous/bgr/logs/run_1780324900_610846337.out
+/work/anonymous/bgr/logs/run_1780324943_628488822.out
 ```
 
 Interpretation: this re-exports the TFDS smoke under the stock
@@ -550,21 +2981,21 @@ Interpretation: this re-exports the TFDS smoke under the stock
 `make_oxe_dataset_kwargs` and `make_dataset_from_rlds` path. The loader computes
 dataset statistics and yields primary/wrist image fields, 8D proprio, 7D action,
 and language. This verifies that the BGR-rendered examples can enter the
-unmodified OpenVLA-OFT RLDS loader; the remaining gap is scaling the render to a
-training-sized dataset and running LoRA fine-tuning/evaluation.
+unmodified OpenVLA-OFT RLDS loader. Later balanced2048 sections scale this path
+to matched larger datasets and LoRA fine-tuning/evaluation smoke runs.
 
 ### `openvla_teacher_oft_balanced64_v1`
 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:40:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_balanced64_v1 --max-examples 64 --selection balanced_episodes --episodes-per-family 1 --max-steps-per-episode 16 --num-steps-wait 10 --env-image-size 256 --image-size 224
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:40:00 /work/anonymous/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_balanced64_v1 --max-examples 64 --selection balanced_episodes --episodes-per-family 1 --max-steps-per-episode 16 --num-steps-wait 10 --env-image-size 256 --image-size 224
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780325448_898879565.out
+/work/anonymous/bgr/logs/run_1780325448_898879565.out
 ```
 
 Interpretation: this scales the renderer from four isolated smoke frames to
@@ -577,14 +3008,14 @@ action, and language.
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples runs/openvla_teacher_oft_balanced64_v1/examples.jsonl --out runs/openvla_oft_pack_balanced64_v1 --write-hdf5
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples runs/openvla_teacher_oft_balanced64_v1/examples.jsonl --out runs/openvla_oft_pack_balanced64_v1 --write-hdf5
 ```
 
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780325655_972521234.out
-/work/joy/bgr/logs/run_1780325709_771885875.out
+/work/anonymous/bgr/logs/run_1780325655_972521234.out
+/work/anonymous/bgr/logs/run_1780325709_771885875.out
 ```
 
 Interpretation: the balanced rendered rows pack into four HDF5 demos with
@@ -597,43 +3028,44 @@ candidate replays.
 Commands:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:20:00 /work/joy/bgr /work/joy/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples runs/openvla_teacher_oft_balanced64_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_balanced64_v1 --dataset-name libero_goal_no_noops --version 1.0.0
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 12G --time 00:15:00 /work/joy/bgr env PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python -c "from pathlib import Path; import tensorflow_datasets as tfds; from prismatic.vla.datasets.rlds.oxe.materialize import make_oxe_dataset_kwargs; from prismatic.vla.datasets.rlds.dataset import make_dataset_from_rlds; kw=make_oxe_dataset_kwargs('libero_goal_no_noops', Path('/work/joy/bgr/runs/openvla_oft_tfds_libero_goal_balanced64_v1'), load_camera_views=('primary','wrist'), load_proprio=True, load_language=True); ds, stats=make_dataset_from_rlds(train=True, shuffle=False, **kw); ex=next(iter(tfds.as_numpy(ds))); print('keys', sorted(ex.keys())); print('obs', {k:v.shape for k,v in ex['observation'].items()}); print('task', ex['task']['language_instruction'][0].decode()); print('action', ex['action'].shape); print('stats_action_mean', stats['action']['mean'].shape); print('stats_proprio_mean', stats['proprio']['mean'].shape)"
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:20:00 /work/anonymous/bgr /work/anonymous/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples runs/openvla_teacher_oft_balanced64_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_balanced64_v1 --dataset-name libero_goal_no_noops --version 1.0.0
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 12G --time 00:15:00 /work/anonymous/bgr env PYTHONPATH=/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python -c "from pathlib import Path; import tensorflow_datasets as tfds; from prismatic.vla.datasets.rlds.oxe.materialize import make_oxe_dataset_kwargs; from prismatic.vla.datasets.rlds.dataset import make_dataset_from_rlds; kw=make_oxe_dataset_kwargs('libero_goal_no_noops', Path('/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_balanced64_v1'), load_camera_views=('primary','wrist'), load_proprio=True, load_language=True); ds, stats=make_dataset_from_rlds(train=True, shuffle=False, **kw); ex=next(iter(tfds.as_numpy(ds))); print('keys', sorted(ex.keys())); print('obs', {k:v.shape for k,v in ex['observation'].items()}); print('task', ex['task']['language_instruction'][0].decode()); print('action', ex['action'].shape); print('stats_action_mean', stats['action']['mean'].shape); print('stats_proprio_mean', stats['proprio']['mean'].shape)"
 ```
 
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780325681_170623263.out
-/work/joy/bgr/logs/run_1780325731_654888892.out
+/work/anonymous/bgr/logs/run_1780325681_170623263.out
+/work/anonymous/bgr/logs/run_1780325731_654888892.out
 ```
 
 Interpretation: this exports the 64-step balanced set under
 `libero_goal_no_noops` and validates it through OpenVLA-OFT's unmodified RLDS
 loader. The loader computes dataset statistics and yields trajectory chunks with
 primary/wrist image fields, proprio `(16,8)`, action `(16,7)`, and language.
-The remaining gap is now training-sized scale and LoRA fine-tuning/evaluation.
+Later balanced2048 sections supersede this 64-step compatibility check for
+training-sized scale and LoRA fine-tuning/evaluation smoke coverage.
 
 ### `openvla_oft_finetune_balanced64_ckpt_smoke_v1`
 
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 8 --mem 64G --time 01:00:00 /work/joy/bgr bash -lc 'cd /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/joy/cache_home/huggingface TRANSFORMERS_CACHE=/work/joy/cache_home/huggingface/hub PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/torchrun --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py --vla_path openvla/openvla-7b --data_root_dir /work/joy/bgr/runs/openvla_oft_tfds_libero_goal_balanced64_v1 --dataset_name libero_goal_no_noops --run_root_dir /work/joy/bgr/runs/openvla_oft_finetune_balanced64_ckpt_smoke_v1 --use_l1_regression True --use_diffusion False --use_film False --num_images_in_input 2 --use_proprio True --batch_size 1 --learning_rate 5e-4 --num_steps_before_decay 100000 --max_steps 1 --save_freq 1 --save_latest_checkpoint_only True --image_aug False --lora_rank 8 --merge_lora_during_training False --shuffle_buffer_size 16 --wandb_entity disabled --wandb_project bgr --run_id_note bgr-balanced64-ckpt-smoke --wandb_log_freq 1'
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 8 --mem 64G --time 01:00:00 /work/anonymous/bgr bash -lc 'cd /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/anonymous/cache_home/huggingface TRANSFORMERS_CACHE=/work/anonymous/cache_home/huggingface/hub PYTHONPATH=/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/torchrun --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py --vla_path openvla/openvla-7b --data_root_dir /work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_balanced64_v1 --dataset_name libero_goal_no_noops --run_root_dir /work/anonymous/bgr/runs/openvla_oft_finetune_balanced64_ckpt_smoke_v1 --use_l1_regression True --use_diffusion False --use_film False --num_images_in_input 2 --use_proprio True --batch_size 1 --learning_rate 5e-4 --num_steps_before_decay 100000 --max_steps 1 --save_freq 1 --save_latest_checkpoint_only True --image_aug False --lora_rank 8 --merge_lora_during_training False --shuffle_buffer_size 16 --wandb_entity disabled --wandb_project bgr --run_id_note bgr-balanced64-ckpt-smoke --wandb_log_freq 1'
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780326595_120788212.out
+/work/anonymous/bgr/logs/run_1780326595_120788212.out
 ```
 
 Interpretation: this is the first end-to-end OpenVLA-OFT training smoke on BGR
 data. The run loaded OpenVLA 7B, initialized LoRA rank 8 plus proprio and L1
 action heads, loaded the BGR `libero_goal_no_noops` TFDS dataset, completed a
 one-step forward/backward/update loop, and wrote checkpoint artifacts under
-`/work/joy/bgr/runs`. The checkpoint directory is 656M and is not checked into
-git; checked-in metadata records the saved LoRA adapter, action head, proprio
+`/work/anonymous/bgr/runs`. The checkpoint directory is 656M and is not included in
+the compact artifact; included metadata records the saved LoRA adapter, action head, proprio
 projector, and dataset statistics. This is still a smoke test, not a
 training-scale fine-tuning/evaluation result.
 
@@ -642,13 +3074,13 @@ training-scale fine-tuning/evaluation result.
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:40:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_random_balanced64_v1 --method random_balanced --max-examples 64 --selection balanced_episodes --episodes-per-family 1 --max-steps-per-episode 16 --num-steps-wait 10 --env-image-size 256 --image-size 224
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 16G --time 00:40:00 /work/anonymous/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_random_balanced64_v1 --method random_balanced --max-examples 64 --selection balanced_episodes --episodes-per-family 1 --max-steps-per-episode 16 --num-steps-wait 10 --env-image-size 256 --image-size 224
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780327075_235451672.out
+/work/anonymous/bgr/logs/run_1780327075_235451672.out
 ```
 
 Interpretation: this renders the matched random-balanced baseline analog of
@@ -661,13 +3093,13 @@ episode per family.
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples runs/openvla_teacher_oft_random_balanced64_v1/examples.jsonl --out runs/openvla_oft_pack_random_balanced64_v1 --write-hdf5
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:10:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples runs/openvla_teacher_oft_random_balanced64_v1/examples.jsonl --out runs/openvla_oft_pack_random_balanced64_v1 --write-hdf5
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780327145_234510679.out
+/work/anonymous/bgr/logs/run_1780327145_234510679.out
 ```
 
 Interpretation: the random-balanced rendered rows pack into four HDF5 demos
@@ -679,15 +3111,15 @@ confirms the baseline uses the same episode-safe bridge as BGR.
 Commands:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:20:00 /work/joy/bgr /work/joy/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples runs/openvla_teacher_oft_random_balanced64_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_random_balanced64_v1 --dataset-name libero_goal_no_noops --version 1.0.0
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 12G --time 00:15:00 /work/joy/bgr env PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python -c "from pathlib import Path; import tensorflow_datasets as tfds; from prismatic.vla.datasets.rlds.oxe.materialize import make_oxe_dataset_kwargs; from prismatic.vla.datasets.rlds.dataset import make_dataset_from_rlds; kw=make_oxe_dataset_kwargs('libero_goal_no_noops', Path('/work/joy/bgr/runs/openvla_oft_tfds_libero_goal_random_balanced64_v1'), load_camera_views=('primary','wrist'), load_proprio=True, load_language=True); ds, stats=make_dataset_from_rlds(train=True, shuffle=False, **kw); ex=next(iter(tfds.as_numpy(ds))); print('keys', sorted(ex.keys())); print('obs', {k:v.shape for k,v in ex['observation'].items()}); print('task', ex['task']['language_instruction'][0].decode()); print('action', ex['action'].shape); print('stats_action_mean', stats['action']['mean'].shape); print('stats_proprio_mean', stats['proprio']['mean'].shape)"
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 00:20:00 /work/anonymous/bgr /work/anonymous/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples runs/openvla_teacher_oft_random_balanced64_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_random_balanced64_v1 --dataset-name libero_goal_no_noops --version 1.0.0
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 12G --time 00:15:00 /work/anonymous/bgr env PYTHONPATH=/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python -c "from pathlib import Path; import tensorflow_datasets as tfds; from prismatic.vla.datasets.rlds.oxe.materialize import make_oxe_dataset_kwargs; from prismatic.vla.datasets.rlds.dataset import make_dataset_from_rlds; kw=make_oxe_dataset_kwargs('libero_goal_no_noops', Path('/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_balanced64_v1'), load_camera_views=('primary','wrist'), load_proprio=True, load_language=True); ds, stats=make_dataset_from_rlds(train=True, shuffle=False, **kw); ex=next(iter(tfds.as_numpy(ds))); print('keys', sorted(ex.keys())); print('obs', {k:v.shape for k,v in ex['observation'].items()}); print('task', ex['task']['language_instruction'][0].decode()); print('action', ex['action'].shape); print('stats_action_mean', stats['action']['mean'].shape); print('stats_proprio_mean', stats['proprio']['mean'].shape)"
 ```
 
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780327170_100921796.out
-/work/joy/bgr/logs/run_1780327240_909792233.out
+/work/anonymous/bgr/logs/run_1780327170_100921796.out
+/work/anonymous/bgr/logs/run_1780327240_909792233.out
 ```
 
 Interpretation: this exports the matched random-balanced set under
@@ -700,57 +3132,57 @@ loader. The loader yields primary/wrist image fields, proprio `(16,8)`, action
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 8 --mem 64G --time 01:00:00 /work/joy/bgr bash -lc 'cd /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/joy/cache_home/huggingface TRANSFORMERS_CACHE=/work/joy/cache_home/huggingface/hub PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/torchrun --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py --vla_path openvla/openvla-7b --data_root_dir /work/joy/bgr/runs/openvla_oft_tfds_libero_goal_random_balanced64_v1 --dataset_name libero_goal_no_noops --run_root_dir /work/joy/bgr/runs/openvla_oft_finetune_random_balanced64_ckpt_smoke_v1 --use_l1_regression True --use_diffusion False --use_film False --num_images_in_input 2 --use_proprio True --batch_size 1 --learning_rate 5e-4 --num_steps_before_decay 100000 --max_steps 1 --save_freq 1 --save_latest_checkpoint_only True --image_aug False --lora_rank 8 --merge_lora_during_training False --shuffle_buffer_size 16 --wandb_entity disabled --wandb_project bgr --run_id_note random-balanced64-ckpt-smoke --wandb_log_freq 1'
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 8 --mem 64G --time 01:00:00 /work/anonymous/bgr bash -lc 'cd /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/anonymous/cache_home/huggingface TRANSFORMERS_CACHE=/work/anonymous/cache_home/huggingface/hub PYTHONPATH=/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/torchrun --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py --vla_path openvla/openvla-7b --data_root_dir /work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_balanced64_v1 --dataset_name libero_goal_no_noops --run_root_dir /work/anonymous/bgr/runs/openvla_oft_finetune_random_balanced64_ckpt_smoke_v1 --use_l1_regression True --use_diffusion False --use_film False --num_images_in_input 2 --use_proprio True --batch_size 1 --learning_rate 5e-4 --num_steps_before_decay 100000 --max_steps 1 --save_freq 1 --save_latest_checkpoint_only True --image_aug False --lora_rank 8 --merge_lora_during_training False --shuffle_buffer_size 16 --wandb_entity disabled --wandb_project bgr --run_id_note random-balanced64-ckpt-smoke --wandb_log_freq 1'
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780327341_446370402.out
+/work/anonymous/bgr/logs/run_1780327341_446370402.out
 ```
 
 Interpretation: this mirrors the BGR one-step OpenVLA-OFT checkpoint smoke on
 the matched random-balanced baseline. It loaded OpenVLA 7B, initialized LoRA
 rank 8 plus proprio and L1 action heads, loaded the baseline
 `libero_goal_no_noops` TFDS dataset, completed one optimizer step, and wrote the
-same class of checkpoint files under `/work/joy/bgr/runs`. The 656M checkpoint
-weights are not checked into git.
+same class of checkpoint files under `/work/anonymous/bgr/runs`. The 656M checkpoint
+weights are not included in the compact artifact.
 
 ### `openvla_teacher_oft_bgr_balanced2048_v1` and `openvla_teacher_oft_random_balanced2048_v1`
 
 Commands:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 24G --time 01:30:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_bgr_balanced2048_v1 --method bgr_boundary --max-examples 2048 --selection balanced_episodes --episodes-per-family 8 --max-steps-per-episode 64 --num-steps-wait 10 --env-image-size 256 --image-size 224
-~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 24G --time 01:30:00 /work/joy/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_random_balanced2048_v1 --method random_balanced --max-examples 2048 --selection balanced_episodes --episodes-per-family 8 --max-steps-per-episode 64 --num-steps-wait 10 --env-image-size 256 --image-size 224
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 24G --time 01:30:00 /work/anonymous/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_bgr_balanced2048_v1 --method bgr_boundary --max-examples 2048 --selection balanced_episodes --episodes-per-family 8 --max-steps-per-episode 64 --num-steps-wait 10 --env-image-size 256 --image-size 224
+~/remote_srun.sh --github-test --git-pull --log --partition gpu --gres gpu:1 --cpus 4 --mem 24G --time 01:30:00 /work/anonymous/bgr env MUJOCO_GL=egl PYOPENGL_PLATFORM=egl PYTHONPATH=src:. python scripts/render_openvla_teacher_examples.py --manifest results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl --out runs/openvla_teacher_oft_random_balanced2048_v1 --method random_balanced --max-examples 2048 --selection balanced_episodes --episodes-per-family 8 --max-steps-per-episode 64 --num-steps-wait 10 --env-image-size 256 --image-size 224
 ```
 
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780379901_989185344.out
-/work/joy/bgr/logs/run_1780380209_343397743.out
+/work/anonymous/bgr/logs/run_1780379901_989185344.out
+/work/anonymous/bgr/logs/run_1780380209_343397743.out
 ```
 
 Interpretation: this scales the OpenVLA render bridge to matched 2,048-step
 BGR-boundary and random-balanced datasets. Each render has 32 replay episodes,
 8 episodes per visual perturbation family, and 64 steps per episode. The full
-render trees are 492M and 524M under `/work` and are not checked into git.
+render trees are 492M and 524M under `/work` and are not included in the compact artifact.
 
 ### `openvla_oft_pack_bgr_balanced2048_v1` and `openvla_oft_pack_random_balanced2048_v1`
 
 Commands:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 16G --time 00:30:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples runs/openvla_teacher_oft_bgr_balanced2048_v1/examples.jsonl --out runs/openvla_oft_pack_bgr_balanced2048_v1 --write-hdf5
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 16G --time 00:30:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples runs/openvla_teacher_oft_random_balanced2048_v1/examples.jsonl --out runs/openvla_oft_pack_random_balanced2048_v1 --write-hdf5
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 16G --time 00:30:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples runs/openvla_teacher_oft_bgr_balanced2048_v1/examples.jsonl --out runs/openvla_oft_pack_bgr_balanced2048_v1 --write-hdf5
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 16G --time 00:30:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/pack_openvla_oft_examples.py --examples runs/openvla_teacher_oft_random_balanced2048_v1/examples.jsonl --out runs/openvla_oft_pack_random_balanced2048_v1 --write-hdf5
 ```
 
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780380477_635336557.out
-/work/joy/bgr/logs/run_1780380526_513758944.out
+/work/anonymous/bgr/logs/run_1780380477_635336557.out
+/work/anonymous/bgr/logs/run_1780380526_513758944.out
 ```
 
 Interpretation: both matched 2,048-step renders pack into LIBERO-style HDF5
@@ -762,8 +3194,8 @@ are 383M and 399M under `/work`.
 Commands:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 16G --time 01:00:00 /work/joy/bgr /work/joy/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples runs/openvla_teacher_oft_bgr_balanced2048_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_bgr_balanced2048_v1 --dataset-name libero_goal_no_noops --version 1.0.0
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 16G --time 01:00:00 /work/joy/bgr /work/joy/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples runs/openvla_teacher_oft_random_balanced2048_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_random_balanced2048_v1 --dataset-name libero_goal_no_noops --version 1.0.0
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 16G --time 01:00:00 /work/anonymous/bgr /work/anonymous/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples runs/openvla_teacher_oft_bgr_balanced2048_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_bgr_balanced2048_v1 --dataset-name libero_goal_no_noops --version 1.0.0
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 16G --time 01:00:00 /work/anonymous/bgr /work/anonymous/safesae-openvla/bin/python scripts/export_openvla_oft_tfds.py --examples runs/openvla_teacher_oft_random_balanced2048_v1/examples.jsonl --out runs/openvla_oft_tfds_libero_goal_random_balanced2048_v1 --dataset-name libero_goal_no_noops --version 1.0.0
 ```
 
 Loader validation uses OpenVLA-OFT's unmodified `make_oxe_dataset_kwargs` and
@@ -772,10 +3204,10 @@ Loader validation uses OpenVLA-OFT's unmodified `make_oxe_dataset_kwargs` and
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780380577_704261678.out
-/work/joy/bgr/logs/run_1780380831_695183835.out
-/work/joy/bgr/logs/run_1780381106_407628579.out
-/work/joy/bgr/logs/run_1780381221_375772232.out
+/work/anonymous/bgr/logs/run_1780380577_704261678.out
+/work/anonymous/bgr/logs/run_1780380831_695183835.out
+/work/anonymous/bgr/logs/run_1780381106_407628579.out
+/work/anonymous/bgr/logs/run_1780381221_375772232.out
 ```
 
 Interpretation: both matched 2,048-step TFDS exports use the stock
@@ -790,31 +3222,32 @@ compatibility gate.
 Commands:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition low-prio-gpu --gres gpu:a6000:1 --cpus 8 --mem 64G --time 02:00:00 /work/joy/bgr bash -lc 'cd /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/joy/cache_home/huggingface TRANSFORMERS_CACHE=/work/joy/cache_home/huggingface/hub PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/torchrun --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py --vla_path openvla/openvla-7b --data_root_dir /work/joy/bgr/runs/openvla_oft_tfds_libero_goal_bgr_balanced2048_v1 --dataset_name libero_goal_no_noops --run_root_dir /work/joy/bgr/runs/openvla_oft_finetune_bgr_balanced2048_step10_v1 --use_l1_regression True --use_diffusion False --use_film False --num_images_in_input 2 --use_proprio True --batch_size 1 --learning_rate 5e-4 --num_steps_before_decay 100000 --max_steps 10 --save_freq 10 --save_latest_checkpoint_only True --image_aug False --lora_rank 8 --merge_lora_during_training False --shuffle_buffer_size 512 --wandb_entity disabled --wandb_project bgr --run_id_note bgr-balanced2048-step10 --wandb_log_freq 1'
-~/remote_srun.sh --github-test --git-pull --log --partition low-prio-gpu --gres gpu:a6000:1 --cpus 8 --mem 64G --time 02:00:00 /work/joy/bgr bash -lc 'cd /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/joy/cache_home/huggingface TRANSFORMERS_CACHE=/work/joy/cache_home/huggingface/hub PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/torchrun --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py --vla_path openvla/openvla-7b --data_root_dir /work/joy/bgr/runs/openvla_oft_tfds_libero_goal_random_balanced2048_v1 --dataset_name libero_goal_no_noops --run_root_dir /work/joy/bgr/runs/openvla_oft_finetune_random_balanced2048_step10_v1 --use_l1_regression True --use_diffusion False --use_film False --num_images_in_input 2 --use_proprio True --batch_size 1 --learning_rate 5e-4 --num_steps_before_decay 100000 --max_steps 10 --save_freq 10 --save_latest_checkpoint_only True --image_aug False --lora_rank 8 --merge_lora_during_training False --shuffle_buffer_size 512 --wandb_entity disabled --wandb_project bgr --run_id_note random-balanced2048-step10 --wandb_log_freq 1'
+~/remote_srun.sh --github-test --git-pull --log --partition low-prio-gpu --gres gpu:a6000:1 --cpus 8 --mem 64G --time 02:00:00 /work/anonymous/bgr bash -lc 'cd /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/anonymous/cache_home/huggingface TRANSFORMERS_CACHE=/work/anonymous/cache_home/huggingface/hub PYTHONPATH=/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/torchrun --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py --vla_path openvla/openvla-7b --data_root_dir /work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_bgr_balanced2048_v1 --dataset_name libero_goal_no_noops --run_root_dir /work/anonymous/bgr/runs/openvla_oft_finetune_bgr_balanced2048_step10_v1 --use_l1_regression True --use_diffusion False --use_film False --num_images_in_input 2 --use_proprio True --batch_size 1 --learning_rate 5e-4 --num_steps_before_decay 100000 --max_steps 10 --save_freq 10 --save_latest_checkpoint_only True --image_aug False --lora_rank 8 --merge_lora_during_training False --shuffle_buffer_size 512 --wandb_entity disabled --wandb_project bgr --run_id_note bgr-balanced2048-step10 --wandb_log_freq 1'
+~/remote_srun.sh --github-test --git-pull --log --partition low-prio-gpu --gres gpu:a6000:1 --cpus 8 --mem 64G --time 02:00:00 /work/anonymous/bgr bash -lc 'cd /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/anonymous/cache_home/huggingface TRANSFORMERS_CACHE=/work/anonymous/cache_home/huggingface/hub PYTHONPATH=/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/torchrun --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py --vla_path openvla/openvla-7b --data_root_dir /work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_balanced2048_v1 --dataset_name libero_goal_no_noops --run_root_dir /work/anonymous/bgr/runs/openvla_oft_finetune_random_balanced2048_step10_v1 --use_l1_regression True --use_diffusion False --use_film False --num_images_in_input 2 --use_proprio True --batch_size 1 --learning_rate 5e-4 --num_steps_before_decay 100000 --max_steps 10 --save_freq 10 --save_latest_checkpoint_only True --image_aug False --lora_rank 8 --merge_lora_during_training False --shuffle_buffer_size 512 --wandb_entity disabled --wandb_project bgr --run_id_note random-balanced2048-step10 --wandb_log_freq 1'
 ```
 
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780381812_955203657.out
-/work/joy/bgr/logs/run_1780382026_303226869.out
+/work/anonymous/bgr/logs/run_1780381812_955203657.out
+/work/anonymous/bgr/logs/run_1780382026_303226869.out
 ```
 
-Interpretation: both matched 2,048-step TFDS exports now complete bounded
-OpenVLA-OFT LoRA fine-tuning runs. Each run loads OpenVLA 7B, initializes LoRA
-rank 8 plus proprio and L1 action heads, trains for 10 optimizer steps, and
-writes a latest checkpoint under `/work/joy/bgr/runs`. The remote checkpoint
-trees are 656M each and are not checked into git. This upgrades the OpenVLA
-bridge from dataset compatibility to matched checkpoint generation.
+Interpretation: both matched 2,048-step TFDS exports complete scoped
+OpenVLA-OFT LoRA fine-tuning smoke runs. Each run loads OpenVLA 7B,
+initializes LoRA rank 8 plus proprio and L1 action heads, trains for 10
+optimizer steps, and writes a latest checkpoint under
+`/work/anonymous/bgr/runs`. The remote checkpoint trees are 656M each and are
+not included in the compact artifact. This upgrades the OpenVLA bridge from
+dataset compatibility to matched checkpoint generation.
 
 ### `openvla_oft_eval_balanced2048_step10_smoke_v1`
 
 Commands:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition low-prio-gpu --gres gpu:a6000:1 --cpus 8 --mem 80G --time 02:00:00 /work/joy/bgr bash -lc 'cd /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/joy/cache_home/huggingface TRANSFORMERS_CACHE=/work/joy/cache_home/huggingface/hub PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python vla-scripts/merge_lora_weights_and_save.py --base_checkpoint openvla/openvla-7b --lora_finetuned_checkpoint_dir /work/joy/bgr/runs/openvla_oft_finetune_bgr_balanced2048_step10_v1/openvla-7b+libero_goal_no_noops+b1+lr-0.0005+lora-r8+dropout-0.0--bgr-balanced2048-step10'
-~/remote_srun.sh --github-test --git-pull --log --partition low-prio-gpu --gres gpu:a6000:1 --cpus 8 --mem 80G --time 02:00:00 /work/joy/bgr bash -lc 'cd /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/joy/cache_home/huggingface TRANSFORMERS_CACHE=/work/joy/cache_home/huggingface/hub PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft /work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python vla-scripts/merge_lora_weights_and_save.py --base_checkpoint openvla/openvla-7b --lora_finetuned_checkpoint_dir /work/joy/bgr/runs/openvla_oft_finetune_random_balanced2048_step10_v1/openvla-7b+libero_goal_no_noops+b1+lr-0.0005+lora-r8+dropout-0.0--random-balanced2048-step10'
+~/remote_srun.sh --github-test --git-pull --log --partition low-prio-gpu --gres gpu:a6000:1 --cpus 8 --mem 80G --time 02:00:00 /work/anonymous/bgr bash -lc 'cd /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/anonymous/cache_home/huggingface TRANSFORMERS_CACHE=/work/anonymous/cache_home/huggingface/hub PYTHONPATH=/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python vla-scripts/merge_lora_weights_and_save.py --base_checkpoint openvla/openvla-7b --lora_finetuned_checkpoint_dir /work/anonymous/bgr/runs/openvla_oft_finetune_bgr_balanced2048_step10_v1/openvla-7b+libero_goal_no_noops+b1+lr-0.0005+lora-r8+dropout-0.0--bgr-balanced2048-step10'
+~/remote_srun.sh --github-test --git-pull --log --partition low-prio-gpu --gres gpu:a6000:1 --cpus 8 --mem 80G --time 02:00:00 /work/anonymous/bgr bash -lc 'cd /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft && env WANDB_MODE=disabled HF_HOME=/work/anonymous/cache_home/huggingface TRANSFORMERS_CACHE=/work/anonymous/cache_home/huggingface/hub PYTHONPATH=/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft /work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/bin/python vla-scripts/merge_lora_weights_and_save.py --base_checkpoint openvla/openvla-7b --lora_finetuned_checkpoint_dir /work/anonymous/bgr/runs/openvla_oft_finetune_random_balanced2048_step10_v1/openvla-7b+libero_goal_no_noops+b1+lr-0.0005+lora-r8+dropout-0.0--random-balanced2048-step10'
 ```
 
 Eval commands use `run_libero_eval.py` with the merged checkpoint roots,
@@ -822,19 +3255,19 @@ Eval commands use `run_libero_eval.py` with the merged checkpoint roots,
 `max_steps_override=20`. The required runtime path is:
 
 ```text
-PYTHONPATH=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft:/athenahomes/joy/LIBERO:/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/lib/python3.10/site-packages
+PYTHONPATH=/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft:/home/anonymous/LIBERO:/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft/.venv-oft/lib/python3.10/site-packages
 ```
 
 Remote logs:
 
 ```text
-/work/joy/bgr/logs/run_1780382513_105504870.out
-/work/joy/bgr/logs/run_1780382656_581424411.out
-/work/joy/bgr/logs/run_1780383317_343334235.out
-/work/joy/bgr/logs/run_1780383458_588753145.out
+/work/anonymous/bgr/logs/run_1780382513_105504870.out
+/work/anonymous/bgr/logs/run_1780382656_581424411.out
+/work/anonymous/bgr/logs/run_1780383317_343334235.out
+/work/anonymous/bgr/logs/run_1780383458_588753145.out
 ```
 
-Interpretation: this closes the next OpenVLA infrastructure gap. Both matched
+Interpretation: this closes an OpenVLA infrastructure gap. Both matched
 10-step LoRA checkpoints merge into 15G local OpenVLA checkpoint roots, load
 through the stock OpenVLA-OFT LIBERO eval script, instantiate LIBERO-Goal, run
 one closed-loop rollout, save a rollout video, and log final results. Both score
@@ -846,13 +3279,13 @@ merge/load/closed-loop evaluation path needed for longer matched evaluations.
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_suffix_experiment.py --config configs/suffix_strategy.yaml --out runs/suffix_strategy_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_suffix_experiment.py --config configs/suffix_strategy.yaml --out runs/suffix_strategy_v1
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780312179_117921719.out
+/work/anonymous/bgr/logs/run_1780312179_117921719.out
 ```
 
 Mean results over five seeds:
@@ -872,13 +3305,13 @@ Interpretation: in the suffix simulator, narrow boundary-only radius sampling un
 Command:
 
 ```bash
-~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 04:00:00 /work/joy/bgr env PYTHONPATH=src:. python scripts/run_suffix_experiment.py --config configs/suffix_strategy_pair_15seed.yaml --out runs/suffix_strategy_pair_15seed_v1
+~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 4 --mem 12G --time 04:00:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_suffix_experiment.py --config configs/suffix_strategy_pair_15seed.yaml --out runs/suffix_strategy_pair_15seed_v1
 ```
 
 Remote log:
 
 ```text
-/work/joy/bgr/logs/run_1780328104_484552023.out
+/work/anonymous/bgr/logs/run_1780328104_484552023.out
 ```
 
 Mean results over 15 paired seeds:

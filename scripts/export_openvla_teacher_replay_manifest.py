@@ -27,31 +27,49 @@ def main() -> int:
     parser.add_argument("--upper", type=float, default=0.75)
     parser.add_argument("--max-steps-per-episode", type=int, default=64)
     parser.add_argument("--boundary-only", action="store_true", help="Export only candidates inside the observed boundary band.")
+    parser.add_argument(
+        "--include-native-anchors",
+        action="store_true",
+        help="Also export successful native OpenVLA replay episodes as identity clean-anchor candidates.",
+    )
+    parser.add_argument(
+        "--native-anchors-only",
+        action="store_true",
+        help="Export only successful native OpenVLA replay episodes as identity clean-anchor candidates.",
+    )
     args = parser.parse_args()
 
     rows: list[dict[str, Any]] = []
     for path in args.bgr_dir:
-        rows.extend(
-            _export_dir(
-                Path(path),
-                method="bgr_boundary",
-                lower=float(args.lower),
-                upper=float(args.upper),
-                max_steps_per_episode=int(args.max_steps_per_episode),
-                boundary_only=bool(args.boundary_only),
+        artifact = Path(path)
+        if not bool(args.native_anchors_only):
+            rows.extend(
+                _export_dir(
+                    artifact,
+                    method="bgr_boundary",
+                    lower=float(args.lower),
+                    upper=float(args.upper),
+                    max_steps_per_episode=int(args.max_steps_per_episode),
+                    boundary_only=bool(args.boundary_only),
+                )
             )
-        )
+        if bool(args.include_native_anchors) or bool(args.native_anchors_only):
+            rows.extend(_export_native_anchors(artifact, method="bgr_boundary", max_steps_per_episode=int(args.max_steps_per_episode)))
     for path in args.random_dir:
-        rows.extend(
-            _export_dir(
-                Path(path),
-                method="random_balanced",
-                lower=float(args.lower),
-                upper=float(args.upper),
-                max_steps_per_episode=int(args.max_steps_per_episode),
-                boundary_only=bool(args.boundary_only),
+        artifact = Path(path)
+        if not bool(args.native_anchors_only):
+            rows.extend(
+                _export_dir(
+                    artifact,
+                    method="random_balanced",
+                    lower=float(args.lower),
+                    upper=float(args.upper),
+                    max_steps_per_episode=int(args.max_steps_per_episode),
+                    boundary_only=bool(args.boundary_only),
+                )
             )
-        )
+        if bool(args.include_native_anchors) or bool(args.native_anchors_only):
+            rows.extend(_export_native_anchors(artifact, method="random_balanced", max_steps_per_episode=int(args.max_steps_per_episode)))
     if not rows:
         raise SystemExit("No replay rows exported.")
 
@@ -124,6 +142,39 @@ def _export_dir(
     return rows
 
 
+def _export_native_anchors(path: Path, method: str, max_steps_per_episode: int) -> list[dict[str, Any]]:
+    native_steps = _load_successful_native_steps(path / "validate" / "observation_steps.jsonl", max_steps_per_episode=max_steps_per_episode)
+    candidate_name = f"native_{path.name}"
+    rows: list[dict[str, Any]] = []
+    for episode_key, steps in sorted(native_steps.items()):
+        for step in steps:
+            rows.append(
+                {
+                    "method": method,
+                    "run": path.name,
+                    "source_artifact": str(path),
+                    "candidate_name": candidate_name,
+                    "candidate_spec": "native:identity",
+                    "perturbation_type": "identity",
+                    "perturbation_params": "{}",
+                    "observed_cf_rate": 0.0,
+                    "in_boundary_band": True,
+                    "suite": episode_key[0],
+                    "task_idx": int(episode_key[1]),
+                    "task_name": episode_key[2],
+                    "episode_idx": int(episode_key[3]),
+                    "init_state_idx": int(episode_key[4]),
+                    "episode_uid": _episode_uid(episode_key),
+                    "step_idx": int(step["step_idx"]),
+                    "instruction": str(step.get("policy_instruction") or step.get("instruction") or ""),
+                    "target_action": json.dumps(step["executed_action"]),
+                    "target_token_ids": json.dumps(step.get("token_ids", [])),
+                    "source_label": "successful_native_openvla_clean_anchor",
+                }
+            )
+    return rows
+
+
 def _load_successful_native_steps(path: Path, max_steps_per_episode: int) -> dict[tuple[Any, ...], list[dict[str, Any]]]:
     grouped: dict[tuple[Any, ...], list[dict[str, Any]]] = defaultdict(list)
     successful_keys: set[tuple[Any, ...]] = set()
@@ -180,6 +231,7 @@ def _summarize(rows: list[dict[str, Any]], lower: float, upper: float, max_steps
             "candidates": len(candidates),
             "episodes": len(episodes),
             "boundary_rows": sum(bool(row["in_boundary_band"]) for row in items),
+            "clean_anchor_rows": sum(str(row.get("perturbation_type", "")) == "identity" for row in items),
             "mean_observed_cf_rate": mean(float(row["observed_cf_rate"]) for row in items),
             "families": sorted({str(row["perturbation_type"]) for row in items}),
         }

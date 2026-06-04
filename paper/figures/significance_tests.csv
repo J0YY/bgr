@@ -1,11 +1,155 @@
-benchmark,metric,treatment,baseline,n,mean_treatment_minus_baseline,paired_se,two_sided_sign_flip_p,direction,supports_treatment
-Synthetic margin,final_rauc,bgr,uniform,3,0.009686,0.007663,0.2500,higher,true
-Synthetic margin,rauc_aulc,bgr,uniform,3,0.018131,0.004277,0.2500,higher,true
-Grid margin,final_rauc,bgr,uniform,5,0.037153,0.000865,0.0625,higher,true
-Grid margin,rauc_aulc,bgr,uniform,5,0.039227,0.000669,0.0625,higher,true
-Grid margin,final_clean,bgr,uniform,5,0.050523,0.000863,0.0625,higher,true
-Robot suffix,final_rauc,bgr_broad,uniform,5,-0.003915,0.000836,0.0625,higher,false
-Robot suffix,final_transfer_rauc,bgr_broad,uniform,5,0.009348,0.000731,0.0625,higher,true
-Robot suffix,rauc_aulc,bgr_broad,uniform,5,0.008195,0.000713,0.0625,higher,true
-Estimator,boundary_hit_rate,active,uniform,5,0.067187,0.005814,0.0625,higher,true
-Estimator,r80_mae,active,uniform,5,-0.026879,0.002116,0.0625,lower,true
+benchmark,condition,metric,treatment,baseline,n,mean_treatment_minus_baseline,paired_se,paired_ci95_low,paired_ci95_high,paired_wins,paired_losses,paired_ties,two_sided_sign_test_p,direction,supports_treatment
+Synthetic margin 15-seed,,final_rauc,bgr,uniform,15,0.008335,0.001561,0.004985,0.011684,15,0,0,6.10352e-05,higher,true
+Synthetic margin 15-seed,,rauc_aulc,bgr,uniform,15,0.016306,0.000999,0.014164,0.018448,15,0,0,6.10352e-05,higher,true
+Synthetic margin 15-seed,,final_rauc,bgr,fixed,15,0.143139,0.001922,0.139017,0.147261,15,0,0,6.10352e-05,higher,true
+Synthetic margin 15-seed,,final_rauc,bgr,failure_only,15,0.140139,0.001998,0.135853,0.144424,15,0,0,6.10352e-05,higher,true
+Synthetic margin 15-seed,,final_rauc,bgr,plr_loss,15,0.143732,0.001902,0.139652,0.147811,15,0,0,6.10352e-05,higher,true
+Synthetic margin 30-seed,,final_rauc,bgr,uniform,30,0.008294,0.001172,0.005897,0.010692,29,1,0,5.7742e-08,higher,true
+Synthetic margin 30-seed,,rauc_aulc,bgr,uniform,30,0.016440,0.000708,0.014992,0.017888,30,0,0,1.86265e-09,higher,true
+Synthetic margin 30-seed,,final_clean,bgr,uniform,30,0.006163,0.000540,0.005058,0.007268,30,0,0,1.86265e-09,higher,true
+Synthetic margin 30-seed,,final_rauc,bgr,fixed,30,0.141772,0.001203,0.139312,0.144231,30,0,0,1.86265e-09,higher,true
+Synthetic margin 30-seed,,final_rauc,bgr,failure_only,30,0.138472,0.001300,0.135813,0.141131,30,0,0,1.86265e-09,higher,true
+Synthetic margin 30-seed,,final_rauc,bgr,plr_loss,30,0.142740,0.001258,0.140168,0.145313,30,0,0,1.86265e-09,higher,true
+Grid margin 15-seed,,final_rauc,bgr,uniform,15,0.038374,0.000618,0.037048,0.039700,15,0,0,6.10352e-05,higher,true
+Grid margin 15-seed,,rauc_aulc,bgr,uniform,15,0.039628,0.000512,0.038529,0.040727,15,0,0,6.10352e-05,higher,true
+Grid margin 15-seed,,final_clean,bgr,uniform,15,0.051773,0.000555,0.050582,0.052963,15,0,0,6.10352e-05,higher,true
+Grid margin 15-seed,,final_median_r80,bgr,uniform,15,0.012307,0.000896,0.010385,0.014229,15,0,0,6.10352e-05,higher,true
+Grid margin full 15-seed,,final_rauc,bgr,fixed,15,0.225139,0.000625,0.223798,0.226480,15,0,0,6.10352e-05,higher,true
+Grid margin full 15-seed,,final_rauc,bgr,failure_only,15,0.143530,0.000573,0.142301,0.144758,15,0,0,6.10352e-05,higher,true
+Grid margin full 15-seed,,final_rauc,bgr,plr_loss,15,0.223880,0.000664,0.222455,0.225305,15,0,0,6.10352e-05,higher,true
+Grid margin full 15-seed,,rauc_aulc,bgr,fixed,15,0.140108,0.000498,0.139039,0.141177,15,0,0,6.10352e-05,higher,true
+Grid margin full 15-seed,,rauc_aulc,bgr,failure_only,15,0.098799,0.000462,0.097808,0.099790,15,0,0,6.10352e-05,higher,true
+Grid margin full 15-seed,,rauc_aulc,bgr,plr_loss,15,0.139853,0.000528,0.138719,0.140986,15,0,0,6.10352e-05,higher,true
+Grid margin full 30-seed,,final_rauc,bgr,uniform,30,0.038120,0.000432,0.037236,0.039004,30,0,0,1.86265e-09,higher,true
+Grid margin full 30-seed,,rauc_aulc,bgr,uniform,30,0.039406,0.000350,0.038690,0.040121,30,0,0,1.86265e-09,higher,true
+Grid margin full 30-seed,,final_clean,bgr,uniform,30,0.051552,0.000374,0.050787,0.052318,30,0,0,1.86265e-09,higher,true
+Grid margin full 30-seed,,final_median_r80,bgr,uniform,30,0.012604,0.000749,0.011071,0.014136,30,0,0,1.86265e-09,higher,true
+Grid margin full 30-seed,,final_rauc,bgr,fixed,30,0.224697,0.000416,0.223846,0.225548,30,0,0,1.86265e-09,higher,true
+Grid margin full 30-seed,,final_rauc,bgr,failure_only,30,0.143515,0.000422,0.142652,0.144379,30,0,0,1.86265e-09,higher,true
+Grid margin full 30-seed,,final_rauc,bgr,plr_loss,30,0.223591,0.000415,0.222742,0.224440,30,0,0,1.86265e-09,higher,true
+Grid margin full 30-seed,,rauc_aulc,bgr,fixed,30,0.139819,0.000321,0.139163,0.140475,30,0,0,1.86265e-09,higher,true
+Grid margin full 30-seed,,rauc_aulc,bgr,failure_only,30,0.098623,0.000310,0.097988,0.099258,30,0,0,1.86265e-09,higher,true
+Grid margin full 30-seed,,rauc_aulc,bgr,plr_loss,30,0.139629,0.000326,0.138962,0.140297,30,0,0,1.86265e-09,higher,true
+Grid margin replication 30-seed,,final_rauc,bgr,uniform,30,0.037349,0.000395,0.036542,0.038156,30,0,0,1.86265e-09,higher,true
+Grid margin replication 30-seed,,rauc_aulc,bgr,uniform,30,0.038561,0.000295,0.037958,0.039164,30,0,0,1.86265e-09,higher,true
+Grid margin replication 30-seed,,final_clean,bgr,uniform,30,0.051872,0.000444,0.050963,0.052781,30,0,0,1.86265e-09,higher,true
+Grid margin ablation 15-seed,,final_rauc,bgr,bgr_uniform_radius,15,0.052862,0.000617,0.051539,0.054185,15,0,0,6.10352e-05,higher,true
+Grid margin ablation 15-seed,,final_rauc,bgr_uniform_radius,uniform,15,-0.014488,0.000597,-0.015769,-0.013206,0,15,0,6.10352e-05,higher,false
+Grid margin ablation 15-seed,,final_rauc,bgr,bgr_no_uncertainty,15,-0.000030,0.000265,-0.000599,0.000539,8,7,0,1,higher,false
+Grid margin ablation 15-seed,,final_rauc,bgr,bgr_no_sharpness,15,0.000265,0.000309,-0.000398,0.000928,9,6,0,0.607239,higher,true
+Robot suffix full 15-seed,,final_rauc,bgr,clean_ft,15,0.209355,0.000649,0.207964,0.210746,15,0,0,6.10352e-05,higher,true
+Robot suffix full 15-seed,,final_rauc,bgr,fixed,15,0.314027,0.000676,0.312577,0.315478,15,0,0,6.10352e-05,higher,true
+Robot suffix full 15-seed,,final_rauc,bgr,failure_only,15,0.049502,0.000702,0.047995,0.051009,15,0,0,6.10352e-05,higher,true
+Robot suffix full 15-seed,,final_rauc,bgr,loss_priority,15,0.302750,0.000666,0.301321,0.304180,15,0,0,6.10352e-05,higher,true
+Robot suffix full 15-seed,,rauc_aulc,bgr,uniform,15,0.003171,0.000617,0.001846,0.004495,14,1,0,0.000976562,higher,true
+Robot suffix coverage 30-seed,,final_clean,bgr_broad,uniform,30,0.027952,0.000335,0.027268,0.028636,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage 30-seed,,final_transfer_rauc,bgr_broad,uniform,30,0.006088,0.000328,0.005417,0.006760,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage 30-seed,,rauc_aulc,bgr_broad,uniform,30,0.011515,0.000352,0.010795,0.012234,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage 30-seed,,final_rauc,bgr_broad,uniform,30,0.011565,0.000332,0.010886,0.012244,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage 30-seed,,final_median_r80,bgr_broad,uniform,30,-0.006547,0.000770,-0.008122,-0.004972,1,29,0,5.7742e-08,higher,false
+Robot suffix replication 30-seed,,final_clean,bgr_broad,uniform,30,0.027094,0.000294,0.026492,0.027696,30,0,0,1.86265e-09,higher,true
+Robot suffix replication 30-seed,,final_rauc,bgr_broad,uniform,30,0.011305,0.000312,0.010666,0.011943,30,0,0,1.86265e-09,higher,true
+Robot suffix replication 30-seed,,final_transfer_rauc,bgr_broad,uniform,30,0.006087,0.000402,0.005265,0.006908,30,0,0,1.86265e-09,higher,true
+Robot suffix replication 30-seed,,rauc_aulc,bgr_broad,uniform,30,0.010809,0.000377,0.010039,0.011580,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full 30-seed,,final_rauc,bgr_broad,clean_ft,30,0.233828,0.000572,0.232659,0.234997,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full 30-seed,,final_rauc,bgr_broad,fixed,30,0.338609,0.000623,0.337335,0.339884,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full 30-seed,,final_rauc,bgr_broad,failure_only,30,0.074060,0.000478,0.073082,0.075039,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full 30-seed,,final_rauc,bgr_broad,loss_priority,30,0.327530,0.000633,0.326236,0.328823,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full 30-seed,,final_rauc,bgr_broad,uniform,30,0.011565,0.000332,0.010886,0.012244,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full 30-seed,,final_transfer_rauc,bgr_broad,uniform,30,0.006088,0.000328,0.005417,0.006760,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full 30-seed,,rauc_aulc,bgr_broad,uniform,30,0.011515,0.000352,0.010795,0.012234,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full replication 30-seed,,final_rauc,bgr_broad,clean_ft,30,0.233847,0.000604,0.232612,0.235082,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full replication 30-seed,,final_rauc,bgr_broad,fixed,30,0.338185,0.000689,0.336776,0.339594,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full replication 30-seed,,final_rauc,bgr_broad,failure_only,30,0.073485,0.000469,0.072526,0.074443,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full replication 30-seed,,final_rauc,bgr_broad,loss_priority,30,0.327333,0.000686,0.325931,0.328735,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full replication 30-seed,,final_rauc,bgr_broad,uniform,30,0.011305,0.000312,0.010666,0.011943,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full replication 30-seed,,final_transfer_rauc,bgr_broad,uniform,30,0.006087,0.000402,0.005265,0.006908,30,0,0,1.86265e-09,higher,true
+Robot suffix coverage-full replication 30-seed,,rauc_aulc,bgr_broad,uniform,30,0.010809,0.000377,0.010039,0.011580,30,0,0,1.86265e-09,higher,true
+Estimator 15-seed,,boundary_hit_rate,active,uniform,15,0.076823,0.008547,0.058490,0.095156,15,0,0,6.10352e-05,higher,true
+Estimator 15-seed,,r80_mae,active,uniform,15,-0.026563,0.002256,-0.031402,-0.021724,15,0,0,6.10352e-05,lower,true
+Estimator 30-seed,,boundary_hit_rate,active,uniform,30,0.075130,0.005159,0.064581,0.085680,30,0,0,1.86265e-09,higher,true
+Estimator 30-seed,,r80_mae,active,uniform,30,-0.024831,0.001425,-0.027745,-0.021916,30,0,0,1.86265e-09,lower,true
+Estimator 30-seed,,rauc_mae,active,uniform,30,-0.001578,0.000532,-0.002666,-0.000491,24,6,0,0.00143091,lower,true
+Grid margin target sensitivity 15-seed,target_margin=0.26,final_rauc,bgr_target_0.26,uniform,15,0.046786,0.000547,0.045612,0.047960,15,0,0,6.10352e-05,higher,true
+Grid margin target sensitivity 15-seed,target_margin=0.26,rauc_aulc,bgr_target_0.26,uniform,15,0.045827,0.000377,0.045018,0.046635,15,0,0,6.10352e-05,higher,true
+Grid margin target sensitivity 15-seed,target_margin=0.32,final_rauc,bgr_target_0.32,uniform,15,0.042886,0.000523,0.041763,0.044008,15,0,0,6.10352e-05,higher,true
+Grid margin target sensitivity 15-seed,target_margin=0.32,rauc_aulc,bgr_target_0.32,uniform,15,0.042865,0.000411,0.041983,0.043747,15,0,0,6.10352e-05,higher,true
+Grid margin target sensitivity 15-seed,target_margin=0.38,final_rauc,bgr_target_0.38,uniform,15,0.038374,0.000618,0.037048,0.039700,15,0,0,6.10352e-05,higher,true
+Grid margin target sensitivity 15-seed,target_margin=0.38,rauc_aulc,bgr_target_0.38,uniform,15,0.039628,0.000512,0.038529,0.040727,15,0,0,6.10352e-05,higher,true
+Grid margin target sensitivity 15-seed,target_margin=0.46,final_rauc,bgr_target_0.46,uniform,15,0.030433,0.000682,0.028969,0.031896,15,0,0,6.10352e-05,higher,true
+Grid margin target sensitivity 15-seed,target_margin=0.46,rauc_aulc,bgr_target_0.46,uniform,15,0.033815,0.000550,0.032635,0.034994,15,0,0,6.10352e-05,higher,true
+Grid margin target sensitivity 15-seed,target_margin=0.54,final_rauc,bgr_target_0.54,uniform,15,0.019087,0.000809,0.017352,0.020822,15,0,0,6.10352e-05,higher,true
+Grid margin target sensitivity 15-seed,target_margin=0.54,rauc_aulc,bgr_target_0.54,uniform,15,0.025920,0.000673,0.024477,0.027364,15,0,0,6.10352e-05,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.26,final_rauc,bgr_target_0.26,uniform,30,0.046347,0.000380,0.045570,0.047125,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.26,rauc_aulc,bgr_target_0.26,uniform,30,0.045456,0.000295,0.044853,0.046058,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.26,final_clean,bgr_target_0.26,uniform,30,0.056779,0.000383,0.055995,0.057563,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.32,final_rauc,bgr_target_0.32,uniform,30,0.042810,0.000393,0.042007,0.043613,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.32,rauc_aulc,bgr_target_0.32,uniform,30,0.042729,0.000322,0.042071,0.043387,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.32,final_clean,bgr_target_0.32,uniform,30,0.054852,0.000414,0.054005,0.055699,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.38,final_rauc,bgr_target_0.38,uniform,30,0.038120,0.000432,0.037236,0.039004,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.38,rauc_aulc,bgr_target_0.38,uniform,30,0.039406,0.000350,0.038690,0.040121,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.38,final_clean,bgr_target_0.38,uniform,30,0.051552,0.000374,0.050787,0.052318,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.46,final_rauc,bgr_target_0.46,uniform,30,0.030042,0.000411,0.029203,0.030882,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.46,rauc_aulc,bgr_target_0.46,uniform,30,0.033542,0.000335,0.032858,0.034226,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.46,final_clean,bgr_target_0.46,uniform,30,0.046552,0.000387,0.045761,0.047343,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.54,final_rauc,bgr_target_0.54,uniform,30,0.019358,0.000502,0.018330,0.020385,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.54,rauc_aulc,bgr_target_0.54,uniform,30,0.026093,0.000414,0.025246,0.026939,30,0,0,1.86265e-09,higher,true
+Grid margin target sensitivity 30-seed,target_margin=0.54,final_clean,bgr_target_0.54,uniform,30,0.040499,0.000338,0.039809,0.041190,30,0,0,1.86265e-09,higher,true
+Grid margin learning-rate sensitivity 15-seed,learning_rate=0.015,final_clean,bgr,uniform,15,0.061059,0.000665,0.059631,0.062486,15,0,0,6.10352e-05,higher,true
+Grid margin learning-rate sensitivity 15-seed,learning_rate=0.015,final_rauc,bgr,uniform,15,0.062338,0.000453,0.061366,0.063310,15,0,0,6.10352e-05,higher,true
+Grid margin learning-rate sensitivity 15-seed,learning_rate=0.015,final_median_r80,bgr,uniform,15,0.051407,0.000759,0.049779,0.053035,15,0,0,6.10352e-05,higher,true
+Grid margin learning-rate sensitivity 15-seed,learning_rate=0.015,rauc_aulc,bgr,uniform,15,0.043435,0.000313,0.042764,0.044107,15,0,0,6.10352e-05,higher,true
+Grid margin learning-rate sensitivity 15-seed,learning_rate=0.030,final_clean,bgr,uniform,15,0.051773,0.000555,0.050582,0.052963,15,0,0,6.10352e-05,higher,true
+Grid margin learning-rate sensitivity 15-seed,learning_rate=0.030,final_rauc,bgr,uniform,15,0.038374,0.000618,0.037048,0.039700,15,0,0,6.10352e-05,higher,true
+Grid margin learning-rate sensitivity 15-seed,learning_rate=0.030,final_median_r80,bgr,uniform,15,0.012307,0.000896,0.010385,0.014229,15,0,0,6.10352e-05,higher,true
+Grid margin learning-rate sensitivity 15-seed,learning_rate=0.030,rauc_aulc,bgr,uniform,15,0.039628,0.000512,0.038529,0.040727,15,0,0,6.10352e-05,higher,true
+Grid margin learning-rate sensitivity 15-seed,learning_rate=0.060,final_clean,bgr,uniform,15,0.044947,0.000482,0.043912,0.045981,15,0,0,6.10352e-05,higher,true
+Grid margin learning-rate sensitivity 15-seed,learning_rate=0.060,final_rauc,bgr,uniform,15,-0.005197,0.000730,-0.006762,-0.003631,1,14,0,0.000976562,higher,false
+Grid margin learning-rate sensitivity 15-seed,learning_rate=0.060,final_median_r80,bgr,uniform,15,-0.032094,0.000898,-0.034019,-0.030169,0,15,0,6.10352e-05,higher,false
+Grid margin learning-rate sensitivity 15-seed,learning_rate=0.060,rauc_aulc,bgr,uniform,15,0.017671,0.000669,0.016237,0.019106,15,0,0,6.10352e-05,higher,true
+Grid margin learning-rate sensitivity 30-seed,learning_rate=0.015,final_clean,bgr,uniform,30,0.061047,0.000440,0.060147,0.061948,30,0,0,1.86265e-09,higher,true
+Grid margin learning-rate sensitivity 30-seed,learning_rate=0.015,final_rauc,bgr,uniform,30,0.061974,0.000300,0.061362,0.062587,30,0,0,1.86265e-09,higher,true
+Grid margin learning-rate sensitivity 30-seed,learning_rate=0.015,final_median_r80,bgr,uniform,30,0.050529,0.000641,0.049218,0.051839,30,0,0,1.86265e-09,higher,true
+Grid margin learning-rate sensitivity 30-seed,learning_rate=0.015,rauc_aulc,bgr,uniform,30,0.043153,0.000219,0.042705,0.043601,30,0,0,1.86265e-09,higher,true
+Grid margin learning-rate sensitivity 30-seed,learning_rate=0.030,final_clean,bgr,uniform,30,0.051552,0.000374,0.050787,0.052318,30,0,0,1.86265e-09,higher,true
+Grid margin learning-rate sensitivity 30-seed,learning_rate=0.030,final_rauc,bgr,uniform,30,0.038120,0.000432,0.037236,0.039004,30,0,0,1.86265e-09,higher,true
+Grid margin learning-rate sensitivity 30-seed,learning_rate=0.030,final_median_r80,bgr,uniform,30,0.012604,0.000749,0.011071,0.014136,30,0,0,1.86265e-09,higher,true
+Grid margin learning-rate sensitivity 30-seed,learning_rate=0.030,rauc_aulc,bgr,uniform,30,0.039406,0.000350,0.038690,0.040121,30,0,0,1.86265e-09,higher,true
+Grid margin learning-rate sensitivity 30-seed,learning_rate=0.060,final_clean,bgr,uniform,30,0.044781,0.000362,0.044041,0.045522,30,0,0,1.86265e-09,higher,true
+Grid margin learning-rate sensitivity 30-seed,learning_rate=0.060,final_rauc,bgr,uniform,30,-0.005429,0.000463,-0.006375,-0.004483,1,29,0,5.7742e-08,higher,false
+Grid margin learning-rate sensitivity 30-seed,learning_rate=0.060,final_median_r80,bgr,uniform,30,-0.032363,0.000792,-0.033983,-0.030744,0,30,0,1.86265e-09,higher,false
+Grid margin learning-rate sensitivity 30-seed,learning_rate=0.060,rauc_aulc,bgr,uniform,30,0.017422,0.000430,0.016542,0.018302,30,0,0,1.86265e-09,higher,true
+Grid margin regime sensitivity 15-seed,regime=high_obstacle,final_rauc,bgr,uniform,15,0.038313,0.000645,0.036930,0.039695,15,0,0,6.10352e-05,higher,true
+Grid margin regime sensitivity 15-seed,regime=high_obstacle,rauc_aulc,bgr,uniform,15,0.039455,0.000478,0.038430,0.040481,15,0,0,6.10352e-05,higher,true
+Grid margin regime sensitivity 15-seed,regime=low_obstacle,final_rauc,bgr,uniform,15,0.038361,0.000620,0.037030,0.039691,15,0,0,6.10352e-05,higher,true
+Grid margin regime sensitivity 15-seed,regime=low_obstacle,rauc_aulc,bgr,uniform,15,0.039675,0.000478,0.038651,0.040699,15,0,0,6.10352e-05,higher,true
+Grid margin regime sensitivity 15-seed,regime=nominal,final_rauc,bgr,uniform,15,0.038374,0.000618,0.037048,0.039700,15,0,0,6.10352e-05,higher,true
+Grid margin regime sensitivity 15-seed,regime=nominal,rauc_aulc,bgr,uniform,15,0.039628,0.000512,0.038529,0.040727,15,0,0,6.10352e-05,higher,true
+Grid margin regime sensitivity 30-seed,regime=high_obstacle,final_rauc,bgr,uniform,30,0.038303,0.000413,0.037459,0.039147,30,0,0,1.86265e-09,higher,true
+Grid margin regime sensitivity 30-seed,regime=high_obstacle,rauc_aulc,bgr,uniform,30,0.039373,0.000327,0.038705,0.040041,30,0,0,1.86265e-09,higher,true
+Grid margin regime sensitivity 30-seed,regime=low_obstacle,final_rauc,bgr,uniform,30,0.038115,0.000429,0.037237,0.038993,30,0,0,1.86265e-09,higher,true
+Grid margin regime sensitivity 30-seed,regime=low_obstacle,rauc_aulc,bgr,uniform,30,0.039434,0.000336,0.038746,0.040121,30,0,0,1.86265e-09,higher,true
+Grid margin regime sensitivity 30-seed,regime=nominal,final_rauc,bgr,uniform,30,0.038120,0.000432,0.037236,0.039004,30,0,0,1.86265e-09,higher,true
+Grid margin regime sensitivity 30-seed,regime=nominal,rauc_aulc,bgr,uniform,30,0.039406,0.000350,0.038690,0.040121,30,0,0,1.86265e-09,higher,true
+Grid margin stress sensitivity 15-seed,stress_case=diffuse_boundary,final_rauc,bgr,uniform,15,0.027368,0.000457,0.026388,0.028348,15,0,0,6.10352e-05,higher,true
+Grid margin stress sensitivity 15-seed,stress_case=diffuse_boundary,rauc_aulc,bgr,uniform,15,0.034664,0.000388,0.033831,0.035496,15,0,0,6.10352e-05,higher,true
+Grid margin stress sensitivity 15-seed,stress_case=low_feasibility,final_rauc,bgr,uniform,15,0.038425,0.000427,0.037509,0.039341,15,0,0,6.10352e-05,higher,true
+Grid margin stress sensitivity 15-seed,stress_case=low_feasibility,rauc_aulc,bgr,uniform,15,0.034185,0.000376,0.033378,0.034991,15,0,0,6.10352e-05,higher,true
+Grid margin stress sensitivity 15-seed,stress_case=sharp_low_margin,final_rauc,bgr,uniform,15,0.073098,0.000347,0.072353,0.073843,15,0,0,6.10352e-05,higher,true
+Grid margin stress sensitivity 15-seed,stress_case=sharp_low_margin,rauc_aulc,bgr,uniform,15,0.062628,0.000246,0.062100,0.063156,15,0,0,6.10352e-05,higher,true
+Grid margin stress sensitivity 30-seed,stress_case=diffuse_boundary,final_rauc,bgr,uniform,30,0.027385,0.000308,0.026755,0.028015,30,0,0,1.86265e-09,higher,true
+Grid margin stress sensitivity 30-seed,stress_case=diffuse_boundary,rauc_aulc,bgr,uniform,30,0.034718,0.000273,0.034159,0.035276,30,0,0,1.86265e-09,higher,true
+Grid margin stress sensitivity 30-seed,stress_case=low_feasibility,final_rauc,bgr,uniform,30,0.038220,0.000271,0.037665,0.038775,30,0,0,1.86265e-09,higher,true
+Grid margin stress sensitivity 30-seed,stress_case=low_feasibility,rauc_aulc,bgr,uniform,30,0.033925,0.000262,0.033389,0.034460,30,0,0,1.86265e-09,higher,true
+Grid margin stress sensitivity 30-seed,stress_case=sharp_low_margin,final_rauc,bgr,uniform,30,0.073005,0.000333,0.072325,0.073686,30,0,0,1.86265e-09,higher,true
+Grid margin stress sensitivity 30-seed,stress_case=sharp_low_margin,rauc_aulc,bgr,uniform,30,0.062504,0.000231,0.062032,0.062977,30,0,0,1.86265e-09,higher,true
+Grid margin learning curve 15-seed,step=30,rauc,bgr,uniform,15,0.023534,0.000370,0.022741,0.024327,15,0,0,6.10352e-05,higher,true
+Grid margin learning curve 15-seed,step=60,rauc,bgr,uniform,15,0.036883,0.000457,0.035902,0.037864,15,0,0,6.10352e-05,higher,true
+Grid margin learning curve 15-seed,step=90,rauc,bgr,uniform,15,0.044001,0.000573,0.042772,0.045229,15,0,0,6.10352e-05,higher,true
+Grid margin learning curve 15-seed,step=120,rauc,bgr,uniform,15,0.047450,0.000551,0.046268,0.048632,15,0,0,6.10352e-05,higher,true
+Grid margin learning curve 15-seed,step=150,rauc,bgr,uniform,15,0.048163,0.000590,0.046897,0.049429,15,0,0,6.10352e-05,higher,true
+Grid margin learning curve 15-seed,step=180,rauc,bgr,uniform,15,0.047314,0.000680,0.045855,0.048772,15,0,0,6.10352e-05,higher,true
+Grid margin learning curve 15-seed,step=210,rauc,bgr,uniform,15,0.045605,0.000719,0.044063,0.047147,15,0,0,6.10352e-05,higher,true
+Grid margin learning curve 15-seed,step=240,rauc,bgr,uniform,15,0.043304,0.000664,0.041880,0.044727,15,0,0,6.10352e-05,higher,true
+Grid margin learning curve 15-seed,step=270,rauc,bgr,uniform,15,0.040844,0.000653,0.039443,0.042245,15,0,0,6.10352e-05,higher,true
+Grid margin learning curve 15-seed,step=300,rauc,bgr,uniform,15,0.038374,0.000618,0.037048,0.039700,15,0,0,6.10352e-05,higher,true

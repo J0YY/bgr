@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 BENCHMARKS = {
-    "toy_fast_v3": {
+    "toy_15seed_v1": {
         "label": "Synthetic",
         "primary": ["bgr", "uniform", "fixed", "failure_only", "plr_loss"],
         "display": {
@@ -19,7 +19,7 @@ BENCHMARKS = {
             "plr_loss": "Loss-priority",
         },
     },
-    "grid_margin_pair_15seed_v1": {
+    "grid_margin_full_30seed_v1": {
         "label": "GridMargin",
         "primary": ["bgr", "uniform"],
         "display": {
@@ -27,11 +27,11 @@ BENCHMARKS = {
             "uniform": "Uniform",
         },
     },
-    "suffix_strategy_pair_15seed_v1": {
+    "suffix_strategy_coverage_30seed_v1": {
         "label": "RobotSuffix",
         "primary": ["bgr_broad", "uniform"],
         "display": {
-            "bgr_broad": "BGR-Broad",
+            "bgr_broad": "BGR-Coverage",
             "uniform": "Uniform",
         },
     },
@@ -45,7 +45,13 @@ METRICS = [
 ]
 
 ESTIMATOR_RUN = "estimator_pair_15seed_v1"
-ABLATION_RUN = "grid_margin_ablation_v1"
+GRID_FULL_RUN = "grid_margin_full_30seed_v1"
+ABLATION_RUN = "grid_margin_ablation_15seed_v1"
+TARGET_SENSITIVITY_RUN = "grid_margin_target_sensitivity_15seed_v1"
+LEARNING_RATE_SENSITIVITY_RUN = "grid_margin_learning_rate_sensitivity_15seed_v1"
+REGIME_SENSITIVITY_RUN = "grid_margin_regime_sensitivity_15seed_v1"
+STRESS_SENSITIVITY_RUN = "grid_margin_stress_sensitivity_15seed_v1"
+GRID_LEARNING_CURVE_RUN = "grid_margin_full_15seed_v1"
 OPENVLA_RECOVERY_RUN = "libero_openvla_recovery_v1"
 OPENVLA_SELECTION_RUN = "libero_openvla_boundary_selection_balanced_v1"
 
@@ -107,10 +113,45 @@ def main() -> None:
     if estimator_rows:
         write_csv(out_dir / "estimator_stats.csv", estimator_rows)
         write_estimator_table(out_dir / "estimator_table.tex", estimator_rows)
+    grid_full_rows = load_grid_full(results_dir / GRID_FULL_RUN / "summary.csv")
+    if grid_full_rows:
+        write_csv(out_dir / "grid_margin_full_stats.csv", grid_full_rows)
+        write_grid_full_table(out_dir / "grid_margin_full_table.tex", grid_full_rows)
     ablation_rows = load_ablation(results_dir / ABLATION_RUN / "summary.csv")
     if ablation_rows:
         write_csv(out_dir / "grid_margin_ablation_stats.csv", ablation_rows)
         write_ablation_table(out_dir / "grid_margin_ablation_table.tex", ablation_rows)
+    target_sensitivity_rows = load_target_sensitivity(results_dir / TARGET_SENSITIVITY_RUN / "summary.csv")
+    if target_sensitivity_rows:
+        write_csv(out_dir / "grid_margin_target_sensitivity_stats.csv", target_sensitivity_rows)
+        write_target_sensitivity_table(out_dir / "grid_margin_target_sensitivity_table.tex", target_sensitivity_rows)
+    learning_rate_sensitivity_rows = load_learning_rate_sensitivity(
+        results_dir / LEARNING_RATE_SENSITIVITY_RUN / "summary.csv"
+    )
+    if learning_rate_sensitivity_rows:
+        write_csv(out_dir / "grid_margin_learning_rate_sensitivity_stats.csv", learning_rate_sensitivity_rows)
+        write_learning_rate_sensitivity_table(
+            out_dir / "grid_margin_learning_rate_sensitivity_table.tex",
+            learning_rate_sensitivity_rows,
+        )
+    regime_sensitivity_rows = load_regime_sensitivity(results_dir / REGIME_SENSITIVITY_RUN / "summary.csv")
+    if regime_sensitivity_rows:
+        write_csv(out_dir / "grid_margin_regime_sensitivity_stats.csv", regime_sensitivity_rows)
+        write_regime_sensitivity_table(
+            out_dir / "grid_margin_regime_sensitivity_table.tex",
+            regime_sensitivity_rows,
+        )
+    stress_sensitivity_rows = load_stress_sensitivity(results_dir / STRESS_SENSITIVITY_RUN / "summary.csv")
+    if stress_sensitivity_rows:
+        write_csv(out_dir / "grid_margin_stress_sensitivity_stats.csv", stress_sensitivity_rows)
+        write_stress_sensitivity_table(
+            out_dir / "grid_margin_stress_sensitivity_table.tex",
+            stress_sensitivity_rows,
+        )
+    learning_curve_rows = load_grid_learning_curve(results_dir / GRID_LEARNING_CURVE_RUN / "results.json")
+    if learning_curve_rows:
+        write_csv(out_dir / "grid_margin_learning_curve_stats.csv", learning_curve_rows)
+        write_grid_learning_curve_table(out_dir / "grid_margin_learning_curve_table.tex", learning_curve_rows)
     openvla_rows = load_openvla(
         results_dir / OPENVLA_RECOVERY_RUN / "summary.csv",
         results_dir / OPENVLA_SELECTION_RUN / "aggregate.csv",
@@ -200,6 +241,57 @@ def write_estimator_table(path: Path, rows: list[dict]) -> None:
         handle.write("\\end{tabular}\n")
 
 
+def load_grid_full(path: Path) -> list[dict[str, str | float | int]]:
+    if not path.exists():
+        return []
+    rows = list(csv.DictReader(path.open("r", encoding="utf-8")))
+    display = {
+        "bgr": "BGR",
+        "uniform": "Uniform",
+        "failure_only": "Failure-only",
+        "plr_loss": "Loss-priority",
+        "fixed": "Fixed radius",
+    }
+    out: list[dict[str, str | float | int]] = []
+    for method in ["bgr", "uniform", "failure_only", "plr_loss", "fixed"]:
+        items = [row for row in rows if row["method"] == method]
+        if not items:
+            continue
+        out.append(
+            {
+                "method": display[method],
+                "n": len(items),
+                "clean_mean": mean([float(row["final_clean"]) for row in items]),
+                "clean_sem": sem([float(row["final_clean"]) for row in items]),
+                "rauc_mean": mean([float(row["final_rauc"]) for row in items]),
+                "rauc_sem": sem([float(row["final_rauc"]) for row in items]),
+                "r80_mean": mean([float(row["final_median_r80"]) for row in items]),
+                "r80_sem": sem([float(row["final_median_r80"]) for row in items]),
+                "aulc_mean": mean([float(row["rauc_aulc"]) for row in items]),
+                "aulc_sem": sem([float(row["rauc_aulc"]) for row in items]),
+            }
+        )
+    return out
+
+
+def write_grid_full_table(path: Path, rows: list[dict]) -> None:
+    with path.open("w", encoding="utf-8") as handle:
+        handle.write("\\begin{tabular}{lcccc}\n")
+        handle.write("\\hline\n")
+        handle.write("Method & Clean & RAUC & Median $r_{80}$ & AULC \\\\\n")
+        handle.write("\\hline\n")
+        for row in rows:
+            handle.write(
+                f"{row['method']} & "
+                f"{float(row['clean_mean']):.3f}$\\pm${float(row['clean_sem']):.3f} & "
+                f"{float(row['rauc_mean']):.3f}$\\pm${float(row['rauc_sem']):.3f} & "
+                f"{float(row['r80_mean']):.3f}$\\pm${float(row['r80_sem']):.3f} & "
+                f"{float(row['aulc_mean']):.3f}$\\pm${float(row['aulc_sem']):.3f} \\\\\n"
+            )
+        handle.write("\\hline\n")
+        handle.write("\\end{tabular}\n")
+
+
 def load_ablation(path: Path) -> list[dict[str, str | float | int]]:
     if not path.exists():
         return []
@@ -246,6 +338,270 @@ def write_ablation_table(path: Path, rows: list[dict]) -> None:
                 f"{float(row['rauc_mean']):.3f}$\\pm${float(row['rauc_sem']):.3f} & "
                 f"{float(row['r80_mean']):.3f}$\\pm${float(row['r80_sem']):.3f} & "
                 f"{float(row['aulc_mean']):.3f}$\\pm${float(row['aulc_sem']):.3f} \\\\\n"
+            )
+        handle.write("\\hline\n")
+        handle.write("\\end{tabular}\n")
+
+
+def load_target_sensitivity(path: Path) -> list[dict[str, str | float | int]]:
+    if not path.exists():
+        return []
+    rows = list(csv.DictReader(path.open("r", encoding="utf-8")))
+    out: list[dict[str, str | float | int]] = []
+    targets = sorted({float(row["target_margin"]) for row in rows})
+    for target_margin in targets:
+        items = [row for row in rows if float(row["target_margin"]) == target_margin]
+        out.append(
+            {
+                "target_margin": target_margin,
+                "n": len(items),
+                "clean_mean": mean([float(row["final_clean"]) for row in items]),
+                "clean_sem": sem([float(row["final_clean"]) for row in items]),
+                "rauc_mean": mean([float(row["final_rauc"]) for row in items]),
+                "rauc_sem": sem([float(row["final_rauc"]) for row in items]),
+                "r80_mean": mean([float(row["final_median_r80"]) for row in items]),
+                "r80_sem": sem([float(row["final_median_r80"]) for row in items]),
+                "aulc_mean": mean([float(row["rauc_aulc"]) for row in items]),
+                "aulc_sem": sem([float(row["rauc_aulc"]) for row in items]),
+            }
+        )
+    return out
+
+
+def write_target_sensitivity_table(path: Path, rows: list[dict]) -> None:
+    with path.open("w", encoding="utf-8") as handle:
+        handle.write("\\begin{tabular}{ccccc}\n")
+        handle.write("\\hline\n")
+        handle.write("Target $r_{80}$ & Clean & RAUC & Median $r_{80}$ & AULC \\\\\n")
+        handle.write("\\hline\n")
+        for row in rows:
+            handle.write(
+                f"{float(row['target_margin']):.2f} & "
+                f"{float(row['clean_mean']):.3f}$\\pm${float(row['clean_sem']):.3f} & "
+                f"{float(row['rauc_mean']):.3f}$\\pm${float(row['rauc_sem']):.3f} & "
+                f"{float(row['r80_mean']):.3f}$\\pm${float(row['r80_sem']):.3f} & "
+                f"{float(row['aulc_mean']):.3f}$\\pm${float(row['aulc_sem']):.3f} \\\\\n"
+            )
+        handle.write("\\hline\n")
+        handle.write("\\end{tabular}\n")
+
+
+def load_learning_rate_sensitivity(path: Path) -> list[dict[str, str | float | int]]:
+    if not path.exists():
+        return []
+    with path.open("r", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    display = {"bgr": "BGR", "uniform": "Uniform"}
+    out: list[dict[str, str | float | int]] = []
+    for learning_rate in sorted({float(row["learning_rate"]) for row in rows}):
+        for method in ["bgr", "uniform"]:
+            items = [
+                row
+                for row in rows
+                if float(row["learning_rate"]) == learning_rate and row["method"] == method
+            ]
+            if not items:
+                continue
+            out.append(
+                {
+                    "learning_rate": learning_rate,
+                    "method": display[method],
+                    "n": len(items),
+                    "clean_mean": mean([float(row["final_clean"]) for row in items]),
+                    "clean_sem": sem([float(row["final_clean"]) for row in items]),
+                    "rauc_mean": mean([float(row["final_rauc"]) for row in items]),
+                    "rauc_sem": sem([float(row["final_rauc"]) for row in items]),
+                    "r80_mean": mean([float(row["final_median_r80"]) for row in items]),
+                    "r80_sem": sem([float(row["final_median_r80"]) for row in items]),
+                    "aulc_mean": mean([float(row["rauc_aulc"]) for row in items]),
+                    "aulc_sem": sem([float(row["rauc_aulc"]) for row in items]),
+                }
+            )
+    return out
+
+
+def write_learning_rate_sensitivity_table(path: Path, rows: list[dict]) -> None:
+    with path.open("w", encoding="utf-8") as handle:
+        handle.write("\\begin{tabular}{clcccc}\n")
+        handle.write("\\hline\n")
+        handle.write("LR & Method & Clean & RAUC & Median $r_{80}$ & AULC \\\\\n")
+        handle.write("\\hline\n")
+        for row in rows:
+            handle.write(
+                f"{float(row['learning_rate']):.3f} & {row['method']} & "
+                f"{float(row['clean_mean']):.3f}$\\pm${float(row['clean_sem']):.3f} & "
+                f"{float(row['rauc_mean']):.3f}$\\pm${float(row['rauc_sem']):.3f} & "
+                f"{float(row['r80_mean']):.3f}$\\pm${float(row['r80_sem']):.3f} & "
+                f"{float(row['aulc_mean']):.3f}$\\pm${float(row['aulc_sem']):.3f} \\\\\n"
+            )
+        handle.write("\\hline\n")
+        handle.write("\\end{tabular}\n")
+
+
+def load_regime_sensitivity(path: Path) -> list[dict[str, str | float | int]]:
+    if not path.exists():
+        return []
+    with path.open("r", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    display = {
+        "low_obstacle": "Low obstacle",
+        "nominal": "Nominal",
+        "high_obstacle": "High obstacle",
+        "bgr": "BGR",
+        "uniform": "Uniform",
+    }
+    out: list[dict[str, str | float | int]] = []
+    regimes = sorted({row["regime"] for row in rows})
+    for regime in regimes:
+        for method in ["bgr", "uniform"]:
+            items = [row for row in rows if row["regime"] == regime and row["method"] == method]
+            if not items:
+                continue
+            out.append(
+                {
+                    "regime": regime,
+                    "regime_label": display.get(regime, regime.replace("_", " ").title()),
+                    "method": display[method],
+                    "obstacle_prob": float(items[0]["obstacle_prob"]),
+                    "grid_size": int(float(items[0]["grid_size"])),
+                    "max_offset": int(float(items[0]["max_offset"])),
+                    "n": len(items),
+                    "clean_mean": mean([float(row["final_clean"]) for row in items]),
+                    "clean_sem": sem([float(row["final_clean"]) for row in items]),
+                    "rauc_mean": mean([float(row["final_rauc"]) for row in items]),
+                    "rauc_sem": sem([float(row["final_rauc"]) for row in items]),
+                    "r80_mean": mean([float(row["final_median_r80"]) for row in items]),
+                    "r80_sem": sem([float(row["final_median_r80"]) for row in items]),
+                    "aulc_mean": mean([float(row["rauc_aulc"]) for row in items]),
+                    "aulc_sem": sem([float(row["rauc_aulc"]) for row in items]),
+                }
+            )
+    return out
+
+
+def write_regime_sensitivity_table(path: Path, rows: list[dict]) -> None:
+    with path.open("w", encoding="utf-8") as handle:
+        handle.write("\\begin{tabular}{llcccc}\n")
+        handle.write("\\hline\n")
+        handle.write("Regime & Method & Clean & RAUC & Median $r_{80}$ & AULC \\\\\n")
+        handle.write("\\hline\n")
+        for row in rows:
+            handle.write(
+                f"{row['regime_label']} & {row['method']} & "
+                f"{float(row['clean_mean']):.3f}$\\pm${float(row['clean_sem']):.3f} & "
+                f"{float(row['rauc_mean']):.3f}$\\pm${float(row['rauc_sem']):.3f} & "
+                f"{float(row['r80_mean']):.3f}$\\pm${float(row['r80_sem']):.3f} & "
+                f"{float(row['aulc_mean']):.3f}$\\pm${float(row['aulc_sem']):.3f} \\\\\n"
+            )
+        handle.write("\\hline\n")
+        handle.write("\\end{tabular}\n")
+
+
+def load_stress_sensitivity(path: Path) -> list[dict[str, str | float | int]]:
+    if not path.exists():
+        return []
+    with path.open("r", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    display = {
+        "sharp_low_margin": "Sharp low-margin",
+        "diffuse_boundary": "Diffuse boundary",
+        "low_feasibility": "Low feasibility",
+        "bgr": "BGR",
+        "uniform": "Uniform",
+    }
+    out: list[dict[str, str | float | int]] = []
+    stress_cases = sorted({row["stress_case"] for row in rows})
+    for stress_case in stress_cases:
+        for method in ["bgr", "uniform"]:
+            items = [row for row in rows if row["stress_case"] == stress_case and row["method"] == method]
+            if not items:
+                continue
+            out.append(
+                {
+                    "stress_case": stress_case,
+                    "stress_label": display.get(stress_case, stress_case.replace("_", " ").title()),
+                    "method": display[method],
+                    "n": len(items),
+                    "clean_mean": mean([float(row["final_clean"]) for row in items]),
+                    "clean_sem": sem([float(row["final_clean"]) for row in items]),
+                    "rauc_mean": mean([float(row["final_rauc"]) for row in items]),
+                    "rauc_sem": sem([float(row["final_rauc"]) for row in items]),
+                    "r80_mean": mean([float(row["final_median_r80"]) for row in items]),
+                    "r80_sem": sem([float(row["final_median_r80"]) for row in items]),
+                    "aulc_mean": mean([float(row["rauc_aulc"]) for row in items]),
+                    "aulc_sem": sem([float(row["rauc_aulc"]) for row in items]),
+                }
+            )
+    return out
+
+
+def write_stress_sensitivity_table(path: Path, rows: list[dict]) -> None:
+    with path.open("w", encoding="utf-8") as handle:
+        handle.write("\\begin{tabular}{llcccc}\n")
+        handle.write("\\hline\n")
+        handle.write("Stress case & Method & Clean & RAUC & Median $r_{80}$ & AULC \\\\\n")
+        handle.write("\\hline\n")
+        for row in rows:
+            handle.write(
+                f"{row['stress_label']} & {row['method']} & "
+                f"{float(row['clean_mean']):.3f}$\\pm${float(row['clean_sem']):.3f} & "
+                f"{float(row['rauc_mean']):.3f}$\\pm${float(row['rauc_sem']):.3f} & "
+                f"{float(row['r80_mean']):.3f}$\\pm${float(row['r80_sem']):.3f} & "
+                f"{float(row['aulc_mean']):.3f}$\\pm${float(row['aulc_sem']):.3f} \\\\\n"
+            )
+        handle.write("\\hline\n")
+        handle.write("\\end{tabular}\n")
+
+
+def load_grid_learning_curve(path: Path) -> list[dict[str, str | float | int]]:
+    if not path.exists():
+        return []
+    import json
+
+    with path.open(encoding="utf-8") as handle:
+        payload = json.load(handle)
+    by_method: dict[str, dict[int, dict]] = {}
+    for result in payload["results"]:
+        by_method.setdefault(str(result["method"]), {})[int(result["seed"])] = result
+    if "bgr" not in by_method or "uniform" not in by_method:
+        return []
+    seeds = sorted(set(by_method["bgr"]) & set(by_method["uniform"]))
+    steps = [float(point["step"]) for point in by_method["bgr"][seeds[0]]["history"]]
+    out: list[dict[str, str | float | int]] = []
+    for step_idx, step in enumerate(steps):
+        bgr_vals = [float(by_method["bgr"][seed]["history"][step_idx]["rauc"]) for seed in seeds]
+        uniform_vals = [float(by_method["uniform"][seed]["history"][step_idx]["rauc"]) for seed in seeds]
+        diffs = [bgr - uniform for bgr, uniform in zip(bgr_vals, uniform_vals, strict=True)]
+        out.append(
+            {
+                "step": int(step),
+                "n": len(seeds),
+                "bgr_rauc_mean": mean(bgr_vals),
+                "bgr_rauc_sem": sem(bgr_vals),
+                "uniform_rauc_mean": mean(uniform_vals),
+                "uniform_rauc_sem": sem(uniform_vals),
+                "delta_mean": mean(diffs),
+                "delta_sem": sem(diffs),
+            }
+        )
+    return out
+
+
+def write_grid_learning_curve_table(path: Path, rows: list[dict]) -> None:
+    selected_steps = {30, 60, 120, 300}
+    with path.open("w", encoding="utf-8") as handle:
+        handle.write("\\begin{tabular}{rrrr}\n")
+        handle.write("\\hline\n")
+        handle.write("Step & BGR RAUC & Uniform RAUC & $\\Delta$ \\\\\n")
+        handle.write("\\hline\n")
+        for row in rows:
+            if int(row["step"]) not in selected_steps:
+                continue
+            handle.write(
+                f"{int(row['step'])} & "
+                f"{float(row['bgr_rauc_mean']):.3f}$\\pm${float(row['bgr_rauc_sem']):.3f} & "
+                f"{float(row['uniform_rauc_mean']):.3f}$\\pm${float(row['uniform_rauc_sem']):.3f} & "
+                f"{float(row['delta_mean']):.3f}$\\pm${float(row['delta_sem']):.3f} \\\\\n"
             )
         handle.write("\\hline\n")
         handle.write("\\end{tabular}\n")
