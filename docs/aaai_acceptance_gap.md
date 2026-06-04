@@ -52,11 +52,22 @@ Do not add another result to the manuscript if it has any of these properties:
 
 1. Taxi-v3 recovery replay, with taxi-position perturbations and fixed
    passenger/destination state. An optimized internal probe now exists at
-   `tools/taxi_recovery_probe.py`, but the first 4-seed diagnostic is negative
-   for promotion: at 120 iterations, final RAUC is 0.9963 for uniform, 1.0000
-   for failure-only, 0.9960 for TD-loss, 0.9763 for BGR-uniform-radius, 0.9650
-   for BGR-coverage, and 0.9578 for BGR. This protocol saturates simple
-   baselines and should not be added to the paper.
+   `tools/taxi_recovery_probe.py`, but the first diagnostics are negative for
+   promotion:
+   - At the normal 4-seed diagnostic budget, final RAUC is 0.9963 for uniform,
+     1.0000 for failure-only, 0.9960 for TD-loss, 0.9763 for
+     BGR-uniform-radius, 0.9650 for BGR-coverage, and 0.9578 for BGR. This
+     protocol saturates simple baselines.
+   - At a harder undertrained budget (`--iterations 80 --train-batch-size 6
+     --max-steps 40 --q-init-blend 0.02 --q-init-noise 0.04
+     --learning-rate 0.30`), BGR-family replay beats uniform, but the winning
+     variant is BGR-uniform-radius (0.0794 final RAUC), ahead of BGR-coverage
+     (0.0640) and BGR (0.0632). Uniform is 0.0058, failure-only is 0.0187,
+     TD-loss is 0.0083, and fixed-radius is 0.0037. This suggests hard-state
+     replay can help in Taxi, but boundary-radius sampling is not the important
+     ingredient.
+   Taxi should stay out of the paper unless a new pre-registered protocol makes
+   the boundary-radius rule itself beat the state-priority-only ablation.
 2. A faster discrete control benchmark with exact reset states and a
    pre-registered perturbation family. CliffWalking and FrozenLake currently
    look negative for BGR under the tested protocols.
