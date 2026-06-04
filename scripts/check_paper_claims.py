@@ -895,6 +895,43 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             "results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
         )
     )
+    p2048_imageaug_1000_low_lr_perturb = read_csv_rows(
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1"
+        / "summary.csv"
+    )
+    low_lr_bgr_successes, low_lr_bgr_episodes = perturbed_total(p2048_imageaug_1000_low_lr_perturb, "bgr")
+    low_lr_official_successes, low_lr_official_episodes = perturbed_total(
+        p2048_imageaug_1000_low_lr_perturb, "official"
+    )
+    low_lr_random_successes, low_lr_random_episodes = perturbed_total(
+        p2048_imageaug_1000_low_lr_perturb, "random"
+    )
+    low_lr_identity = {
+        row["method"]: int(row["successes"])
+        for row in p2048_imageaug_1000_low_lr_perturb
+        if row["perturbation"] == "identity"
+    }
+    if not (
+        low_lr_bgr_episodes == low_lr_official_episodes == low_lr_random_episodes == 400
+        and low_lr_bgr_successes == 366
+        and low_lr_official_successes == 367
+        and low_lr_random_successes == 370
+        and low_lr_identity == {"bgr": 98, "official": 99, "random": 99}
+    ):
+        raise ValueError("Expected p2048 1,000-step low-LR image-augmentation audit to trail both controls")
+    claims.append(
+        Claim(
+            "OpenVLA p2048 1,000-step low-LR image-augmentation audit",
+            (
+                f"1,000-step low-learning-rate continuation is also negative: BGR gives "
+                f"{low_lr_bgr_successes}/{low_lr_bgr_episodes} non-identity perturbation successes, "
+                f"trailing official at {low_lr_official_successes}/{low_lr_official_episodes} "
+                f"and matched random at {low_lr_random_successes}/{low_lr_random_episodes}"
+            ),
+            "results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
+        )
+    )
     if not (p1024_pooled_bgr > p1024_pooled_random and p2048_pooled_bgr >= p2048_pooled_random):
         raise ValueError("Expected corrected OpenVLA diagnostics to show a p1024 edge and non-worse p2048 pooled comparison")
     if not (p1024_pooled_bgr < p1024_pooled_official and p2048_pooled_bgr < p2048_pooled_official):
@@ -975,6 +1012,11 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
         / "openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1"
         / "summary.csv",
     ]
+    p2048_imageaug_1000_low_lr_summary_paths = [
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1"
+        / "summary.csv",
+    ]
     action_tfds_summary_paths = [
         results_dir / "openvla_action_tfds_validation_v1" / "summary.json",
     ]
@@ -993,6 +1035,9 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
         "367/400": p2048_fullgoal_summary_paths,
         "300-step image-augmentation continuation": p2048_imageaug_300_summary_paths,
         "368/400": p2048_imageaug_300_summary_paths,
+        "1,000-step low-learning-rate continuation": p2048_imageaug_1000_low_lr_summary_paths,
+        "366/400": p2048_imageaug_1000_low_lr_summary_paths,
+        "370/400": p2048_imageaug_1000_low_lr_summary_paths,
         "action-label/TFDS plumbing validates": action_tfds_summary_paths,
         "2,048-transition matched BGR/random exports": action_tfds_summary_paths,
     }

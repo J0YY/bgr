@@ -125,6 +125,8 @@ Packaged OpenVLA audit artifacts are:
   p2048 full-goal visual perturbation audit.
 - `results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv`:
   p2048 300-step image-augmentation continuation audit.
+- `results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv`:
+  p2048 1,000-step low-LR image-augmentation continuation audit.
 
 The p4096 and common-availability sections below are retained as paper-negative
 diagnostics in this ledger only. Their summary CSVs are not part of the

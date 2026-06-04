@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 18:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 21:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -40,17 +40,17 @@ Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
 Package: newtxtext 2026/06/01 local build shim for minimal TeX installs
 )
 (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/times.sty
-Package: times 2020/03/25 PSNFSS-v9.3 (SPQR) 
+Package: times 2020/03/25 PSNFSS-v9.3 (SPQR)
 )
 (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/helvet.sty
-Package: helvet 2020/03/25 PSNFSS-v9.3 (WaS) 
+Package: helvet 2020/03/25 PSNFSS-v9.3 (WaS)
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks17
 ))
 (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/courier.sty
-Package: courier 2020/03/25 PSNFSS-v9.3 (WaS) 
+Package: courier 2020/03/25 PSNFSS-v9.3 (WaS)
 )
 (./placeins.sty
 Package: placeins 2026/06/01 local build shim for minimal TeX installs
@@ -134,12 +134,9 @@ File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 
 
 {/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/loc
-al/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc}]
-Underfull \vbox (badness 1308) has occurred while \output is active []
-
- [2]
+al/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc}] [2]
 Underfull \hbox (badness 4726) in paragraph at lines 175--175
-[]\T1/ptm/m/n/10 This pa-per lists all fi-nal (hyper-)parameters used for each 
+[]\T1/ptm/m/n/10 This pa-per lists all fi-nal (hyper-)parameters used for each
 model/algorithm in the pa-per's ex-per-i-ments
  []
 
@@ -148,7 +145,7 @@ model/algorithm in the pa-per's ex-per-i-ments
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-05-26>
  ***********
- ) 
+ )
 Here is how much of TeX's memory you used:
  1980 strings out of 467337
  29926 string characters out of 5415293
@@ -156,11 +153,11 @@ Here is how much of TeX's memory you used:
  31094 multiletter control sequences out of 15000+600000
  639077 words of font info for 50 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,5n,76p,439b,279s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,5n,76p,439b,277s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/
 local/texlive/2026/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texl
 ive/2026/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on ReproducibilityChecklist.pdf (3 pages, 49201 bytes).
+Output written on ReproducibilityChecklist.pdf (3 pages, 49246 bytes).
 PDF statistics:
  30 PDF objects out of 1000 (max. 8388607)
  18 compressed objects within 1 object stream

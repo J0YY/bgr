@@ -425,6 +425,7 @@ OPENVLA_CLAIM_ARTIFACTS = [
     "results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
+    "results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
 ]
 CHECKED_CLAIM_ARTIFACTS = [
     "paper/figures/estimator_stats.csv",
@@ -457,6 +458,7 @@ CHECKED_CLAIM_ARTIFACTS = [
     "results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
+    "results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_sanity_eval_sanity_v1/summary.csv",
     "results/openvla_action_tfds_validation_v1/summary.json",
     "results/openvla_teacher_replay_manifest_v1/summary.json",
@@ -1381,6 +1383,7 @@ def check_results_evidence_index(root: Path) -> list[str]:
         "p2048 full-goal clean identity audit",
         "p2048 full-goal visual perturbation audit",
         "p2048 300-step image-augmentation continuation audit",
+        "p2048 1,000-step low-LR image-augmentation continuation audit",
         "results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
         "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
         "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
@@ -1391,6 +1394,7 @@ def check_results_evidence_index(root: Path) -> list[str]:
         "results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
         "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
         "results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
+        "results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
         "p4096 and common-availability sections below are retained as paper-negative diagnostics in this ledger only",
         "not part of the anonymous submission manifest or archive",
         "The detailed sections below are a historical provenance ledger",
@@ -1459,6 +1463,8 @@ def check_root_readme_openvla_status(root: Path) -> list[str]:
         "trailing matched random by one episode (368/400)",
         "The 300-step image-augmentation continuation gives BGR and matched random 368/400 perturbed successes each",
         "only one episode above official (367/400)",
+        "The 1,000-step low-learning-rate continuation is also negative",
+        "BGR gives 366/400 non-identity perturbation successes",
     ]
     missing = [snippet for snippet in required if snippet not in normalized_text]
     if missing:
@@ -1497,6 +1503,7 @@ def check_paper_readme_openvla_status(root: Path) -> list[str]:
         "At p2048, the full-goal identity audit gives 99/100 clean successes",
         "The 10-task visual perturbation audit gives BGR 367/400 perturbed successes",
         "trailing matched random by one episode (368/400)",
+        "The 1,000-step low-learning-rate continuation is also negative",
     ]
     missing = [snippet for snippet in required if snippet not in normalized_text]
     if missing:
@@ -3989,8 +3996,8 @@ def check_manuscript_framing(path: Path) -> list[str]:
     ]
     if stale:
         raise ValueError(f"{path}: stale manuscript framing marker(s): {', '.join(stale)}")
-    if "local margin-update model.\n\\textbf{Proposition 1.}" in text:
-        raise ValueError(f"{path}: Proposition 1 should start a new paragraph in the rendered manuscript")
+    if "\\textbf{Proposition 1.}" in text:
+        raise ValueError(f"{path}: theory block should be framed as local boundary intuition, not Proposition 1")
     required = [
         "In a robot-suffix simulator, a coverage-aware BGR variant improves",
         "coverage-aware boundary replay expand recovery margins",
@@ -4015,11 +4022,13 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "matched action/TFDS construction",
         "Geometric intuition for BGR",
         "We treat exact paired sign tests as consistency checks over shared seeds, not as substitutes for effect size",
-        "The following local argument is intuition for the radius sampler, not a convergence or global robustness theorem",
+        "The following local calculation is a design rationale for the radius sampler",
+        "Local boundary intuition",
         "BGR depends on a feasibility witness",
         "synthetic and grid-margin benchmarks are constructed to expose recovery curves",
         "RAUC and AULC are useful for measuring curve expansion, but they are author-defined integrals",
         "300-step image-augmentation continuation",
+        "1,000-step low-learning-rate continuation",
         "measure learned-policy brittleness and build matched fine-tuning datasets",
         "current adaptation does not establish stable gains over the official checkpoint",
         "BGR converts recovery-margin measurement into a replay curriculum",

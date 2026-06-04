@@ -94,6 +94,7 @@ OpenVLA-OFT packaged audit summaries:
 - p2048 full-goal clean identity audit: `results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv`
 - p2048 full-goal visual perturbation audit: `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv`
 - p2048 300-step image-augmentation continuation audit: `results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv`
+- p2048 1,000-step low-LR image-augmentation continuation audit: `results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv`
 
 ## Repository Layout
 
@@ -318,7 +319,9 @@ and the official checkpoint. The 10-task visual perturbation audit gives BGR
 367/400 perturbed successes, tying official and trailing matched random by one
 episode (368/400). The 300-step image-augmentation continuation gives BGR and
 matched random 368/400 perturbed successes each, only one episode above official
-(367/400), while BGR trails both on identity.
+(367/400), while BGR trails both on identity. The 1,000-step low-learning-rate
+continuation is also negative: BGR gives 366/400 non-identity perturbation
+successes, trailing official at 367/400 and matched random at 370/400.
 
 ## AAAI Sources
 

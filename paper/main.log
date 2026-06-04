@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 19:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 21:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -320,10 +320,6 @@ Underfull \hbox (badness 2726) in paragraph at lines 221--222
 []\T1/ptm/m/n/10 The OpenVLA-OFT bridge ex-ports 11,776 teacher-
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 (./main.bbl [6]) [7
 
 ] (./ReproducibilityChecklist.tex
@@ -336,10 +332,7 @@ LaTeX Font Info:    Trying to load font information for T1+pcr on input line 51
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 ) [8
 
-]
-Underfull \vbox (badness 1308) has occurred while \output is active []
-
- [9]
+] [9]
 Underfull \hbox (badness 4726) in paragraph at lines 175--175
 []\T1/ptm/m/n/10 This pa-per lists all fi-nal (hyper-)parameters used for each
 model/algorithm in the pa-per's ex-per-i-ments
@@ -358,7 +351,7 @@ Here is how much of TeX's memory you used:
  33199 multiletter control sequences out of 15000+600000
  664307 words of font info for 85 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,11n,76p,1889b,285s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,11n,76p,1889b,283s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
 ></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
 </usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></
@@ -379,7 +372,7 @@ texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2026/texmf-di
 st/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/t
 ype1/urw/times/utmr8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/t
 imes/utmri8a.pfb>
-Output written on main.pdf (10 pages, 284527 bytes).
+Output written on main.pdf (10 pages, 284771 bytes).
 PDF statistics:
  163 PDF objects out of 1000 (max. 8388607)
  99 compressed objects within 1 object stream

@@ -104,6 +104,8 @@ visual perturbation audit gives BGR 367/400 perturbed successes, tying official
 and trailing matched random by one episode (368/400). The 300-step
 image-augmentation continuation gives BGR and matched random 368/400 perturbed
 successes each, only one episode above official (367/400), while BGR trails both
-on identity. OpenVLA therefore remains
+on identity. The 1,000-step low-learning-rate continuation is also negative:
+BGR gives 366/400 non-identity perturbation successes, trailing official at
+367/400 and matched random at 370/400. OpenVLA therefore remains
 an audit of recovery curves, matched action/TFDS construction, and OpenVLA-OFT plumbing
 rather than a robotics success claim.
