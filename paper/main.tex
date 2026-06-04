@@ -122,6 +122,8 @@ All experiments are driven by artifact YAML configs and scripts. The anonymous a
 
 We report clean success, recovery AUC (RAUC), median $r_{80}$, and area under the RAUC learning curve (AULC). RAUC and $r_{80}$ are evaluated on dense held-out radius grids rather than on the probes used by BGR during training. The synthetic, estimator, and grid learning-curve diagnostics use 15 paired seeds; packaged grid full-baseline, ablation, sensitivity, and suffix coverage confirmations use 30. We report exact two-sided paired sign tests; five-seed exploratory variants are reported only as exploratory evidence.
 
+Baselines are matched to the decisions BGR changes. Uniform replay samples replay states and perturbation radii without recovery-boundary information. Fixed-radius replay uses the same learner and feasibility filters at one configured perturbation scale. Failure-only replay prioritizes states with observed failures without estimating a crossing radius. PLR-loss and loss-priority baselines replace BGR's recovery-curve priority with learner-loss proxies. Clean-only suffix training regularizes on unperturbed suffixes. Paired comparisons share seeds, rollout budgets, evaluation grids, and validity filters.
+
 \begin{table*}[t]
 \centering
 \small

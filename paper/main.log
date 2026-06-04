@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 10:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 10:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -287,21 +287,18 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [2]
 (./figures/summary_table.tex) (./figures/significance_table.tex)
 (./figures/estimator_table.tex)
-Underfull \hbox (badness 1127) in paragraph at lines 167--168
+Underfull \hbox (badness 1127) in paragraph at lines 169--170
 \T1/ptm/m/n/10 run, BGR out-per-forms uni-form re-play on fi-nal RAUC
  []
 
 
-Underfull \hbox (badness 1565) in paragraph at lines 169--170
+Underfull \hbox (badness 1565) in paragraph at lines 171--172
 \T1/ptm/m/n/10 form 0.396; and ge-om-e-try stresses give stress RAUC
  []
 
 [3] (./figures/grid_margin_full_table.tex)
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 (./figures/grid_margin_ablation_table.tex) [4]
-Underfull \hbox (badness 1142) in paragraph at lines 197--198
+Underfull \hbox (badness 1142) in paragraph at lines 199--200
 \T1/ptm/m/n/10 i-da-tion. A GPU/EGL LIBERO-Goal probe com-pleted
  []
 
@@ -360,7 +357,7 @@ texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2026/texmf-di
 st/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/t
 ype1/urw/times/utmr8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/t
 imes/utmri8a.pfb>
-Output written on main.pdf (9 pages, 245156 bytes).
+Output written on main.pdf (9 pages, 245845 bytes).
 PDF statistics:
  135 PDF objects out of 1000 (max. 8388607)
  83 compressed objects within 1 object stream

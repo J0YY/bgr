@@ -13,16 +13,20 @@ mixing in clean and broader coverage examples.
 
 The current evidence is tiered:
 
-- Synthetic and procedural grid-margin experiments support the main
-  recovery-margin mechanism under 15 paired seeds.
-- Robot-suffix experiments are manipulation-style diagnostics. The
+- Synthetic experiments support the intended recovery-margin mechanism, with a
+  15-seed rendered study and a 30-seed confirmation in the anonymous artifact.
+- Procedural grid-margin experiments support the main recovery-margin claim. The
+  completed 30-seed full-baseline comparison and held-out 30-seed replication
+  pool to 60/0 paired RAUC wins for BGR over uniform.
+- Robot-suffix experiments are positive manipulation-style evidence. The
   coverage-aware BGR-Suffix variant improves clean success, object RAUC,
-  transfer RAUC, and AULC over uniform suffix replay, while uniform remains
-  higher on median critical radius.
+  transfer RAUC, and AULC over uniform suffix replay across original and held-out
+  30-seed sweeps, while uniform remains higher on median critical radius.
 - OpenVLA/LIBERO experiments are audits of recovery-curve measurement,
-  boundary selection, and data plumbing. They are not positive BGR fine-tuning
-  evidence.
+  boundary selection, data plumbing, and bounded full-goal evaluation. They are
+  not positive BGR fine-tuning evidence because BGR does not stably outperform
+  both matched random selection and the unadapted official checkpoint.
 
 The paper therefore frames BGR as a boundary-centered replay principle with
-controlled procedural evidence and learned-policy audits, not as a completed
-robotics fine-tuning claim.
+controlled procedural evidence, positive manipulation-style simulator evidence,
+and learned-policy audits, not as a completed robotics fine-tuning claim.
