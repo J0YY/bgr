@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 09:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 10:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -297,6 +297,9 @@ Underfull \hbox (badness 1565) in paragraph at lines 169--170
  []
 
 [3] (./figures/grid_margin_full_table.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 (./figures/grid_margin_ablation_table.tex) [4]
 Underfull \hbox (badness 1142) in paragraph at lines 197--198
 \T1/ptm/m/n/10 i-da-tion. A GPU/EGL LIBERO-Goal probe com-pleted
@@ -336,7 +339,7 @@ Here is how much of TeX's memory you used:
  33181 multiletter control sequences out of 15000+600000
  664307 words of font info for 85 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,11n,76p,1760b,285s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,11n,76p,1873b,285s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
 ></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
 </usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></
@@ -357,7 +360,7 @@ texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2026/texmf-di
 st/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/t
 ype1/urw/times/utmr8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/t
 imes/utmri8a.pfb>
-Output written on main.pdf (9 pages, 244709 bytes).
+Output written on main.pdf (9 pages, 245156 bytes).
 PDF statistics:
  135 PDF objects out of 1000 (max. 8388607)
  83 compressed objects within 1 object stream
