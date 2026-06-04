@@ -172,6 +172,39 @@ PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_perturb_eval.py \
   --out results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1
 ```
 
+## Queued OpenVLA-OFT p2048 Full-Goal Clean Identity Audit
+
+Queued on 2026-06-04 after the p2048 10-trial perturbation variance audit tied
+the unadapted official checkpoint and gave only a one-episode edge over matched
+random. This follow-up evaluates the p2048 BGR, matched-random, and official
+checkpoints under identity/no-perturbation observations across all 10
+LIBERO-Goal tasks with 10 initial states each. It directly tests the paper's
+remaining multi-task learned-policy gap without rerunning adaptation.
+
+Submitted command shape:
+
+```bash
+TAG=cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1 \
+EVAL_ARTIFACT=openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1 \
+REMOTE_RUN_ROOT=/work/anonymous/bgr/runs \
+REMOTE_HF_HOME=/work/anonymous/cache_home/huggingface \
+BGR_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+PERTURBATIONS='identity={}' \
+EVAL_TASKS=10 \
+EVAL_TRIALS=10 \
+EVAL_SEED=23 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Initial Slurm jobs:
+
+```text
+764778  official identity, running on submission
+764779  BGR identity, running on submission
+764780  random identity, running on submission
+```
+
 ## Completed OpenVLA-OFT p4096 Clean-Mix Scale Diagnostic
 
 Launched on 2026-06-02 after p2048 again tied matched random on clean success and
