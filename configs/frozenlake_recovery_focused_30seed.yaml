@@ -1,0 +1,33 @@
+experiment:
+  name: frozenlake_recovery_focused_30seed_v1
+  benchmark: Gym FrozenLake8x8-v1 canonical slippery map
+  seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+  methods: [uniform, fixed, failure_only, td_loss, bgr_uniform_radius, bgr_coverage, bgr]
+  replay_state_count: 36
+  max_radius: 6
+  iterations: 180
+  eval_every: 30
+  train_batch_size: 20
+  eval_grid_size: 7
+  alpha: 0.8
+  learning_rate: 0.18
+  discount: 0.97
+  epsilon: 0.08
+  q_init_blend: 0.45
+  q_init_noise: 0.03
+  episode_max_steps: 96
+  fixed_radius: 0.65
+  target_margin: 0.35
+  radius_bandwidth: 0.35
+  clean_threshold: 0.0
+  baseline_candidates: 18
+  failure_probe_trials: 2
+bgr:
+  initial_probes: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+  refresh_per_eval: 18
+  refresh_trials: 2
+  min_trials: 4
+  radius_noise: 0.08
+  radius_uniform_mix: 0.25
+  priority_temperature: 0.8
+  uniform_mix: 0.10
