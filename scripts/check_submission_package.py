@@ -372,6 +372,8 @@ PAPER_GENERATED_VISUAL_ARTIFACTS = [
     "paper/figures/clean_bars.png",
     "paper/figures/estimator_r80_mae.pdf",
     "paper/figures/estimator_r80_mae.png",
+    "paper/figures/grid_margin_learning_curve.pdf",
+    "paper/figures/grid_margin_learning_curve.png",
     "paper/figures/rauc_bars.pdf",
     "paper/figures/rauc_bars.png",
 ]

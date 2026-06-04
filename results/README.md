@@ -47,9 +47,10 @@ Packaged grid-margin robustness/scope diagnostics are:
   seeds 30--59 replication of the radius-level ablation.
 - `results/grid_margin_ablation_15seed_v1/summary.csv`: original 15-seed
   radius-level ablation retained for provenance.
-- `paper/figures/grid_margin_learning_curve_stats.csv` and
+- `paper/figures/grid_margin_learning_curve_stats.csv`,
+  `paper/figures/grid_margin_learning_curve.pdf`, and
   `results/grid_margin_full_15seed_v1/results.json`: stored 15-seed
-  learning-curve history and generated stats.
+  learning-curve history, generated stats, and paper figure.
 - `paper/figures/grid_margin_target_sensitivity_stats.csv` and
   `results/grid_margin_target_sensitivity_30seed_v1/summary.csv`: 30-seed
   target-margin table/source; `results/grid_margin_target_sensitivity_15seed_v1/summary.csv`

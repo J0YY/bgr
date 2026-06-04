@@ -179,7 +179,14 @@ We instantiate replayable states in procedural grid environments with resettable
 
 In a completed 30-seed paired grid-margin full-baseline run, BGR gives the largest absolute gap in the paper: final RAUC 0.4344 vs. 0.3963, RAUC learning-curve area 0.3526 vs. 0.3132, median $r_{80}$ 0.3447 vs. 0.3321, and clean success 0.9455 vs. 0.8939. A held-out seeds 30--59 BGR-vs-uniform replication gives 0.4340 vs. 0.3967 RAUC, also with 30/0 wins. Pooling original and held-out grid sweeps gives 0.4342 vs. 0.3965 RAUC with 60/0 paired wins. The same sweep shows that failure-only replay (RAUC 0.2909), PLR-loss proxy replay (0.2109), and fixed-radius perturbation training (0.2097) substantially underperform BGR (0.4344).
 
-Stored 15-seed learning curves show BGR ahead of uniform on RAUC for all paired seeds at every post-update checkpoint (steps 30--300; $p=0.0001$). The 30-seed sensitivity tables give the same pattern: target margins 0.26--0.54 yield RAUC 0.416--0.443 vs. uniform 0.396; obstacle regimes yield BGR RAUC 0.434--0.435 vs. uniform 0.396; and geometry stresses give stress RAUC 0.362--0.457 vs. uniform 0.323--0.430. The learning-rate table preserves the high-rate final-RAUC caveat. The reported 0.38 margin is not the best tuned value.
+Figure~\ref{fig:grid-learning-curve} shows the stored 15-seed learning curves rather than only the endpoint table: BGR separates from uniform early and remains ahead through the final checkpoint over steps 30--300. The endpoint gap is about 0.038 RAUC, which is the paper's clearest practical effect but still a scoped mechanism result rather than broad benchmark dominance. The 30-seed sensitivity tables give the same pattern: target margins 0.26--0.54 yield RAUC 0.416--0.443 vs. uniform 0.396; obstacle regimes yield BGR RAUC 0.434--0.435 vs. uniform 0.396; and geometry stresses give stress RAUC 0.362--0.457 vs. uniform 0.323--0.430. The learning-rate table preserves the high-rate final-RAUC caveat. The reported 0.38 margin is not the best tuned value.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/grid_margin_learning_curve.pdf}
+\caption{Grid-margin RAUC learning curve from the stored 15-seed run. Shaded bands show standard error. The right panel plots the paired mean gap, making the effect size visible without relying on significance notation.}
+\label{fig:grid-learning-curve}
+\end{figure}
 
 A learning-rate sweep is a scope diagnostic: BGR wins final RAUC at 0.015 and 0.030 (0.382 vs. 0.320; 0.434 vs. 0.396) and AULC at all three rates, but high learning rate flips final RAUC to uniform (0.485 vs. 0.491). Thus neither failure mining nor static perturbation scales recover the same margin-expansion behavior, while aggressive optimization can saturate uniform final RAUC. A separate tabular grid-policy setup either saturates under broad replay or undertrains BGR relative to fixed-radius oracle imitation; we therefore keep the main procedural claim on the margin-expansion benchmark.
 

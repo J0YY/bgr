@@ -182,6 +182,8 @@ def main() -> None:
         make_figures(out_dir, summary_rows)
         if estimator_rows:
             make_estimator_figure(out_dir, estimator_rows)
+        if learning_curve_rows:
+            make_grid_learning_curve_figure(out_dir, learning_curve_rows)
     except Exception as exc:  # pragma: no cover - optional plotting path.
         print(f"[warn] skipped figure generation: {exc}")
 
@@ -800,6 +802,59 @@ def make_estimator_figure(out_dir: Path, rows: list[dict]) -> None:
     fig.tight_layout()
     fig.savefig(out_dir / "estimator_r80_mae.pdf")
     fig.savefig(out_dir / "estimator_r80_mae.png", dpi=200)
+    plt.close(fig)
+
+
+def make_grid_learning_curve_figure(out_dir: Path, rows: list[dict]) -> None:
+    import matplotlib.pyplot as plt
+
+    configure_matplotlib_pdf_fonts(plt)
+    steps = [int(row["step"]) for row in rows]
+    bgr = [float(row["bgr_rauc_mean"]) for row in rows]
+    bgr_sem = [float(row["bgr_rauc_sem"]) for row in rows]
+    uniform = [float(row["uniform_rauc_mean"]) for row in rows]
+    uniform_sem = [float(row["uniform_rauc_sem"]) for row in rows]
+    delta = [float(row["delta_mean"]) for row in rows]
+
+    fig, axes = plt.subplots(1, 2, figsize=(6.4, 2.35), gridspec_kw={"width_ratios": [2.0, 1.0]})
+    ax = axes[0]
+    ax.plot(steps, bgr, color="#1f77b4", linewidth=1.9, label="BGR")
+    ax.fill_between(
+        steps,
+        [mean - err for mean, err in zip(bgr, bgr_sem, strict=True)],
+        [mean + err for mean, err in zip(bgr, bgr_sem, strict=True)],
+        color="#1f77b4",
+        alpha=0.16,
+        linewidth=0,
+    )
+    ax.plot(steps, uniform, color="#666666", linewidth=1.7, label="Uniform")
+    ax.fill_between(
+        steps,
+        [mean - err for mean, err in zip(uniform, uniform_sem, strict=True)],
+        [mean + err for mean, err in zip(uniform, uniform_sem, strict=True)],
+        color="#888888",
+        alpha=0.18,
+        linewidth=0,
+    )
+    ax.set_xlabel("Training steps")
+    ax.set_ylabel("Grid-margin RAUC")
+    ax.set_xlim(min(steps), max(steps))
+    ax.set_ylim(bottom=0.20)
+    ax.grid(alpha=0.24, linewidth=0.5)
+    ax.legend(loc="lower right", fontsize=7.2, frameon=False)
+
+    ax = axes[1]
+    ax.plot(steps, delta, color="#1f77b4", linewidth=1.8)
+    ax.axhline(0.0, color="#666666", linewidth=0.8)
+    ax.fill_between(steps, delta, 0.0, color="#1f77b4", alpha=0.18)
+    ax.set_xlabel("Training steps")
+    ax.set_ylabel("BGR - Uniform")
+    ax.set_xlim(min(steps), max(steps))
+    ax.grid(alpha=0.24, linewidth=0.5)
+
+    fig.tight_layout(w_pad=1.1)
+    fig.savefig(out_dir / "grid_margin_learning_curve.pdf")
+    fig.savefig(out_dir / "grid_margin_learning_curve.png", dpi=200)
     plt.close(fig)
 
 

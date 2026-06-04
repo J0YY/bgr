@@ -7,8 +7,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "55446152520e104f4c23273aeeb59cff9cf86fef7d2e3af81b9e8885bff9684f",
-      "size_bytes": 29739
+      "sha256": "a3f657632f22e2cfe3ff12060a5633d7e457a72f7692396b992be5f8a95070b7",
+      "size_bytes": 29842
     },
     {
       "path": "configs/estimator_bgr_full.yaml",
@@ -217,7 +217,7 @@
     },
     {
       "path": "paper/figures/aulc_bars.pdf",
-      "sha256": "8c4529dba7cb1d9b4829711180648d9ebe4fe5edbfc1a749c96f02ebcffcac34",
+      "sha256": "aed8b13f8f331e2c43a0645c3a3759386a51e421f074054123f5639a4df357c4",
       "size_bytes": 13560
     },
     {
@@ -232,7 +232,7 @@
     },
     {
       "path": "paper/figures/boundary_intuition.pdf",
-      "sha256": "6a088310fb8b3752d51276e572a5792411940ef366cafcfd13f5a25333616d6b",
+      "sha256": "a210113a7c3e63d56f87d9aa77187d09100e342710d95deeab3660fce8150917",
       "size_bytes": 25214
     },
     {
@@ -242,7 +242,7 @@
     },
     {
       "path": "paper/figures/clean_bars.pdf",
-      "sha256": "777985ce60c72c06562f4688fcc80513ab452ddc307123c6ce2b4b53d39d40f1",
+      "sha256": "a952dcc5dec9a593586ad3372ef2d3b776a4819575570f468b6b8743c8a5f3f3",
       "size_bytes": 13265
     },
     {
@@ -252,7 +252,7 @@
     },
     {
       "path": "paper/figures/estimator_r80_mae.pdf",
-      "sha256": "d5ef616fcdf89e8e2f4dfcf9531500529996cd7f73913368c03046463d06ec7a",
+      "sha256": "bd6498d344a38a11dfbb6b44d3951be257bc86a610c39c759c935298aa897d88",
       "size_bytes": 12952
     },
     {
@@ -289,6 +289,16 @@
       "path": "paper/figures/grid_margin_full_table.tex",
       "sha256": "f7cc99ebf9dca3ad765a38529d915a77cbe5ec23b7cb9ef56ba5639c2def4215",
       "size_bytes": 535
+    },
+    {
+      "path": "paper/figures/grid_margin_learning_curve.pdf",
+      "sha256": "bec86af830f617b3ec65f9e6f50de25950aab4a28e40c81e34447b1f9a145d67",
+      "size_bytes": 11986
+    },
+    {
+      "path": "paper/figures/grid_margin_learning_curve.png",
+      "sha256": "fc3b850c423bef030bcb1a5ff3146ad81c08309bdfa0904361816115f3abf0e5",
+      "size_bytes": 56471
     },
     {
       "path": "paper/figures/grid_margin_learning_curve_stats.csv",
@@ -352,7 +362,7 @@
     },
     {
       "path": "paper/figures/rauc_bars.pdf",
-      "sha256": "d8b7cada53b77a691cbb79c3473a906668343a7e913405b612f61d23401dc945",
+      "sha256": "2682929832eb377f12ebce9ad9883d55c44052697905ee4066fbb855478cff19",
       "size_bytes": 13530
     },
     {
@@ -397,13 +407,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "c76c63b0c919f3671bd0a8a420b99a1c0068d0e35f07101f7ace629a6b29731a",
-      "size_bytes": 271735
+      "sha256": "b2a09835ce525b7e7abe6d29cfa9e4041e3954dbcb870c6f08f0e01c80d6069b",
+      "size_bytes": 282938
     },
     {
       "path": "paper/main.tex",
-      "sha256": "c5ba347a2231422d0577d71deb64be1e74158ef75cc3838989ffb94ad54375c9",
-      "size_bytes": 30339
+      "sha256": "e6a9e369639150143aeaa267b07014f1dd07b7c37b5d21e3ebed1c41fa0cab59",
+      "size_bytes": 30940
     },
     {
       "path": "paper/references.bib",
@@ -417,8 +427,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "83ad46f8c88ffc4944f0002955410017a0247ec6764b06f74feb4a6059d1a77e",
-      "size_bytes": 212753
+      "sha256": "ed68129171df02d714e7bb82c2a9eea07092a0143bc1eb19312f2a1c354392b1",
+      "size_bytes": 212819
     },
     {
       "path": "results/environment_v1/README.md",
@@ -682,8 +692,8 @@
     },
     {
       "path": "scripts/aggregate_results.py",
-      "sha256": "878a56e2b7318c3234ccdb70d8e4c735c84ba27498deccd0cc2b11fdc12c80cd",
-      "size_bytes": 37159
+      "sha256": "518fde45567062e4823f2efa2317cc91d3dc3f45e732085c48d935cb164ad14e",
+      "size_bytes": 39315
     },
     {
       "path": "scripts/analyze_significance.py",
@@ -697,8 +707,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "f1e1b9b3b24a552756be625bb364d685f7204539cc43ab250084798695f55ffc",
-      "size_bytes": 223649
+      "sha256": "ee7bb9ffcf782d32e50a96d56bbc595c24238e4ae43e2fcdf347bd3533fd012f",
+      "size_bytes": 223753
     },
     {
       "path": "scripts/collect_environment.py",
