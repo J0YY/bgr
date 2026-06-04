@@ -1,0 +1,26 @@
+experiment:
+  name: grid_margin_ablation_replication_30seed_v1
+  seeds: [30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+  methods: [uniform, bgr, bgr_no_uncertainty, bgr_no_sharpness, bgr_uniform_radius]
+  num_tasks: 72
+  grid_size: 11
+  obstacle_prob: 0.22
+  replay_states_per_task: 5
+  max_offset: 6
+  iterations: 300
+  eval_every: 30
+  train_batch_size: 64
+  eval_grid_size: 11
+  alpha: 0.8
+  learning_rate: 0.03
+  fixed_radius: 0.75
+  target_margin: 0.38
+  baseline_candidates: 32
+  failure_probe_trials: 3
+bgr:
+  initial_probes: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+  refresh_per_eval: 128
+  min_trials: 3
+  radius_noise: 0.07
+  priority_temperature: 0.7
+  uniform_mix: 0.08

@@ -2971,6 +2971,26 @@ average (0.0645 vs. 0.0661) and 24/6 paired wins. Interpretation: this
 strengthens the method-validation claim without changing the paper table or
 claim scope.
 
+### In-progress `grid_margin_ablation_replication_30seed_v1`
+
+Queued on 2026-06-04 to rerun the radius-level mechanism ablation on held-out
+seeds 30-59, disjoint from the original ablation seeds. This is a falsifiable
+replication of the paper's mechanism claim that BGR's gains come from
+boundary-centered radius sampling rather than only replay-state priority.
+
+Command shape:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_grid_margin_experiment.py \
+  --config configs/grid_margin_ablation_replication_30seed.yaml \
+  --out results/grid_margin_ablation_replication_30seed_v1
+```
+
+Expected interpretation if it matches the original ablation: BGR should beat
+the uniform-radius ablation on final RAUC and RAUC AULC, and the uniform-radius
+ablation should remain worse than uniform replay. Until the summary is complete
+and checked, this run is ledger-only and not reviewer-facing evidence.
+
 ### Completed `grid_margin_ablation_30seed_v1`
 
 Command:
