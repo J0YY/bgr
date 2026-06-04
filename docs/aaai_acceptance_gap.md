@@ -30,6 +30,8 @@ all of these criteria before paper writing:
 - BGR also beats failure-only and loss/loss-proxy replay on final RAUC.
 - Median critical radius does not contradict the RAUC claim, or the paper
   reports the contradiction as a limitation rather than a win.
+- Median critical radius is not saturated at the evaluation maximum for both
+  BGR and uniform; otherwise the benchmark is not measuring boundary expansion.
 - The same configuration is either replicated on held-out seeds or passes a
   preregistered stress sweep.
 - The result is checked by `scripts/check_paper_claims.py` and protected by
