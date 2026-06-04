@@ -83,6 +83,7 @@ OpenVLA-OFT packaged audit summaries:
 - p2048 clean adaptation audit: `results/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv`
 - p2048 original perturbation audit: `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv`
 - p2048 offset-3 perturbation audit: `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv`
+- p2048 10-trial perturbation variance audit: `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/summary.csv`
 
 ## Repository Layout
 

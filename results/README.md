@@ -93,6 +93,8 @@ Packaged OpenVLA audit artifacts are:
   p2048 original perturbation audit.
 - `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv`:
   p2048 offset-3 perturbation audit.
+- `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/summary.csv`:
+  p2048 10-trial perturbation variance audit.
 
 The p4096 and common-availability sections below are retained as paper-negative
 diagnostics in this ledger only. Their summary CSVs are not part of the
@@ -105,15 +107,14 @@ Older troubleshooting sections may retain labels such as Queued command to
 record original Slurm submissions; those labels are provenance, not active
 experiment status.
 
-## Queued OpenVLA-OFT p2048 10-Trial Perturbation Follow-Up
+## Completed OpenVLA-OFT p2048 10-Trial Perturbation Follow-Up
 
-Queued on 2026-06-04 to reduce variance in the p2048 perturbation audit. The
-current paper reports 15-episode original and offset-3 perturbation diagnostics;
-this follow-up evaluates five LIBERO-Goal tasks with 10 initial states each,
-giving 50 episodes per perturbation and method. It is still an audit, not a
-promoted robotics fine-tuning claim: the useful outcome is either a more stable
-BGR-vs-random edge or a clearer falsification that matched random/official remain
-competitive.
+Queued and completed on 2026-06-04 to reduce variance in the p2048 perturbation
+audit. The paper reports 15-episode original and offset-3 perturbation
+diagnostics; this follow-up evaluates five LIBERO-Goal tasks with 10 initial
+states each, giving 50 episodes per perturbation and method. It remains an
+audit, not a promoted robotics fine-tuning claim: BGR has a small matched-random
+edge on the perturbed mean but ties the unadapted official checkpoint.
 
 Submitted command shape:
 
@@ -132,7 +133,7 @@ scripts/queue_openvla_oft_perturb_eval.sh --submit
 Initial Slurm jobs:
 
 ```text
-764720--764724  official identity/blur/brightness/occlusion/shift, running
+764720--764724  official identity/blur/brightness/occlusion/shift completed
 764725          BGR identity failed during checkpoint config mutation
 764726--764729  BGR blur/brightness/occlusion/shift cancelled before completion
 764730--764734  random identity/blur/brightness/occlusion/shift cancelled before start
@@ -143,8 +144,32 @@ checkpoint config. The BGR and random evals were resubmitted as per-checkpoint
 serial chains:
 
 ```text
-764735--764739  BGR identity -> blur -> brightness -> occlusion -> shift
-764740--764744  random identity -> blur -> brightness -> occlusion -> shift
+764735--764739  BGR identity -> blur -> brightness -> occlusion -> shift completed
+764740--764744  random identity -> blur -> brightness -> occlusion -> shift completed
+```
+
+Summary rows:
+
+| Method | Identity | Blur | Brightness | Occlusion | Shift | Mean perturbed |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| BGR clean-mix p2048 | 0.9800 | 0.9600 | 0.9600 | 0.6200 | 0.9600 | 0.8750 |
+| Official OpenVLA-OFT | 0.9800 | 0.9600 | 0.9800 | 0.6000 | 0.9600 | 0.8750 |
+| Random clean-mix p2048 | 0.9800 | 0.9800 | 0.9400 | 0.6000 | 0.9600 | 0.8700 |
+
+Interpretation: this variance-reduction audit preserves the earlier p2048
+pattern. BGR is one episode above matched random and official on occlusion,
+one episode below random on blur, one episode below official on brightness, and
+tied on identity/shift. Aggregated over perturbed conditions, BGR ties official
+at 175/200 successes and is one episode above matched random at 174/200. This
+supports keeping OpenVLA-OFT as an audit rather than promoting a stable robotics
+fine-tuning gain.
+
+Compact artifact:
+
+```bash
+PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_perturb_eval.py \
+  --logs-root results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/logs \
+  --out results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1
 ```
 
 ## Completed OpenVLA-OFT p4096 Clean-Mix Scale Diagnostic

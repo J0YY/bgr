@@ -7,8 +7,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "caf227e0d4aa984234821106801da7652d9221e18fe9b6fedc25985865000109",
-      "size_bytes": 27730
+      "sha256": "4fe6fa2749206b743df6e1bce5ed6dc035b49b531ac9dbf4e1e773006d10fb04",
+      "size_bytes": 27899
     },
     {
       "path": "configs/estimator_bgr_full.yaml",
@@ -372,8 +372,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "a150e872fc335bdde8c2e11e4c2ca2dd42dc7e7c4526f23193b2e7ec185295a3",
-      "size_bytes": 180448
+      "sha256": "45a165b2f0f1f61586c9ffb710beac84619118c6209c97b63a9e1ee5d536117a",
+      "size_bytes": 181836
     },
     {
       "path": "results/environment_v1/README.md",
@@ -521,6 +521,11 @@
       "size_bytes": 5024
     },
     {
+      "path": "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/summary.csv",
+      "sha256": "6a1d03ef32aea48333c6660e18c8ef7c743d716378571c0f1f84044e05f3ba67",
+      "size_bytes": 4983
+    },
+    {
       "path": "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
       "sha256": "87aa58209cdcf01deeee91297cefb756de7a765ddf5ade8a0c82d80fd841e8f8",
       "size_bytes": 5453
@@ -597,8 +602,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "a33a06848b56aa28fe2b82a8d388ea1c2fcfed2196dcf9a06fb592720e2c9e90",
-      "size_bytes": 201112
+      "sha256": "ca2505651be50f1779536abd65180a1769fdaeace04002d4329c40c73f85e70c",
+      "size_bytes": 201740
     },
     {
       "path": "scripts/collect_environment.py",
@@ -862,8 +867,8 @@
     },
     {
       "path": "tests/test_check_submission_package.py",
-      "sha256": "5d708093cdbfb7023065b01183bde0b04a3796763ea373c51697881af2f4399c",
-      "size_bytes": 303209
+      "sha256": "f17203797222bb3463196fbc4e9c594008d3de88e8d3c5a19ed7fd88d18a85f2",
+      "size_bytes": 303620
     },
     {
       "path": "tests/test_combine_openvla_oft_examples.py",
