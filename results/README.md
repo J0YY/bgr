@@ -208,14 +208,29 @@ Second repair submission:
 ```text
 764976  random repair1 adapt failed immediately while the filesystem was still full
 764977--764978  cancelled after 764976 failed
-764980  random repair1 adapt, running at ledger update
-764981  random repair1 merge, afterok:764980
-764982  random repair1 clean eval, afterok:764981
+764980  random repair1 adapt completed, exit 0:0, elapsed 03:48
+764981  random repair1 merge completed, exit 0:0, elapsed 01:23
+764982  random repair1 clean eval failed before evaluation because the repair command used an invalid LIBERO path
 764983--764997  first repair1 perturb chain superseded because the submitted LIBERO path was invalid; identity jobs failed before evaluation
 764998--765002  official repair2 identity -> blur -> brightness -> occlusion -> shift
 765003--765007  BGR repair2 identity -> blur -> brightness -> occlusion -> shift
 765008--765012  random repair2 identity -> blur -> brightness -> occlusion -> shift, afterok:764981
 ```
+
+Completed repair2 identity rows:
+
+| Method | Episodes | Successes | Success rate |
+| --- | ---: | ---: | ---: |
+| Official OpenVLA-OFT | 100 | 99 | 0.9900 |
+| BGR p2048 300-step image-aug | 100 | 98 | 0.9800 |
+| Random p2048 300-step image-aug | 100 | 100 | 1.0000 |
+
+Interpretation at this checkpoint: the 300-step continuation is already
+paper-negative as a learned-policy improvement claim on the identity condition.
+The remaining repair2 blur, brightness, occlusion, and shift jobs are being left
+to finish for audit completeness, but this run should not be promoted unless the
+completed perturbation aggregate overturns the clean/identity loss to both the
+official checkpoint and matched random.
 
 ## Completed OpenVLA-OFT p2048 Image-Augmentation Adaptation Audit
 
