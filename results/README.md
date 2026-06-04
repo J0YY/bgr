@@ -79,13 +79,13 @@ Packaged FrozenLake diagnostic:
   `results/frozenlake_recovery_focused_30seed_v1/results.json`: 30 paired seeds
   on the canonical Gym FrozenLake8x8-v1 slippery map using
   `configs/frozenlake_recovery_focused_30seed.yaml`. This was run as an
-  attempted independent standard-environment confirmation after review. It is
-  not promoted into the paper because it does not give a clean BGR win: BGR
-  gives final RAUC 0.5453 vs. 0.5312 for uniform and clean success 0.5581 vs.
-  0.5461, but the paired signs are 14/16 wins/losses on RAUC and 13/17 on clean
-  success, median r80 is lower for BGR (0.7967 vs. 0.8091), best RAUC is lower
-  (0.6491 vs. 0.6565), and failure-only replay is stronger on final RAUC,
-  median r80, AULC, and best RAUC in this run.
+  attempted independent standard-environment confirmation. It is included in
+  the paper as a limitation, not as support for the method, because it does not
+  give a clean BGR win: BGR gives final RAUC 0.5453 vs. 0.5312 for uniform and
+  clean success 0.5581 vs. 0.5461, but the paired signs are 14/16 wins/losses on
+  RAUC and 13/17 on clean success, median r80 is lower for BGR (0.7967 vs.
+  0.8091), best RAUC is lower (0.6491 vs. 0.6565), and failure-only replay is
+  stronger on final RAUC, median r80, AULC, and best RAUC in this run.
 
 Packaged OpenVLA audit artifacts are:
 

@@ -7,8 +7,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "90a5359aac854624dfadd4047a50616508ab211678ca7009417a9ce7b324b101",
-      "size_bytes": 30223
+      "sha256": "cfed5b3a1c2a0ea03d122cf26c4a7b208c9fe7fb18037840e2ac43e76f6e91b7",
+      "size_bytes": 30600
     },
     {
       "path": "configs/estimator_bgr_full.yaml",
@@ -407,18 +407,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "e379502acdbc584f534417e3de23e6e5b163f0b8f09cb786bc690f7d103f8bd8",
+      "sha256": "704b228d59cf88c0b45adc26b108d12ddc7d716b2ae385ea32338d4360d7f8b1",
       "size_bytes": 14709
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "3f1911e0ce301c45f4dd1e52e2a5b20b363de5c06523beae5dfa4ed50bd1825b",
-      "size_bytes": 284169
+      "sha256": "67c4d0c084eff18c4003f91aa322593ddd4fae816e247ae875aeed11741f8484",
+      "size_bytes": 284434
     },
     {
       "path": "paper/main.tex",
-      "sha256": "bf8230dea1a74d7a83567636d314d9081facb1f3c5257bb39e965831d536f9a6",
-      "size_bytes": 32351
+      "sha256": "9c3cff546065c826a23da9e6ca79a5f166e0591750ff4fb2ac0adf6d2e74fe2d",
+      "size_bytes": 32683
     },
     {
       "path": "paper/references.bib",
@@ -432,8 +432,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "cc7bb73338c9442182bc4b8bb90268a9b03c332fcc4bbc5456deab288f4884cb",
-      "size_bytes": 215257
+      "sha256": "0bd126eab7cf83f3f18b2cac005c3e33329bd85333d868b8f60851676e08fde6",
+      "size_bytes": 215286
     },
     {
       "path": "results/environment_v1/README.md",
@@ -722,13 +722,13 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "294663fc23ba422c1d524b82e85818468db320f23347ae47bb43ce49f9e5aec8",
-      "size_bytes": 73167
+      "sha256": "a6ce54130f67a1d569a439d39bd49c213b0a79c67b56738c386143f8efcb9c04",
+      "size_bytes": 75319
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "c2274d1b9b59969fc729fe8ddb65f53b875abfcee7550b5eab9fe4a4d69e191b",
-      "size_bytes": 224877
+      "sha256": "aa44e35bf07a28dc81029787251b77de5a00b8f93e554d353197be0f5bef9b85",
+      "size_bytes": 225024
     },
     {
       "path": "scripts/collect_environment.py",

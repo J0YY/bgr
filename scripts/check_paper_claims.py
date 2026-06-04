@@ -568,6 +568,40 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         ]
     )
 
+    frozenlake = read_csv_rows(results_dir / "frozenlake_recovery_focused_30seed_v1" / "summary.csv")
+    frozenlake_rauc_wins = paired_wins(frozenlake, "bgr", "uniform", "final_rauc")
+    frozenlake_clean_wins = paired_wins(frozenlake, "bgr", "uniform", "final_clean")
+    if frozenlake_rauc_wins != (14, 16, 0) or frozenlake_clean_wins != (13, 17, 0):
+        raise ValueError(
+            "Expected FrozenLake diagnostic to remain a non-promoted BGR result "
+            f"with RAUC signs {frozenlake_rauc_wins} and clean signs {frozenlake_clean_wins}"
+        )
+    if not (
+        mean_metric(frozenlake, "uniform", "final_median_r80") > mean_metric(frozenlake, "bgr", "final_median_r80")
+        and mean_metric(frozenlake, "uniform", "best_rauc") > mean_metric(frozenlake, "bgr", "best_rauc")
+        and mean_metric(frozenlake, "failure_only", "final_rauc") > mean_metric(frozenlake, "bgr", "final_rauc")
+        and mean_metric(frozenlake, "failure_only", "final_median_r80") > mean_metric(
+            frozenlake, "bgr", "final_median_r80"
+        )
+        and mean_metric(frozenlake, "failure_only", "rauc_aulc") > mean_metric(frozenlake, "bgr", "rauc_aulc")
+        and mean_metric(frozenlake, "failure_only", "best_rauc") > mean_metric(frozenlake, "bgr", "best_rauc")
+    ):
+        raise ValueError("Expected FrozenLake diagnostic to favor uniform/failure-only on limitation metrics")
+    claims.append(
+        Claim(
+            "FrozenLake standard-environment limitation",
+            (
+                f"BGR gives final RAUC {fmt(mean_metric(frozenlake, 'bgr', 'final_rauc'), 4)} "
+                f"vs. {fmt(mean_metric(frozenlake, 'uniform', 'final_rauc'), 4)} for uniform and clean success "
+                f"{fmt(mean_metric(frozenlake, 'bgr', 'final_clean'), 4)} "
+                f"vs. {fmt(mean_metric(frozenlake, 'uniform', 'final_clean'), 4)}, "
+                f"but paired signs are {frozenlake_rauc_wins[0]}/{frozenlake_rauc_wins[1]} "
+                f"and {frozenlake_clean_wins[0]}/{frozenlake_clean_wins[1]}"
+            ),
+            "results/frozenlake_recovery_focused_30seed_v1/summary.csv",
+        )
+    )
+
     probe_rows = read_csv_rows(results_dir / "libero_probe_v2" / "summary.csv")
     valid_rows = sum(1 for row in probe_rows if float(row["valid_rate"]) == 1.0 and not row.get("error"))
     claims.append(
