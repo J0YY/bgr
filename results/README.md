@@ -2865,6 +2865,33 @@ wins. Interpretation: independent held-out seeds replicate the positive
 BGR-Coverage-vs-uniform suffix result and preserve the median-critical-radius
 caveat.
 
+### Queued `suffix_strategy_ablation_30seed_v1`
+
+Queued on 2026-06-04 to turn the suffix strategy scan into a paired 30-seed
+ablation. This tests whether the packaged BGR-Coverage result is specifically a
+coverage-aware replay strategy rather than a one-off tuned radius distribution.
+
+Command:
+
+```bash
+PYTHONPATH=src:. python3 scripts/run_suffix_experiment.py \
+  --config configs/suffix_strategy_ablation_30seed.yaml \
+  --out results/suffix_strategy_ablation_30seed_v1
+```
+
+Methods:
+
+- `uniform`: uniform suffix replay baseline.
+- `bgr_boundary`: boundary-heavy radius sampling with little uniform coverage.
+- `bgr_broad`: packaged coverage-aware BGR-Coverage setting.
+- `bgr_hard`: hard-radius-heavy BGR variant from the strategy scan.
+
+Expected interpretation if it strengthens the paper: BGR-Coverage should retain
+the clean-success, transfer-RAUC, and AULC gains over uniform while explaining
+why boundary-heavy or hard-heavy variants underperform on final object RAUC or
+coverage. If it does not separate cleanly, keep the paper's suffix claim scoped
+to the already replicated BGR-Coverage-vs-uniform result.
+
 ### `suffix_strategy_coverage_15seed_v1`
 
 Command:
