@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 15:56
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 15:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -257,57 +257,54 @@ Underfull \hbox (badness 1546) in paragraph at lines 41--42
 \T1/ptm/m/n/10 of the cur-rent learned-policy ev-i-dence and sep-a-rate
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 48--49
-[]\T1/ptm/m/n/10 Prioritized ex-pe-ri-ence re-play ranks tran-si-tions by
- []
-
-
-Underfull \hbox (badness 1635) in paragraph at lines 48--49
-\T1/ptm/m/n/10 from adversarial-example train-ing (Good-fel-low, Shlens,
- []
-
 [1{/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/l
 ocal/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc}
 
 
 
 ]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 54.
+Underfull \hbox (badness 10000) in paragraph at lines 50--51
+[]\T1/ptm/m/n/10 Prioritized ex-pe-ri-ence re-play ranks tran-si-tions by
+ []
 
+
+Underfull \hbox (badness 1635) in paragraph at lines 50--51
+\T1/ptm/m/n/10 from adversarial-example train-ing (Good-fel-low, Shlens,
+ []
+
+LaTeX Font Info:    Trying to load font information for U+msa on input line 56.
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 54.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 56.
 
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [2]
 (./figures/summary_table.tex) (./figures/significance_table.tex)
-(./figures/estimator_table.tex)
-Underfull \hbox (badness 1127) in paragraph at lines 171--172
+(./figures/estimator_table.tex) [3]
+Underfull \hbox (badness 1127) in paragraph at lines 173--174
 \T1/ptm/m/n/10 run, BGR out-per-forms uni-form re-play on fi-nal RAUC
  []
 
-[3] (./figures/grid_margin_full_table.tex)
-Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Underfull \vbox (badness 2213) has occurred while \output is active []
 
  [4]
+(./figures/grid_margin_full_table.tex)
 (./figures/grid_margin_ablation_table.tex)
-Underfull \hbox (badness 1142) in paragraph at lines 201--202
+Underfull \hbox (badness 1142) in paragraph at lines 203--204
 \T1/ptm/m/n/10 i-da-tion. A GPU/EGL LIBERO-Goal probe com-pleted
  []
 
 
-Underfull \hbox (badness 1297) in paragraph at lines 203--204
+Underfull \hbox (badness 1297) in paragraph at lines 205--206
 \T1/ptm/m/n/10 rows and matched BGR/random TFDS datasets. The
  []
 
-(./main.bbl [5]) [6
-
-] (./ReproducibilityChecklist.tex
+[5] (./main.bbl) [6] (./ReproducibilityChecklist.tex
 \c@checksubsection=\count306
 \c@checkitem=\count307
 LaTeX Font Info:    Trying to load font information for T1+pcr on input line 51
@@ -360,7 +357,7 @@ texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2026/texmf-di
 st/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/t
 ype1/urw/times/utmr8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/t
 imes/utmri8a.pfb>
-Output written on main.pdf (9 pages, 246487 bytes).
+Output written on main.pdf (9 pages, 247019 bytes).
 PDF statistics:
  135 PDF objects out of 1000 (max. 8388607)
  83 compressed objects within 1 object stream

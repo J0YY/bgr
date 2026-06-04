@@ -41,6 +41,8 @@ Our contributions are:
     \item OpenVLA/LIBERO audits that define the practical scope of the current learned-policy evidence and separate recovery-margin measurement from robotics fine-tuning claims.
 \end{itemize}
 
+The claim is intentionally scoped. BGR is not a universal robustness guarantee or a completed robotics fine-tuning result; it is a replay rule for settings where states can be revisited, perturbations can be kept feasible, and the recovery curve is trainable. The controlled experiments test the mechanism under paired seeds and ablations, while the suffix and OpenVLA/LIBERO studies test interface transfer and expose where broader learned-policy claims still need stronger evidence.
+
 \section{Related Work}
 
 BGR is closest in spirit to curriculum learning and level replay for reinforcement learning. Prioritized Level Replay samples levels by learning-potential proxies such as value loss \cite{jiang2021prioritized}, while PAIRED and ACCEL generate or mutate environments using regret and curriculum-frontier objectives \cite{dennis2020paired,parkerholder2022accel}. BGR is complementary: it can operate over fixed replayable states and prioritizes the local perturbation geometry of the current policy rather than a scalar difficulty or regret score. It also differs from broad curriculum schedules surveyed by \citet{narvekar2020curriculum}, because the unit of progress is recovery-margin expansion around each state.
