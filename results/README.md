@@ -218,6 +218,38 @@ BGR adaptation preserves clean competence across the 10-task suite. It remains a
 scoping audit rather than a promoted learned-policy improvement, because BGR
 ties both matched random and the unadapted official checkpoint.
 
+## Queued OpenVLA-OFT p2048 Full-Goal Visual Perturbation Audit
+
+Queued on 2026-06-04 after the full-goal clean identity audit tied all methods
+at 99/100. This follow-up runs the same 10 LIBERO-Goal tasks with 10 initial
+states for identity, blur, brightness, occlusion, and shift. The launcher now
+serializes perturbations within each checkpoint chain, avoiding the shared
+checkpoint config mutation race observed in the earlier p2048 10-trial audit,
+while still running official, BGR, and random chains in parallel.
+
+Submitted command shape:
+
+```bash
+TAG=cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_perturb_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1 \
+REMOTE_RUN_ROOT=/work/anonymous/bgr/runs \
+REMOTE_HF_HOME=/work/anonymous/cache_home/huggingface \
+BGR_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+EVAL_TASKS=10 \
+EVAL_TRIALS=10 \
+EVAL_SEED=29 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Initial Slurm jobs:
+
+```text
+764781--764785  official identity -> blur -> brightness -> occlusion -> shift
+764786--764790  BGR identity -> blur -> brightness -> occlusion -> shift
+764791--764795  random identity -> blur -> brightness -> occlusion -> shift
+```
+
 ## Completed OpenVLA-OFT p4096 Clean-Mix Scale Diagnostic
 
 Launched on 2026-06-02 after p2048 again tied matched random on clean success and

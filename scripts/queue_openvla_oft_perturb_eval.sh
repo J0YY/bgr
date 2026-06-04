@@ -27,6 +27,7 @@ METHODS="${METHODS:-official,bgr,random}"
 OFFICIAL_DEPENDENCY="${OFFICIAL_DEPENDENCY:-}"
 BGR_DEPENDENCY="${BGR_DEPENDENCY:-}"
 RANDOM_DEPENDENCY="${RANDOM_DEPENDENCY:-}"
+SERIAL_PERTURB_PER_METHOD="${SERIAL_PERTURB_PER_METHOD:-1}"
 if [[ -z "${PERTURBATIONS:-}" ]]; then
   PERTURBATIONS='identity={};blur={"radius":2.5};brightness={"factor":0.5};occlusion={"fraction":0.5};shift={"dx_fraction":0.15,"dy_fraction":0.0}'
 fi
@@ -57,6 +58,8 @@ Environment overrides:
   REMOTE_HF_HOME=${REMOTE_HF_HOME}
   REMOTE_TRANSFORMERS_CACHE=${REMOTE_TRANSFORMERS_CACHE}
   OFFICIAL_DEPENDENCY/BGR_DEPENDENCY/RANDOM_DEPENDENCY optional sbatch dependencies
+  SERIAL_PERTURB_PER_METHOD=1 serializes perturbations per checkpoint to avoid
+    shared checkpoint config mutation races during OpenVLA-OFT eval startup
 
 Default mode is dry-run. Pass --submit to queue asynchronous Slurm jobs.
 USAGE
@@ -157,6 +160,20 @@ submit_script() {
   fi
 }
 
+append_afterok_dependency() {
+  local base="$1"
+  local job_id="$2"
+  if [[ -z "${job_id}" ]]; then
+    printf '%s\n' "${base}"
+  elif [[ -z "${base}" ]]; then
+    printf 'afterok:%s\n' "${job_id}"
+  elif [[ "${base}" == afterok:* ]]; then
+    printf '%s:%s\n' "${base}" "${job_id}"
+  else
+    printf '%s,afterok:%s\n' "${base}" "${job_id}"
+  fi
+}
+
 checkpoint_for_method() {
   case "$1" in
     official) printf '%s\n' "${OFFICIAL_CKPT}" ;;
@@ -244,9 +261,14 @@ for method in "${SELECTED_METHODS[@]}"; do
   method="$(printf '%s' "${method}" | tr -d '[:space:]')"
   [[ -z "${method}" ]] && continue
   checkpoint="$(checkpoint_for_method "${method}")"
-  dependency="$(dependency_for_method "${method}")"
+  method_dependency="$(dependency_for_method "${method}")"
+  last_perturb_job=""
   for spec in "${SELECTED_PERTURBATIONS[@]}"; do
     [[ -z "${spec}" ]] && continue
+    dependency="${method_dependency}"
+    if [[ "${SERIAL_PERTURB_PER_METHOD}" == "1" && -n "${last_perturb_job}" ]]; then
+      dependency="$(append_afterok_dependency "${dependency}" "${last_perturb_job}")"
+    fi
     perturbation_name="${spec%%=*}"
     perturbation_params="${spec#*=}"
     perturbation_type="${perturbation_name}"
@@ -256,8 +278,15 @@ for method in "${SELECTED_METHODS[@]}"; do
     eval_script="$(mktemp "${TMPDIR:-/tmp}/perturb_eval_${method}_${perturbation_name}.XXXXXX.sh")"
     tmp_files+=("${eval_script}")
     write_eval_script "${method}" "${checkpoint}" "${perturbation_name}" "${perturbation_type}" "${perturbation_params}" "${eval_script}"
-    job_id="$(submit_script "perturb-eval-${method}-${perturbation_name}-${TAG}" "${dependency}" "${eval_script}")"
-    echo "${method}/${perturbation_name}: ${job_id}"
+    if [[ "${SUBMIT}" -eq 1 ]]; then
+      job_id="$(submit_script "perturb-eval-${method}-${perturbation_name}-${TAG}" "${dependency}" "${eval_script}")"
+      echo "${method}/${perturbation_name}: ${job_id}"
+      last_perturb_job="${job_id}"
+    else
+      submit_script "perturb-eval-${method}-${perturbation_name}-${TAG}" "${dependency}" "${eval_script}"
+      echo "${method}/${perturbation_name}: dry-run"
+      last_perturb_job="<${method}_${perturbation_name}_job>"
+    fi
   done
 done
 
