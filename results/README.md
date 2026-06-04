@@ -104,6 +104,8 @@ Packaged OpenVLA audit artifacts are:
   p2048 full-goal clean identity audit.
 - `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv`:
   p2048 full-goal visual perturbation audit.
+- `results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv`:
+  p2048 300-step image-augmentation continuation audit.
 
 The p4096 and common-availability sections below are retained as paper-negative
 diagnostics in this ledger only. Their summary CSVs are not part of the
@@ -116,7 +118,7 @@ Older troubleshooting sections may retain labels such as Queued command to
 record original Slurm submissions; those labels are provenance, not active
 experiment status.
 
-## Active OpenVLA-OFT p2048 300-Step Image-Augmentation Continuation
+## Completed OpenVLA-OFT p2048 300-Step Image-Augmentation Continuation
 
 Launched on 2026-06-04 after the 100-step p2048 image-augmentation audit
 separated BGR from matched random but still tied the unadapted official
@@ -182,14 +184,14 @@ Initial Slurm submission:
 Repaired Slurm submission:
 
 ```text
-764959  BGR 300-step image-aug adapt, running at ledger update
-764960  BGR merge, afterok:764959
-764961  BGR clean eval, afterok:764960
-764962  random 300-step image-aug adapt, afterok:764959
-764963  random merge, afterok:764962
-764964  random clean eval, afterok:764963
-764965--764969  BGR identity -> blur -> brightness -> occlusion -> shift, afterok:764960
-764970--764974  random identity -> blur -> brightness -> occlusion -> shift, afterok:764963
+764959  BGR 300-step image-aug adapt, superseded by repair2 after storage failure
+764960  BGR merge, superseded by repair2 after storage failure
+764961  BGR clean eval, failed before final summary during storage outage
+764962  random 300-step image-aug adapt, superseded by repair1/repair2
+764963  random merge, failed with partial shards during storage outage
+764964  random clean eval, cancelled after dependency failure
+764965--764969  BGR identity -> blur -> brightness -> occlusion -> shift, superseded by repair2
+764970--764974  random identity -> blur -> brightness -> occlusion -> shift, superseded by repair2
 ```
 
 Failure accounting and storage repair:

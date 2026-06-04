@@ -799,10 +799,10 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         / "summary.csv"
     )
 
-    def perturbed_total(method: str) -> tuple[int, int]:
+    def perturbed_total(rows: list[dict[str, str]], method: str) -> tuple[int, int]:
         rows = [
             row
-            for row in p2048_fullgoal_perturb
+            for row in rows
             if row["method"] == method and row["perturbation"] != "identity"
         ]
         return (
@@ -810,9 +810,9 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             sum(int(row["episodes"]) for row in rows),
         )
 
-    bgr_successes, bgr_episodes = perturbed_total("bgr")
-    official_successes, official_episodes = perturbed_total("official")
-    random_successes, random_episodes = perturbed_total("random")
+    bgr_successes, bgr_episodes = perturbed_total(p2048_fullgoal_perturb, "bgr")
+    official_successes, official_episodes = perturbed_total(p2048_fullgoal_perturb, "official")
+    random_successes, random_episodes = perturbed_total(p2048_fullgoal_perturb, "random")
     if not (
         bgr_episodes == official_episodes == random_episodes
         and bgr_successes == official_successes
@@ -827,6 +827,40 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
                 f"and trailing matched random by one episode ({random_successes}/{random_episodes})"
             ),
             "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
+        )
+    )
+    p2048_imageaug_300_perturb = read_csv_rows(
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1"
+        / "summary.csv"
+    )
+    imageaug_bgr_successes, imageaug_bgr_episodes = perturbed_total(p2048_imageaug_300_perturb, "bgr")
+    imageaug_official_successes, imageaug_official_episodes = perturbed_total(
+        p2048_imageaug_300_perturb, "official"
+    )
+    imageaug_random_successes, imageaug_random_episodes = perturbed_total(p2048_imageaug_300_perturb, "random")
+    imageaug_identity = {
+        row["method"]: int(row["successes"])
+        for row in p2048_imageaug_300_perturb
+        if row["perturbation"] == "identity"
+    }
+    if not (
+        imageaug_bgr_episodes == imageaug_official_episodes == imageaug_random_episodes == 400
+        and imageaug_bgr_successes == imageaug_random_successes == 368
+        and imageaug_official_successes == 367
+        and imageaug_identity == {"bgr": 98, "official": 99, "random": 100}
+    ):
+        raise ValueError("Expected p2048 300-step image-augmentation audit to tie random, edge official by one perturbed episode, and trail identity")
+    claims.append(
+        Claim(
+            "OpenVLA p2048 300-step image-augmentation audit",
+            (
+                f"300-step image-augmentation continuation gives BGR and matched random "
+                f"{imageaug_bgr_successes}/{imageaug_bgr_episodes} perturbed successes each, "
+                f"only one episode above official ({imageaug_official_successes}/{imageaug_official_episodes}), "
+                "while BGR trails both on identity"
+            ),
+            "results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
         )
     )
     if not (p1024_pooled_bgr > p1024_pooled_random and p2048_pooled_bgr >= p2048_pooled_random):
@@ -904,6 +938,11 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
         / "openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1"
         / "summary.csv",
     ]
+    p2048_imageaug_300_summary_paths = [
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1"
+        / "summary.csv",
+    ]
     guarded_results = {
         "cleanmix_p1024": p1024_summary_paths,
         "p1024 clean-mix": p1024_summary_paths,
@@ -917,6 +956,8 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
         "full-goal identity audit": p2048_fullgoal_summary_paths,
         "10-task visual perturbation audit": p2048_fullgoal_summary_paths,
         "367/400": p2048_fullgoal_summary_paths,
+        "300-step image-augmentation continuation": p2048_imageaug_300_summary_paths,
+        "368/400": p2048_imageaug_300_summary_paths,
     }
     missing: list[str] = []
     for token, required_paths in guarded_results.items():

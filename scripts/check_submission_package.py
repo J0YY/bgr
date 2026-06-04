@@ -416,6 +416,7 @@ OPENVLA_CLAIM_ARTIFACTS = [
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/summary.csv",
     "results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
+    "results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
 ]
 CHECKED_CLAIM_ARTIFACTS = [
     "paper/figures/estimator_stats.csv",
@@ -447,6 +448,7 @@ CHECKED_CLAIM_ARTIFACTS = [
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/summary.csv",
     "results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
+    "results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_sanity_eval_sanity_v1/summary.csv",
     "results/openvla_teacher_replay_manifest_v1/summary.json",
     "results/suffix_coverage_full_30seed_v1/summary.csv",
@@ -1361,6 +1363,7 @@ def check_results_evidence_index(root: Path) -> list[str]:
         "p2048 10-trial perturbation variance audit",
         "p2048 full-goal clean identity audit",
         "p2048 full-goal visual perturbation audit",
+        "p2048 300-step image-augmentation continuation audit",
         "results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
         "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
         "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
@@ -1370,6 +1373,7 @@ def check_results_evidence_index(root: Path) -> list[str]:
         "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1/summary.csv",
         "results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
         "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
+        "results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
         "p4096 and common-availability sections below are retained as paper-negative diagnostics in this ledger only",
         "not part of the anonymous submission manifest or archive",
         "The detailed sections below are a historical provenance ledger",
@@ -1435,6 +1439,8 @@ def check_root_readme_openvla_status(root: Path) -> list[str]:
         "At p2048, the full-goal identity audit gives 99/100 clean successes",
         "The 10-task visual perturbation audit gives BGR 367/400 perturbed successes",
         "trailing matched random by one episode (368/400)",
+        "The 300-step image-augmentation continuation gives BGR and matched random 368/400 perturbed successes each",
+        "only one episode above official (367/400)",
     ]
     missing = [snippet for snippet in required if snippet not in normalized_text]
     if missing:
@@ -3977,6 +3983,7 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "five-seed exploratory variants are reported only as exploratory evidence",
         "OpenVLA/LIBERO results are learned-policy audits and infrastructure checks, not BGR fine-tuning claims",
         "OpenVLA is a learned-policy audit rather than a robotics training claim",
+        "300-step image-augmentation continuation",
         "measure learned-policy brittleness and build matched fine-tuning datasets",
         "report them as audits, not as final robotics fine-tuning claims",
         "BGR converts recovery-margin measurement into a replay curriculum",

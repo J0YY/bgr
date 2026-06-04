@@ -99,6 +99,9 @@ visual-perturbation evidence gives BGR 0.8550 vs. 0.8400 for random, trailing
 official at 0.8700. At p2048, the full-goal identity audit gives 99/100 clean
 successes for BGR, matched random, and the official checkpoint. The 10-task
 visual perturbation audit gives BGR 367/400 perturbed successes, tying official
-and trailing matched random by one episode (368/400). OpenVLA therefore remains
+and trailing matched random by one episode (368/400). The 300-step
+image-augmentation continuation gives BGR and matched random 368/400 perturbed
+successes each, only one episode above official (367/400), while BGR trails both
+on identity. OpenVLA therefore remains
 an audit of recovery curves, matched data construction, and OpenVLA-OFT plumbing
 rather than a robotics success claim.
