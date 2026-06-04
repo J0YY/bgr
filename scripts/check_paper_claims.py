@@ -351,6 +351,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     )
 
     ablation = read_csv_rows(results_dir / "grid_margin_ablation_30seed_v1" / "summary.csv")
+    ablation_replication = read_csv_rows(results_dir / "grid_margin_ablation_replication_30seed_v1" / "summary.csv")
     claims.extend(
         [
             Claim(
@@ -367,6 +368,32 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
                 "grid ablation uniform RAUC",
                 f"{fmt(mean_metric(ablation, 'uniform', 'final_rauc'), 3)} RAUC",
                 "results/grid_margin_ablation_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "grid ablation held-out replication RAUC",
+                (
+                    f"held-out seeds 30--59 replication gives "
+                    f"{fmt(mean_metric(ablation_replication, 'bgr', 'final_rauc'), 3)} vs. "
+                    f"{fmt(mean_metric(ablation_replication, 'bgr_uniform_radius', 'final_rauc'), 3)} RAUC"
+                ),
+                "results/grid_margin_ablation_replication_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "grid ablation held-out replication AULC",
+                (
+                    f"{fmt(mean_metric(ablation_replication, 'bgr', 'rauc_aulc'), 3)} vs. "
+                    f"{fmt(mean_metric(ablation_replication, 'bgr_uniform_radius', 'rauc_aulc'), 3)} AULC"
+                ),
+                "results/grid_margin_ablation_replication_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "grid ablation held-out uniform-radius caveat",
+                (
+                    f"uniform-radius remains below uniform replay "
+                    f"({fmt(mean_metric(ablation_replication, 'bgr_uniform_radius', 'final_rauc'), 3)} vs. "
+                    f"{fmt(mean_metric(ablation_replication, 'uniform', 'final_rauc'), 3)} RAUC)"
+                ),
+                "results/grid_margin_ablation_replication_30seed_v1/summary.csv",
             ),
         ]
     )
@@ -898,6 +925,50 @@ def build_significance_checks() -> list[SignificanceCheck]:
         SignificanceCheck("grid ablation boundary-radius AULC sign test", "Grid margin ablation 30-seed", "", "rauc_aulc", "bgr", "bgr_uniform_radius", True, 30, 0),
         SignificanceCheck("grid ablation uniform-radius caveat", "Grid margin ablation 30-seed", "", "final_rauc", "bgr_uniform_radius", "uniform", True, 30, 0),
         SignificanceCheck("grid ablation uniform-radius AULC caveat", "Grid margin ablation 30-seed", "", "rauc_aulc", "bgr_uniform_radius", "uniform", True, 30, 0),
+        SignificanceCheck(
+            "grid ablation held-out boundary-radius sign test",
+            "Grid margin ablation replication 30-seed",
+            "",
+            "final_rauc",
+            "bgr",
+            "bgr_uniform_radius",
+            True,
+            30,
+            0,
+        ),
+        SignificanceCheck(
+            "grid ablation held-out boundary-radius AULC sign test",
+            "Grid margin ablation replication 30-seed",
+            "",
+            "rauc_aulc",
+            "bgr",
+            "bgr_uniform_radius",
+            True,
+            30,
+            0,
+        ),
+        SignificanceCheck(
+            "grid ablation held-out uniform-radius caveat",
+            "Grid margin ablation replication 30-seed",
+            "",
+            "final_rauc",
+            "bgr_uniform_radius",
+            "uniform",
+            True,
+            30,
+            0,
+        ),
+        SignificanceCheck(
+            "grid ablation held-out uniform-radius AULC caveat",
+            "Grid margin ablation replication 30-seed",
+            "",
+            "rauc_aulc",
+            "bgr_uniform_radius",
+            "uniform",
+            True,
+            30,
+            0,
+        ),
         SignificanceCheck("suffix clean sign test", "Robot suffix coverage 30-seed", "", "final_clean", "bgr_broad", "uniform", True, 30, 0),
         SignificanceCheck("suffix object RAUC sign test", "Robot suffix coverage 30-seed", "", "final_rauc", "bgr_broad", "uniform", True, 30, 0),
         SignificanceCheck("suffix transfer sign test", "Robot suffix coverage 30-seed", "", "final_transfer_rauc", "bgr_broad", "uniform", True, 30, 0),

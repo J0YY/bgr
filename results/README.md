@@ -36,6 +36,8 @@ Packaged grid-margin robustness/scope diagnostics are:
 
 - `results/grid_margin_ablation_30seed_v1/summary.csv`: 30-seed radius-level
   ablation showing that boundary-radius sampling is the important BGR component.
+- `results/grid_margin_ablation_replication_30seed_v1/summary.csv`: held-out
+  seeds 30--59 replication of the radius-level ablation.
 - `results/grid_margin_ablation_15seed_v1/summary.csv`: original 15-seed
   radius-level ablation retained for provenance.
 - `paper/figures/grid_margin_learning_curve_stats.csv` and
@@ -2971,10 +2973,10 @@ average (0.0645 vs. 0.0661) and 24/6 paired wins. Interpretation: this
 strengthens the method-validation claim without changing the paper table or
 claim scope.
 
-### In-progress `grid_margin_ablation_replication_30seed_v1`
+### Completed `grid_margin_ablation_replication_30seed_v1`
 
-Queued on 2026-06-04 to rerun the radius-level mechanism ablation on held-out
-seeds 30-59, disjoint from the original ablation seeds. This is a falsifiable
+Queued and completed on 2026-06-04 to rerun the radius-level mechanism ablation
+on held-out seeds 30-59, disjoint from the original ablation seeds. This is a
 replication of the paper's mechanism claim that BGR's gains come from
 boundary-centered radius sampling rather than only replay-state priority.
 
@@ -2995,10 +2997,23 @@ Slurm submission:
 765224  repaired merge job, afterok:765223
 ```
 
-Expected interpretation if it matches the original ablation: BGR should beat
-the uniform-radius ablation on final RAUC and RAUC AULC, and the uniform-radius
-ablation should remain worse than uniform replay. Until the summary is complete
-and checked, this run is ledger-only and not reviewer-facing evidence.
+Mean results over 30 held-out paired seeds:
+
+| Method | Clean | RAUC | Median r80 | RAUC AULC |
+|---|---:|---:|---:|---:|
+| BGR | 0.9453 | 0.4340 | 0.3446 | 0.3523 |
+| No uncertainty | 0.9456 | 0.4339 | 0.3440 | 0.3522 |
+| No sharpness | 0.9461 | 0.4343 | 0.3445 | 0.3525 |
+| Uniform radius | 0.8904 | 0.3818 | 0.3225 | 0.3051 |
+| Uniform replay | 0.8934 | 0.3967 | 0.3327 | 0.3137 |
+
+BGR beats the uniform-radius ablation by +0.0522 final RAUC and +0.0472
+RAUC AULC with 30/0 paired wins. The uniform-radius ablation is again worse
+than uniform replay on final RAUC and RAUC AULC with 30/0 paired losses. The
+no-uncertainty and no-sharpness variants remain effectively tied with BGR,
+matching the original ablation. Interpretation: held-out seeds replicate the
+mechanism result that the radius-level boundary rule, not merely hard-state
+priority, drives the procedural grid-margin gains.
 
 ### Completed `grid_margin_ablation_30seed_v1`
 

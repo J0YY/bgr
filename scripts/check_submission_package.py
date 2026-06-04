@@ -297,6 +297,9 @@ ESTIMATOR_30_METHODS = ["uniform", "active"]
 GRID_MARGIN_ABLATION_30_CONFIG = "configs/grid_margin_ablation_30seed.yaml"
 GRID_MARGIN_ABLATION_30_SUMMARY = "results/grid_margin_ablation_30seed_v1/summary.csv"
 GRID_MARGIN_ABLATION_30_METHODS = ["uniform", "bgr", "bgr_no_uncertainty", "bgr_no_sharpness", "bgr_uniform_radius"]
+GRID_MARGIN_ABLATION_REPLICATION_CONFIG = "configs/grid_margin_ablation_replication_30seed.yaml"
+GRID_MARGIN_ABLATION_REPLICATION_SUMMARY = "results/grid_margin_ablation_replication_30seed_v1/summary.csv"
+GRID_MARGIN_ABLATION_REPLICATION_RESULTS = "results/grid_margin_ablation_replication_30seed_v1/results.json"
 GRID_MARGIN_TARGET_30_CONFIG = "configs/grid_margin_target_sensitivity_30seed.yaml"
 GRID_MARGIN_TARGET_30_SUMMARY = "results/grid_margin_target_sensitivity_30seed_v1/summary.csv"
 GRID_MARGIN_TARGET_30_MARGINS = ["0.26", "0.32", "0.38", "0.46", "0.54"]
@@ -402,6 +405,7 @@ CHECKED_CLAIM_ARTIFACTS = [
     "paper/figures/significance_tests.csv",
     "results/grid_margin_ablation_15seed_v1/summary.csv",
     "results/grid_margin_ablation_30seed_v1/summary.csv",
+    "results/grid_margin_ablation_replication_30seed_v1/summary.csv",
     "results/grid_margin_full_30seed_v1/summary.csv",
     "results/grid_margin_full_replication_30seed_v1/summary.csv",
     "results/grid_margin_learning_rate_sensitivity_30seed_v1/summary.csv",
@@ -1283,6 +1287,7 @@ def check_results_evidence_index(root: Path) -> list[str]:
         "Packaged grid-margin robustness/scope diagnostics are:",
         "results/grid_margin_ablation_15seed_v1/summary.csv",
         "results/grid_margin_ablation_30seed_v1/summary.csv",
+        "results/grid_margin_ablation_replication_30seed_v1/summary.csv",
         "paper/figures/grid_margin_learning_curve_stats.csv",
         "results/grid_margin_full_15seed_v1/results.json",
         "paper/figures/grid_margin_target_sensitivity_stats.csv",
@@ -2253,6 +2258,83 @@ def check_grid_margin_ablation_30_status(root: Path) -> list[str]:
     return [f"{results_readme}: grid margin ablation 30-seed completion ledger ok"]
 
 
+def check_grid_margin_ablation_replication_status(root: Path) -> list[str]:
+    config_path = root / GRID_MARGIN_ABLATION_REPLICATION_CONFIG
+    summary_path = root / GRID_MARGIN_ABLATION_REPLICATION_SUMMARY
+    results_path = root / GRID_MARGIN_ABLATION_REPLICATION_RESULTS
+    results_readme = root / "results" / "README.md"
+    missing = [
+        str(path.relative_to(root))
+        for path in [config_path, summary_path, results_path]
+        if not path.exists()
+    ]
+    if missing:
+        raise ValueError(f"missing grid margin ablation replication artifact(s): {', '.join(missing)}")
+
+    configured = configured_seeds(config_path)
+    expected_seed_tokens = {str(seed) for seed in range(30, 60)}
+    expected_seed_values = set(range(30, 60))
+    if configured != expected_seed_tokens:
+        raise ValueError(f"{config_path}: expected held-out configured seeds 30-59, found {sorted(configured)}")
+    methods = configured_methods(config_path)
+    if methods != GRID_MARGIN_ABLATION_30_METHODS:
+        raise ValueError(f"{config_path}: expected methods {GRID_MARGIN_ABLATION_30_METHODS}, found {methods}")
+
+    rows = read_csv_rows(summary_path)
+    by_method: dict[str, dict[int, dict[str, str]]] = {}
+    for row in rows:
+        method = row.get("method", "")
+        seed_text = row.get("seed", "")
+        if not seed_text:
+            raise ValueError(f"{summary_path}: missing seed in grid margin ablation replication row")
+        by_method.setdefault(method, {})[int(float(seed_text))] = row
+    for method in GRID_MARGIN_ABLATION_30_METHODS:
+        seeds = set(by_method.get(method, {}))
+        if seeds != expected_seed_values:
+            raise ValueError(f"{summary_path}: method {method} has seeds {sorted(seeds)}, expected {sorted(expected_seed_values)}")
+
+    bgr_rows = by_method["bgr"]
+    uniform_radius_rows = by_method["bgr_uniform_radius"]
+    uniform_rows = by_method["uniform"]
+    for metric in ["final_rauc", "rauc_aulc"]:
+        wins = sum(
+            float(bgr_rows[seed][metric]) > float(uniform_radius_rows[seed][metric])
+            for seed in expected_seed_values
+        )
+        if wins != 30:
+            raise ValueError(f"{summary_path}: expected 30/0 held-out BGR wins over uniform-radius on {metric}, found {wins}/30")
+        uniform_radius_losses = sum(
+            float(uniform_radius_rows[seed][metric]) < float(uniform_rows[seed][metric])
+            for seed in expected_seed_values
+        )
+        if uniform_radius_losses != 30:
+            raise ValueError(
+                f"{summary_path}: expected 30/0 held-out uniform-radius losses to uniform on {metric}, found {uniform_radius_losses}/30"
+            )
+
+    with results_path.open(encoding="utf-8") as handle:
+        payload = json.load(handle)
+    if not isinstance(payload, dict) or "results" not in payload:
+        raise ValueError(f"{results_path}: expected JSON object with results")
+
+    if not results_readme.exists():
+        raise ValueError(f"{results_readme}: missing ledger for grid margin ablation replication run")
+    normalized_text = normalize_space(results_readme.read_text(encoding="utf-8"))
+    required_completed = [
+        "Completed `grid_margin_ablation_replication_30seed_v1`",
+        "held-out seeds 30-59",
+        "BGR beats the uniform-radius ablation by +0.0522 final RAUC and +0.0472 RAUC AULC with 30/0 paired wins",
+        "uniform-radius ablation is again worse than uniform replay",
+        "no-uncertainty and no-sharpness variants remain effectively tied",
+    ]
+    missing_completed = [snippet for snippet in required_completed if snippet not in normalized_text]
+    if missing_completed:
+        raise ValueError(
+            f"{results_readme}: missing grid margin ablation replication ledger snippet(s): {', '.join(missing_completed)}"
+        )
+    return [f"{results_readme}: grid margin ablation replication completion ledger ok"]
+
+
 def check_grid_margin_target_30_status(root: Path) -> list[str]:
     config_path = root / GRID_MARGIN_TARGET_30_CONFIG
     summary_path = root / GRID_MARGIN_TARGET_30_SUMMARY
@@ -3009,6 +3091,9 @@ def data_artifact_text_files() -> list[str]:
         files.extend([config_relative, summary_relative])
     files.extend(
         [
+            GRID_MARGIN_ABLATION_REPLICATION_CONFIG,
+            GRID_MARGIN_ABLATION_REPLICATION_SUMMARY,
+            GRID_MARGIN_ABLATION_REPLICATION_RESULTS,
             GRID_MARGIN_FULL_30_CONFIG,
             GRID_MARGIN_FULL_30_SUMMARY,
             GRID_MARGIN_REPLICATION_CONFIG,
@@ -3384,6 +3469,7 @@ def check_root_readme_submission_framing(root: Path) -> list[str]:
         "Radius-level boundary sampling is the important BGR ablation in the grid-margin benchmark",
         "results/grid_margin_ablation_15seed_v1/summary.csv",
         "results/grid_margin_ablation_30seed_v1/summary.csv",
+        "results/grid_margin_ablation_replication_30seed_v1/summary.csv",
         "Coverage-aware BGR-Suffix is positive manipulation-style evidence but not a final robotics claim",
         "results/suffix_coverage_full_30seed_v1/summary.csv",
         "results/suffix_coverage_full_replication_30seed_v1/summary.csv",
@@ -4162,6 +4248,7 @@ def check_package(root: Path) -> list[str]:
     messages.extend(check_estimator_30_status(root))
     messages.extend(check_grid_margin_full_30_status(root))
     messages.extend(check_grid_margin_ablation_30_status(root))
+    messages.extend(check_grid_margin_ablation_replication_status(root))
     messages.extend(check_grid_margin_target_30_status(root))
     messages.extend(check_grid_margin_learning_rate_30_status(root))
     messages.extend(check_grid_margin_regime_30_status(root))

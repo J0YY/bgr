@@ -32,6 +32,7 @@ from scripts.check_submission_package import (
     check_environment_artifacts,
     check_estimator_30_status,
     check_grid_margin_ablation_30_status,
+    check_grid_margin_ablation_replication_status,
     check_generated_result_tables,
     check_grid_margin_full_30_status,
     check_grid_margin_learning_rate_30_status,
@@ -1226,6 +1227,94 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "expected 30/0 BGR wins over uniform-radius"):
                 check_grid_margin_ablation_30_status(root)
 
+    def test_grid_margin_ablation_replication_accepts_completed_ledger(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            config = root / "configs" / "grid_margin_ablation_replication_30seed.yaml"
+            config.parent.mkdir(parents=True)
+            config.write_text(
+                "experiment:\n"
+                "  seeds: ["
+                + ", ".join(str(seed) for seed in range(30, 60))
+                + "]\n"
+                "  methods: [uniform, bgr, bgr_no_uncertainty, bgr_no_sharpness, bgr_uniform_radius]\n",
+                encoding="utf-8",
+            )
+            readme = root / "results" / "README.md"
+            readme.parent.mkdir(parents=True)
+            readme.write_text(
+                "### Completed `grid_margin_ablation_replication_30seed_v1`\n"
+                "This held-out replication uses held-out seeds 30-59.\n"
+                "BGR beats the uniform-radius ablation by +0.0522 final RAUC and +0.0472 RAUC AULC with 30/0 paired wins.\n"
+                "The uniform-radius ablation is again worse than uniform replay, while no-uncertainty and no-sharpness variants remain effectively tied.\n",
+                encoding="utf-8",
+            )
+            summary = root / "results" / "grid_margin_ablation_replication_30seed_v1" / "summary.csv"
+            summary.parent.mkdir(parents=True)
+            summary.write_text(
+                "method,seed,final_clean,final_rauc,final_median_r80,rauc_aulc,best_rauc\n"
+                + "".join(
+                    f"uniform,{seed},0.89,0.40,0.33,0.31,0.40\n"
+                    f"bgr,{seed},0.94,0.45,0.34,0.36,0.45\n"
+                    f"bgr_no_uncertainty,{seed},0.94,0.45,0.34,0.36,0.45\n"
+                    f"bgr_no_sharpness,{seed},0.94,0.45,0.34,0.36,0.45\n"
+                    f"bgr_uniform_radius,{seed},0.89,0.38,0.32,0.30,0.38\n"
+                    for seed in range(30, 60)
+                ),
+                encoding="utf-8",
+            )
+            results = root / "results" / "grid_margin_ablation_replication_30seed_v1" / "results.json"
+            results.write_text('{"results": []}\n', encoding="utf-8")
+
+            self.assertEqual(
+                check_grid_margin_ablation_replication_status(root),
+                [f"{readme}: grid margin ablation replication completion ledger ok"],
+            )
+
+    def test_grid_margin_ablation_replication_rejects_nonmechanism_signs(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            config = root / "configs" / "grid_margin_ablation_replication_30seed.yaml"
+            config.parent.mkdir(parents=True)
+            config.write_text(
+                "experiment:\n"
+                "  seeds: ["
+                + ", ".join(str(seed) for seed in range(30, 60))
+                + "]\n"
+                "  methods: [uniform, bgr, bgr_no_uncertainty, bgr_no_sharpness, bgr_uniform_radius]\n",
+                encoding="utf-8",
+            )
+            readme = root / "results" / "README.md"
+            readme.parent.mkdir(parents=True)
+            readme.write_text(
+                "### Completed `grid_margin_ablation_replication_30seed_v1`\n"
+                "held-out seeds 30-59; BGR beats the uniform-radius ablation by +0.0522 final RAUC and +0.0472 RAUC AULC with 30/0 paired wins.\n"
+                "The uniform-radius ablation is again worse than uniform replay, while no-uncertainty and no-sharpness variants remain effectively tied.\n",
+                encoding="utf-8",
+            )
+            summary = root / "results" / "grid_margin_ablation_replication_30seed_v1" / "summary.csv"
+            summary.parent.mkdir(parents=True)
+            rows = []
+            for seed in range(30, 60):
+                uniform_radius_rauc = 0.38
+                if seed == 30:
+                    uniform_radius_rauc = 0.46
+                rows.append(f"uniform,{seed},0.89,0.40,0.33,0.31,0.40\n")
+                rows.append(f"bgr,{seed},0.94,0.45,0.34,0.36,0.45\n")
+                rows.append(f"bgr_no_uncertainty,{seed},0.94,0.45,0.34,0.36,0.45\n")
+                rows.append(f"bgr_no_sharpness,{seed},0.94,0.45,0.34,0.36,0.45\n")
+                rows.append(f"bgr_uniform_radius,{seed},0.89,{uniform_radius_rauc},0.32,0.30,0.38\n")
+            summary.write_text(
+                "method,seed,final_clean,final_rauc,final_median_r80,rauc_aulc,best_rauc\n"
+                + "".join(rows),
+                encoding="utf-8",
+            )
+            results = root / "results" / "grid_margin_ablation_replication_30seed_v1" / "results.json"
+            results.write_text('{"results": []}\n', encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "expected 30/0 held-out BGR wins"):
+                check_grid_margin_ablation_replication_status(root)
+
     def test_grid_margin_target_30_accepts_completed_ledger(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
@@ -1699,6 +1788,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                     "- `results/estimator_pair_30seed_v1/summary.csv`: 30-seed active-estimator confirmation.",
                     "Packaged grid-margin robustness/scope diagnostics are:",
                     "- `results/grid_margin_ablation_30seed_v1/summary.csv`: 30-seed radius-level ablation showing that boundary-radius sampling is the important BGR component.",
+                    "- `results/grid_margin_ablation_replication_30seed_v1/summary.csv`: held-out seeds 30--59 replication of the radius-level ablation.",
                     "- `results/grid_margin_ablation_15seed_v1/summary.csv`: original 15-seed radius-level ablation retained for provenance.",
                     "- `paper/figures/grid_margin_learning_curve_stats.csv` and `results/grid_margin_full_15seed_v1/results.json`: stored 15-seed learning-curve history and generated stats.",
                     "- `paper/figures/grid_margin_target_sensitivity_stats.csv` and `results/grid_margin_target_sensitivity_30seed_v1/summary.csv`: 30-seed target-margin table/source; `results/grid_margin_target_sensitivity_15seed_v1/summary.csv` is retained for provenance.",
@@ -2627,6 +2717,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "Radius-level boundary sampling is the important BGR ablation in the grid-margin benchmark.",
                         "results/grid_margin_ablation_15seed_v1/summary.csv",
                         "results/grid_margin_ablation_30seed_v1/summary.csv",
+                        "results/grid_margin_ablation_replication_30seed_v1/summary.csv",
                         "Coverage-aware BGR-Suffix is positive manipulation-style evidence but not a final robotics claim.",
                         "results/suffix_coverage_full_30seed_v1/summary.csv",
                         "results/suffix_coverage_full_replication_30seed_v1/summary.csv",

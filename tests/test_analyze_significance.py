@@ -793,6 +793,7 @@ def write_required_comparison_summaries(root: Path) -> None:
         "grid_margin_full_replication_30seed_v1": ["bgr", "uniform"],
         "grid_margin_ablation_15seed_v1": ["bgr", "bgr_uniform_radius", "uniform", "bgr_no_uncertainty", "bgr_no_sharpness"],
         "grid_margin_ablation_30seed_v1": ["bgr", "bgr_uniform_radius", "uniform", "bgr_no_uncertainty", "bgr_no_sharpness"],
+        "grid_margin_ablation_replication_30seed_v1": ["bgr", "bgr_uniform_radius", "uniform", "bgr_no_uncertainty", "bgr_no_sharpness"],
         "suffix_full_15seed_v1": ["bgr", "clean_ft", "fixed", "failure_only", "loss_priority", "uniform"],
         "suffix_strategy_coverage_30seed_v1": ["bgr_broad", "uniform"],
         "suffix_strategy_coverage_replication_30seed_v1": ["bgr_broad", "uniform"],
