@@ -487,6 +487,7 @@ OPENVLA_BRIDGE_ARTIFACTS = [
     "scripts/queue_openvla_oft_goal_adapt.sh",
     "scripts/queue_openvla_oft_long_run.sh",
     "scripts/queue_openvla_oft_perturb_eval.sh",
+    "scripts/queue_openvla_oft_preregistered_goal_adapt.sh",
     "scripts/queue_openvla_sanity_eval.sh",
     "scripts/render_openvla_teacher_examples.py",
     "scripts/summarize_libero_openvla_recovery.py",

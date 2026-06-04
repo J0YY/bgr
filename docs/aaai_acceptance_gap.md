@@ -121,6 +121,20 @@ Do not add another result to the manuscript if it has any of these properties:
 3. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.
+   - The next preregistered candidate is
+     `scripts/queue_openvla_oft_preregistered_goal_adapt.sh`. It uses the
+     completed fair p4096 common-availability TFDS roots, official OpenVLA-OFT
+     LIBERO-Goal statistics, identity-LoRA, image augmentation, `ADAPT_STEPS=500`,
+     `LR=5e-7`, and fixed 10-task x 10-trial clean and perturbation evals.
+   - Promotion requires BGR to beat both matched random and the official
+     checkpoint on the fixed non-identity perturbation total by at least 10/400
+     episodes and at least 0.02 absolute success rate, while not trailing clean
+     identity by more than 1/100. A tie, one-episode edge, or gain over random
+     that still trails official remains a negative audit.
+   - Queue the adaptation chain only after the preregistration script is pushed.
+     Queue perturbation evals only after BGR and random merge jobs exist, passing
+     `BGR_DEPENDENCY=afterok:<bgr_merge>` and
+     `RANDOM_DEPENDENCY=afterok:<random_merge>`.
 
 ## Immediate Engineering Work
 
@@ -134,3 +148,6 @@ Do not add another result to the manuscript if it has any of these properties:
   fixes clean-success saturation and defines a non-contradictory radius metric.
 - Keep scratch negative runs out of the anonymous package unless they are being
   used as explicit limitations.
+- Use the preregistered p4096 common-availability OpenVLA wrapper for the next
+  learned-policy attempt; do not edit its recipe after seeing results unless the
+  run is explicitly relabeled as exploratory.
