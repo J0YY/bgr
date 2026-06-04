@@ -105,6 +105,48 @@ Older troubleshooting sections may retain labels such as Queued command to
 record original Slurm submissions; those labels are provenance, not active
 experiment status.
 
+## Queued OpenVLA-OFT p2048 10-Trial Perturbation Follow-Up
+
+Queued on 2026-06-04 to reduce variance in the p2048 perturbation audit. The
+current paper reports 15-episode original and offset-3 perturbation diagnostics;
+this follow-up evaluates five LIBERO-Goal tasks with 10 initial states each,
+giving 50 episodes per perturbation and method. It is still an audit, not a
+promoted robotics fine-tuning claim: the useful outcome is either a more stable
+BGR-vs-random edge or a clearer falsification that matched random/official remain
+competitive.
+
+Submitted command shape:
+
+```bash
+TAG=cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_10trials_v1 \
+REMOTE_RUN_ROOT=/work/anonymous/bgr/runs \
+REMOTE_HF_HOME=/work/anonymous/cache_home/huggingface \
+BGR_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+EVAL_TRIALS=10 \
+EVAL_SEED=17 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Initial Slurm jobs:
+
+```text
+764720--764724  official identity/blur/brightness/occlusion/shift, running
+764725          BGR identity failed during checkpoint config mutation
+764726--764729  BGR blur/brightness/occlusion/shift cancelled before completion
+764730--764734  random identity/blur/brightness/occlusion/shift cancelled before start
+```
+
+The BGR failure came from concurrent eval jobs mutating the same merged
+checkpoint config. The BGR and random evals were resubmitted as per-checkpoint
+serial chains:
+
+```text
+764735--764739  BGR identity -> blur -> brightness -> occlusion -> shift
+764740--764744  random identity -> blur -> brightness -> occlusion -> shift
+```
+
 ## Completed OpenVLA-OFT p4096 Clean-Mix Scale Diagnostic
 
 Launched on 2026-06-02 after p2048 again tied matched random on clean success and
