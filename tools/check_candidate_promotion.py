@@ -73,7 +73,7 @@ def main() -> None:
     parser.add_argument("summary", type=Path)
     parser.add_argument("--treatment", default="bgr")
     parser.add_argument("--uniform", default="uniform")
-    parser.add_argument("--baselines", default="failure_only,td_loss")
+    parser.add_argument("--baselines", default="fixed,failure_only,td_loss")
     parser.add_argument("--ablation", default="bgr_uniform_radius")
     parser.add_argument("--metric", default="final_rauc")
     parser.add_argument("--radius-metric", default="final_median_r80")

@@ -27,7 +27,8 @@ all of these criteria before paper writing:
 - The run uses at least 30 paired seeds for BGR and each baseline.
 - BGR beats uniform replay on final RAUC with at least 24/30 paired wins and a
   practically visible mean gap.
-- BGR also beats failure-only and loss/loss-proxy replay on final RAUC.
+- BGR also beats fixed-radius, failure-only, and loss/loss-proxy replay on
+  final RAUC.
 - Median critical radius does not contradict the RAUC claim, or the paper
   reports the contradiction as a limitation rather than a win.
 - Median critical radius is not saturated at the evaluation maximum for both
@@ -75,6 +76,20 @@ Do not add another result to the manuscript if it has any of these properties:
 2. A faster discrete control benchmark with exact reset states and a
    pre-registered perturbation family. CliffWalking and FrozenLake currently
    look negative for BGR under the tested protocols.
+   - MountainCar-v0 recovery replay now has an internal diagnostic at
+     `tools/mountaincar_recovery_probe.py`. The pre-promotion protocol uses
+     canonical MountainCar dynamics, right-moving replay states, and an adverse
+     perturbation family that moves states back toward the low-energy valley
+     anchor. A 4-seed diagnostic is negative for promotion: final RAUC is
+     0.1420 for fixed-radius replay, 0.0653 for failure-only, 0.0558 for
+     BGR-uniform-radius, 0.0553 for BGR-Coverage, 0.0532 for BGR, 0.0497 for
+     uniform, and 0.0447 for TD-loss. The promotion checker rejects it because
+     BGR has only 3/4 wins over uniform, a +0.0036 mean RAUC gap, loses to
+     fixed-radius and failure-only replay, loses to the uniform-radius ablation,
+     and has saturated median critical radius against uniform. Keep
+     MountainCar out of the paper unless a new pre-registered protocol makes
+     boundary-radius replay beat fixed-radius replay and the state-priority-only
+     ablation without saturated radius metrics.
 3. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.
@@ -85,5 +100,7 @@ Do not add another result to the manuscript if it has any of these properties:
   first, then rerun a small diagnostic before any 30-seed scale-up.
 - Add a small smoke test for Taxi transition dynamics against the Gym Taxi map
   only if the diagnostic is promoted into `src/`.
+- Treat the MountainCar probe as an internal negative unless a new protocol is
+  pre-registered before rerunning; do not tune it into the paper post hoc.
 - Keep scratch negative runs out of the anonymous package unless they are being
   used as explicit limitations.
