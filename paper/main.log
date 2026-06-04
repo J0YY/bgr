@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 18:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 19:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -40,17 +40,17 @@ Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
 Package: newtxtext 2026/06/01 local build shim for minimal TeX installs
 )
 (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/times.sty
-Package: times 2020/03/25 PSNFSS-v9.3 (SPQR) 
+Package: times 2020/03/25 PSNFSS-v9.3 (SPQR)
 )
 (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/helvet.sty
-Package: helvet 2020/03/25 PSNFSS-v9.3 (WaS) 
+Package: helvet 2020/03/25 PSNFSS-v9.3 (WaS)
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks17
 ))
 (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/courier.sty
-Package: courier 2020/03/25 PSNFSS-v9.3 (WaS) 
+Package: courier 2020/03/25 PSNFSS-v9.3 (WaS)
 )
 (./placeins.sty
 Package: placeins 2026/06/01 local build shim for minimal TeX installs
@@ -289,33 +289,44 @@ File: figures/boundary_intuition.pdf Graphic file (type pdf)
 Package pdftex.def Info: figures/boundary_intuition.pdf  used on input line 95.
 
 (pdftex.def)             Requested size: 239.39438pt x 78.55107pt.
- [2 <./figures/boundary_intuition.pdf>] (./figures/summary_table.tex)
-(./figures/significance_table.tex) (./figures/estimator_table.tex)
-Underfull \vbox (badness 1014) has occurred while \output is active []
+ [2]
+(./figures/summary_table.tex) (./figures/significance_table.tex)
+(./figures/estimator_table.tex) [3 <./figures/boundary_intuition.pdf>] [4]
+<figures/grid_margin_learning_curve.pdf, id=50, 462.52798pt x 169.8345pt>
+File: figures/grid_margin_learning_curve.pdf Graphic file (type pdf)
+<use figures/grid_margin_learning_curve.pdf>
+Package pdftex.def Info: figures/grid_margin_learning_curve.pdf  used on input
+line 186.
+(pdftex.def)             Requested size: 239.39438pt x 87.90239pt.
 
- [3]
-[4] (./figures/grid_margin_full_table.tex)
+(./figures/grid_margin_full_table.tex)
 (./figures/grid_margin_ablation_table.tex)
-Underfull \hbox (badness 1755) in paragraph at lines 208--209
+Underfull \hbox (badness 1755) in paragraph at lines 215--216
 \T1/ptm/m/n/10 er-age. In the 30-seed run, BGR-Coverage raises fi-
  []
 
-
-Underfull \hbox (badness 2173) in paragraph at lines 210--211
+[5 <./figures/grid_margin_learning_curve.pdf>]
+Underfull \hbox (badness 2173) in paragraph at lines 217--218
 []\T1/ptm/m/n/10 A four-condition 30-seed suf-fix stress sweep varies
  []
 
 
-Underfull \hbox (badness 1142) in paragraph at lines 212--213
+Underfull \hbox (badness 1142) in paragraph at lines 219--220
 \T1/ptm/m/n/10 i-da-tion. A GPU/EGL LIBERO-Goal probe com-pleted
  []
 
 
-Underfull \hbox (badness 2726) in paragraph at lines 214--215
+Underfull \hbox (badness 2726) in paragraph at lines 221--222
 []\T1/ptm/m/n/10 The OpenVLA-OFT bridge ex-ports 11,776 teacher-
  []
 
-[5] (./main.bbl) [6] (./ReproducibilityChecklist.tex
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+(./main.bbl [6]) [7
+
+] (./ReproducibilityChecklist.tex
 \c@checksubsection=\count306
 \c@checkitem=\count307
 LaTeX Font Info:    Trying to load font information for T1+pcr on input line 51
@@ -323,28 +334,28 @@ LaTeX Font Info:    Trying to load font information for T1+pcr on input line 51
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-) [7
+) [8
 
 ]
 Underfull \vbox (badness 1308) has occurred while \output is active []
 
- [8]
+ [9]
 Underfull \hbox (badness 4726) in paragraph at lines 175--175
-[]\T1/ptm/m/n/10 This pa-per lists all fi-nal (hyper-)parameters used for each 
+[]\T1/ptm/m/n/10 This pa-per lists all fi-nal (hyper-)parameters used for each
 model/algorithm in the pa-per's ex-per-i-ments
  []
 
-) [9] (./main.aux)
+) [10] (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-05-26>
  ***********
- ) 
+ )
 Here is how much of TeX's memory you used:
- 4179 strings out of 467337
- 60387 string characters out of 5415293
- 497403 words of memory out of 5000000
- 33191 multiletter control sequences out of 15000+600000
+ 4187 strings out of 467337
+ 60750 string characters out of 5415293
+ 496427 words of memory out of 5000000
+ 33199 multiletter control sequences out of 15000+600000
  664307 words of font info for 85 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  57i,11n,76p,1889b,285s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -368,10 +379,10 @@ texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2026/texmf-di
 st/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/t
 ype1/urw/times/utmr8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/t
 imes/utmri8a.pfb>
-Output written on main.pdf (9 pages, 272327 bytes).
+Output written on main.pdf (10 pages, 284527 bytes).
 PDF statistics:
- 151 PDF objects out of 1000 (max. 8388607)
- 92 compressed objects within 1 object stream
+ 163 PDF objects out of 1000 (max. 8388607)
+ 99 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
