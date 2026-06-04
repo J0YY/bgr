@@ -81,11 +81,11 @@ Packaged FrozenLake diagnostic:
   `configs/frozenlake_recovery_focused_30seed.yaml`. This was run as an
   attempted independent standard-environment confirmation after review. It is
   not promoted into the paper because it does not give a clean BGR win: BGR
-  gives final RAUC 0.5433 vs. 0.5312 for uniform and clean success 0.5561 vs.
-  0.5461, but the paired signs are 13/17 wins/losses on both metrics, median
-  r80 is lower for BGR (0.7994 vs. 0.8091), best RAUC is lower (0.6499 vs.
-  0.6565), and fixed-radius replay is stronger on final RAUC, clean success,
-  median r80, and AULC in this run.
+  gives final RAUC 0.5453 vs. 0.5312 for uniform and clean success 0.5581 vs.
+  0.5461, but the paired signs are 14/16 wins/losses on RAUC and 13/17 on clean
+  success, median r80 is lower for BGR (0.7967 vs. 0.8091), best RAUC is lower
+  (0.6491 vs. 0.6565), and failure-only replay is stronger on final RAUC,
+  median r80, AULC, and best RAUC in this run.
 
 Packaged OpenVLA audit artifacts are:
 

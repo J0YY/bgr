@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import time
 from pathlib import Path
 
 from bgr.experiments.frozenlake_recovery import run_method, serialize_result
@@ -14,9 +15,15 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="configs/frozenlake_recovery_30seed.yaml")
     parser.add_argument("--out", default="runs/frozenlake_recovery")
+    parser.add_argument("--methods", help="Comma-separated method override for small probes.")
+    parser.add_argument("--seeds", help="Comma-separated seed override for small probes.")
     args = parser.parse_args()
 
     config = _load_config(Path(args.config))
+    if args.methods:
+        config["experiment"]["methods"] = [item.strip() for item in args.methods.split(",") if item.strip()]
+    if args.seeds:
+        config["experiment"]["seeds"] = [int(item.strip()) for item in args.seeds.split(",") if item.strip()]
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -24,8 +31,15 @@ def main() -> None:
     results = []
     for method in config["experiment"]["methods"]:
         for seed in config["experiment"]["seeds"]:
+            start = time.perf_counter()
             print(f"[run] method={method} seed={seed}", flush=True)
             result = run_method(config, method, int(seed))
+            elapsed = time.perf_counter() - start
+            print(
+                f"[done] method={method} seed={seed} "
+                f"rauc={result.final_rauc:.4f} aulc={result.rauc_aulc:.4f} elapsed={elapsed:.2f}s",
+                flush=True,
+            )
             results.append(serialize_result(result))
             rows.append(
                 {

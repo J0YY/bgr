@@ -63,6 +63,7 @@ class FrozenLakeRecoveryBenchmark:
         self.q += self.rng.normal(0.0, float(q_init_noise), size=self.q.shape)
         self.q[self._terminal_mask(), :] = 0.0
         self.states = self._select_replay_states(int(replay_state_count))
+        self._perturbation_cache = self._build_perturbation_cache()
 
     def clean_success(self, replay_idx: int) -> float:
         return self.success_prob(replay_idx, 0.0)
@@ -116,8 +117,20 @@ class FrozenLakeRecoveryBenchmark:
         return abs(target - float(self.q[state, action]))
 
     def perturbation_states(self, replay_idx: int, sigma: float) -> list[int]:
-        replay = self.states[replay_idx]
         radius = int(round(float(np.clip(sigma, 0.0, 1.0)) * self.max_radius))
+        return list(self._perturbation_cache[replay_idx][radius])
+
+    def _build_perturbation_cache(self) -> tuple[tuple[tuple[int, ...], ...], ...]:
+        return tuple(
+            tuple(
+                tuple(self._perturbation_states_for_radius(replay_idx, radius))
+                for radius in range(self.max_radius + 1)
+            )
+            for replay_idx in range(len(self.states))
+        )
+
+    def _perturbation_states_for_radius(self, replay_idx: int, radius: int) -> list[int]:
+        replay = self.states[replay_idx]
         candidates: list[int] = []
         for state in self.safe_states:
             row, col = self._to_pos(state)

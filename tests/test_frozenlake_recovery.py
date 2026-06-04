@@ -57,6 +57,16 @@ class FrozenLakeRecoveryTest(unittest.TestCase):
                     bench.success_prob_from_values(replay_idx, sigma, values),
                 )
 
+    def test_cached_perturbation_states_match_direct_radius_construction(self):
+        bench = FrozenLakeRecoveryBenchmark(replay_state_count=8, max_radius=4, seed=3)
+        for replay_idx in range(4):
+            for radius in range(bench.max_radius + 1):
+                sigma = radius / bench.max_radius
+                self.assertEqual(
+                    bench.perturbation_states(replay_idx, sigma),
+                    bench._perturbation_states_for_radius(replay_idx, radius),
+                )
+
 
 if __name__ == "__main__":
     unittest.main()
