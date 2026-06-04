@@ -68,6 +68,8 @@ Do not add another result to the manuscript if it has any of these properties:
      ingredient.
    Taxi should stay out of the paper unless a new pre-registered protocol makes
    the boundary-radius rule itself beat the state-priority-only ablation.
+   Recheck candidate summaries with:
+   `PYTHONPATH=src:. python3 tools/check_candidate_promotion.py <summary.csv>`.
 2. A faster discrete control benchmark with exact reset states and a
    pre-registered perturbation family. CliffWalking and FrozenLake currently
    look negative for BGR under the tested protocols.
