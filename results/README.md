@@ -133,6 +133,74 @@ checkpoint writeability. It is infrastructure evidence only; the paper still
 treats OpenVLA as an audit because the learned adaptation does not stably beat
 both matched random selection and the official checkpoint.
 
+## Queued OpenVLA-OFT p2048 1,000-Step Low-LR Image-Augmentation Continuation
+
+Queued on 2026-06-04 in response to the current review risk: the manuscript can
+only promote a learned-policy robotics claim if BGR beats both matched random
+selection and the unadapted official checkpoint on a standard LIBERO-Goal audit.
+This run keeps the p2048 clean-mix BGR/random datasets, official training/eval
+statistics, identity-LoRA entry point, image augmentation, and 10-task/10-trial
+evaluation scale from the completed 300-step audit, but reduces the adaptation
+learning rate to `1e-7` and extends the continuation to 1,000 optimizer steps
+(`MAX_STEPS=51000`). It should remain ledger-only unless completed summaries
+show a stable BGR improvement over both controls.
+
+Submitted adaptation command shape:
+
+```bash
+REMOTE_PROJECT=/work/anonymous/bgr \
+REMOTE_LOG_DIR=/work/anonymous/bgr/logs \
+REMOTE_RUN_ROOT=/work/anonymous/bgr/runs \
+REMOTE_HF_HOME=/work/anonymous/cache_home/huggingface \
+REMOTE_TRANSFORMERS_CACHE=/work/anonymous/cache_home/huggingface/hub \
+OPENVLA_OFT_ROOT=/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft \
+LIBERO_ROOT=/home/anonymous/LIBERO \
+TRAIN_DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/.../dataset_statistics.json \
+DATASET_STATISTICS_SOURCE=/work/anonymous/cache_home/huggingface/hub/models--moojink--openvla-7b-oft-finetuned-libero-goal/snapshots/.../dataset_statistics.json \
+FINETUNE_SCRIPT=vla-scripts/finetune_identity_lora.py \
+ADAPT_STEPS=1000 LR=1e-7 IMAGE_AUG=True TRAIN_TIME=16:00:00 \
+TAG=cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_v1 \
+EVAL_ARTIFACT=openvla_oft_goal_adapt_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_v1 \
+BGR_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_bgr_cleanmix_p2048_v1 \
+RANDOM_DATA_ROOT=/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_cleanmix_p2048_v1 \
+BGR_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_v1 \
+RANDOM_RUN_ROOT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_v1 \
+EVAL_TASKS=10 EVAL_TRIALS=10 EVAL_SEED=37 GIT_PULL=0 \
+scripts/queue_openvla_oft_goal_adapt.sh --submit
+```
+
+Submitted perturbation-audit command shape:
+
+```bash
+REMOTE_LOG_DIR=/work/anonymous/bgr/logs \
+REMOTE_RUN_ROOT=/work/anonymous/bgr/runs \
+REMOTE_HF_HOME=/work/anonymous/cache_home/huggingface \
+REMOTE_TRANSFORMERS_CACHE=/work/anonymous/cache_home/huggingface/hub \
+OPENVLA_OFT_ROOT=/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft \
+LIBERO_ROOT=/home/anonymous/LIBERO \
+TAG=cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1 \
+BGR_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/anonymous/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+BGR_DEPENDENCY=afterok:765586 RANDOM_DEPENDENCY=afterok:765589 \
+EVAL_TASKS=10 EVAL_TRIALS=10 EVAL_SEED=37 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Initial Slurm submission:
+
+```text
+765585  BGR 1,000-step low-LR image-aug adapt
+765586  BGR merge, afterok:765585
+765587  BGR clean 10-task/10-trial eval, afterok:765586
+765588  random 1,000-step low-LR image-aug adapt, afterok:765585
+765589  random merge, afterok:765588
+765590  random clean 10-task/10-trial eval, afterok:765589
+765591--765595  official identity -> blur -> brightness -> occlusion -> shift comparator chain
+765596--765600  BGR identity -> blur -> brightness -> occlusion -> shift, afterok:765586
+765601--765605  random identity -> blur -> brightness -> occlusion -> shift, afterok:765589
+```
+
 ## Completed OpenVLA-OFT p2048 300-Step Image-Augmentation Continuation
 
 Launched on 2026-06-04 after the 100-step p2048 image-augmentation audit
