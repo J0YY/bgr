@@ -151,6 +151,14 @@ Do not add another result to the manuscript if it has any of these properties:
        after `afterok:765763`.
      - Initial `squeue` check showed all jobs pending with the intended
        dependencies.
+     - Follow-up scheduler check on 2026-06-04/05 still showed all 21 jobs
+       pending, not failed. The two root jobs were pending for `Priority`, with
+       Slurm backfill start estimates around 2026-06-05T02:12 for BGR adapt
+       (`765759`) and 2026-06-05T02:37 for official identity perturb eval
+       (`765765`). `scontrol show job` confirmed valid `/work/joy` stdout paths,
+       `gres/gpu:a6000:1`, excluded nodes `c2-g4-[19,21]`, and scheduled nodes
+       `c1-g4-01` / `c1-g4-05`. Do not resubmit duplicates unless these jobs
+       fail or disappear from accounting.
 
 ## Immediate Engineering Work
 
