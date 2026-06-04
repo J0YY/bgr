@@ -4343,6 +4343,22 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
             raise ValueError(
                 f"{pdf_path}: missing rendered limitations snippet(s): {', '.join(rendered_limitations_missing)}"
             )
+    if "A canonical Gym FrozenLake8x8-v1 diagnostic reinforces that limitation" in source_text:
+        frozenlake_required = [
+            ("FrozenLake8x8-v1 diagnostic", "FrozenLake8x8v1 diagnostic"),
+            ("0.5453 vs. 0.5312",),
+            ("14/16 and 13/17",),
+            ("failure-only replay is stronger",),
+        ]
+        frozenlake_missing = [
+            snippets[0]
+            for snippets in frozenlake_required
+            if not any(snippet in normalized_rendered_text for snippet in snippets)
+        ]
+        if frozenlake_missing:
+            raise ValueError(
+                f"{pdf_path}: missing rendered FrozenLake limitation snippet(s): {', '.join(frozenlake_missing)}"
+            )
     if "held-out seeds 30--59 BGR-vs-uniform replication gives" in source_text:
         grid_required = [
             ("held-out seeds 30-59", "held-out seeds 30--59", "held-out seeds 30–59"),

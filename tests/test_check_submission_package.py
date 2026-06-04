@@ -1914,6 +1914,9 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                     "- `results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv`: p2048 full-goal clean identity audit.",
                     "- `results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv`: p2048 full-goal visual perturbation audit.",
                     "- `results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv`: p2048 300-step image-augmentation continuation audit.",
+                    "- `results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv`: p2048 1,000-step low-LR image-augmentation continuation audit.",
+                    "Packaged FrozenLake diagnostic:",
+                    "- `results/frozenlake_recovery_focused_30seed_v1/summary.csv`: canonical Gym FrozenLake8x8-v1 limitation diagnostic.",
                     "The p4096 and common-availability sections below are retained as paper-negative diagnostics in this ledger only.",
                     "Their summary CSVs are not part of the anonymous submission manifest or archive.",
                     "",
@@ -4342,6 +4345,8 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "trailing matched random by one episode (368/400)",
                         "The 300-step image-augmentation continuation gives BGR and matched random 368/400 perturbed successes each",
                         "only one episode above official (367/400)",
+                        "The 1,000-step low-learning-rate continuation is also negative",
+                        "BGR gives 366/400 non-identity perturbation successes",
                     ]
                 ),
                 encoding="utf-8",
@@ -4467,6 +4472,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "trailing matched random by one episode (368/400)",
                         "The 300-step image-augmentation continuation gives BGR and matched random 368/400 perturbed successes each",
                         "only one episode above official (367/400)",
+                        "The 1,000-step low-learning-rate continuation is also negative",
                     ]
                 ),
                 encoding="utf-8",
@@ -4828,11 +4834,14 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "matched action/TFDS construction",
                         "Geometric intuition for BGR",
                         "We treat exact paired sign tests as consistency checks over shared seeds, not as substitutes for effect size",
-                        "The following local argument is intuition for the radius sampler, not a convergence or global robustness theorem",
+                        "The following local calculation is a design rationale for the radius sampler",
+                        "Local boundary intuition",
                         "BGR depends on a feasibility witness",
                         "synthetic and grid-margin benchmarks are constructed to expose recovery curves",
+                        "A canonical Gym FrozenLake8x8-v1 diagnostic reinforces that limitation",
                         "RAUC and AULC are useful for measuring curve expansion, but they are author-defined integrals",
                         "300-step image-augmentation continuation",
+                        "1,000-step low-learning-rate continuation",
                         "measure learned-policy brittleness and build matched fine-tuning datasets",
                         "current adaptation does not establish stable gains over the official checkpoint",
                         "BGR converts recovery-margin measurement into a replay curriculum",
@@ -4854,7 +4863,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                     [
                         "local margin-update model.",
                         "",
-                        r"\textbf{Proposition 1.} Fix a replay state.",
+                        r"\textbf{Local Boundary Intuition.} Fix a replay state.",
                         "In a robot-suffix simulator, a coverage-aware BGR variant improves final object recovery AUC",
                         "coverage-aware boundary replay expand recovery margins",
                         "Instantiations of the BGR interface",
@@ -4878,11 +4887,14 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "matched action/TFDS construction",
                         "Geometric intuition for BGR",
                         "We treat exact paired sign tests as consistency checks over shared seeds, not as substitutes for effect size",
-                        "The following local argument is intuition for the radius sampler, not a convergence or global robustness theorem",
+                        "The following local calculation is a design rationale for the radius sampler",
+                        "Local boundary intuition",
                         "BGR depends on a feasibility witness",
                         "synthetic and grid-margin benchmarks are constructed to expose recovery curves",
+                        "A canonical Gym FrozenLake8x8-v1 diagnostic reinforces that limitation",
                         "RAUC and AULC are useful for measuring curve expansion, but they are author-defined integrals",
                         "300-step image-augmentation continuation",
+                        "1,000-step low-learning-rate continuation",
                         "measure learned-policy brittleness and build matched fine-tuning datasets",
                         "current adaptation does not establish stable gains over the official checkpoint",
                         "BGR converts recovery-margin measurement into a replay curriculum",
@@ -6007,6 +6019,31 @@ class CheckSubmissionPackageTest(unittest.TestCase):
     def test_rendered_source_sync_accepts_grid_replication_pdf_text(self):
         source = "A held-out seeds 30--59 BGR-vs-uniform replication gives 0.4340 vs. 0.3967 RAUC."
         rendered = "A held-out seeds 30-59 BGR-vs-uniform replication gives 0.4340 vs. 0.3967 RAUC, also with 30/0 wins."
+        with mock.patch.object(Path, "read_text", return_value=source), mock.patch(
+            "scripts.check_submission_package.pdf_text",
+            return_value=rendered,
+        ):
+            messages = check_rendered_source_sync(Path("paper/main.tex"), Path("paper/main.pdf"))
+
+        self.assertEqual(messages, ["paper/main.pdf: rendered/source OpenVLA sync guard not triggered"])
+
+    def test_rendered_source_sync_requires_frozenlake_limitation_pdf_text(self):
+        source = "A canonical Gym FrozenLake8x8-v1 diagnostic reinforces that limitation."
+        rendered = "The paper does not claim a clear win on an independent pre-existing robustness benchmark."
+        with mock.patch.object(Path, "read_text", return_value=source), mock.patch(
+            "scripts.check_submission_package.pdf_text",
+            return_value=rendered,
+        ):
+            with self.assertRaisesRegex(ValueError, "missing rendered FrozenLake limitation"):
+                check_rendered_source_sync(Path("paper/main.tex"), Path("paper/main.pdf"))
+
+    def test_rendered_source_sync_accepts_frozenlake_limitation_pdf_text(self):
+        source = "A canonical Gym FrozenLake8x8-v1 diagnostic reinforces that limitation."
+        rendered = (
+            "A canonical Gym FrozenLake8x8v1 diagnostic reinforces that limitation: "
+            "BGR gives final RAUC 0.5453 vs. 0.5312 for uniform, "
+            "but paired signs are 14/16 and 13/17, and failure-only replay is stronger."
+        )
         with mock.patch.object(Path, "read_text", return_value=source), mock.patch(
             "scripts.check_submission_package.pdf_text",
             return_value=rendered,
