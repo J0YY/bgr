@@ -4966,7 +4966,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             paper.write_text(
                 "\n".join(
                     [
-                        r"\title{Boundary-Guided Replay: Learning at the Success--Failure Boundary of Decision Policies}",
+                        r"\title{Boundary-Guided Replay: A Mechanism Study of Success--Failure Boundary Learning}",
                         r"\author{Anonymous Submission}",
                         r"\affiliations{}",
                     ]
@@ -4982,7 +4982,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             paper.write_text(
                 "\n".join(
                     [
-                        r"\title{Boundary-Guided Replay: Learning at the Success--Failure Boundary of Decision Policies}",
+                        r"\title{Boundary-Guided Replay: A Mechanism Study of Success--Failure Boundary Learning}",
                         r"\affiliations{}",
                     ]
                 ),
@@ -4998,7 +4998,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             paper.write_text(
                 "\n".join(
                     [
-                        r"\title{Boundary-Guided Replay: Learning at the Success--Failure Boundary of Decision Policies}",
+                        r"\title{Boundary-Guided Replay: A Mechanism Study of Success--Failure Boundary Learning}",
                         r"\author{Named Author}",
                         r"\affiliations{}",
                     ]
@@ -5015,7 +5015,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             paper.write_text(
                 "\n".join(
                     [
-                        r"\title{Boundary-Guided Replay: Learning at the Success--Failure Boundary of Decision Policies}",
+                        r"\title{Boundary-Guided Replay: A Mechanism Study of Success--Failure Boundary Learning}",
                         r"\author{Anonymous Submission}",
                         r"\affiliations{Paper under double-blind review}",
                     ]
@@ -5032,7 +5032,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             paper.write_text(
                 "\n".join(
                     [
-                        r"\title{Bifurcation-Guided Replay: Learning at the Success--Failure Boundary of Decision Policies}",
+                        r"\title{Bifurcation-Guided Replay: A Mechanism Study of Success--Failure Boundary Learning}",
                         r"\author{Anonymous Submission}",
                         r"\affiliations{}",
                     ]
@@ -5049,7 +5049,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             paper.write_text(
                 "\n".join(
                     [
-                        r"\title{Boundary-Guided Replay: Learning at the Success--Failure Boundary of Decision Policies}",
+                        r"\title{Boundary-Guided Replay: A Mechanism Study of Success--Failure Boundary Learning}",
                         r"\author{Anonymous Submission}",
                         r"\affiliations{" + self.author_pattern("/" + "Users" + "/") + r"local}",
                     ]
@@ -5063,15 +5063,15 @@ class CheckSubmissionPackageTest(unittest.TestCase):
     def test_rendered_title_block_sync_accepts_current_title_and_anonymous_author(self):
         source_text = "\n".join(
             [
-                r"\title{Boundary-Guided Replay: Learning at the Success--Failure Boundary of Decision Policies}",
+                r"\title{Boundary-Guided Replay: A Mechanism Study of Success--Failure Boundary Learning}",
                 r"\author{Anonymous Submission}",
                 r"\affiliations{}",
             ]
         )
         rendered = "\n".join(
             [
-                "Boundary-Guided Replay: Learning at the Success-Failure Boundary of Decision",
-                "Policies",
+                "Boundary-Guided Replay: A Mechanism Study of Success-Failure Boundary",
+                "Learning",
                 "Anonymous submission",
                 "Abstract",
             ]
@@ -5088,12 +5088,12 @@ class CheckSubmissionPackageTest(unittest.TestCase):
     def test_rendered_title_block_sync_rejects_stale_rendered_title(self):
         source_text = "\n".join(
             [
-                r"\title{Boundary-Guided Replay: Learning at the Success--Failure Boundary of Decision Policies}",
+                r"\title{Boundary-Guided Replay: A Mechanism Study of Success--Failure Boundary Learning}",
                 r"\author{Anonymous Submission}",
                 r"\affiliations{}",
             ]
         )
-        rendered = "Bifurcation-Guided Replay: Learning at the Success-Failure Boundary of Decision Policies\nAnonymous submission"
+        rendered = "Bifurcation-Guided Replay: A Mechanism Study of Success-Failure Boundary Learning\nAnonymous submission"
         with mock.patch.object(Path, "read_text", return_value=source_text), mock.patch(
             "scripts.check_submission_package.pdf_page_text",
             return_value=rendered,
@@ -5104,12 +5104,12 @@ class CheckSubmissionPackageTest(unittest.TestCase):
     def test_rendered_title_block_sync_rejects_missing_anonymous_author(self):
         source_text = "\n".join(
             [
-                r"\title{Boundary-Guided Replay: Learning at the Success--Failure Boundary of Decision Policies}",
+                r"\title{Boundary-Guided Replay: A Mechanism Study of Success--Failure Boundary Learning}",
                 r"\author{Anonymous Submission}",
                 r"\affiliations{}",
             ]
         )
-        rendered = "Boundary-Guided Replay: Learning at the Success-Failure Boundary of Decision Policies\nNamed Author"
+        rendered = "Boundary-Guided Replay: A Mechanism Study of Success-Failure Boundary Learning\nNamed Author"
         with mock.patch.object(Path, "read_text", return_value=source_text), mock.patch(
             "scripts.check_submission_package.pdf_page_text",
             return_value=rendered,
@@ -5120,14 +5120,14 @@ class CheckSubmissionPackageTest(unittest.TestCase):
     def test_rendered_title_block_sync_rejects_stale_affiliation_placeholder(self):
         source_text = "\n".join(
             [
-                r"\title{Boundary-Guided Replay: Learning at the Success--Failure Boundary of Decision Policies}",
+                r"\title{Boundary-Guided Replay: A Mechanism Study of Success--Failure Boundary Learning}",
                 r"\author{Anonymous Submission}",
                 r"\affiliations{}",
             ]
         )
         rendered = "\n".join(
             [
-                "Boundary-Guided Replay: Learning at the Success-Failure Boundary of Decision Policies",
+                "Boundary-Guided Replay: A Mechanism Study of Success-Failure Boundary Learning",
                 "Anonymous submission",
                 "Paper under double-blind review",
             ]

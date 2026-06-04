@@ -7,8 +7,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "cfed5b3a1c2a0ea03d122cf26c4a7b208c9fe7fb18037840e2ac43e76f6e91b7",
-      "size_bytes": 30600
+      "sha256": "53613d8075aab56d375ae28bbd23f2aa6945b12f74004486567668bb04bef2ed",
+      "size_bytes": 30593
     },
     {
       "path": "configs/estimator_bgr_full.yaml",
@@ -412,18 +412,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "2f614a6dfc53a15336ac34ec1f7d974f0d63bf008dd9cae19ee29b3397b74ac3",
+      "sha256": "c27cca636a21ae373283bd9a29949959fd27c4f159778fd41ffcc1d7c38d628d",
       "size_bytes": 14928
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "555eba208e48f56b70af5a9cc8328c0de6bab48e41bfa42fa55069b470a1020a",
-      "size_bytes": 281931
+      "sha256": "c6c89c2bc0d611fb0090cdf0b27b3c154891dffb5ce114d85fba74a9ff34ee4a",
+      "size_bytes": 282003
     },
     {
       "path": "paper/main.tex",
-      "sha256": "8b4b5af8459ab7d93107fab77cd38f9d250240fbca8cd1f50b3e7e253ab0b912",
-      "size_bytes": 32843
+      "sha256": "930d9a123610a76a584b7a6e12c58b5b63942ae4c043e16de91cefe1f5247ec5",
+      "size_bytes": 32917
     },
     {
       "path": "paper/references.bib",
@@ -1017,8 +1017,8 @@
     },
     {
       "path": "tests/test_check_submission_package.py",
-      "sha256": "a683bcfeac720b4ada21f61d278dd59df1984a1c88105efb9383e425bd238fd6",
-      "size_bytes": 322059
+      "sha256": "58a79e6e79f95191437af438c2df7104feaecdf8b87001b207865f3cbd8282f6",
+      "size_bytes": 321961
     },
     {
       "path": "tests/test_combine_openvla_oft_examples.py",

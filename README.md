@@ -2,7 +2,7 @@
 
 This repository contains the anonymous AAAI-27 submission package for:
 
-**Boundary-Guided Replay: Learning at the Success-Failure Boundary of Decision Policies**
+**Boundary-Guided Replay: A Mechanism Study of Success-Failure Boundary Learning**
 
 The included artifact contains the reusable BGR core, versioned experiment
 configs, per-seed result summaries, generated paper tables/figures, OpenVLA
