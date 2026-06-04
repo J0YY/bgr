@@ -222,7 +222,7 @@
     },
     {
       "path": "paper/figures/aulc_bars.pdf",
-      "sha256": "aed8b13f8f331e2c43a0645c3a3759386a51e421f074054123f5639a4df357c4",
+      "sha256": "094bea2e4f212b3b37e0b5de5faf3bfc6129b874b22c22072bd4721e3ca50aba",
       "size_bytes": 13560
     },
     {
@@ -237,7 +237,7 @@
     },
     {
       "path": "paper/figures/boundary_intuition.pdf",
-      "sha256": "b7ed4b5415a3902336d8c9808ae8d0b6651446e45c13307f85271418745cf8fa",
+      "sha256": "e4f0bfd206b19fc0af2501683b5878cd3fdb30f1d2c28e416f706f618bb16728",
       "size_bytes": 22665
     },
     {
@@ -252,7 +252,7 @@
     },
     {
       "path": "paper/figures/clean_bars.pdf",
-      "sha256": "a952dcc5dec9a593586ad3372ef2d3b776a4819575570f468b6b8743c8a5f3f3",
+      "sha256": "dae5dd6b7397d70a3ab7d1abac52b42c17bd774864a2d51635aac8b537b8da36",
       "size_bytes": 13265
     },
     {
@@ -262,7 +262,7 @@
     },
     {
       "path": "paper/figures/estimator_r80_mae.pdf",
-      "sha256": "bd6498d344a38a11dfbb6b44d3951be257bc86a610c39c759c935298aa897d88",
+      "sha256": "c79ea81eacd776590980928029e74b4d2822833e598288807278ba2f5a72b18e",
       "size_bytes": 12952
     },
     {
@@ -302,7 +302,7 @@
     },
     {
       "path": "paper/figures/grid_margin_learning_curve.pdf",
-      "sha256": "bec86af830f617b3ec65f9e6f50de25950aab4a28e40c81e34447b1f9a145d67",
+      "sha256": "a0c16fc42907e9dffeee2653d971a8bcfc788f6476a4fde001229ebd8e8af1ac",
       "size_bytes": 11986
     },
     {
@@ -361,6 +361,11 @@
       "size_bytes": 517
     },
     {
+      "path": "paper/figures/openvla_adaptation_table.tex",
+      "sha256": "3fcd9a897eb0a9f6027d03ff67256c011cec7fdc50050a4d2746fef1d2d42601",
+      "size_bytes": 458
+    },
+    {
       "path": "paper/figures/openvla_stats.csv",
       "sha256": "9776d9609ec2e80144aff01502969b388a74e93e4022d3e46bc8e73f9f06e75b",
       "size_bytes": 391
@@ -372,7 +377,7 @@
     },
     {
       "path": "paper/figures/rauc_bars.pdf",
-      "sha256": "2682929832eb377f12ebce9ad9883d55c44052697905ee4066fbb855478cff19",
+      "sha256": "59ab73589088b635deb9f20483c0678e68bab547583ba18a3d99c87ff2b49a67",
       "size_bytes": 13530
     },
     {
@@ -412,18 +417,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "62593909c5f30a8a8cf3c7a54fd0e8afa7c00587a94086128370ce958d7cd564",
-      "size_bytes": 14645
+      "sha256": "f979cbbdf75c0c515be1fa7630e01e9d40774a0f917535772ece70f2555002fb",
+      "size_bytes": 14692
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "0216d5262bc5e15c5d5fe9d9f9be22f9797ba13f9c0df0be568b623ef30bf557",
-      "size_bytes": 282825
+      "sha256": "3c23cad8d0820df9d11eb829cee6515cee8ce6c3c52586639bc3fe0470870339",
+      "size_bytes": 283600
     },
     {
       "path": "paper/main.tex",
-      "sha256": "607ed2ce28a69d8fb85ef7cf431f17dcf847cca6813867b3f86dffbd5f3bcf23",
-      "size_bytes": 34473
+      "sha256": "f20b27711eda779342e8aac95e9d843731e1bd9cf185ca60b348f0994f63d886",
+      "size_bytes": 35194
     },
     {
       "path": "paper/references.bib",
@@ -717,8 +722,8 @@
     },
     {
       "path": "scripts/aggregate_results.py",
-      "sha256": "795fc959a9380044854dd2f6f609f25737c98a431ef1c603553eeac854ce935d",
-      "size_bytes": 45359
+      "sha256": "7217fb74663ea989c759496e460bb3bfe6a0e050195ea990da84d5138ec83301",
+      "size_bytes": 48600
     },
     {
       "path": "scripts/analyze_significance.py",
@@ -732,8 +737,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "bd13efe6fa60b8950c2a7e97d3758addcf30a283895ce446bcd55695fe548438",
-      "size_bytes": 226683
+      "sha256": "05e507a263309c6dd812fb09d78143cf388968d3985b47a70aa908bcf92e67fe",
+      "size_bytes": 226769
     },
     {
       "path": "scripts/collect_environment.py",

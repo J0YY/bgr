@@ -57,6 +57,10 @@ SUFFIX_STRESS_SENSITIVITY_RUN = "suffix_stress_sensitivity_30seed_v1"
 GRID_LEARNING_CURVE_RUN = "grid_margin_full_15seed_v1"
 OPENVLA_RECOVERY_RUN = "libero_openvla_recovery_v1"
 OPENVLA_SELECTION_RUN = "libero_openvla_boundary_selection_balanced_v1"
+OPENVLA_FULL_CLEAN_RUN = "openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1"
+OPENVLA_FULL_PERTURB_RUN = "openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1"
+OPENVLA_IMAGEAUG_300_RUN = "openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1"
+OPENVLA_LOWLR_1000_RUN = "openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1"
 
 
 def main() -> None:
@@ -179,6 +183,9 @@ def main() -> None:
     if openvla_rows:
         write_csv(out_dir / "openvla_stats.csv", openvla_rows)
         write_openvla_table(out_dir / "openvla_table.tex", openvla_rows)
+    openvla_adaptation_rows = load_openvla_adaptation(results_dir)
+    if openvla_adaptation_rows:
+        write_openvla_adaptation_table(out_dir / "openvla_adaptation_table.tex", openvla_adaptation_rows)
     try:
         make_boundary_intuition_figure(out_dir, results_dir)
         make_figures(out_dir, summary_rows)
@@ -706,6 +713,72 @@ def write_openvla_table(path: Path, rows: list[dict]) -> None:
                 f"{float(row['metric_a']):.3f} & {float(row['metric_b']):.3f} & "
                 f"{float(row['metric_c']):.3f} & {int(row['n'])} \\\\\n"
             )
+        handle.write("\\hline\n")
+        handle.write("\\end{tabular}\n")
+
+
+def load_openvla_adaptation(results_dir: Path) -> list[dict[str, str | int]]:
+    runs = [
+        (
+            "100-step clean identity",
+            results_dir / OPENVLA_FULL_CLEAN_RUN / "summary.csv",
+            {"identity"},
+        ),
+        (
+            "100-step non-identity perturbations",
+            results_dir / OPENVLA_FULL_PERTURB_RUN / "summary.csv",
+            {"blur", "brightness", "occlusion", "shift"},
+        ),
+        (
+            "300-step image-aug identity",
+            results_dir / OPENVLA_IMAGEAUG_300_RUN / "summary.csv",
+            {"identity"},
+        ),
+        (
+            "300-step image-aug non-identity",
+            results_dir / OPENVLA_IMAGEAUG_300_RUN / "summary.csv",
+            {"blur", "brightness", "occlusion", "shift"},
+        ),
+        (
+            "1000-step low-LR identity",
+            results_dir / OPENVLA_LOWLR_1000_RUN / "summary.csv",
+            {"identity"},
+        ),
+        (
+            "1000-step low-LR non-identity",
+            results_dir / OPENVLA_LOWLR_1000_RUN / "summary.csv",
+            {"blur", "brightness", "occlusion", "shift"},
+        ),
+    ]
+    rows: list[dict[str, str | int]] = []
+    for label, path, perturbations in runs:
+        if not path.exists():
+            return []
+        summary_rows = list(csv.DictReader(path.open("r", encoding="utf-8")))
+        item: dict[str, str | int] = {"audit": label}
+        for method in ["bgr", "official", "random"]:
+            selected = [
+                row
+                for row in summary_rows
+                if row["method"] == method and row["perturbation"] in perturbations
+            ]
+            if not selected:
+                return []
+            successes = sum(int(float(row["successes"])) for row in selected)
+            episodes = sum(int(float(row["episodes"])) for row in selected)
+            item[method] = f"{successes}/{episodes}"
+        rows.append(item)
+    return rows
+
+
+def write_openvla_adaptation_table(path: Path, rows: list[dict[str, str | int]]) -> None:
+    with path.open("w", encoding="utf-8") as handle:
+        handle.write("\\begin{tabular}{lccc}\n")
+        handle.write("\\hline\n")
+        handle.write("Audit & BGR & Official & Random \\\\\n")
+        handle.write("\\hline\n")
+        for row in rows:
+            handle.write(f"{row['audit']} & {row['bgr']} & {row['official']} & {row['random']} \\\\\n")
         handle.write("\\hline\n")
         handle.write("\\end{tabular}\n")
 

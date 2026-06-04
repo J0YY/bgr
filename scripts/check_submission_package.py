@@ -366,6 +366,7 @@ PAPER_FIGURE_ARTIFACTS = [
     "paper/figures/grid_margin_target_sensitivity_table.tex",
     "paper/figures/openvla_stats.csv",
     "paper/figures/openvla_table.tex",
+    "paper/figures/openvla_adaptation_table.tex",
 ]
 PAPER_GENERATED_VISUAL_ARTIFACTS = [
     "paper/figures/aulc_bars.pdf",
@@ -406,6 +407,7 @@ AGGREGATE_TEXT_ARTIFACTS = [
     "grid_margin_learning_curve_table.tex",
     "openvla_stats.csv",
     "openvla_table.tex",
+    "openvla_adaptation_table.tex",
 ]
 SIGNIFICANCE_TEXT_ARTIFACTS = [
     "significance_tests.csv",

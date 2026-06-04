@@ -159,6 +159,11 @@ Do not add another result to the manuscript if it has any of these properties:
        `gres/gpu:a6000:1`, excluded nodes `c2-g4-[19,21]`, and scheduled nodes
        `c1-g4-01` / `c1-g4-05`. Do not resubmit duplicates unless these jobs
        fail or disappear from accounting.
+     - Latest poll from the local workspace on 2026-06-04 showed the same
+       state: all 21 jobs remain pending; `sacct` reports no start/end times;
+       the expected step50500 output directories have not appeared yet. There
+       are therefore no new preregistered OpenVLA results to incorporate into
+       `paper/main.tex` as of this poll.
 
 ## Immediate Engineering Work
 
