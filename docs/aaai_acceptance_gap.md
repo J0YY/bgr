@@ -17,6 +17,22 @@ guards. That improves reviewability, but it does not by itself make the paper a
 - the strongest result is still the controlled procedural grid-margin
   mechanism benchmark.
 
+After the weak-reject style review, the immediate paper-defense priority is not
+to amplify p-values or add more authored toy wins. The manuscript should instead
+make the evidence contract unavoidable:
+
+- lead with the grid-margin mechanism effect because it is the only visibly
+  large effect;
+- describe synthetic and suffix results as modest scoped support, not broad
+  robustness evidence;
+- keep standard-environment diagnostics in the limitations unless they satisfy
+  the promotion criteria below;
+- keep OpenVLA/LIBERO framed as an audit until BGR beats both matched random and
+  the official checkpoint on the same fixed evaluation;
+- foreground mean differences, clean success, and median critical radius before
+  sign-test p-values;
+- treat the local boundary proposition as design intuition, not a theory claim.
+
 ## Promotion Criteria For A New Independent Benchmark
 
 A new benchmark result should be promoted into `paper/main.tex` only if it meets

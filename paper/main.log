@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 22:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.5.31)  4 JUN 2026 23:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -252,11 +252,6 @@ Underfull \hbox (badness 2547) in paragraph at lines 38--39
 []\T1/ptm/m/n/10 an ef-fi-cient BGR al-go-rithm that ac-tively es-ti-mates
  []
 
-
-Underfull \hbox (badness 1546) in paragraph at lines 41--42
-\T1/ptm/m/n/10 of the cur-rent learned-policy ev-i-dence and sep-a-rate
- []
-
 [1{/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/l
 ocal/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc}
 
@@ -295,34 +290,34 @@ Package pdftex.def Info: figures/boundary_intuition.pdf  used on input line 95.
 File: figures/grid_margin_learning_curve.pdf Graphic file (type pdf)
 <use figures/grid_margin_learning_curve.pdf>
 Package pdftex.def Info: figures/grid_margin_learning_curve.pdf  used on input
-line 206.
+line 208.
 (pdftex.def)             Requested size: 239.39438pt x 87.90239pt.
 
-(./figures/grid_margin_full_table.tex)
-(./figures/grid_margin_ablation_table.tex) [4 <./figures/grid_margin_learning_c
-urve.pdf>] [5]
-Underfull \hbox (badness 1755) in paragraph at lines 235--236
+(./figures/grid_margin_full_table.tex) [4 <./figures/grid_margin_learning_curve
+.pdf>] (./figures/grid_margin_ablation_table.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [5]
+Underfull \hbox (badness 1755) in paragraph at lines 237--238
 \T1/ptm/m/n/10 er-age. In the 30-seed run, BGR-Coverage raises fi-
  []
 
 
-Underfull \hbox (badness 2173) in paragraph at lines 237--238
+Underfull \hbox (badness 2173) in paragraph at lines 239--240
 []\T1/ptm/m/n/10 A four-condition 30-seed suf-fix stress sweep varies
  []
 
 
-Underfull \hbox (badness 1142) in paragraph at lines 239--240
+Underfull \hbox (badness 1142) in paragraph at lines 241--242
 \T1/ptm/m/n/10 i-da-tion. A GPU/EGL LIBERO-Goal probe com-pleted
  []
 
 
-Underfull \hbox (badness 2726) in paragraph at lines 241--242
+Underfull \hbox (badness 2726) in paragraph at lines 243--244
 []\T1/ptm/m/n/10 The OpenVLA-OFT bridge ex-ports 11,776 teacher-
  []
 
-[6] (./main.bbl) [7
-
-] (./ReproducibilityChecklist.tex
+[6] (./main.bbl) [7] (./ReproducibilityChecklist.tex
 \c@checksubsection=\count306
 \c@checkitem=\count307
 LaTeX Font Info:    Trying to load font information for T1+pcr on input line 51
@@ -347,11 +342,11 @@ L3 programming layer <2026-05-26>
 Here is how much of TeX's memory you used:
  4188 strings out of 467337
  60773 string characters out of 5415293
- 499441 words of memory out of 5000000
+ 497441 words of memory out of 5000000
  33200 multiletter control sequences out of 15000+600000
  664307 words of font info for 85 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,11n,76p,1889b,283s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,11n,76p,1796b,283s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
 ></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
 </usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></
@@ -372,7 +367,7 @@ texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2026/texmf-di
 st/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/t
 ype1/urw/times/utmr8a.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/t
 imes/utmri8a.pfb>
-Output written on main.pdf (10 pages, 283074 bytes).
+Output written on main.pdf (10 pages, 283430 bytes).
 PDF statistics:
  163 PDF objects out of 1000 (max. 8388607)
  99 compressed objects within 1 object stream

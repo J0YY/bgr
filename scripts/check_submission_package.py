@@ -4002,7 +4002,7 @@ def check_manuscript_framing(path: Path) -> list[str]:
     if "\\textbf{Proposition 1.}" in text:
         raise ValueError(f"{path}: theory block should be framed as local boundary intuition, not Proposition 1")
     required = [
-        "In a robot-suffix simulator, a coverage-aware BGR variant improves",
+        "Synthetic and robot-suffix results are smaller and are reported as scoped support",
         "coverage-aware boundary replay expand recovery margins",
         "Instantiations of the BGR interface",
         "The first three rows are training experiments",
@@ -4016,11 +4016,12 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "independent-benchmark and learned-policy wins remain open requirements rather than hidden claims",
         "The main claim is supported by controlled synthetic and procedural grid-margin experiments",
         "The robot-suffix simulator is a manipulation-style extension",
-        "The FrozenLake and OpenVLA/LIBERO results are scope checks and learned-policy audits, not BGR fine-tuning claims",
+        "Gym-style standard-environment probes and OpenVLA/LIBERO results are scope checks and learned-policy audits, not promoted positive claims",
         "four stress regimes",
         "A four-condition 30-seed suffix stress sweep varies teacher quality",
         "while still trailing uniform on median critical radius",
-        "Five-seed exploratory variants are reported only as exploratory evidence",
+        "Five-seed exploratory variants and small pre-promotion standard-environment probes are reported only as scope diagnostics",
+        "Additional 4-seed pre-promotion probes also stay negative",
         "OpenVLA is a learned-policy audit rather than a robotics training claim",
         "action-label/TFDS plumbing validates 2,048-transition matched BGR/random exports with 7D actions and 8D state",
         "matched action/TFDS construction",
@@ -4272,7 +4273,7 @@ def check_main_pdf(path: Path) -> list[str]:
         "Boundary-Guided Replay",
         "coverage-aware BGR variant improves",
         "OpenVLA/LIBERO audits",
-        "not BGR fine-tuning claims",
+        "not promoted positive claims",
         "run ledger files",
         "30-seed synthetic, estimator, grid, and suffix",
         "Suffix RAUC vs clean-only",
