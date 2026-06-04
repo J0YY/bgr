@@ -46,7 +46,7 @@ METRICS = [
 
 ESTIMATOR_RUN = "estimator_pair_30seed_v1"
 GRID_FULL_RUN = "grid_margin_full_30seed_v1"
-ABLATION_RUN = "grid_margin_ablation_15seed_v1"
+ABLATION_RUN = "grid_margin_ablation_30seed_v1"
 TARGET_SENSITIVITY_RUN = "grid_margin_target_sensitivity_15seed_v1"
 LEARNING_RATE_SENSITIVITY_RUN = "grid_margin_learning_rate_sensitivity_15seed_v1"
 REGIME_SENSITIVITY_RUN = "grid_margin_regime_sensitivity_15seed_v1"

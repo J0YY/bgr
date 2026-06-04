@@ -1698,8 +1698,8 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                     "  method-validation evidence that active boundary probing estimates useful critical radii at a small fixed rollout budget.",
                     "- `results/estimator_pair_30seed_v1/summary.csv`: 30-seed active-estimator confirmation.",
                     "Packaged grid-margin robustness/scope diagnostics are:",
-                    "- `results/grid_margin_ablation_15seed_v1/summary.csv`: original radius-level ablation showing that boundary-radius sampling is the important BGR component.",
-                    "- `results/grid_margin_ablation_30seed_v1/summary.csv`: 30-seed radius-level ablation confirmation.",
+                    "- `results/grid_margin_ablation_30seed_v1/summary.csv`: 30-seed radius-level ablation showing that boundary-radius sampling is the important BGR component.",
+                    "- `results/grid_margin_ablation_15seed_v1/summary.csv`: original 15-seed radius-level ablation retained for provenance.",
                     "- `paper/figures/grid_margin_learning_curve_stats.csv` and `results/grid_margin_full_15seed_v1/results.json`: stored 15-seed learning-curve history and generated stats.",
                     "- `paper/figures/grid_margin_target_sensitivity_stats.csv` and `results/grid_margin_target_sensitivity_15seed_v1/summary.csv`: target-margin sweep.",
                     "- `results/grid_margin_target_sensitivity_30seed_v1/summary.csv`: 30-seed target-margin confirmation.",
@@ -2046,7 +2046,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             self.write_results_evidence_index(results_readme)
             results_readme.write_text(
                 results_readme.read_text(encoding="utf-8").replace(
-                    f"- `{missing}`: original radius-level ablation showing that boundary-radius sampling is the important BGR component.\n",
+                    f"- `{missing}`: original 15-seed radius-level ablation retained for provenance.\n",
                     "",
                 ),
                 encoding="utf-8",
@@ -5420,9 +5420,9 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Table 3: Selected paired effect sizes",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
                 "Table 4: Probe-efficiency validation",
-                "Grid-margin ablations over 15 seeds",
+                "Grid-margin ablations over 30 seeds",
                 "Robot Suffix Study",
-                "Table 6: Grid-margin ablations over 15 seeds",
+                "Table 6: Grid-margin ablations over 30 seeds",
             ]
         )
         with mock.patch("scripts.check_submission_package.assert_letter_pdf", return_value=["pdf ok"]), mock.patch(
@@ -5460,8 +5460,8 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Table 3: Selected paired effect sizes",
                 "Table 4: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
-                "Grid-margin ablations over 15 seeds",
-                "Table 6: Grid-margin ablations over 15 seeds",
+                "Grid-margin ablations over 30 seeds",
+                "Table 6: Grid-margin ablations over 30 seeds",
                 "Table 6 isolates the replay decisions inside BGR",
                 "Robot Suffix Study",
             ]
@@ -5503,8 +5503,8 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Table 3: Selected paired effect sizes",
                 "Table 4: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
-                "Grid-margin ablations over 15 seeds",
-                "Table 6: Grid-margin ablations over 15 seeds",
+                "Grid-margin ablations over 30 seeds",
+                "Table 6: Grid-margin ablations over 30 seeds",
                 "Table 6 isolates the replay decisions inside BGR",
                 "Robot Suffix Study",
             ]
@@ -5545,7 +5545,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Table 3: Selected paired effect sizes",
                 "Table 4: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
-                "Table 6: Grid-margin ablations over 15 seeds",
+                "Table 6: Grid-margin ablations over 30 seeds",
                 "Robot Suffix Study",
             ]
         )
@@ -5586,7 +5586,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Table 3: Selected paired effect sizes",
                 "Table 4: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
-                "Table 6: Grid-margin ablations over 15 seeds",
+                "Table 6: Grid-margin ablations over 30 seeds",
                 "Robot Suffix Study",
             ]
         )
@@ -5616,7 +5616,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Table 3: Selected paired effect sizes",
                 "Table 4: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
-                "Table 6: Grid-margin ablations over 15 seeds",
+                "Table 6: Grid-margin ablations over 30 seeds",
                 "Robot Suffix Study",
             ]
         )
@@ -5646,7 +5646,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Table 3: Selected paired effect sizes",
                 "Table 4: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
-                "Table 6: Grid-margin ablations over 15 seeds",
+                "Table 6: Grid-margin ablations over 30 seeds",
                 "Robot Suffix Study",
             ]
         )
@@ -5677,7 +5677,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Table 3: Selected paired effect sizes",
                 "Table 4: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
-                "Table 6: Grid-margin ablations over 15 seeds",
+                "Table 6: Grid-margin ablations over 30 seeds",
                 "Robot Suffix Study",
             ]
         )

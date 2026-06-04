@@ -37,6 +37,12 @@ Grid margin ablation 15-seed,,final_rauc,bgr,bgr_uniform_radius,15,0.052862,0.00
 Grid margin ablation 15-seed,,final_rauc,bgr_uniform_radius,uniform,15,-0.014488,0.000597,-0.015769,-0.013206,0,15,0,6.10352e-05,higher,false
 Grid margin ablation 15-seed,,final_rauc,bgr,bgr_no_uncertainty,15,-0.000030,0.000265,-0.000599,0.000539,8,7,0,1,higher,false
 Grid margin ablation 15-seed,,final_rauc,bgr,bgr_no_sharpness,15,0.000265,0.000309,-0.000398,0.000928,9,6,0,0.607239,higher,true
+Grid margin ablation 30-seed,,final_rauc,bgr,bgr_uniform_radius,30,0.052507,0.000386,0.051719,0.053296,30,0,0,1.86265e-09,higher,true
+Grid margin ablation 30-seed,,rauc_aulc,bgr,bgr_uniform_radius,30,0.047542,0.000249,0.047034,0.048051,30,0,0,1.86265e-09,higher,true
+Grid margin ablation 30-seed,,final_rauc,bgr_uniform_radius,uniform,30,-0.014387,0.000370,-0.015143,-0.013632,30,0,0,1.86265e-09,lower,true
+Grid margin ablation 30-seed,,rauc_aulc,bgr_uniform_radius,uniform,30,-0.008136,0.000237,-0.008622,-0.007651,30,0,0,1.86265e-09,lower,true
+Grid margin ablation 30-seed,,final_rauc,bgr,bgr_no_uncertainty,30,-0.000450,0.000226,-0.000912,0.000012,13,17,0,0.584665,higher,false
+Grid margin ablation 30-seed,,final_rauc,bgr,bgr_no_sharpness,30,-0.000161,0.000296,-0.000766,0.000445,16,14,0,0.855536,higher,false
 Robot suffix full 15-seed,,final_rauc,bgr,clean_ft,15,0.209355,0.000649,0.207964,0.210746,15,0,0,6.10352e-05,higher,true
 Robot suffix full 15-seed,,final_rauc,bgr,fixed,15,0.314027,0.000676,0.312577,0.315478,15,0,0,6.10352e-05,higher,true
 Robot suffix full 15-seed,,final_rauc,bgr,failure_only,15,0.049502,0.000702,0.047995,0.051009,15,0,0,6.10352e-05,higher,true

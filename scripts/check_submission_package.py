@@ -3928,7 +3928,7 @@ def check_main_pdf(path: Path) -> list[str]:
         "Table 3: Selected paired effect sizes",
         "Table 4: Probe-efficiency validation",
         "Thirty-seed procedural grid-margin full-baseline comparison",
-        "Table 6: Grid-margin ablations over 15 seeds",
+        "Table 6: Grid-margin ablations over 30 seeds",
         "Robot Suffix Study",
     ]
     positions = [normalized_text.find(snippet) for snippet in rendered_order]

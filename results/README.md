@@ -34,10 +34,10 @@ Primary controlled evidence for the paper is:
 
 Packaged grid-margin robustness/scope diagnostics are:
 
-- `results/grid_margin_ablation_15seed_v1/summary.csv`: original radius-level
-  ablation showing that boundary-radius sampling is the important BGR component.
 - `results/grid_margin_ablation_30seed_v1/summary.csv`: 30-seed radius-level
-  ablation confirmation.
+  ablation showing that boundary-radius sampling is the important BGR component.
+- `results/grid_margin_ablation_15seed_v1/summary.csv`: original 15-seed
+  radius-level ablation retained for provenance.
 - `paper/figures/grid_margin_learning_curve_stats.csv` and
   `results/grid_margin_full_15seed_v1/results.json`: stored 15-seed
   learning-curve history and generated stats.
