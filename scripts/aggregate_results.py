@@ -3,7 +3,9 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import math
+import sys
 from pathlib import Path
 
 
@@ -178,7 +180,7 @@ def main() -> None:
         write_csv(out_dir / "openvla_stats.csv", openvla_rows)
         write_openvla_table(out_dir / "openvla_table.tex", openvla_rows)
     try:
-        make_boundary_intuition_figure(out_dir)
+        make_boundary_intuition_figure(out_dir, results_dir)
         make_figures(out_dir, summary_rows)
         if estimator_rows:
             make_estimator_figure(out_dir, estimator_rows)
@@ -737,7 +739,7 @@ def make_figures(out_dir: Path, rows: list[dict]) -> None:
         plt.close(fig)
 
 
-def make_boundary_intuition_figure(out_dir: Path) -> None:
+def make_boundary_intuition_figure(out_dir: Path, results_dir: Path) -> None:
     import matplotlib.pyplot as plt
     import numpy as np
 
@@ -748,9 +750,8 @@ def make_boundary_intuition_figure(out_dir: Path) -> None:
     recovery = clean / (1.0 + np.exp((sigma - radius) / 0.055))
     alpha = 0.8
     threshold = alpha * clean
-    boundary_density = np.exp(-0.5 * ((sigma - radius) / 0.075) ** 2)
-    boundary_density = 0.26 * boundary_density / boundary_density.max()
-    uniform_density = np.full_like(sigma, 0.055)
+
+    trace = grid_margin_boundary_trace(results_dir)
 
     fig, axes = plt.subplots(1, 2, figsize=(6.4, 2.1))
     ax = axes[0]
@@ -766,23 +767,153 @@ def make_boundary_intuition_figure(out_dir: Path) -> None:
     ax.legend(loc="upper right", fontsize=6.7, frameon=False)
 
     ax = axes[1]
-    ax.fill_between(sigma, boundary_density, color="#1f77b4", alpha=0.42, label="Boundary-centered")
-    ax.plot(sigma, boundary_density, color="#1f77b4", linewidth=1.6)
-    ax.fill_between(sigma, uniform_density, color="#b8b8b8", alpha=0.55, label="Uniform radius")
-    ax.plot(sigma, uniform_density, color="#666666", linewidth=1.1)
-    ax.axvline(radius, color="#d62728", linestyle=":", linewidth=1.4)
-    ax.set_xlabel("Training perturbation radius")
-    ax.set_ylabel("Sampling mass")
-    ax.set_ylim(0, 0.30)
+    empirical_sigma = trace["sigma"]
+    bgr_curve = trace["bgr_curve"]
+    uniform_curve = trace["uniform_curve"]
+    ax.plot(empirical_sigma, bgr_curve, color="#1f77b4", linewidth=2.0, label="BGR final curve")
+    ax.plot(empirical_sigma, uniform_curve, color="#666666", linewidth=1.6, label="Uniform final curve")
+    ax.axvline(trace["bgr_median_r80"], color="#1f77b4", linestyle=":", linewidth=1.1)
+    ax.axvline(trace["uniform_median_r80"], color="#666666", linestyle=":", linewidth=1.0)
+    hist, edges = np.histogram(trace["bgr_sampled_sigmas"], bins=np.linspace(0.0, 1.0, 21))
+    heights = hist / max(1, int(hist.max())) * 0.18
+    ax.bar(
+        edges[:-1],
+        heights,
+        width=np.diff(edges),
+        align="edge",
+        color="#1f77b4",
+        alpha=0.20,
+        edgecolor="none",
+        label="BGR train radii",
+    )
+    ax.set_xlabel("Perturbation radius")
+    ax.set_ylabel("Success probability")
+    ax.set_ylim(0, 1.02)
     ax.set_xlim(0, 1.0)
-    ax.set_yticks([])
-    ax.grid(axis="x", alpha=0.22, linewidth=0.5)
-    ax.legend(loc="upper right", fontsize=6.7, frameon=False)
+    ax.grid(alpha=0.22, linewidth=0.5)
+    ax.legend(loc="upper right", fontsize=6.2, frameon=False)
 
     fig.tight_layout(w_pad=1.2)
     fig.savefig(out_dir / "boundary_intuition.pdf")
     fig.savefig(out_dir / "boundary_intuition.png", dpi=200)
     plt.close(fig)
+
+    write_csv(
+        out_dir / "boundary_intuition_stats.csv",
+        [
+            {"metric": "seed", "value": trace["seed"]},
+            {"metric": "bgr_final_rauc", "value": trace["bgr_rauc"]},
+            {"metric": "uniform_final_rauc", "value": trace["uniform_rauc"]},
+            {"metric": "bgr_median_r80", "value": trace["bgr_median_r80"]},
+            {"metric": "uniform_median_r80", "value": trace["uniform_median_r80"]},
+            {"metric": "bgr_sample_radius_q25", "value": trace["bgr_sample_radius_q25"]},
+            {"metric": "bgr_sample_radius_median", "value": trace["bgr_sample_radius_median"]},
+            {"metric": "bgr_sample_radius_q75", "value": trace["bgr_sample_radius_q75"]},
+        ],
+    )
+
+
+def grid_margin_boundary_trace(results_dir: Path) -> dict:
+    import numpy as np
+
+    root = Path(__file__).resolve().parents[1]
+    src_dir = root / "src"
+    if str(src_dir) not in sys.path:
+        sys.path.insert(0, str(src_dir))
+
+    from bgr.metrics import critical_radius, recovery_auc
+
+    config = json.loads((results_dir / "grid_margin_full_30seed_v1" / "results.json").read_text(encoding="utf-8"))[
+        "config"
+    ]
+    seed = 0
+    sigma_grid = np.linspace(0.0, 1.0, 101)
+    alpha = float(config["experiment"].get("alpha", 0.8))
+    bgr = _run_grid_margin_trace(config, "bgr", seed, sigma_grid)
+    uniform = _run_grid_margin_trace(config, "uniform", seed, sigma_grid)
+
+    bgr_radii = [critical_radius(sigma_grid, curve, alpha=alpha) for curve in bgr["state_curves"]]
+    uniform_radii = [critical_radius(sigma_grid, curve, alpha=alpha) for curve in uniform["state_curves"]]
+    bgr_raucs = [recovery_auc(sigma_grid, curve, sigma_max=1.0) for curve in bgr["state_curves"]]
+    uniform_raucs = [recovery_auc(sigma_grid, curve, sigma_max=1.0) for curve in uniform["state_curves"]]
+    sampled = np.asarray(bgr["sampled_sigmas"], dtype=float)
+    return {
+        "seed": seed,
+        "sigma": sigma_grid,
+        "bgr_curve": np.mean(np.vstack(bgr["state_curves"]), axis=0),
+        "uniform_curve": np.mean(np.vstack(uniform["state_curves"]), axis=0),
+        "bgr_rauc": float(np.mean(bgr_raucs)),
+        "uniform_rauc": float(np.mean(uniform_raucs)),
+        "bgr_median_r80": float(np.median(bgr_radii)),
+        "uniform_median_r80": float(np.median(uniform_radii)),
+        "bgr_sampled_sigmas": sampled,
+        "bgr_sample_radius_q25": float(np.quantile(sampled, 0.25)),
+        "bgr_sample_radius_median": float(np.quantile(sampled, 0.50)),
+        "bgr_sample_radius_q75": float(np.quantile(sampled, 0.75)),
+    }
+
+
+def _run_grid_margin_trace(config: dict, method: str, seed: int, sigma_grid) -> dict:
+    import numpy as np
+
+    from bgr.envs.grid_recovery import GridMarginRecoveryBenchmark
+    from bgr.experiments.grid_margin import (
+        _init_records,
+        _refresh_records,
+        _sample_training_pair,
+        _uses_bgr_records,
+    )
+    from bgr.priorities import BGRPriorityScorer
+
+    exp = config["experiment"]
+    bgr_cfg = config.get("bgr", {})
+    rng = np.random.default_rng(seed + 30_000)
+    bench = GridMarginRecoveryBenchmark(
+        num_tasks=int(exp["num_tasks"]),
+        grid_size=int(exp["grid_size"]),
+        obstacle_prob=float(exp["obstacle_prob"]),
+        replay_states_per_task=int(exp["replay_states_per_task"]),
+        max_offset=int(exp["max_offset"]),
+        learning_rate=float(exp["learning_rate"]),
+        seed=seed,
+        feasible_radius_floor=float(exp.get("feasible_radius_floor", 0.35)),
+        feasible_radius_base=float(exp.get("feasible_radius_base", 0.45)),
+        feasible_radius_path_scale=float(exp.get("feasible_radius_path_scale", 0.45)),
+        feasible_radius_noise=float(exp.get("feasible_radius_noise", 0.03)),
+        initial_margin_base=float(exp.get("initial_margin_base", 0.12)),
+        initial_margin_path_scale=float(exp.get("initial_margin_path_scale", 0.22)),
+        initial_margin_noise=float(exp.get("initial_margin_noise", 0.05)),
+        initial_margin_min=float(exp.get("initial_margin_min", 0.05)),
+        initial_margin_max=float(exp.get("initial_margin_max", 0.45)),
+        clean_success_min=float(exp.get("clean_success_min", 0.80)),
+        clean_success_max=float(exp.get("clean_success_max", 0.96)),
+        temperature_min=float(exp.get("temperature_min", 0.045)),
+        temperature_max=float(exp.get("temperature_max", 0.10)),
+        boundary_width=float(exp.get("boundary_width", 0.15)),
+    )
+    alpha = float(exp.get("alpha", 0.8))
+    records = _init_records(bench, bgr_cfg, alpha, rng)
+    scorer = BGRPriorityScorer(target_radius=float(exp.get("target_margin", 0.38)))
+    sampled_sigmas: list[float] = []
+    for step in range(int(exp["iterations"]) + 1):
+        if step % int(exp["eval_every"]) == 0 and _uses_bgr_records(method):
+            _refresh_records(bench, records, bgr_cfg, alpha, rng, step)
+        if step == int(exp["iterations"]):
+            break
+        for _ in range(int(exp["train_batch_size"])):
+            replay_idx, sigma = _sample_training_pair(method, bench, records, scorer, config, rng, step)
+            if method == "bgr":
+                sampled_sigmas.append(sigma)
+            bench.train_step(replay_idx, sigma, rng)
+            if _uses_bgr_records(method):
+                success = bench.rollout(replay_idx, sigma, rng)
+                records[replay_idx].add_observation(sigma, success)
+                records[replay_idx].replay_count += 1
+    state_curves = [
+        np.array([bench.success_prob(replay_idx, float(sigma)) for sigma in sigma_grid], dtype=float)
+        for replay_idx in range(len(bench.states))
+    ]
+    return {"state_curves": state_curves, "sampled_sigmas": sampled_sigmas}
 
 
 def make_estimator_figure(out_dir: Path, rows: list[dict]) -> None:

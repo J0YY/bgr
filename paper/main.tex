@@ -93,7 +93,7 @@ BGR maintains a buffer of replayable states. For each state, it probes perturbat
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/boundary_intuition.pdf}
-\caption{Geometric intuition for BGR. A recovery curve maps perturbation radius to success probability; the critical radius is the success--failure crossing relative to clean success. BGR concentrates radius samples near this crossing while retaining clean, easier, harder, broad, and uniform components for coverage.}
+\caption{Geometric intuition for BGR and empirical grid-margin trace. Left: a recovery curve maps perturbation radius to success probability, and the critical radius is the success--failure crossing relative to clean success. Right: a deterministic seed-0 grid-margin replay trace overlays final BGR/uniform recovery curves with the BGR training-radius histogram, showing how boundary-centered replay concentrates updates near the trainable transition while retaining coverage.}
 \label{fig:boundary-intuition}
 \end{figure}
 

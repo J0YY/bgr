@@ -1,0 +1,9 @@
+metric,value
+seed,0
+bgr_final_rauc,0.4332633498297786
+uniform_final_rauc,0.3964070803386946
+bgr_median_r80,0.3512843502198342
+uniform_median_r80,0.3407458588258427
+bgr_sample_radius_q25,0.08657664991044112
+bgr_sample_radius_median,0.19093942942392444
+bgr_sample_radius_q75,0.28971486348330494

@@ -343,6 +343,7 @@ PAPER_FIGURE_ARTIFACTS = [
     "paper/figures/summary_stats.csv",
     "paper/figures/summary_table.tex",
     "paper/figures/bgr_deltas.csv",
+    "paper/figures/boundary_intuition_stats.csv",
     "paper/figures/significance_tests.csv",
     "paper/figures/significance_table.tex",
     "paper/figures/grid_margin_full_stats.csv",
@@ -383,6 +384,7 @@ PAPER_GENERATED_VISUAL_ARTIFACTS = [
 AGGREGATE_TEXT_ARTIFACTS = [
     "summary_stats.csv",
     "bgr_deltas.csv",
+    "boundary_intuition_stats.csv",
     "summary_table.tex",
     "estimator_stats.csv",
     "estimator_table.tex",
