@@ -120,7 +120,7 @@ All experiments are driven by artifact YAML configs and scripts. The anonymous a
 
 \subsection{Protocol and Metrics}
 
-We report clean success, recovery AUC (RAUC), median $r_{80}$, and area under the RAUC learning curve (AULC). RAUC and $r_{80}$ are evaluated on dense held-out radius grids rather than on the probes used by BGR during training. The synthetic, estimator, and grid learning-curve diagnostics use 15 paired seeds; packaged grid full-baseline, ablation, sensitivity, and suffix coverage confirmations use 30. We report exact two-sided paired sign tests; five-seed exploratory variants are reported only as exploratory evidence.
+We report clean success, recovery AUC (RAUC), median $r_{80}$, and area under the RAUC learning curve (AULC). RAUC and $r_{80}$ are evaluated on dense held-out radius grids rather than on the probes used by BGR during training. The synthetic and grid learning-curve diagnostics use 15 paired seeds; estimator validation and packaged grid full-baseline, ablation, sensitivity, and suffix coverage confirmations use 30. We report exact two-sided paired sign tests; five-seed exploratory variants are reported only as exploratory evidence.
 
 Baselines are matched to the decisions BGR changes. Uniform replay samples replay states and perturbation radii without recovery-boundary information. Fixed-radius replay uses the same learner and feasibility filters at one configured perturbation scale. Failure-only replay prioritizes states with observed failures without estimating a crossing radius. PLR-loss and loss-priority baselines replace BGR's recovery-curve priority with learner-loss proxies. Clean-only suffix training regularizes on unperturbed suffixes. Paired comparisons share seeds, rollout budgets, evaluation grids, and validity filters.
 
@@ -136,7 +136,7 @@ Baselines are matched to the decisions BGR changes. Uniform replay samples repla
 \centering
 \small
 \resizebox{\textwidth}{!}{\input{figures/significance_table.tex}}
-\caption{Selected paired effect sizes for the central claims, including the completed 30-seed confirmations for the grid and suffix full-baseline runs. Mean differences and 95\% confidence intervals are computed over paired seeds; W/L/T counts paired wins, losses, and ties in the declared improvement direction; $p$ is the exact two-sided paired sign-test value. Synthetic and estimator comparisons use 15 paired seeds; grid full-baseline and suffix coverage-full comparisons use 30 paired seeds.}
+\caption{Selected paired effect sizes for the central claims, including the completed 30-seed estimator, grid, and suffix full-baseline confirmations. Mean differences and 95\% confidence intervals are computed over paired seeds; W/L/T counts paired wins, losses, and ties in the declared improvement direction; $p$ is the exact two-sided paired sign-test value. The synthetic comparison uses 15 paired seeds; estimator, grid full-baseline, and suffix coverage-full comparisons use 30 paired seeds.}
 \label{tab:significance}
 \end{table*}
 
@@ -154,7 +154,7 @@ Baselines are matched to the decisions BGR changes. Uniform replay samples repla
 
 BGR is useful only if recovery boundaries can be estimated without evaluating dense curves for every replay state. We therefore validate the training-time estimator separately from the replay experiments. For each synthetic state, we compute a dense 201-point reference curve for evaluation only, then compare 17-probe estimators: uniform random radii and active BGR probing initialized with a coarse sweep and then focused near the current critical-radius estimate.
 
-Table~\ref{tab:estimator} shows over 15 paired seeds that active BGR finds the boundary within $\pm0.08$ radius units more often than uniform probing (0.677 vs. 0.601) and lowers mean $r_{80}$ error (0.080 vs. 0.106). Paired exact sign tests support both effects ($p<10^{-3}$). This result does not claim that active probing dominates every fixed grid in this simple one-dimensional setting; rather, it verifies that BGR's boundary estimates are usable at a small fixed rollout budget before final dense-curve evaluation.
+Table~\ref{tab:estimator} shows over 30 paired seeds that active BGR finds the boundary within $\pm0.08$ radius units more often than uniform probing (0.670 vs. 0.595) and lowers mean $r_{80}$ error (0.081 vs. 0.105). Paired exact sign tests support both effects ($p<10^{-3}$). This result does not claim that active probing dominates every fixed grid in this simple one-dimensional setting; rather, it verifies that BGR's boundary estimates are usable at a small fixed rollout budget before final dense-curve evaluation.
 
 \subsection{Synthetic Recovery-Margin Benchmark}
 

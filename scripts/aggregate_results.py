@@ -44,7 +44,7 @@ METRICS = [
     ("rauc_aulc", "AULC"),
 ]
 
-ESTIMATOR_RUN = "estimator_pair_15seed_v1"
+ESTIMATOR_RUN = "estimator_pair_30seed_v1"
 GRID_FULL_RUN = "grid_margin_full_30seed_v1"
 ABLATION_RUN = "grid_margin_ablation_15seed_v1"
 TARGET_SENSITIVITY_RUN = "grid_margin_target_sensitivity_15seed_v1"

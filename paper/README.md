@@ -45,8 +45,7 @@ synthetic table checks the intended recovery-margin sampler over 15 paired
 seeds, and the anonymous artifact also includes the 30-seed confirmation
 `results/toy_30seed_v1/summary.csv` for reviewer inspection. The rendered
 active-estimator validation checks that boundary-focused probes recover useful
-critical radii at a small fixed rollout budget over 15 paired seeds, and the
-artifact also includes the 30-seed confirmation
+critical radii at a small fixed rollout budget over 30 paired seeds from
 `results/estimator_pair_30seed_v1/summary.csv`. The procedural grid-margin
 section reports the completed 30-seed full-baseline confirmation, while retaining 15-seed
 target-margin sensitivity over targets 0.26--0.54 and stepwise learning-curve

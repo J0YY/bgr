@@ -647,7 +647,7 @@ def write_latex(rows: list[dict[str, str]], path: Path) -> None:
         ("Robot suffix coverage-full 30-seed", "final_rauc", "uniform"),
         ("Robot suffix coverage-full 30-seed", "final_transfer_rauc", "uniform"),
         ("Robot suffix coverage-full 30-seed", "rauc_aulc", "uniform"),
-        ("Estimator 15-seed", "boundary_hit_rate", "uniform"),
+        ("Estimator 30-seed", "boundary_hit_rate", "uniform"),
     ]
     available = {(row["benchmark"], row["metric"], row["baseline"]): row for row in rows}
     if ("Grid margin full 30-seed", "final_rauc", "uniform") not in available:

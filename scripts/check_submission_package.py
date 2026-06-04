@@ -127,6 +127,7 @@ STALE_CHECKLIST_ARTIFACT_FRAMING = [
 STALE_CHECKLIST_CLAIM_FRAMING = [
     "training-loop figure",
     "main synthetic, grid-margin, suffix, and estimator comparisons use 15 paired seeds",
+    "synthetic/estimator and grid learning-curve diagnostics: 15 seed pairs",
     "Grid sensitivity, ablation, and learning-curve diagnostics use 15 paired seeds",
     "grid sensitivity, ablation, and learning-curve diagnostics use 15 paired seeds",
 ]
@@ -134,8 +135,8 @@ REQUIRED_CHECKLIST_CLAIM_FRAMING = [
     "training-loop method box",
     "method section defines replayable states and recovery curves",
     "states critical radii, BGR priority",
-    "synthetic/estimator and grid learning-curve diagnostics: 15 seed pairs",
-    "grid-margin full-baseline, grid ablation, grid sensitivity confirmations, and robot-suffix coverage comparisons use 30 paired seeds",
+    "synthetic and grid learning-curve diagnostics use 15 seed pairs",
+    "estimator validation, grid-margin full-baseline, grid ablation, grid sensitivity confirmations, and robot-suffix coverage comparisons use 30 paired seeds",
 ]
 CHECKLIST_BAD_ANSWER_SPACING = re.compile(r"\)(yes|partial|no|NA)\b")
 PAPER_FACING_OPENVLA_STALE_PHRASES = [
@@ -1514,7 +1515,8 @@ def check_paper_readme_submission_framing(root: Path) -> list[str]:
             "bridge now has corrected",
             "synthetic mechanism, estimator-validation, procedural, diagnostic, OpenVLA audit",
             "The synthetic benchmark checks the intended recovery-margin sampler over 15 paired seeds",
-            "The active-estimator validation checks that boundary-focused probes recover useful critical radii at a small fixed rollout budget.",
+            "The active-estimator validation checks that boundary-focused probes recover useful critical radii at a small fixed rollout budget over 15 paired seeds",
+            "the artifact also includes the 30-seed confirmation `results/estimator_pair_30seed_v1/summary.csv`",
         ]
         if snippet in text
     ]
@@ -1525,8 +1527,7 @@ def check_paper_readme_submission_framing(root: Path) -> list[str]:
         "synthetic mechanism, estimator-validation, procedural grid-margin, grid-scope diagnostic, OpenVLA audit, and embedded checklist evidence",
         "The rendered synthetic table checks the intended recovery-margin sampler over 15 paired seeds",
         "the anonymous artifact also includes the 30-seed confirmation `results/toy_30seed_v1/summary.csv`",
-        "The rendered active-estimator validation checks that boundary-focused probes recover useful critical radii at a small fixed rollout budget over 15 paired seeds",
-        "the artifact also includes the 30-seed confirmation `results/estimator_pair_30seed_v1/summary.csv`",
+        "The rendered active-estimator validation checks that boundary-focused probes recover useful critical radii at a small fixed rollout budget over 30 paired seeds from `results/estimator_pair_30seed_v1/summary.csv`",
         "procedural grid-margin section reports the completed 30-seed full-baseline confirmation",
         "robot-suffix simulator reports a 30-seed coverage-aware BGR-Suffix variant",
         "OpenVLA-OFT bridge includes corrected clean-mix diagnostics",
@@ -3886,7 +3887,7 @@ def check_main_pdf(path: Path) -> list[str]:
         "OpenVLA/LIBERO audits",
         "not BGR fine-tuning claims",
         "run ledger files",
-        "30-seed confirmations for the grid and suffix",
+        "30-seed estimator, grid, and suffix",
         "Suffix RAUC vs clean-only",
         "Suffix RAUC vs loss-priority",
         "Suffix transfer vs uniform",
