@@ -65,10 +65,10 @@ Grid-margin robustness/scope diagnostic artifacts:
 - 30-seed radius-level ablation/table: `results/grid_margin_ablation_30seed_v1/summary.csv`, `paper/figures/grid_margin_ablation_table.tex`
 - original 15-seed radius-level ablation: `results/grid_margin_ablation_15seed_v1/summary.csv`
 - learning-curve stats/source: `paper/figures/grid_margin_learning_curve_stats.csv`, `results/grid_margin_full_15seed_v1/results.json`
-- target-margin sweep stats/source: `paper/figures/grid_margin_target_sensitivity_stats.csv`, `results/grid_margin_target_sensitivity_15seed_v1/summary.csv`, `results/grid_margin_target_sensitivity_30seed_v1/summary.csv`
-- learning-rate sweep stats/source: `paper/figures/grid_margin_learning_rate_sensitivity_stats.csv`, `results/grid_margin_learning_rate_sensitivity_15seed_v1/summary.csv`, `results/grid_margin_learning_rate_sensitivity_30seed_v1/summary.csv`
-- regime sweep stats/source: `paper/figures/grid_margin_regime_sensitivity_stats.csv`, `results/grid_margin_regime_sensitivity_15seed_v1/summary.csv`, `results/grid_margin_regime_sensitivity_30seed_v1/summary.csv`
-- stress sweep stats/source: `paper/figures/grid_margin_stress_sensitivity_stats.csv`, `results/grid_margin_stress_sensitivity_15seed_v1/summary.csv`, `results/grid_margin_stress_sensitivity_30seed_v1/summary.csv`
+- 30-seed target-margin sweep table/source: `paper/figures/grid_margin_target_sensitivity_stats.csv`, `results/grid_margin_target_sensitivity_30seed_v1/summary.csv`; 15-seed provenance: `results/grid_margin_target_sensitivity_15seed_v1/summary.csv`
+- 30-seed learning-rate sweep table/source: `paper/figures/grid_margin_learning_rate_sensitivity_stats.csv`, `results/grid_margin_learning_rate_sensitivity_30seed_v1/summary.csv`; 15-seed provenance: `results/grid_margin_learning_rate_sensitivity_15seed_v1/summary.csv`
+- 30-seed regime sweep table/source: `paper/figures/grid_margin_regime_sensitivity_stats.csv`, `results/grid_margin_regime_sensitivity_30seed_v1/summary.csv`; 15-seed provenance: `results/grid_margin_regime_sensitivity_15seed_v1/summary.csv`
+- 30-seed stress sweep table/source: `paper/figures/grid_margin_stress_sensitivity_stats.csv`, `results/grid_margin_stress_sensitivity_30seed_v1/summary.csv`; 15-seed provenance: `results/grid_margin_stress_sensitivity_15seed_v1/summary.csv`
 
 OpenVLA-OFT packaged audit summaries:
 
@@ -212,7 +212,7 @@ The grid benchmarks are dependency-light procedural decision benchmarks with gen
 ~/remote_srun.sh --github-test --git-pull --log --partition compute --gres '' --cpus 2 --mem 8G --time 01:00:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_grid_experiment.py --config configs/grid_bgr.yaml --out runs/grid_fast
 ```
 
-The positive procedural benchmark is `grid_margin_bgr`, which evaluates state-conditioned margin expansion on grid-backed replay states. The completed 30-seed full-baseline config is the primary grid comparison; 15-seed runs remain the source for the rendered learning-curve and sensitivity tables, while 30-seed confirmation summaries are packaged for the ablation and sensitivity claims:
+The positive procedural benchmark is `grid_margin_bgr`, which evaluates state-conditioned margin expansion on grid-backed replay states. The completed 30-seed full-baseline config is the primary grid comparison; the stored learning-curve history remains 15-seed, while the rendered ablation and sensitivity tables use the packaged 30-seed confirmations:
 
 ```bash
 ~/remote_srun.sh --dry-run --partition compute --gres '' --cpus 4 --mem 12G --time 02:00:00 /work/anonymous/bgr env PYTHONPATH=src:. python scripts/run_grid_margin_experiment.py --config configs/grid_margin_bgr_full.yaml --out runs/grid_margin_full
@@ -247,8 +247,8 @@ Grid-margin ablations isolate BGR priority terms and boundary-centered radius sa
 A grid-regime sensitivity runner is retained as a diagnostic. The packaged
 `obstacle_prob`/`max_offset` sweep mostly reproduces the nominal margin dynamics,
 so it should not be treated as separate robustness evidence without stronger
-regime changes. The artifact also includes a 30-seed regime diagnostic
-confirmation with 30/0 paired wins for BGR on final RAUC, RAUC AULC, clean
+regime changes. The rendered table uses the 30-seed regime diagnostic
+source, with 30/0 paired wins for BGR on final RAUC, RAUC AULC, clean
 success, and median r80 in each tested regime:
 
 ```bash
