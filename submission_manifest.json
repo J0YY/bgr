@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "2eb5b74d8608dadfc34bc0724a8b5b3faa6a7900212fe0c57cf02ee444e755d0",
-      "size_bytes": 265563
+      "sha256": "f35b893809823ec8af88fad4bee4f71e9be13694984c09822832b225c2ff3cbd",
+      "size_bytes": 265927
     },
     {
       "path": "results/environment_v1/README.md",
@@ -757,8 +757,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "6e89789c6b1aaa0c85dfd1fc2986df3b07a3afe04d003b1cd1fbdc650ac9b0ab",
-      "size_bytes": 234667
+      "sha256": "7122b8c2a2d8d18ddab62c4da96e0f26cbda87595271fc436d8d2b38a33e98f1",
+      "size_bytes": 234727
     },
     {
       "path": "scripts/collect_environment.py",
@@ -944,6 +944,11 @@
       "path": "scripts/sync_openvla_oft_proximal_anchor_results.sh",
       "sha256": "63f872bd580cd9a06359b4f928464e300b7395bf7b08c855b435297f9d4d193d",
       "size_bytes": 4976
+    },
+    {
+      "path": "scripts/sync_openvla_oft_weighted_perturb_results.sh",
+      "sha256": "595661624f9344c2c784010d0fe78d2aded5dcd850e0602ca40add72af8e21fa",
+      "size_bytes": 4750
     },
     {
       "path": "spec.md",
@@ -1217,8 +1222,8 @@
     },
     {
       "path": "tests/test_queue_openvla_oft_goal_adapt.py",
-      "sha256": "6e37ba585a0ff9ccfbdf0ce9bf3ccad7d57436540b8f7c0cd4702f00c3914e47",
-      "size_bytes": 12864
+      "sha256": "11be1105e1230f5590fb7f7d2718dd9088fc78eef602f4977a3f604cc73171f7",
+      "size_bytes": 14157
     },
     {
       "path": "tests/test_queue_openvla_oft_perturb_eval.py",

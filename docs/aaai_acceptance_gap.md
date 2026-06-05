@@ -665,11 +665,15 @@ package and recording its version before any result is run.
   checkpoint's four completed non-identity rows also total 367/400, far below
   the preregistered requirement that BGR beat the official checkpoint by at
   least 10/400 episodes and 0.02 absolute success.
-  Live Slurm poll on 2026-06-05 13:06 PDT still shows matched-random shift job
-  `766831` as `PENDING` for unavailable GPU nodes, with a Slurm start estimate
-  of 2026-06-07T13:21:02 and no start/end time in `sacct`. The remote
-  `summary.csv` has the same 14 rows as the local `summary_available.csv`, so
-  there is no complete weighted summary to sync. Because the
+  Live Slurm poll on 2026-06-05 14:29 PDT / 22:29 BST still shows
+  matched-random shift job `766831` as `PENDING` for unavailable A6000 GPU
+  nodes, with a Slurm start estimate of 2026-06-07T13:21:02 and no start/end
+  time in `sacct`. The remote `summary.csv` still has the same 14 rows as the
+  local `summary_available.csv`, so there is no complete weighted summary to
+  sync. Use `scripts/sync_openvla_oft_weighted_perturb_results.sh --poll --no-check`
+  for future ledger polls; its sync mode writes incomplete data to
+  `summary_available.csv` and only writes `summary.csv` after the fixed
+  perturbation gate rows are complete. Because the
   official-checkpoint margin is already +0 rather than the required +10/400,
   the pending row is ledger completion only and cannot make this intervention
   promotable.

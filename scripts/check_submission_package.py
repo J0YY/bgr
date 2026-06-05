@@ -506,6 +506,7 @@ OPENVLA_BRIDGE_ARTIFACTS = [
     "scripts/queue_openvla_oft_preregistered_weighted_perturb.sh",
     "scripts/queue_openvla_sanity_eval.sh",
     "scripts/sync_openvla_oft_proximal_anchor_results.sh",
+    "scripts/sync_openvla_oft_weighted_perturb_results.sh",
     "scripts/check_openvla_perturb_gate.py",
     "scripts/render_openvla_teacher_examples.py",
     "scripts/summarize_libero_openvla_recovery.py",

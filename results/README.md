@@ -131,8 +131,8 @@ Packaged OpenVLA audit artifacts are:
   weighted p2048unique perturbation audit rows available before matched-random
   shift completed; this artifact already proves the official-checkpoint
   promotion gate cannot pass because BGR and official tie at 367/400
-  non-identity successes. A live poll on 2026-06-05 13:06 PDT still had
-  matched-random shift job `766831` pending for unavailable GPU nodes, so the
+  non-identity successes. A live poll on 2026-06-05 14:29 PDT / 22:29 BST still had
+  matched-random shift job `766831` pending for unavailable A6000 GPU nodes, so the
   missing row is ledger completion only.
 
 The p4096 and common-availability sections below are retained as paper-negative
@@ -1579,11 +1579,17 @@ official checkpoint's 367/400, so BGR cannot satisfy the preregistered
 checkpoint. The paper should therefore continue to treat this intervention as a
 negative OpenVLA/LIBERO audit, not a robotics fine-tuning result.
 
-Live Slurm poll on 2026-06-05 13:06 PDT still shows matched-random shift job
-`766831` as pending for unavailable GPU nodes, with estimated start
-2026-06-07T13:21:02 and no start/end time in `sacct`. The remote perturbation
-`summary.csv` has the same 14 completed rows as the local
+Live Slurm poll on 2026-06-05 14:29 PDT / 22:29 BST still shows matched-random
+shift job `766831` as pending for unavailable A6000 GPU nodes, with estimated
+start 2026-06-07T13:21:02 and no start/end time in `sacct`. The remote
+perturbation `summary.csv` still has the same 14 completed rows as the local
 `summary_available.csv`, so there is no complete weighted summary to sync yet.
+Use
+`scripts/sync_openvla_oft_weighted_perturb_results.sh --poll --no-check` for
+future ledger polls. If the compact remote summary appears but remains
+incomplete, the helper syncs it to `summary_available.csv`; it writes
+`summary.csv` only after `check_openvla_perturb_gate.py --require-complete`
+accepts the fixed rows.
 
 Promotion gate: weighted BGR must beat weighted matched random and the official
 checkpoint on the fixed non-identity perturbation total by at least 10/400
