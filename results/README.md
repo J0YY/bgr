@@ -184,6 +184,16 @@ the original failure-only baseline, not merely old BGR. The preregistered
 4-seed follow-up command is:
 `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/pointmaze_recovery_probe.py --out results/pointmaze_umaze_guarded_probe_4seed_v1 --env-id PointMaze_UMaze-v3 --methods uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr,bgr_guarded --max-steps 80 --q-init-blend 1.0 --q-init-noise 0.02 --perturb-cells 3 --replay-distance-min 1 --replay-distance-max 3 --iterations 60`.
 
+`results/pointmaze_umaze_guarded_probe_4seed_v1/summary.csv` is the completed
+guarded follow-up. It is negative: final RAUC is 0.5458 for failure-only,
+0.2201 for uniform, 0.2073 for BGR-Coverage, 0.1406 for BGR, 0.1233 for
+BGR-uniform-radius, 0.0566 for BGR-Guarded, 0.0556 for TD-loss, and 0.0448 for
+fixed-radius replay. BGR-Guarded has floor-saturated absolute r20 (0.0000),
+below uniform (0.2500) and failure-only (0.5472). The promotion checker rejects
+BGR-Guarded because it loses to uniform on mean RAUC, loses to failure-only on
+all four paired seeds, loses to the state-priority/uniform-radius ablation, and
+has lower absolute r20 than uniform. Do not scale this sampler-mixing variant.
+
 ## Internal Official MiniGrid-FourRooms Diagnostic
 
 `results/minigrid_fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed

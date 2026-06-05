@@ -309,6 +309,16 @@ package and recording its version before any result is run.
      beats the original failure-only baseline, not merely if it beats old BGR.
      The preregistered 4-seed follow-up command is:
      `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/pointmaze_recovery_probe.py --out results/pointmaze_umaze_guarded_probe_4seed_v1 --env-id PointMaze_UMaze-v3 --methods uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr,bgr_guarded --max-steps 80 --q-init-blend 1.0 --q-init-noise 0.02 --perturb-cells 3 --replay-distance-min 1 --replay-distance-max 3 --iterations 60`.
+     The completed guarded follow-up is worse than old BGR on endpoint RAUC:
+     BGR-Guarded reaches 0.0566 final RAUC and 0.0000 absolute r20, versus
+     failure-only 0.5458 final RAUC and 0.5472 absolute r20, uniform 0.2201
+     RAUC and 0.2500 absolute r20, and BGR-Coverage 0.2073 RAUC and 0.0750
+     absolute r20. The checker rejects BGR-Guarded because it loses to uniform
+     on mean RAUC and paired signs, loses to failure-only on all four seeds,
+     loses to the state-priority/uniform-radius ablation, and has lower
+     absolute r20 than uniform. This rules out a sampler-mixing fix for the
+     PointMaze failure mode; the next attempt must change the update objective,
+     reset-state policy, or learned-policy intervention.
 5. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.
