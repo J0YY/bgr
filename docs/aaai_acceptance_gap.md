@@ -697,3 +697,13 @@ package and recording its version before any result is run.
   This means the learned linear controller saturates the FetchReach recovery
   curve for simple baselines, while BGR-family replay trails uniform and
   failure-only. Do not scale or promote this FetchReach protocol.
+- The next harder Gymnasium-Robotics calibration route is FetchPush-v4 with an
+  exact object-state reset interface. This is deliberately a pre-method
+  calibration, not BGR evidence: it checks whether a fixed scripted push
+  controller can preserve clean object-goal success and produce non-saturated
+  recovery curves before any replay-training comparison is implemented. The
+  preregistered calibration command is:
+  `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --out results/fetchpush_object_goal_calibration_2seed_v1 --env-id FetchPush-v4 --seeds 2 --replay-states 4 --trials 2 --radii 0.00,0.02,0.04,0.06,0.08,0.12 --horizon 80 --controller-gain 6.0 --direction-jitter 0.10`.
+  Do not implement or run a FetchPush method comparison unless this calibration
+  gives usable clean success, a nontrivial recovery drop across radii, and no
+  obvious controller-induced destruction of already-successful states.
