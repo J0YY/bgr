@@ -127,6 +127,11 @@ Packaged OpenVLA audit artifacts are:
   p2048 300-step image-augmentation continuation audit.
 - `results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv`:
   p2048 1,000-step low-LR image-augmentation continuation audit.
+- `results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary_available.csv`:
+  weighted p2048unique perturbation audit rows available before matched-random
+  shift completed; this artifact already proves the official-checkpoint
+  promotion gate cannot pass because BGR and official tie at 367/400
+  non-identity successes.
 
 The p4096 and common-availability sections below are retained as paper-negative
 diagnostics in this ledger only. Their summary CSVs are not part of the

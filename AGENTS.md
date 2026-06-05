@@ -10,7 +10,7 @@ As of 2026-06-05, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.p
 
 - PASS controlled grid mechanism: pooled RAUC 0.4342 vs 0.3965.
 - FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, and PointMaze remain non-promotable.
-- FAIL learned-policy OpenVLA/LIBERO: non-identity success is BGR 366/400, official 367/400, and matched random 368/400.
+- FAIL learned-policy OpenVLA/LIBERO: the latest weighted perturbation audit has non-identity success BGR 367/400 and official 367/400, with matched-random 273/300 available rows and random shift pending. The official-checkpoint gate is already impossible because the required margin is +10/400 and +0.02 absolute success.
 - Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
 The practical goal is not to make the paper sound accepted. The practical goal is to find or build defensible evidence that survives the acceptance criteria below, then incorporate only those results into `paper/main.tex`.

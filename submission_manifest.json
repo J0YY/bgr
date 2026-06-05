@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "08202f230ed312b57a24c3ff17242c57726608e02f4aa4e902740fd23f2d14fd",
-      "size_bytes": 245190
+      "sha256": "7ff67ef2cace2663936b8d750cdb5bd4333208dc2ce577dc722859d00c93b8b3",
+      "size_bytes": 245622
     },
     {
       "path": "results/environment_v1/README.md",
@@ -651,6 +651,11 @@
       "size_bytes": 510
     },
     {
+      "path": "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary_available.csv",
+      "sha256": "9bde29c1a00b290fd17244c7411ccce9542947857521336085bccb8c88a7f0bd",
+      "size_bytes": 430
+    },
+    {
       "path": "results/openvla_oft_sanity_eval_sanity_v1/summary.csv",
       "sha256": "81cd14233578a22d1b3176bec4fc989720dc4e779f7d67578050ad270ade4c97",
       "size_bytes": 266
@@ -731,6 +736,11 @@
       "size_bytes": 35107
     },
     {
+      "path": "scripts/check_acceptance_readiness.py",
+      "sha256": "910f7a98c9bded4b7d5789014561e87863567183f1abec3e789afb4057499d3e",
+      "size_bytes": 11607
+    },
+    {
       "path": "scripts/check_openvla_perturb_gate.py",
       "sha256": "e13abb756e0f759c945668c6932aaca902d147b1ba4d42a0819dadec7682ca4a",
       "size_bytes": 6960
@@ -742,8 +752,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "063335fe1966ad451d4c703bad51a1adc0e9c8ac72ad354eef0e96c3ed59ce48",
-      "size_bytes": 229703
+      "sha256": "6296a09b5621eaba90d78fcd0fe73b3dff456f6ebec61ed7d8b2a6579cab8e5d",
+      "size_bytes": 230032
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1029,6 +1039,11 @@
       "path": "tests/test_analyze_significance.py",
       "sha256": "56594406a331412e2fd30ecb9c014fa62ce9dbb6f7749b7ac70220ba5bda2b84",
       "size_bytes": 37326
+    },
+    {
+      "path": "tests/test_check_acceptance_readiness.py",
+      "sha256": "aa289ae072ec9713e6efacb8618cf4fa45c39082a861dd1b030cac3a98f0b0e8",
+      "size_bytes": 1952
     },
     {
       "path": "tests/test_check_openvla_perturb_gate.py",

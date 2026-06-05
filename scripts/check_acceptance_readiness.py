@@ -8,6 +8,16 @@ from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
 
+OPENVLA_NON_IDENTITY_PERTURBATIONS = {"blur", "brightness", "occlusion", "shift"}
+OPENVLA_WEIGHTED_AVAILABLE = (
+    "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_"
+    "imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary_available.csv"
+)
+OPENVLA_LEGACY_COMPLETE = (
+    "results/openvla_oft_perturb_eval_cleanmix_p4096_commonavail_step50500_lr5em7_identitylora_imageaug_"
+    "officialtrainstats_prereg_fullgoal10x10_v1/summary.csv"
+)
+
 
 @dataclass(frozen=True)
 class GateResult:
@@ -55,6 +65,19 @@ def success_total(rows: list[dict[str, str]], method: str, *, exclude_identity: 
         episodes += int(row["episodes"])
     if episodes == 0:
         raise ValueError(f"no OpenVLA rows for {method=}")
+    return successes, episodes
+
+
+def perturbation_total(rows: list[dict[str, str]], method: str, perturbations: set[str]) -> tuple[int, int]:
+    successes = 0
+    episodes = 0
+    for row in rows:
+        if row.get("method") != method or row.get("perturbation") not in perturbations:
+            continue
+        successes += int(float(row["successes"]))
+        episodes += int(float(row["episodes"]))
+    if episodes == 0:
+        raise ValueError(f"no OpenVLA rows for {method=} {perturbations=}")
     return successes, episodes
 
 
@@ -131,10 +154,50 @@ def independent_benchmark_gate(root: Path) -> GateResult:
 
 
 def learned_policy_gate(root: Path) -> GateResult:
-    rows = read_rows(
-        root
-        / "results/openvla_oft_perturb_eval_cleanmix_p4096_commonavail_step50500_lr5em7_identitylora_imageaug_officialtrainstats_prereg_fullgoal10x10_v1/summary.csv"
-    )
+    weighted_path = root / OPENVLA_WEIGHTED_AVAILABLE
+    if weighted_path.exists():
+        rows = read_rows(weighted_path)
+        bgr_success, bgr_episodes = perturbation_total(rows, "bgr", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+        official_success, official_episodes = perturbation_total(rows, "official", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+        random_success, random_episodes = perturbation_total(rows, "random", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+        bgr_identity, identity_eps = success_total(
+            [row for row in rows if row.get("perturbation") == "identity"], "bgr", exclude_identity=False
+        )
+        official_identity, _ = success_total(
+            [row for row in rows if row.get("perturbation") == "identity"], "official", exclude_identity=False
+        )
+        random_identity, _ = success_total(
+            [row for row in rows if row.get("perturbation") == "identity"], "random", exclude_identity=False
+        )
+        official_margin = bgr_success - official_success
+        official_rate_margin = bgr_success / bgr_episodes - official_success / official_episodes
+        random_detail = f"random {random_success}/{random_episodes}"
+        if random_episodes < 400:
+            random_detail = f"{random_detail} available rows; random shift pending"
+        clean_floor = max(official_identity, random_identity) - 1
+        passed = (
+            bgr_episodes == 400
+            and official_episodes == 400
+            and random_episodes == 400
+            and official_margin >= 10
+            and official_rate_margin >= 0.02
+            and bgr_success - random_success >= 10
+            and bgr_success / bgr_episodes - random_success / random_episodes >= 0.02
+            and bgr_identity >= clean_floor
+        )
+        return GateResult(
+            "learned-policy OpenVLA/LIBERO",
+            passed,
+            (
+                f"latest weighted audit non-identity BGR {bgr_success}/{bgr_episodes}, "
+                f"official {official_success}/{official_episodes}, {random_detail}; "
+                f"identity BGR {bgr_identity}/{identity_eps}, official {official_identity}/{identity_eps}, "
+                f"random {random_identity}/{identity_eps}; official_margin={official_margin}, "
+                f"official_rate_margin={official_rate_margin:+.4f}"
+            ),
+        )
+
+    rows = read_rows(root / OPENVLA_LEGACY_COMPLETE)
     bgr_success, non_identity = success_total(rows, "bgr", exclude_identity=True)
     random_success, _ = success_total(rows, "random", exclude_identity=True)
     official_success, _ = success_total(rows, "official", exclude_identity=True)

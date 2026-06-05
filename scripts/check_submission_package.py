@@ -430,6 +430,7 @@ OPENVLA_CLAIM_ARTIFACTS = [
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
+    "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary_available.csv",
 ]
 CHECKED_CLAIM_ARTIFACTS = [
     "paper/figures/estimator_stats.csv",
@@ -519,6 +520,7 @@ OPENVLA_BRIDGE_TEST_ARTIFACTS = [
 TEST_ARTIFACTS = [
     "tests/test_aggregate_results.py",
     "tests/test_analyze_significance.py",
+    "tests/test_check_acceptance_readiness.py",
     "tests/test_check_paper_claims.py",
     "tests/test_check_openvla_perturb_gate.py",
     "tests/test_check_submission_package.py",
@@ -606,6 +608,7 @@ SUBMISSION_GATE_ARTIFACTS = [
     "scripts/collect_environment.py",
     "scripts/aggregate_results.py",
     "scripts/analyze_significance.py",
+    "scripts/check_acceptance_readiness.py",
     "scripts/check_paper_claims.py",
     "scripts/check_submission_package.py",
     "scripts/merge_grid_margin_trials.py",
@@ -618,6 +621,7 @@ SUBMISSION_GATE_ARTIFACTS = [
     "scripts/run_suffix_stress_sensitivity.py",
     "tests/test_aggregate_results.py",
     "tests/test_analyze_significance.py",
+    "tests/test_check_acceptance_readiness.py",
     "tests/test_check_paper_claims.py",
     "tests/test_check_submission_package.py",
     "tests/test_grid_margin_learning_rate_sensitivity.py",
