@@ -5,6 +5,7 @@ from pathlib import Path
 
 from scripts.check_paper_claims import (
     Claim,
+    effect_size_framing_issues,
     find_significance_row,
     forbidden_terms,
     forbidden_paper_negative_claims,
@@ -68,6 +69,30 @@ class CheckPaperClaimsTest(unittest.TestCase):
             forbidden_paper_negative_claims("The p4096 common-availability diagnostic is negative."),
             ["p4096", "common-availability"],
         )
+
+    def test_effect_size_framing_accepts_required_caveats(self):
+        text = "\n".join(
+            [
+                "Mean differences and 95\\% confidence intervals are the primary quantities.",
+                "a 30/0 sign pattern can certify direction while the absolute gain remains small.",
+                "BGR gives a modest final recovery-AUC gain over uniform replay.",
+                "The synthetic result has mean difference 0.0084.",
+                "The endpoint gap is about 0.038 RAUC.",
+                "BGR-Coverage raises final object RAUC over uniform by a small but consistent amount.",
+                "uniform remains higher on median $r_{80}$.",
+            ]
+        )
+
+        self.assertEqual(effect_size_framing_issues(text), [])
+
+    def test_effect_size_framing_rejects_pvalue_only_overclaim(self):
+        text = "BGR wins with p<0.0001 and 30/0 paired signs across the main tasks."
+
+        issues = effect_size_framing_issues(text)
+
+        self.assertIn("significance table prioritizes effect sizes", issues)
+        self.assertIn("sign tests framed as directional consistency", issues)
+        self.assertIn("synthetic result framed as modest", issues)
 
     def test_unverified_result_claims_rejects_queued_p1024_without_summaries(self):
         with tempfile.TemporaryDirectory() as temp_dir:

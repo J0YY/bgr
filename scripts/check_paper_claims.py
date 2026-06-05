@@ -1203,6 +1203,40 @@ def forbidden_terms(paper_text: str) -> list[str]:
     ]
 
 
+def effect_size_framing_issues(paper_text: str) -> list[str]:
+    required_snippets = [
+        (
+            "significance table prioritizes effect sizes",
+            "Mean differences and 95\\% confidence intervals are the primary quantities",
+        ),
+        (
+            "sign tests framed as directional consistency",
+            "a 30/0 sign pattern can certify direction while the absolute gain remains small",
+        ),
+        (
+            "synthetic result framed as modest",
+            "BGR gives a modest final recovery-AUC gain over uniform replay",
+        ),
+        (
+            "synthetic absolute mean difference reported",
+            "mean difference 0.0084",
+        ),
+        (
+            "grid practical effect size named",
+            "The endpoint gap is about 0.038 RAUC",
+        ),
+        (
+            "suffix result framed as small",
+            "raises final object RAUC over uniform by a small but consistent amount",
+        ),
+        (
+            "suffix metric tension retained",
+            "uniform remains higher on median $r_{80}$",
+        ),
+    ]
+    return [label for label, snippet in required_snippets if snippet not in paper_text]
+
+
 def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
     p1024_summary_paths = [
         results_dir
@@ -1771,6 +1805,12 @@ def main() -> int:
         for token in paper_negative:
             print(f"- paper-negative OpenVLA diagnostic appears in paper: {token!r}")
         return 1
+    effect_framing = effect_size_framing_issues(paper_text)
+    if effect_framing:
+        print("Paper effect-size framing check failed:")
+        for item in effect_framing:
+            print(f"- missing or weakened framing: {item}")
+        return 1
 
     try:
         significance_messages = validate_significance_checks(args.figures_dir)
@@ -1783,6 +1823,7 @@ def main() -> int:
         print(f"[ok] {claim.label}: {claim.snippet} ({claim.source})")
     for message in significance_messages:
         print(f"[ok] {message} (paper/figures/significance_tests.csv)")
+    print("[ok] effect-size-first framing retained in paper text")
     return 0
 
 

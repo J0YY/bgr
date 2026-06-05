@@ -752,8 +752,8 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "00abf7f9bb9b3e744087e7a164ccd5dd612ab45ac137d72d5320a54c15b24272",
-      "size_bytes": 87013
+      "sha256": "a2bea4e10c95cee346656f82ac90aa9b35e8ffa37561f565fe280f4efc48e66f",
+      "size_bytes": 88526
     },
     {
       "path": "scripts/check_submission_package.py",
@@ -1067,8 +1067,8 @@
     },
     {
       "path": "tests/test_check_paper_claims.py",
-      "sha256": "649bb4137929a392b28f0e299f88b04c2f0770bf57df8ed90ce788b75e39f0b4",
-      "size_bytes": 25375
+      "sha256": "5dcbf910d4f3364ac971362c1b672197ff9f63e9e7bb53472bcded649bc78ae8",
+      "size_bytes": 26600
     },
     {
       "path": "tests/test_check_submission_package.py",
