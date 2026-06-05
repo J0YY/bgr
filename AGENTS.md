@@ -26,7 +26,7 @@ As of 2026-06-05, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.p
 
 - PASS controlled grid mechanism: pooled RAUC 0.4342 vs 0.3965.
 - FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, MiniGrid LavaGapS7, and PointMaze remain non-promotable.
-- FAIL learned-policy OpenVLA/LIBERO: the latest weighted perturbation audit has non-identity success BGR 367/400 and official 367/400, with matched-random 273/300 available rows and random shift job `766831` still pending on unavailable GPU nodes as of 2026-06-05 11:24 PDT. The official-checkpoint gate is already impossible because the required margin is +10/400 and +0.02 absolute success.
+- FAIL learned-policy OpenVLA/LIBERO: the latest weighted perturbation audit has non-identity success BGR 367/400 and official 367/400, with matched-random 273/300 available rows and random shift job `766831` still pending on unavailable GPU nodes as of 2026-06-05 11:44 PDT. The official-checkpoint gate is already impossible because the required margin is +10/400 and +0.02 absolute success.
 - Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
 The practical goal is not to make the paper sound accepted. The practical goal is to find or build defensible evidence that survives the acceptance criteria below, then incorporate only those results into `paper/main.tex`.
@@ -76,7 +76,7 @@ Treat the following as the current paper-weakness backlog:
 - Do not use Docker for this workflow.
 - Commit compact artifacts such as `summary.csv` and `package_versions.json`. Leave raw `results.json`, Slurm logs, and scratch directories untracked unless there is a deliberate reason to package them.
 - Use the `athena` Slurm workflow and repository scripts for heavy OpenVLA/LIBERO work. Do not rely on the dirty remote checkout being clean; prefer local wrapper scripts, explicit environment variables, and `GIT_PULL=0` where the remote tree is known to be dirty.
-- The latest learned-policy follow-up is the preregistered weighted OpenVLA perturbation curriculum. It is a negative audit: before the matched-random shift row finished, BGR's completed non-identity total was already 367/400, tied with the official checkpoint's 367/400, so it cannot clear the required +10/400 and +0.02 official-checkpoint margins. Poll job `766831` only for ledger completion; the 2026-06-05 11:24 PDT remote poll still had it pending for unavailable GPU nodes with a Slurm start estimate of 2026-06-07T13:21:02. Do not treat the final random-shift row as paper-positive evidence.
+- The latest learned-policy follow-up is the preregistered weighted OpenVLA perturbation curriculum. It is a negative audit: before the matched-random shift row finished, BGR's completed non-identity total was already 367/400, tied with the official checkpoint's 367/400, so it cannot clear the required +10/400 and +0.02 official-checkpoint margins. Poll job `766831` only for ledger completion; the 2026-06-05 11:44 PDT remote poll still had it pending for unavailable GPU nodes with a Slurm start estimate of 2026-06-07T13:21:02. Do not treat the final random-shift row as paper-positive evidence.
 
 ## Paper Workflow
 
