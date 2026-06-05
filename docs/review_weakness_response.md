@@ -45,8 +45,8 @@ to reproduce this read from the current result artifacts.
 - Do not add another authored toy benchmark unless it replaces, not expands,
   the current mechanism evidence.
 - Do not run another local classic-control/tabular probe after FourRooms; the
-  next acceptance-moving benchmark attempt needs an external package such as
-  MiniGrid or PointMaze/D4RL with package version recorded before results.
+  next acceptance-moving benchmark attempt needs a genuinely different external
+  package/reset interface with package version recorded before results.
 - Official MiniGrid-FourRooms is the first external-package screen with a
   BGR-family RAUC lead, but it is not paper evidence yet: BGR-Coverage clears
   the 4-seed RAUC/baseline screen only if radius saturation is waived, and the
@@ -71,19 +71,19 @@ to reproduce this read from the current result artifacts.
 - The next acceptance-moving result must be either a fixed-protocol positive
   pre-existing benchmark or a genuinely different preregistered learned-policy
   intervention that can beat both official and matched random.
-- The next independent-benchmark route is Gymnasium-Robotics FetchReach-v4.
-  A package-backed goal-recovery calibration is now non-saturated at
-  `--horizon 14 --controller-gain 2.0 --direction-jitter 0.15` (clean 0.3750,
-  RAUC 0.1969, r80 0.0395), but it is not method evidence. Implement and preregister the full
-  comparison before any BGR method result, with the same strong-baseline and
-  non-contradictory-radius promotion gate used elsewhere.
-  The fixed full-comparison tool is now `tools/fetchreach_goal_recovery_probe.py`;
-  it should be committed and pushed before running
-  `results/fetchreach_goal_recovery_probe_4seed_v1`.
-  The completed 4-seed screen is negative and saturated: BGR-Coverage 0.9000
-  and BGR 0.8938 trail uniform/fixed 0.9437 and failure-only 0.9563, while
-  every method has clean 1.0000 and median r80 0.1500. Do not scale this
-  protocol.
+- Gymnasium-Robotics FetchReach-v4 is now completed negative, including the
+  hard-budget follow-up. The default screen saturates after training:
+  BGR-Coverage 0.9000 and BGR 0.8938 trail uniform/fixed 0.9437 and
+  failure-only 0.9563, while every method has clean 1.0000 and median r80
+  0.1500. The hard-budget screen is also negative: TD-loss 0.9437,
+  failure-only 0.8250, uniform 0.6813, fixed-radius 0.6438,
+  BGR-uniform-radius 0.5188, BGR-Coverage 0.4625, and BGR 0.4438. Do not scale
+  or promote either FetchReach protocol.
+- The next acceptance-moving result must be a fixed-protocol positive result
+  on a truly different external package/reset interface, a genuinely different
+  preregistered learned-policy intervention that can beat both official and
+  matched random, or a stronger theory/presentation contribution. Do not keep
+  rerunning the same MiniGrid/PointMaze/FetchReach protocol family.
 - The current learned-policy follow-up is the preregistered weighted
   perturbation curriculum in
   `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh`. It changes the

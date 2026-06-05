@@ -131,7 +131,7 @@ Packaged OpenVLA audit artifacts are:
   weighted p2048unique perturbation audit rows available before matched-random
   shift completed; this artifact already proves the official-checkpoint
   promotion gate cannot pass because BGR and official tie at 367/400
-  non-identity successes. A live poll on 2026-06-05 11:44 PDT still had
+  non-identity successes. A live poll on 2026-06-05 11:55 PDT still had
   matched-random shift job `766831` pending for unavailable GPU nodes, so the
   missing row is ledger completion only.
 
@@ -148,14 +148,15 @@ experiment status.
 
 ## Internal FetchReach Goal-Recovery Calibration
 
-This is a pre-comparison calibration for a new independent-benchmark route, not
-paper evidence. It uses Gymnasium-Robotics FetchReach-v4 from the existing
+This began as a pre-comparison calibration for an independent-benchmark route,
+not paper evidence. It uses Gymnasium-Robotics FetchReach-v4 from the existing
 isolated robotics environment (`gymnasium-robotics==1.4.2`,
 `gymnasium==1.3.0`, `mujoco==3.9.0`) and keeps repo runtime dependencies
-unchanged. The route is different from the failed MiniGrid and PointMaze
-screens: replay states are package-sampled Fetch goals, perturbations are
-clipped 3D goal offsets inside the package target range, and evaluation uses
-MuJoCo Fetch dynamics.
+unchanged. The route differs from the failed MiniGrid and PointMaze screens:
+replay states are package-sampled Fetch goals, perturbations are clipped 3D
+goal offsets inside the package target range, and evaluation uses MuJoCo Fetch
+dynamics. Both the default and hard-budget method screens are now completed
+negative, so this route remains internal scope evidence only.
 
 Calibration command:
 
@@ -1553,7 +1554,7 @@ official checkpoint's 367/400, so BGR cannot satisfy the preregistered
 checkpoint. The paper should therefore continue to treat this intervention as a
 negative OpenVLA/LIBERO audit, not a robotics fine-tuning result.
 
-Live Slurm poll on 2026-06-05 11:44 PDT still shows matched-random shift job
+Live Slurm poll on 2026-06-05 11:55 PDT still shows matched-random shift job
 `766831` as pending for unavailable GPU nodes, with estimated start
 2026-06-07T13:21:02 and no start/end time in `sacct`. The remote perturbation
 `summary.csv` has the same 14 completed rows as the local

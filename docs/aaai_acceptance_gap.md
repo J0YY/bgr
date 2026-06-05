@@ -643,7 +643,7 @@ package and recording its version before any result is run.
   checkpoint's four completed non-identity rows also total 367/400, far below
   the preregistered requirement that BGR beat the official checkpoint by at
   least 10/400 episodes and 0.02 absolute success.
-  Live Slurm poll on 2026-06-05 11:44 PDT still shows matched-random shift job
+  Live Slurm poll on 2026-06-05 11:55 PDT still shows matched-random shift job
   `766831` as `PENDING` for unavailable GPU nodes, with a Slurm start estimate
   of 2026-06-07T13:21:02 and no start/end time in `sacct`. The remote
   `summary.csv` has the same 14 rows as the local `summary_available.csv`, so
@@ -658,13 +658,15 @@ package and recording its version before any result is run.
   learned-policy intervention, add a truly independent benchmark with a
   different reset/replay interface, or strengthen the theory/presentation enough
   to make the mechanism-study framing stand on its own.
-- The next independent-benchmark route is a Gymnasium-Robotics FetchReach-v4
-  goal-recovery screen because it changes both the package and reset interface:
-  replay states are package-sampled Fetch goals, perturbations are clipped 3D
-  goal offsets inside the package target range, and evaluation uses MuJoCo
-  Fetch dynamics rather than grid/tabular transitions. The probe package was
-  verified in the existing isolated `/tmp/bgr_pointmaze_venv` environment as
-  `gymnasium-robotics==1.4.2`, `gymnasium==1.3.0`, and `mujoco==3.9.0`.
+- Gymnasium-Robotics FetchReach-v4 was the next independent-benchmark route
+  because it changed both the package and reset interface: replay states are
+  package-sampled Fetch goals, perturbations are clipped 3D goal offsets inside
+  the package target range, and evaluation uses MuJoCo Fetch dynamics rather
+  than grid/tabular transitions. The completed default and hard-budget screens
+  are both negative, so this route is now scope evidence rather than acceptance
+  evidence. The probe package was verified in the existing isolated
+  `/tmp/bgr_pointmaze_venv` environment as `gymnasium-robotics==1.4.2`,
+  `gymnasium==1.3.0`, and `mujoco==3.9.0`.
   A pre-comparison calibration tool is implemented at
   `tools/fetchreach_goal_recovery_calibration.py`. The saturated default
   controller (`--horizon 18 --controller-gain 4.0`) was rejected. The fixed
