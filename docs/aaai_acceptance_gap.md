@@ -643,11 +643,14 @@ package and recording its version before any result is run.
   checkpoint's four completed non-identity rows also total 367/400, far below
   the preregistered requirement that BGR beat the official checkpoint by at
   least 10/400 episodes and 0.02 absolute success.
-  Live Slurm poll on 2026-06-05 10:25 PDT still shows matched-random shift job
-  `766831` as `PENDING` with no start/end time, so there is no complete
-  weighted summary to sync. Because the official-checkpoint margin is already
-  +0 rather than the required +10/400, the pending row is ledger completion
-  only and cannot make this intervention promotable.
+  Live Slurm poll on 2026-06-05 11:24 PDT still shows matched-random shift job
+  `766831` as `PENDING` for unavailable GPU nodes, with a Slurm start estimate
+  of 2026-06-07T13:21:02 and no start/end time in `sacct`. The remote
+  `summary.csv` has the same 14 rows as the local `summary_available.csv`, so
+  there is no complete weighted summary to sync. Because the
+  official-checkpoint margin is already +0 rather than the required +10/400,
+  the pending row is ledger completion only and cannot make this intervention
+  promotable.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance
