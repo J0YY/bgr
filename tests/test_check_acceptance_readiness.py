@@ -5,6 +5,7 @@ from pathlib import Path
 from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_AVAILABLE
 from scripts.check_acceptance_readiness import independent_benchmark_gate
 from scripts.check_acceptance_readiness import learned_policy_gate
+from scripts.check_acceptance_readiness import roadmap_hygiene_gate
 
 
 def _write_weighted_summary(root: Path) -> None:
@@ -119,6 +120,48 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
         self.assertIn("FetchSlide calibration invalid", gate.detail)
         self.assertIn("FetchPickAndPlace calibration invalid", gate.detail)
         self.assertIn("clean 0.2500", gate.detail)
+
+    def test_roadmap_hygiene_rejects_completed_weighted_openvla_as_next_step(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            docs = root / "docs"
+            docs.mkdir(parents=True)
+            (root / "AGENTS.md").write_text("Current status.\n", encoding="utf-8")
+            (docs / "review_weakness_response.md").write_text("Current status.\n", encoding="utf-8")
+            (docs / "aaai_acceptance_gap.md").write_text(
+                "The next preregistered learned-policy intervention is weighted perturbation curriculum.\n",
+                encoding="utf-8",
+            )
+
+            gate = roadmap_hygiene_gate(root)
+
+        self.assertFalse(gate.passed)
+        self.assertIn("weighted perturbation", gate.detail)
+
+    def test_roadmap_hygiene_accepts_completed_negative_weighted_openvla(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            docs = root / "docs"
+            docs.mkdir(parents=True)
+            (root / "AGENTS.md").write_text(
+                "The latest learned-policy follow-up is the preregistered weighted OpenVLA perturbation curriculum. "
+                "It is a negative audit.\n",
+                encoding="utf-8",
+            )
+            (docs / "aaai_acceptance_gap.md").write_text(
+                "The latest preregistered learned-policy intervention is the weighted perturbation curriculum. "
+                "This intervention is now a negative audit for the official-checkpoint gate.\n",
+                encoding="utf-8",
+            )
+            (docs / "review_weakness_response.md").write_text(
+                "Do not keep rerunning the same MiniGrid/PointMaze/FetchReach protocol family.\n",
+                encoding="utf-8",
+            )
+
+            gate = roadmap_hygiene_gate(root)
+
+        self.assertTrue(gate.passed)
+        self.assertIn("active roadmap avoids stale next-step instructions", gate.detail)
 
 
 if __name__ == "__main__":

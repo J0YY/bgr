@@ -57,10 +57,9 @@ to reproduce this read from the current result artifacts.
 - Official MiniGrid-DoorKey is internal and paper-limitation evidence only:
   BGR-Coverage and default BGR lose to uniform and strong baselines, with
   lower absolute-radius checks than uniform.
-- Official MiniGrid-LavaCrossingS9N3 is the next preregistered
-  external-package screen because it gives package-defined lava hazards,
-  safe-cell reset states, and a non-saturated uniform-only calibration before
-  method comparison.
+- Official MiniGrid-LavaCrossingS9N3 was a preregistered external-package
+  screen because it gave package-defined lava hazards, safe-cell reset states,
+  and a non-saturated uniform-only calibration before method comparison.
 - The completed LavaCrossingS9N3 screen is also internal and negative:
   BGR-Coverage and default BGR lose to uniform and to the
   state-priority/uniform-radius ablation, with lower absolute-radius checks

@@ -23,6 +23,22 @@ CALIBRATION_SUMMARIES = [
     ("FetchSlide calibration", "results/fetchslide_object_goal_calibration_2seed_v1/summary.json"),
     ("FetchPickAndPlace calibration", "results/fetchpickplace_object_goal_calibration_2seed_v1/summary.json"),
 ]
+ROADMAP_DOCS = [
+    "AGENTS.md",
+    "docs/aaai_acceptance_gap.md",
+    "docs/review_weakness_response.md",
+]
+STALE_ROADMAP_SNIPPETS = [
+    "Treat official MiniGrid-FourRooms as the next",
+    "is now the next fixed",
+    "The next preregistered external-package screen is official",
+    "The next preregistered PointMaze",
+    "The next preregistered learned-policy intervention is weighted perturbation",
+    "The next independent-benchmark route is Gymnasium-Robotics FetchReach",
+    "The next harder Gymnasium-Robotics calibration route",
+    "The next Gymnasium-Robotics object calibration",
+    "Official MiniGrid-LavaCrossingS9N3 is the next",
+]
 
 
 @dataclass(frozen=True)
@@ -297,6 +313,23 @@ def learned_policy_gate(root: Path) -> GateResult:
     )
 
 
+def roadmap_hygiene_gate(root: Path) -> GateResult:
+    offenders: list[str] = []
+    for relative in ROADMAP_DOCS:
+        path = root / relative
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        for snippet in STALE_ROADMAP_SNIPPETS:
+            if snippet in text:
+                offenders.append(f"{relative}: {snippet}")
+    return GateResult(
+        "acceptance roadmap hygiene",
+        not offenders,
+        "active roadmap avoids stale next-step instructions" if not offenders else "; ".join(offenders),
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path("."))
@@ -307,6 +340,7 @@ def main() -> int:
         grid_mechanism_gate(args.root),
         independent_benchmark_gate(args.root),
         learned_policy_gate(args.root),
+        roadmap_hygiene_gate(args.root),
     ]
     ready = all(gate.passed for gate in gates)
     for gate in gates:

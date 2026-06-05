@@ -207,7 +207,7 @@ package and recording its version before any result is run.
    If the package is not installed, do not substitute another local gridworld;
    that would be another authored diagnostic, not the independent benchmark win
    reviewers are asking for.
-   - Official MiniGrid-FourRooms is now the next fixed 4-seed screen at
+   - Official MiniGrid-FourRooms was the fixed 4-seed screen at
      `tools/minigrid_fourrooms_recovery_probe.py`. The package was installed in
      an isolated `/tmp/bgr_minigrid_venv` environment as `minigrid==3.1.0` with
      `gymnasium==1.3.0` on 2026-06-05, leaving repo runtime dependencies
@@ -255,7 +255,7 @@ package and recording its version before any result is run.
      at small absolute radii, the goalward selector was too easy, and a
      mid-distance band of shortest-path distances 2--6 gave a usable seed-0
      uniform diagnostic: final RAUC 0.5652, clean success 0.7188, and median
-     r80 0.55. The next preregistered 4-seed screen is therefore:
+     r80 0.55. The preregistered 4-seed follow-up command was:
      `PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_fourrooms_recovery_probe.py --out results/minigrid_fourrooms_recovery_probe_midband_4seed_v1 --replay-selection midband --replay-distance-min 2 --replay-distance-max 6`.
      This screen can only justify a 30-seed scale-up if BGR-Coverage beats
      uniform, fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on
@@ -277,7 +277,7 @@ package and recording its version before any result is run.
    fine-tuning. The promotion gate is the same: no 30-seed scale-up unless a
    fixed 4-seed screen beats uniform and hard-state/loss baselines with a
    visible final-RAUC gap and non-saturated critical-radius metrics.
-   - Official PointMaze is now the next fixed external-package screen at
+   - Official PointMaze was the fixed external-package screen at
      `tools/pointmaze_recovery_probe.py`. The package was installed in an
      isolated `/tmp/bgr_pointmaze_venv` environment as
      `gymnasium-robotics==1.4.2`, `gymnasium==1.3.0`, and `mujoco==3.9.0`,
@@ -328,7 +328,7 @@ package and recording its version before any result is run.
      absolute r20 than uniform. This rules out a sampler-mixing fix for the
      PointMaze failure mode; the next attempt must change the update objective,
      reset-state policy, or learned-policy intervention.
-   - The next preregistered PointMaze update-schedule follow-up is
+   - The preregistered PointMaze update-schedule follow-up was
      BGR-Clean-Shield, implemented as `bgr_clean_shield` in
      `tools/pointmaze_recovery_probe.py`. It uses the same BGR priority and
      boundary-radius sampling as default BGR, but if the selected replay state's
@@ -382,7 +382,7 @@ package and recording its version before any result is run.
 5. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.
-   - The next preregistered candidate is
+   - The preregistered candidate was
      `scripts/queue_openvla_oft_preregistered_goal_adapt.sh`. It uses the
      completed fair p4096 common-availability TFDS roots, official OpenVLA-OFT
      LIBERO-Goal statistics, identity-LoRA, image augmentation, `ADAPT_STEPS=500`,
@@ -455,33 +455,26 @@ package and recording its version before any result is run.
 
 ## Immediate Engineering Work
 
-- If Taxi is revisited, change the pre-registered perturbation/training budget
-  first, then rerun a small diagnostic before any 30-seed scale-up.
-- Add a small smoke test for Taxi transition dynamics against the Gym Taxi map
-  only if the diagnostic is promoted into `src/`.
-- Treat the CliffWalking probe as an internal negative and paper limitation:
-  the default protocol saturates, while the harder undertrained protocol has
-  BGR below uniform and all strong baselines.
-- Treat the Acrobot probe as an internal negative unless a new protocol first
-  creates a visible BGR or BGR-Coverage effect over uniform before scale-up.
-- Treat the Pendulum probe as an internal negative unless a new protocol first
-  avoids endpoint collapse and saturated median-r80 metrics.
-- Treat the MountainCar probe as an internal negative unless a new protocol is
-  pre-registered before rerunning; do not tune it into the paper post hoc.
-- Treat the CartPole probe as an internal negative unless a new protocol first
-  fixes clean-success saturation and defines a non-contradictory radius metric.
-- Do not add another local classic-control/tabular probe after FourRooms. The
-  next benchmark attempt must use an external package such as MiniGrid or
-  PointMaze/D4RL, with the package/version recorded before any result is run.
-- Treat official MiniGrid-FourRooms as the next highest-leverage follow-up, but
-  only after preregistering a radius check that does not saturate when clean
-  success is low. The current 4-seed BGR-Coverage RAUC lead is not yet a paper
-  claim.
-- The first MiniGrid absolute-radius follow-up failed because `final_abs_r10`
-  floor-saturates at 0.0 for every method. Do not scale MiniGrid until the
-  replay-state selection or training budget yields a non-saturated absolute
-  radius check before method comparison.
-- The next preregistered external-package screen is official MiniGrid-DoorKey,
+- Do not add another local classic-control/tabular probe under the existing
+  recovery-replay protocol. Taxi, CliffWalking, FourRooms, MountainCar,
+  CartPole, Acrobot, Pendulum, and FrozenLake already serve as negative scope
+  diagnostics.
+- Do not run more MiniGrid/PointMaze/FetchReach screens under the same reset
+  interface and tabular/linear update recipe. Official MiniGrid-FourRooms,
+  DoorKey, LavaCrossing, LavaGap, PointMaze U-Maze variants, FetchReach, and
+  hard-budget FetchReach are completed negative or non-promotable.
+- The next acceptance-moving empirical route must change the premise: either a
+  genuinely different pre-existing benchmark package/reset interface, or a
+  genuinely different learned-policy intervention that is preregistered before
+  data generation and can plausibly beat both matched random and the official
+  checkpoint. The current OpenVLA-OFT clean-mix/visual-perturbation recipe
+  family is exhausted for acceptance purposes.
+- If no such empirical route is ready, work on theory/presentation only when it
+  directly answers a cited weakness: novelty over state-priority replay,
+  estimator/sample-complexity guarantees, metric transparency, or clearer
+  recovery-boundary visualization. Do not treat wording-only reframing as an
+  acceptance substitute.
+- Official MiniGrid-DoorKey was a preregistered external-package screen
   implemented at `tools/minigrid_doorkey_recovery_probe.py`. It uses
   `gym.make("MiniGrid-DoorKey-6x6-v0")`, package-generated layouts and
   MiniGrid `env.step` dynamics, exact reset states with the key carried and the
@@ -504,8 +497,8 @@ package and recording its version before any result is run.
   all strong baselines. Absolute-radius checks also contradict promotion:
   final_abs_r10 is 0.5916 for BGR-Coverage and 0.4981 for BGR versus 0.7484
   for uniform.
-- The next preregistered external-package screen is official
-  MiniGrid-LavaCrossingS9N3, implemented at
+- Official MiniGrid-LavaCrossingS9N3 was a preregistered external-package
+  screen implemented at
   `tools/minigrid_lavacrossing_recovery_probe.py`. It uses
   `gym.make("MiniGrid-LavaCrossingS9N3-v0")`, package-generated lava/goal
   layouts and MiniGrid `env.step` dynamics, exact reset states on safe cells
@@ -530,8 +523,8 @@ package and recording its version before any result is run.
   baselines but lose to uniform and the state-priority/uniform-radius ablation.
   Absolute-radius checks also contradict promotion: final_abs_r10 is 0.5047
   for BGR-Coverage and 0.4187 for BGR versus 0.6352 for uniform.
-- The next preregistered external-package screen is official
-  MiniGrid-LavaGapS7, using the same package-backed lava probe after extending
+- Official MiniGrid-LavaGapS7 was a preregistered external-package screen using
+  the same package-backed lava probe after extending
   `tools/minigrid_lavacrossing_recovery_probe.py` to allow LavaGap env IDs.
   The environment is `gym.make("MiniGrid-LavaGapS7-v0")` from
   `minigrid==3.1.0`, a fixed package geometry with a single gap through a lava
@@ -560,8 +553,8 @@ package and recording its version before any result is run.
   the next attempt changes the learned-policy intervention in a preregistered
   way that plausibly beats both official and matched random; the latest
   preregistered run reinforces the current negative audit.
-- The next preregistered learned-policy intervention is weighted perturbation
-  curriculum, implemented in
+- The latest preregistered learned-policy intervention is the weighted
+  perturbation curriculum, implemented in
   `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh`. It changes the
   OpenVLA-OFT training distribution rather than only changing step count, seed,
   or evaluation: render 2,048 unique perturbation examples per method with eight
@@ -581,7 +574,11 @@ package and recording its version before any result is run.
   BGR/random perturbation-family counts after weighting, the run is an audit
   only and cannot be promoted. The narrow promotion gate is now checked by:
   `PYTHONPATH=src:. python3 scripts/check_openvla_perturb_gate.py --perturb-summary <perturb_summary.csv> --clean-summary <clean_summary.csv>`.
-  The weighted prep job was submitted after the preregistration commit on
+  This intervention is now a negative audit for the official-checkpoint gate:
+  before the final matched-random shift row finished, BGR's completed
+  non-identity total was already tied with the official checkpoint at 367/400,
+  so it cannot clear the required +10/400 and +0.02 margins. The weighted prep
+  job was submitted after the preregistration commit on
   2026-06-05 as Slurm job `766799` and completed successfully with exit `0:0`
   after 21m30s. Prep metadata validates the intended perturbation weighting:
   BGR has 7,296 examples and random has 7,424 examples; both have exactly 1,536
@@ -643,7 +640,7 @@ package and recording its version before any result is run.
   checkpoint's four completed non-identity rows also total 367/400, far below
   the preregistered requirement that BGR beat the official checkpoint by at
   least 10/400 episodes and 0.02 absolute success.
-  Live Slurm poll on 2026-06-05 11:55 PDT still shows matched-random shift job
+  Live Slurm poll on 2026-06-05 12:06 PDT still shows matched-random shift job
   `766831` as `PENDING` for unavailable GPU nodes, with a Slurm start estimate
   of 2026-06-07T13:21:02 and no start/end time in `sacct`. The remote
   `summary.csv` has the same 14 rows as the local `summary_available.csv`, so
@@ -728,8 +725,8 @@ package and recording its version before any result is run.
   state-priority/uniform-radius ablation. Default BGR is lower and has
   contradictory median r80 versus uniform. Keep this as another negative
   independent-benchmark screen.
-- The next harder Gymnasium-Robotics calibration route is FetchPush-v4 with an
-  exact object-state reset interface. This is deliberately a pre-method
+- FetchPush-v4 was the harder Gymnasium-Robotics calibration route with an
+  exact object-state reset interface. This was deliberately a pre-method
   calibration, not BGR evidence: it checks whether a fixed scripted push
   controller can preserve clean object-goal success and produce non-saturated
   recovery curves before any replay-training comparison is implemented. The
@@ -745,8 +742,8 @@ package and recording its version before any result is run.
   states fail clean and perturbed goals. This does not define a trainable
   success-failure boundary, so do not build or scale a FetchPush replay
   comparison around this scripted controller/interface.
-- The next Gymnasium-Robotics object calibration is FetchSlide-v4 with the
-  same exact reset-state and object-goal perturbation interface. It is still a
+- FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
+  same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:
   `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --out results/fetchslide_object_goal_calibration_2seed_v1 --env-id FetchSlide-v4 --seeds 2 --replay-states 4 --trials 1 --radii 0.00,0.03,0.06,0.09,0.12,0.15 --horizon 80 --controller-gain 6.0 --direction-jitter 0.10`.
   Do not implement a FetchSlide replay comparison unless this calibration first
@@ -757,9 +754,9 @@ package and recording its version before any result is run.
   The curve is not fully flat, but the fixed controller fails the clean-success
   prerequisite on most replay states. Do not build or scale a FetchSlide replay
   comparison around this scripted controller/interface.
-- The next Gymnasium-Robotics object calibration is FetchPickAndPlace-v4, using
-  the same exact reset-state and object-goal perturbation interface but a
-  separate fixed scripted pick-place controller. This is pre-method calibration
+- FetchPickAndPlace-v4 was the Gymnasium-Robotics object calibration using the
+  same exact reset-state and object-goal perturbation interface but a
+  separate fixed scripted pick-place controller. This was pre-method calibration
   only. The fixed command is:
   `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --out results/fetchpickplace_object_goal_calibration_2seed_v1 --env-id FetchPickAndPlace-v4 --controller scripted_pick_place --seeds 2 --replay-states 4 --trials 1 --radii 0.00,0.03,0.06,0.09,0.12,0.15 --horizon 100 --controller-gain 6.0 --direction-jitter 0.10`.
   Do not implement a FetchPickAndPlace replay comparison unless this
