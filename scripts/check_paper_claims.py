@@ -740,6 +740,34 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    fetchreach_hard = read_csv_rows(results_dir / "fetchreach_goal_recovery_hard_probe_4seed_v1" / "summary.csv")
+    fetchreach_hard_coverage_rauc = mean_metric(fetchreach_hard, "bgr_coverage", "final_rauc")
+    fetchreach_hard_bgr_rauc = mean_metric(fetchreach_hard, "bgr", "final_rauc")
+    fetchreach_hard_uniform_rauc = mean_metric(fetchreach_hard, "uniform", "final_rauc")
+    fetchreach_hard_failure_rauc = mean_metric(fetchreach_hard, "failure_only", "final_rauc")
+    fetchreach_hard_td_rauc = mean_metric(fetchreach_hard, "td_loss", "final_rauc")
+    fetchreach_hard_ablation_rauc = mean_metric(fetchreach_hard, "bgr_uniform_radius", "final_rauc")
+    if not (
+        fetchreach_hard_td_rauc > fetchreach_hard_failure_rauc
+        and fetchreach_hard_failure_rauc > fetchreach_hard_uniform_rauc
+        and fetchreach_hard_uniform_rauc > fetchreach_hard_ablation_rauc
+        and fetchreach_hard_ablation_rauc > fetchreach_hard_coverage_rauc
+        and fetchreach_hard_coverage_rauc > fetchreach_hard_bgr_rauc
+    ):
+        raise ValueError("Expected hard-budget FetchReach diagnostic to remain a non-promoted negative result")
+    claims.append(
+        Claim(
+            "FetchReach official-package limitation",
+            (
+                f"FetchReach-v4 & BGR-Coverage {fmt(fetchreach_hard_coverage_rauc, 4)}; "
+                f"BGR {fmt(fetchreach_hard_bgr_rauc, 4)} & uniform {fmt(fetchreach_hard_uniform_rauc, 4)}; "
+                f"failure-only {fmt(fetchreach_hard_failure_rauc, 4)}; "
+                f"TD-loss {fmt(fetchreach_hard_td_rauc, 4)} & negative"
+            ),
+            "results/fetchreach_goal_recovery_hard_probe_4seed_v1/summary.csv",
+        )
+    )
+
     probe_rows = read_csv_rows(results_dir / "libero_probe_v2" / "summary.csv")
     valid_rows = sum(1 for row in probe_rows if float(row["valid_rate"]) == 1.0 and not row.get("error"))
     claims.append(
