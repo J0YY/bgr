@@ -658,6 +658,34 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    lavacrossing = read_csv_rows(results_dir / "minigrid_lavacrossing_recovery_probe_4seed_v1" / "summary.csv")
+    lavacrossing_uniform_rauc = mean_metric(lavacrossing, "uniform", "final_rauc")
+    lavacrossing_coverage_rauc = mean_metric(lavacrossing, "bgr_coverage", "final_rauc")
+    lavacrossing_bgr_rauc = mean_metric(lavacrossing, "bgr", "final_rauc")
+    lavacrossing_ablation_rauc = mean_metric(lavacrossing, "bgr_uniform_radius", "final_rauc")
+    lavacrossing_uniform_abs = mean_metric(lavacrossing, "uniform", "final_abs_r10")
+    lavacrossing_coverage_abs = mean_metric(lavacrossing, "bgr_coverage", "final_abs_r10")
+    lavacrossing_bgr_abs = mean_metric(lavacrossing, "bgr", "final_abs_r10")
+    if not (
+        lavacrossing_uniform_rauc > lavacrossing_ablation_rauc
+        and lavacrossing_ablation_rauc > lavacrossing_coverage_rauc
+        and lavacrossing_coverage_rauc > lavacrossing_bgr_rauc
+        and lavacrossing_coverage_abs < lavacrossing_uniform_abs
+        and lavacrossing_bgr_abs < lavacrossing_uniform_abs
+    ):
+        raise ValueError("Expected MiniGrid-LavaCrossing diagnostic to remain a non-promoted negative result")
+    claims.append(
+        Claim(
+            "MiniGrid-LavaCrossing official-package limitation",
+            (
+                f"in LavaCrossingS9N3, uniform reaches {fmt(lavacrossing_uniform_rauc, 4)} final RAUC "
+                f"while BGR-Coverage reaches {fmt(lavacrossing_coverage_rauc, 4)} and default BGR reaches "
+                f"{fmt(lavacrossing_bgr_rauc, 4)}, with lower absolute radius than uniform"
+            ),
+            "results/minigrid_lavacrossing_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+
     pointmaze = read_csv_rows(results_dir / "pointmaze_umaze_recovery_probe_4seed_v1" / "summary.csv")
     pointmaze_shield = read_csv_rows(results_dir / "pointmaze_umaze_clean_shield_probe_4seed_v1" / "summary.csv")
     pointmaze_failure_rauc = mean_metric(pointmaze, "failure_only", "final_rauc")

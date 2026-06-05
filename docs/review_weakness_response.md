@@ -59,6 +59,10 @@ OpenVLA/LIBERO improvement over both matched random and the official checkpoint.
   external-package screen because it gives package-defined lava hazards,
   safe-cell reset states, and a non-saturated uniform-only calibration before
   method comparison.
+- The completed LavaCrossingS9N3 screen is also internal and negative:
+  BGR-Coverage and default BGR lose to uniform and to the
+  state-priority/uniform-radius ablation, with lower absolute-radius checks
+  than uniform.
 - The next acceptance-moving result must be either a fixed-protocol positive
   pre-existing benchmark or a genuinely different preregistered learned-policy
   intervention that can beat both official and matched random.

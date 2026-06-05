@@ -4405,6 +4405,23 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
             raise ValueError(
                 f"{pdf_path}: missing rendered MiniGrid-DoorKey limitation snippet(s): {', '.join(doorkey_missing)}"
             )
+    if "LavaCrossingS9N3" in source_text:
+        lavacrossing_required = [
+            ("LavaCrossingS9N3",),
+            ("uniform reaches 0.4165",),
+            ("BGR-Coverage reaches 0.3547",),
+            ("default BGR reaches 0.3153",),
+            ("lower absolute radius",),
+        ]
+        lavacrossing_missing = [
+            snippets[0]
+            for snippets in lavacrossing_required
+            if not any(snippet in normalized_rendered_text for snippet in snippets)
+        ]
+        if lavacrossing_missing:
+            raise ValueError(
+                f"{pdf_path}: missing rendered MiniGrid-LavaCrossing limitation snippet(s): {', '.join(lavacrossing_missing)}"
+            )
     if "Official PointMaze U-Maze diagnostics also fail" in source_text:
         pointmaze_required = [
             ("PointMaze U-Maze diagnostics", "PointMaze UMaze diagnostics"),
