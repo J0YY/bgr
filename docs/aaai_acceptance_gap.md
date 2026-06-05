@@ -547,6 +547,12 @@ package and recording its version before any result is run.
   At submission audit time, official identity `766817` was running, the other
   official perturbations were serialized behind it, and BGR/random perturbation
   jobs were pending on their merge and per-method serial dependencies.
+  A later 2026-06-05 audit found BGR train `766805` completed with exit `0:0`
+  after 6m14s, with the adapted checkpoint files present. BGR merge `766806`,
+  random train `766808`, and official identity eval `766817` were still
+  running, while the dependent clean and perturbation evals were still pending.
+  There are not yet any weighted clean or perturbation summaries to incorporate
+  into the paper.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

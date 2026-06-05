@@ -1287,6 +1287,15 @@ perturbation job. BGR perturbation jobs were pending on BGR merge `766806` and
 their per-method serial dependencies; random perturbation jobs were pending on
 random merge `766809` and their per-method serial dependencies.
 
+Follow-up audit on 2026-06-05: BGR train `766805` completed with exit `0:0`
+after 6m14s and produced the expected adapted checkpoint files. BGR merge
+`766806`, random train `766808`, and official identity perturbation eval
+`766817` were running; BGR clean eval `766807`, random merge/eval
+`766809`/`766810`, and all BGR/random perturbation evals remained pending on
+their declared dependencies. No weighted clean or perturbation summary was
+available yet, so there are no paper-facing results to incorporate from this
+intervention.
+
 Promotion gate: weighted BGR must beat weighted matched random and the official
 checkpoint on the fixed non-identity perturbation total by at least 10/400
 episodes and at least 0.02 absolute success rate, while not trailing clean
