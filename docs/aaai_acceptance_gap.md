@@ -92,18 +92,20 @@ Do not add another result to the manuscript if it has any of these properties:
 2. A faster discrete control benchmark with exact reset states and a
    pre-registered perturbation family. CliffWalking and FrozenLake currently
    look negative for BGR under the tested protocols.
-   - FourRooms recovery replay is the next fixed pre-promotion diagnostic at
-     `tools/fourrooms_recovery_probe.py`. It uses a canonical 11x11 FourRooms
-     grid with cross walls and four doorways, deterministic shortest-path
-     dynamics, exact resettable doorway-adjacent replay states, and Manhattan
-     restart perturbations that can move states across room bottlenecks. The
-     initial screen is limited to 4 paired seeds and the same method set as the
-     other standard-environment probes:
-     `uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr`.
-     It can only scale to 30 seeds if BGR or BGR-Coverage first clears the
-     pre-promotion checker against uniform, fixed-radius, failure-only,
-     TD-loss, and the state-priority/uniform-radius ablation with a visible
-     final-RAUC effect and non-saturated median-r80 evidence.
+   - FourRooms recovery replay now has an internal diagnostic at
+     `tools/fourrooms_recovery_probe.py`. The fixed protocol uses a canonical
+     11x11 FourRooms grid with cross walls and four doorways, deterministic
+     shortest-path dynamics, exact resettable doorway-adjacent replay states,
+     and Manhattan restart perturbations that can move states across room
+     bottlenecks. The 4-seed pre-promotion screen is negative: final RAUC is
+     0.9994 for failure-only, 0.9958 for TD-loss, 0.9900 for fixed-radius,
+     0.9777 for uniform, 0.9746 for BGR-uniform-radius, 0.9695 for
+     BGR-Coverage, and 0.9672 for BGR. The promotion checker rejects BGR
+     because it loses to uniform (-0.0106 mean RAUC, 1/3 paired split), all
+     strong baselines, and the state-priority/uniform-radius ablation, with
+     median r80 saturated against uniform. It rejects BGR-Coverage because it
+     trails uniform and all strong baselines and has lower median r80 than
+     uniform. Do not scale FourRooms to 30 seeds under this protocol.
    - CliffWalking-v0 recovery replay now has an internal diagnostic at
      `tools/cliffwalking_recovery_probe.py`. The pre-promotion protocol uses
      canonical 4x12 CliffWalking dynamics, exact resettable safe-corridor

@@ -26,8 +26,13 @@ OpenVLA/LIBERO improvement over both matched random and the official checkpoint.
 
 ## Immediate Paper Policy
 
-- Do not promote Acrobot, Pendulum, CliffWalking, Taxi, MountainCar, CartPole,
-  FrozenLake, or OpenVLA adaptation as positive evidence under current results.
+- Do not promote FourRooms, Acrobot, Pendulum, CliffWalking, Taxi, MountainCar,
+  CartPole, FrozenLake, or OpenVLA adaptation as positive evidence under
+  current results.
+- Keep FourRooms internal: the preregistered 4-seed screen has BGR and
+  BGR-Coverage below uniform, fixed-radius, failure-only, TD-loss, and the
+  state-priority/uniform-radius ablation, with saturated or contradictory
+  median-r80 evidence.
 - Keep Acrobot internal: the 4-seed diagnostic is non-saturated, but default
   BGR trails uniform and BGR-Coverage has only a +0.0016 RAUC edge with a
   2/1/1 paired split.

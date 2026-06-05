@@ -139,6 +139,24 @@ Older troubleshooting sections may retain labels such as Queued command to
 record original Slurm submissions; those labels are provenance, not active
 experiment status.
 
+## Internal FourRooms Diagnostic
+
+`results/fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed
+pre-promotion diagnostic on a canonical 11x11 FourRooms grid with deterministic
+shortest-path dynamics, cross walls, four doorways, resettable doorway-adjacent
+replay states, and Manhattan restart perturbations. It was preregistered in
+`docs/aaai_acceptance_gap.md` before the fixed 4-seed comparison ran. The
+diagnostic is not promotable: final RAUC is 0.9994 for failure-only, 0.9958 for
+TD-loss, 0.9900 for fixed-radius, 0.9777 for uniform, 0.9746 for
+BGR-uniform-radius, 0.9695 for BGR-Coverage, and 0.9672 for BGR. The promotion
+checker rejects default BGR because it loses to uniform on mean RAUC (-0.0106,
+1/3 paired split), loses to fixed-radius, failure-only, TD-loss, and the
+state-priority/uniform-radius ablation, and has saturated median r80 against
+uniform. It rejects BGR-Coverage because it trails uniform and all strong
+baselines and has a lower median r80 than uniform. Keep FourRooms out of the
+paper except as a limitation unless a new fixed protocol first creates a
+non-saturated boundary-radius effect.
+
 ## Internal CliffWalking Diagnostics
 
 `results/cliffwalking_recovery_probe_4seed_v1/summary.csv` is a 4-seed
