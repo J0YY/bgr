@@ -268,6 +268,26 @@ package and recording its version before any result is run.
    fine-tuning. The promotion gate is the same: no 30-seed scale-up unless a
    fixed 4-seed screen beats uniform and hard-state/loss baselines with a
    visible final-RAUC gap and non-saturated critical-radius metrics.
+   - Official PointMaze is now the next fixed external-package screen at
+     `tools/pointmaze_recovery_probe.py`. The package was installed in an
+     isolated `/tmp/bgr_pointmaze_venv` environment as
+     `gymnasium-robotics==1.4.2`, `gymnasium==1.3.0`, and `mujoco==3.9.0`,
+     leaving repo runtime dependencies unchanged unless the result becomes
+     promotable. The probe uses `gym.make("PointMaze_UMaze-v3",
+     continuing_task=False, reset_target=False)`, package maze layouts,
+     package point dynamics, exact `PointEnv.set_state` resets, and
+     graph-distance perturbations over official free cells. Before any method
+     comparison, uniform-only seed-0 calibration rejected Medium Maze and broad
+     U-Maze bands as collapsed or radius-saturated. The fixed U-Maze near-goal
+     band gave a usable baseline diagnostic: uniform clean success 0.7500,
+     final RAUC 0.4375, median r80 0.7000, and absolute r20 0.5333. The
+     preregistered 4-seed screen command is:
+     `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/pointmaze_recovery_probe.py --out results/pointmaze_umaze_recovery_probe_4seed_v1 --env-id PointMaze_UMaze-v3 --max-steps 80 --q-init-blend 1.0 --q-init-noise 0.02 --perturb-cells 3 --replay-distance-min 1 --replay-distance-max 3 --iterations 60`.
+     This screen can only justify 30-seed scale-up or paper promotion if
+     default BGR or BGR-Coverage beats uniform, fixed-radius, failure-only,
+     TD-loss, and BGR-uniform-radius on final RAUC with a visible gap, while
+     median r80 and absolute r20 are non-saturated and do not contradict the
+     RAUC effect.
 5. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.

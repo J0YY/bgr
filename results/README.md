@@ -139,6 +139,30 @@ Older troubleshooting sections may retain labels such as Queued command to
 record original Slurm submissions; those labels are provenance, not active
 experiment status.
 
+## Internal Official PointMaze Diagnostic
+
+The next preregistered external-package screen is official PointMaze U-Maze,
+implemented at `tools/pointmaze_recovery_probe.py`. It runs in an isolated
+`/tmp/bgr_pointmaze_venv` environment with `gymnasium-robotics==1.4.2`,
+`gymnasium==1.3.0`, and `mujoco==3.9.0`, leaving repo runtime dependencies
+unchanged unless the result becomes promotable. The probe uses
+`gym.make("PointMaze_UMaze-v3", continuing_task=False, reset_target=False)`,
+package maze layouts, package point dynamics, exact `PointEnv.set_state`
+restarts, graph-distance perturbations over official free cells, and compares
+uniform, fixed-radius, failure-only, TD-loss, BGR-uniform-radius,
+BGR-Coverage, and default BGR.
+
+Uniform-only seed-0 calibration was run before any BGR comparison. Medium Maze
+and broad U-Maze bands either collapsed or had unusable radius metrics. The
+fixed U-Maze near-goal band gives a usable baseline diagnostic: uniform clean
+success 0.7500, final RAUC 0.4375, median r80 0.7000, and absolute r20 0.5333.
+The preregistered 4-seed command is:
+`PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/pointmaze_recovery_probe.py --out results/pointmaze_umaze_recovery_probe_4seed_v1 --env-id PointMaze_UMaze-v3 --max-steps 80 --q-init-blend 1.0 --q-init-noise 0.02 --perturb-cells 3 --replay-distance-min 1 --replay-distance-max 3 --iterations 60`.
+Do not scale or promote this result unless default BGR or BGR-Coverage beats
+uniform, fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on final
+RAUC with a visible gap, while median r80 and absolute r20 are non-saturated
+and do not contradict the RAUC effect.
+
 ## Internal Official MiniGrid-FourRooms Diagnostic
 
 `results/minigrid_fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed
