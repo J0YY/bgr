@@ -726,3 +726,11 @@ package and recording its version before any result is run.
   The curve is not fully flat, but the fixed controller fails the clean-success
   prerequisite on most replay states. Do not build or scale a FetchSlide replay
   comparison around this scripted controller/interface.
+- The next Gymnasium-Robotics object calibration is FetchPickAndPlace-v4, using
+  the same exact reset-state and object-goal perturbation interface but a
+  separate fixed scripted pick-place controller. This is pre-method calibration
+  only. The fixed command is:
+  `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --out results/fetchpickplace_object_goal_calibration_2seed_v1 --env-id FetchPickAndPlace-v4 --controller scripted_pick_place --seeds 2 --replay-states 4 --trials 1 --radii 0.00,0.03,0.06,0.09,0.12,0.15 --horizon 100 --controller-gain 6.0 --direction-jitter 0.10`.
+  Do not implement a FetchPickAndPlace replay comparison unless this
+  calibration first shows usable clean success and a non-flat recovery curve
+  under the fixed scripted controller.

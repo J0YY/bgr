@@ -114,7 +114,62 @@ def push_action(obs: dict[str, np.ndarray], *, threshold: float, gain: float) ->
     return action
 
 
-def rollout_success(env, *, base_seed: int, goal: np.ndarray, horizon: int, gain: float) -> tuple[bool, float, int]:
+def pick_place_action(obs: dict[str, np.ndarray], *, threshold: float, gain: float) -> np.ndarray:
+    raw = np.array(obs["observation"], dtype=float)
+    gripper = raw[0:3]
+    obj = raw[3:6]
+    goal = np.array(obs["desired_goal"], dtype=float)
+    distance = float(np.linalg.norm(np.array(obs["achieved_goal"], dtype=float) - goal))
+    if distance <= threshold:
+        return np.zeros(4, dtype=float)
+
+    above_obj = obj + np.array([0.0, 0.0, 0.10], dtype=float)
+    grasp = obj + np.array([0.0, 0.0, 0.015], dtype=float)
+    lift = obj + np.array([0.0, 0.0, 0.18], dtype=float)
+    above_goal = goal + np.array([0.0, 0.0, 0.12], dtype=float)
+    place = goal + np.array([0.0, 0.0, 0.015], dtype=float)
+
+    xy_error = float(np.linalg.norm(gripper[:2] - obj[:2]))
+    z_error = float(abs(gripper[2] - grasp[2]))
+    object_lifted = obj[2] > 0.48
+    gripper_near_object = xy_error < 0.025 and z_error < 0.025
+
+    if not object_lifted and not gripper_near_object:
+        target = above_obj if float(np.linalg.norm(gripper[:2] - obj[:2])) > 0.025 else grasp
+        grip = 1.0
+    elif not object_lifted:
+        target = lift
+        grip = -1.0
+    elif float(np.linalg.norm(obj[:2] - goal[:2])) > 0.035:
+        target = above_goal
+        grip = -1.0
+    else:
+        target = place
+        grip = 1.0 if float(abs(obj[2] - goal[2])) < 0.035 else -1.0
+
+    action = np.zeros(4, dtype=float)
+    action[:3] = np.clip(float(gain) * (target - gripper), -1.0, 1.0)
+    action[3] = grip
+    return action
+
+
+def controller_action(controller: str, obs: dict[str, np.ndarray], *, threshold: float, gain: float) -> np.ndarray:
+    if controller == "scripted_push":
+        return push_action(obs, threshold=threshold, gain=gain)
+    if controller == "scripted_pick_place":
+        return pick_place_action(obs, threshold=threshold, gain=gain)
+    raise ValueError(f"unknown controller: {controller}")
+
+
+def rollout_success(
+    env,
+    *,
+    base_seed: int,
+    goal: np.ndarray,
+    horizon: int,
+    gain: float,
+    controller: str,
+) -> tuple[bool, float, int]:
     obs, _info = env.reset(seed=base_seed)
     unwrapped = env.unwrapped
     unwrapped.goal = np.array(goal, dtype=float)
@@ -126,7 +181,9 @@ def rollout_success(env, *, base_seed: int, goal: np.ndarray, horizon: int, gain
             return True, distance, step
         if step == horizon:
             return False, distance, step
-        obs, _reward, _terminated, truncated, _info = env.step(push_action(obs, threshold=threshold, gain=gain))
+        obs, _reward, _terminated, truncated, _info = env.step(
+            controller_action(controller, obs, threshold=threshold, gain=gain)
+        )
         if bool(truncated):
             distance = float(
                 np.linalg.norm(np.array(obs["achieved_goal"], dtype=float) - np.array(obs["desired_goal"], dtype=float))
@@ -182,6 +239,7 @@ def calibrate(args: argparse.Namespace) -> tuple[list[CalibrationRow], dict[str,
                         goal=goal,
                         horizon=args.horizon,
                         gain=args.controller_gain,
+                        controller=args.controller,
                     )
                     rows.append(
                         CalibrationRow(
@@ -209,7 +267,7 @@ def calibrate(args: argparse.Namespace) -> tuple[list[CalibrationRow], dict[str,
         "trials": args.trials,
         "radii": ",".join(f"{float(radius):.4f}" for radius in radii),
         "horizon": args.horizon,
-        "controller": "scripted_push",
+        "controller": args.controller,
         "controller_gain": args.controller_gain,
         "direction_jitter": args.direction_jitter,
         "clean_success": float(curve[0]),
@@ -245,6 +303,7 @@ def main() -> int:
     parser.add_argument("--trials", type=int, default=2)
     parser.add_argument("--radii", default="0.00,0.02,0.04,0.06,0.08,0.12")
     parser.add_argument("--horizon", type=int, default=80)
+    parser.add_argument("--controller", choices=["scripted_push", "scripted_pick_place"], default="scripted_push")
     parser.add_argument("--controller-gain", type=float, default=6.0)
     parser.add_argument("--direction-jitter", type=float, default=0.10)
     parser.add_argument("--alpha", type=float, default=0.80)

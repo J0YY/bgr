@@ -105,12 +105,19 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
                 '{"clean_success": 0.25, "min_recovery": 0.25, "max_recovery": 0.25, "r80": 0.15}\n',
                 encoding="utf-8",
             )
+            pick_path = root / "results/fetchpickplace_object_goal_calibration_2seed_v1/summary.json"
+            pick_path.parent.mkdir(parents=True, exist_ok=True)
+            pick_path.write_text(
+                '{"clean_success": 0.25, "min_recovery": 0.25, "max_recovery": 0.25, "r80": 0.15}\n',
+                encoding="utf-8",
+            )
 
             gate = independent_benchmark_gate(root)
 
         self.assertFalse(gate.passed)
         self.assertIn("FetchPush calibration invalid", gate.detail)
         self.assertIn("FetchSlide calibration invalid", gate.detail)
+        self.assertIn("FetchPickAndPlace calibration invalid", gate.detail)
         self.assertIn("clean 0.2500", gate.detail)
 
 
