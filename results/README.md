@@ -858,6 +858,61 @@ results/openvla_oft_goal_adapt_eval_cleanmix_p4096_commonavail_step50100_lr1em6_
 results/openvla_oft_perturb_eval_cleanmix_p4096_commonavail_step50100_lr1em6_identitylora_officialtrainstats_v1/
 ```
 
+## Completed OpenVLA-OFT p4096 Preregistered Image-Augmentation Audit
+
+Launched on 2026-06-04 and completed on 2026-06-05 as the preregistered
+learned-policy promotion attempt after the fair common-availability repair. The
+adaptation recipe used the fair p4096 common-availability TFDS roots, official
+OpenVLA-OFT LIBERO-Goal statistics, identity-LoRA initialization, image
+augmentation, `ADAPT_STEPS=500`, `LR=5e-7`, and fixed 10-task x 10-trial
+identity/perturbation evals. Promotion was preregistered to require BGR to beat
+both matched random and the official OpenVLA-OFT checkpoint on the fixed
+non-identity perturbation total by at least 10/400 episodes and at least 0.02
+absolute success, while not trailing clean identity by more than 1/100.
+
+The initial official identity job (`765765`) failed immediately because the
+generated live scripts used a stale home-directory `LIBERO_ROOT`, which is
+absent on the compute node. Pending eval jobs generated with that bad path were
+canceled, and repaired evals were submitted with the same checkpoint paths,
+perturbation families, 10-task x 10-trial protocol, seed, and promotion gate,
+changing only the live LIBERO installation path.
+
+Completed repaired perturb eval jobs:
+
+```text
+765782  official identity  completed, 99/100 = 0.9900
+765785  official blur      completed, 97/100 = 0.9700
+765787  official brightness completed, 98/100 = 0.9800
+765791  official occlusion completed, 74/100 = 0.7400
+765795  official shift     completed, 98/100 = 0.9800
+765783  BGR identity       completed, 99/100 = 0.9900
+765786  BGR blur           completed, 97/100 = 0.9700
+765789  BGR brightness     completed, 98/100 = 0.9800
+765792  BGR occlusion      completed, 74/100 = 0.7400
+765794  BGR shift          completed, 97/100 = 0.9700
+765781  random identity    completed, 98/100 = 0.9800
+765784  random blur        completed, 98/100 = 0.9800
+765788  random brightness  completed, 99/100 = 0.9900
+765790  random occlusion   completed, 75/100 = 0.7500
+765793  random shift       completed, 96/100 = 0.9600
+```
+
+Summary:
+
+| Method | Identity | Blur | Brightness | Occlusion | Shift | Non-identity |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| BGR prereg p4096 | 0.9900 | 0.9700 | 0.9800 | 0.7400 | 0.9700 | 366/400 = 0.9150 |
+| Official OpenVLA-OFT | 0.9900 | 0.9700 | 0.9800 | 0.7400 | 0.9800 | 367/400 = 0.9175 |
+| Random prereg p4096 | 0.9800 | 0.9800 | 0.9900 | 0.7500 | 0.9600 | 368/400 = 0.9200 |
+
+Interpretation: BGR satisfies the clean-identity side condition by tying the
+official checkpoint and beating matched random by one episode, but it fails the
+actual promotion gate because it trails official by one non-identity episode and
+matched random by two. This is therefore another negative/diagnostic
+OpenVLA-OFT result, not paper-facing evidence for a robotics fine-tuning claim.
+The local summaries are stored under
+`results/openvla_oft_perturb_eval_cleanmix_p4096_commonavail_step50500_lr5em7_identitylora_imageaug_officialtrainstats_prereg_fullgoal10x10_v1/`.
+
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 
 Launched on 2026-06-02 after the p1024 offset-3 follow-up showed only a small

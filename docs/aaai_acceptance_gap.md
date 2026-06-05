@@ -169,18 +169,28 @@ Do not add another result to the manuscript if it has any of these properties:
        started, with random merge `765763` still pending on it. The original
        official identity perturb eval `765765` failed immediately with
        `ModuleNotFoundError: No module named 'libero'` because the generated
-       live scripts used `LIBERO_ROOT=/home/joy/LIBERO`, which is absent on the
-       compute node; the valid live path is `/users/joy/LIBERO`. The pending
+       live scripts used a stale home-directory `LIBERO_ROOT`, which is absent
+       on the compute node; the valid live LIBERO installation is under the
+       cluster user directory. The pending
        clean-eval and perturb-eval jobs generated with the bad path were
        canceled (`765761`, `765764`, `765766`--`765779`). Repaired perturb evals
        were submitted with the same preregistered checkpoint paths, perturbation
        families, 10-task x 10-trial protocol, seed, and promotion gate, changing
-       only `LIBERO_ROOT=/users/joy/LIBERO`: official
+       only the live LIBERO installation path: official
        `765782 -> 765785 -> 765787 -> 765791 -> 765795`; BGR
        `765783 -> 765786 -> 765789 -> 765792 -> 765794`; random
        `765781 -> 765784 -> 765788 -> 765790 -> 765793` after
-       `afterok:765763`. `scontrol` confirmed the repaired scripts include
-       `/users/joy/LIBERO` in `PYTHONPATH`.
+       `afterok:765763`. `scontrol` confirmed the repaired scripts include the
+       live LIBERO installation in `PYTHONPATH`.
+     - Completed poll on 2026-06-05 showed all repaired perturb evals completed
+       successfully. The fixed non-identity totals are BGR 366/400 = 0.9150,
+       official 367/400 = 0.9175, and matched random 368/400 = 0.9200. Clean
+       identity is BGR 99/100, official 99/100, and random 98/100. The clean
+       gate is acceptable for BGR, but the preregistered promotion gate fails
+       because BGR trails both official and matched random on non-identity
+       perturbations instead of beating each by at least 10/400 episodes and
+       0.02 absolute success. This result is another negative OpenVLA audit and
+       should not be promoted into the paper as robotics evidence.
 
 ## Immediate Engineering Work
 
@@ -194,6 +204,7 @@ Do not add another result to the manuscript if it has any of these properties:
   fixes clean-success saturation and defines a non-contradictory radius metric.
 - Keep scratch negative runs out of the anonymous package unless they are being
   used as explicit limitations.
-- Use the preregistered p4096 common-availability OpenVLA wrapper for the next
-  learned-policy attempt; do not edit its recipe after seeing results unless the
-  run is explicitly relabeled as exploratory.
+- Do not spend more robotics compute on the current OpenVLA recipe family unless
+  the next attempt changes the learned-policy intervention in a preregistered
+  way that plausibly beats both official and matched random; the latest
+  preregistered run reinforces the current negative audit.
