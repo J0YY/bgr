@@ -92,6 +92,22 @@ Do not add another result to the manuscript if it has any of these properties:
 2. A faster discrete control benchmark with exact reset states and a
    pre-registered perturbation family. CliffWalking and FrozenLake currently
    look negative for BGR under the tested protocols.
+   - CliffWalking-v0 recovery replay now has an internal diagnostic at
+     `tools/cliffwalking_recovery_probe.py`. The pre-promotion protocol uses
+     canonical 4x12 CliffWalking dynamics, exact resettable safe-corridor
+     replay states, and Manhattan restart perturbations that can cross the
+     cliff boundary. The default 4-seed diagnostic saturates: fixed-radius,
+     failure-only, and TD-loss all reach 1.0000 final RAUC, uniform reaches
+     0.9945, BGR-uniform-radius reaches 0.9958, and BGR reaches 0.9917, with
+     clean success and median r80 saturated at 1.0. A harder undertrained
+     variant (`--iterations 60 --train-batch-size 4 --max-steps 24
+     --q-init-blend 0.02 --q-init-noise 0.04 --learning-rate 0.30`) is also
+     negative: final RAUC is 0.9074 for failure-only, 0.7118 for TD-loss,
+     0.6758 for fixed-radius, 0.6490 for uniform, 0.6087 for BGR-Coverage,
+     0.4900 for BGR, and 0.4533 for BGR-uniform-radius. The promotion checker
+     rejects it because BGR loses to uniform and all strong baselines, despite
+     beating the state-priority-only ablation in the harder variant. Keep
+     CliffWalking out of the paper.
    - MountainCar-v0 recovery replay now has an internal diagnostic at
      `tools/mountaincar_recovery_probe.py`. The pre-promotion protocol uses
      canonical MountainCar dynamics, right-moving replay states, and an adverse

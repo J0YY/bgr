@@ -417,8 +417,8 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "20c0eaa53995a884e0dd10ec20c76a16b45a5168b3fe82f9522fae714906eece",
-      "size_bytes": 13813
+      "sha256": "dbe29924e0b4ffc471e2a3b0e2e3d0ae188ba8fbb291c450ca243199ac2716c3",
+      "size_bytes": 13807
     },
     {
       "path": "paper/main.pdf",
@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "0dfbc5dcf9131a1a3507f4c79e550e38b39d5c7a3abcd8bc881fd2bcc7f555a9",
-      "size_bytes": 218306
+      "sha256": "dc1afc7beaa8ed2a00ddfab353eb3a948be8aa84aa9db97e537428835196ea5a",
+      "size_bytes": 219396
     },
     {
       "path": "results/environment_v1/README.md",

@@ -139,6 +139,24 @@ Older troubleshooting sections may retain labels such as Queued command to
 record original Slurm submissions; those labels are provenance, not active
 experiment status.
 
+## Internal CliffWalking Diagnostics
+
+`results/cliffwalking_recovery_probe_4seed_v1/summary.csv` is a 4-seed
+pre-promotion diagnostic on canonical CliffWalking-v0 dynamics with resettable
+safe-corridor states and Manhattan restart perturbations. This default budget
+saturates and is not promotable: fixed-radius, failure-only, and TD-loss replay
+all reach 1.0000 final RAUC, uniform reaches 0.9945, BGR-uniform-radius reaches
+0.9958, and BGR reaches 0.9917; clean success and median r80 saturate at 1.0.
+
+`results/cliffwalking_recovery_probe_hard_4seed_v1/summary.csv` is a harder
+undertrained diagnostic with fewer updates and lower optimal-Q initialization.
+It is also negative for promotion: final RAUC is 0.9074 for failure-only, 0.7118
+for TD-loss, 0.6758 for fixed-radius, 0.6490 for uniform, 0.6087 for
+BGR-Coverage, 0.4900 for BGR, and 0.4533 for BGR-uniform-radius. BGR beats the
+state-priority-only ablation in this harder variant but loses to uniform and all
+strong baselines, so CliffWalking remains an internal negative
+independent-benchmark probe rather than paper evidence.
+
 ## Packaged OpenVLA Action/TFDS Validation
 
 `results/openvla_action_tfds_validation_v1/summary.json` is a compact,
