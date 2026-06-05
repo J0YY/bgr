@@ -417,18 +417,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "110c1d2076ec73518d23d121e9b4eefa05c63aac7bc2bad4e101f5b40d78b798",
-      "size_bytes": 13739
+      "sha256": "59304749ee0df9e06e8afa177fff2d5ddf349df6b0455d45a3a27d6689b7c19e",
+      "size_bytes": 13813
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "6de7ce33460f45027619cc37e25dea318f3df1e838b8c0a884f2f380b40d3312",
-      "size_bytes": 289139
+      "sha256": "2dcc3680083b596cfb7fb2ce2a62af7c3b0687dd92aa2dd2542cf52ec64bf839",
+      "size_bytes": 290126
     },
     {
       "path": "paper/main.tex",
-      "sha256": "1e29fb4e82b9227be16cb1383b6354760ecd691a2fa5e9722cfe2494f2f6da75",
-      "size_bytes": 36980
+      "sha256": "39b157ecc4ff0c173acceabefd9715b11a1bf65e74798fe041918d76dc80b868",
+      "size_bytes": 37040
     },
     {
       "path": "paper/references.bib",
