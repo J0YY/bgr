@@ -122,6 +122,16 @@ def perturbation_total(rows: list[dict[str, str]], method: str, perturbations: s
     return successes, episodes
 
 
+def missing_openvla_rows(rows: list[dict[str, str]], methods: set[str], perturbations: set[str]) -> list[str]:
+    present = {(row.get("method"), row.get("perturbation")) for row in rows}
+    return [
+        f"{method}/{perturbation}"
+        for method in sorted(methods)
+        for perturbation in sorted(perturbations)
+        if (method, perturbation) not in present
+    ]
+
+
 def learned_policy_inflight_detail(root: Path) -> str | None:
     if (root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE).exists():
         return None
@@ -143,6 +153,60 @@ def learned_policy_inflight_detail(root: Path) -> str | None:
         "BGR 767128/767129/767130 and random 767131/767132/767133 are queued; "
         "fixed perturbation jobs official 767134--767138, BGR 767139--767143, "
         "and random 767144--767148 must finish before the +10/400 and +0.02 learned-policy gate can be checked"
+    )
+
+
+def learned_policy_summary_gate(root: Path, relative_path: str, *, label: str) -> GateResult:
+    rows = read_rows(root / relative_path)
+    methods = {"bgr", "official", "random"}
+    required_perturbations = OPENVLA_NON_IDENTITY_PERTURBATIONS | {"identity"}
+    missing = missing_openvla_rows(rows, methods, required_perturbations)
+    if missing:
+        return GateResult(
+            "learned-policy OpenVLA/LIBERO",
+            False,
+            f"{label} incomplete; missing {', '.join(missing)}",
+        )
+
+    bgr_success, bgr_episodes = perturbation_total(rows, "bgr", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+    official_success, official_episodes = perturbation_total(rows, "official", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+    random_success, random_episodes = perturbation_total(rows, "random", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+    bgr_identity, identity_eps = success_total(
+        [row for row in rows if row.get("perturbation") == "identity"], "bgr", exclude_identity=False
+    )
+    official_identity, _ = success_total(
+        [row for row in rows if row.get("perturbation") == "identity"], "official", exclude_identity=False
+    )
+    random_identity, _ = success_total(
+        [row for row in rows if row.get("perturbation") == "identity"], "random", exclude_identity=False
+    )
+
+    official_margin = bgr_success - official_success
+    random_margin = bgr_success - random_success
+    official_rate_margin = bgr_success / bgr_episodes - official_success / official_episodes
+    random_rate_margin = bgr_success / bgr_episodes - random_success / random_episodes
+    clean_floor = max(official_identity, random_identity) - 1
+    passed = (
+        bgr_episodes == 400
+        and official_episodes == 400
+        and random_episodes == 400
+        and official_margin >= 10
+        and random_margin >= 10
+        and official_rate_margin >= 0.02
+        and random_rate_margin >= 0.02
+        and bgr_identity >= clean_floor
+    )
+    return GateResult(
+        "learned-policy OpenVLA/LIBERO",
+        passed,
+        (
+            f"{label} non-identity BGR {bgr_success}/{bgr_episodes}, "
+            f"official {official_success}/{official_episodes}, random {random_success}/{random_episodes}; "
+            f"identity BGR {bgr_identity}/{identity_eps}, official {official_identity}/{identity_eps}, "
+            f"random {random_identity}/{identity_eps}; official_margin={official_margin}, "
+            f"random_margin={random_margin}, official_rate_margin={official_rate_margin:+.4f}, "
+            f"random_rate_margin={random_rate_margin:+.4f}"
+        ),
     )
 
 
@@ -307,6 +371,9 @@ def independent_benchmark_gate(root: Path) -> GateResult:
 
 def learned_policy_gate(root: Path) -> GateResult:
     inflight_detail = learned_policy_inflight_detail(root)
+    if (root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE).exists():
+        return learned_policy_summary_gate(root, OPENVLA_PROXIMAL_ANCHOR_COMPLETE, label="latest proximal-anchor audit")
+
     weighted_path = root / OPENVLA_WEIGHTED_AVAILABLE
     if weighted_path.exists():
         rows = read_rows(weighted_path)

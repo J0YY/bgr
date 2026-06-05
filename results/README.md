@@ -1658,6 +1658,19 @@ Slurm audit showed all rows pending, with BGR/random perturb rows held on
 dependencies and official perturb rows serialized by method. No result is
 available yet, and this remains an audit until the fixed gate above is checked.
 
+Fresh Athena poll on 2026-06-05 13:41 PDT / 21:41 BST:
+
+```text
+767128 PENDING (ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08],g2-[01-02])
+767134 PENDING (ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08],g2-[01-02])
+767129-767133 PENDING (Dependency)
+767135-767148 PENDING (Dependency)
+```
+
+`sacct` reported `PENDING`, `00:00:00` elapsed, and unknown start/end times for
+all jobs `767128`-`767148`; there is still no proximal-anchor summary to sync
+or promote.
+
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 
 Launched on 2026-06-02 after the p1024 offset-3 follow-up showed only a small

@@ -37,6 +37,35 @@ def _write_weighted_summary(root: Path) -> None:
     )
 
 
+def _write_proximal_summary(root: Path, *, bgr_shift: int, random_shift: int) -> None:
+    path = root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        "\n".join(
+            [
+                "method,perturbation,episodes,successes,success_rate",
+                "bgr,identity,100,99,0.99",
+                "bgr,blur,100,98,0.98",
+                "bgr,brightness,100,99,0.99",
+                "bgr,occlusion,100,75,0.75",
+                f"bgr,shift,100,{bgr_shift},{bgr_shift / 100:.2f}",
+                "official,identity,100,99,0.99",
+                "official,blur,100,97,0.97",
+                "official,brightness,100,98,0.98",
+                "official,occlusion,100,74,0.74",
+                "official,shift,100,88,0.88",
+                "random,identity,100,99,0.99",
+                "random,blur,100,95,0.95",
+                "random,brightness,100,96,0.96",
+                "random,occlusion,100,73,0.73",
+                f"random,shift,100,{random_shift},{random_shift / 100:.2f}",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+
 def _write_independent_summaries(root: Path) -> None:
     summaries = {
         "results/frozenlake_recovery_focused_30seed_v1/summary.csv": (
@@ -109,7 +138,7 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
         self.assertIn("767144--767148", gate.detail)
         self.assertIn("must finish before the +10/400 and +0.02 learned-policy gate", gate.detail)
 
-    def test_learned_policy_gate_omits_proximal_anchor_inflight_after_summary_exists(self) -> None:
+    def test_learned_policy_gate_reports_incomplete_proximal_anchor_summary(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             _write_weighted_summary(root)
@@ -125,6 +154,40 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
 
         self.assertFalse(gate.passed)
         self.assertNotIn("proximal-anchor route in flight", gate.detail)
+        self.assertIn("latest proximal-anchor audit incomplete", gate.detail)
+        self.assertIn("missing bgr/blur", gate.detail)
+
+    def test_learned_policy_gate_prefers_completed_proximal_anchor_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_weighted_summary(root)
+            _write_proximal_summary(root, bgr_shift=90, random_shift=90)
+
+            gate = learned_policy_gate(root)
+
+        self.assertFalse(gate.passed)
+        self.assertIn("latest proximal-anchor audit", gate.detail)
+        self.assertIn("BGR 362/400", gate.detail)
+        self.assertIn("official 357/400", gate.detail)
+        self.assertIn("random 354/400", gate.detail)
+        self.assertIn("official_margin=5", gate.detail)
+        self.assertNotIn("latest weighted audit", gate.detail)
+
+    def test_learned_policy_gate_accepts_completed_proximal_anchor_pass(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_weighted_summary(root)
+            _write_proximal_summary(root, bgr_shift=98, random_shift=88)
+
+            gate = learned_policy_gate(root)
+
+        self.assertTrue(gate.passed)
+        self.assertIn("latest proximal-anchor audit", gate.detail)
+        self.assertIn("BGR 370/400", gate.detail)
+        self.assertIn("official 357/400", gate.detail)
+        self.assertIn("random 352/400", gate.detail)
+        self.assertIn("official_margin=13", gate.detail)
+        self.assertIn("random_margin=18", gate.detail)
 
     def test_independent_gate_reports_fetchpush_invalid_calibration(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

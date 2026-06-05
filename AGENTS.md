@@ -114,7 +114,11 @@ Treat the following as the current paper-weakness backlog:
   BGR dependency `afterok:767129` and random dependency `afterok:767132` as
   official jobs `767134`-`767138`, BGR jobs `767139`-`767143`, and random jobs
   `767144`-`767148`. At submission, all were pending; BGR/random perturb jobs
-  were dependency-held, while official perturb jobs serialized by method.
+  were dependency-held, while official perturb jobs serialized by method. A
+  remote Athena poll on 2026-06-05 13:41 PDT / 21:41 BST still showed all jobs
+  pending with no `sacct` start/end times: BGR train job `767128` and official
+  identity job `767134` were waiting on unavailable GPU nodes, and all other
+  jobs were dependency-held.
 
 ## Paper Workflow
 

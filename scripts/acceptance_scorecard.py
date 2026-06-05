@@ -12,6 +12,7 @@ from statistics import mean
 
 from scripts.check_acceptance_readiness import OPENVLA_LEGACY_COMPLETE
 from scripts.check_acceptance_readiness import OPENVLA_NON_IDENTITY_PERTURBATIONS
+from scripts.check_acceptance_readiness import OPENVLA_PROXIMAL_ANCHOR_COMPLETE
 from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_AVAILABLE
 
 
@@ -419,7 +420,56 @@ def identity_total(rows: list[dict[str, str]], method: str) -> tuple[int, int]:
     return successes, episodes
 
 
+def missing_openvla_rows(rows: list[dict[str, str]]) -> list[str]:
+    methods = ("bgr", "official", "random")
+    perturbations = tuple(sorted(OPENVLA_NON_IDENTITY_PERTURBATIONS | {"identity"}))
+    present = {(row.get("method"), row.get("perturbation")) for row in rows}
+    return [
+        f"{method}/{perturbation}"
+        for method in methods
+        for perturbation in perturbations
+        if (method, perturbation) not in present
+    ]
+
+
 def learned_policy_summary(root: Path) -> str:
+    proximal = root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE
+    if proximal.exists():
+        rows = read_rows(proximal)
+        missing = missing_openvla_rows(rows)
+        if missing:
+            return f"Proximal-anchor OpenVLA audit summary is incomplete; missing {', '.join(missing)}."
+        bgr_success, bgr_episodes = perturbation_total(rows, "bgr", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+        official_success, official_episodes = perturbation_total(rows, "official", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+        random_success, random_episodes = perturbation_total(rows, "random", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+        bgr_identity, identity_episodes = identity_total(rows, "bgr")
+        official_identity, _ = identity_total(rows, "official")
+        random_identity, _ = identity_total(rows, "random")
+        official_gap = bgr_success - official_success
+        random_gap = bgr_success - random_success
+        official_rate_gap = bgr_success / bgr_episodes - official_success / official_episodes
+        random_rate_gap = bgr_success / bgr_episodes - random_success / random_episodes
+        clean_deficit = max(official_identity, random_identity) - bgr_identity
+        passed = (
+            bgr_episodes == 400
+            and official_episodes == 400
+            and random_episodes == 400
+            and official_gap >= 10
+            and random_gap >= 10
+            and official_rate_gap >= 0.02
+            and random_rate_gap >= 0.02
+            and clean_deficit <= 1
+        )
+        status = "clears" if passed else "does not clear"
+        return (
+            f"Proximal-anchor OpenVLA audit {status} the learned-policy promotion gate: "
+            f"BGR {bgr_success}/{bgr_episodes}, official {official_success}/{official_episodes}, "
+            f"random {random_success}/{random_episodes}; identity BGR {bgr_identity}/{identity_episodes}, "
+            f"official {official_identity}/{identity_episodes}, random {random_identity}/{identity_episodes}; "
+            f"official gap {official_gap:+d} ({official_rate_gap:+.4f}), "
+            f"random gap {random_gap:+d} ({random_rate_gap:+.4f}), clean deficit {clean_deficit}."
+        )
+
     weighted = root / OPENVLA_WEIGHTED_AVAILABLE
     if weighted.exists():
         rows = read_rows(weighted)

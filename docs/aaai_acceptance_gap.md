@@ -701,7 +701,12 @@ package and recording its version before any result is run.
   occlusion/shift jobs `767134`-`767138`, BGR jobs `767139`-`767143`, and
   matched-random jobs `767144`-`767148`. Slurm immediately reported all jobs
   pending; BGR/random perturb rows were dependency-held, and official
-  perturb rows serialized identity through shift.
+  perturb rows serialized identity through shift. A fresh Athena poll on
+  2026-06-05 13:41 PDT / 21:41 BST still showed all jobs pending with no
+  `sacct` start/end times: BGR train job `767128` and official identity job
+  `767134` were waiting on unavailable GPU nodes
+  (`ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08],g2-[01-02]`),
+  and every other proximal job was dependency-held.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance
