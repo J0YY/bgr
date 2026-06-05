@@ -1633,8 +1633,8 @@ trailing clean identity by more than 1/100. A tie, one-episode edge, or
 official/random lead remains a negative audit.
 
 Launched on 2026-06-05 13:18 PDT / 21:18 BST after verifying the remote
-`/work/joy` TFDS roots, OpenVLA-OFT checkout, Python environment, `torchrun`,
-and official statistics file on `athena`.
+TFDS roots, OpenVLA-OFT checkout, Python environment, `torchrun`, and official
+statistics file on `athena`.
 
 Adaptation/merge/clean-eval jobs:
 
@@ -1670,6 +1670,21 @@ Fresh Athena poll on 2026-06-05 13:41 PDT / 21:41 BST:
 `sacct` reported `PENDING`, `00:00:00` elapsed, and unknown start/end times for
 all jobs `767128`-`767148`; there is still no proximal-anchor summary to sync
 or promote.
+
+Result ingestion helper:
+
+```bash
+scripts/sync_openvla_oft_proximal_anchor_results.sh --poll --no-check
+scripts/sync_openvla_oft_proximal_anchor_results.sh --sync
+```
+
+The helper polls the fixed jobs, checks the remote compact summaries under
+the configured remote run root, syncs only `summary.csv` files when present, and
+then runs the local perturbation and readiness gates. For the live internal
+cluster workspace, set `REMOTE_RUN_ROOT=/work/<user>/bgr/runs`. A follow-up
+helper poll on
+2026-06-05 13:47 PDT / 21:47 BST still showed all jobs pending and both expected
+proximal `summary.csv` files missing.
 
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 

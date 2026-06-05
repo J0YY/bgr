@@ -9,6 +9,7 @@ SCRIPT = ROOT / "scripts" / "queue_openvla_oft_goal_adapt.sh"
 PREREG_SCRIPT = ROOT / "scripts" / "queue_openvla_oft_preregistered_goal_adapt.sh"
 WEIGHTED_PREREG_SCRIPT = ROOT / "scripts" / "queue_openvla_oft_preregistered_weighted_perturb.sh"
 PROXIMAL_PREREG_SCRIPT = ROOT / "scripts" / "queue_openvla_oft_preregistered_proximal_anchor.sh"
+PROXIMAL_SYNC_SCRIPT = ROOT / "scripts" / "sync_openvla_oft_proximal_anchor_results.sh"
 
 
 class QueueOpenVlaOftGoalAdaptTest(unittest.TestCase):
@@ -237,6 +238,33 @@ class QueueOpenVlaOftGoalAdaptTest(unittest.TestCase):
         result = self.run_proximal_preregistered("--perturb-only", "--submit-perturb", check=False)
         self.assertEqual(result.returncode, 2)
         self.assertIn("Refusing --submit-perturb without BGR_DEPENDENCY and RANDOM_DEPENDENCY", result.stderr)
+
+    def test_proximal_sync_dry_run_prints_fixed_paths(self) -> None:
+        env = os.environ.copy()
+        env.update(
+            {
+                "REMOTE_HOST": "athena-unit",
+                "REMOTE_RUN_ROOT": "/tmp/bgr-runs",
+                "LOCAL_RESULTS_ROOT": "/tmp/local-results",
+            }
+        )
+        result = subprocess.run(
+            ["bash", str(PROXIMAL_SYNC_SCRIPT), "--no-check"],
+            cwd=ROOT,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True,
+        )
+        output = result.stdout
+        self.assertIn("Proximal-anchor OpenVLA-OFT result sync", output)
+        self.assertIn("REMOTE_HOST=athena-unit", output)
+        self.assertIn("767128,767129", output)
+        self.assertIn("openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0", output)
+        self.assertIn("[dry-run] pass --poll", output)
+        self.assertIn("[dry-run] pass --sync", output)
+        self.assertIn("[skip] local gates disabled by --no-check", output)
 
 
 if __name__ == "__main__":

@@ -118,7 +118,10 @@ Treat the following as the current paper-weakness backlog:
   remote Athena poll on 2026-06-05 13:41 PDT / 21:41 BST still showed all jobs
   pending with no `sacct` start/end times: BGR train job `767128` and official
   identity job `767134` were waiting on unavailable GPU nodes, and all other
-  jobs were dependency-held.
+  jobs were dependency-held. Use
+  `scripts/sync_openvla_oft_proximal_anchor_results.sh --poll --no-check` to
+  re-poll the fixed job IDs and remote summary paths; use `--sync` only after
+  the compact `summary.csv` files exist.
 
 ## Paper Workflow
 
