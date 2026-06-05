@@ -71,3 +71,10 @@ to reproduce this read from the current result artifacts.
 - The next acceptance-moving result must be either a fixed-protocol positive
   pre-existing benchmark or a genuinely different preregistered learned-policy
   intervention that can beat both official and matched random.
+- The current learned-policy follow-up is the preregistered weighted
+  perturbation curriculum in
+  `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh`. It changes the
+  OpenVLA-OFT training distribution by repeating perturbation examples under
+  separate TFDS `mix_source` labels. It remains non-promotable unless weighted
+  BGR beats both weighted random and official by the fixed 10/400 and 0.02
+  non-identity gates without clean-identity regression.

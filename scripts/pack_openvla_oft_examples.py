@@ -88,6 +88,7 @@ def _load_record(root: Path, row: dict[str, Any]) -> dict[str, Any]:
         "instruction": str(row["instruction"]),
         "method": str(row.get("method", "")),
         "run": str(row.get("run", "")),
+        "mix_source": str(row.get("mix_source", "")),
         "episode_uid": str(row.get("episode_uid", "")),
     }
     return {
@@ -164,6 +165,7 @@ def _record_group_key(record: dict[str, Any]) -> str:
             str(metadata.get("episode_idx", 0)),
             str(metadata.get("init_state_idx", 0)),
             str(metadata.get("candidate_name", "")),
+            str(metadata.get("mix_source", "")),
         ]
     )
 

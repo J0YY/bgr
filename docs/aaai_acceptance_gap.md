@@ -504,6 +504,26 @@ package and recording its version before any result is run.
   the next attempt changes the learned-policy intervention in a preregistered
   way that plausibly beats both official and matched random; the latest
   preregistered run reinforces the current negative audit.
+- The next preregistered learned-policy intervention is weighted perturbation
+  curriculum, implemented in
+  `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh`. It changes the
+  OpenVLA-OFT training distribution rather than only changing step count, seed,
+  or evaluation: render 2,048 unique perturbation examples per method with eight
+  episodes per perturbation family, duplicate the perturbation subset three
+  times under distinct TFDS `mix_source` labels, keep the same identity-LoRA,
+  image augmentation, official statistics, `ADAPT_STEPS=500`, `LR=5e-7`, and
+  10-task x 10-trial identity/perturbation evals. The fixed prep command is:
+  `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh --prep-only --submit-prep`.
+  The fixed adaptation command, after prep succeeds, is:
+  `PREP_DEPENDENCY=afterok:<prep_job> scripts/queue_openvla_oft_preregistered_weighted_perturb.sh --adapt-only --submit-adapt`.
+  The fixed perturbation command, after BGR/random merge jobs exist, is:
+  `BGR_DEPENDENCY=afterok:<bgr_merge> RANDOM_DEPENDENCY=afterok:<random_merge> scripts/queue_openvla_oft_preregistered_weighted_perturb.sh --perturb-only --submit-perturb`.
+  Promotion requires weighted BGR to beat both weighted matched random and the
+  official checkpoint on the fixed non-identity perturbation total by at least
+  10/400 episodes and at least 0.02 absolute success rate, while not trailing
+  clean identity by more than 1/100. If prep metadata shows unmatched
+  BGR/random perturbation-family counts after weighting, the run is an audit
+  only and cannot be promoted.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

@@ -83,6 +83,7 @@ def _episode_records(records: list[dict[str, Any]]) -> list[tuple[str, dict[str,
                         "task_name": metadata["task_name"],
                         "candidate_name": metadata["candidate_name"],
                         "perturbation_type": metadata["perturbation_type"],
+                        "mix_source": metadata.get("mix_source", ""),
                         "episode_uid": metadata.get("episode_uid", ""),
                     },
                 },
@@ -137,6 +138,7 @@ def _feature_spec(tfds: Any) -> Any:
                     "task_name": tfds.features.Text(),
                     "candidate_name": tfds.features.Text(),
                     "perturbation_type": tfds.features.Text(),
+                    "mix_source": tfds.features.Text(),
                     "episode_uid": tfds.features.Text(),
                 }
             ),
@@ -154,6 +156,7 @@ def _record_group_key(record: dict[str, Any]) -> str:
             str(metadata.get("episode_idx", 0)),
             str(metadata.get("init_state_idx", 0)),
             str(metadata.get("candidate_name", "")),
+            str(metadata.get("mix_source", "")),
         ]
     )
 

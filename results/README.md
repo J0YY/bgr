@@ -1188,6 +1188,45 @@ OpenVLA-OFT result, not paper-facing evidence for a robotics fine-tuning claim.
 The local summaries are stored under
 `results/openvla_oft_perturb_eval_cleanmix_p4096_commonavail_step50500_lr5em7_identitylora_imageaug_officialtrainstats_prereg_fullgoal10x10_v1/`.
 
+## Preregistered OpenVLA-OFT Weighted Perturbation Curriculum
+
+This is the next learned-policy intervention after the negative p4096
+image-augmentation audit. It is not another step-count or seed rerun: the
+training distribution changes by repeating perturbation examples under separate
+TFDS `mix_source` labels before OpenVLA-OFT adaptation. The fixed recipe uses
+2,048 unique perturbation examples per method, eight episodes per perturbation
+family, `PERTURB_REPEAT=3`, official OpenVLA-OFT LIBERO-Goal statistics,
+identity-LoRA, image augmentation, `ADAPT_STEPS=500`, `LR=5e-7`, and the same
+10-task x 10-trial identity and visual-perturbation evals.
+
+Fixed prep command:
+
+```bash
+scripts/queue_openvla_oft_preregistered_weighted_perturb.sh --prep-only --submit-prep
+```
+
+Fixed adaptation command after prep succeeds:
+
+```bash
+PREP_DEPENDENCY=afterok:<prep_job> \
+scripts/queue_openvla_oft_preregistered_weighted_perturb.sh --adapt-only --submit-adapt
+```
+
+Fixed perturbation command after BGR/random merge jobs exist:
+
+```bash
+BGR_DEPENDENCY=afterok:<bgr_merge> \
+RANDOM_DEPENDENCY=afterok:<random_merge> \
+scripts/queue_openvla_oft_preregistered_weighted_perturb.sh --perturb-only --submit-perturb
+```
+
+Promotion gate: weighted BGR must beat weighted matched random and the official
+checkpoint on the fixed non-identity perturbation total by at least 10/400
+episodes and at least 0.02 absolute success rate, while not trailing clean
+identity by more than 1/100. If prep metadata shows unmatched BGR/random
+perturbation-family counts after weighting, the result is an audit only and
+cannot be promoted.
+
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 
 Launched on 2026-06-02 after the p1024 offset-3 follow-up showed only a small

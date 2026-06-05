@@ -29,10 +29,12 @@ class PackOpenVLAOFTExamplesTest(unittest.TestCase):
                 "candidate_name": "blur",
                 "perturbation_type": "blur",
                 "instruction": "open drawer",
+                "mix_source": "perturb_2",
             }
             record = _load_record(root, row)
             self.assertEqual(record["image"].shape, (224, 224, 3))
             self.assertEqual(record["action"].shape, (7,))
+            self.assertEqual(record["metadata"]["mix_source"], "perturb_2")
             summary = _summary([record])
             self.assertEqual(summary["families"], ["blur"])
             self.assertEqual(summary["examples"], 1)

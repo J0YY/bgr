@@ -8,6 +8,7 @@ MAX_PERTURB_EXAMPLES="${MAX_PERTURB_EXAMPLES:-256}"
 MAX_STEPS_PER_EPISODE="${MAX_STEPS_PER_EPISODE:-64}"
 CLEAN_EPISODES_PER_FAMILY="${CLEAN_EPISODES_PER_FAMILY:-64}"
 PERTURB_EPISODES_PER_FAMILY="${PERTURB_EPISODES_PER_FAMILY:-1}"
+PERTURB_REPEAT="${PERTURB_REPEAT:-1}"
 PARTITION="${PARTITION:-low-prio-gpu}"
 GRES="${GRES:-gpu:a6000:1}"
 CPUS="${CPUS:-8}"
@@ -17,23 +18,25 @@ EXCLUDE="${EXCLUDE:-c2-g4-21}"
 REMOTE_HOST="${REMOTE_HOST:-athena}"
 REMOTE_PROJECT="${REMOTE_PROJECT:-/work/anonymous/bgr}"
 REMOTE_LOG_DIR="${REMOTE_LOG_DIR:-/work/anonymous/bgr/logs}"
+REMOTE_RUN_ROOT="${REMOTE_RUN_ROOT:-/work/anonymous/bgr/runs}"
 OPENVLA_OFT_ROOT="${OPENVLA_OFT_ROOT:-/work/anonymous/external_validation/openvla_oft_smoke_746850/openvla-oft}"
 OPENVLA_OFT_PY="${OPENVLA_OFT_PY:-${OPENVLA_OFT_ROOT}/.venv-oft/bin/python}"
 OPENVLA_OFT_SITE="${OPENVLA_OFT_SITE:-${OPENVLA_OFT_ROOT}/.venv-oft/lib/python3.10/site-packages}"
 LIBERO_ROOT="${LIBERO_ROOT:-/home/anonymous/LIBERO}"
 DATASET_NAME="${DATASET_NAME:-libero_goal_no_noops}"
 SYNC_CODE="${SYNC_CODE:-1}"
+SOURCE_ARTIFACT_ROOT="${SOURCE_ARTIFACT_ROOT:-/work/anonymous/dreamaudit_jobs/artifacts}"
 
-BGR_CLEAN_RENDER="/work/anonymous/bgr/runs/openvla_teacher_oft_bgr_clean_${TAG}_v1"
-RANDOM_CLEAN_RENDER="/work/anonymous/bgr/runs/openvla_teacher_oft_random_clean_${TAG}_v1"
-BGR_PERTURB_RENDER="/work/anonymous/bgr/runs/openvla_teacher_oft_bgr_perturb_${TAG}_v1"
-RANDOM_PERTURB_RENDER="/work/anonymous/bgr/runs/openvla_teacher_oft_random_perturb_${TAG}_v1"
-BGR_MIX_RENDER="/work/anonymous/bgr/runs/openvla_teacher_oft_bgr_cleanmix_${TAG}_v1"
-RANDOM_MIX_RENDER="/work/anonymous/bgr/runs/openvla_teacher_oft_random_cleanmix_${TAG}_v1"
-BGR_TFDS_ROOT="/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_bgr_cleanmix_${TAG}_v1"
-RANDOM_TFDS_ROOT="/work/anonymous/bgr/runs/openvla_oft_tfds_libero_goal_random_cleanmix_${TAG}_v1"
-CLEAN_MANIFEST_DIR="/work/anonymous/bgr/runs/openvla_teacher_replay_manifest_clean_anchors_${TAG}_v1"
-PERTURB_MANIFEST="/work/anonymous/bgr/results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl"
+BGR_CLEAN_RENDER="${REMOTE_RUN_ROOT}/openvla_teacher_oft_bgr_clean_${TAG}_v1"
+RANDOM_CLEAN_RENDER="${REMOTE_RUN_ROOT}/openvla_teacher_oft_random_clean_${TAG}_v1"
+BGR_PERTURB_RENDER="${REMOTE_RUN_ROOT}/openvla_teacher_oft_bgr_perturb_${TAG}_v1"
+RANDOM_PERTURB_RENDER="${REMOTE_RUN_ROOT}/openvla_teacher_oft_random_perturb_${TAG}_v1"
+BGR_MIX_RENDER="${REMOTE_RUN_ROOT}/openvla_teacher_oft_bgr_cleanmix_${TAG}_v1"
+RANDOM_MIX_RENDER="${REMOTE_RUN_ROOT}/openvla_teacher_oft_random_cleanmix_${TAG}_v1"
+BGR_TFDS_ROOT="${REMOTE_RUN_ROOT}/openvla_oft_tfds_libero_goal_bgr_cleanmix_${TAG}_v1"
+RANDOM_TFDS_ROOT="${REMOTE_RUN_ROOT}/openvla_oft_tfds_libero_goal_random_cleanmix_${TAG}_v1"
+CLEAN_MANIFEST_DIR="${REMOTE_RUN_ROOT}/openvla_teacher_replay_manifest_clean_anchors_${TAG}_v1"
+PERTURB_MANIFEST="${PERTURB_MANIFEST:-${REMOTE_PROJECT}/results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl}"
 
 usage() {
   cat <<USAGE
@@ -42,6 +45,10 @@ Usage: scripts/queue_openvla_oft_clean_mix_prep.sh [--submit]
 Prepares clean-mix OpenVLA-OFT TFDS datasets:
   BGR:    ${BGR_TFDS_ROOT}
   Random: ${RANDOM_TFDS_ROOT}
+
+Set PERTURB_REPEAT>1 to duplicate the rendered perturbation subset under
+separate mix-source labels before TFDS export. This preregisters a weighted
+perturbation curriculum while preserving matched BGR/random example counts.
 
 Default mode is dry-run. Pass --submit to queue the preparation job.
 USAGE
@@ -92,18 +99,18 @@ set -euo pipefail
 source ~/.bashrc || true
 
 BGR_SOURCE_DIRS=(
-  /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed1_lp2_h160
-  /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed2_lp2_h160
-  /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed3_lp2_h160
-  /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed4_lp2_h160
-  /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_proposal_balanced_expfit_seed5_lp2_h160
+  "${SOURCE_ARTIFACT_ROOT}/libero_openvla_observation_proposal_balanced_expfit_seed1_lp2_h160"
+  "${SOURCE_ARTIFACT_ROOT}/libero_openvla_observation_proposal_balanced_expfit_seed2_lp2_h160"
+  "${SOURCE_ARTIFACT_ROOT}/libero_openvla_observation_proposal_balanced_expfit_seed3_lp2_h160"
+  "${SOURCE_ARTIFACT_ROOT}/libero_openvla_observation_proposal_balanced_expfit_seed4_lp2_h160"
+  "${SOURCE_ARTIFACT_ROOT}/libero_openvla_observation_proposal_balanced_expfit_seed5_lp2_h160"
 )
 RANDOM_SOURCE_DIRS=(
-  /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160
-  /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160
-  /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160
-  /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160
-  /work/anonymous/dreamaudit_jobs/artifacts/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160
+  "${SOURCE_ARTIFACT_ROOT}/libero_openvla_observation_random_balanced_seed1b_skip_lp2_h160"
+  "${SOURCE_ARTIFACT_ROOT}/libero_openvla_observation_random_balanced_seed2b_skip_lp2_h160"
+  "${SOURCE_ARTIFACT_ROOT}/libero_openvla_observation_random_balanced_seed3b_skip_lp2_h160"
+  "${SOURCE_ARTIFACT_ROOT}/libero_openvla_observation_random_balanced_seed4b_skip_lp2_h160"
+  "${SOURCE_ARTIFACT_ROOT}/libero_openvla_observation_random_balanced_seed5b_skip_lp2_h160"
 )
 
 cd "${REMOTE_PROJECT}"
@@ -171,13 +178,17 @@ echo "Rendering random perturbation subset at \$(date -Is)"
   --max-steps-per-episode "${MAX_STEPS_PER_EPISODE}"
 
 echo "Combining rendered examples at \$(date -Is)"
+BGR_COMBINE_ARGS=(--source clean="${BGR_CLEAN_RENDER}")
+RANDOM_COMBINE_ARGS=(--source clean="${RANDOM_CLEAN_RENDER}")
+for repeat_idx in \$(seq 1 "${PERTURB_REPEAT}"); do
+  BGR_COMBINE_ARGS+=(--source "perturb_\${repeat_idx}=${BGR_PERTURB_RENDER}")
+  RANDOM_COMBINE_ARGS+=(--source "perturb_\${repeat_idx}=${RANDOM_PERTURB_RENDER}")
+done
 "${OPENVLA_OFT_PY}" scripts/combine_openvla_oft_examples.py \\
-  --source clean="${BGR_CLEAN_RENDER}" \\
-  --source perturb="${BGR_PERTURB_RENDER}" \\
+  "\${BGR_COMBINE_ARGS[@]}" \\
   --out "${BGR_MIX_RENDER}"
 "${OPENVLA_OFT_PY}" scripts/combine_openvla_oft_examples.py \\
-  --source clean="${RANDOM_CLEAN_RENDER}" \\
-  --source perturb="${RANDOM_PERTURB_RENDER}" \\
+  "\${RANDOM_COMBINE_ARGS[@]}" \\
   --out "${RANDOM_MIX_RENDER}"
 
 echo "Exporting TFDS datasets at \$(date -Is)"

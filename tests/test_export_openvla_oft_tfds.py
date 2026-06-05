@@ -5,7 +5,13 @@ import numpy as np
 from scripts.export_openvla_oft_tfds import _episode_records, _summary
 
 
-def _record(candidate_name: str, perturbation_type: str, episode_idx: int = 0, step_idx: int = 0) -> dict:
+def _record(
+    candidate_name: str,
+    perturbation_type: str,
+    episode_idx: int = 0,
+    step_idx: int = 0,
+    mix_source: str = "",
+) -> dict:
     return {
         "image": np.zeros((224, 224, 3), dtype=np.uint8),
         "wrist_image": np.zeros((224, 224, 3), dtype=np.uint8),
@@ -23,6 +29,7 @@ def _record(candidate_name: str, perturbation_type: str, episode_idx: int = 0, s
             "candidate_name": candidate_name,
             "perturbation_type": perturbation_type,
             "instruction": "open the drawer",
+            "mix_source": mix_source,
             "episode_uid": f"goal:0:{episode_idx}",
         },
     }
@@ -66,6 +73,18 @@ class ExportOpenVLAOFTTFDSTest(unittest.TestCase):
         self.assertFalse(episodes[0][1]["steps"][0]["is_last"])
         self.assertTrue(episodes[0][1]["steps"][1]["is_last"])
         self.assertEqual(len(episodes[1][1]["steps"]), 1)
+
+    def test_episode_records_do_not_merge_repeated_mix_sources(self):
+        records = [
+            _record("blur", "blur", episode_idx=0, step_idx=0, mix_source="perturb_1"),
+            _record("blur", "blur", episode_idx=0, step_idx=0, mix_source="perturb_2"),
+        ]
+
+        episodes = _episode_records(records)
+
+        self.assertEqual(len(episodes), 2)
+        mix_sources = [episode[1]["episode_metadata"]["mix_source"] for episode in episodes]
+        self.assertEqual(mix_sources, ["perturb_1", "perturb_2"])
 
 
 if __name__ == "__main__":
