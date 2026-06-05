@@ -1296,6 +1296,14 @@ their declared dependencies. No weighted clean or perturbation summary was
 available yet, so there are no paper-facing results to incorporate from this
 intervention.
 
+Later 2026-06-05 audit: BGR merge `766806`, random train `766808`, and random
+merge `766809` completed with exit `0:0`. BGR clean eval `766807`, random clean
+eval `766810`, official identity perturbation eval `766817`, BGR identity
+perturbation eval `766822`, and random identity perturbation eval `766827` were
+running. The remaining perturbation jobs were pending on their per-method
+serial dependencies. No weighted clean or perturbation `summary.csv`/`summary.json`
+files were present yet.
+
 Promotion gate: weighted BGR must beat weighted matched random and the official
 checkpoint on the fixed non-identity perturbation total by at least 10/400
 episodes and at least 0.02 absolute success rate, while not trailing clean

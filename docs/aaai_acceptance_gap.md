@@ -553,6 +553,12 @@ package and recording its version before any result is run.
   running, while the dependent clean and perturbation evals were still pending.
   There are not yet any weighted clean or perturbation summaries to incorporate
   into the paper.
+  A subsequent audit found BGR merge `766806`, random train `766808`, and
+  random merge `766809` completed successfully. BGR clean eval `766807`, random
+  clean eval `766810`, official identity perturbation eval `766817`, BGR
+  identity perturbation eval `766822`, and random identity perturbation eval
+  `766827` were running. No weighted clean or perturbation summaries were
+  available yet, so the paper should remain unchanged.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance
