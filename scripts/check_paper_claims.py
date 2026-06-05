@@ -683,6 +683,29 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    lavagap = read_csv_rows(results_dir / "minigrid_lavagap_s7_recovery_probe_4seed_v1" / "summary.csv")
+    lavagap_uniform_rauc = mean_metric(lavagap, "uniform", "final_rauc")
+    lavagap_coverage_rauc = mean_metric(lavagap, "bgr_coverage", "final_rauc")
+    lavagap_bgr_rauc = mean_metric(lavagap, "bgr", "final_rauc")
+    lavagap_ablation_rauc = mean_metric(lavagap, "bgr_uniform_radius", "final_rauc")
+    if not (
+        lavagap_ablation_rauc > lavagap_uniform_rauc
+        and lavagap_uniform_rauc > lavagap_coverage_rauc
+        and lavagap_coverage_rauc > lavagap_bgr_rauc
+    ):
+        raise ValueError("Expected MiniGrid-LavaGap diagnostic to remain a non-promoted negative result")
+    claims.append(
+        Claim(
+            "MiniGrid-LavaGap official-package limitation",
+            (
+                f"LavaGapS7 & BGR-Coverage {fmt(lavagap_coverage_rauc, 4)}; "
+                f"BGR {fmt(lavagap_bgr_rauc, 4)} & uniform {fmt(lavagap_uniform_rauc, 4)}; "
+                f"uniform-radius {fmt(lavagap_ablation_rauc, 4)} & negative"
+            ),
+            "results/minigrid_lavagap_s7_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+
     pointmaze = read_csv_rows(results_dir / "pointmaze_umaze_recovery_probe_4seed_v1" / "summary.csv")
     pointmaze_shield = read_csv_rows(results_dir / "pointmaze_umaze_clean_shield_probe_4seed_v1" / "summary.csv")
     pointmaze_failure_rauc = mean_metric(pointmaze, "failure_only", "final_rauc")

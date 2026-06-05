@@ -271,6 +271,7 @@ FrozenLake8x8 & BGR 0.5453; clean 0.5581 & uniform 0.5312; signs 14/16, 13/17 & 
 MiniGrid FourRooms & BGR-Coverage 0.6077 & uniform 0.6665; failure-only 0.7940; fixed 0.7587 & negative\\
 DoorKey-6x6 & BGR-Coverage 0.4846; BGR 0.3687 & uniform 0.6384; failure-only 0.6459 & negative\\
 LavaCrossingS9N3 & BGR-Coverage 0.3547; BGR 0.3153 & uniform 0.4165; lower abs. radius & negative\\
+LavaGapS7 & BGR-Coverage 0.4277; BGR 0.4031 & uniform 0.4461; uniform-radius 0.4627 & negative\\
 PointMaze U-Maze & BGR-Clean-Shield 0.2448; BGR 0.1406 & failure-only 0.5458; 2/4 wins; r20 0.1167 vs. 0.2500 & not promoted\\
 \hline
 \end{tabular}}
@@ -278,7 +279,7 @@ PointMaze U-Maze & BGR-Clean-Shield 0.2448; BGR 0.1406 & failure-only 0.5458; 2/
 {\footnotesize Table~\thetable: Standard-environment scope audits. These are limitation evidence, not positive benchmark claims.}
 \end{center}
 
-Table~\ref{tab:scope-audits} summarizes the standard-environment audits that keep the claim scoped. FrozenLake has a small BGR RAUC edge but loses the paired-sign and complementary-metric checks; MiniGrid DoorKey and LavaCrossing are direct negatives; FourRooms and PointMaze are explained by stronger baselines. Additional 4-seed pre-promotion probes also stay negative: Taxi is saturated or explained by hard-state replay; CliffWalking is saturated or has BGR below uniform and strong baselines; FourRooms has BGR variants below all baselines and the state-priority/uniform-radius ablation; MountainCar, CartPole, Acrobot, and Pendulum likewise fail the fixed-protocol effect-size and baseline criteria above.
+Table~\ref{tab:scope-audits} summarizes the standard-environment audits that keep the claim scoped. FrozenLake has a small BGR RAUC edge but loses the paired-sign and complementary-metric checks; MiniGrid DoorKey, LavaCrossing, and LavaGap are direct negatives; FourRooms and PointMaze are explained by stronger baselines. Additional 4-seed pre-promotion probes also stay negative: Taxi is saturated or explained by hard-state replay; CliffWalking is saturated or has BGR below uniform and strong baselines; FourRooms has BGR variants below all baselines and the state-priority/uniform-radius ablation; MountainCar, CartPole, Acrobot, and Pendulum likewise fail the fixed-protocol effect-size and baseline criteria above.
 
 The suffix simulator is positive on final RAUC, clean success, transfer RAUC, and AULC, including stress regimes, but the absolute gains over uniform are small and uniform retains the median-critical-radius edge. RAUC and AULC are useful for measuring curve expansion, but they are author-defined integrals over chosen radius grids; we therefore report median $r_{80}$ and clean success as separate checks instead of treating RAUC alone as decisive. OpenVLA is a learned-policy audit rather than a robotics training claim: it validates recovery-curve measurement and matched action/TFDS construction, while showing that a full robotics claim still requires stable optimization, clean-data scale, and multi-task LIBERO gains over both matched random selection and the official checkpoint.
 
