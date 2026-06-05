@@ -9,6 +9,8 @@ The paper is more defensible as an honest mechanism study, but it is not yet a
 90%+ AAAI main-track accept. The main blocker is still evidence, not packaging:
 there is no promoted positive independent benchmark and no learned-policy
 OpenVLA/LIBERO improvement over both matched random and the official checkpoint.
+Run `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .`
+to reproduce this read from the current result artifacts.
 
 ## Reviewer Weaknesses
 
@@ -63,6 +65,9 @@ OpenVLA/LIBERO improvement over both matched random and the official checkpoint.
   BGR-Coverage and default BGR lose to uniform and to the
   state-priority/uniform-radius ablation, with lower absolute-radius checks
   than uniform.
+- Stop adding MiniGrid/classic-control screens under the same tabular recovery
+  protocol. They now support limitations and scope, not an AAAI-main acceptance
+  case.
 - The next acceptance-moving result must be either a fixed-protocol positive
   pre-existing benchmark or a genuinely different preregistered learned-policy
   intervention that can beat both official and matched random.

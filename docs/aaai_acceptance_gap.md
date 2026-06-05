@@ -17,6 +17,13 @@ guards. That improves reviewability, but it does not by itself make the paper a
 - the strongest result is still the controlled procedural grid-margin
   mechanism benchmark.
 
+Audit this current status from artifacts with:
+`PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .`.
+The checker is intentionally stricter than the package guard: package checks
+verify that claims match artifacts, while this readiness check verifies whether
+the evidence has actually cleared the independent-benchmark and learned-policy
+promotion gates.
+
 After the weak-reject style review, the immediate paper-defense priority is not
 to amplify p-values or add more authored toy wins. The manuscript should instead
 make the evidence contract unavoidable:
@@ -497,3 +504,10 @@ package and recording its version before any result is run.
   the next attempt changes the learned-policy intervention in a preregistered
   way that plausibly beats both official and matched random; the latest
   preregistered run reinforces the current negative audit.
+- After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
+  not add more MiniGrid screens under the same tabular recovery-replay protocol.
+  The standard-environment route has produced scope evidence, not acceptance
+  evidence. Further acceptance-moving work should either change the
+  learned-policy intervention, add a truly independent benchmark with a
+  different reset/replay interface, or strengthen the theory/presentation enough
+  to make the mechanism-study framing stand on its own.
