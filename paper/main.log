@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.31)  5 JUN 2026 19:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.31)  5 JUN 2026 19:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -280,9 +280,6 @@ line 210.
 (pdftex.def)             Requested size: 239.39438pt x 87.90239pt.
  [4 <./figures/grid_margin_learning_curve.pdf>] (./figures/grid_margin_full_tab
 le.tex)
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 (./figures/grid_margin_ablation_table.tex) [5]
 Underfull \hbox (badness 1755) in paragraph at lines 239--240
 \T1/ptm/m/n/10 er-age. In the 30-seed run, BGR-Coverage raises fi-
@@ -348,7 +345,7 @@ dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/ut
 mr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (10 pages, 290687 bytes).
+Output written on main.pdf (10 pages, 293677 bytes).
 PDF statistics:
  163 PDF objects out of 1000 (max. 8388607)
  99 compressed objects within 1 object stream

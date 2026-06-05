@@ -2,8 +2,14 @@ metric,value
 seed,0
 bgr_final_rauc,0.4332633498297786
 uniform_final_rauc,0.3964070803386946
+failure_only_final_rauc,0.2909418201618529
+fixed_final_rauc,0.21021788114348036
+plr_loss_final_rauc,0.21129677741006894
 bgr_median_r80,0.3512843502198342
 uniform_median_r80,0.3407458588258427
+failure_only_median_r80,0.23534941163881795
+fixed_median_r80,0.14460027351237398
+plr_loss_median_r80,0.14479614166030183
 bgr_sample_radius_q25,0.08657664991044112
 bgr_sample_radius_median,0.19093942942392444
 bgr_sample_radius_q75,0.28971486348330494

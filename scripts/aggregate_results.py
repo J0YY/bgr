@@ -850,10 +850,22 @@ def make_boundary_intuition_figure(out_dir: Path, results_dir: Path) -> None:
 
     ax = axes[1]
     empirical_sigma = trace["sigma"]
-    bgr_curve = trace["bgr_curve"]
-    uniform_curve = trace["uniform_curve"]
-    ax.plot(empirical_sigma, bgr_curve, color="#1f77b4", linewidth=2.0, label="BGR final curve")
-    ax.plot(empirical_sigma, uniform_curve, color="#666666", linewidth=1.6, label="Uniform final curve")
+    curve_specs = [
+        ("bgr", "BGR", "#1f77b4", 2.0, "-"),
+        ("uniform", "Uniform", "#666666", 1.5, "-"),
+        ("failure_only", "Failure-only", "#d62728", 1.25, "--"),
+        ("fixed", "Fixed radius", "#9467bd", 1.25, "-."),
+        ("plr_loss", "PLR-loss", "#2ca02c", 1.25, ":"),
+    ]
+    for method, label, color, linewidth, linestyle in curve_specs:
+        ax.plot(
+            empirical_sigma,
+            trace[f"{method}_curve"],
+            color=color,
+            linewidth=linewidth,
+            linestyle=linestyle,
+            label=label,
+        )
     ax.axvline(trace["bgr_median_r80"], color="#1f77b4", linestyle=":", linewidth=1.1)
     ax.axvline(trace["uniform_median_r80"], color="#666666", linestyle=":", linewidth=1.0)
     hist, edges = np.histogram(trace["bgr_sampled_sigmas"], bins=np.linspace(0.0, 1.0, 21))
@@ -873,7 +885,7 @@ def make_boundary_intuition_figure(out_dir: Path, results_dir: Path) -> None:
     ax.set_ylim(0, 1.02)
     ax.set_xlim(0, 1.0)
     ax.grid(alpha=0.22, linewidth=0.5)
-    ax.legend(loc="upper right", fontsize=6.2, frameon=False)
+    ax.legend(loc="upper right", fontsize=5.7, frameon=False, ncol=1)
 
     fig.tight_layout(w_pad=1.2)
     fig.savefig(out_dir / "boundary_intuition.pdf")
@@ -884,10 +896,14 @@ def make_boundary_intuition_figure(out_dir: Path, results_dir: Path) -> None:
         out_dir / "boundary_intuition_stats.csv",
         [
             {"metric": "seed", "value": trace["seed"]},
-            {"metric": "bgr_final_rauc", "value": trace["bgr_rauc"]},
-            {"metric": "uniform_final_rauc", "value": trace["uniform_rauc"]},
-            {"metric": "bgr_median_r80", "value": trace["bgr_median_r80"]},
-            {"metric": "uniform_median_r80", "value": trace["uniform_median_r80"]},
+            *[
+                {"metric": f"{method}_final_rauc", "value": trace[f"{method}_rauc"]}
+                for method, *_unused in curve_specs
+            ],
+            *[
+                {"metric": f"{method}_median_r80", "value": trace[f"{method}_median_r80"]}
+                for method, *_unused in curve_specs
+            ],
             {"metric": "bgr_sample_radius_q25", "value": trace["bgr_sample_radius_q25"]},
             {"metric": "bgr_sample_radius_median", "value": trace["bgr_sample_radius_median"]},
             {"metric": "bgr_sample_radius_q75", "value": trace["bgr_sample_radius_q75"]},
@@ -911,23 +927,20 @@ def grid_margin_boundary_trace(results_dir: Path) -> dict:
     seed = 0
     sigma_grid = np.linspace(0.0, 1.0, 101)
     alpha = float(config["experiment"].get("alpha", 0.8))
-    bgr = _run_grid_margin_trace(config, "bgr", seed, sigma_grid)
-    uniform = _run_grid_margin_trace(config, "uniform", seed, sigma_grid)
-
-    bgr_radii = [critical_radius(sigma_grid, curve, alpha=alpha) for curve in bgr["state_curves"]]
-    uniform_radii = [critical_radius(sigma_grid, curve, alpha=alpha) for curve in uniform["state_curves"]]
-    bgr_raucs = [recovery_auc(sigma_grid, curve, sigma_max=1.0) for curve in bgr["state_curves"]]
-    uniform_raucs = [recovery_auc(sigma_grid, curve, sigma_max=1.0) for curve in uniform["state_curves"]]
-    sampled = np.asarray(bgr["sampled_sigmas"], dtype=float)
+    methods = ["bgr", "uniform", "failure_only", "fixed", "plr_loss"]
+    traces = {method: _run_grid_margin_trace(config, method, seed, sigma_grid) for method in methods}
+    method_stats = {}
+    for method, method_trace in traces.items():
+        radii = [critical_radius(sigma_grid, curve, alpha=alpha) for curve in method_trace["state_curves"]]
+        raucs = [recovery_auc(sigma_grid, curve, sigma_max=1.0) for curve in method_trace["state_curves"]]
+        method_stats[f"{method}_curve"] = np.mean(np.vstack(method_trace["state_curves"]), axis=0)
+        method_stats[f"{method}_rauc"] = float(np.mean(raucs))
+        method_stats[f"{method}_median_r80"] = float(np.median(radii))
+    sampled = np.asarray(traces["bgr"]["sampled_sigmas"], dtype=float)
     return {
         "seed": seed,
         "sigma": sigma_grid,
-        "bgr_curve": np.mean(np.vstack(bgr["state_curves"]), axis=0),
-        "uniform_curve": np.mean(np.vstack(uniform["state_curves"]), axis=0),
-        "bgr_rauc": float(np.mean(bgr_raucs)),
-        "uniform_rauc": float(np.mean(uniform_raucs)),
-        "bgr_median_r80": float(np.median(bgr_radii)),
-        "uniform_median_r80": float(np.median(uniform_radii)),
+        **method_stats,
         "bgr_sampled_sigmas": sampled,
         "bgr_sample_radius_q25": float(np.quantile(sampled, 0.25)),
         "bgr_sample_radius_median": float(np.quantile(sampled, 0.50)),
