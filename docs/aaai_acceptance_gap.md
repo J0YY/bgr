@@ -665,7 +665,7 @@ package and recording its version before any result is run.
   checkpoint's four completed non-identity rows also total 367/400, far below
   the preregistered requirement that BGR beat the official checkpoint by at
   least 10/400 episodes and 0.02 absolute success.
-  Live Slurm poll on 2026-06-05 12:27 PDT still shows matched-random shift job
+  Live Slurm poll on 2026-06-05 13:06 PDT still shows matched-random shift job
   `766831` as `PENDING` for unavailable GPU nodes, with a Slurm start estimate
   of 2026-06-07T13:21:02 and no start/end time in `sacct`. The remote
   `summary.csv` has the same 14 rows as the local `summary_available.csv`, so
@@ -673,6 +673,24 @@ package and recording its version before any result is run.
   official-checkpoint margin is already +0 rather than the required +10/400,
   the pending row is ledger completion only and cannot make this intervention
   promotable.
+- The next preregistered learned-policy route changes the optimization
+  objective rather than the data mix:
+  `scripts/queue_openvla_oft_preregistered_proximal_anchor.sh`. It reuses the
+  already fixed weighted perturbation TFDS roots but adds
+  `PROXIMAL_ANCHOR_L2=1.0` inside the OpenVLA-OFT trainer. The generated
+  training wrapper snapshots all trainable parameters after resuming the
+  official LIBERO-Goal checkpoint and adds an L2 penalty on deviation from
+  those initial values while fitting the BGR-boundary or matched-random replay
+  examples. This tests whether BGR can improve perturbation behavior without
+  drifting away from the official checkpoint. Fixed adaptation command:
+  `scripts/queue_openvla_oft_preregistered_proximal_anchor.sh --adapt-only --submit-adapt`.
+  Fixed perturbation command after BGR/random merge jobs exist:
+  `BGR_DEPENDENCY=afterok:<bgr_merge> RANDOM_DEPENDENCY=afterok:<random_merge> scripts/queue_openvla_oft_preregistered_proximal_anchor.sh --perturb-only --submit-perturb`.
+  Promotion uses the same strict learned-policy gate: proximal-anchor BGR must
+  beat both proximal-anchor matched random and the official checkpoint by at
+  least 10/400 non-identity perturbation episodes and at least 0.02 absolute
+  success, while clean identity is no worse than -1/100. Anything weaker stays
+  an audit.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

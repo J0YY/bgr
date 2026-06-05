@@ -32,6 +32,7 @@ OPENVLA_OFT_SITE="${OPENVLA_OFT_SITE:-${OPENVLA_OFT_ROOT}/.venv-oft/lib/python3.
 FINETUNE_SCRIPT="${FINETUNE_SCRIPT:-vla-scripts/finetune.py}"
 TRAIN_DATASET_STATISTICS_SOURCE="${TRAIN_DATASET_STATISTICS_SOURCE:-}"
 DATASET_STATISTICS_SOURCE="${DATASET_STATISTICS_SOURCE:-}"
+PROXIMAL_ANCHOR_L2="${PROXIMAL_ANCHOR_L2:-0}"
 LIBERO_ROOT="${LIBERO_ROOT:-/home/anonymous/LIBERO}"
 BASE_CHECKPOINT="${BASE_CHECKPOINT:-moojink/openvla-7b-oft-finetuned-libero-goal}"
 DATASET_NAME="${DATASET_NAME:-libero_goal_no_noops}"
@@ -72,6 +73,7 @@ Environment overrides:
   FINETUNE_SCRIPT selects an alternate OpenVLA-OFT fine-tuning entry point
   TRAIN_DATASET_STATISTICS_SOURCE forces official action/proprio stats during RLDS training normalization
   DATASET_STATISTICS_SOURCE copies known-good action stats into the checkpoint after merge
+  PROXIMAL_ANCHOR_L2>0 adds an explicit L2 penalty to keep trainable parameters near the resumed official checkpoint
 
 Default mode is dry-run. Pass --submit to queue asynchronous Slurm jobs with sbatch.
 USAGE
@@ -152,7 +154,7 @@ cd "${OPENVLA_OFT_ROOT}"
 echo "Adapting official LIBERO-Goal checkpoint with ${method} data on \$(hostname) at \$(date -Is)"
 
 FINETUNE_ENTRYPOINT="${FINETUNE_SCRIPT}"
-if [[ -n "${TRAIN_DATASET_STATISTICS_SOURCE}" ]]; then
+if [[ -n "${TRAIN_DATASET_STATISTICS_SOURCE}" || "${PROXIMAL_ANCHOR_L2}" != "0" ]]; then
   mkdir -p "${REMOTE_PROJECT}/runs/openvla_oft_wrappers"
   FINETUNE_ENTRYPOINT="${REMOTE_PROJECT}/runs/openvla_oft_wrappers/finetune_${method}_${TAG}.py"
   cat > "\${FINETUNE_ENTRYPOINT}" <<'PY'
@@ -163,6 +165,7 @@ import json
 import os
 from pathlib import Path
 import runpy
+import tempfile
 
 from prismatic.vla.datasets.rlds import dataset as rlds_dataset
 
@@ -198,7 +201,7 @@ def _make_dataset_from_rlds_with_official_stats(*args, **kwargs):
     dataset_name = kwargs.get("name")
     if dataset_name is None and args:
         dataset_name = args[0]
-    if dataset_name is not None:
+    if dataset_name is not None and os.environ.get("BGR_TRAIN_DATASET_STATISTICS_SOURCE"):
         stats_path = _stats_path_for_dataset(str(dataset_name))
         kwargs["dataset_statistics"] = stats_path
         print(f"[BGR] Forcing RLDS dataset_statistics={stats_path} for dataset={dataset_name}", flush=True)
@@ -206,12 +209,57 @@ def _make_dataset_from_rlds_with_official_stats(*args, **kwargs):
 
 
 rlds_dataset.make_dataset_from_rlds = _make_dataset_from_rlds_with_official_stats
-runpy.run_path(os.environ["BGR_ORIGINAL_FINETUNE_SCRIPT"], run_name="__main__")
+
+
+def _patched_finetune_script() -> str:
+    original = Path(os.environ["BGR_ORIGINAL_FINETUNE_SCRIPT"])
+    source = original.read_text()
+    strength = float(os.environ.get("BGR_PROXIMAL_ANCHOR_L2", "0") or "0")
+    if strength <= 0:
+        return str(original)
+
+    optimizer_block = "    optimizer = AdamW(trainable_params, lr=cfg.learning_rate)\n"
+    anchor_init = (
+        optimizer_block
+        + "\n"
+        + "    bgr_proximal_anchor_l2 = float(os.environ.get(\"BGR_PROXIMAL_ANCHOR_L2\", \"0\") or \"0\")\n"
+        + "    bgr_anchor_params = [p.detach().clone() for p in trainable_params] if bgr_proximal_anchor_l2 > 0 else []\n"
+        + "    if bgr_proximal_anchor_l2 > 0:\n"
+        + "        print(f\"[BGR] Enabling official-checkpoint proximal anchor L2={bgr_proximal_anchor_l2}\", flush=True)\n"
+    )
+    if optimizer_block not in source:
+        raise RuntimeError("Could not patch optimizer block for BGR proximal anchor")
+    source = source.replace(optimizer_block, anchor_init, 1)
+
+    loss_block = "            # Normalize loss to account for gradient accumulation\n"
+    anchor_loss = (
+        "            if bgr_proximal_anchor_l2 > 0:\n"
+        + "                proximal_anchor_loss = torch.zeros((), device=device_id, dtype=torch.float32)\n"
+        + "                for param, anchor_param in zip(trainable_params, bgr_anchor_params, strict=True):\n"
+        + "                    proximal_anchor_loss = proximal_anchor_loss + torch.mean((param.float() - anchor_param.float()) ** 2)\n"
+        + "                loss = loss + bgr_proximal_anchor_l2 * proximal_anchor_loss\n"
+        + "                metrics[\"proximal_anchor_l2\"] = proximal_anchor_loss.detach().item()\n"
+        + "                metrics[\"anchored_loss_value\"] = loss.detach().item()\n\n"
+        + loss_block
+    )
+    if loss_block not in source:
+        raise RuntimeError("Could not patch loss block for BGR proximal anchor")
+    source = source.replace(loss_block, anchor_loss, 1)
+
+    out_dir = Path(os.environ.get("BGR_TRAIN_DATASET_STATISTICS_DIR", tempfile.gettempdir()))
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_path = out_dir / f"{original.stem}_proximal_anchor.py"
+    out_path.write_text(source)
+    return str(out_path)
+
+
+runpy.run_path(_patched_finetune_script(), run_name="__main__")
 PY
   chmod +x "\${FINETUNE_ENTRYPOINT}"
   export BGR_ORIGINAL_FINETUNE_SCRIPT="${OPENVLA_OFT_ROOT}/${FINETUNE_SCRIPT}"
   export BGR_TRAIN_DATASET_STATISTICS_SOURCE="${TRAIN_DATASET_STATISTICS_SOURCE}"
   export BGR_TRAIN_DATASET_STATISTICS_DIR="${REMOTE_PROJECT}/runs/openvla_oft_wrappers"
+  export BGR_PROXIMAL_ANCHOR_L2="${PROXIMAL_ANCHOR_L2}"
 fi
 
 env WANDB_MODE=disabled \\

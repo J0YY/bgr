@@ -1579,7 +1579,7 @@ official checkpoint's 367/400, so BGR cannot satisfy the preregistered
 checkpoint. The paper should therefore continue to treat this intervention as a
 negative OpenVLA/LIBERO audit, not a robotics fine-tuning result.
 
-Live Slurm poll on 2026-06-05 12:27 PDT still shows matched-random shift job
+Live Slurm poll on 2026-06-05 13:06 PDT still shows matched-random shift job
 `766831` as pending for unavailable GPU nodes, with estimated start
 2026-06-07T13:21:02 and no start/end time in `sacct`. The remote perturbation
 `summary.csv` has the same 14 completed rows as the local
@@ -1591,6 +1591,46 @@ episodes and at least 0.02 absolute success rate, while not trailing clean
 identity by more than 1/100. If prep metadata shows unmatched BGR/random
 perturbation-family counts after weighting, the result is an audit only and
 cannot be promoted.
+
+## Preregistered OpenVLA-OFT Proximal-Anchor Adaptation
+
+This is the next learned-policy intervention after the negative weighted
+perturbation curriculum. It changes the optimization objective rather than the
+data mix: the fixed recipe reuses the already prepared weighted perturbation
+TFDS roots, keeps official OpenVLA-OFT LIBERO-Goal statistics, identity-LoRA,
+image augmentation, `ADAPT_STEPS=500`, `LR=5e-7`, and 10-task x 10-trial
+identity/visual-perturbation evals, but adds `PROXIMAL_ANCHOR_L2=1.0` to the
+OpenVLA-OFT training objective.
+
+The implementation is in
+`scripts/queue_openvla_oft_preregistered_proximal_anchor.sh` plus the
+`PROXIMAL_ANCHOR_L2` wrapper path in `scripts/queue_openvla_oft_goal_adapt.sh`.
+The generated remote trainer snapshots all trainable parameters immediately
+after resuming the official LIBERO-Goal checkpoint and penalizes L2 deviation
+from those initial values while fitting the BGR-boundary or matched-random
+examples. This is a proximal residual adaptation test: it can only become
+paper-positive if the BGR branch improves perturbation success without losing
+the official clean behavior and without being matched by the random branch.
+
+Fixed adaptation command:
+
+```bash
+scripts/queue_openvla_oft_preregistered_proximal_anchor.sh --adapt-only --submit-adapt
+```
+
+Fixed perturbation command after BGR/random merge jobs exist:
+
+```bash
+BGR_DEPENDENCY=afterok:<bgr_merge> \
+RANDOM_DEPENDENCY=afterok:<random_merge> \
+scripts/queue_openvla_oft_preregistered_proximal_anchor.sh --perturb-only --submit-perturb
+```
+
+Promotion gate: proximal-anchor BGR must beat proximal-anchor matched random
+and the official checkpoint on the fixed non-identity perturbation total by at
+least 10/400 episodes and at least 0.02 absolute success rate, while not
+trailing clean identity by more than 1/100. A tie, one-episode edge, or
+official/random lead remains a negative audit.
 
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 
