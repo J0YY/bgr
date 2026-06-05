@@ -1304,6 +1304,17 @@ running. The remaining perturbation jobs were pending on their per-method
 serial dependencies. No weighted clean or perturbation `summary.csv`/`summary.json`
 files were present yet.
 
+The clean identity evals then completed and were summarized on the cluster:
+BGR clean identity is 99/100 and matched random clean identity is 99/100. The
+identity perturbation logs also completed and the partial perturbation summary
+shows BGR 99/100, official 99/100, and random 99/100. These results satisfy the
+clean-floor part of the preregistered gate but do not address the non-identity
+perturbation requirement. At the same audit, the blur perturbation jobs were
+running for official (`766818`), BGR (`766823`), and random (`766828`), while
+brightness, occlusion, and shift remained pending behind per-method serial
+dependencies. The cluster-generated partial summaries retain live log paths and
+are not anonymous package artifacts.
+
 Promotion gate: weighted BGR must beat weighted matched random and the official
 checkpoint on the fixed non-identity perturbation total by at least 10/400
 episodes and at least 0.02 absolute success rate, while not trailing clean
