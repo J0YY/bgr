@@ -627,6 +627,37 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    minigrid_mid25 = read_csv_rows(results_dir / "minigrid_fourrooms_recovery_probe_mid2_5_4seed_v1" / "summary.csv")
+    minigrid_mid25_bgr_rauc = mean_metric(minigrid_mid25, "bgr", "final_rauc")
+    minigrid_mid25_coverage_rauc = mean_metric(minigrid_mid25, "bgr_coverage", "final_rauc")
+    minigrid_mid25_uniform_rauc = mean_metric(minigrid_mid25, "uniform", "final_rauc")
+    minigrid_mid25_fixed_rauc = mean_metric(minigrid_mid25, "fixed", "final_rauc")
+    minigrid_mid25_failure_rauc = mean_metric(minigrid_mid25, "failure_only", "final_rauc")
+    minigrid_mid25_bgr_r80 = mean_metric(minigrid_mid25, "bgr", "final_median_r80")
+    minigrid_mid25_uniform_r80 = mean_metric(minigrid_mid25, "uniform", "final_median_r80")
+    minigrid_mid25_wins = paired_wins(minigrid_mid25, "bgr", "uniform", "final_rauc")
+    if not (
+        minigrid_mid25_bgr_rauc > minigrid_mid25_uniform_rauc
+        and minigrid_mid25_wins == (2, 2, 0)
+        and minigrid_mid25_bgr_rauc < minigrid_mid25_fixed_rauc
+        and minigrid_mid25_bgr_rauc < minigrid_mid25_failure_rauc
+        and minigrid_mid25_bgr_r80 < minigrid_mid25_uniform_r80
+        and minigrid_mid25_coverage_rauc < minigrid_mid25_uniform_rauc
+    ):
+        raise ValueError("Expected MiniGrid mid2-5 diagnostic to remain non-promoted with stronger baselines and r80 contradiction")
+    claims.append(
+        Claim(
+            "MiniGrid mid2-5 limitation",
+            (
+                f"FourRooms mid2--5 & BGR {fmt(minigrid_mid25_bgr_rauc, 4)}; "
+                f"BGR-Cov. {fmt(minigrid_mid25_coverage_rauc, 4)} & fixed "
+                f"{fmt(minigrid_mid25_fixed_rauc, 4)}; failure-only {fmt(minigrid_mid25_failure_rauc, 4)}; "
+                f"r80 {fmt(minigrid_mid25_bgr_r80, 4)} vs. {fmt(minigrid_mid25_uniform_r80, 4)} & not promoted"
+            ),
+            "results/minigrid_fourrooms_recovery_probe_mid2_5_4seed_v1/summary.csv",
+        )
+    )
+
     doorkey = read_csv_rows(results_dir / "minigrid_doorkey_recovery_probe_4seed_v1" / "summary.csv")
     doorkey_failure_rauc = mean_metric(doorkey, "failure_only", "final_rauc")
     doorkey_uniform_rauc = mean_metric(doorkey, "uniform", "final_rauc")

@@ -269,6 +269,7 @@ BGR requires reset or replay access, a meaningful perturbation family, a feasibi
 \hline
 FrozenLake8x8 & BGR 0.5453; clean 0.5581 & uniform 0.5312; signs 14/16, 13/17 & not promoted\\
 MiniGrid FourRooms & BGR-Coverage 0.6077 & uniform 0.6665; failure-only 0.7940; fixed 0.7587 & negative\\
+FourRooms mid2--5 & BGR 0.6747; BGR-Cov. 0.5933 & fixed 0.6779; failure-only 0.7309; r80 0.5627 vs. 0.6451 & not promoted\\
 DoorKey-6x6 & BGR-Coverage 0.4846; BGR 0.3687 & uniform 0.6384; failure-only 0.6459 & negative\\
 LavaCrossingS9N3 & BGR-Coverage 0.3547; BGR 0.3153 & uniform 0.4165; lower abs. radius & negative\\
 LavaGapS7 & BGR-Coverage 0.4277; BGR 0.4031 & uniform 0.4461; uniform-radius 0.4627 & negative\\
@@ -280,7 +281,7 @@ FetchReach-v4 & BGR-Coverage 0.4625; BGR 0.4438 & uniform 0.6813; failure-only 0
 {\footnotesize Table~\thetable: Standard-environment scope audits. These are limitation evidence, not positive benchmark claims.}
 \end{center}
 
-Table~\ref{tab:scope-audits} summarizes standard-environment audits that keep the claim scoped. FrozenLake has a small BGR RAUC edge but loses paired-sign and complementary-metric checks; MiniGrid DoorKey, LavaCrossing, LavaGap, and FetchReach are direct negatives; FourRooms and PointMaze have stronger baselines. Additional 4-seed pre-promotion probes also stay negative: Taxi, CliffWalking, MountainCar, CartPole, Acrobot, and Pendulum fail through saturation, stronger baselines, or the state-priority/uniform-radius ablation.
+Table~\ref{tab:scope-audits} summarizes standard-environment audits that keep the claim scoped. FrozenLake has a small BGR RAUC edge but loses paired-sign and complementary-metric checks; MiniGrid DoorKey, LavaCrossing, LavaGap, and FetchReach are direct negatives. FourRooms illustrates both failure modes: the official-package screen is beaten by stronger baselines, while the non-saturated mid2--5 follow-up gives default BGR a mean RAUC edge over uniform but only 2/4 paired wins, worse median $r_{80}$, and lower RAUC than fixed-radius and failure-only replay. PointMaze also has stronger baselines. Additional 4-seed pre-promotion probes also stay negative: Taxi, CliffWalking, MountainCar, CartPole, Acrobot, and Pendulum fail through saturation, stronger baselines, or the state-priority/uniform-radius ablation.
 
 The suffix simulator is positive on final RAUC, clean success, transfer RAUC, and AULC, including stress regimes, but gains over uniform are small and uniform retains the median-critical-radius edge. RAUC and AULC are useful for measuring curve expansion, but they are author-defined integrals over chosen radius grids; we report median $r_{80}$ and clean success separately instead of treating RAUC alone as decisive. OpenVLA is a learned-policy audit rather than a robotics training claim: it validates recovery-curve measurement and matched action/TFDS construction, while showing that a full robotics claim still requires stable optimization, clean-data scale, and LIBERO gains over both matched random and the official checkpoint.
 
