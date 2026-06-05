@@ -144,6 +144,36 @@ Older troubleshooting sections may retain labels such as Queued command to
 record original Slurm submissions; those labels are provenance, not active
 experiment status.
 
+## Internal FetchReach Goal-Recovery Calibration
+
+This is a pre-comparison calibration for a new independent-benchmark route, not
+paper evidence. It uses Gymnasium-Robotics FetchReach-v4 from the existing
+isolated robotics environment (`gymnasium-robotics==1.4.2`,
+`gymnasium==1.3.0`, `mujoco==3.9.0`) and keeps repo runtime dependencies
+unchanged. The route is different from the failed MiniGrid and PointMaze
+screens: replay states are package-sampled Fetch goals, perturbations are
+clipped 3D goal offsets inside the package target range, and evaluation uses
+MuJoCo Fetch dynamics.
+
+Calibration command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetchreach_goal_recovery_calibration.py --out results/fetchreach_goal_recovery_calibration_gain2_h14_v1 --seeds 2 --replay-states 4 --trials 8 --horizon 14 --controller-gain 2.0 --direction-jitter 0.15
+```
+
+The selected calibration gives clean success 0.3750, RAUC 0.1969, median r80
+0.0395, and recovery range 0.0625--0.3750. Compact artifacts:
+
+- `results/fetchreach_goal_recovery_calibration_gain2_h14_v1/summary.json`
+- `results/fetchreach_goal_recovery_calibration_gain2_h14_v1/recovery_rows.csv`
+- `results/fetchreach_goal_recovery_calibration_gain2_h14_v1/package_versions.json`
+
+This only establishes a non-saturated package-backed recovery curve. A full BGR
+comparison must be preregistered before method results and must beat uniform,
+fixed-radius, failure-only, loss-priority, and the state-priority/uniform-radius
+ablation on final RAUC with non-contradictory median-r80 before any paper
+promotion.
+
 ## Internal Official PointMaze Diagnostic
 
 The next preregistered external-package screen is official PointMaze U-Maze,

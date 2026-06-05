@@ -1,0 +1,14 @@
+{
+  "clean_success": 0.375,
+  "controller_gain": 2.0,
+  "direction_jitter": 0.15,
+  "env_id": "FetchReach-v4",
+  "horizon": 14,
+  "max_recovery": 0.375,
+  "min_recovery": 0.0625,
+  "r80": 0.03949999999999999,
+  "rauc": 0.19687499999999997,
+  "replay_states": 4,
+  "seeds": 2,
+  "trials": 8
+}

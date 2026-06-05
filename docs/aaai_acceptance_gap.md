@@ -655,3 +655,24 @@ package and recording its version before any result is run.
   learned-policy intervention, add a truly independent benchmark with a
   different reset/replay interface, or strengthen the theory/presentation enough
   to make the mechanism-study framing stand on its own.
+- The next independent-benchmark route is a Gymnasium-Robotics FetchReach-v4
+  goal-recovery screen because it changes both the package and reset interface:
+  replay states are package-sampled Fetch goals, perturbations are clipped 3D
+  goal offsets inside the package target range, and evaluation uses MuJoCo
+  Fetch dynamics rather than grid/tabular transitions. The probe package was
+  verified in the existing isolated `/tmp/bgr_pointmaze_venv` environment as
+  `gymnasium-robotics==1.4.2`, `gymnasium==1.3.0`, and `mujoco==3.9.0`.
+  A pre-comparison calibration tool is implemented at
+  `tools/fetchreach_goal_recovery_calibration.py`. The saturated default
+  controller (`--horizon 18 --controller-gain 4.0`) was rejected. The fixed
+  usable calibration command is:
+  `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetchreach_goal_recovery_calibration.py --out results/fetchreach_goal_recovery_calibration_gain2_h14_v1 --seeds 2 --replay-states 4 --trials 8 --horizon 14 --controller-gain 2.0 --direction-jitter 0.15`.
+  It gives clean success 0.3750, RAUC 0.1969, median r80 0.0395, and recovery
+  range 0.0625--0.3750. This is not method evidence. It only establishes a
+  non-saturated package-backed recovery curve suitable for implementing a
+  preregistered full comparison. Do not run a BGR comparison until the full
+  FetchReach tool fixes the learner, replay-state pool, perturbation directions,
+  baselines, and promotion gate before seeing method results. Promotion should
+  require BGR or BGR-Coverage to beat uniform, fixed-radius, failure-only,
+  loss-priority, and state-priority/uniform-radius on final RAUC with
+  non-contradictory median-r80 and visible mean effect.

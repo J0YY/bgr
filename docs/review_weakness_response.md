@@ -71,6 +71,12 @@ to reproduce this read from the current result artifacts.
 - The next acceptance-moving result must be either a fixed-protocol positive
   pre-existing benchmark or a genuinely different preregistered learned-policy
   intervention that can beat both official and matched random.
+- The next independent-benchmark route is Gymnasium-Robotics FetchReach-v4.
+  A package-backed goal-recovery calibration is now non-saturated at
+  `--horizon 14 --controller-gain 2.0 --direction-jitter 0.15` (clean 0.3750,
+  RAUC 0.1969, r80 0.0395), but it is not method evidence. Implement and preregister the full
+  comparison before any BGR method result, with the same strong-baseline and
+  non-contradictory-radius promotion gate used elsewhere.
 - The current learned-policy follow-up is the preregistered weighted
   perturbation curriculum in
   `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh`. It changes the
