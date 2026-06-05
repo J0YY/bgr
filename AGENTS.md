@@ -6,6 +6,13 @@ The active objective is to move this repository toward a genuinely high-confiden
 
 Current target: iterate, queue experiments, and reframe the paper until the work is plausibly 90%+ likely to clear the AAAI main-track bar. Current status is below that bar: the strongest positive evidence is still the controlled grid-margin mechanism result, while standard-environment and learned-policy probes remain negative or non-promotable.
 
+As of 2026-06-05, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .` reports:
+
+- PASS controlled grid mechanism: pooled RAUC 0.4342 vs 0.3965.
+- FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, and PointMaze remain non-promotable.
+- FAIL learned-policy OpenVLA/LIBERO: non-identity success is BGR 366/400, official 367/400, and matched random 368/400.
+- Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
+
 The practical goal is not to make the paper sound accepted. The practical goal is to find or build defensible evidence that survives the acceptance criteria below, then incorporate only those results into `paper/main.tex`.
 
 ## Current Acceptance Status
@@ -30,6 +37,8 @@ The practical goal is not to make the paper sound accepted. The practical goal i
 - Use isolated temporary virtualenvs for optional external packages, such as `/tmp/bgr_minigrid_venv` and `/tmp/bgr_pointmaze_venv`. Do not add runtime dependencies unless the result becomes promotable.
 - Do not use Docker for this workflow.
 - Commit compact artifacts such as `summary.csv` and `package_versions.json`. Leave raw `results.json`, Slurm logs, and scratch directories untracked unless there is a deliberate reason to package them.
+- Use the `athena` Slurm workflow and repository scripts for heavy OpenVLA/LIBERO work. Do not rely on the dirty remote checkout being clean; prefer local wrapper scripts, explicit environment variables, and `GIT_PULL=0` where the remote tree is known to be dirty.
+- The active learned-policy follow-up is the preregistered weighted OpenVLA perturbation curriculum. Promote it only if it beats both weighted matched random and the official checkpoint on the fixed non-identity perturbation eval by at least 10/400 episodes and at least 0.02 absolute success, while not trailing clean identity by more than 1/100.
 
 ## Paper Workflow
 
