@@ -214,6 +214,9 @@ Do not add another result to the manuscript if it has any of these properties:
   first, then rerun a small diagnostic before any 30-seed scale-up.
 - Add a small smoke test for Taxi transition dynamics against the Gym Taxi map
   only if the diagnostic is promoted into `src/`.
+- Treat the CliffWalking probe as an internal negative and paper limitation:
+  the default protocol saturates, while the harder undertrained protocol has
+  BGR below uniform and all strong baselines.
 - Treat the MountainCar probe as an internal negative unless a new protocol is
   pre-registered before rerunning; do not tune it into the paper post hoc.
 - Treat the CartPole probe as an internal negative unless a new protocol first
