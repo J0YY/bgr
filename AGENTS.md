@@ -20,7 +20,7 @@ The practical goal is not to make the paper sound accepted. The practical goal i
 - The internal readiness gate is intentionally failing; do not report the paper as AAAI-ready.
 - Controlled grid-margin evidence is positive and mechanistically useful, but it is not enough for a high-confidence main-track acceptance claim.
 - FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, PointMaze, and OpenVLA/LIBERO are currently negative or non-promotable.
-- The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes.
+- The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation recipe family; the preregistered weighted perturbation curriculum already failed the official-checkpoint promotion gate.
 
 ## Evidence Policy
 
@@ -38,7 +38,7 @@ The practical goal is not to make the paper sound accepted. The practical goal i
 - Do not use Docker for this workflow.
 - Commit compact artifacts such as `summary.csv` and `package_versions.json`. Leave raw `results.json`, Slurm logs, and scratch directories untracked unless there is a deliberate reason to package them.
 - Use the `athena` Slurm workflow and repository scripts for heavy OpenVLA/LIBERO work. Do not rely on the dirty remote checkout being clean; prefer local wrapper scripts, explicit environment variables, and `GIT_PULL=0` where the remote tree is known to be dirty.
-- The active learned-policy follow-up is the preregistered weighted OpenVLA perturbation curriculum. Promote it only if it beats both weighted matched random and the official checkpoint on the fixed non-identity perturbation eval by at least 10/400 episodes and at least 0.02 absolute success, while not trailing clean identity by more than 1/100.
+- The latest learned-policy follow-up is the preregistered weighted OpenVLA perturbation curriculum. It is a negative audit: before the matched-random shift row finished, BGR's completed non-identity total was already 367/400, tied with the official checkpoint's 367/400, so it cannot clear the required +10/400 and +0.02 official-checkpoint margins. Treat any final random-shift row as ledger completion only, not a paper-positive result.
 
 ## Paper Workflow
 
