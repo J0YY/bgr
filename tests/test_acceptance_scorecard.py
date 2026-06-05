@@ -81,6 +81,13 @@ class AcceptanceScorecardTest(unittest.TestCase):
                     ]
                 ),
             )
+            _write(
+                root / "results/fetchpush_object_goal_calibration_2seed_v1/summary.json",
+                (
+                    '{"clean_success": 0.25, "min_recovery": 0.25, '
+                    '"max_recovery": 0.25, "r80": 0.12}\n'
+                ),
+            )
 
             text = render_markdown(root)
 
@@ -90,6 +97,9 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("pending random row is ledger completion", text)
         self.assertIn("MiniGrid LavaGapS7", text)
         self.assertIn("state-priority/uniform-radius ablation", text)
+        self.assertIn("Pre-Method Calibrations", text)
+        self.assertIn("FetchPush-v4 object-goal calibration", text)
+        self.assertIn("reject-calibration", text)
         self.assertIn("fail", text)
 
 

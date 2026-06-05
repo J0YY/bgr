@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
@@ -169,6 +170,19 @@ def independent_benchmark_gate(root: Path) -> GateResult:
             failures.append(
                 f"FetchReach negative/saturated: BGR-Coverage {fetch_coverage:.4f}, BGR {fetch_bgr:.4f}, "
                 f"uniform {fetch_uniform:.4f}, failure-only {fetch_failure:.4f}, median-r80 {fetch_r80:.4f}"
+            )
+
+    fetchpush_calibration_path = root / "results/fetchpush_object_goal_calibration_2seed_v1/summary.json"
+    if fetchpush_calibration_path.exists():
+        summary = json.loads(fetchpush_calibration_path.read_text(encoding="utf-8"))
+        clean = float(summary["clean_success"])
+        min_recovery = float(summary["min_recovery"])
+        max_recovery = float(summary["max_recovery"])
+        r80 = float(summary["r80"])
+        if clean < 0.75 or abs(max_recovery - min_recovery) < 0.05:
+            failures.append(
+                f"FetchPush calibration invalid: clean {clean:.4f}, recovery range "
+                f"{min_recovery:.4f}--{max_recovery:.4f}, median-r80 {r80:.4f}"
             )
 
     return GateResult(

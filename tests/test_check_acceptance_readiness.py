@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 
 from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_AVAILABLE
+from scripts.check_acceptance_readiness import independent_benchmark_gate
 from scripts.check_acceptance_readiness import learned_policy_gate
 
 
@@ -34,6 +35,43 @@ def _write_weighted_summary(root: Path) -> None:
     )
 
 
+def _write_independent_summaries(root: Path) -> None:
+    summaries = {
+        "results/frozenlake_recovery_focused_30seed_v1/summary.csv": (
+            "method,seed,final_rauc\n"
+            "bgr,0,0.50\nuniform,0,0.40\nfailure_only,0,0.60\n"
+        ),
+        "results/minigrid_fourrooms_recovery_probe_midband_4seed_v1/summary.csv": (
+            "method,seed,final_rauc\n"
+            "bgr_coverage,0,0.50\nuniform,0,0.60\nfailure_only,0,0.70\n"
+        ),
+        "results/minigrid_doorkey_recovery_probe_4seed_v1/summary.csv": (
+            "method,seed,final_rauc\n"
+            "bgr_coverage,0,0.50\nuniform,0,0.60\nfailure_only,0,0.70\n"
+        ),
+        "results/minigrid_lavacrossing_recovery_probe_4seed_v1/summary.csv": (
+            "method,seed,final_rauc\n"
+            "bgr_coverage,0,0.50\nuniform,0,0.60\nbgr_uniform_radius,0,0.70\n"
+        ),
+        "results/minigrid_lavagap_s7_recovery_probe_4seed_v1/summary.csv": (
+            "method,seed,final_rauc\n"
+            "bgr_coverage,0,0.50\nuniform,0,0.60\nbgr_uniform_radius,0,0.70\n"
+        ),
+        "results/pointmaze_umaze_clean_shield_probe_4seed_v1/summary.csv": (
+            "method,seed,final_rauc\n"
+            "bgr_clean_shield,0,0.50\nuniform,0,0.40\nfailure_only,0,0.70\n"
+        ),
+        "results/fetchreach_goal_recovery_probe_4seed_v1/summary.csv": (
+            "method,seed,final_rauc,final_median_r80\n"
+            "bgr_coverage,0,0.50,0.15\nbgr,0,0.49,0.15\nuniform,0,0.60,0.15\nfailure_only,0,0.70,0.15\n"
+        ),
+    }
+    for relative, text in summaries.items():
+        path = root / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+
+
 class CheckAcceptanceReadinessTest(unittest.TestCase):
     def test_learned_policy_gate_prefers_latest_weighted_official_failure(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -50,6 +88,23 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
         self.assertIn("random 273/300 available rows", gate.detail)
         self.assertIn("official_margin=0", gate.detail)
         self.assertIn("official gate already impossible", gate.detail)
+
+    def test_independent_gate_reports_fetchpush_invalid_calibration(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_independent_summaries(root)
+            path = root / "results/fetchpush_object_goal_calibration_2seed_v1/summary.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(
+                '{"clean_success": 0.25, "min_recovery": 0.25, "max_recovery": 0.25, "r80": 0.12}\n',
+                encoding="utf-8",
+            )
+
+            gate = independent_benchmark_gate(root)
+
+        self.assertFalse(gate.passed)
+        self.assertIn("FetchPush calibration invalid", gate.detail)
+        self.assertIn("clean 0.2500", gate.detail)
 
 
 if __name__ == "__main__":

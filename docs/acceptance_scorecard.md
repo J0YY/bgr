@@ -7,6 +7,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Grid-margin mechanism clears the internal mechanism threshold: BGR 0.4342 vs uniform 0.3965, delta +0.0377; margin above +0.03 threshold +0.0077.
 - Weighted OpenVLA audit is already unable to clear the official-checkpoint gate before the final random row: BGR 367/400, official 367/400, random 273/300 available; final random shift pending; identity BGR 99/100. Official episode margin is +0, short of +10 by 10 episodes; the pending random row is ledger completion, not a path to promotion.
 - Closest independent benchmark screen is `PointMaze U-Maze clean-shield` with treatment `bgr_clean_shield`: delta vs uniform +0.0247 (2/2/0), worst required-baseline delta -0.3010 (0/3/1), ablation delta +0.1215 (2/1/1), radius delta -0.1333 (1/2/1).
+- Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`.
 
 ## Independent Benchmark Screens
 
@@ -27,9 +28,16 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | MiniGrid DoorKey | bgr_coverage | 4 | -0.1538 (0/2/2) | -0.1613 (1/3/0) | -0.0093 (1/2/1) | -0.1569 (0/2/2) | fail |
 | MiniGrid DoorKey | bgr | 4 | -0.2697 (0/4/0) | -0.2772 (0/4/0) | -0.1252 (0/4/0) | -0.2503 (0/2/2) | fail |
 
+## Pre-Method Calibrations
+
+| Calibration | Clean | Recovery range | Median r80 | Decision |
+| --- | ---: | ---: | ---: | --- |
+| FetchPush-v4 object-goal calibration | 0.2500 | 0.2500--0.2500 | 0.1200 | reject-calibration |
+
 ## Priority Read
 
 - The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.
 - The independent-benchmark route has not produced a promotable screen: the closest external-package screens either trail uniform on mean RAUC or lose to the state-priority/uniform-radius ablation.
+- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The current OpenVLA weighted curriculum is already unable to clear the official-checkpoint gate; the pending random-shift row is ledger completion, not a path to a positive robotics claim.
 - The next acceptance-moving work should change the learned-policy intervention or materially strengthen theory/presentation; another same-protocol MiniGrid/classic-control screen is unlikely to move the gate.

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
@@ -74,6 +75,28 @@ class BenchmarkCandidate:
         return int(self.promotable_screen), uniform_delta, worst_delta
 
 
+@dataclass(frozen=True)
+class CalibrationScreen:
+    name: str
+    path: str
+    clean_success: float
+    min_recovery: float
+    max_recovery: float
+    r80: float
+
+    @property
+    def recovery_range(self) -> float:
+        return self.max_recovery - self.min_recovery
+
+    @property
+    def usable(self) -> bool:
+        return self.clean_success >= 0.75 and self.recovery_range >= 0.05
+
+    @property
+    def decision(self) -> str:
+        return "usable-calibration" if self.usable else "reject-calibration"
+
+
 BENCHMARK_SCREENS = [
     (
         "FrozenLake8x8",
@@ -130,6 +153,13 @@ BENCHMARK_SCREENS = [
         ["fixed", "failure_only", "td_loss"],
         "bgr_uniform_radius",
         "final_median_r80",
+    ),
+]
+
+CALIBRATION_SCREENS = [
+    (
+        "FetchPush-v4 object-goal calibration",
+        "results/fetchpush_object_goal_calibration_2seed_v1/summary.json",
     ),
 ]
 
@@ -238,6 +268,26 @@ def benchmark_candidates(root: Path) -> list[BenchmarkCandidate]:
     return candidates
 
 
+def calibration_screens(root: Path) -> list[CalibrationScreen]:
+    screens: list[CalibrationScreen] = []
+    for name, rel_path in CALIBRATION_SCREENS:
+        path = root / rel_path
+        if not path.exists():
+            continue
+        summary = json.loads(path.read_text(encoding="utf-8"))
+        screens.append(
+            CalibrationScreen(
+                name=name,
+                path=rel_path,
+                clean_success=float(summary["clean_success"]),
+                min_recovery=float(summary["min_recovery"]),
+                max_recovery=float(summary["max_recovery"]),
+                r80=float(summary["r80"]),
+            )
+        )
+    return screens
+
+
 def grid_summary(root: Path) -> str:
     rows = read_rows(root / "results/grid_margin_full_30seed_v1/summary.csv") + read_rows(
         root / "results/grid_margin_full_replication_30seed_v1/summary.csv"
@@ -320,6 +370,7 @@ def fmt_comparison(comparison: PairedComparison | None) -> str:
 
 def render_markdown(root: Path) -> str:
     candidates = sorted(benchmark_candidates(root), key=lambda candidate: candidate.priority_key, reverse=True)
+    calibrations = calibration_screens(root)
     best = candidates[0] if candidates else None
     lines = [
         "# Acceptance Scorecard",
@@ -337,6 +388,10 @@ def render_markdown(root: Path) -> str:
             f"delta vs uniform {fmt_comparison(best.vs_uniform)}, worst required-baseline delta {fmt_comparison(best.worst_required)}, "
             f"ablation delta {fmt_comparison(best.vs_ablation)}, radius delta {fmt_comparison(best.radius_vs_uniform)}."
         )
+    rejected_calibrations = [screen for screen in calibrations if not screen.usable]
+    if rejected_calibrations:
+        names = ", ".join(f"`{screen.name}`" for screen in rejected_calibrations)
+        lines.append(f"- Rejected pre-method calibration route(s): {names}.")
     lines.extend(
         [
             "",
@@ -364,6 +419,30 @@ def render_markdown(root: Path) -> str:
             )
             + " |"
         )
+    if calibrations:
+        lines.extend(
+            [
+                "",
+                "## Pre-Method Calibrations",
+                "",
+                "| Calibration | Clean | Recovery range | Median r80 | Decision |",
+                "| --- | ---: | ---: | ---: | --- |",
+            ]
+        )
+        for screen in calibrations:
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        screen.name,
+                        f"{screen.clean_success:.4f}",
+                        f"{screen.min_recovery:.4f}--{screen.max_recovery:.4f}",
+                        f"{screen.r80:.4f}",
+                        screen.decision,
+                    ]
+                )
+                + " |"
+            )
     lines.extend(
         [
             "",
@@ -371,6 +450,7 @@ def render_markdown(root: Path) -> str:
             "",
             "- The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.",
             "- The independent-benchmark route has not produced a promotable screen: the closest external-package screens either trail uniform on mean RAUC or lose to the state-priority/uniform-radius ablation.",
+            "- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.",
             "- The current OpenVLA weighted curriculum is already unable to clear the official-checkpoint gate; the pending random-shift row is ledger completion, not a path to a positive robotics claim.",
             "- The next acceptance-moving work should change the learned-policy intervention or materially strengthen theory/presentation; another same-protocol MiniGrid/classic-control screen is unlikely to move the gate.",
         ]
