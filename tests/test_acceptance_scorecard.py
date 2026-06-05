@@ -88,6 +88,13 @@ class AcceptanceScorecardTest(unittest.TestCase):
                     '"max_recovery": 0.25, "r80": 0.12}\n'
                 ),
             )
+            _write(
+                root / "results/fetchslide_object_goal_calibration_2seed_v1/summary.json",
+                (
+                    '{"clean_success": 0.90, "min_recovery": 0.40, '
+                    '"max_recovery": 0.90, "r80": 0.09}\n'
+                ),
+            )
 
             text = render_markdown(root)
 
@@ -99,7 +106,9 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("state-priority/uniform-radius ablation", text)
         self.assertIn("Pre-Method Calibrations", text)
         self.assertIn("FetchPush-v4 object-goal calibration", text)
+        self.assertIn("FetchSlide-v4 object-goal calibration", text)
         self.assertIn("reject-calibration", text)
+        self.assertIn("usable-calibration", text)
         self.assertIn("fail", text)
 
 

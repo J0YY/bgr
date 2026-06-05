@@ -161,6 +161,10 @@ CALIBRATION_SCREENS = [
         "FetchPush-v4 object-goal calibration",
         "results/fetchpush_object_goal_calibration_2seed_v1/summary.json",
     ),
+    (
+        "FetchSlide-v4 object-goal calibration",
+        "results/fetchslide_object_goal_calibration_2seed_v1/summary.json",
+    ),
 ]
 
 

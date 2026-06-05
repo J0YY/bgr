@@ -714,3 +714,10 @@ package and recording its version before any result is run.
   states fail clean and perturbed goals. This does not define a trainable
   success-failure boundary, so do not build or scale a FetchPush replay
   comparison around this scripted controller/interface.
+- The next Gymnasium-Robotics object calibration is FetchSlide-v4 with the
+  same exact reset-state and object-goal perturbation interface. It is still a
+  pre-method calibration, not method evidence. The fixed command is:
+  `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --out results/fetchslide_object_goal_calibration_2seed_v1 --env-id FetchSlide-v4 --seeds 2 --replay-states 4 --trials 1 --radii 0.00,0.03,0.06,0.09,0.12,0.15 --horizon 80 --controller-gain 6.0 --direction-jitter 0.10`.
+  Do not implement a FetchSlide replay comparison unless this calibration first
+  shows usable clean success and a non-flat recovery curve under the fixed
+  scripted controller.

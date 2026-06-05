@@ -18,6 +18,10 @@ OPENVLA_LEGACY_COMPLETE = (
     "results/openvla_oft_perturb_eval_cleanmix_p4096_commonavail_step50500_lr5em7_identitylora_imageaug_"
     "officialtrainstats_prereg_fullgoal10x10_v1/summary.csv"
 )
+CALIBRATION_SUMMARIES = [
+    ("FetchPush calibration", "results/fetchpush_object_goal_calibration_2seed_v1/summary.json"),
+    ("FetchSlide calibration", "results/fetchslide_object_goal_calibration_2seed_v1/summary.json"),
+]
 
 
 @dataclass(frozen=True)
@@ -172,16 +176,18 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"uniform {fetch_uniform:.4f}, failure-only {fetch_failure:.4f}, median-r80 {fetch_r80:.4f}"
             )
 
-    fetchpush_calibration_path = root / "results/fetchpush_object_goal_calibration_2seed_v1/summary.json"
-    if fetchpush_calibration_path.exists():
-        summary = json.loads(fetchpush_calibration_path.read_text(encoding="utf-8"))
+    for label, relative_path in CALIBRATION_SUMMARIES:
+        calibration_path = root / relative_path
+        if not calibration_path.exists():
+            continue
+        summary = json.loads(calibration_path.read_text(encoding="utf-8"))
         clean = float(summary["clean_success"])
         min_recovery = float(summary["min_recovery"])
         max_recovery = float(summary["max_recovery"])
         r80 = float(summary["r80"])
         if clean < 0.75 or abs(max_recovery - min_recovery) < 0.05:
             failures.append(
-                f"FetchPush calibration invalid: clean {clean:.4f}, recovery range "
+                f"{label} invalid: clean {clean:.4f}, recovery range "
                 f"{min_recovery:.4f}--{max_recovery:.4f}, median-r80 {r80:.4f}"
             )
 
