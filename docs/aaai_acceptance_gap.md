@@ -566,6 +566,12 @@ package and recording its version before any result is run.
   undecided because the required non-identity perturbation totals are still
   running. Official blur `766818`, BGR blur `766823`, and random blur `766828`
   were running; brightness, occlusion, and shift remained pending.
+  The first completed non-identity family is blur: BGR 98/100, official 97/100,
+  and matched random 99/100. This partial result is not promotable because BGR
+  trails random by one episode. The full gate remains open until brightness,
+  occlusion, and shift complete, but BGR now needs to overcome this random
+  deficit and still clear the preregistered +10/400 and +0.02 absolute
+  non-identity margins.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

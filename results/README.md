@@ -1315,6 +1315,14 @@ brightness, occlusion, and shift remained pending behind per-method serial
 dependencies. The cluster-generated partial summaries retain live log paths and
 are not anonymous package artifacts.
 
+The next partial perturbation summary added the blur rows: BGR 98/100,
+official 97/100, and matched random 99/100. This is not promotable because BGR
+trails matched random by one episode on the first non-identity family. The full
+promotion gate remains undecided until brightness, occlusion, and shift finish,
+but BGR must now overcome a one-episode deficit to random while still beating
+both random and official by at least 10/400 total non-identity episodes and at
+least 0.02 absolute success.
+
 Promotion gate: weighted BGR must beat weighted matched random and the official
 checkpoint on the fixed non-identity perturbation total by at least 10/400
 episodes and at least 0.02 absolute success rate, while not trailing clean
