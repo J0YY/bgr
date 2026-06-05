@@ -4034,7 +4034,7 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "Local boundary intuition",
         "BGR depends on a feasibility witness",
         "synthetic and grid-margin benchmarks are constructed to expose recovery curves",
-        "A canonical Gym FrozenLake8x8-v1 diagnostic reinforces that limitation",
+        "Standard-environment scope audits",
         "RAUC and AULC are useful for measuring curve expansion, but they are author-defined integrals",
         "300-step image-augmentation continuation",
         "1,000-step low-learning-rate continuation",
@@ -4354,47 +4354,42 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
             raise ValueError(
                 f"{pdf_path}: missing rendered limitations snippet(s): {', '.join(rendered_limitations_missing)}"
             )
-    if "A canonical Gym FrozenLake8x8-v1 diagnostic reinforces that limitation" in source_text:
-        frozenlake_required = [
-            ("FrozenLake8x8-v1 diagnostic", "FrozenLake8x8v1 diagnostic"),
-            ("0.5453 vs. 0.5312",),
-            ("14/16 and 13/17",),
-            ("failure-only replay is stronger", "failureonly replay is stronger"),
+    if "Standard-environment scope audits" in source_text:
+        scope_required = [
+            ("Standard-environment scope audits",),
+            ("FrozenLake8x8", "FrozenLake8x8v1"),
+            ("BGR 0.5453",),
+            ("signs 14/16, 13/17",),
+            ("MiniGrid FourRooms",),
+            ("BGR-Coverage 0.6077",),
+            ("failure-only 0.7940", "failureonly 0.7940"),
+            ("fixed 0.7587",),
+            ("DoorKey-6x6",),
+            ("BGR-Coverage 0.4846",),
+            ("uniform 0.6384",),
+            ("LavaCrossingS9N3",),
+            ("BGR-Coverage 0.3547",),
+            ("uniform 0.4165",),
+            ("PointMaze U-Maze", "PointMaze UMaze"),
+            ("BGR-Clean-Shield 0.2448",),
+            ("failure-only 0.5458", "failureonly 0.5458"),
+            ("2/4 wins",),
+            ("r20 0.1167 vs. 0.2500",),
         ]
-        frozenlake_missing = [
+        scope_missing = [
             snippets[0]
-            for snippets in frozenlake_required
+            for snippets in scope_required
             if not any(snippet in normalized_rendered_text for snippet in snippets)
         ]
-        if frozenlake_missing:
-            raise ValueError(
-                f"{pdf_path}: missing rendered FrozenLake limitation snippet(s): {', '.join(frozenlake_missing)}"
-            )
-    if "Official MiniGrid package diagnostics are also negative" in source_text:
-        minigrid_required = [
-            ("MiniGrid package diagnostics",),
-            ("FourRooms",),
-            ("0.6077 vs. 0.6665",),
-            ("failure-only (0.7940)", "failureonly (0.7940)"),
-            ("fixed-radius replay (0.7587)", "fixedradius replay (0.7587)"),
-            ("lower median",),
-        ]
-        minigrid_missing = [
-            snippets[0]
-            for snippets in minigrid_required
-            if not any(snippet in normalized_rendered_text for snippet in snippets)
-        ]
-        if minigrid_missing:
-            raise ValueError(
-                f"{pdf_path}: missing rendered MiniGrid limitation snippet(s): {', '.join(minigrid_missing)}"
-            )
+        if scope_missing:
+            raise ValueError(f"{pdf_path}: missing rendered scope-audit snippet(s): {', '.join(scope_missing)}")
     if "DoorKey-6x6" in source_text:
         doorkey_required = [
             ("DoorKey-6x6",),
-            ("0.6459 and 0.6384",),
-            ("BGR-Coverage reaches 0.4846",),
-            ("default BGR reaches 0.3687",),
-            ("lower absolute radius",),
+            ("BGR-Coverage 0.4846",),
+            ("BGR 0.3687",),
+            ("uniform 0.6384",),
+            ("failure-only 0.6459", "failureonly 0.6459"),
         ]
         doorkey_missing = [
             snippets[0]
@@ -4408,10 +4403,10 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
     if "LavaCrossingS9N3" in source_text:
         lavacrossing_required = [
             ("LavaCrossingS9N3",),
-            ("uniform reaches 0.4165",),
-            ("BGR-Coverage reaches 0.3547",),
-            ("default BGR reaches 0.3153",),
-            ("lower absolute radius",),
+            ("BGR-Coverage 0.3547",),
+            ("BGR 0.3153",),
+            ("uniform 0.4165",),
+            ("lower abs. radius",),
         ]
         lavacrossing_missing = [
             snippets[0]

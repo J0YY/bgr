@@ -591,12 +591,11 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "FrozenLake standard-environment limitation",
             (
-                f"BGR gives final RAUC {fmt(mean_metric(frozenlake, 'bgr', 'final_rauc'), 4)} "
-                f"vs. {fmt(mean_metric(frozenlake, 'uniform', 'final_rauc'), 4)} for uniform and clean success "
-                f"{fmt(mean_metric(frozenlake, 'bgr', 'final_clean'), 4)} "
-                f"vs. {fmt(mean_metric(frozenlake, 'uniform', 'final_clean'), 4)}, "
-                f"but paired signs are {frozenlake_rauc_wins[0]}/{frozenlake_rauc_wins[1]} "
-                f"and {frozenlake_clean_wins[0]}/{frozenlake_clean_wins[1]}"
+                f"FrozenLake8x8 & BGR {fmt(mean_metric(frozenlake, 'bgr', 'final_rauc'), 4)}; "
+                f"clean {fmt(mean_metric(frozenlake, 'bgr', 'final_clean'), 4)} & uniform "
+                f"{fmt(mean_metric(frozenlake, 'uniform', 'final_rauc'), 4)}; signs "
+                f"{frozenlake_rauc_wins[0]}/{frozenlake_rauc_wins[1]}, "
+                f"{frozenlake_clean_wins[0]}/{frozenlake_clean_wins[1]} & not promoted"
             ),
             "results/frozenlake_recovery_focused_30seed_v1/summary.csv",
         )
@@ -620,10 +619,9 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "MiniGrid official-package limitation",
             (
-                f"BGR-Coverage gives final RAUC {fmt(minigrid_coverage_rauc, 4)} "
-                f"vs. {fmt(minigrid_uniform_rauc, 4)} for uniform, trails failure-only "
-                f"({fmt(minigrid_failure_rauc, 4)}) and fixed-radius replay "
-                f"({fmt(minigrid_fixed_rauc, 4)}), and has lower median $r_{{80}}$ than uniform"
+                f"MiniGrid FourRooms & BGR-Coverage {fmt(minigrid_coverage_rauc, 4)} "
+                f"& uniform {fmt(minigrid_uniform_rauc, 4)}; failure-only "
+                f"{fmt(minigrid_failure_rauc, 4)}; fixed {fmt(minigrid_fixed_rauc, 4)} & negative"
             ),
             "results/minigrid_fourrooms_recovery_probe_midband_4seed_v1/summary.csv",
         )
@@ -649,10 +647,9 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "MiniGrid-DoorKey official-package limitation",
             (
-                f"in DoorKey-6x6, failure-only and uniform reach {fmt(doorkey_failure_rauc, 4)} "
-                f"and {fmt(doorkey_uniform_rauc, 4)} final RAUC, while BGR-Coverage reaches "
-                f"{fmt(doorkey_coverage_rauc, 4)} and default BGR reaches {fmt(doorkey_bgr_rauc, 4)}, "
-                "with lower absolute radius than uniform"
+                f"DoorKey-6x6 & BGR-Coverage {fmt(doorkey_coverage_rauc, 4)}; "
+                f"BGR {fmt(doorkey_bgr_rauc, 4)} & uniform {fmt(doorkey_uniform_rauc, 4)}; "
+                f"failure-only {fmt(doorkey_failure_rauc, 4)} & negative"
             ),
             "results/minigrid_doorkey_recovery_probe_4seed_v1/summary.csv",
         )
@@ -678,9 +675,9 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "MiniGrid-LavaCrossing official-package limitation",
             (
-                f"in LavaCrossingS9N3, uniform reaches {fmt(lavacrossing_uniform_rauc, 4)} final RAUC "
-                f"while BGR-Coverage reaches {fmt(lavacrossing_coverage_rauc, 4)} and default BGR reaches "
-                f"{fmt(lavacrossing_bgr_rauc, 4)}, with lower absolute radius than uniform"
+                f"LavaCrossingS9N3 & BGR-Coverage {fmt(lavacrossing_coverage_rauc, 4)}; "
+                f"BGR {fmt(lavacrossing_bgr_rauc, 4)} & uniform {fmt(lavacrossing_uniform_rauc, 4)}; "
+                "lower abs. radius & negative"
             ),
             "results/minigrid_lavacrossing_recovery_probe_4seed_v1/summary.csv",
         )
@@ -711,12 +708,10 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "PointMaze official-package limitation",
             (
-                f"failure-only reaches {fmt(pointmaze_failure_rauc, 4)} final RAUC, while uniform is "
-                f"{fmt(pointmaze_uniform_rauc, 4)}, BGR-Coverage is {fmt(pointmaze_coverage_rauc, 4)}, "
-                f"default BGR is {fmt(pointmaze_bgr_rauc, 4)}, and BGR-Clean-Shield reaches "
-                f"{fmt(pointmaze_shield_rauc, 4)} with only {pointmaze_shield_wins[0]}/{pointmaze_shield_pairs} "
-                f"paired wins against uniform and lower absolute r20 "
-                f"({fmt(pointmaze_shield_abs, 4)} vs. {fmt(pointmaze_uniform_abs, 4)})"
+                f"PointMaze U-Maze & BGR-Clean-Shield {fmt(pointmaze_shield_rauc, 4)}; "
+                f"BGR {fmt(pointmaze_bgr_rauc, 4)} & failure-only {fmt(pointmaze_failure_rauc, 4)}; "
+                f"{pointmaze_shield_wins[0]}/{pointmaze_shield_pairs} wins; r20 "
+                f"{fmt(pointmaze_shield_abs, 4)} vs. {fmt(pointmaze_uniform_abs, 4)} & not promoted"
             ),
             "results/pointmaze_umaze_recovery_probe_4seed_v1/summary.csv and pointmaze_umaze_clean_shield_probe_4seed_v1/summary.csv",
         )
