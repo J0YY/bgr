@@ -689,3 +689,11 @@ package and recording its version before any result is run.
   uniform, fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on final
   RAUC with at least 3/4 paired wins over uniform, a visible mean gap, and
   non-contradictory median r80.
+  The completed 4-seed screen is negative and saturated after training:
+  failure-only reaches 0.9563 final RAUC, uniform and fixed-radius reach
+  0.9437, TD-loss reaches 0.9375, BGR-uniform-radius reaches 0.9062,
+  BGR-Coverage reaches 0.9000, and default BGR reaches 0.8938. All methods
+  have clean success 1.0000 and median r80 at the evaluation maximum 0.1500.
+  This means the learned linear controller saturates the FetchReach recovery
+  curve for simple baselines, while BGR-family replay trails uniform and
+  failure-only. Do not scale or promote this FetchReach protocol.

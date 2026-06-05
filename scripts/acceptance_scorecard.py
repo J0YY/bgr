@@ -123,6 +123,14 @@ BENCHMARK_SCREENS = [
         "bgr_uniform_radius",
         "final_abs_r20",
     ),
+    (
+        "FetchReach-v4 goal recovery",
+        "results/fetchreach_goal_recovery_probe_4seed_v1/summary.csv",
+        ["bgr_coverage", "bgr"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
 ]
 
 

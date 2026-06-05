@@ -80,6 +80,10 @@ to reproduce this read from the current result artifacts.
   The fixed full-comparison tool is now `tools/fetchreach_goal_recovery_probe.py`;
   it should be committed and pushed before running
   `results/fetchreach_goal_recovery_probe_4seed_v1`.
+  The completed 4-seed screen is negative and saturated: BGR-Coverage 0.9000
+  and BGR 0.8938 trail uniform/fixed 0.9437 and failure-only 0.9563, while
+  every method has clean 1.0000 and median r80 0.1500. Do not scale this
+  protocol.
 - The current learned-policy follow-up is the preregistered weighted
   perturbation curriculum in
   `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh`. It changes the

@@ -190,6 +190,19 @@ unless default BGR or BGR-Coverage beats every listed baseline on final RAUC,
 wins at least 3/4 paired seeds against uniform, has a visible mean gap, and has
 non-contradictory median r80.
 
+The completed fixed 4-seed screen is negative and saturated after training:
+failure-only reaches 0.9563 final RAUC, uniform and fixed-radius reach 0.9437,
+TD-loss reaches 0.9375, BGR-uniform-radius reaches 0.9062, BGR-Coverage reaches
+0.9000, and default BGR reaches 0.8938. Clean success is 1.0000 for every
+method, and median r80 is saturated at the evaluation maximum 0.1500 for every
+method. Compact artifacts:
+
+- `results/fetchreach_goal_recovery_probe_4seed_v1/summary.csv`
+- `results/fetchreach_goal_recovery_probe_4seed_v1/package_versions.json`
+
+Keep this as an internal negative independent-benchmark screen; do not add it
+to the paper unless the limitations table is expanded.
+
 ## Internal Official PointMaze Diagnostic
 
 The next preregistered external-package screen is official PointMaze U-Maze,

@@ -157,6 +157,20 @@ def independent_benchmark_gate(root: Path) -> GateResult:
             f"PointMaze negative: BGR-Clean-Shield {shield:.4f}, uniform {point_uniform:.4f}, failure-only {point_failure:.4f}, W/L/T={shield_wins}"
         )
 
+    fetch_path = root / "results/fetchreach_goal_recovery_probe_4seed_v1/summary.csv"
+    if fetch_path.exists():
+        fetch = read_rows(fetch_path)
+        fetch_coverage = mean_metric(fetch, "bgr_coverage", "final_rauc")
+        fetch_bgr = mean_metric(fetch, "bgr", "final_rauc")
+        fetch_uniform = mean_metric(fetch, "uniform", "final_rauc")
+        fetch_failure = mean_metric(fetch, "failure_only", "final_rauc")
+        fetch_r80 = mean_metric(fetch, "bgr_coverage", "final_median_r80")
+        if not (fetch_coverage > fetch_uniform and fetch_coverage > fetch_failure and fetch_r80 < 0.15):
+            failures.append(
+                f"FetchReach negative/saturated: BGR-Coverage {fetch_coverage:.4f}, BGR {fetch_bgr:.4f}, "
+                f"uniform {fetch_uniform:.4f}, failure-only {fetch_failure:.4f}, median-r80 {fetch_r80:.4f}"
+            )
+
     return GateResult(
         "independent/pre-existing benchmark",
         not failures,
