@@ -573,6 +573,12 @@ package and recording its version before any result is run.
   occlusion, and shift complete, but BGR now needs to overcome this random
   deficit and still clear the preregistered +10/400 and +0.02 absolute
   non-identity margins.
+  Brightness then completed for all three methods: BGR 99/100, official
+  98/100, and matched random 99/100. Across the completed non-identity
+  families so far (blur and brightness), BGR is 197/200, official is 195/200,
+  and matched random is 198/200. The gate remains incomplete until occlusion
+  and shift complete, and the partial aggregate remains non-promotable because
+  BGR still trails matched random by one episode.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

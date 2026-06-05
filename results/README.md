@@ -1323,6 +1323,13 @@ but BGR must now overcome a one-episode deficit to random while still beating
 both random and official by at least 10/400 total non-identity episodes and at
 least 0.02 absolute success.
 
+The following completed family, brightness, gives BGR 99/100, official 98/100,
+and matched random 99/100. The completed non-identity subtotal over blur and
+brightness is therefore BGR 197/200, official 195/200, and matched random
+198/200. This remains an incomplete audit rather than paper-positive evidence:
+occlusion and shift are still required for the fixed 400-episode non-identity
+gate, and the completed subtotal still trails matched random by one episode.
+
 Promotion gate: weighted BGR must beat weighted matched random and the official
 checkpoint on the fixed non-identity perturbation total by at least 10/400
 episodes and at least 0.02 absolute success rate, while not trailing clean
