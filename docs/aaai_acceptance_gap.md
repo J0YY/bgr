@@ -525,8 +525,20 @@ package and recording its version before any result is run.
   BGR/random perturbation-family counts after weighting, the run is an audit
   only and cannot be promoted.
   The weighted prep job was submitted after the preregistration commit on
-  2026-06-05 as Slurm job `766799`; the initial scheduler state is pending for
-  `Priority`, with stdout under the live cluster user's `bgr/logs` directory.
+  2026-06-05 as Slurm job `766799` and completed successfully with exit `0:0`
+  after 21m30s. Prep metadata validates the intended perturbation weighting:
+  BGR has 7,296 examples and random has 7,424 examples; both have exactly 1,536
+  examples each for blur, brightness, occlusion, and shift after the three
+  perturbation repeats. Identity differs because native clean-anchor counts are
+  1,152 for BGR and 1,280 for random. This is acceptable for queuing adaptation,
+  but the result remains audit-only until the fixed evaluation clears the
+  promotion gate.
+  Weighted adaptation was submitted on 2026-06-05 with
+  `PREP_DEPENDENCY=afterok:766799` and `GIT_PULL=0`. The Slurm chain is:
+  BGR train `766805`, BGR merge `766806`, BGR clean eval `766807`, random train
+  `766808`, random merge `766809`, random clean eval `766810`. At submission
+  audit time, BGR train `766805` was running and the remaining jobs were
+  pending on dependencies.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

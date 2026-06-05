@@ -1206,11 +1206,29 @@ scripts/queue_openvla_oft_preregistered_weighted_perturb.sh --prep-only --submit
 ```
 
 Submitted weighted prep on 2026-06-05 after the preregistration script was
-pushed:
+pushed. It completed successfully:
 
 ```text
-766799  bgr-cleanmix-prep-p2048unique_perturbrepeat3_prereg  pending, reason=Priority
+766799  bgr-cleanmix-prep-p2048unique_perturbrepeat3_prereg  COMPLETED  exit=0:0  elapsed=00:21:30
 ```
+
+Prep metadata confirms that the weighted perturbation subsets are matched after
+the `PERTURB_REPEAT=3` curriculum expansion. BGR exports 114 episodes and 7,296
+steps; random exports 116 episodes and 7,424 steps. The combine summaries are:
+
+```text
+BGR examples=7296
+BGR examples_by_source clean=1152 perturb_1=2048 perturb_2=2048 perturb_3=2048
+BGR perturbation_types blur=1536 brightness=1536 identity=1152 occlusion=1536 shift=1536
+random examples=7424
+random examples_by_source clean=1280 perturb_1=2048 perturb_2=2048 perturb_3=2048
+random perturbation_types blur=1536 brightness=1536 identity=1280 occlusion=1536 shift=1536
+```
+
+The non-identity perturbation-family counts match exactly between BGR and
+random after weighting: blur, brightness, occlusion, and shift each contribute
+1,536 examples per method. The clean identity count differs because the native
+clean-anchor render has 1,152 BGR and 1,280 random examples.
 
 The live submission uses the cluster user's writable workspace, source
 artifacts, Hugging Face cache, OpenVLA-OFT checkout, and LIBERO checkout:
@@ -1232,6 +1250,18 @@ Fixed adaptation command after prep succeeds:
 PREP_DEPENDENCY=afterok:<prep_job> \
 scripts/queue_openvla_oft_preregistered_weighted_perturb.sh --adapt-only --submit-adapt
 ```
+
+Submitted weighted adaptation on 2026-06-05 with `PREP_DEPENDENCY=afterok:766799`
+and `GIT_PULL=0` because the live remote checkout is intentionally treated as
+dirty. Slurm job chain:
+
+```text
+bgr train=766805 merge=766806 clean_eval=766807
+random train=766808 merge=766809 clean_eval=766810
+```
+
+At submission audit time, BGR train `766805` was running on `c1-g4-03`; BGR
+merge/eval and the random chain were pending on their declared dependencies.
 
 Fixed perturbation command after BGR/random merge jobs exist:
 
