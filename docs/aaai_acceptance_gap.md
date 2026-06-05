@@ -275,10 +275,22 @@ package and recording its version before any result is run.
      and BGR 0.5538. The checker rejects BGR-Coverage because it loses to
      uniform on mean RAUC and paired signs, loses to fixed-radius,
      failure-only, TD-loss, and the state-priority/uniform-radius ablation,
-     and has lower non-saturated median r80 than uniform (0.6050 vs. 0.6799).
-     The paper-facing consequence is unchanged: MiniGrid belongs only in the
-     limitations/scope audit unless a different preregistered external package
-     benchmark clears the promotion gate before method comparison.
+	     and has lower non-saturated median r80 than uniform (0.6050 vs. 0.6799).
+	     A second baseline-only replay-distance calibration was then run before
+	     any new method comparison. On four uniform-only seeds, the shorter
+	     distance band 2--5 gives clean success 0.7188, RAUC 0.6190, and
+	     non-saturated median r80 0.6451; band 3--7 gives clean success 0.7422,
+	     RAUC 0.6661, and non-saturated median r80 0.6687. Because band 2--5 is
+	     harder while preserving a non-saturated relative-radius metric, the next
+	     preregistered all-method screen is:
+	     `PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_fourrooms_recovery_probe.py --out results/minigrid_fourrooms_recovery_probe_mid2_5_4seed_v1 --replay-selection midband --replay-distance-min 2 --replay-distance-max 5`.
+	     This screen can only justify a 30-seed scale-up if BGR-Coverage or BGR
+	     beats uniform, fixed-radius, failure-only, TD-loss, and
+	     BGR-uniform-radius on final RAUC with at least 3/4 paired wins over
+	     uniform, a visible mean gap, and non-contradictory non-saturated median
+	     r80. The paper-facing consequence remains unchanged until that fixed
+	     comparison clears the gate: MiniGrid belongs only in the limitations/scope
+	     audit.
 4. PointMaze/D4RL-style continuous navigation only if a real installed benchmark
    package is available. This is the best mechanistic fit because resettable
    continuous states, corridor bottlenecks, and distance-to-goal perturbations

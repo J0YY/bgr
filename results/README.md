@@ -461,6 +461,26 @@ the state-priority/uniform-radius ablation. Median r80 is non-saturated but
 contradicts the BGR-Coverage RAUC claim: 0.6050 for BGR-Coverage vs. 0.6799 for
 uniform. Do not scale this protocol.
 
+Two additional uniform-only replay-distance calibrations were run before any new
+method comparison:
+
+- `results/minigrid_fourrooms_recovery_probe_mid2_5_uniform_calibration_4seed_v1/summary.csv`
+  uses `--replay-selection midband --replay-distance-min 2
+  --replay-distance-max 5` and gives uniform-only clean success 0.7188, RAUC
+  0.6190, and non-saturated median r80 0.6451 over four seeds.
+- `results/minigrid_fourrooms_recovery_probe_mid3_7_uniform_calibration_4seed_v1/summary.csv`
+  uses `--replay-selection midband --replay-distance-min 3
+  --replay-distance-max 7` and gives uniform-only clean success 0.7422, RAUC
+  0.6661, and non-saturated median r80 0.6687 over four seeds.
+
+Because band 2--5 is harder while keeping relative median r80 non-saturated, the
+next fixed all-method screen is preregistered as:
+`PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_fourrooms_recovery_probe.py --out results/minigrid_fourrooms_recovery_probe_mid2_5_4seed_v1 --replay-selection midband --replay-distance-min 2 --replay-distance-max 5`.
+Do not edit this command after seeing method results. Do not scale or promote
+unless BGR-Coverage or BGR beats uniform, fixed-radius, failure-only, TD-loss,
+and BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform,
+a visible mean gap, and non-contradictory non-saturated median r80.
+
 ## Internal Official MiniGrid-DoorKey Diagnostic
 
 The next preregistered external-package screen is official MiniGrid-DoorKey,
