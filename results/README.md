@@ -183,6 +183,18 @@ Do not scale it unless default BGR or BGR-Coverage beats uniform, fixed-radius,
 failure-only, TD-loss, and BGR-uniform-radius on final RAUC with a visible gap,
 and median r80 plus absolute r20 do not contradict the RAUC effect.
 
+`results/pointmaze_umaze_bottleneck_probe_4seed_v1/summary.csv` is the
+completed topology-bottleneck reset-interface screen. It is negative for
+promotion: failure-only reaches 0.3500 final RAUC, ahead of fixed-radius
+0.0896, default BGR 0.0854, uniform 0.0677, BGR-Coverage 0.0573,
+BGR-uniform-radius 0.0167, and TD-loss 0.0156. Failure-only also leads absolute
+r20 (0.1462), while default BGR ties uniform at 0.0167 and BGR-Coverage is
+0.0000. The promotion checker rejects default BGR because it wins only 2/4
+paired seeds against uniform, loses to fixed-radius on mean final RAUC, and
+loses to failure-only with W/L/T=0/3/1. It rejects BGR-Coverage because it
+loses to uniform, fixed-radius, and failure-only on mean final RAUC; the
+absolute-r20 gate also contradicts BGR-Coverage. Do not scale this protocol.
+
 `results/pointmaze_umaze_recovery_probe_4seed_v1/summary.csv` is the completed
 4-seed screen. It is negative for promotion: final RAUC is 0.5458 for
 failure-only, 0.2201 for uniform, 0.2073 for BGR-Coverage, 0.1406 for BGR,

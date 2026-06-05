@@ -368,6 +368,15 @@ package and recording its version before any result is run.
      fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on final RAUC
      with a visible gap, and median r80 plus absolute r20 do not contradict the
      RAUC effect.
+     The completed 4-seed screen is negative and should not be scaled:
+     failure-only reaches 0.3500 final RAUC and 0.1462 absolute r20, while
+     default BGR reaches 0.0854 final RAUC and 0.0167 absolute r20, and
+     BGR-Coverage reaches 0.0573 final RAUC and 0.0000 absolute r20. Default
+     BGR wins only 2/4 paired seeds against uniform, loses to fixed-radius on
+     mean final RAUC, and loses to failure-only with W/L/T=0/3/1. BGR-Coverage
+     loses to uniform, fixed-radius, and failure-only on mean final RAUC, and
+     its absolute r20 contradicts the RAUC effect. Keep this as a paper-negative
+     reset-interface screen.
 5. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.
