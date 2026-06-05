@@ -442,6 +442,21 @@ package and recording its version before any result is run.
   floor-saturates at 0.0 for every method. Do not scale MiniGrid until the
   replay-state selection or training budget yields a non-saturated absolute
   radius check before method comparison.
+- The next preregistered external-package screen is official MiniGrid-DoorKey,
+  implemented at `tools/minigrid_doorkey_recovery_probe.py`. It uses
+  `gym.make("MiniGrid-DoorKey-6x6-v0")`, package-generated layouts and
+  MiniGrid `env.step` dynamics, exact reset states with the key carried and the
+  door still closed, and position/direction perturbations around the door
+  approach. Uniform-only seed-0 calibration selected a distance band that avoids
+  the FourRooms endpoint failures: with `--replay-distance-min 1
+  --replay-distance-max 6`, `--iterations 50`, `--train-batch-size 5`,
+  `--q-init-blend 0.015`, and `--absolute-radius-alpha 0.01`, uniform gives
+  final RAUC 0.4939, clean success 0.9167, median r80 0.3000, and absolute
+  radius 0.7475. The fixed 4-seed command is:
+  `PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_doorkey_recovery_probe.py --out results/minigrid_doorkey_recovery_probe_4seed_v1 --iterations 50 --eval-every 25 --train-batch-size 5 --q-init-blend 0.015 --q-init-noise 0.05 --learning-rate 0.25 --epsilon 0.10 --absolute-radius-alpha 0.01 --replay-distance-min 1 --replay-distance-max 6`.
+  Do not scale it unless BGR or BGR-Coverage beats uniform, fixed-radius,
+  failure-only, TD-loss, and BGR-uniform-radius on final RAUC, and median r80
+  plus absolute radius do not contradict the RAUC effect.
 - Keep scratch negative runs out of the anonymous package unless they are being
   used as explicit limitations.
 - Do not spend more robotics compute on the current OpenVLA recipe family unless

@@ -274,6 +274,28 @@ the state-priority/uniform-radius ablation. Median r80 is non-saturated but
 contradicts the BGR-Coverage RAUC claim: 0.6050 for BGR-Coverage vs. 0.6799 for
 uniform. Do not scale this protocol.
 
+## Internal Official MiniGrid-DoorKey Diagnostic
+
+The next preregistered external-package screen is official MiniGrid-DoorKey,
+implemented at `tools/minigrid_doorkey_recovery_probe.py`. It uses the isolated
+`/tmp/bgr_minigrid_venv` environment with `minigrid==3.1.0` and
+`gymnasium==1.3.0`, leaving repo runtime dependencies unchanged unless the
+result becomes promotable. The probe uses
+`gym.make("MiniGrid-DoorKey-6x6-v0")`, package-generated layouts and MiniGrid
+`env.step` dynamics, exact reset states with the key carried and the door still
+closed, and position/direction perturbations around the door approach.
+
+Uniform-only seed-0 calibration selected a distance band and budget that avoid
+the FourRooms endpoint failures: with `--replay-distance-min 1
+--replay-distance-max 6`, `--iterations 50`, `--train-batch-size 5`,
+`--q-init-blend 0.015`, and `--absolute-radius-alpha 0.01`, uniform gives final
+RAUC 0.4939, clean success 0.9167, median r80 0.3000, and absolute radius
+0.7475. The fixed 4-seed command is:
+`PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_doorkey_recovery_probe.py --out results/minigrid_doorkey_recovery_probe_4seed_v1 --iterations 50 --eval-every 25 --train-batch-size 5 --q-init-blend 0.015 --q-init-noise 0.05 --learning-rate 0.25 --epsilon 0.10 --absolute-radius-alpha 0.01 --replay-distance-min 1 --replay-distance-max 6`.
+Do not scale it unless BGR or BGR-Coverage beats uniform, fixed-radius,
+failure-only, TD-loss, and BGR-uniform-radius on final RAUC, and median r80 plus
+absolute radius do not contradict the RAUC effect.
+
 ## Internal FourRooms Diagnostic
 
 `results/fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed
