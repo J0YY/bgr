@@ -1,5 +1,21 @@
 # AGENTS.md
 
+This file is the project handoff contract for coding agents working in this
+repository. Read it before editing code, running experiments, changing paper
+claims, or committing results.
+
+## Standing Instructions
+
+- Active goal: iterate, queue experiments, and reframe the paper until it is
+  plausibly 90%+ likely to clear the AAAI main-track bar.
+- Current acceptance status: `NOT_READY_FOR_90P_AAAI_CLAIM`.
+- Keep pushing clean checkpoints to GitHub.
+- Do not use Docker. Use local Python environments, temporary virtualenvs, and
+  the `athena` Slurm workflow already used by this repo.
+- Incorporate new results into `paper/main.tex` only when they satisfy the
+  evidence policy below and have source artifacts/checker coverage.
+- Preserve unrelated local or user-created changes. Stage explicit files only.
+
 ## Working Objective
 
 The active objective is to move this repository toward a genuinely high-confidence AAAI main-track paper. Do not treat wording-only reframing as success. The core blocker is evidence: a promoted result must beat strong baselines on a fixed or pre-existing benchmark with non-contradictory metrics.
