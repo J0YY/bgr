@@ -42,6 +42,9 @@ OpenVLA/LIBERO improvement over both matched random and the official checkpoint.
   harder undertrained protocol has BGR below uniform and all strong baselines.
 - Do not add another authored toy benchmark unless it replaces, not expands,
   the current mechanism evidence.
+- Do not run another local classic-control/tabular probe after FourRooms; the
+  next acceptance-moving benchmark attempt needs an external package such as
+  MiniGrid or PointMaze/D4RL with package version recorded before results.
 - The next acceptance-moving result must be either a fixed-protocol positive
   pre-existing benchmark or a genuinely different preregistered learned-policy
   intervention that can beat both official and matched random.

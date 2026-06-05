@@ -69,6 +69,19 @@ Do not add another result to the manuscript if it has any of these properties:
 
 ## Next Experiment Candidates
 
+Stop-rule after the FourRooms screen: do not add more local classic-control or
+small tabular recovery probes under this evidence plan. FrozenLake, Taxi,
+CliffWalking, FourRooms, MountainCar, CartPole, Acrobot, and Pendulum now cover
+the obvious low-cost standard-environment checks, and none meets the promotion
+gate. Further acceptance-moving evidence should use either (a) an installed
+external benchmark package with recognizable task definitions and no local
+reimplementation of the environment, or (b) a genuinely different learned-policy
+intervention. A local dependency check on 2026-06-05 found `gymnasium`, `gym`,
+`minigrid`, `d4rl`, `metaworld`, `procgen`, `mujoco`, and
+`stable_baselines3` absent from the current Python environment, so the next
+external benchmark attempt must start by installing/verifying the benchmark
+package and recording its version before any result is run.
+
 1. Taxi-v3 recovery replay, with taxi-position perturbations and fixed
    passenger/destination state. An optimized internal probe now exists at
    `tools/taxi_recovery_probe.py`, but the first diagnostics are negative for
@@ -173,7 +186,26 @@ Do not add another result to the manuscript if it has any of these properties:
      loses to failure-only, and median r80 saturates at 1.0 for both BGR and
      uniform. Keep Pendulum out of the paper unless a new fixed protocol first
      avoids endpoint collapse and saturated radius metrics.
-3. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
+3. MiniGrid-DoorKey or MiniGrid-FourRooms only if the official `minigrid`
+   package is installed and the probe uses package task definitions rather than
+   a local environment clone. The preregistered interface should use exact
+   resettable states near doors/keys, perturb only the agent position/direction
+   while preserving object layout and inventory validity, and compare BGR,
+   BGR-Coverage, uniform, fixed-radius, failure-only, TD/loss-priority, and the
+   state-priority/uniform-radius ablation. It should not run beyond a 4-seed
+   screen unless BGR or BGR-Coverage beats every baseline, avoids clean-success
+   and median-r80 saturation, and clears the same promotion checker used above.
+   If the package is not installed, do not substitute another local gridworld;
+   that would be another authored diagnostic, not the independent benchmark win
+   reviewers are asking for.
+4. PointMaze/D4RL-style continuous navigation only if a real installed benchmark
+   package is available. This is the best mechanistic fit because resettable
+   continuous states, corridor bottlenecks, and distance-to-goal perturbations
+   should expose recovery margins without relying on image-level policy
+   fine-tuning. The promotion gate is the same: no 30-seed scale-up unless a
+   fixed 4-seed screen beats uniform and hard-state/loss baselines with a
+   visible final-RAUC gap and non-saturated critical-radius metrics.
+5. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.
    - The next preregistered candidate is
@@ -264,6 +296,9 @@ Do not add another result to the manuscript if it has any of these properties:
   pre-registered before rerunning; do not tune it into the paper post hoc.
 - Treat the CartPole probe as an internal negative unless a new protocol first
   fixes clean-success saturation and defines a non-contradictory radius metric.
+- Do not add another local classic-control/tabular probe after FourRooms. The
+  next benchmark attempt must use an external package such as MiniGrid or
+  PointMaze/D4RL, with the package/version recorded before any result is run.
 - Keep scratch negative runs out of the anonymous package unless they are being
   used as explicit limitations.
 - Do not spend more robotics compute on the current OpenVLA recipe family unless
