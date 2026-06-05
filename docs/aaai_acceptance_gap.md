@@ -27,13 +27,16 @@ the evidence has actually cleared the independent-benchmark and learned-policy
 promotion gates.
 
 The generated scorecard now reports why each independent-benchmark screen fails
-the gate. As of the 2026-06-05 12:27 PDT refresh, the closest screen is the
+the gate. As of the 2026-06-05 refresh, the closest screen is the
 official-package MiniGrid FourRooms BGR-Coverage run: it has a visible RAUC lead
 over uniform and required baselines, but fails because both the original
-relative-radius metric and the absolute-r10 follow-up are saturated. Any further
-independent-benchmark attempt should therefore fix non-saturated radius evidence
-before method comparison, not merely rerun the same MiniGrid protocol at more
-seeds.
+relative-radius metric and the absolute-r10 follow-up are saturated. The
+non-saturated midband distance-2-to-5 follow-up is also negative because default
+BGR trails fixed-radius and failure-only replay, wins only 2/4 paired seeds over
+uniform, and has lower median r80 than uniform. Any further independent-benchmark
+attempt should therefore fix non-saturated radius evidence before method
+comparison and avoid rerunning the same MiniGrid protocol unless the premise
+materially changes.
 
 After the weak-reject style review, the immediate paper-defense priority is not
 to amplify p-values or add more authored toy wins. The manuscript should instead
@@ -281,16 +284,17 @@ package and recording its version before any result is run.
 	     distance band 2--5 gives clean success 0.7188, RAUC 0.6190, and
 	     non-saturated median r80 0.6451; band 3--7 gives clean success 0.7422,
 	     RAUC 0.6661, and non-saturated median r80 0.6687. Because band 2--5 is
-	     harder while preserving a non-saturated relative-radius metric, the next
-	     preregistered all-method screen is:
+	     harder while preserving a non-saturated relative-radius metric, the
+	     preregistered all-method screen was:
 	     `PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_fourrooms_recovery_probe.py --out results/minigrid_fourrooms_recovery_probe_mid2_5_4seed_v1 --replay-selection midband --replay-distance-min 2 --replay-distance-max 5`.
-	     This screen can only justify a 30-seed scale-up if BGR-Coverage or BGR
-	     beats uniform, fixed-radius, failure-only, TD-loss, and
-	     BGR-uniform-radius on final RAUC with at least 3/4 paired wins over
-	     uniform, a visible mean gap, and non-contradictory non-saturated median
-	     r80. The paper-facing consequence remains unchanged until that fixed
-	     comparison clears the gate: MiniGrid belongs only in the limitations/scope
-	     audit.
+	     The completed screen is negative and should not be scaled. Default BGR
+	     improves mean RAUC over uniform (0.6747 vs. 0.6190) but wins only 2/4
+	     paired seeds, trails fixed-radius replay (0.6779) and failure-only replay
+	     (0.7309), and has lower non-saturated median r80 than uniform (0.5627
+	     vs. 0.6451). BGR-Coverage is also negative: 0.5933 RAUC vs. 0.6190 for
+	     uniform, and it trails fixed-radius, failure-only, TD-loss, and
+	     BGR-uniform-radius. The paper-facing consequence remains unchanged:
+	     MiniGrid belongs only in the limitations/scope audit.
 4. PointMaze/D4RL-style continuous navigation only if a real installed benchmark
    package is available. This is the best mechanistic fit because resettable
    continuous states, corridor bottlenecks, and distance-to-goal perturbations

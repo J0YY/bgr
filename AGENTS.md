@@ -26,7 +26,7 @@ As of 2026-06-05, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.p
 
 - PASS controlled grid mechanism: pooled RAUC 0.4342 vs 0.3965.
 - FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, MiniGrid LavaGapS7, and PointMaze remain non-promotable.
-- FAIL learned-policy OpenVLA/LIBERO: the latest weighted perturbation audit has non-identity success BGR 367/400 and official 367/400, with matched-random 273/300 available rows and random shift job `766831` still pending on unavailable GPU nodes as of 2026-06-05 12:27 PDT. The official-checkpoint gate is already impossible because the required margin is +10/400 and +0.02 absolute success.
+- FAIL learned-policy OpenVLA/LIBERO: the latest weighted perturbation audit has non-identity success BGR 367/400 and official 367/400, with matched-random 273/300 available rows and random shift job `766831` still pending on unavailable GPU nodes as of 2026-06-05 12:33 PDT / 20:33 BST. The official-checkpoint gate is already impossible because the required margin is +10/400 and +0.02 absolute success.
 - Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
 The practical goal is not to make the paper sound accepted. The practical goal is to find or build defensible evidence that survives the acceptance criteria below, then incorporate only those results into `paper/main.tex`.
@@ -48,6 +48,12 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   negative. BGR-Coverage reaches 0.4625 final RAUC and default BGR reaches
   0.4438, below uniform 0.6813, failure-only 0.8250, and TD-loss 0.9437; do
   not scale or promote this protocol.
+- The MiniGrid-FourRooms midband distance-2-to-5 follow-up is completed and
+  negative. Default BGR improves mean RAUC over uniform (0.6747 vs. 0.6190)
+  but wins only 2/4 paired seeds, trails fixed-radius replay (0.6779) and
+  failure-only replay (0.7309), and has lower non-saturated median r80 than
+  uniform (0.5627 vs. 0.6451). BGR-Coverage is also negative at 0.5933 RAUC;
+  do not scale or promote this protocol.
 
 ## Reviewer-Critique Priorities
 

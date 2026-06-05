@@ -474,12 +474,17 @@ method comparison:
   0.6661, and non-saturated median r80 0.6687 over four seeds.
 
 Because band 2--5 is harder while keeping relative median r80 non-saturated, the
-next fixed all-method screen is preregistered as:
+fixed all-method screen was preregistered as:
 `PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_fourrooms_recovery_probe.py --out results/minigrid_fourrooms_recovery_probe_mid2_5_4seed_v1 --replay-selection midband --replay-distance-min 2 --replay-distance-max 5`.
-Do not edit this command after seeing method results. Do not scale or promote
-unless BGR-Coverage or BGR beats uniform, fixed-radius, failure-only, TD-loss,
-and BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform,
-a visible mean gap, and non-contradictory non-saturated median r80.
+
+`results/minigrid_fourrooms_recovery_probe_mid2_5_4seed_v1/summary.csv` is the
+completed all-method screen. It is negative for promotion. Default BGR improves
+mean RAUC over uniform (0.6747 vs. 0.6190), but wins only 2/4 paired seeds,
+trails fixed-radius replay (0.6779) and failure-only replay (0.7309), and has
+lower non-saturated median r80 than uniform (0.5627 vs. 0.6451). BGR-Coverage
+also fails: 0.5933 RAUC vs. 0.6190 for uniform, and below fixed-radius,
+failure-only, TD-loss, and BGR-uniform-radius. Do not scale or promote this
+protocol.
 
 ## Internal Official MiniGrid-DoorKey Diagnostic
 

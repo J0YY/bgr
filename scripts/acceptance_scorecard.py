@@ -185,6 +185,14 @@ BENCHMARK_SCREENS = [
         "final_median_r80",
     ),
     (
+        "MiniGrid FourRooms mid2-5",
+        "results/minigrid_fourrooms_recovery_probe_mid2_5_4seed_v1/summary.csv",
+        ["bgr", "bgr_coverage"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
+    (
         "MiniGrid DoorKey",
         "results/minigrid_doorkey_recovery_probe_4seed_v1/summary.csv",
         ["bgr_coverage", "bgr"],
