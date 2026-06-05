@@ -457,6 +457,14 @@ package and recording its version before any result is run.
   Do not scale it unless BGR or BGR-Coverage beats uniform, fixed-radius,
   failure-only, TD-loss, and BGR-uniform-radius on final RAUC, and median r80
   plus absolute radius do not contradict the RAUC effect.
+  The completed 4-seed screen is negative and should not be scaled: final RAUC
+  is 0.6459 for failure-only, 0.6384 for uniform, 0.5018 for TD-loss, 0.4939
+  for BGR-uniform-radius, 0.4846 for BGR-Coverage, 0.3687 for BGR, and 0.2424
+  for fixed-radius. BGR-Coverage loses to uniform, failure-only, TD-loss, and
+  the state-priority/uniform-radius ablation; default BGR loses to uniform and
+  all strong baselines. Absolute-radius checks also contradict promotion:
+  final_abs_r10 is 0.5916 for BGR-Coverage and 0.4981 for BGR versus 0.7484
+  for uniform.
 - Keep scratch negative runs out of the anonymous package unless they are being
   used as explicit limitations.
 - Do not spend more robotics compute on the current OpenVLA recipe family unless

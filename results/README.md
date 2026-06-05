@@ -296,6 +296,17 @@ Do not scale it unless BGR or BGR-Coverage beats uniform, fixed-radius,
 failure-only, TD-loss, and BGR-uniform-radius on final RAUC, and median r80 plus
 absolute radius do not contradict the RAUC effect.
 
+`results/minigrid_doorkey_recovery_probe_4seed_v1/summary.csv` is the completed
+fixed 4-seed screen. It is negative for promotion: final RAUC is 0.6459 for
+failure-only, 0.6384 for uniform, 0.5018 for TD-loss, 0.4939 for
+BGR-uniform-radius, 0.4846 for BGR-Coverage, 0.3687 for BGR, and 0.2424 for
+fixed-radius. The promotion checker rejects BGR-Coverage because it loses to
+uniform (-0.1538 mean RAUC), failure-only, TD-loss, and the
+state-priority/uniform-radius ablation; it rejects default BGR because it loses
+to uniform (-0.2697 mean RAUC) and all strong baselines. Absolute-radius checks
+also contradict promotion: final_abs_r10 is 0.5916 for BGR-Coverage and 0.4981
+for BGR versus 0.7484 for uniform. Do not scale this protocol.
+
 ## Internal FourRooms Diagnostic
 
 `results/fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed
