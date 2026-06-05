@@ -61,6 +61,10 @@ OPENVLA_FULL_CLEAN_RUN = "openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6
 OPENVLA_FULL_PERTURB_RUN = "openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1"
 OPENVLA_IMAGEAUG_300_RUN = "openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1"
 OPENVLA_LOWLR_1000_RUN = "openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1"
+OPENVLA_WEIGHTED_PERTURB_RUN = (
+    "openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_"
+    "imageaug_officialtrainstats_fullgoal10x10_perturb_v1"
+)
 
 
 def main() -> None:
@@ -747,6 +751,11 @@ def load_openvla_adaptation(results_dir: Path) -> list[dict[str, str | int]]:
         (
             "1000-step low-LR non-identity",
             results_dir / OPENVLA_LOWLR_1000_RUN / "summary.csv",
+            {"blur", "brightness", "occlusion", "shift"},
+        ),
+        (
+            "Weighted perturbation non-id.",
+            results_dir / OPENVLA_WEIGHTED_PERTURB_RUN / "summary_available.csv",
             {"blur", "brightness", "occlusion", "shift"},
         ),
     ]

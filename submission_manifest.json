@@ -362,8 +362,8 @@
     },
     {
       "path": "paper/figures/openvla_adaptation_table.tex",
-      "sha256": "3fcd9a897eb0a9f6027d03ff67256c011cec7fdc50050a4d2746fef1d2d42601",
-      "size_bytes": 458
+      "sha256": "9da2c389195783e234e53181e55503d424e6502096ef93c1757ad5b068147073",
+      "size_bytes": 521
     },
     {
       "path": "paper/figures/openvla_stats.csv",
@@ -417,18 +417,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "60ac0afd3968af1ec7c211ea7c681056a321fd8a608143a9fb14846abef68d40",
+      "sha256": "8ddc6b2e0d448911323bbdfb9abed130ac739ebb5bc9d172484e3487f7c76af2",
       "size_bytes": 13813
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "400c9e45e658225e9be1a0013379bab207dbd4a80d1a099baff9e0a18fcb5f09",
-      "size_bytes": 284874
+      "sha256": "8ad6b2b3b260cd65098313cc20da970cd8461375f8283b10f3f87bc2d8f485f1",
+      "size_bytes": 284962
     },
     {
       "path": "paper/main.tex",
-      "sha256": "4ceabadf62efbdf10c4962cb6646bfd816947dc19ca6574b951c04506bb9c4b5",
-      "size_bytes": 36266
+      "sha256": "ef340ddbcb29f0c731bf68d935c480da1acd7e2e73d5301fcfdca006c4f561d1",
+      "size_bytes": 36331
     },
     {
       "path": "paper/references.bib",
@@ -727,8 +727,8 @@
     },
     {
       "path": "scripts/aggregate_results.py",
-      "sha256": "7217fb74663ea989c759496e460bb3bfe6a0e050195ea990da84d5138ec83301",
-      "size_bytes": 48600
+      "sha256": "57f42b400425ed3f8be1a727b2748cf21c4e1ea7fd2c4fc8755ed178b028c3c3",
+      "size_bytes": 49005
     },
     {
       "path": "scripts/analyze_significance.py",
@@ -747,8 +747,8 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "5c2f02dec0376ffb361395af20d880ab2e3db084468f7a543fc9177b89ecc87e",
-      "size_bytes": 81845
+      "sha256": "55e0aee7ee7988911b81e663c5540e8a4db103aea0c288e073b77f39d1eaebe1",
+      "size_bytes": 82229
     },
     {
       "path": "scripts/check_submission_package.py",
