@@ -1205,6 +1205,27 @@ Fixed prep command:
 scripts/queue_openvla_oft_preregistered_weighted_perturb.sh --prep-only --submit-prep
 ```
 
+Submitted weighted prep on 2026-06-05 after the preregistration script was
+pushed:
+
+```text
+766799  bgr-cleanmix-prep-p2048unique_perturbrepeat3_prereg  pending, reason=Priority
+```
+
+The live submission uses the cluster user's writable workspace, source
+artifacts, Hugging Face cache, OpenVLA-OFT checkout, and LIBERO checkout:
+
+```bash
+REMOTE_PROJECT=/work/<user>/bgr
+REMOTE_RUN_ROOT=/work/<user>/bgr/runs
+REMOTE_LOG_DIR=/work/<user>/bgr/logs
+REMOTE_HF_HOME=/work/<user>/cache_home/huggingface
+OPENVLA_OFT_ROOT=/work/<user>/external_validation/openvla_oft_smoke_746850/openvla-oft
+LIBERO_ROOT=/work/<user>/external_validation/openvla_oft_smoke_746850/LIBERO
+SOURCE_ARTIFACT_ROOT=/work/<user>/dreamaudit_jobs/artifacts
+PERTURB_MANIFEST=/work/<user>/bgr/results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl
+```
+
 Fixed adaptation command after prep succeeds:
 
 ```bash

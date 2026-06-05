@@ -524,6 +524,9 @@ package and recording its version before any result is run.
   clean identity by more than 1/100. If prep metadata shows unmatched
   BGR/random perturbation-family counts after weighting, the run is an audit
   only and cannot be promoted.
+  The weighted prep job was submitted after the preregistration commit on
+  2026-06-05 as Slurm job `766799`; the initial scheduler state is pending for
+  `Priority`, with stdout under the live cluster user's `bgr/logs` directory.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance
