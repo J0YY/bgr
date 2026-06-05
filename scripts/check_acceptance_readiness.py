@@ -177,6 +177,29 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"uniform {fetch_uniform:.4f}, failure-only {fetch_failure:.4f}, median-r80 {fetch_r80:.4f}"
             )
 
+    fetch_hard_path = root / "results/fetchreach_goal_recovery_hard_probe_4seed_v1/summary.csv"
+    if fetch_hard_path.exists():
+        fetch_hard = read_rows(fetch_hard_path)
+        hard_coverage = mean_metric(fetch_hard, "bgr_coverage", "final_rauc")
+        hard_bgr = mean_metric(fetch_hard, "bgr", "final_rauc")
+        hard_uniform = mean_metric(fetch_hard, "uniform", "final_rauc")
+        hard_failure = mean_metric(fetch_hard, "failure_only", "final_rauc")
+        hard_ablation = mean_metric(fetch_hard, "bgr_uniform_radius", "final_rauc")
+        hard_r80 = mean_metric(fetch_hard, "bgr_coverage", "final_median_r80")
+        hard_wins = paired_wins(fetch_hard, "bgr_coverage", "uniform", "final_rauc")
+        if not (
+            hard_coverage > hard_uniform
+            and hard_coverage > hard_failure
+            and hard_coverage > hard_ablation
+            and hard_wins[0] >= 3
+            and hard_r80 < 0.15
+        ):
+            failures.append(
+                f"FetchReach hard-budget negative/saturated: BGR-Coverage {hard_coverage:.4f}, BGR {hard_bgr:.4f}, "
+                f"uniform {hard_uniform:.4f}, failure-only {hard_failure:.4f}, uniform-radius {hard_ablation:.4f}, "
+                f"W/L/T={hard_wins}, median-r80 {hard_r80:.4f}"
+            )
+
     for label, relative_path in CALIBRATION_SUMMARIES:
         calibration_path = root / relative_path
         if not calibration_path.exists():

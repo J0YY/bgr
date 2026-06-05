@@ -700,6 +700,23 @@ package and recording its version before any result is run.
   This means the learned linear controller saturates the FetchReach recovery
   curve for simple baselines, while BGR-family replay trails uniform and
   failure-only. Do not scale or promote this FetchReach protocol.
+  A hard-budget FetchReach follow-up was calibrated before any new method
+  comparison by running uniform replay only. The first weaker-controller probes
+  (`--iterations 10/20/30 --horizon 10 --init-gain 1.2`) collapsed to clean
+  success 0.0000 and were rejected. Keeping the calibrated controller and
+  reducing only update budget produced a usable uniform-only 4-seed calibration:
+  final clean 0.9375, final RAUC 0.6813, and median r80 0.1185 with
+  `--iterations 20 --eval-every 10 --train-batch-size 2 --horizon 14
+  --init-gain 2.0 --init-noise 0.04 --teacher-gain 4.0 --learning-rate 0.20
+  --eval-trials 4 --record-trials 2 --quick-trials 2`. This is not method
+  evidence; it only fixes a non-saturated measurement budget before comparison.
+  The preregistered all-method command is:
+  `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetchreach_goal_recovery_probe.py --out results/fetchreach_goal_recovery_hard_probe_4seed_v1 --methods uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr --seeds 0,1,2,3 --iterations 20 --eval-every 10 --train-batch-size 2 --horizon 14 --init-gain 2.0 --init-noise 0.04 --teacher-gain 4.0 --learning-rate 0.20 --eval-trials 4 --record-trials 2 --quick-trials 2`.
+  Do not edit this command after seeing method results. Do not scale to
+  30 seeds or promote unless BGR or BGR-Coverage beats uniform, fixed-radius,
+  failure-only, TD-loss, and BGR-uniform-radius on final RAUC with at least 3/4
+  paired wins over uniform, a visible mean gap, and non-contradictory
+  non-saturated median r80.
 - The next harder Gymnasium-Robotics calibration route is FetchPush-v4 with an
   exact object-state reset interface. This is deliberately a pre-method
   calibration, not BGR evidence: it checks whether a fixed scripted push

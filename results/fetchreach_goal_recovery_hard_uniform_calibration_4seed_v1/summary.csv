@@ -1,0 +1,5 @@
+method,seed,final_clean,final_rauc,final_median_r80,rauc_aulc,best_rauc
+uniform,0,1.0,0.6,0.093,0.41875,0.6
+uniform,1,1.0,0.9750000000000001,0.15,0.51875,0.9750000000000001
+uniform,2,0.75,0.4,0.108,0.175,0.4
+uniform,3,1.0,0.75,0.123,0.5,0.75

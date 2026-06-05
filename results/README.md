@@ -205,6 +205,33 @@ method. Compact artifacts:
 Keep this as an internal negative independent-benchmark screen; do not add it
 to the paper unless the limitations table is expanded.
 
+A hard-budget follow-up was calibrated before any new method comparison by
+running uniform replay only. The weaker-controller probes with `--horizon 10`
+and `--init-gain 1.2` collapsed to clean success 0.0000 and are rejected. The
+fixed usable uniform-only calibration command is:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetchreach_goal_recovery_probe.py --out results/fetchreach_goal_recovery_hard_uniform_calibration_4seed_v1 --methods uniform --seeds 0,1,2,3 --iterations 20 --eval-every 10 --train-batch-size 2 --horizon 14 --init-gain 2.0 --init-noise 0.04 --teacher-gain 4.0 --learning-rate 0.20 --eval-trials 4 --record-trials 2 --quick-trials 2
+```
+
+This calibration gives uniform-only final clean 0.9375, final RAUC 0.6813, and
+median r80 0.1185 over four seeds. It is not method evidence; it only fixes a
+non-saturated measurement budget before comparison. Compact artifacts:
+
+- `results/fetchreach_goal_recovery_hard_uniform_calibration_4seed_v1/summary.csv`
+- `results/fetchreach_goal_recovery_hard_uniform_calibration_4seed_v1/package_versions.json`
+
+The preregistered all-method hard-budget comparison command is:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetchreach_goal_recovery_probe.py --out results/fetchreach_goal_recovery_hard_probe_4seed_v1 --methods uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr --seeds 0,1,2,3 --iterations 20 --eval-every 10 --train-batch-size 2 --horizon 14 --init-gain 2.0 --init-noise 0.04 --teacher-gain 4.0 --learning-rate 0.20 --eval-trials 4 --record-trials 2 --quick-trials 2
+```
+
+Do not edit this command after seeing method results. Do not scale or promote
+unless BGR or BGR-Coverage beats uniform, fixed-radius, failure-only, TD-loss,
+and BGR-uniform-radius on final RAUC with at least 3/4 paired wins over
+uniform, a visible mean gap, and non-contradictory non-saturated median r80.
+
 ## Internal Fetch Object-Goal Calibrations
 
 These are pre-method calibrations for harder Gymnasium-Robotics Fetch object
