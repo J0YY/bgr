@@ -4042,6 +4042,7 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "We treat exact paired sign tests as consistency checks over shared seeds, not as substitutes for effect size",
         "The following local calculation is a design rationale for the radius sampler",
         "Local boundary intuition",
+        "Finite-grid estimator guarantee",
         "BGR depends on a feasibility witness",
         "synthetic and grid-margin benchmarks are constructed to expose recovery curves",
         "Standard-environment scope audits",

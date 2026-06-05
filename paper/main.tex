@@ -125,6 +125,8 @@ The following local calculation is a design rationale for the radius sampler, no
 \end{equation}
 The assumption is first-order stochastic dominance over distance to the boundary. By the quantile coupling for stochastic orders \cite{shaked2007stochastic}, there exists a coupling with $D'_b\le D'_0$ almost surely and with the same marginals as $D_b,D_0$; monotonicity of $k_x$ then gives $\mathbb{E}[k_x(D'_b)]\ge \mathbb{E}[k_x(D'_0)]$, which is the stated inequality. Thus, under this local model, placing more probability near the current critical radius improves the expected one-step margin signal over uniform or fixed-radius replay. BGR uses boundary-centered sampling as a default but retains clean, easier, harder, broad-radius, and uniform components because real learners can violate the local model through saturation, noisy labels, or unstable optimization.
 
+\textbf{Finite-grid estimator guarantee.} For one state, $K$ radii, and $m$ Bernoulli rollouts per radius, Hoeffding plus a union bound gives $\max_j|\bar R(x,\sigma_j)-R(x,\sigma_j)|\le\epsilon=\sqrt{\log(2K/\delta)/(2m)}$ with probability $1-\delta$. If a monotone fit has this grid error, the true crossing has local slope at least $\gamma$, and grid spacing is at most $\Delta$, then $\hat r_\alpha$ is within $\Delta+(1+\alpha)\epsilon/\gamma$ of the true critical radius. This certifies boundary localization, not learner improvement.
+
 \section{Experiments}
 
 All experiments are driven by artifact YAML configs and scripts. The anonymous artifact records per-seed CSVs, aggregation code, paired exact sign tests, Slurm launch commands, run ledger files, compute/GPU environment snapshots, and an MIT license; the paper tables are generated from these artifacts rather than hand-edited results.
