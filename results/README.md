@@ -163,6 +163,16 @@ uniform, fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on final
 RAUC with a visible gap, while median r80 and absolute r20 are non-saturated
 and do not contradict the RAUC effect.
 
+`results/pointmaze_umaze_recovery_probe_4seed_v1/summary.csv` is the completed
+4-seed screen. It is negative for promotion: final RAUC is 0.5458 for
+failure-only, 0.2201 for uniform, 0.2073 for BGR-Coverage, 0.1406 for BGR,
+0.1233 for BGR-uniform-radius, 0.0556 for TD-loss, and 0.0448 for fixed-radius
+replay. Failure-only also leads absolute r20 (0.5472 vs. 0.2500 for uniform,
+0.0750 for BGR-Coverage, and 0.0167 for BGR). The promotion checker rejects
+default BGR and BGR-Coverage because neither beats uniform on mean final RAUC,
+both lose to failure-only on all four paired seeds, and both have lower
+absolute r20 than uniform. Do not scale this protocol.
+
 ## Internal Official MiniGrid-FourRooms Diagnostic
 
 `results/minigrid_fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed

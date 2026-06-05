@@ -288,6 +288,16 @@ package and recording its version before any result is run.
      TD-loss, and BGR-uniform-radius on final RAUC with a visible gap, while
      median r80 and absolute r20 are non-saturated and do not contradict the
      RAUC effect.
+     The completed 4-seed screen is negative and should not be scaled:
+     failure-only reaches 0.5458 final RAUC and 0.5472 absolute r20, far ahead
+     of uniform (0.2201 RAUC, 0.2500 absolute r20), BGR-Coverage (0.2073 RAUC,
+     0.0750 absolute r20), and default BGR (0.1406 RAUC, 0.0167 absolute r20).
+     The checker rejects default BGR because it loses to uniform on mean RAUC
+     and paired signs, loses to failure-only on all four seeds, and has a lower
+     absolute r20 than uniform. It rejects BGR-Coverage because it also loses to
+     uniform on mean RAUC, loses to failure-only on all four seeds, and has
+     lower absolute r20 than uniform. PointMaze therefore does not fix the
+     independent-benchmark evidence gap under this protocol.
 5. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.
