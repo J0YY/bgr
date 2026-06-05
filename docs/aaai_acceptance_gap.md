@@ -332,6 +332,14 @@ package and recording its version before any result is run.
      It is only worth scaling if BGR-Clean-Shield beats uniform, fixed-radius,
      failure-only, TD-loss, and BGR-uniform-radius on final RAUC, and if
      absolute r20 does not contradict the RAUC effect.
+     The completed 4-seed screen improves over default BGR but is still
+     negative: BGR-Clean-Shield reaches 0.2448 final RAUC, above uniform
+     (0.2201), fixed-radius (0.0448), TD-loss (0.0556), and BGR-uniform-radius
+     (0.1233), but below failure-only (0.5458). It wins only 2/4 paired seeds
+     against uniform and has lower absolute r20 than uniform (0.1167 vs.
+     0.2500). The checker rejects it because the effect is inconsistent versus
+     uniform, failure-only remains much stronger, and absolute r20 contradicts
+     the RAUC gain. Do not scale this update-schedule variant.
 5. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.

@@ -207,6 +207,14 @@ Do not scale it unless BGR-Clean-Shield beats uniform, fixed-radius,
 failure-only, TD-loss, and BGR-uniform-radius on final RAUC, and absolute r20
 does not contradict the RAUC effect.
 
+`results/pointmaze_umaze_clean_shield_probe_4seed_v1/summary.csv` is the
+completed clean-shield follow-up. It is negative for promotion: BGR-Clean-Shield
+improves over default BGR (0.2448 vs. 0.1406 final RAUC) and is above uniform
+on mean final RAUC (0.2448 vs. 0.2201), but the paired split against uniform is
+only 2/2, failure-only remains much stronger (0.5458 final RAUC), and absolute
+r20 contradicts the mean-RAUC gain (0.1167 for BGR-Clean-Shield vs. 0.2500 for
+uniform). Do not scale this update-schedule variant.
+
 ## Internal Official MiniGrid-FourRooms Diagnostic
 
 `results/minigrid_fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed
