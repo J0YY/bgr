@@ -26,6 +26,8 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | MiniGrid LavaCrossing | bgr | 4 | -0.1012 (1/3/0) | +0.0794 (3/1/0) | -0.0889 (1/3/0) | -0.2164 (0/3/1) | fail |
 | MiniGrid FourRooms midband | bgr | 4 | -0.1127 (1/3/0) | -0.2403 (0/4/0) | -0.0749 (1/3/0) | +0.0995 (2/2/0) | fail |
 | MiniGrid DoorKey | bgr_coverage | 4 | -0.1538 (0/2/2) | -0.1613 (1/3/0) | -0.0093 (1/2/1) | -0.1569 (0/2/2) | fail |
+| FetchReach-v4 hard-budget goal recovery | bgr_coverage | 4 | -0.2188 (1/3/0) | -0.4813 (0/4/0) | -0.0563 (0/3/1) | +0.0008 (1/2/1) | fail |
+| FetchReach-v4 hard-budget goal recovery | bgr | 4 | -0.2375 (0/3/1) | -0.5000 (0/4/0) | -0.0750 (1/2/1) | -0.0097 (0/3/1) | fail |
 | MiniGrid DoorKey | bgr | 4 | -0.2697 (0/4/0) | -0.2772 (0/4/0) | -0.1252 (0/4/0) | -0.2503 (0/2/2) | fail |
 
 ## Pre-Method Calibrations

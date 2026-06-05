@@ -232,6 +232,16 @@ unless BGR or BGR-Coverage beats uniform, fixed-radius, failure-only, TD-loss,
 and BGR-uniform-radius on final RAUC with at least 3/4 paired wins over
 uniform, a visible mean gap, and non-contradictory non-saturated median r80.
 
+The completed hard-budget screen is negative and should not be scaled: final
+RAUC is 0.9437 for TD-loss, 0.8250 for failure-only, 0.6813 for uniform,
+0.6438 for fixed-radius, 0.5188 for BGR-uniform-radius, 0.4625 for
+BGR-Coverage, and 0.4438 for default BGR. BGR-Coverage loses to uniform
+with W/L/T=(1,3,0), loses to failure-only and TD-loss on all four seeds, and
+trails the state-priority/uniform-radius ablation. Compact artifacts:
+
+- `results/fetchreach_goal_recovery_hard_probe_4seed_v1/summary.csv`
+- `results/fetchreach_goal_recovery_hard_probe_4seed_v1/package_versions.json`
+
 ## Internal Fetch Object-Goal Calibrations
 
 These are pre-method calibrations for harder Gymnasium-Robotics Fetch object

@@ -717,6 +717,15 @@ package and recording its version before any result is run.
   failure-only, TD-loss, and BGR-uniform-radius on final RAUC with at least 3/4
   paired wins over uniform, a visible mean gap, and non-contradictory
   non-saturated median r80.
+  The completed hard-budget screen is negative and should not be scaled:
+  TD-loss reaches 0.9437 final RAUC, failure-only reaches 0.8250, uniform
+  reaches 0.6813, fixed-radius reaches 0.6438, BGR-uniform-radius reaches
+  0.5188, BGR-Coverage reaches 0.4625, and default BGR reaches 0.4438.
+  BGR-Coverage loses to uniform with W/L/T=(1,3,0), loses to failure-only on
+  all four seeds, loses to TD-loss on all four seeds, and trails the
+  state-priority/uniform-radius ablation. Default BGR is lower and has
+  contradictory median r80 versus uniform. Keep this as another negative
+  independent-benchmark screen.
 - The next harder Gymnasium-Robotics calibration route is FetchPush-v4 with an
   exact object-state reset interface. This is deliberately a pre-method
   calibration, not BGR evidence: it checks whether a fixed scripted push
