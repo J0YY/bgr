@@ -49,6 +49,7 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
         self.assertIn("official 367/400", gate.detail)
         self.assertIn("random 273/300 available rows", gate.detail)
         self.assertIn("official_margin=0", gate.detail)
+        self.assertIn("official gate already impossible", gate.detail)
 
 
 if __name__ == "__main__":

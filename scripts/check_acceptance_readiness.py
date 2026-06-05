@@ -185,6 +185,14 @@ def learned_policy_gate(root: Path) -> GateResult:
         random_detail = f"random {random_success}/{random_episodes}"
         if random_episodes < 400:
             random_detail = f"{random_detail} available rows; random shift pending"
+        official_gate_impossible = (
+            bgr_episodes == 400
+            and official_episodes == 400
+            and (official_margin < 10 or official_rate_margin < 0.02)
+        )
+        gate_detail = ""
+        if official_gate_impossible:
+            gate_detail = "; official gate already impossible; pending random row is ledger completion only"
         clean_floor = max(official_identity, random_identity) - 1
         passed = (
             bgr_episodes == 400
@@ -204,7 +212,7 @@ def learned_policy_gate(root: Path) -> GateResult:
                 f"official {official_success}/{official_episodes}, {random_detail}; "
                 f"identity BGR {bgr_identity}/{identity_eps}, official {official_identity}/{identity_eps}, "
                 f"random {random_identity}/{identity_eps}; official_margin={official_margin}, "
-                f"official_rate_margin={official_rate_margin:+.4f}"
+                f"official_rate_margin={official_rate_margin:+.4f}{gate_detail}"
             ),
         )
 

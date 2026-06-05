@@ -727,8 +727,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "487d7c45c71285e5c10b8156053acc02999bf798f50997e2e5113dbd12ca8ac0",
-      "size_bytes": 14597
+      "sha256": "ff5dca81a0009d51917cff028ff5de4260ad42a38fd240080df5612c4c5db0c0",
+      "size_bytes": 14870
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -742,8 +742,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "1e4c15bd8d7afaa87be486998becfb271e3e1a4ef100be1eb32df8a7a135c619",
-      "size_bytes": 12254
+      "sha256": "12ff31c0db78845254c48b4e3697d2483c5555a5da7b4023b7a4bbd1d85e6c4b",
+      "size_bytes": 12628
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -1037,8 +1037,8 @@
     },
     {
       "path": "tests/test_acceptance_scorecard.py",
-      "sha256": "341f64e8ddd08c6853461cbb78d963ed1cd1881d1ebce3c423c9935e4bd38e6f",
-      "size_bytes": 3567
+      "sha256": "d345f33351344470aaa6c6edd31755794e26d394a5a1c19eb160b25052e8ba63",
+      "size_bytes": 3722
     },
     {
       "path": "tests/test_aggregate_results.py",
@@ -1052,8 +1052,8 @@
     },
     {
       "path": "tests/test_check_acceptance_readiness.py",
-      "sha256": "aa289ae072ec9713e6efacb8618cf4fa45c39082a861dd1b030cac3a98f0b0e8",
-      "size_bytes": 1952
+      "sha256": "c39605dec0eea32833e1098f0d5a181493bdcbab294897dc1abf325d8d0adecd",
+      "size_bytes": 2023
     },
     {
       "path": "tests/test_check_openvla_perturb_gate.py",

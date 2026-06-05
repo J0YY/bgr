@@ -279,11 +279,15 @@ def learned_policy_summary(root: Path) -> str:
         random_detail = f"random {random_success}/{random_episodes}"
         if random_episodes < 400:
             random_detail += " available; final random shift pending"
+        status = "non-promotable"
+        if bgr_episodes == 400 and official_episodes == 400 and official_gap < 10:
+            status = "already unable to clear the official-checkpoint gate"
         return (
-            f"Weighted OpenVLA audit is non-promotable before the final random row: "
+            f"Weighted OpenVLA audit is {status} before the final random row: "
             f"BGR {bgr_success}/{bgr_episodes}, official {official_success}/{official_episodes}, "
             f"{random_detail}; identity BGR {bgr_identity}/{identity_episodes}. "
-            f"Official episode margin is {official_gap:+d}, short of +10 by {official_needed} episodes."
+            f"Official episode margin is {official_gap:+d}, short of +10 by {official_needed} episodes; "
+            f"the pending random row is ledger completion, not a path to promotion."
         )
 
     legacy = root / OPENVLA_LEGACY_COMPLETE

@@ -86,6 +86,8 @@ class AcceptanceScorecardTest(unittest.TestCase):
 
         self.assertIn("Grid-margin mechanism clears", text)
         self.assertIn("BGR 367/400, official 367/400", text)
+        self.assertIn("already unable to clear the official-checkpoint gate", text)
+        self.assertIn("pending random row is ledger completion", text)
         self.assertIn("MiniGrid LavaGapS7", text)
         self.assertIn("state-priority/uniform-radius ablation", text)
         self.assertIn("fail", text)
