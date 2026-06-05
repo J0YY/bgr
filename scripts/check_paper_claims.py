@@ -629,6 +629,35 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    doorkey = read_csv_rows(results_dir / "minigrid_doorkey_recovery_probe_4seed_v1" / "summary.csv")
+    doorkey_failure_rauc = mean_metric(doorkey, "failure_only", "final_rauc")
+    doorkey_uniform_rauc = mean_metric(doorkey, "uniform", "final_rauc")
+    doorkey_coverage_rauc = mean_metric(doorkey, "bgr_coverage", "final_rauc")
+    doorkey_bgr_rauc = mean_metric(doorkey, "bgr", "final_rauc")
+    doorkey_uniform_abs = mean_metric(doorkey, "uniform", "final_abs_r10")
+    doorkey_coverage_abs = mean_metric(doorkey, "bgr_coverage", "final_abs_r10")
+    doorkey_bgr_abs = mean_metric(doorkey, "bgr", "final_abs_r10")
+    if not (
+        doorkey_failure_rauc > doorkey_uniform_rauc
+        and doorkey_uniform_rauc > doorkey_coverage_rauc
+        and doorkey_coverage_rauc > doorkey_bgr_rauc
+        and doorkey_coverage_abs < doorkey_uniform_abs
+        and doorkey_bgr_abs < doorkey_uniform_abs
+    ):
+        raise ValueError("Expected MiniGrid-DoorKey diagnostic to remain a non-promoted negative result")
+    claims.append(
+        Claim(
+            "MiniGrid-DoorKey official-package limitation",
+            (
+                f"in DoorKey-6x6, failure-only and uniform reach {fmt(doorkey_failure_rauc, 4)} "
+                f"and {fmt(doorkey_uniform_rauc, 4)} final RAUC, while BGR-Coverage reaches "
+                f"{fmt(doorkey_coverage_rauc, 4)} and default BGR reaches {fmt(doorkey_bgr_rauc, 4)}, "
+                "with lower absolute radius than uniform"
+            ),
+            "results/minigrid_doorkey_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+
     pointmaze = read_csv_rows(results_dir / "pointmaze_umaze_recovery_probe_4seed_v1" / "summary.csv")
     pointmaze_shield = read_csv_rows(results_dir / "pointmaze_umaze_clean_shield_probe_4seed_v1" / "summary.csv")
     pointmaze_failure_rauc = mean_metric(pointmaze, "failure_only", "final_rauc")

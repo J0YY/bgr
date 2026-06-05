@@ -4370,9 +4370,10 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
             raise ValueError(
                 f"{pdf_path}: missing rendered FrozenLake limitation snippet(s): {', '.join(frozenlake_missing)}"
             )
-    if "An official MiniGrid-FourRooms package diagnostic is also negative" in source_text:
+    if "Official MiniGrid package diagnostics are also negative" in source_text:
         minigrid_required = [
-            ("MiniGrid-FourRooms package diagnostic",),
+            ("MiniGrid package diagnostics",),
+            ("FourRooms",),
             ("0.6077 vs. 0.6665",),
             ("failure-only (0.7940)", "failureonly (0.7940)"),
             ("fixed-radius replay (0.7587)", "fixedradius replay (0.7587)"),
@@ -4386,6 +4387,23 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
         if minigrid_missing:
             raise ValueError(
                 f"{pdf_path}: missing rendered MiniGrid limitation snippet(s): {', '.join(minigrid_missing)}"
+            )
+    if "DoorKey-6x6" in source_text:
+        doorkey_required = [
+            ("DoorKey-6x6",),
+            ("0.6459 and 0.6384",),
+            ("BGR-Coverage reaches 0.4846",),
+            ("default BGR reaches 0.3687",),
+            ("lower absolute radius",),
+        ]
+        doorkey_missing = [
+            snippets[0]
+            for snippets in doorkey_required
+            if not any(snippet in normalized_rendered_text for snippet in snippets)
+        ]
+        if doorkey_missing:
+            raise ValueError(
+                f"{pdf_path}: missing rendered MiniGrid-DoorKey limitation snippet(s): {', '.join(doorkey_missing)}"
             )
     if "Official PointMaze U-Maze diagnostics also fail" in source_text:
         pointmaze_required = [
