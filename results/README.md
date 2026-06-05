@@ -203,6 +203,47 @@ method. Compact artifacts:
 Keep this as an internal negative independent-benchmark screen; do not add it
 to the paper unless the limitations table is expanded.
 
+## Internal Fetch Object-Goal Calibrations
+
+These are pre-method calibrations for harder Gymnasium-Robotics Fetch object
+tasks. They use the exact reset-state and object-goal perturbation interface in
+`tools/fetch_object_goal_recovery_calibration.py`; they are not BGR method
+comparisons and should not be promoted into the paper.
+
+FetchPush-v4 command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --out results/fetchpush_object_goal_calibration_2seed_v1 --env-id FetchPush-v4 --seeds 2 --replay-states 4 --trials 2 --radii 0.00,0.02,0.04,0.06,0.08,0.12 --horizon 80 --controller-gain 6.0 --direction-jitter 0.10
+```
+
+FetchPush is rejected as a method route: clean success is 0.2500, recovery is
+flat at 0.2500 over all tested radii, RAUC is 0.2500, and median r80 is at the
+evaluation maximum 0.1200.
+
+FetchSlide-v4 command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --out results/fetchslide_object_goal_calibration_2seed_v1 --env-id FetchSlide-v4 --seeds 2 --replay-states 4 --trials 1 --radii 0.00,0.03,0.06,0.09,0.12,0.15 --horizon 80 --controller-gain 6.0 --direction-jitter 0.10
+```
+
+FetchSlide is also rejected as a method route: clean success is 0.2500, RAUC is
+0.1875, recovery ranges from 0.1250 to 0.2500, and median r80 is 0.0720. The
+curve is not fully flat, but the scripted controller fails the clean-success
+prerequisite on most replay states.
+
+Compact artifacts:
+
+- `results/fetchpush_object_goal_calibration_2seed_v1/summary.json`
+- `results/fetchpush_object_goal_calibration_2seed_v1/recovery_rows.csv`
+- `results/fetchpush_object_goal_calibration_2seed_v1/package_versions.json`
+- `results/fetchslide_object_goal_calibration_2seed_v1/summary.json`
+- `results/fetchslide_object_goal_calibration_2seed_v1/recovery_rows.csv`
+- `results/fetchslide_object_goal_calibration_2seed_v1/package_versions.json`
+
+Do not build FetchPush or FetchSlide replay comparisons around this scripted
+controller/interface unless a new preregistered calibration first produces
+usable clean success and a non-saturated recovery curve.
+
 ## Internal Official PointMaze Diagnostic
 
 The next preregistered external-package screen is official PointMaze U-Maze,

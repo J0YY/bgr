@@ -721,3 +721,8 @@ package and recording its version before any result is run.
   Do not implement a FetchSlide replay comparison unless this calibration first
   shows usable clean success and a non-flat recovery curve under the fixed
   scripted controller.
+  The completed calibration is negative: clean success is 0.2500, RAUC is
+  0.1875, recovery ranges from 0.1250 to 0.2500, and median r80 is 0.0720.
+  The curve is not fully flat, but the fixed controller fails the clean-success
+  prerequisite on most replay states. Do not build or scale a FetchSlide replay
+  comparison around this scripted controller/interface.

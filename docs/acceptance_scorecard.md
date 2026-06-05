@@ -7,7 +7,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Grid-margin mechanism clears the internal mechanism threshold: BGR 0.4342 vs uniform 0.3965, delta +0.0377; margin above +0.03 threshold +0.0077.
 - Weighted OpenVLA audit is already unable to clear the official-checkpoint gate before the final random row: BGR 367/400, official 367/400, random 273/300 available; final random shift pending; identity BGR 99/100. Official episode margin is +0, short of +10 by 10 episodes; the pending random row is ledger completion, not a path to promotion.
 - Closest independent benchmark screen is `PointMaze U-Maze clean-shield` with treatment `bgr_clean_shield`: delta vs uniform +0.0247 (2/2/0), worst required-baseline delta -0.3010 (0/3/1), ablation delta +0.1215 (2/1/1), radius delta -0.1333 (1/2/1).
-- Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`.
+- Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`, `FetchSlide-v4 object-goal calibration`.
 
 ## Independent Benchmark Screens
 
@@ -33,6 +33,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | Calibration | Clean | Recovery range | Median r80 | Decision |
 | --- | ---: | ---: | ---: | --- |
 | FetchPush-v4 object-goal calibration | 0.2500 | 0.2500--0.2500 | 0.1200 | reject-calibration |
+| FetchSlide-v4 object-goal calibration | 0.2500 | 0.1250--0.2500 | 0.0720 | reject-calibration |
 
 ## Priority Read
 

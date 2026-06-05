@@ -1,0 +1,16 @@
+{
+  "clean_success": 0.25,
+  "controller": "scripted_push",
+  "controller_gain": 6.0,
+  "direction_jitter": 0.1,
+  "env_id": "FetchSlide-v4",
+  "horizon": 80,
+  "max_recovery": 0.25,
+  "min_recovery": 0.125,
+  "r80": 0.072,
+  "radii": "0.0000,0.0300,0.0600,0.0900,0.1200,0.1500",
+  "rauc": 0.1875,
+  "replay_states": 4,
+  "seeds": 2,
+  "trials": 1
+}
