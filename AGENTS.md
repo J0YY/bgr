@@ -8,6 +8,13 @@ Current target: iterate, queue experiments, and reframe the paper until the work
 
 The practical goal is not to make the paper sound accepted. The practical goal is to find or build defensible evidence that survives the acceptance criteria below, then incorporate only those results into `paper/main.tex`.
 
+## Current Acceptance Status
+
+- The internal readiness gate is intentionally failing; do not report the paper as AAAI-ready.
+- Controlled grid-margin evidence is positive and mechanistically useful, but it is not enough for a high-confidence main-track acceptance claim.
+- FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, PointMaze, and OpenVLA/LIBERO are currently negative or non-promotable.
+- The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes.
+
 ## Evidence Policy
 
 - Do not promote a new result into `paper/main.tex` unless it was preregistered or fixed before method comparison.
