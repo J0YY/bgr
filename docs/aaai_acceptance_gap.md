@@ -465,6 +465,25 @@ package and recording its version before any result is run.
   all strong baselines. Absolute-radius checks also contradict promotion:
   final_abs_r10 is 0.5916 for BGR-Coverage and 0.4981 for BGR versus 0.7484
   for uniform.
+- The next preregistered external-package screen is official
+  MiniGrid-LavaCrossingS9N3, implemented at
+  `tools/minigrid_lavacrossing_recovery_probe.py`. It uses
+  `gym.make("MiniGrid-LavaCrossingS9N3-v0")`, package-generated lava/goal
+  layouts and MiniGrid `env.step` dynamics, exact reset states on safe cells
+  near the package shortest path and lava hazards, and Manhattan
+  position/direction perturbations that preserve safe-cell validity. Lava cells
+  are terminal failures, not replay states. Uniform-only seed-0 calibration
+  selected a non-saturated pre-promotion budget: with `--iterations 60`,
+  `--train-batch-size 5`, `--replay-selection midband`,
+  `--replay-distance-min 4`, `--replay-distance-max 16`,
+  `--q-init-blend 0.015`, `--q-init-noise 0.06`, `--learning-rate 0.25`,
+  `--epsilon 0.10`, and `--absolute-radius-alpha 0.10`, uniform gives final
+  RAUC 0.4878, clean success 0.9167, median r80 0.3000, and absolute radius
+  0.6500. The fixed 4-seed command is:
+  `PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_lavacrossing_recovery_probe.py --out results/minigrid_lavacrossing_recovery_probe_4seed_v1 --env-id MiniGrid-LavaCrossingS9N3-v0 --iterations 60 --eval-every 20 --train-batch-size 5 --replay-selection midband --replay-distance-min 4 --replay-distance-max 16 --q-init-blend 0.015 --q-init-noise 0.06 --learning-rate 0.25 --epsilon 0.10 --absolute-radius-alpha 0.10`.
+  Do not scale it unless BGR or BGR-Coverage beats uniform, fixed-radius,
+  failure-only, TD-loss, and BGR-uniform-radius on final RAUC, and median r80
+  plus absolute radius do not contradict the RAUC effect.
 - Keep scratch negative runs out of the anonymous package unless they are being
   used as explicit limitations.
 - Do not spend more robotics compute on the current OpenVLA recipe family unless

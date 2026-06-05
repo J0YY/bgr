@@ -52,6 +52,13 @@ OpenVLA/LIBERO improvement over both matched random and the official checkpoint.
 - The MiniGrid absolute-r10 follow-up also stays internal: the RAUC lead
   persists, but `final_abs_r10` is 0.0 for every method, so the auxiliary
   radius metric floor-saturates.
+- Official MiniGrid-DoorKey is internal and paper-limitation evidence only:
+  BGR-Coverage and default BGR lose to uniform and strong baselines, with
+  lower absolute-radius checks than uniform.
+- Official MiniGrid-LavaCrossingS9N3 is the next preregistered
+  external-package screen because it gives package-defined lava hazards,
+  safe-cell reset states, and a non-saturated uniform-only calibration before
+  method comparison.
 - The next acceptance-moving result must be either a fixed-protocol positive
   pre-existing benchmark or a genuinely different preregistered learned-policy
   intervention that can beat both official and matched random.
