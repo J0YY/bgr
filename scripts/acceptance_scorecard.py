@@ -545,6 +545,7 @@ def render_markdown(root: Path) -> str:
     candidates = sorted(benchmark_candidates(root), key=lambda candidate: candidate.priority_key, reverse=True)
     calibrations = calibration_screens(root)
     best = candidates[0] if candidates else None
+    learned_summary = learned_policy_summary(root)
     lines = [
         "# Acceptance Scorecard",
         "",
@@ -553,7 +554,7 @@ def render_markdown(root: Path) -> str:
         "## Gate Summary",
         "",
         f"- {grid_summary(root)}",
-        f"- {learned_policy_summary(root)}",
+        f"- {learned_summary}",
     ]
     inflight = learned_policy_inflight_summary(root)
     if inflight is not None:
@@ -569,6 +570,46 @@ def render_markdown(root: Path) -> str:
     if rejected_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in rejected_calibrations)
         lines.append(f"- Rejected pre-method calibration route(s): {names}.")
+    lines.extend(
+        [
+            "",
+            "## Promotion Deficits",
+            "",
+        ]
+    )
+    if best is None:
+        lines.append("- Independent benchmark: no completed screen artifacts were found.")
+    else:
+        lines.append(
+            f"- Independent benchmark: no screen clears the 4/4 promotion screen. "
+            f"The closest screen, `{best.name}` with `{best.treatment}`, clears "
+            f"{best.cleared_gate_count}/4 gates and fails on {fmt_reasons(best)}."
+        )
+    if learned_summary.startswith("Weighted OpenVLA audit"):
+        lines.append(
+            "- Learned policy: the latest weighted OpenVLA audit is short of the "
+            "official-checkpoint promotion gate by 10/400 non-identity episodes "
+            "and 0.02 absolute success before the final random row can matter."
+        )
+    elif "does not clear" in learned_summary or "negative" in learned_summary:
+        lines.append(f"- Learned policy: {learned_summary}")
+    elif "incomplete" in learned_summary:
+        lines.append(f"- Learned policy: {learned_summary}")
+    else:
+        lines.append(
+            "- Learned policy: the latest summarized OpenVLA audit clears the "
+            "internal learned-policy gate; paper incorporation still requires "
+            "claim and package checks."
+        )
+    if inflight is None:
+        lines.append(
+            "- Active route: no queued learned-policy route is recorded in the local ledgers."
+        )
+    else:
+        lines.append(
+            "- Active route: the proximal-anchor OpenVLA audit is queued but remains "
+            "non-evidence until the fixed clean and perturbation summaries exist."
+        )
     lines.extend(
         [
             "",

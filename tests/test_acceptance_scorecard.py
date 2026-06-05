@@ -152,6 +152,10 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("pending random row is ledger completion", text)
         self.assertIn("Proximal-anchor OpenVLA route is in flight, not yet evidence", text)
         self.assertIn("must finish before the +10/400 and +0.02 learned-policy gate", text)
+        self.assertIn("Promotion Deficits", text)
+        self.assertIn("no screen clears the 4/4 promotion screen", text)
+        self.assertIn("short of the official-checkpoint promotion gate by 10/400", text)
+        self.assertIn("proximal-anchor OpenVLA audit is queued but remains non-evidence", text)
         self.assertIn("MiniGrid LavaGapS7", text)
         self.assertIn("MiniGrid FourRooms official-package", text)
         self.assertIn("final_median_r80-ceiling-saturated", text)
@@ -232,7 +236,9 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("Proximal-anchor OpenVLA audit clears", text)
         self.assertIn("BGR 370/400, official 357/400, random 352/400", text)
         self.assertIn("official gap +13", text)
+        self.assertIn("latest summarized OpenVLA audit clears", text)
         self.assertNotIn("Weighted OpenVLA audit", text)
+        self.assertNotIn("latest weighted OpenVLA audit is short", text)
         self.assertNotIn("in flight, not yet evidence", text)
 
 

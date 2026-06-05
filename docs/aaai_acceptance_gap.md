@@ -665,7 +665,7 @@ package and recording its version before any result is run.
   checkpoint's four completed non-identity rows also total 367/400, far below
   the preregistered requirement that BGR beat the official checkpoint by at
   least 10/400 episodes and 0.02 absolute success.
-  Live Slurm poll on 2026-06-05 14:29 PDT / 22:29 BST still shows
+  Live Slurm poll on 2026-06-05 14:34 PDT / 22:34 BST still shows
   matched-random shift job `766831` as `PENDING` for unavailable A6000 GPU
   nodes, with a Slurm start estimate of 2026-06-07T13:21:02 and no start/end
   time in `sacct`. The remote `summary.csv` still has the same 14 rows as the
@@ -706,16 +706,17 @@ package and recording its version before any result is run.
   matched-random jobs `767144`-`767148`. Slurm immediately reported all jobs
   pending; BGR/random perturb rows were dependency-held, and official
   perturb rows serialized identity through shift. A fresh Athena poll on
-  2026-06-05 14:09 PDT / 22:09 BST still showed all jobs pending with no
+  2026-06-05 14:34 PDT / 22:34 BST still showed all jobs pending with no
   `sacct` start/end times: BGR train job `767128` and official identity job
-  `767134` were waiting on unavailable GPU nodes
-  (`ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08],g2-[03-05]`),
+  `767134` were waiting on unavailable A6000 GPU nodes
+  (`ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08]`),
   and every other proximal job was dependency-held. `scontrol show job -dd`
-  reported `StartTime=2026-06-07T14:27:51` and
+  reported `StartTime=2026-06-07T13:21:02` and
   `TresPerNode=gres/gpu:a6000:1` for jobs `767128` and `767134`. Idle g2 nodes
   expose `gpu:a4000`, so a generic/A4000 resubmission is not a protocol-neutral
   acceleration for OpenVLA unless the memory footprint is separately changed
-  and preregistered.
+  and preregistered. The perturbation and adaptation compact summaries were
+  both still missing, so there is nothing to sync or promote.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

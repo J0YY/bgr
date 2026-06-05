@@ -10,6 +10,12 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Closest independent benchmark screen is `MiniGrid FourRooms official-package` with treatment `bgr_coverage`: delta vs uniform +0.1075 (4/0/0), worst required-baseline delta +0.0464 (3/1/0), ablation delta +0.0071 (2/2/0), radius delta +0.0000 (0/0/4), failure reason(s): final_median_r80-ceiling-saturated.
 - Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`, `FetchSlide-v4 object-goal calibration`, `FetchPickAndPlace-v4 object-goal calibration`.
 
+## Promotion Deficits
+
+- Independent benchmark: no screen clears the 4/4 promotion screen. The closest screen, `MiniGrid FourRooms official-package` with `bgr_coverage`, clears 3/4 gates and fails on final_median_r80-ceiling-saturated.
+- Learned policy: the latest weighted OpenVLA audit is short of the official-checkpoint promotion gate by 10/400 non-identity episodes and 0.02 absolute success before the final random row can matter.
+- Active route: the proximal-anchor OpenVLA audit is queued but remains non-evidence until the fixed clean and perturbation summaries exist.
+
 ## Independent Benchmark Screens
 
 | Screen | Treatment | Seeds | dRAUC vs uniform (W/L/T) | Worst required baseline dRAUC | Ablation dRAUC | Radius metric | Radius delta | Cleared gates | Screen gate | Failure reason(s) |

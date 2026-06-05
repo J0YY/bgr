@@ -131,7 +131,7 @@ Packaged OpenVLA audit artifacts are:
   weighted p2048unique perturbation audit rows available before matched-random
   shift completed; this artifact already proves the official-checkpoint
   promotion gate cannot pass because BGR and official tie at 367/400
-  non-identity successes. A live poll on 2026-06-05 14:29 PDT / 22:29 BST still had
+  non-identity successes. A live poll on 2026-06-05 14:34 PDT / 22:34 BST still had
   matched-random shift job `766831` pending for unavailable A6000 GPU nodes, so the
   missing row is ledger completion only.
 
@@ -1579,7 +1579,7 @@ official checkpoint's 367/400, so BGR cannot satisfy the preregistered
 checkpoint. The paper should therefore continue to treat this intervention as a
 negative OpenVLA/LIBERO audit, not a robotics fine-tuning result.
 
-Live Slurm poll on 2026-06-05 14:29 PDT / 22:29 BST still shows matched-random
+Live Slurm poll on 2026-06-05 14:34 PDT / 22:34 BST still shows matched-random
 shift job `766831` as pending for unavailable A6000 GPU nodes, with estimated
 start 2026-06-07T13:21:02 and no start/end time in `sacct`. The remote
 perturbation `summary.csv` still has the same 14 completed rows as the local
@@ -1664,14 +1664,14 @@ Slurm audit showed all rows pending, with BGR/random perturb rows held on
 dependencies and official perturb rows serialized by method. No result is
 available yet, and this remains an audit until the fixed gate above is checked.
 
-Fresh Athena poll on 2026-06-05 14:09 PDT / 22:09 BST:
+Fresh Athena poll on 2026-06-05 14:34 PDT / 22:34 BST:
 
 ```text
-767128 PENDING (ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08],g2-[03-05])
-767134 PENDING (ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08],g2-[03-05])
+767128 PENDING (ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08])
+767134 PENDING (ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08])
 767129-767133 PENDING (Dependency)
 767135-767148 PENDING (Dependency)
-StartTime=2026-06-07T14:27:51 for 767128 and 767134
+StartTime=2026-06-07T13:21:02 for 767128 and 767134
 TresPerNode=gres/gpu:a6000:1 for 767128 and 767134
 ```
 
@@ -1694,7 +1694,7 @@ the configured remote run root, prints selected `scontrol show job -dd` details
 including `TresPerNode`, syncs only `summary.csv` files when present, and then
 runs the local perturbation and readiness gates. For the live internal cluster
 workspace, set `REMOTE_RUN_ROOT=/work/<user>/bgr/runs`. The 2026-06-05
-14:09 PDT / 22:09 BST helper poll still showed all jobs pending and both
+14:34 PDT / 22:34 BST helper poll still showed all jobs pending and both
 expected proximal `summary.csv` files missing.
 
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
