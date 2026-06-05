@@ -147,6 +147,18 @@ Do not add another result to the manuscript if it has any of these properties:
      split, below the pre-set 3/4 wins and +0.01 mean-delta gates. Keep Acrobot
      out of the paper unless a new fixed protocol creates a visible effect
      before method comparison.
+   - Pendulum-v1 recovery replay now has an internal diagnostic at
+     `tools/pendulum_recovery_probe.py`. The pre-promotion protocol uses
+     canonical Pendulum-v1 dynamics implemented locally, near-upright restart
+     states, adverse angle/velocity perturbations, and fixed PD-controller
+     imitation. A 4-seed diagnostic is negative and mostly non-informative at
+     the endpoint: final RAUC is 0.0075 for failure-only, 0.0036 for BGR,
+     0.0007 for uniform, 0.0004 for BGR-Coverage, and 0.0000 for fixed,
+     TD-loss, and BGR-uniform-radius replay. The promotion checker rejects BGR
+     because the uniform gap is only +0.0029 with a 2/1/1 paired split, BGR
+     loses to failure-only, and median r80 saturates at 1.0 for both BGR and
+     uniform. Keep Pendulum out of the paper unless a new fixed protocol first
+     avoids endpoint collapse and saturated radius metrics.
 3. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.
@@ -232,6 +244,8 @@ Do not add another result to the manuscript if it has any of these properties:
   BGR below uniform and all strong baselines.
 - Treat the Acrobot probe as an internal negative unless a new protocol first
   creates a visible BGR or BGR-Coverage effect over uniform before scale-up.
+- Treat the Pendulum probe as an internal negative unless a new protocol first
+  avoids endpoint collapse and saturated median-r80 metrics.
 - Treat the MountainCar probe as an internal negative unless a new protocol is
   pre-registered before rerunning; do not tune it into the paper post hoc.
 - Treat the CartPole probe as an internal negative unless a new protocol first

@@ -174,6 +174,23 @@ with a 2/1/1 paired split, below the pre-set 3/4 wins and +0.01 mean-delta
 thresholds. Keep Acrobot out of the paper unless a new fixed protocol first
 produces a visible boundary-radius effect.
 
+## Internal Pendulum Diagnostic
+
+`results/pendulum_recovery_probe_4seed_v1/summary.csv` is a 4-seed
+pre-promotion diagnostic on canonical Pendulum-v1 dynamics implemented locally
+without adding a Gym dependency. Replay states are near-upright angle/velocity
+states, perturbations move starts toward a high-angle adverse anchor, and
+training imitates a fixed PD controller. The diagnostic is not promotable:
+endpoint recovery is near zero for all methods and median r80 saturates at 1.0.
+Final RAUC is 0.0075 for failure-only, 0.0036 for BGR, 0.0007 for uniform,
+0.0004 for BGR-Coverage, and 0.0000 for fixed-radius, TD-loss, and
+BGR-uniform-radius replay. The promotion checker rejects default BGR because
+it has only a +0.0029 RAUC gap over uniform with a 2/1/1 paired split, loses to
+failure-only replay, and has saturated median r80 against uniform. It rejects
+BGR-Coverage because it trails uniform and failure-only. Keep Pendulum out of
+the paper unless a new fixed protocol first avoids endpoint collapse and
+non-informative radius saturation.
+
 ## Packaged OpenVLA Action/TFDS Validation
 
 `results/openvla_action_tfds_validation_v1/summary.json` is a compact,
