@@ -49,6 +49,9 @@ OpenVLA/LIBERO improvement over both matched random and the official checkpoint.
   BGR-family RAUC lead, but it is not paper evidence yet: BGR-Coverage clears
   the 4-seed RAUC/baseline screen only if radius saturation is waived, and the
   strict gate rejects it because median r80 saturates at 1.0.
+- The MiniGrid absolute-r10 follow-up also stays internal: the RAUC lead
+  persists, but `final_abs_r10` is 0.0 for every method, so the auxiliary
+  radius metric floor-saturates.
 - The next acceptance-moving result must be either a fixed-protocol positive
   pre-existing benchmark or a genuinely different preregistered learned-policy
   intervention that can beat both official and matched random.

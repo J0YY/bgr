@@ -162,6 +162,20 @@ waived, BGR-Coverage clears the 4-seed RAUC/baseline screen. Do not promote or
 scale this exact protocol until a preregistered follow-up defines a
 non-saturated radius check or otherwise resolves the median-r80 issue.
 
+`results/minigrid_fourrooms_recovery_probe_absr10_4seed_v1/summary.csv` is the
+preregistered follow-up that keeps the same official package versions, task,
+method set, seeds, replay states, perturbation family, and training budget, and
+adds `final_abs_r10`, the median largest perturbation radius whose absolute
+recovery probability is at least 0.10. The RAUC ordering is unchanged, with
+BGR-Coverage retaining the 0.1426 vs. 0.0351 mean RAUC lead over uniform and
+remaining above fixed-radius, failure-only, TD-loss, and the
+state-priority/uniform-radius ablation. However, `final_abs_r10` is 0.0 for
+every method, so this follow-up replaces ceiling saturation with floor
+saturation rather than resolving the radius-metric weakness. The promotion
+checker now rejects both ceiling- and floor-saturated radius metrics, and it
+rejects this follow-up accordingly. Do not scale MiniGrid under this exact
+protocol.
+
 ## Internal FourRooms Diagnostic
 
 `results/fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed

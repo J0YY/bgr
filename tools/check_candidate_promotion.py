@@ -80,6 +80,7 @@ def main() -> None:
     parser.add_argument("--min-seeds", type=int, default=30)
     parser.add_argument("--min-wins", type=int, default=24)
     parser.add_argument("--min-delta", type=float, default=0.01)
+    parser.add_argument("--radius-floor-saturation-threshold", type=float, default=0.01)
     parser.add_argument("--radius-saturation-threshold", type=float, default=0.99)
     parser.add_argument(
         "--allow-radius-saturation",
@@ -132,6 +133,16 @@ def main() -> None:
         ):
             failures.append(
                 f"{args.radius_metric} is saturated for both {args.treatment} and {args.uniform} "
+                f"(means {radius_uniform.treatment_mean:.4f}, {radius_uniform.baseline_mean:.4f})"
+            )
+        if (
+            not args.allow_radius_saturation
+            and radius_uniform.treatment_mean <= args.radius_floor_saturation_threshold
+            and radius_uniform.baseline_mean <= args.radius_floor_saturation_threshold
+            and abs(radius_uniform.mean_delta) < 1e-12
+        ):
+            failures.append(
+                f"{args.radius_metric} is floor-saturated for both {args.treatment} and {args.uniform} "
                 f"(means {radius_uniform.treatment_mean:.4f}, {radius_uniform.baseline_mean:.4f})"
             )
 

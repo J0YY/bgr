@@ -235,6 +235,14 @@ package and recording its version before any result is run.
      30-seed scale-up if BGR-Coverage keeps the RAUC/baseline lead and
      `final_abs_r10` is not saturated for both BGR-Coverage and uniform and
      does not contradict the RAUC effect.
+     The completed follow-up keeps the RAUC lead but fails that radius gate:
+     `final_abs_r10` is 0.0 for every method, so the radius evidence is
+     floor-saturated. `tools/check_candidate_promotion.py` now rejects
+     floor-saturated radius metrics as well as ceiling-saturated ones. MiniGrid
+     remains the most promising independent benchmark path because the
+     BGR-Coverage RAUC effect is visible on an external package task, but the
+     next protocol must create replay states with nonzero absolute recovery at
+     small radii before any 30-seed scale-up.
 4. PointMaze/D4RL-style continuous navigation only if a real installed benchmark
    package is available. This is the best mechanistic fit because resettable
    continuous states, corridor bottlenecks, and distance-to-goal perturbations
@@ -340,6 +348,10 @@ package and recording its version before any result is run.
   only after preregistering a radius check that does not saturate when clean
   success is low. The current 4-seed BGR-Coverage RAUC lead is not yet a paper
   claim.
+- The first MiniGrid absolute-radius follow-up failed because `final_abs_r10`
+  floor-saturates at 0.0 for every method. Do not scale MiniGrid until the
+  replay-state selection or training budget yields a non-saturated absolute
+  radius check before method comparison.
 - Keep scratch negative runs out of the anonymous package unless they are being
   used as explicit limitations.
 - Do not spend more robotics compute on the current OpenVLA recipe family unless
