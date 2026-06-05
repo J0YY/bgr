@@ -215,6 +215,17 @@ package and recording its version before any result is run.
      one-method check under those defaults gave final RAUC 0.0666 and clean
      success 0.0938, but still saturated relative median r80; therefore any
      saturation or contradiction in the full 4-seed screen blocks promotion.
+     The completed 4-seed screen is the first external-package diagnostic with
+     a meaningful BGR-family RAUC lead: final RAUC is 0.1426 for BGR-Coverage,
+     0.1355 for BGR-uniform-radius, 0.0992 for BGR, 0.0962 for failure-only,
+     0.0863 for TD-loss, 0.0351 for uniform, and 0.0220 for fixed-radius
+     replay. The strict promotion checker rejects default BGR because it loses
+     to the state-priority/uniform-radius ablation, and rejects BGR-Coverage
+     because median r80 saturates at 1.0 for both BGR-Coverage and uniform.
+     With radius saturation explicitly waived, BGR-Coverage clears the 4-seed
+     RAUC/baseline screen. Do not add this result to the paper or scale the same
+     protocol to 30 seeds until a preregistered follow-up resolves the
+     non-saturated radius-metric requirement.
 4. PointMaze/D4RL-style continuous navigation only if a real installed benchmark
    package is available. This is the best mechanistic fit because resettable
    continuous states, corridor bottlenecks, and distance-to-goal perturbations
@@ -316,6 +327,10 @@ package and recording its version before any result is run.
 - Do not add another local classic-control/tabular probe after FourRooms. The
   next benchmark attempt must use an external package such as MiniGrid or
   PointMaze/D4RL, with the package/version recorded before any result is run.
+- Treat official MiniGrid-FourRooms as the next highest-leverage follow-up, but
+  only after preregistering a radius check that does not saturate when clean
+  success is low. The current 4-seed BGR-Coverage RAUC lead is not yet a paper
+  claim.
 - Keep scratch negative runs out of the anonymous package unless they are being
   used as explicit limitations.
 - Do not spend more robotics compute on the current OpenVLA recipe family unless

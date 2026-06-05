@@ -139,6 +139,29 @@ Older troubleshooting sections may retain labels such as Queued command to
 record original Slurm submissions; those labels are provenance, not active
 experiment status.
 
+## Internal Official MiniGrid-FourRooms Diagnostic
+
+`results/minigrid_fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed
+pre-promotion screen using the external MiniGrid package rather than a local
+environment clone. It ran in an isolated virtualenv with package versions
+recorded in
+`results/minigrid_fourrooms_recovery_probe_4seed_v1/package_versions.json`
+(`minigrid==3.1.0`, `gymnasium==1.3.0`). The protocol uses
+`gym.make("MiniGrid-FourRooms-v0")`, package-generated layouts/dynamics,
+resettable package env state, bottleneck-adjacent replay states, and Manhattan
+position restarts with direction preserved.
+
+The result is promising but not paper-promotable under the preregistered gate.
+Final RAUC is 0.1426 for BGR-Coverage, 0.1355 for BGR-uniform-radius, 0.0992
+for BGR, 0.0962 for failure-only, 0.0863 for TD-loss, 0.0351 for uniform, and
+0.0220 for fixed-radius replay. The promotion checker rejects default BGR
+because it loses to the state-priority/uniform-radius ablation. It rejects
+BGR-Coverage under the strict preregistered gate only because median r80 is
+saturated at 1.0 for BGR-Coverage and uniform; with radius saturation explicitly
+waived, BGR-Coverage clears the 4-seed RAUC/baseline screen. Do not promote or
+scale this exact protocol until a preregistered follow-up defines a
+non-saturated radius check or otherwise resolves the median-r80 issue.
+
 ## Internal FourRooms Diagnostic
 
 `results/fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed

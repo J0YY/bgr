@@ -45,6 +45,10 @@ OpenVLA/LIBERO improvement over both matched random and the official checkpoint.
 - Do not run another local classic-control/tabular probe after FourRooms; the
   next acceptance-moving benchmark attempt needs an external package such as
   MiniGrid or PointMaze/D4RL with package version recorded before results.
+- Official MiniGrid-FourRooms is the first external-package screen with a
+  BGR-family RAUC lead, but it is not paper evidence yet: BGR-Coverage clears
+  the 4-seed RAUC/baseline screen only if radius saturation is waived, and the
+  strict gate rejects it because median r80 saturates at 1.0.
 - The next acceptance-moving result must be either a fixed-protocol positive
   pre-existing benchmark or a genuinely different preregistered learned-policy
   intervention that can beat both official and matched random.
