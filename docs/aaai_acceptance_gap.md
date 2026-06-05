@@ -579,6 +579,14 @@ package and recording its version before any result is run.
   and matched random is 198/200. The gate remains incomplete until occlusion
   and shift complete, and the partial aggregate remains non-promotable because
   BGR still trails matched random by one episode.
+  Occlusion then completed as BGR 75/100, official 74/100, and matched random
+  75/100. BGR and official shift also completed as 95/100 and 98/100,
+  respectively, while matched-random shift was still incomplete. At this point
+  promotion is already impossible even before the final random-shift row:
+  BGR's four completed non-identity rows total 367/400 and the official
+  checkpoint's four completed non-identity rows also total 367/400, far below
+  the preregistered requirement that BGR beat the official checkpoint by at
+  least 10/400 episodes and 0.02 absolute success.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

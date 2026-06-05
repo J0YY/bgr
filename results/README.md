@@ -1330,6 +1330,16 @@ brightness is therefore BGR 197/200, official 195/200, and matched random
 occlusion and shift are still required for the fixed 400-episode non-identity
 gate, and the completed subtotal still trails matched random by one episode.
 
+Occlusion then completed as BGR 75/100, official 74/100, and matched random
+75/100. BGR and official shift also completed as 95/100 and 98/100,
+respectively, while matched-random shift remained incomplete at the time of
+this ledger update. The promotion gate is already impossible before the final
+random-shift row: BGR's completed non-identity total is 367/400, tied with the
+official checkpoint's 367/400, so BGR cannot satisfy the preregistered
++10/400 episode and +0.02 absolute-success margins over the official
+checkpoint. The paper should therefore continue to treat this intervention as a
+negative OpenVLA/LIBERO audit, not a robotics fine-tuning result.
+
 Promotion gate: weighted BGR must beat weighted matched random and the official
 checkpoint on the fixed non-identity perturbation total by at least 10/400
 episodes and at least 0.02 absolute success rate, while not trailing clean
