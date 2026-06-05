@@ -528,6 +528,21 @@ package and recording its version before any result is run.
   baselines but lose to uniform and the state-priority/uniform-radius ablation.
   Absolute-radius checks also contradict promotion: final_abs_r10 is 0.5047
   for BGR-Coverage and 0.4187 for BGR versus 0.6352 for uniform.
+- The next preregistered external-package screen is official
+  MiniGrid-LavaGapS7, using the same package-backed lava probe after extending
+  `tools/minigrid_lavacrossing_recovery_probe.py` to allow LavaGap env IDs.
+  The environment is `gym.make("MiniGrid-LavaGapS7-v0")` from
+  `minigrid==3.1.0`, a fixed package geometry with a single gap through a lava
+  barrier. This changes the official task geometry, not the BGR sampler or
+  metric. Baseline-only calibration before method comparison rejected
+  LavaGapS5/S6 and default S7 budgets because uniform saturated final RAUC and
+  radius metrics. The fixed hard-budget S7 calibration over uniform-only seeds
+  0--3 gives final clean 0.8917, final RAUC 0.4461, median r80 0.2453, and
+  absolute r10 0.6336. The preregistered 4-seed command is:
+  `PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_lavacrossing_recovery_probe.py --out results/minigrid_lavagap_s7_recovery_probe_4seed_v1 --env-id MiniGrid-LavaGapS7-v0 --methods uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr --replay-selection spread --replay-distance-min 2 --replay-distance-max 8 --iterations 60 --eval-every 20 --train-batch-size 5 --q-init-blend 0.015 --q-init-noise 0.08 --learning-rate 0.25 --epsilon 0.10 --rollout-horizon 40 --max-radius 6 --absolute-radius-alpha 0.10`.
+  Do not scale it unless BGR or BGR-Coverage beats uniform, fixed-radius,
+  failure-only, TD-loss, and BGR-uniform-radius on final RAUC with a visible
+  gap, and median r80 plus absolute r10 do not contradict the RAUC effect.
 - Keep scratch negative runs out of the anonymous package unless they are being
   used as explicit limitations.
 - Do not spend more robotics compute on the current OpenVLA recipe family unless

@@ -542,6 +542,9 @@ def build_parser() -> argparse.ArgumentParser:
         "--env-id",
         default="MiniGrid-LavaCrossingS9N2-v0",
         choices=[
+            "MiniGrid-LavaGapS5-v0",
+            "MiniGrid-LavaGapS6-v0",
+            "MiniGrid-LavaGapS7-v0",
             "MiniGrid-LavaCrossingS9N1-v0",
             "MiniGrid-LavaCrossingS9N2-v0",
             "MiniGrid-LavaCrossingS9N3-v0",

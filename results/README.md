@@ -350,6 +350,22 @@ to uniform (-0.2697 mean RAUC) and all strong baselines. Absolute-radius checks
 also contradict promotion: final_abs_r10 is 0.5916 for BGR-Coverage and 0.4981
 for BGR versus 0.7484 for uniform. Do not scale this protocol.
 
+The next official MiniGrid external-package screen is MiniGrid-LavaGapS7. This
+uses the same package-backed lava probe and extends only the allowed `--env-id`
+choices in `tools/minigrid_lavacrossing_recovery_probe.py`; the environment is
+`gym.make("MiniGrid-LavaGapS7-v0")` from `minigrid==3.1.0`. LavaGap is a
+different fixed package geometry from LavaCrossing, with a single gap through a
+lava barrier. Baseline-only calibration before method comparison rejected
+LavaGapS5/S6 and default S7 budgets because uniform saturated final RAUC and
+radius metrics. The fixed S7 hard budget was chosen from uniform-only
+calibration: over seeds 0--3, uniform gives final clean 0.8917, final RAUC
+0.4461, median r80 0.2453, and absolute r10 0.6336. The preregistered 4-seed
+command is:
+`PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_lavacrossing_recovery_probe.py --out results/minigrid_lavagap_s7_recovery_probe_4seed_v1 --env-id MiniGrid-LavaGapS7-v0 --methods uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr --replay-selection spread --replay-distance-min 2 --replay-distance-max 8 --iterations 60 --eval-every 20 --train-batch-size 5 --q-init-blend 0.015 --q-init-noise 0.08 --learning-rate 0.25 --epsilon 0.10 --rollout-horizon 40 --max-radius 6 --absolute-radius-alpha 0.10`.
+Do not scale it unless BGR or BGR-Coverage beats uniform, fixed-radius,
+failure-only, TD-loss, and BGR-uniform-radius on final RAUC with a visible gap,
+and median r80 plus absolute r10 do not contradict the RAUC effect.
+
 ## Internal Official MiniGrid-LavaCrossing Diagnostic
 
 The next preregistered external-package screen is official
