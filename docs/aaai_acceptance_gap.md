@@ -92,6 +92,18 @@ Do not add another result to the manuscript if it has any of these properties:
 2. A faster discrete control benchmark with exact reset states and a
    pre-registered perturbation family. CliffWalking and FrozenLake currently
    look negative for BGR under the tested protocols.
+   - FourRooms recovery replay is the next fixed pre-promotion diagnostic at
+     `tools/fourrooms_recovery_probe.py`. It uses a canonical 11x11 FourRooms
+     grid with cross walls and four doorways, deterministic shortest-path
+     dynamics, exact resettable doorway-adjacent replay states, and Manhattan
+     restart perturbations that can move states across room bottlenecks. The
+     initial screen is limited to 4 paired seeds and the same method set as the
+     other standard-environment probes:
+     `uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr`.
+     It can only scale to 30 seeds if BGR or BGR-Coverage first clears the
+     pre-promotion checker against uniform, fixed-radius, failure-only,
+     TD-loss, and the state-priority/uniform-radius ablation with a visible
+     final-RAUC effect and non-saturated median-r80 evidence.
    - CliffWalking-v0 recovery replay now has an internal diagnostic at
      `tools/cliffwalking_recovery_probe.py`. The pre-promotion protocol uses
      canonical 4x12 CliffWalking dynamics, exact resettable safe-corridor
