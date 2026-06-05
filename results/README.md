@@ -157,6 +157,23 @@ state-priority-only ablation in this harder variant but loses to uniform and all
 strong baselines, so CliffWalking remains an internal negative
 independent-benchmark probe rather than paper evidence.
 
+## Internal Acrobot Diagnostic
+
+`results/acrobot_recovery_probe_4seed_v1/summary.csv` is a 4-seed
+pre-promotion diagnostic on canonical Acrobot-v1 dynamics implemented locally
+without adding a Gym dependency. Replay states are near-swing-up continuous
+states, perturbations interpolate toward the hanging state with bounded restart
+noise, and all methods share the same coarse value-table initialization,
+rollout horizon, and evaluation grid. The diagnostic is non-saturated but not
+promotable. Final RAUC is 0.1471 for uniform, 0.1488 for BGR-Coverage, 0.1455
+for BGR, 0.1383 for failure-only, 0.1305 for BGR-uniform-radius, 0.1292 for
+TD-loss, and 0.1279 for fixed-radius replay. The promotion checker rejects
+default BGR because it loses to uniform on mean RAUC (-0.0016, 2/2 paired
+split). It also rejects BGR-Coverage because the uniform gap is only +0.0016
+with a 2/1/1 paired split, below the pre-set 3/4 wins and +0.01 mean-delta
+thresholds. Keep Acrobot out of the paper unless a new fixed protocol first
+produces a visible boundary-radius effect.
+
 ## Packaged OpenVLA Action/TFDS Validation
 
 `results/openvla_action_tfds_validation_v1/summary.json` is a compact,

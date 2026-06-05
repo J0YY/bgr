@@ -26,8 +26,11 @@ OpenVLA/LIBERO improvement over both matched random and the official checkpoint.
 
 ## Immediate Paper Policy
 
-- Do not promote CliffWalking, Taxi, MountainCar, CartPole, FrozenLake, or
-  OpenVLA adaptation as positive evidence under current results.
+- Do not promote Acrobot, CliffWalking, Taxi, MountainCar, CartPole, FrozenLake,
+  or OpenVLA adaptation as positive evidence under current results.
+- Keep Acrobot internal: the 4-seed diagnostic is non-saturated, but default
+  BGR trails uniform and BGR-Coverage has only a +0.0016 RAUC edge with a
+  2/1/1 paired split.
 - Keep CliffWalking in limitations only: default protocol saturates, and the
   harder undertrained protocol has BGR below uniform and all strong baselines.
 - Do not add another authored toy benchmark unless it replaces, not expands,

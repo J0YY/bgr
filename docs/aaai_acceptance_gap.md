@@ -134,6 +134,19 @@ Do not add another result to the manuscript if it has any of these properties:
      and has a lower median critical radius than uniform. Keep CartPole out of
      the paper unless a pre-registered non-saturated protocol creates a
      meaningful recovery-boundary metric before method comparison.
+   - Acrobot-v1 recovery replay now has an internal diagnostic at
+     `tools/acrobot_recovery_probe.py`. The pre-promotion protocol uses
+     canonical Acrobot-v1 dynamics implemented locally, near-swing-up restart
+     states, and adverse perturbations toward the hanging state. A 4-seed
+     diagnostic is non-saturated but negative for promotion: final RAUC is
+     0.1488 for BGR-Coverage, 0.1471 for uniform, 0.1455 for BGR, 0.1383 for
+     failure-only, 0.1305 for BGR-uniform-radius, 0.1292 for TD-loss, and
+     0.1279 for fixed-radius replay. The promotion checker rejects BGR because
+     it loses to uniform on mean RAUC (-0.0016, 2/2 paired split), and rejects
+     BGR-Coverage because the uniform gap is only +0.0016 with a 2/1/1 paired
+     split, below the pre-set 3/4 wins and +0.01 mean-delta gates. Keep Acrobot
+     out of the paper unless a new fixed protocol creates a visible effect
+     before method comparison.
 3. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.
@@ -217,6 +230,8 @@ Do not add another result to the manuscript if it has any of these properties:
 - Treat the CliffWalking probe as an internal negative and paper limitation:
   the default protocol saturates, while the harder undertrained protocol has
   BGR below uniform and all strong baselines.
+- Treat the Acrobot probe as an internal negative unless a new protocol first
+  creates a visible BGR or BGR-Coverage effect over uniform before scale-up.
 - Treat the MountainCar probe as an internal negative unless a new protocol is
   pre-registered before rerunning; do not tune it into the paper post hoc.
 - Treat the CartPole probe as an internal negative unless a new protocol first
