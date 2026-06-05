@@ -523,7 +523,8 @@ package and recording its version before any result is run.
   10/400 episodes and at least 0.02 absolute success rate, while not trailing
   clean identity by more than 1/100. If prep metadata shows unmatched
   BGR/random perturbation-family counts after weighting, the run is an audit
-  only and cannot be promoted.
+  only and cannot be promoted. The narrow promotion gate is now checked by:
+  `PYTHONPATH=src:. python3 scripts/check_openvla_perturb_gate.py --perturb-summary <perturb_summary.csv> --clean-summary <clean_summary.csv>`.
   The weighted prep job was submitted after the preregistration commit on
   2026-06-05 as Slurm job `766799` and completed successfully with exit `0:0`
   after 21m30s. Prep metadata validates the intended perturbation weighting:

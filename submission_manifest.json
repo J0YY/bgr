@@ -731,14 +731,19 @@
       "size_bytes": 35107
     },
     {
+      "path": "scripts/check_openvla_perturb_gate.py",
+      "sha256": "e13abb756e0f759c945668c6932aaca902d147b1ba4d42a0819dadec7682ca4a",
+      "size_bytes": 6960
+    },
+    {
       "path": "scripts/check_paper_claims.py",
       "sha256": "5c2f02dec0376ffb361395af20d880ab2e3db084468f7a543fc9177b89ecc87e",
       "size_bytes": 81845
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "6f96e08b76d49b624cfa71ad1188ae6f9a2d9d4c56dc5bd5a7353f687223563d",
-      "size_bytes": 229562
+      "sha256": "063335fe1966ad451d4c703bad51a1adc0e9c8ac72ad354eef0e96c3ed59ce48",
+      "size_bytes": 229703
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1024,6 +1029,11 @@
       "path": "tests/test_analyze_significance.py",
       "sha256": "56594406a331412e2fd30ecb9c014fa62ce9dbb6f7749b7ac70220ba5bda2b84",
       "size_bytes": 37326
+    },
+    {
+      "path": "tests/test_check_openvla_perturb_gate.py",
+      "sha256": "c86ef765129d50661e2c9ef7fd0ef9da816ebabc61c8f629a8cc4cea8cc9d99b",
+      "size_bytes": 3472
     },
     {
       "path": "tests/test_check_paper_claims.py",
