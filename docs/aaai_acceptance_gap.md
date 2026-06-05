@@ -198,6 +198,23 @@ package and recording its version before any result is run.
    If the package is not installed, do not substitute another local gridworld;
    that would be another authored diagnostic, not the independent benchmark win
    reviewers are asking for.
+   - Official MiniGrid-FourRooms is now the next fixed 4-seed screen at
+     `tools/minigrid_fourrooms_recovery_probe.py`. The package was installed in
+     an isolated `/tmp/bgr_minigrid_venv` environment as `minigrid==3.1.0` with
+     `gymnasium==1.3.0` on 2026-06-05, leaving repo runtime dependencies
+     unchanged unless the result becomes promotable. The probe uses
+     `gym.make("MiniGrid-FourRooms-v0")`, package-generated layouts/dynamics,
+     resettable package env state, bottleneck-adjacent replay states, and
+     Manhattan position restarts with direction preserved. The preregistered
+     screen command is:
+     `PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_fourrooms_recovery_probe.py --out results/minigrid_fourrooms_recovery_probe_4seed_v1`.
+     A one-method calibration before preregistration showed that the original
+     default budget saturated uniform final RAUC (0.9040) and median r80, so the
+     fixed screen uses the script defaults `--iterations 80 --eval-every 20
+     --train-batch-size 8 --q-init-blend 0.03 --rollout-horizon 50`. A uniform
+     one-method check under those defaults gave final RAUC 0.0666 and clean
+     success 0.0938, but still saturated relative median r80; therefore any
+     saturation or contradiction in the full 4-seed screen blocks promotion.
 4. PointMaze/D4RL-style continuous navigation only if a real installed benchmark
    package is available. This is the best mechanistic fit because resettable
    continuous states, corridor bottlenecks, and distance-to-goal perturbations
