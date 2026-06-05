@@ -173,6 +173,17 @@ default BGR and BGR-Coverage because neither beats uniform on mean final RAUC,
 both lose to failure-only on all four paired seeds, and both have lower
 absolute r20 than uniform. Do not scale this protocol.
 
+The next preregistered algorithmic follow-up is BGR-Guarded, implemented as
+`bgr_guarded` in `tools/pointmaze_recovery_probe.py`. It targets the observed
+PointMaze failure mode where boundary replay collapses clean recovery while the
+failure-only baseline preserves it: updates mix BGR boundary replay with the
+same failure-mining candidate rule used by the explicit baseline
+(`--guarded-failure-mix 0.55`) and apply clean replay on the selected state
+with probability `--guarded-clean-mix 0.35`. It is only promotable if it beats
+the original failure-only baseline, not merely old BGR. The preregistered
+4-seed follow-up command is:
+`PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/pointmaze_recovery_probe.py --out results/pointmaze_umaze_guarded_probe_4seed_v1 --env-id PointMaze_UMaze-v3 --methods uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr,bgr_guarded --max-steps 80 --q-init-blend 1.0 --q-init-noise 0.02 --perturb-cells 3 --replay-distance-min 1 --replay-distance-max 3 --iterations 60`.
+
 ## Internal Official MiniGrid-FourRooms Diagnostic
 
 `results/minigrid_fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed

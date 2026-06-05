@@ -360,6 +360,8 @@ def run_method(args: argparse.Namespace, method: str, seed: int) -> PointMazePro
         for _ in range(args.train_batch_size):
             replay_idx, sigma = sample_training_pair(method, bench, records, scorer, rng, args, step)
             bench.train_step(replay_idx, sigma, rng)
+            if method == "bgr_guarded" and rng.random() < args.guarded_clean_mix:
+                bench.train_step(replay_idx, 0.0, rng)
             if method.startswith("bgr"):
                 records[replay_idx].add_observation(sigma, bench.rollout(replay_idx, sigma, rng))
                 records[replay_idx].replay_count += 1
@@ -484,6 +486,12 @@ def sample_training_pair(
         scores = [bench.loss_proxy(int(candidate), float(sigma), rng) for candidate, sigma in zip(candidates, sigmas, strict=True)]
         idx = int(np.argmax(scores))
         return int(candidates[idx]), float(sigmas[idx])
+    if method == "bgr_guarded" and rng.random() < args.guarded_failure_mix:
+        candidates = rng.choice(len(records), size=min(args.baseline_candidates, len(records)), replace=False)
+        sigmas = rng.uniform(0.0, 1.0, size=len(candidates))
+        scores = [1.0 - bench.success_prob(int(candidate), float(sigma)) for candidate, sigma in zip(candidates, sigmas, strict=True)]
+        idx = int(np.argmax(scores))
+        return int(candidates[idx]), float(sigmas[idx])
     if method.startswith("bgr"):
         priorities = np.array([scorer.score(record, step) for record in records], dtype=float)
         probs = mixed_priority_probs(priorities, temperature=args.priority_temperature, uniform_mix=args.uniform_mix)
@@ -542,6 +550,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--refresh-jitter", type=float, default=0.08)
     parser.add_argument("--radius-noise", type=float, default=0.08)
     parser.add_argument("--radius-uniform-mix", type=float, default=0.25)
+    parser.add_argument("--guarded-failure-mix", type=float, default=0.55)
+    parser.add_argument("--guarded-clean-mix", type=float, default=0.35)
     parser.add_argument("--priority-temperature", type=float, default=0.8)
     parser.add_argument("--uniform-mix", type=float, default=0.10)
     return parser
