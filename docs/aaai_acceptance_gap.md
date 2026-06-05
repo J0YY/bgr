@@ -691,6 +691,17 @@ package and recording its version before any result is run.
   least 10/400 non-identity perturbation episodes and at least 0.02 absolute
   success, while clean identity is no worse than -1/100. Anything weaker stays
   an audit.
+  Submitted the fixed adaptation chain on 2026-06-05 13:18 PDT / 21:18 BST
+  after verifying the `/work/joy` TFDS roots, OpenVLA-OFT checkout, Python
+  environment, `torchrun`, and official statistics file on `athena`: BGR
+  train/merge/clean-eval jobs are `767128`/`767129`/`767130`, and matched-random
+  train/merge/clean-eval jobs are `767131`/`767132`/`767133`. The fixed
+  perturbation evals were then submitted with BGR dependency `afterok:767129`
+  and random dependency `afterok:767132`: official identity/blur/brightness/
+  occlusion/shift jobs `767134`-`767138`, BGR jobs `767139`-`767143`, and
+  matched-random jobs `767144`-`767148`. Slurm immediately reported all jobs
+  pending; BGR/random perturb rows were dependency-held, and official
+  perturb rows serialized identity through shift.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

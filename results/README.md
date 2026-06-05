@@ -131,7 +131,7 @@ Packaged OpenVLA audit artifacts are:
   weighted p2048unique perturbation audit rows available before matched-random
   shift completed; this artifact already proves the official-checkpoint
   promotion gate cannot pass because BGR and official tie at 367/400
-  non-identity successes. A live poll on 2026-06-05 12:27 PDT still had
+  non-identity successes. A live poll on 2026-06-05 13:06 PDT still had
   matched-random shift job `766831` pending for unavailable GPU nodes, so the
   missing row is ledger completion only.
 
@@ -1631,6 +1631,32 @@ and the official checkpoint on the fixed non-identity perturbation total by at
 least 10/400 episodes and at least 0.02 absolute success rate, while not
 trailing clean identity by more than 1/100. A tie, one-episode edge, or
 official/random lead remains a negative audit.
+
+Launched on 2026-06-05 13:18 PDT / 21:18 BST after verifying the remote
+`/work/joy` TFDS roots, OpenVLA-OFT checkout, Python environment, `torchrun`,
+and official statistics file on `athena`.
+
+Adaptation/merge/clean-eval jobs:
+
+```text
+BGR:    train=767128 merge=767129 clean_eval=767130
+random: train=767131 merge=767132 clean_eval=767133
+```
+
+Fixed perturbation eval jobs:
+
+```text
+official: identity=767134 blur=767135 brightness=767136 occlusion=767137 shift=767138
+BGR:      identity=767139 blur=767140 brightness=767141 occlusion=767142 shift=767143
+random:   identity=767144 blur=767145 brightness=767146 occlusion=767147 shift=767148
+```
+
+The BGR perturbation rows were submitted with dependency `afterok:767129`, and
+the matched-random perturbation rows were submitted with dependency
+`afterok:767132`; each method serializes identity through shift. The immediate
+Slurm audit showed all rows pending, with BGR/random perturb rows held on
+dependencies and official perturb rows serialized by method. No result is
+available yet, and this remains an audit until the fixed gate above is checked.
 
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 

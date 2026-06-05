@@ -95,7 +95,14 @@ Treat the following as the current paper-weakness backlog:
   from their resumed official-checkpoint values. It is promotable only if BGR
   beats both proximal-anchor matched random and the official checkpoint by the
   fixed +10/400 and +0.02 non-identity perturbation gate while preserving clean
-  identity within -1/100.
+  identity within -1/100. The adaptation chain was submitted on 2026-06-05
+  13:18 PDT / 21:18 BST as BGR train/merge/clean-eval jobs
+  `767128`/`767129`/`767130` and random train/merge/clean-eval jobs
+  `767131`/`767132`/`767133`. The fixed perturbation evals were submitted with
+  BGR dependency `afterok:767129` and random dependency `afterok:767132` as
+  official jobs `767134`-`767138`, BGR jobs `767139`-`767143`, and random jobs
+  `767144`-`767148`. At submission, all were pending; BGR/random perturb jobs
+  were dependency-held, while official perturb jobs serialized by method.
 
 ## Paper Workflow
 
