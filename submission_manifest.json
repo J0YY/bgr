@@ -757,8 +757,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "5bf7142e9eb028c46f7c81c0e4ccf7dd5575980c1e1aa799f84633d8b94cc561",
-      "size_bytes": 233895
+      "sha256": "6e89789c6b1aaa0c85dfd1fc2986df3b07a3afe04d003b1cd1fbdc650ac9b0ab",
+      "size_bytes": 234667
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1082,8 +1082,8 @@
     },
     {
       "path": "tests/test_check_submission_package.py",
-      "sha256": "4b29561230fdb83f328b72068e428abb0e62e1b137374649920317594a9e95e5",
-      "size_bytes": 326601
+      "sha256": "92f04238709ea39069cd2a06f20a763ebc20b09a868dea9788c65512da6e3250",
+      "size_bytes": 328868
     },
     {
       "path": "tests/test_combine_openvla_oft_examples.py",

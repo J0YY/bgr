@@ -3098,6 +3098,10 @@ def check_generated_result_tables(root: Path) -> list[str]:
         "failure_only_median_r80",
         "fixed_median_r80",
         "plr_loss_median_r80",
+        "uniform_r80_q25",
+        "uniform_r80_q75",
+        "bgr_r80_q25",
+        "bgr_r80_q75",
         "grid_margin_rauc_delta",
         "grid_margin_median_r80_delta",
         "robot_suffix_rauc_delta",
@@ -3117,6 +3121,19 @@ def check_generated_result_tables(root: Path) -> list[str]:
         raise ValueError(
             "paper/figures/boundary_intuition_stats.csv: expected seed-0 boundary figure to show "
             "BGR above uniform and strong baselines"
+        )
+    if not (
+        boundary_metrics["uniform_r80_q25"]
+        <= boundary_metrics["uniform_median_r80"]
+        <= boundary_metrics["uniform_r80_q75"]
+        and boundary_metrics["bgr_r80_q25"]
+        <= boundary_metrics["bgr_median_r80"]
+        <= boundary_metrics["bgr_r80_q75"]
+        and boundary_metrics["bgr_r80_q75"] > boundary_metrics["uniform_r80_q75"]
+    ):
+        raise ValueError(
+            "paper/figures/boundary_intuition_stats.csv: expected critical-radius distribution "
+            "quantiles to bracket BGR/uniform medians and show the seed-0 BGR upper-tail shift"
         )
     if not (
         boundary_metrics["grid_margin_rauc_delta"] > 0.03
@@ -4122,6 +4139,7 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "matched action/TFDS construction",
         "Geometric intuition for BGR",
         "final recovery curves for BGR, uniform, failure-only, fixed-radius, and PLR-loss replay",
+        "inset showing BGR/uniform critical-radius distributions",
         "We treat exact paired sign tests as consistency checks over shared seeds, not as substitutes for effect size",
         "The following local calculation is a design rationale for the radius sampler",
         "not a convergence result, global robustness theorem, or margin-expansion guarantee",

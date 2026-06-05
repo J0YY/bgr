@@ -172,6 +172,10 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             "failure_only_median_r80,0.300\n"
             "fixed_median_r80,0.200\n"
             "plr_loss_median_r80,0.201\n"
+            "uniform_r80_q25,0.303\n"
+            "uniform_r80_q75,0.371\n"
+            "bgr_r80_q25,0.311\n"
+            "bgr_r80_q75,0.398\n"
             "grid_margin_rauc_delta,0.038\n"
             "grid_margin_median_r80_delta,0.013\n"
             "robot_suffix_rauc_delta,0.012\n"
@@ -2287,6 +2291,28 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             (root / PAPER_GENERATED_VISUAL_ARTIFACTS[0]).unlink()
 
             with self.assertRaisesRegex(ValueError, "missing generated visual artifact"):
+                check_generated_result_tables(root)
+
+    def test_generated_result_tables_require_boundary_r80_distribution_stats(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            self.write_generated_table_artifacts(root)
+            stats_path = root / "paper" / "figures" / "boundary_intuition_stats.csv"
+            stats_text = stats_path.read_text(encoding="utf-8")
+            stats_path.write_text(stats_text.replace("bgr_r80_q75,0.398\n", ""), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "bgr_r80_q75"):
+                check_generated_result_tables(root)
+
+    def test_generated_result_tables_reject_incoherent_boundary_r80_distribution_stats(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            self.write_generated_table_artifacts(root)
+            stats_path = root / "paper" / "figures" / "boundary_intuition_stats.csv"
+            stats_text = stats_path.read_text(encoding="utf-8")
+            stats_path.write_text(stats_text.replace("bgr_r80_q75,0.398", "bgr_r80_q75,0.320"), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "critical-radius distribution quantiles"):
                 check_generated_result_tables(root)
 
     def test_generated_result_tables_accept_stats_synced_tables(self):
@@ -4877,6 +4903,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "action-label/TFDS plumbing validates 2,048-transition matched BGR/random exports with 7D actions and 8D state",
                         "matched action/TFDS construction",
                         "Geometric intuition for BGR",
+                        "inset showing BGR/uniform critical-radius distributions",
                         "We treat exact paired sign tests as consistency checks over shared seeds, not as substitutes for effect size",
                         "The following local calculation is a design rationale for the radius sampler",
                         "Local boundary intuition",
@@ -4940,6 +4967,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "matched action/TFDS construction",
                         "Geometric intuition for BGR",
                         "final recovery curves for BGR, uniform, failure-only, fixed-radius, and PLR-loss replay",
+                        "inset showing BGR/uniform critical-radius distributions",
                         "We treat exact paired sign tests as consistency checks over shared seeds, not as substitutes for effect size",
                         "The following local calculation is a design rationale for the radius sampler",
                         "not a convergence result, global robustness theorem, or margin-expansion guarantee",
@@ -4978,6 +5006,19 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             paper.write_text(manuscript.replace(scoped, "This certifies boundary localization"), encoding="utf-8")
 
             with self.assertRaisesRegex(ValueError, "This certifies boundary localization"):
+                check_manuscript_framing(paper)
+
+    def test_manuscript_framing_rejects_boundary_figure_without_r80_distribution_inset(self):
+        source_paper = Path(__file__).resolve().parents[1] / "paper" / "main.tex"
+        manuscript = source_paper.read_text(encoding="utf-8")
+        scoped = "inset showing BGR/uniform critical-radius distributions"
+        self.assertIn(scoped, manuscript)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            paper = Path(temp_dir) / "main.tex"
+            paper.write_text(manuscript.replace(scoped, "inset showing method diagnostics"), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "critical-radius distributions"):
                 check_manuscript_framing(paper)
 
     def test_manuscript_framing_rejects_remote_log_path_scope(self):
