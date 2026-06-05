@@ -520,6 +520,7 @@ OPENVLA_BRIDGE_TEST_ARTIFACTS = [
 TEST_ARTIFACTS = [
     "tests/test_aggregate_results.py",
     "tests/test_analyze_significance.py",
+    "tests/test_acceptance_scorecard.py",
     "tests/test_check_acceptance_readiness.py",
     "tests/test_check_paper_claims.py",
     "tests/test_check_openvla_perturb_gate.py",
@@ -608,6 +609,7 @@ SUBMISSION_GATE_ARTIFACTS = [
     "scripts/collect_environment.py",
     "scripts/aggregate_results.py",
     "scripts/analyze_significance.py",
+    "scripts/acceptance_scorecard.py",
     "scripts/check_acceptance_readiness.py",
     "scripts/check_paper_claims.py",
     "scripts/check_submission_package.py",

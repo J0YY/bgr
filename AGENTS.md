@@ -14,6 +14,7 @@ As of 2026-06-05, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.p
 - Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
 The practical goal is not to make the paper sound accepted. The practical goal is to find or build defensible evidence that survives the acceptance criteria below, then incorporate only those results into `paper/main.tex`.
+Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out docs/acceptance_scorecard.md` to quantify current distances to the internal gates before choosing the next experiment.
 
 ## Current Acceptance Status
 

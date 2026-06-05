@@ -726,6 +726,11 @@
       "size_bytes": 16398
     },
     {
+      "path": "scripts/acceptance_scorecard.py",
+      "sha256": "fe18a066ad54d165ab1125e9ab324ac4ccb629fb33ce975362438b8d8b684c19",
+      "size_bytes": 14613
+    },
+    {
       "path": "scripts/aggregate_results.py",
       "sha256": "57f42b400425ed3f8be1a727b2748cf21c4e1ea7fd2c4fc8755ed178b028c3c3",
       "size_bytes": 49005
@@ -752,8 +757,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "56ee2b552d4b0c8e0ee9994089cd2be1a178f118c112f9db1f1de3cca85cc004",
-      "size_bytes": 230075
+      "sha256": "092ac1e41e9d578c185752d337a88d6679d076c6a9fcedc3498182fe1b8dd544",
+      "size_bytes": 230156
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1029,6 +1034,11 @@
       "path": "src/bgr/samplers.py",
       "sha256": "2ce39bcc346c1b9bfb33ee1ac922fe4e7d219848018f304ef76a1e8259f846dc",
       "size_bytes": 1096
+    },
+    {
+      "path": "tests/test_acceptance_scorecard.py",
+      "sha256": "341f64e8ddd08c6853461cbb78d963ed1cd1881d1ebce3c423c9935e4bd38e6f",
+      "size_bytes": 3567
     },
     {
       "path": "tests/test_aggregate_results.py",

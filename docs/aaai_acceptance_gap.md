@@ -19,6 +19,8 @@ guards. That improves reviewability, but it does not by itself make the paper a
 
 Audit this current status from artifacts with:
 `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .`.
+Quantify the distances to those gates with:
+`PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out docs/acceptance_scorecard.md`.
 The checker is intentionally stricter than the package guard: package checks
 verify that claims match artifacts, while this readiness check verifies whether
 the evidence has actually cleared the independent-benchmark and learned-policy
