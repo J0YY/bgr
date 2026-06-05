@@ -885,6 +885,23 @@ def make_boundary_intuition_figure(out_dir: Path, results_dir: Path) -> None:
         edgecolor="none",
         label="BGR train radii",
     )
+    inset = ax.inset_axes([0.56, 0.12, 0.38, 0.28])
+    inset.boxplot(
+        [trace["uniform_r80"], trace["bgr_r80"]],
+        vert=False,
+        widths=0.55,
+        patch_artist=True,
+        tick_labels=["U", "B"],
+        medianprops={"color": "#222222", "linewidth": 0.8},
+        boxprops={"facecolor": "#eeeeee", "edgecolor": "#666666", "linewidth": 0.6},
+        whiskerprops={"color": "#666666", "linewidth": 0.6},
+        capprops={"color": "#666666", "linewidth": 0.6},
+        flierprops={"marker": ".", "markersize": 1.8, "markeredgecolor": "#666666"},
+    )
+    inset.set_xlim(0.0, 1.0)
+    inset.set_title(r"$r_{80}$ dist.", fontsize=5.6, pad=1.0)
+    inset.tick_params(axis="both", labelsize=5.3, length=1.5, pad=1.0)
+    inset.grid(axis="x", alpha=0.18, linewidth=0.4)
     ax.set_xlabel("Perturbation radius")
     ax.set_ylabel("Success probability")
     ax.set_ylim(0, 1.02)
@@ -939,6 +956,10 @@ def make_boundary_intuition_figure(out_dir: Path, results_dir: Path) -> None:
             {"metric": "bgr_sample_radius_q25", "value": trace["bgr_sample_radius_q25"]},
             {"metric": "bgr_sample_radius_median", "value": trace["bgr_sample_radius_median"]},
             {"metric": "bgr_sample_radius_q75", "value": trace["bgr_sample_radius_q75"]},
+            {"metric": "uniform_r80_q25", "value": trace["uniform_r80_q25"]},
+            {"metric": "uniform_r80_q75", "value": trace["uniform_r80_q75"]},
+            {"metric": "bgr_r80_q25", "value": trace["bgr_r80_q25"]},
+            {"metric": "bgr_r80_q75", "value": trace["bgr_r80_q75"]},
             *cross_metric_rows,
         ],
     )
@@ -1014,6 +1035,7 @@ def grid_margin_boundary_trace(results_dir: Path) -> dict:
         method_stats[f"{method}_curve"] = np.mean(np.vstack(method_trace["state_curves"]), axis=0)
         method_stats[f"{method}_rauc"] = float(np.mean(raucs))
         method_stats[f"{method}_median_r80"] = float(np.median(radii))
+        method_stats[f"{method}_r80"] = np.asarray(radii, dtype=float)
     sampled = np.asarray(traces["bgr"]["sampled_sigmas"], dtype=float)
     return {
         "seed": seed,
@@ -1023,6 +1045,10 @@ def grid_margin_boundary_trace(results_dir: Path) -> dict:
         "bgr_sample_radius_q25": float(np.quantile(sampled, 0.25)),
         "bgr_sample_radius_median": float(np.quantile(sampled, 0.50)),
         "bgr_sample_radius_q75": float(np.quantile(sampled, 0.75)),
+        "uniform_r80_q25": float(np.quantile(method_stats["uniform_r80"], 0.25)),
+        "uniform_r80_q75": float(np.quantile(method_stats["uniform_r80"], 0.75)),
+        "bgr_r80_q25": float(np.quantile(method_stats["bgr_r80"], 0.25)),
+        "bgr_r80_q75": float(np.quantile(method_stats["bgr_r80"], 0.75)),
     }
 
 

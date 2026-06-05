@@ -93,7 +93,7 @@ BGR maintains a buffer of replayable states. For each state, it probes perturbat
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/boundary_intuition.pdf}
-\caption{Geometric intuition for BGR, empirical trace, and metric cross-checks. Left: a recovery curve maps perturbation radius to success probability, and the critical radius is the success--failure crossing relative to clean success. Middle: a deterministic seed-0 grid-margin replay trace overlays final recovery curves for BGR, uniform, failure-only, fixed-radius, and PLR-loss replay with the BGR training-radius histogram, showing boundary-centered updates near the trainable transition while retaining coverage. Right: paired mean differences against uniform expose the metric tension: grid improves both RAUC and median $r_{80}$, while the suffix variant improves RAUC but reduces median $r_{80}$.}
+\caption{Geometric intuition for BGR, empirical trace, and metric cross-checks. Left: a recovery curve maps perturbation radius to success probability, and the critical radius is the success--failure crossing relative to clean success. Middle: a deterministic seed-0 grid-margin replay trace overlays final recovery curves for BGR, uniform, failure-only, fixed-radius, and PLR-loss replay with the BGR training-radius histogram and an inset showing BGR/uniform critical-radius distributions. Right: paired mean differences against uniform expose the metric tension: grid improves both RAUC and median $r_{80}$, while the suffix variant improves RAUC but reduces median $r_{80}$.}
 \label{fig:boundary-intuition}
 \end{figure}
 

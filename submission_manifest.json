@@ -237,18 +237,18 @@
     },
     {
       "path": "paper/figures/boundary_intuition.pdf",
-      "sha256": "1b483a1395a3a6241e7310d0b3cc6433c9bcd1cdab4388bedd0de0bf77fce573",
-      "size_bytes": 26745
+      "sha256": "fdce932e7c3dd357c945f74e2584dd669590f33bdf204f4ebb761df8ffe851a6",
+      "size_bytes": 28185
     },
     {
       "path": "paper/figures/boundary_intuition.png",
-      "sha256": "61ef4353f964ecd2111ccb9a079aeb3ae3b018834b9851f86b972d761b07e77b",
-      "size_bytes": 74909
+      "sha256": "2457c3fbd3dfea1a2d12391c36d4c0c58c84766f23f46015aea6ccbb370869a8",
+      "size_bytes": 77352
     },
     {
       "path": "paper/figures/boundary_intuition_stats.csv",
-      "sha256": "5216fe027e07f661b5eeec70d2dd47cdc55bb08a06fea25b0cd320b1247bca0d",
-      "size_bytes": 723
+      "sha256": "a3d7ecadd73b0c9931e431404ec9934bd815df656f31969845e905f1ea2b83e7",
+      "size_bytes": 858
     },
     {
       "path": "paper/figures/clean_bars.pdf",
@@ -417,18 +417,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "488abd635bc647a05609ef1868087f773e21cdee55c93bc527c9796f62334431",
+      "sha256": "29eeb79d471e97cba2ab93179f329546668fab5d16a296f524928102d71f81d6",
       "size_bytes": 13816
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "b83993913e92bb18bdbd95442ebae2c586969b98e1d4ca21bc03b62a1ab90bee",
-      "size_bytes": 296771
+      "sha256": "a800980fc01d7bf36b6337ee7a9145f865ca92362f7b647ff53d1a7eb0e81b2a",
+      "size_bytes": 153914
     },
     {
       "path": "paper/main.tex",
-      "sha256": "ca5fdd29a9a4ca8530a4713d61db7fb67d9b226bbc2d9de60a1afae654097baa",
-      "size_bytes": 36931
+      "sha256": "3e86368411f237e2c050233ce56494b221f04dff5ca7f34c3dc41dbb091395f1",
+      "size_bytes": 36904
     },
     {
       "path": "paper/references.bib",
@@ -732,8 +732,8 @@
     },
     {
       "path": "scripts/aggregate_results.py",
-      "sha256": "1b04f22e4a26d2a34e9a938861bd6236dc1b6bb2aeea333bea43ced0517a596b",
-      "size_bytes": 51999
+      "sha256": "61f640e5c247c8718fc8c6f0e9153b111584102becc11dd5d9a2e38a744017de",
+      "size_bytes": 53467
     },
     {
       "path": "scripts/analyze_significance.py",
