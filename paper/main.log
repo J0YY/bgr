@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.31)  5 JUN 2026 19:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.31)  5 JUN 2026 20:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -39,17 +39,17 @@ Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
 Package: newtxtext 2026/06/01 local build shim for minimal TeX installs
 )
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty
-Package: times 2020/03/25 PSNFSS-v9.3 (SPQR) 
+Package: times 2020/03/25 PSNFSS-v9.3 (SPQR)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/helvet.sty
-Package: helvet 2020/03/25 PSNFSS-v9.3 (WaS) 
+Package: helvet 2020/03/25 PSNFSS-v9.3 (WaS)
 
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks16
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/courier.sty
-Package: courier 2020/03/25 PSNFSS-v9.3 (WaS) 
+Package: courier 2020/03/25 PSNFSS-v9.3 (WaS)
 ) (./placeins.sty
 Package: placeins 2026/06/01 local build shim for minimal TeX installs
 )
@@ -239,6 +239,11 @@ Underfull \hbox (badness 2547) in paragraph at lines 38--39
 []\T1/ptm/m/n/10 an ef-fi-cient BGR al-go-rithm that ac-tively es-ti-mates
  []
 
+
+Underfull \hbox (badness 1603) in paragraph at lines 48--49
+\T1/ptm/m/n/10 potential prox-ies (Jiang, Grefen-stette, and Rock-tschel
+ []
+
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
@@ -249,8 +254,8 @@ Underfull \hbox (badness 10000) in paragraph at lines 50--51
  []
 
 
-Underfull \hbox (badness 1635) in paragraph at lines 50--51
-\T1/ptm/m/n/10 from adversarial-example train-ing (Good-fel-low, Shlens,
+Underfull \hbox (badness 1859) in paragraph at lines 50--51
+\T1/ptm/m/n/10 dis-tinct from adversarial-example train-ing (Good-fel-low,
  []
 
 LaTeX Font Info:    Trying to load font information for U+msa on input line 56.
@@ -270,29 +275,22 @@ File: figures/boundary_intuition.pdf Graphic file (type pdf)
 Package pdftex.def Info: figures/boundary_intuition.pdf  used on input line 95.
 
 (pdftex.def)             Requested size: 239.39438pt x 78.55107pt.
- [2] [3 <./figures/boundary_intuition.pdf>] (./figures/summary_table.tex)
+ [2 <./figures/boundary_intuition.pdf>] [3] (./figures/summary_table.tex)
 (./figures/significance_table.tex) (./figures/estimator_table.tex)
 <figures/grid_margin_learning_curve.pdf, id=47, 462.52798pt x 169.8345pt>
 File: figures/grid_margin_learning_curve.pdf Graphic file (type pdf)
 <use figures/grid_margin_learning_curve.pdf>
-Package pdftex.def Info: figures/grid_margin_learning_curve.pdf  used on input 
+Package pdftex.def Info: figures/grid_margin_learning_curve.pdf  used on input
 line 210.
 (pdftex.def)             Requested size: 239.39438pt x 87.90239pt.
- [4 <./figures/grid_margin_learning_curve.pdf>] (./figures/grid_margin_full_tab
-le.tex)
-(./figures/grid_margin_ablation_table.tex) [5]
-Underfull \hbox (badness 1755) in paragraph at lines 239--240
-\T1/ptm/m/n/10 er-age. In the 30-seed run, BGR-Coverage raises fi-
- []
 
+(./figures/grid_margin_full_table.tex) [4 <./figures/grid_margin_learning_curve
+.pdf>] (./figures/grid_margin_ablation_table.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
+ [5]
 Underfull \hbox (badness 2173) in paragraph at lines 241--242
 []\T1/ptm/m/n/10 A four-condition 30-seed suf-fix stress sweep varies
- []
-
-
-Underfull \hbox (badness 1142) in paragraph at lines 243--244
-\T1/ptm/m/n/10 i-da-tion. A GPU/EGL LIBERO-Goal probe com-pleted
  []
 
 
@@ -300,8 +298,12 @@ Underfull \hbox (badness 2726) in paragraph at lines 245--246
 []\T1/ptm/m/n/10 The OpenVLA-OFT bridge ex-ports 11,776 teacher-
  []
 
-(./figures/openvla_adaptation_table.tex) [6] (./main.bbl) [7]
-(./ReproducibilityChecklist.tex
+(./figures/openvla_adaptation_table.tex) [6]
+Underfull \hbox (badness 1221) in paragraph at lines 283--284
+\T1/ptm/m/n/10 RAUC edge but loses paired-sign and complementary-
+ []
+
+(./main.bbl) [7] (./ReproducibilityChecklist.tex
 \c@checksubsection=\count283
 \c@checkitem=\count284
 LaTeX Font Info:    Trying to load font information for T1+pcr on input line 51
@@ -313,15 +315,15 @@ File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 
 ] [9]
 Underfull \hbox (badness 4726) in paragraph at lines 175--175
-[]\T1/ptm/m/n/10 This pa-per lists all fi-nal (hyper-)parameters used for each 
+[]\T1/ptm/m/n/10 This pa-per lists all fi-nal (hyper-)parameters used for each
 model/algorithm in the pa-per's ex-per-i-ments
  []
 
-) [10] (./main.aux) ) 
+) [10] (./main.aux) )
 Here is how much of TeX's memory you used:
  4127 strings out of 480247
  59880 string characters out of 5896151
- 371645 words of memory out of 5000000
+ 370645 words of memory out of 5000000
  21984 multiletter control sequences out of 15000+600000
  505845 words of font info for 73 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -345,7 +347,7 @@ dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/ut
 mr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (10 pages, 293677 bytes).
+Output written on main.pdf (10 pages, 293184 bytes).
 PDF statistics:
  163 PDF objects out of 1000 (max. 8388607)
  99 compressed objects within 1 object stream
