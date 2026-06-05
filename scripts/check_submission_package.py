@@ -4359,7 +4359,7 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
             ("FrozenLake8x8-v1 diagnostic", "FrozenLake8x8v1 diagnostic"),
             ("0.5453 vs. 0.5312",),
             ("14/16 and 13/17",),
-            ("failure-only replay is stronger",),
+            ("failure-only replay is stronger", "failureonly replay is stronger"),
         ]
         frozenlake_missing = [
             snippets[0]
@@ -4369,6 +4369,23 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
         if frozenlake_missing:
             raise ValueError(
                 f"{pdf_path}: missing rendered FrozenLake limitation snippet(s): {', '.join(frozenlake_missing)}"
+            )
+    if "An official MiniGrid-FourRooms package diagnostic is also negative" in source_text:
+        minigrid_required = [
+            ("MiniGrid-FourRooms package diagnostic",),
+            ("0.6077 vs. 0.6665",),
+            ("failure-only (0.7940)", "failureonly (0.7940)"),
+            ("fixed-radius replay (0.7587)", "fixedradius replay (0.7587)"),
+            ("lower median",),
+        ]
+        minigrid_missing = [
+            snippets[0]
+            for snippets in minigrid_required
+            if not any(snippet in normalized_rendered_text for snippet in snippets)
+        ]
+        if minigrid_missing:
+            raise ValueError(
+                f"{pdf_path}: missing rendered MiniGrid limitation snippet(s): {', '.join(minigrid_missing)}"
             )
     if "held-out seeds 30--59 BGR-vs-uniform replication gives" in source_text:
         grid_required = [

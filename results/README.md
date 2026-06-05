@@ -188,6 +188,16 @@ is:
 Do not promote this result unless the full method comparison clears the same
 baseline and non-saturated median-r80 gates.
 
+`results/minigrid_fourrooms_recovery_probe_midband_4seed_v1/summary.csv` is the
+completed midband follow-up. It is negative for promotion: final RAUC is 0.7940
+for failure-only, 0.7587 for fixed-radius, 0.6665 for uniform, 0.6287 for
+BGR-uniform-radius, 0.6170 for TD-loss, 0.6077 for BGR-Coverage, and 0.5538 for
+BGR. The promotion checker rejects BGR-Coverage because it loses to uniform
+(-0.0589 mean RAUC, 2/2 paired split), fixed-radius, failure-only, TD-loss, and
+the state-priority/uniform-radius ablation. Median r80 is non-saturated but
+contradicts the BGR-Coverage RAUC claim: 0.6050 for BGR-Coverage vs. 0.6799 for
+uniform. Do not scale this protocol.
+
 ## Internal FourRooms Diagnostic
 
 `results/fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed

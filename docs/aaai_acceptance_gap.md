@@ -251,6 +251,16 @@ package and recording its version before any result is run.
      This screen can only justify a 30-seed scale-up if BGR-Coverage beats
      uniform, fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on
      final RAUC and does not lose the non-saturated median-r80 comparison.
+     The completed midband screen is negative and should not be scaled:
+     failure-only reaches 0.7940 final RAUC, fixed-radius 0.7587, uniform
+     0.6665, BGR-uniform-radius 0.6287, TD-loss 0.6170, BGR-Coverage 0.6077,
+     and BGR 0.5538. The checker rejects BGR-Coverage because it loses to
+     uniform on mean RAUC and paired signs, loses to fixed-radius,
+     failure-only, TD-loss, and the state-priority/uniform-radius ablation,
+     and has lower non-saturated median r80 than uniform (0.6050 vs. 0.6799).
+     The paper-facing consequence is unchanged: MiniGrid belongs only in the
+     limitations/scope audit unless a different preregistered external package
+     benchmark clears the promotion gate before method comparison.
 4. PointMaze/D4RL-style continuous navigation only if a real installed benchmark
    package is available. This is the best mechanistic fit because resettable
    continuous states, corridor bottlenecks, and distance-to-goal perturbations

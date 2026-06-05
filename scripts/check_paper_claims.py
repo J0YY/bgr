@@ -602,6 +602,33 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    minigrid = read_csv_rows(results_dir / "minigrid_fourrooms_recovery_probe_midband_4seed_v1" / "summary.csv")
+    minigrid_coverage_rauc = mean_metric(minigrid, "bgr_coverage", "final_rauc")
+    minigrid_uniform_rauc = mean_metric(minigrid, "uniform", "final_rauc")
+    minigrid_failure_rauc = mean_metric(minigrid, "failure_only", "final_rauc")
+    minigrid_fixed_rauc = mean_metric(minigrid, "fixed", "final_rauc")
+    minigrid_coverage_r80 = mean_metric(minigrid, "bgr_coverage", "final_median_r80")
+    minigrid_uniform_r80 = mean_metric(minigrid, "uniform", "final_median_r80")
+    if not (
+        minigrid_coverage_rauc < minigrid_uniform_rauc
+        and minigrid_coverage_rauc < minigrid_failure_rauc
+        and minigrid_coverage_rauc < minigrid_fixed_rauc
+        and minigrid_coverage_r80 < minigrid_uniform_r80
+    ):
+        raise ValueError("Expected MiniGrid diagnostic to remain a non-promoted BGR-Coverage result")
+    claims.append(
+        Claim(
+            "MiniGrid official-package limitation",
+            (
+                f"BGR-Coverage gives final RAUC {fmt(minigrid_coverage_rauc, 4)} "
+                f"vs. {fmt(minigrid_uniform_rauc, 4)} for uniform, trails failure-only "
+                f"({fmt(minigrid_failure_rauc, 4)}) and fixed-radius replay "
+                f"({fmt(minigrid_fixed_rauc, 4)}), and has lower median $r_{{80}}$ than uniform"
+            ),
+            "results/minigrid_fourrooms_recovery_probe_midband_4seed_v1/summary.csv",
+        )
+    )
+
     probe_rows = read_csv_rows(results_dir / "libero_probe_v2" / "summary.csv")
     valid_rows = sum(1 for row in probe_rows if float(row["valid_rate"]) == 1.0 and not row.get("error"))
     claims.append(
