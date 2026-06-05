@@ -176,6 +176,18 @@ checker now rejects both ceiling- and floor-saturated radius metrics, and it
 rejects this follow-up accordingly. Do not scale MiniGrid under this exact
 protocol.
 
+The next preregistered MiniGrid screen uses the same official package task but
+restricts replay states to a calibrated shortest-path distance band before any
+method comparison: `--replay-selection midband --replay-distance-min 2
+--replay-distance-max 6`. This band was selected from uniform-only seed-0
+calibration because it avoids the two endpoint failures seen so far: the
+goalward selector was effectively solved, while wider midband/spread selectors
+collapsed to floor-saturated absolute-radius metrics. The fixed 4-seed command
+is:
+`PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_fourrooms_recovery_probe.py --out results/minigrid_fourrooms_recovery_probe_midband_4seed_v1 --replay-selection midband --replay-distance-min 2 --replay-distance-max 6`.
+Do not promote this result unless the full method comparison clears the same
+baseline and non-saturated median-r80 gates.
+
 ## Internal FourRooms Diagnostic
 
 `results/fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed

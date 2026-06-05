@@ -68,6 +68,9 @@ class OfficialMiniGridFourRoomsProbe:
         q_init_blend: float,
         q_init_noise: float,
         rollout_horizon: int,
+        replay_selection: str,
+        replay_distance_min: int,
+        replay_distance_max: int,
     ) -> None:
         import gymnasium as gym
 
@@ -84,6 +87,9 @@ class OfficialMiniGridFourRoomsProbe:
         self.discount = float(discount)
         self.epsilon = float(epsilon)
         self.rollout_horizon = int(rollout_horizon)
+        self.replay_selection = str(replay_selection)
+        self.replay_distance_min = int(replay_distance_min)
+        self.replay_distance_max = int(replay_distance_max)
         self.free_cells = self._free_cells()
         self.goal_cells = self._goal_cells()
         self.state_to_idx = {
@@ -167,6 +173,16 @@ class OfficialMiniGridFourRoomsProbe:
                     dist = distances.get((x, y), self.width * self.height)
                     candidates.append((dist, nearest_bottleneck, direction, MiniGridReplayState(x, y, direction)))
         candidates.sort(key=lambda item: (item[0], item[1], item[2], item[3].x, item[3].y))
+        if self.replay_selection == "goalward":
+            return [item[3] for item in candidates[:count]]
+        if self.replay_selection == "midband":
+            candidates = [
+                item
+                for item in candidates
+                if self.replay_distance_min <= item[0] <= self.replay_distance_max
+            ] or candidates
+        if self.replay_selection not in {"spread", "midband"}:
+            raise ValueError(f"unknown replay selection strategy: {self.replay_selection}")
         if count >= len(candidates):
             return [item[3] for item in candidates]
         indexes = np.linspace(0, len(candidates) - 1, count, dtype=int)
@@ -285,6 +301,9 @@ def run_method(args: argparse.Namespace, method: str, seed: int) -> MiniGridProb
         q_init_blend=args.q_init_blend,
         q_init_noise=args.q_init_noise,
         rollout_horizon=args.rollout_horizon,
+        replay_selection=args.replay_selection,
+        replay_distance_min=args.replay_distance_min,
+        replay_distance_max=args.replay_distance_max,
     )
     records = init_records(bench, rng, args)
     scorer = BGRPriorityScorer(
@@ -468,6 +487,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--eval-every", type=int, default=20)
     parser.add_argument("--train-batch-size", type=int, default=8)
     parser.add_argument("--replay-states", type=int, default=32)
+    parser.add_argument("--replay-selection", choices=["spread", "goalward", "midband"], default="spread")
+    parser.add_argument("--replay-distance-min", type=int, default=8)
+    parser.add_argument("--replay-distance-max", type=int, default=16)
     parser.add_argument("--max-radius", type=int, default=5)
     parser.add_argument("--rollout-horizon", type=int, default=50)
     parser.add_argument("--eval-grid-size", type=int, default=9)

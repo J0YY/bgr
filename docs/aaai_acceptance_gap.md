@@ -240,9 +240,17 @@ package and recording its version before any result is run.
      floor-saturated. `tools/check_candidate_promotion.py` now rejects
      floor-saturated radius metrics as well as ceiling-saturated ones. MiniGrid
      remains the most promising independent benchmark path because the
-     BGR-Coverage RAUC effect is visible on an external package task, but the
-     next protocol must create replay states with nonzero absolute recovery at
-     small radii before any 30-seed scale-up.
+     BGR-Coverage RAUC effect is visible on an external package task.
+     A baseline-only replay-distance calibration was run before any method
+     comparison for the next screen. The original spread selector was too hard
+     at small absolute radii, the goalward selector was too easy, and a
+     mid-distance band of shortest-path distances 2--6 gave a usable seed-0
+     uniform diagnostic: final RAUC 0.5652, clean success 0.7188, and median
+     r80 0.55. The next preregistered 4-seed screen is therefore:
+     `PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_fourrooms_recovery_probe.py --out results/minigrid_fourrooms_recovery_probe_midband_4seed_v1 --replay-selection midband --replay-distance-min 2 --replay-distance-max 6`.
+     This screen can only justify a 30-seed scale-up if BGR-Coverage beats
+     uniform, fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on
+     final RAUC and does not lose the non-saturated median-r80 comparison.
 4. PointMaze/D4RL-style continuous navigation only if a real installed benchmark
    package is available. This is the best mechanistic fit because resettable
    continuous states, corridor bottlenecks, and distance-to-goal perturbations
