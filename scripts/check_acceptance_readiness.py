@@ -18,6 +18,24 @@ OPENVLA_LEGACY_COMPLETE = (
     "results/openvla_oft_perturb_eval_cleanmix_p4096_commonavail_step50500_lr5em7_identitylora_imageaug_"
     "officialtrainstats_prereg_fullgoal10x10_v1/summary.csv"
 )
+OPENVLA_PROXIMAL_ANCHOR_COMPLETE = (
+    "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_"
+    "step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv"
+)
+OPENVLA_PROXIMAL_ANCHOR_JOB_IDS = {
+    "bgr_train": "767128",
+    "bgr_merge": "767129",
+    "bgr_clean_eval": "767130",
+    "random_train": "767131",
+    "random_merge": "767132",
+    "random_clean_eval": "767133",
+    "official_first": "767134",
+    "official_last": "767138",
+    "bgr_perturb_first": "767139",
+    "bgr_perturb_last": "767143",
+    "random_perturb_first": "767144",
+    "random_perturb_last": "767148",
+}
 CALIBRATION_SUMMARIES = [
     ("FetchPush calibration", "results/fetchpush_object_goal_calibration_2seed_v1/summary.json"),
     ("FetchSlide calibration", "results/fetchslide_object_goal_calibration_2seed_v1/summary.json"),
@@ -102,6 +120,30 @@ def perturbation_total(rows: list[dict[str, str]], method: str, perturbations: s
     if episodes == 0:
         raise ValueError(f"no OpenVLA rows for {method=} {perturbations=}")
     return successes, episodes
+
+
+def learned_policy_inflight_detail(root: Path) -> str | None:
+    if (root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE).exists():
+        return None
+
+    ledger_text = ""
+    for relative_path in ["AGENTS.md", "results/README.md", "docs/aaai_acceptance_gap.md"]:
+        path = root / relative_path
+        if path.exists():
+            ledger_text += "\n" + path.read_text(encoding="utf-8")
+
+    if (
+        OPENVLA_PROXIMAL_ANCHOR_JOB_IDS["bgr_train"] not in ledger_text
+        or OPENVLA_PROXIMAL_ANCHOR_JOB_IDS["random_perturb_last"] not in ledger_text
+    ):
+        return None
+
+    return (
+        "proximal-anchor route in flight, not yet evidence: adaptation jobs "
+        "BGR 767128/767129/767130 and random 767131/767132/767133 are queued; "
+        "fixed perturbation jobs official 767134--767138, BGR 767139--767143, "
+        "and random 767144--767148 must finish before the +10/400 and +0.02 learned-policy gate can be checked"
+    )
 
 
 def grid_mechanism_gate(root: Path) -> GateResult:
@@ -264,6 +306,7 @@ def independent_benchmark_gate(root: Path) -> GateResult:
 
 
 def learned_policy_gate(root: Path) -> GateResult:
+    inflight_detail = learned_policy_inflight_detail(root)
     weighted_path = root / OPENVLA_WEIGHTED_AVAILABLE
     if weighted_path.exists():
         rows = read_rows(weighted_path)
@@ -292,6 +335,8 @@ def learned_policy_gate(root: Path) -> GateResult:
         gate_detail = ""
         if official_gate_impossible:
             gate_detail = "; official gate already impossible; pending random row is ledger completion only"
+        if inflight_detail:
+            gate_detail = f"{gate_detail}; {inflight_detail}"
         clean_floor = max(official_identity, random_identity) - 1
         passed = (
             bgr_episodes == 400
@@ -326,6 +371,7 @@ def learned_policy_gate(root: Path) -> GateResult:
     margin_vs_best = bgr_success - max(random_success, official_success)
     clean_floor = max(official_identity, random_identity) - 1
     passed = margin_vs_best >= 10 and (bgr_success / non_identity - max(random_success, official_success) / non_identity) >= 0.02 and bgr_identity >= clean_floor
+    gate_detail = f"; {inflight_detail}" if inflight_detail else ""
     return GateResult(
         "learned-policy OpenVLA/LIBERO",
         passed,
@@ -333,7 +379,7 @@ def learned_policy_gate(root: Path) -> GateResult:
             f"non-identity successes BGR {bgr_success}/{non_identity}, official {official_success}/{non_identity}, "
             f"random {random_success}/{non_identity}; identity BGR {bgr_identity}/{identity_eps}, "
             f"official {official_identity}/{identity_eps}, random {random_identity}/{identity_eps}; "
-            f"margin_vs_best={margin_vs_best}"
+            f"margin_vs_best={margin_vs_best}{gate_detail}"
         ),
     )
 

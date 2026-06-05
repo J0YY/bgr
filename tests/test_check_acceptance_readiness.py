@@ -2,6 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from scripts.check_acceptance_readiness import OPENVLA_PROXIMAL_ANCHOR_COMPLETE
 from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_AVAILABLE
 from scripts.check_acceptance_readiness import independent_benchmark_gate
 from scripts.check_acceptance_readiness import learned_policy_gate
@@ -89,6 +90,41 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
         self.assertIn("random 273/300 available rows", gate.detail)
         self.assertIn("official_margin=0", gate.detail)
         self.assertIn("official gate already impossible", gate.detail)
+
+    def test_learned_policy_gate_reports_proximal_anchor_inflight(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_weighted_summary(root)
+            (root / "AGENTS.md").write_text(
+                "Proximal anchor jobs: BGR 767128/767129/767130, random 767144--767148.\n",
+                encoding="utf-8",
+            )
+
+            gate = learned_policy_gate(root)
+
+        self.assertFalse(gate.passed)
+        self.assertIn("proximal-anchor route in flight", gate.detail)
+        self.assertIn("not yet evidence", gate.detail)
+        self.assertIn("767128/767129/767130", gate.detail)
+        self.assertIn("767144--767148", gate.detail)
+        self.assertIn("must finish before the +10/400 and +0.02 learned-policy gate", gate.detail)
+
+    def test_learned_policy_gate_omits_proximal_anchor_inflight_after_summary_exists(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_weighted_summary(root)
+            (root / "AGENTS.md").write_text(
+                "Proximal anchor jobs: BGR 767128/767129/767130, random 767144--767148.\n",
+                encoding="utf-8",
+            )
+            path = root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("method,perturbation,episodes,successes,success_rate\n", encoding="utf-8")
+
+            gate = learned_policy_gate(root)
+
+        self.assertFalse(gate.passed)
+        self.assertNotIn("proximal-anchor route in flight", gate.detail)
 
     def test_independent_gate_reports_fetchpush_invalid_calibration(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

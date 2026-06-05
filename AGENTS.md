@@ -4,6 +4,18 @@ This file is the project handoff contract for coding agents working in this
 repository. Read it before editing code, running experiments, changing paper
 claims, or committing results.
 
+## Goal Snapshot
+
+Persistent thread goal: iterate, queue experiments, and reframe the paper until
+it is plausibly 90%+ likely to get into AAAI.
+
+Acceptance reality: the project is not there yet. The current evidence supports
+a careful mechanism study, not a high-confidence AAAI main-track claim. Make
+progress by adding preregistered positive evidence, fixing standard-benchmark or
+learned-policy failures, strengthening the theory, or improving required
+figures/presentation. Do not treat softer wording around unchanged results as
+acceptance progress.
+
 ## Standing Instructions
 
 - Active goal: iterate, queue experiments, and reframe the paper until it is
