@@ -160,6 +160,20 @@ class CheckSubmissionPackageTest(unittest.TestCase):
         )
         for relative in PAPER_GENERATED_VISUAL_ARTIFACTS:
             (root / relative).write_bytes(b"generated")
+        (figures / "boundary_intuition_stats.csv").write_text(
+            "metric,value\n"
+            "bgr_final_rauc,0.434\n"
+            "uniform_final_rauc,0.396\n"
+            "failure_only_final_rauc,0.291\n"
+            "fixed_final_rauc,0.210\n"
+            "plr_loss_final_rauc,0.211\n"
+            "bgr_median_r80,0.345\n"
+            "uniform_median_r80,0.332\n"
+            "failure_only_median_r80,0.300\n"
+            "fixed_median_r80,0.200\n"
+            "plr_loss_median_r80,0.201\n",
+            encoding="utf-8",
+        )
 
         summary_rows = [
             ("Synthetic", "BGR"),
@@ -4851,7 +4865,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "A four-condition 30-seed suffix stress sweep varies teacher quality",
                         "while still trailing uniform on median critical radius",
                         "Five-seed exploratory variants are reported only as exploratory evidence",
-                        "OpenVLA/LIBERO results are learned-policy audits and infrastructure checks, not BGR fine-tuning claims",
+                        "OpenVLA/LIBERO results are learned-policy audits and infrastructure checks, not promoted positive claims",
                         "OpenVLA is a learned-policy audit rather than a robotics training claim",
                         "action-label/TFDS plumbing validates 2,048-transition matched BGR/random exports with 7D actions and 8D state",
                         "matched action/TFDS construction",
@@ -4887,6 +4901,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "local margin-update model.",
                         "",
                         r"\textbf{Local Boundary Intuition.} Fix a replay state.",
+                        "Synthetic and robot-suffix results are smaller and are reported as scoped support",
                         "In a robot-suffix simulator, a coverage-aware BGR variant improves final object recovery AUC",
                         "coverage-aware boundary replay expand recovery margins",
                         "Instantiations of the BGR interface",
@@ -4898,23 +4913,35 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "BGR is not an adversarial-training objective",
                         "active learning selects informative labels under a query budget",
                         "We use three evidence tiers",
+                        "Evidence contract used throughout the experiments",
+                        "independent-benchmark and learned-policy wins remain open requirements rather than hidden claims",
                         "The main claim is supported by controlled synthetic and procedural grid-margin experiments",
                         "The robot-suffix simulator is a manipulation-style extension",
+                        "Gym-style standard-environment probes and OpenVLA/LIBERO results are scope checks and learned-policy audits, not promoted positive claims",
                         "four stress regimes",
                         "A four-condition 30-seed suffix stress sweep varies teacher quality",
                         "while still trailing uniform on median critical radius",
                         "Five-seed exploratory variants are reported only as exploratory evidence",
-                        "OpenVLA/LIBERO results are learned-policy audits and infrastructure checks, not BGR fine-tuning claims",
+                        "Five-seed exploratory variants and small pre-promotion standard-environment probes are reported only as scope diagnostics",
+                        "Additional 4-seed pre-promotion probes also stay negative",
+                        "OpenVLA/LIBERO results are learned-policy audits and infrastructure checks, not promoted positive claims",
                         "OpenVLA is a learned-policy audit rather than a robotics training claim",
                         "action-label/TFDS plumbing validates 2,048-transition matched BGR/random exports with 7D actions and 8D state",
                         "matched action/TFDS construction",
                         "Geometric intuition for BGR",
+                        "final recovery curves for BGR, uniform, failure-only, fixed-radius, and PLR-loss replay",
                         "We treat exact paired sign tests as consistency checks over shared seeds, not as substitutes for effect size",
                         "The following local calculation is a design rationale for the radius sampler",
+                        "not a convergence result, global robustness theorem, or margin-expansion guarantee",
                         "Local boundary intuition",
+                        "Finite-grid estimator guarantee",
+                        "Hoeffding plus a union bound",
+                        "critical radius is within",
+                        "This certifies boundary localization, not learner improvement",
                         "BGR depends on a feasibility witness",
                         "synthetic and grid-margin benchmarks are constructed to expose recovery curves",
                         "A canonical Gym FrozenLake8x8-v1 diagnostic reinforces that limitation",
+                        "Standard-environment scope audits",
                         "RAUC and AULC are useful for measuring curve expansion, but they are author-defined integrals",
                         "300-step image-augmentation continuation",
                         "1,000-step low-learning-rate continuation",
@@ -4929,6 +4956,19 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             )
 
             self.assertEqual(check_manuscript_framing(paper), [f"{paper}: manuscript evidence-tier framing ok"])
+
+    def test_manuscript_framing_rejects_estimator_guarantee_without_scope_caveat(self):
+        source_paper = Path(__file__).resolve().parents[1] / "paper" / "main.tex"
+        manuscript = source_paper.read_text(encoding="utf-8")
+        scoped = "This certifies boundary localization, not learner improvement"
+        self.assertIn(scoped, manuscript)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            paper = Path(temp_dir) / "main.tex"
+            paper.write_text(manuscript.replace(scoped, "This certifies boundary localization"), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "This certifies boundary localization"):
+                check_manuscript_framing(paper)
 
     def test_manuscript_framing_rejects_remote_log_path_scope(self):
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -5677,7 +5717,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Boundary-Guided Replay",
                 "coverage-aware BGR variant improves",
                 "OpenVLA/LIBERO audits",
-                "not BGR fine-tuning claims",
+                "not promoted positive claims",
                 "run ledger files",
                 "30-seed synthetic, estimator, grid, and suffix",
                 "Suffix RAUC vs clean-only",
@@ -5687,12 +5727,13 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "< 0.0001",
                 "Method box: BGR training loop without domain-specific learner details.",
                 "Active BGR improves boundary-hit rate over uniform probing at the same rollout budget",
-                "Table 3: Selected paired effect sizes",
+                "Table 4: Selected paired effect sizes",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
-                "Table 4: Probe-efficiency validation",
+                "Table 5: Probe-efficiency validation",
                 "Grid-margin ablations over 30 seeds",
                 "Robot Suffix Study",
-                "Table 6: Grid-margin ablations over 30 seeds",
+                "Table 7: Grid-margin ablations over 30 seeds",
+                "Table 7 isolates the replay decisions inside BGR",
             ]
         )
         with mock.patch("scripts.check_submission_package.assert_letter_pdf", return_value=["pdf ok"]), mock.patch(
@@ -5708,7 +5749,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Suffix RAUC vs clean-only final RAUC 30 0.2338"
             ),
         ):
-            with self.assertRaisesRegex(ValueError, "rendered grid table/order regression"):
+            with self.assertRaisesRegex(ValueError, "rendered grid tables crossed into suffix section"):
                 check_main_pdf(Path("paper/main.pdf"))
 
     def test_main_pdf_accepts_grid_table_order(self):
@@ -5717,7 +5758,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Boundary-Guided Replay",
                 "coverage-aware BGR variant improves",
                 "OpenVLA/LIBERO audits",
-                "not BGR fine-tuning claims",
+                "not promoted positive claims",
                 "run ledger files",
                 "30-seed synthetic, estimator, grid, and suffix",
                 "Suffix RAUC vs clean-only",
@@ -5727,12 +5768,12 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "< 0.0001",
                 "Method box: BGR training loop without domain-specific learner details.",
                 "Active BGR improves boundary-hit rate over uniform probing at the same rollout budget",
-                "Table 3: Selected paired effect sizes",
-                "Table 4: Probe-efficiency validation",
+                "Table 4: Selected paired effect sizes",
+                "Table 5: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
                 "Grid-margin ablations over 30 seeds",
-                "Table 6: Grid-margin ablations over 30 seeds",
-                "Table 6 isolates the replay decisions inside BGR",
+                "Table 7: Grid-margin ablations over 30 seeds",
+                "Table 7 isolates the replay decisions inside BGR",
                 "Robot Suffix Study",
             ]
         )
@@ -5760,7 +5801,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Boundary-Guided Replay",
                 "coverage-aware BGR variant improves",
                 "OpenVLA/LIBERO audits",
-                "not BGR fine-tuning claims",
+                "not promoted positive claims",
                 "run ledger files",
                 "30-seed synthetic, estimator, grid, and suffix",
                 "Suffix RAUC vs clean-only",
@@ -5770,12 +5811,12 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "< 0.0001",
                 "Method box: BGR training loop without domain-specific learner details.",
                 "Active BGR improves boundary-hit rate over uniform probing at the same rollout budget",
-                "Table 3: Selected paired effect sizes",
-                "Table 4: Probe-efficiency validation",
+                "Table 4: Selected paired effect sizes",
+                "Table 5: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
                 "Grid-margin ablations over 30 seeds",
-                "Table 6: Grid-margin ablations over 30 seeds",
-                "Table 6 isolates the replay decisions inside BGR",
+                "Table 7: Grid-margin ablations over 30 seeds",
+                "Table 7 isolates the replay decisions inside BGR",
                 "Robot Suffix Study",
             ]
         )
@@ -5802,7 +5843,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Boundary-Guided Replay",
                 "coverage-aware BGR variant improves",
                 "OpenVLA/LIBERO audits",
-                "not BGR fine-tuning claims",
+                "not promoted positive claims",
                 "run ledger files",
                 "30-seed synthetic, estimator, grid, and suffix",
                 "Suffix RAUC vs clean-only",
@@ -5812,10 +5853,10 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "< 0.0001",
                 "Method box: BGR training loop without domain-specific learner details.",
                 "Active BGR improves boundary-hit rate over uniform probing at the same rollout budget",
-                "Table 3: Selected paired effect sizes",
-                "Table 4: Probe-efficiency validation",
+                "Table 4: Selected paired effect sizes",
+                "Table 5: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
-                "Table 6: Grid-margin ablations over 30 seeds",
+                "Table 7: Grid-margin ablations over 30 seeds",
                 "Robot Suffix Study",
             ]
         )
@@ -5842,7 +5883,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Boundary-Guided Replay",
                 "coverage-aware BGR variant improves",
                 "OpenVLA/LIBERO audits",
-                "not BGR fine-tuning claims",
+                "not promoted positive claims",
                 "remote log paths",
                 "run ledger files",
                 "30-seed synthetic, estimator, grid, and suffix",
@@ -5853,10 +5894,10 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "< 0.0001",
                 "Method box: BGR training loop without domain-specific learner details.",
                 "Active BGR improves boundary-hit rate over uniform probing at the same rollout budget",
-                "Table 3: Selected paired effect sizes",
-                "Table 4: Probe-efficiency validation",
+                "Table 4: Selected paired effect sizes",
+                "Table 5: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
-                "Table 6: Grid-margin ablations over 30 seeds",
+                "Table 7: Grid-margin ablations over 30 seeds",
                 "Robot Suffix Study",
             ]
         )
@@ -5873,7 +5914,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Boundary-Guided Replay",
                 "coverage-aware BGR variant improves",
                 "OpenVLA/LIBERO audits",
-                "not BGR fine-tuning claims",
+                "not promoted positive claims",
                 "run ledger files",
                 "30-seed synthetic, estimator, grid, and suffix",
                 "Suffix RAUC vs clean-only",
@@ -5883,10 +5924,10 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "< 0.0001",
                 "Figure 1: BGR training loop without domain-specific learner details",
                 "Active BGR improves boundary-hit rate over uniform probing at the same rollout budget",
-                "Table 3: Selected paired effect sizes",
-                "Table 4: Probe-efficiency validation",
+                "Table 4: Selected paired effect sizes",
+                "Table 5: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
-                "Table 6: Grid-margin ablations over 30 seeds",
+                "Table 7: Grid-margin ablations over 30 seeds",
                 "Robot Suffix Study",
             ]
         )
@@ -5903,7 +5944,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Boundary-Guided Replay",
                 "coverage-aware BGR variant improves",
                 "OpenVLA/LIBERO audits",
-                "not BGR fine-tuning claims",
+                "not promoted positive claims",
                 "run ledger files",
                 "30-seed synthetic, estimator, grid, and suffix",
                 "Suffix RAUC vs clean-only",
@@ -5913,10 +5954,10 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "< 0.0001",
                 "Method box: BGR training loop without domain-specific learner details.",
                 "Active BGR improves boundary-hit rate over uniform and coarse probing",
-                "Table 3: Selected paired effect sizes",
-                "Table 4: Probe-efficiency validation",
+                "Table 4: Selected paired effect sizes",
+                "Table 5: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
-                "Table 6: Grid-margin ablations over 30 seeds",
+                "Table 7: Grid-margin ablations over 30 seeds",
                 "Robot Suffix Study",
             ]
         )
@@ -5933,7 +5974,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Boundary-Guided Replay",
                 "coverage-aware BGR variant improves",
                 "OpenVLA/LIBERO audits",
-                "not BGR fine-tuning claims",
+                "not promoted positive claims",
                 "run ledger files",
                 "30-seed synthetic, estimator, grid, and suffix",
                 "Suffix RAUC vs clean-only",
@@ -5944,10 +5985,10 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                 "Method box: BGR training loop without domain-specific learner details.",
                 "Active BGR improves boundary-hit rate over uniform probing at the same rollout budget",
                 "The current strongest evidence is controlled procedural margin expansion",
-                "Table 3: Selected paired effect sizes",
-                "Table 4: Probe-efficiency validation",
+                "Table 4: Selected paired effect sizes",
+                "Table 5: Probe-efficiency validation",
                 "Thirty-seed procedural grid-margin full-baseline comparison",
-                "Table 6: Grid-margin ablations over 30 seeds",
+                "Table 7: Grid-margin ablations over 30 seeds",
                 "Robot Suffix Study",
             ]
         )
@@ -6051,21 +6092,24 @@ class CheckSubmissionPackageTest(unittest.TestCase):
         self.assertEqual(messages, ["paper/main.pdf: rendered/source OpenVLA sync guard not triggered"])
 
     def test_rendered_source_sync_requires_frozenlake_limitation_pdf_text(self):
-        source = "A canonical Gym FrozenLake8x8-v1 diagnostic reinforces that limitation."
+        source = "Standard-environment scope audits. FrozenLake8x8 & BGR 0.5453 & signs 14/16, 13/17."
         rendered = "The paper does not claim a clear win on an independent pre-existing robustness benchmark."
         with mock.patch.object(Path, "read_text", return_value=source), mock.patch(
             "scripts.check_submission_package.pdf_text",
             return_value=rendered,
         ):
-            with self.assertRaisesRegex(ValueError, "missing rendered FrozenLake limitation"):
+            with self.assertRaisesRegex(ValueError, "missing rendered scope-audit"):
                 check_rendered_source_sync(Path("paper/main.tex"), Path("paper/main.pdf"))
 
     def test_rendered_source_sync_accepts_frozenlake_limitation_pdf_text(self):
-        source = "A canonical Gym FrozenLake8x8-v1 diagnostic reinforces that limitation."
+        source = "Standard-environment scope audits. FrozenLake8x8 & BGR 0.5453 & signs 14/16, 13/17."
         rendered = (
-            "A canonical Gym FrozenLake8x8v1 diagnostic reinforces that limitation: "
-            "BGR gives final RAUC 0.5453 vs. 0.5312 for uniform, "
-            "but paired signs are 14/16 and 13/17, and failure-only replay is stronger."
+            "Standard-environment scope audits. FrozenLake8x8v1 BGR 0.5453 "
+            "signs 14/16, 13/17. MiniGrid FourRooms BGR-Coverage 0.6077 "
+            "failureonly 0.7940 fixed 0.7587. DoorKey-6x6 BGR-Coverage 0.4846 "
+            "uniform 0.6384. LavaCrossingS9N3 BGR-Coverage 0.3547 uniform 0.4165. "
+            "PointMaze UMaze BGR-Clean-Shield 0.2448 failureonly 0.5458 "
+            "2/4 wins r20 0.1167 vs. 0.2500."
         )
         with mock.patch.object(Path, "read_text", return_value=source), mock.patch(
             "scripts.check_submission_package.pdf_text",
