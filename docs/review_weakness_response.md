@@ -77,6 +77,9 @@ to reproduce this read from the current result artifacts.
   RAUC 0.1969, r80 0.0395), but it is not method evidence. Implement and preregister the full
   comparison before any BGR method result, with the same strong-baseline and
   non-contradictory-radius promotion gate used elsewhere.
+  The fixed full-comparison tool is now `tools/fetchreach_goal_recovery_probe.py`;
+  it should be committed and pushed before running
+  `results/fetchreach_goal_recovery_probe_4seed_v1`.
 - The current learned-policy follow-up is the preregistered weighted
   perturbation curriculum in
   `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh`. It changes the

@@ -676,3 +676,16 @@ package and recording its version before any result is run.
   require BGR or BGR-Coverage to beat uniform, fixed-radius, failure-only,
   loss-priority, and state-priority/uniform-radius on final RAUC with
   non-contradictory median-r80 and visible mean effect.
+  The full comparison tool is now fixed before method results at
+  `tools/fetchreach_goal_recovery_probe.py`. It uses the same
+  Gymnasium-Robotics package task, package-sampled replay goals, adverse
+  clipped goal offsets, a learned linear goal controller initialized at the
+  calibrated weak setting, and teacher-action updates selected by the replay
+  method. The preregistered 4-seed command is:
+  `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetchreach_goal_recovery_probe.py --out results/fetchreach_goal_recovery_probe_4seed_v1`.
+  Do not edit learner hyperparameters, replay-state count, perturbation radii,
+  methods, seeds, or promotion gate after seeing this result. Do not scale to
+  30 seeds or promote to the paper unless default BGR or BGR-Coverage beats
+  uniform, fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on final
+  RAUC with at least 3/4 paired wins over uniform, a visible mean gap, and
+  non-contradictory median r80.

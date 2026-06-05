@@ -174,6 +174,22 @@ fixed-radius, failure-only, loss-priority, and the state-priority/uniform-radius
 ablation on final RAUC with non-contradictory median-r80 before any paper
 promotion.
 
+The full comparison tool is now fixed before method results at
+`tools/fetchreach_goal_recovery_probe.py`. It uses a learned linear FetchReach
+goal controller initialized at the calibrated weak setting and applies
+teacher-action updates selected by the replay method. The preregistered 4-seed
+command is:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetchreach_goal_recovery_probe.py --out results/fetchreach_goal_recovery_probe_4seed_v1
+```
+
+The screen compares uniform, fixed-radius, failure-only, TD-loss,
+BGR-uniform-radius, BGR-Coverage, and default BGR. Do not scale or promote it
+unless default BGR or BGR-Coverage beats every listed baseline on final RAUC,
+wins at least 3/4 paired seeds against uniform, has a visible mean gap, and has
+non-contradictory median r80.
+
 ## Internal Official PointMaze Diagnostic
 
 The next preregistered external-package screen is official PointMaze U-Maze,
