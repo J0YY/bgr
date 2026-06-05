@@ -467,7 +467,7 @@ def render_markdown(root: Path) -> str:
             "- The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.",
             "- The independent-benchmark route has not produced a promotable screen: the closest external-package screens either trail uniform on mean RAUC or lose to the state-priority/uniform-radius ablation.",
             "- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.",
-            "- The current OpenVLA weighted curriculum is already unable to clear the official-checkpoint gate; the pending random-shift row is ledger completion, not a path to a positive robotics claim.",
+            "- The latest OpenVLA weighted audit is already unable to clear the official-checkpoint gate; the pending random-shift row is ledger completion, not a path to a positive robotics claim.",
             "- The next acceptance-moving work should change the learned-policy intervention or materially strengthen theory/presentation; another same-protocol MiniGrid/classic-control screen is unlikely to move the gate.",
         ]
     )

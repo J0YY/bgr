@@ -67,9 +67,6 @@ to reproduce this read from the current result artifacts.
 - Stop adding MiniGrid/classic-control screens under the same tabular recovery
   protocol. They now support limitations and scope, not an AAAI-main acceptance
   case.
-- The next acceptance-moving result must be either a fixed-protocol positive
-  pre-existing benchmark or a genuinely different preregistered learned-policy
-  intervention that can beat both official and matched random.
 - Gymnasium-Robotics FetchReach-v4 is now completed negative, including the
   hard-budget follow-up. The default screen saturates after training:
   BGR-Coverage 0.9000 and BGR 0.8938 trail uniform/fixed 0.9437 and
@@ -83,10 +80,12 @@ to reproduce this read from the current result artifacts.
   preregistered learned-policy intervention that can beat both official and
   matched random, or a stronger theory/presentation contribution. Do not keep
   rerunning the same MiniGrid/PointMaze/FetchReach protocol family.
-- The current learned-policy follow-up is the preregistered weighted
-  perturbation curriculum in
-  `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh`. It changes the
-  OpenVLA-OFT training distribution by repeating perturbation examples under
-  separate TFDS `mix_source` labels. It remains non-promotable unless weighted
-  BGR beats both weighted random and official by the fixed 10/400 and 0.02
-  non-identity gates without clean-identity regression.
+- The weighted perturbation curriculum in
+  `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh` is now a
+  negative learned-policy audit for the official-checkpoint gate. It changed
+  the OpenVLA-OFT training distribution by repeating perturbation examples
+  under separate TFDS `mix_source` labels, but BGR's completed non-identity
+  total is already tied with the official checkpoint at 367/400 before the
+  matched-random shift row finishes. Poll the remaining row only for ledger
+  completion; do not treat this recipe family as an active acceptance-moving
+  route.

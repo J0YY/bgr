@@ -138,6 +138,23 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
         self.assertFalse(gate.passed)
         self.assertIn("weighted perturbation", gate.detail)
 
+    def test_roadmap_hygiene_rejects_completed_weighted_openvla_as_current_followup(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            docs = root / "docs"
+            docs.mkdir(parents=True)
+            (root / "AGENTS.md").write_text("Current status.\n", encoding="utf-8")
+            (docs / "review_weakness_response.md").write_text(
+                "The current learned-policy follow-up is the preregistered weighted perturbation curriculum.\n",
+                encoding="utf-8",
+            )
+            (docs / "aaai_acceptance_gap.md").write_text("Current status.\n", encoding="utf-8")
+
+            gate = roadmap_hygiene_gate(root)
+
+        self.assertFalse(gate.passed)
+        self.assertIn("current learned-policy follow-up", gate.detail)
+
     def test_roadmap_hygiene_accepts_completed_negative_weighted_openvla(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

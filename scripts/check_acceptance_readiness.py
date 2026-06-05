@@ -34,6 +34,7 @@ STALE_ROADMAP_SNIPPETS = [
     "The next preregistered external-package screen is official",
     "The next preregistered PointMaze",
     "The next preregistered learned-policy intervention is weighted perturbation",
+    "The current learned-policy follow-up is the preregistered weighted",
     "The next independent-benchmark route is Gymnasium-Robotics FetchReach",
     "The next harder Gymnasium-Robotics calibration route",
     "The next Gymnasium-Robotics object calibration",

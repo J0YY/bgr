@@ -640,7 +640,7 @@ package and recording its version before any result is run.
   checkpoint's four completed non-identity rows also total 367/400, far below
   the preregistered requirement that BGR beat the official checkpoint by at
   least 10/400 episodes and 0.02 absolute success.
-  Live Slurm poll on 2026-06-05 12:06 PDT still shows matched-random shift job
+  Live Slurm poll on 2026-06-05 12:12 PDT still shows matched-random shift job
   `766831` as `PENDING` for unavailable GPU nodes, with a Slurm start estimate
   of 2026-06-07T13:21:02 and no start/end time in `sacct`. The remote
   `summary.csv` has the same 14 rows as the local `summary_available.csv`, so
