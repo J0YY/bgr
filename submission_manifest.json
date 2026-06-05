@@ -442,7 +442,7 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "f550c1a3559bb56b82f542f44989a6c40eb1f2cd23ce870368154e2cc386a1c6",
+      "sha256": "3d4d17740f30d9424d55546d1e740bdcf6effd76525ec0e3e4b11f23cddb1e0c",
       "size_bytes": 259393
     },
     {
@@ -727,8 +727,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "2f405cf2271ef994a5ccadac44f0141317c96a014f43d7c8fd47f1130b568cd8",
-      "size_bytes": 18344
+      "sha256": "a84cd99ebaafa807ad359a544989dac341b71ee1288d0a87aa5027cc7d6a4e17",
+      "size_bytes": 21383
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -1037,8 +1037,8 @@
     },
     {
       "path": "tests/test_acceptance_scorecard.py",
-      "sha256": "0f2035346189f46ae02c1a7d4c2472f50132b1c3b307c242a370384148897cfe",
-      "size_bytes": 4963
+      "sha256": "f64a7c71ba26b18e264759c1c584c412955a2cf24fb578b14fc856e34cdd52fa",
+      "size_bytes": 6688
     },
     {
       "path": "tests/test_aggregate_results.py",

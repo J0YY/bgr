@@ -26,6 +26,15 @@ verify that claims match artifacts, while this readiness check verifies whether
 the evidence has actually cleared the independent-benchmark and learned-policy
 promotion gates.
 
+The generated scorecard now reports why each independent-benchmark screen fails
+the gate. As of the 2026-06-05 12:27 PDT refresh, the closest screen is the
+official-package MiniGrid FourRooms BGR-Coverage run: it has a visible RAUC lead
+over uniform and required baselines, but fails because both the original
+relative-radius metric and the absolute-r10 follow-up are saturated. Any further
+independent-benchmark attempt should therefore fix non-saturated radius evidence
+before method comparison, not merely rerun the same MiniGrid protocol at more
+seeds.
+
 After the weak-reject style review, the immediate paper-defense priority is not
 to amplify p-values or add more authored toy wins. The manuscript should instead
 make the evidence contract unavoidable:
@@ -640,7 +649,7 @@ package and recording its version before any result is run.
   checkpoint's four completed non-identity rows also total 367/400, far below
   the preregistered requirement that BGR beat the official checkpoint by at
   least 10/400 episodes and 0.02 absolute success.
-  Live Slurm poll on 2026-06-05 12:12 PDT still shows matched-random shift job
+  Live Slurm poll on 2026-06-05 12:27 PDT still shows matched-random shift job
   `766831` as `PENDING` for unavailable GPU nodes, with a Slurm start estimate
   of 2026-06-07T13:21:02 and no start/end time in `sacct`. The remote
   `summary.csv` has the same 14 rows as the local `summary_available.csv`, so

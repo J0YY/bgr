@@ -82,6 +82,39 @@ class AcceptanceScorecardTest(unittest.TestCase):
                 ),
             )
             _write(
+                root / "results/minigrid_fourrooms_recovery_probe_4seed_v1/summary.csv",
+                "\n".join(
+                    [
+                        "method,seed,final_rauc,final_median_r80",
+                        "uniform,0,0.10,1.00",
+                        "uniform,1,0.10,1.00",
+                        "uniform,2,0.10,1.00",
+                        "uniform,3,0.10,1.00",
+                        "fixed,0,0.12,1.00",
+                        "fixed,1,0.12,1.00",
+                        "fixed,2,0.12,1.00",
+                        "fixed,3,0.12,1.00",
+                        "failure_only,0,0.14,1.00",
+                        "failure_only,1,0.14,1.00",
+                        "failure_only,2,0.14,1.00",
+                        "failure_only,3,0.14,1.00",
+                        "td_loss,0,0.15,1.00",
+                        "td_loss,1,0.15,1.00",
+                        "td_loss,2,0.15,1.00",
+                        "td_loss,3,0.15,1.00",
+                        "bgr_uniform_radius,0,0.18,1.00",
+                        "bgr_uniform_radius,1,0.18,1.00",
+                        "bgr_uniform_radius,2,0.18,1.00",
+                        "bgr_uniform_radius,3,0.18,1.00",
+                        "bgr_coverage,0,0.22,1.00",
+                        "bgr_coverage,1,0.22,1.00",
+                        "bgr_coverage,2,0.22,1.00",
+                        "bgr_coverage,3,0.22,1.00",
+                        "",
+                    ]
+                ),
+            )
+            _write(
                 root / "results/fetchpush_object_goal_calibration_2seed_v1/summary.json",
                 (
                     '{"clean_success": 0.25, "min_recovery": 0.25, '
@@ -110,6 +143,10 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("already unable to clear the official-checkpoint gate", text)
         self.assertIn("pending random row is ledger completion", text)
         self.assertIn("MiniGrid LavaGapS7", text)
+        self.assertIn("MiniGrid FourRooms official-package", text)
+        self.assertIn("final_median_r80-ceiling-saturated", text)
+        self.assertIn("Cleared gates", text)
+        self.assertIn("3/4", text)
         self.assertIn("state-priority/uniform-radius ablation", text)
         self.assertIn("Pre-Method Calibrations", text)
         self.assertIn("FetchPush-v4 object-goal calibration", text)

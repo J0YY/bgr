@@ -33,6 +33,7 @@ class BenchmarkCandidate:
     path: str
     treatment: str
     seeds: int
+    radius_metric: str
     vs_uniform: PairedComparison | None
     worst_required: PairedComparison | None
     vs_ablation: PairedComparison | None
@@ -57,7 +58,32 @@ class BenchmarkCandidate:
 
     @property
     def clears_radius_gate(self) -> bool:
-        return self.radius_vs_uniform is None or self.radius_vs_uniform.delta >= 0.0
+        return (
+            self.radius_vs_uniform is None
+            or (
+                self.radius_vs_uniform.delta >= 0.0
+                and not self.radius_ceiling_saturated
+                and not self.radius_floor_saturated
+            )
+        )
+
+    @property
+    def radius_ceiling_saturated(self) -> bool:
+        return (
+            self.radius_vs_uniform is not None
+            and self.radius_vs_uniform.treatment_mean >= 0.99
+            and self.radius_vs_uniform.baseline_mean >= 0.99
+            and abs(self.radius_vs_uniform.delta) < 1e-12
+        )
+
+    @property
+    def radius_floor_saturated(self) -> bool:
+        return (
+            self.radius_vs_uniform is not None
+            and self.radius_vs_uniform.treatment_mean <= 0.01
+            and self.radius_vs_uniform.baseline_mean <= 0.01
+            and abs(self.radius_vs_uniform.delta) < 1e-12
+        )
 
     @property
     def promotable_screen(self) -> bool:
@@ -69,10 +95,38 @@ class BenchmarkCandidate:
         )
 
     @property
-    def priority_key(self) -> tuple[int, float, float]:
+    def cleared_gate_count(self) -> int:
+        return sum(
+            [
+                self.clears_uniform_gate,
+                self.clears_required_baselines,
+                self.clears_ablation_gate,
+                self.clears_radius_gate,
+            ]
+        )
+
+    @property
+    def failure_reasons(self) -> list[str]:
+        reasons: list[str] = []
+        if not self.clears_uniform_gate:
+            reasons.append("uniform-gate")
+        if not self.clears_required_baselines:
+            reasons.append("required-baseline")
+        if not self.clears_ablation_gate:
+            reasons.append("state-priority-ablation")
+        if self.radius_ceiling_saturated:
+            reasons.append(f"{self.radius_metric}-ceiling-saturated")
+        elif self.radius_floor_saturated:
+            reasons.append(f"{self.radius_metric}-floor-saturated")
+        elif not self.clears_radius_gate:
+            reasons.append(f"{self.radius_metric}-contradiction")
+        return reasons
+
+    @property
+    def priority_key(self) -> tuple[int, int, float, float]:
         uniform_delta = self.vs_uniform.delta if self.vs_uniform is not None else -999.0
         worst_delta = self.worst_required.delta if self.worst_required is not None else -999.0
-        return int(self.promotable_screen), uniform_delta, worst_delta
+        return int(self.promotable_screen), self.cleared_gate_count, uniform_delta, worst_delta
 
 
 @dataclass(frozen=True)
@@ -105,6 +159,22 @@ BENCHMARK_SCREENS = [
         ["failure_only"],
         None,
         "final_median_r80",
+    ),
+    (
+        "MiniGrid FourRooms official-package",
+        "results/minigrid_fourrooms_recovery_probe_4seed_v1/summary.csv",
+        ["bgr_coverage", "bgr"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
+    (
+        "MiniGrid FourRooms abs-r10 follow-up",
+        "results/minigrid_fourrooms_recovery_probe_absr10_4seed_v1/summary.csv",
+        ["bgr_coverage", "bgr"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_abs_r10",
     ),
     (
         "MiniGrid FourRooms midband",
@@ -258,6 +328,7 @@ def candidate_from_rows(
         worst_required=strongest_negative(required),
         vs_ablation=vs_ablation,
         radius_vs_uniform=radius_vs_uniform,
+        radius_metric=radius_metric,
     )
 
 
@@ -384,6 +455,12 @@ def fmt_comparison(comparison: PairedComparison | None) -> str:
     return f"{comparison.delta:+.4f} ({comparison.wins}/{comparison.losses}/{comparison.ties})"
 
 
+def fmt_reasons(candidate: BenchmarkCandidate) -> str:
+    if candidate.promotable_screen:
+        return "none"
+    return ", ".join(candidate.failure_reasons)
+
+
 def render_markdown(root: Path) -> str:
     candidates = sorted(benchmark_candidates(root), key=lambda candidate: candidate.priority_key, reverse=True)
     calibrations = calibration_screens(root)
@@ -402,7 +479,8 @@ def render_markdown(root: Path) -> str:
         lines.append(
             f"- Closest independent benchmark screen is `{best.name}` with treatment `{best.treatment}`: "
             f"delta vs uniform {fmt_comparison(best.vs_uniform)}, worst required-baseline delta {fmt_comparison(best.worst_required)}, "
-            f"ablation delta {fmt_comparison(best.vs_ablation)}, radius delta {fmt_comparison(best.radius_vs_uniform)}."
+            f"ablation delta {fmt_comparison(best.vs_ablation)}, radius delta {fmt_comparison(best.radius_vs_uniform)}, "
+            f"failure reason(s): {fmt_reasons(best)}."
         )
     rejected_calibrations = [screen for screen in calibrations if not screen.usable]
     if rejected_calibrations:
@@ -413,8 +491,8 @@ def render_markdown(root: Path) -> str:
             "",
             "## Independent Benchmark Screens",
             "",
-            "| Screen | Treatment | Seeds | dRAUC vs uniform (W/L/T) | Worst required baseline dRAUC | Ablation dRAUC | Radius delta | Screen gate |",
-            "| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |",
+            "| Screen | Treatment | Seeds | dRAUC vs uniform (W/L/T) | Worst required baseline dRAUC | Ablation dRAUC | Radius metric | Radius delta | Cleared gates | Screen gate | Failure reason(s) |",
+            "| --- | --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | --- | --- |",
         ]
     )
     for candidate in candidates:
@@ -429,8 +507,11 @@ def render_markdown(root: Path) -> str:
                     fmt_comparison(candidate.vs_uniform),
                     fmt_comparison(candidate.worst_required),
                     fmt_comparison(candidate.vs_ablation),
+                    candidate.radius_metric if candidate.radius_vs_uniform is not None else "n/a",
                     fmt_comparison(candidate.radius_vs_uniform),
+                    f"{candidate.cleared_gate_count}/4",
                     decision,
+                    fmt_reasons(candidate),
                 ]
             )
             + " |"
@@ -465,7 +546,7 @@ def render_markdown(root: Path) -> str:
             "## Priority Read",
             "",
             "- The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.",
-            "- The independent-benchmark route has not produced a promotable screen: the closest external-package screens either trail uniform on mean RAUC or lose to the state-priority/uniform-radius ablation.",
+            "- The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.",
             "- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.",
             "- The latest OpenVLA weighted audit is already unable to clear the official-checkpoint gate; the pending random-shift row is ledger completion, not a path to a positive robotics claim.",
             "- The next acceptance-moving work should change the learned-policy intervention or materially strengthen theory/presentation; another same-protocol MiniGrid/classic-control screen is unlikely to move the gate.",

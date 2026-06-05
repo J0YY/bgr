@@ -131,7 +131,7 @@ Packaged OpenVLA audit artifacts are:
   weighted p2048unique perturbation audit rows available before matched-random
   shift completed; this artifact already proves the official-checkpoint
   promotion gate cannot pass because BGR and official tie at 367/400
-  non-identity successes. A live poll on 2026-06-05 12:12 PDT still had
+  non-identity successes. A live poll on 2026-06-05 12:27 PDT still had
   matched-random shift job `766831` pending for unavailable GPU nodes, so the
   missing row is ledger completion only.
 
@@ -1554,7 +1554,7 @@ official checkpoint's 367/400, so BGR cannot satisfy the preregistered
 checkpoint. The paper should therefore continue to treat this intervention as a
 negative OpenVLA/LIBERO audit, not a robotics fine-tuning result.
 
-Live Slurm poll on 2026-06-05 12:12 PDT still shows matched-random shift job
+Live Slurm poll on 2026-06-05 12:27 PDT still shows matched-random shift job
 `766831` as pending for unavailable GPU nodes, with estimated start
 2026-06-07T13:21:02 and no start/end time in `sacct`. The remote perturbation
 `summary.csv` has the same 14 completed rows as the local
