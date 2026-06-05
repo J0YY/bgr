@@ -319,6 +319,19 @@ package and recording its version before any result is run.
      absolute r20 than uniform. This rules out a sampler-mixing fix for the
      PointMaze failure mode; the next attempt must change the update objective,
      reset-state policy, or learned-policy intervention.
+   - The next preregistered PointMaze update-schedule follow-up is
+     BGR-Clean-Shield, implemented as `bgr_clean_shield` in
+     `tools/pointmaze_recovery_probe.py`. It uses the same BGR priority and
+     boundary-radius sampling as default BGR, but if the selected replay state's
+     current clean recovery is below `--clean-shield-threshold 0.75`, it spends
+     that update on the clean state (`sigma=0`) rather than another perturbed
+     boundary state; otherwise it applies a clean anchor update with probability
+     `--clean-shield-anchor-mix 0.25`. This tests an update-schedule hypothesis,
+     not another sampler-only rescue. The fixed 4-seed command is:
+     `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/pointmaze_recovery_probe.py --out results/pointmaze_umaze_clean_shield_probe_4seed_v1 --env-id PointMaze_UMaze-v3 --methods uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr,bgr_clean_shield --max-steps 80 --q-init-blend 1.0 --q-init-noise 0.02 --perturb-cells 3 --replay-distance-min 1 --replay-distance-max 3 --iterations 60`.
+     It is only worth scaling if BGR-Clean-Shield beats uniform, fixed-radius,
+     failure-only, TD-loss, and BGR-uniform-radius on final RAUC, and if
+     absolute r20 does not contradict the RAUC effect.
 5. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.

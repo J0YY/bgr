@@ -359,7 +359,15 @@ def run_method(args: argparse.Namespace, method: str, seed: int) -> PointMazePro
             break
         for _ in range(args.train_batch_size):
             replay_idx, sigma = sample_training_pair(method, bench, records, scorer, rng, args, step)
+            if method == "bgr_clean_shield" and bench.clean_success(replay_idx) < args.clean_shield_threshold:
+                sigma = 0.0
             bench.train_step(replay_idx, sigma, rng)
+            if (
+                method == "bgr_clean_shield"
+                and sigma > 0.0
+                and rng.random() < args.clean_shield_anchor_mix
+            ):
+                bench.train_step(replay_idx, 0.0, rng)
             if method == "bgr_guarded" and rng.random() < args.guarded_clean_mix:
                 bench.train_step(replay_idx, 0.0, rng)
             if method.startswith("bgr"):
@@ -552,6 +560,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--radius-uniform-mix", type=float, default=0.25)
     parser.add_argument("--guarded-failure-mix", type=float, default=0.55)
     parser.add_argument("--guarded-clean-mix", type=float, default=0.35)
+    parser.add_argument("--clean-shield-threshold", type=float, default=0.75)
+    parser.add_argument("--clean-shield-anchor-mix", type=float, default=0.25)
     parser.add_argument("--priority-temperature", type=float, default=0.8)
     parser.add_argument("--uniform-mix", type=float, default=0.10)
     return parser

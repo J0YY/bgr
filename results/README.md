@@ -194,6 +194,19 @@ BGR-Guarded because it loses to uniform on mean RAUC, loses to failure-only on
 all four paired seeds, loses to the state-priority/uniform-radius ablation, and
 has lower absolute r20 than uniform. Do not scale this sampler-mixing variant.
 
+The next preregistered PointMaze follow-up is BGR-Clean-Shield, implemented as
+`bgr_clean_shield` in `tools/pointmaze_recovery_probe.py`. It targets the
+observed clean-recovery collapse rather than changing only the sampler: if the
+selected replay state's current clean recovery is below
+`--clean-shield-threshold 0.75`, the update is spent on the clean state
+(`sigma=0`); otherwise the method uses default BGR boundary replay and applies
+a clean anchor update with probability `--clean-shield-anchor-mix 0.25`. The
+fixed 4-seed command is:
+`PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/pointmaze_recovery_probe.py --out results/pointmaze_umaze_clean_shield_probe_4seed_v1 --env-id PointMaze_UMaze-v3 --methods uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr,bgr_clean_shield --max-steps 80 --q-init-blend 1.0 --q-init-noise 0.02 --perturb-cells 3 --replay-distance-min 1 --replay-distance-max 3 --iterations 60`.
+Do not scale it unless BGR-Clean-Shield beats uniform, fixed-radius,
+failure-only, TD-loss, and BGR-uniform-radius on final RAUC, and absolute r20
+does not contradict the RAUC effect.
+
 ## Internal Official MiniGrid-FourRooms Diagnostic
 
 `results/minigrid_fourrooms_recovery_probe_4seed_v1/summary.csv` is a 4-seed
