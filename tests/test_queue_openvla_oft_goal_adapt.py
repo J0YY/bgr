@@ -261,6 +261,7 @@ class QueueOpenVlaOftGoalAdaptTest(unittest.TestCase):
         self.assertIn("Proximal-anchor OpenVLA-OFT result sync", output)
         self.assertIn("REMOTE_HOST=athena-unit", output)
         self.assertIn("767128,767129", output)
+        self.assertIn("DETAIL_JOB_IDS=767128,767134", output)
         self.assertIn("openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0", output)
         self.assertIn("[dry-run] pass --poll", output)
         self.assertIn("[dry-run] pass --sync", output)

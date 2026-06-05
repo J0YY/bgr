@@ -115,10 +115,14 @@ Treat the following as the current paper-weakness backlog:
   official jobs `767134`-`767138`, BGR jobs `767139`-`767143`, and random jobs
   `767144`-`767148`. At submission, all were pending; BGR/random perturb jobs
   were dependency-held, while official perturb jobs serialized by method. A
-  remote Athena poll on 2026-06-05 13:41 PDT / 21:41 BST still showed all jobs
+  remote Athena poll on 2026-06-05 14:09 PDT / 22:09 BST still showed all jobs
   pending with no `sacct` start/end times: BGR train job `767128` and official
-  identity job `767134` were waiting on unavailable GPU nodes, and all other
-  jobs were dependency-held. Use
+  identity job `767134` were waiting on unavailable A6000 GPU nodes with a
+  Slurm start estimate of 2026-06-07 14:27:51 BST, and all other jobs were
+  dependency-held. `scontrol show job -dd` confirmed
+  `TresPerNode=gres/gpu:a6000:1`; idle g2 nodes are A4000s, so do not resubmit
+  this OpenVLA route as a generic/A4000 job unless the memory requirement is
+  separately changed and preregistered. Use
   `scripts/sync_openvla_oft_proximal_anchor_results.sh --poll --no-check` to
   re-poll the fixed job IDs and remote summary paths; use `--sync` only after
   the compact `summary.csv` files exist.

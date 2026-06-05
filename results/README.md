@@ -1658,18 +1658,23 @@ Slurm audit showed all rows pending, with BGR/random perturb rows held on
 dependencies and official perturb rows serialized by method. No result is
 available yet, and this remains an audit until the fixed gate above is checked.
 
-Fresh Athena poll on 2026-06-05 13:41 PDT / 21:41 BST:
+Fresh Athena poll on 2026-06-05 14:09 PDT / 22:09 BST:
 
 ```text
-767128 PENDING (ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08],g2-[01-02])
-767134 PENDING (ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08],g2-[01-02])
+767128 PENDING (ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08],g2-[03-05])
+767134 PENDING (ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08],g2-[03-05])
 767129-767133 PENDING (Dependency)
 767135-767148 PENDING (Dependency)
+StartTime=2026-06-07T14:27:51 for 767128 and 767134
+TresPerNode=gres/gpu:a6000:1 for 767128 and 767134
 ```
 
 `sacct` reported `PENDING`, `00:00:00` elapsed, and unknown start/end times for
 all jobs `767128`-`767148`; there is still no proximal-anchor summary to sync
-or promote.
+or promote. A scheduler diagnostic found idle `g2` nodes, but those nodes expose
+`gpu:a4000`, while these OpenVLA jobs retain a typed A6000 GRES request. Do not
+resubmit this route as a generic/A4000 retry unless the memory footprint is
+separately changed and preregistered.
 
 Result ingestion helper:
 
@@ -1679,12 +1684,12 @@ scripts/sync_openvla_oft_proximal_anchor_results.sh --sync
 ```
 
 The helper polls the fixed jobs, checks the remote compact summaries under
-the configured remote run root, syncs only `summary.csv` files when present, and
-then runs the local perturbation and readiness gates. For the live internal
-cluster workspace, set `REMOTE_RUN_ROOT=/work/<user>/bgr/runs`. A follow-up
-helper poll on
-2026-06-05 13:47 PDT / 21:47 BST still showed all jobs pending and both expected
-proximal `summary.csv` files missing.
+the configured remote run root, prints selected `scontrol show job -dd` details
+including `TresPerNode`, syncs only `summary.csv` files when present, and then
+runs the local perturbation and readiness gates. For the live internal cluster
+workspace, set `REMOTE_RUN_ROOT=/work/<user>/bgr/runs`. The 2026-06-05
+14:09 PDT / 22:09 BST helper poll still showed all jobs pending and both
+expected proximal `summary.csv` files missing.
 
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 

@@ -17,6 +17,7 @@ ADAPT_ARTIFACT="${ADAPT_ARTIFACT:-openvla_oft_goal_adapt_eval_${ADAPT_TAG}}"
 PERTURB_ARTIFACT="${PERTURB_ARTIFACT:-openvla_oft_perturb_eval_${PERTURB_TAG}}"
 
 JOB_IDS="${JOB_IDS:-767128,767129,767130,767131,767132,767133,767134,767135,767136,767137,767138,767139,767140,767141,767142,767143,767144,767145,767146,767147,767148}"
+DETAIL_JOB_IDS="${DETAIL_JOB_IDS:-767128,767134}"
 
 REMOTE_ADAPT_SUMMARY="${REMOTE_ADAPT_SUMMARY:-${REMOTE_RUN_ROOT}/${ADAPT_ARTIFACT}/summary.csv}"
 REMOTE_PERTURB_SUMMARY="${REMOTE_PERTURB_SUMMARY:-${REMOTE_RUN_ROOT}/${PERTURB_ARTIFACT}/summary.csv}"
@@ -60,6 +61,7 @@ done
 echo "### Proximal-anchor OpenVLA-OFT result sync"
 echo "REMOTE_HOST=${REMOTE_HOST}"
 echo "JOB_IDS=${JOB_IDS}"
+echo "DETAIL_JOB_IDS=${DETAIL_JOB_IDS}"
 echo "REMOTE_PERTURB_SUMMARY=${REMOTE_PERTURB_SUMMARY}"
 echo "LOCAL_PERTURB_SUMMARY=${LOCAL_PERTURB_SUMMARY}"
 echo "REMOTE_ADAPT_SUMMARY=${REMOTE_ADAPT_SUMMARY}"
@@ -69,6 +71,17 @@ remote_poll_script=$(cat <<'REMOTE'
 date
 squeue -j "${JOB_IDS}" -o '%i %T %M %R' || true
 sacct -j "${JOB_IDS}" --format=JobID,JobName%40,State,ExitCode,Elapsed,Start,End -P || true
+if command -v scontrol >/dev/null 2>&1 && [ -n "${DETAIL_JOB_IDS:-}" ]; then
+  old_ifs="${IFS}"
+  IFS=,
+  set -- ${DETAIL_JOB_IDS}
+  IFS="${old_ifs}"
+  for job_id in "$@"; do
+    echo "DETAIL:${job_id}"
+    scontrol show job -dd "${job_id}" | \
+      egrep 'JobId=|JobState=|Reason=|StartTime=|Partition=|ReqNodeList=|ExcNodeList=|ReqTRES=|TresPerNode=|MinCPUsNode=|MinMemoryNode=' || true
+  done
+fi
 for p in "${REMOTE_PERTURB_SUMMARY}" "${REMOTE_ADAPT_SUMMARY}"; do
   if [ -f "$p" ]; then
     echo "FOUND:$p"
@@ -83,7 +96,7 @@ REMOTE
 
 if [[ "${POLL}" -eq 1 ]]; then
   ssh -o BatchMode=yes -o ConnectTimeout=8 "${REMOTE_HOST}" \
-    "JOB_IDS='${JOB_IDS}' REMOTE_PERTURB_SUMMARY='${REMOTE_PERTURB_SUMMARY}' REMOTE_ADAPT_SUMMARY='${REMOTE_ADAPT_SUMMARY}' bash -s" \
+    "JOB_IDS='${JOB_IDS}' DETAIL_JOB_IDS='${DETAIL_JOB_IDS}' REMOTE_PERTURB_SUMMARY='${REMOTE_PERTURB_SUMMARY}' REMOTE_ADAPT_SUMMARY='${REMOTE_ADAPT_SUMMARY}' bash -s" \
     <<<"${remote_poll_script}"
 else
   echo "[dry-run] pass --poll to run remote Slurm and summary checks"

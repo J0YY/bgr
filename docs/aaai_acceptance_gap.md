@@ -702,11 +702,16 @@ package and recording its version before any result is run.
   matched-random jobs `767144`-`767148`. Slurm immediately reported all jobs
   pending; BGR/random perturb rows were dependency-held, and official
   perturb rows serialized identity through shift. A fresh Athena poll on
-  2026-06-05 13:41 PDT / 21:41 BST still showed all jobs pending with no
+  2026-06-05 14:09 PDT / 22:09 BST still showed all jobs pending with no
   `sacct` start/end times: BGR train job `767128` and official identity job
   `767134` were waiting on unavailable GPU nodes
-  (`ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08],g2-[01-02]`),
-  and every other proximal job was dependency-held.
+  (`ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08],g2-[03-05]`),
+  and every other proximal job was dependency-held. `scontrol show job -dd`
+  reported `StartTime=2026-06-07T14:27:51` and
+  `TresPerNode=gres/gpu:a6000:1` for jobs `767128` and `767134`. Idle g2 nodes
+  expose `gpu:a4000`, so a generic/A4000 resubmission is not a protocol-neutral
+  acceleration for OpenVLA unless the memory footprint is separately changed
+  and preregistered.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance
