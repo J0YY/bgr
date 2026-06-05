@@ -539,6 +539,14 @@ package and recording its version before any result is run.
   `766808`, random merge `766809`, random clean eval `766810`. At submission
   audit time, BGR train `766805` was running and the remaining jobs were
   pending on dependencies.
+  The fixed perturbation eval was submitted on 2026-06-05 before the merge jobs
+  completed, using dependency gates `BGR_DEPENDENCY=afterok:766806` and
+  `RANDOM_DEPENDENCY=afterok:766809`. Official perturbation jobs are `766817`
+  through `766821` for identity, blur, brightness, occlusion, and shift; BGR
+  jobs are `766822` through `766826`; random jobs are `766827` through `766831`.
+  At submission audit time, official identity `766817` was running, the other
+  official perturbations were serialized behind it, and BGR/random perturbation
+  jobs were pending on their merge and per-method serial dependencies.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

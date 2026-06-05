@@ -1271,6 +1271,22 @@ RANDOM_DEPENDENCY=afterok:<random_merge> \
 scripts/queue_openvla_oft_preregistered_weighted_perturb.sh --perturb-only --submit-perturb
 ```
 
+Submitted the fixed perturbation eval on 2026-06-05 with
+`BGR_DEPENDENCY=afterok:766806` and `RANDOM_DEPENDENCY=afterok:766809`.
+Per-method perturbations are serialized by the queue script. Slurm job map:
+
+```text
+official identity=766817 blur=766818 brightness=766819 occlusion=766820 shift=766821
+bgr identity=766822 blur=766823 brightness=766824 occlusion=766825 shift=766826
+random identity=766827 blur=766828 brightness=766829 occlusion=766830 shift=766831
+```
+
+At submission audit time, official identity `766817` was running. Official
+blur/brightness/occlusion/shift were pending on the previous official
+perturbation job. BGR perturbation jobs were pending on BGR merge `766806` and
+their per-method serial dependencies; random perturbation jobs were pending on
+random merge `766809` and their per-method serial dependencies.
+
 Promotion gate: weighted BGR must beat weighted matched random and the official
 checkpoint on the fixed non-identity perturbation total by at least 10/400
 episodes and at least 0.02 absolute success rate, while not trailing clean
