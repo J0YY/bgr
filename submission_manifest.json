@@ -757,8 +757,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "0b967b3ff4d785685a78f829efd1121428c49f18379fce6e2ebf44466a3f73cc",
-      "size_bytes": 231169
+      "sha256": "55b28fc9197fd0300e417f0c739a4cf6247f2919678e3d66eb64c831dbda1ed3",
+      "size_bytes": 232566
     },
     {
       "path": "scripts/collect_environment.py",

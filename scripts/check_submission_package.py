@@ -3082,6 +3082,36 @@ def check_generated_result_tables(root: Path) -> list[str]:
     if empty_visuals:
         raise ValueError(f"empty generated visual artifact(s): {', '.join(empty_visuals)}")
 
+    boundary_stats = read_csv_rows(root / "paper" / "figures" / "boundary_intuition_stats.csv")
+    boundary_metrics = {row["metric"]: float(row["value"]) for row in boundary_stats}
+    required_boundary_metrics = [
+        "bgr_final_rauc",
+        "uniform_final_rauc",
+        "failure_only_final_rauc",
+        "fixed_final_rauc",
+        "plr_loss_final_rauc",
+        "bgr_median_r80",
+        "uniform_median_r80",
+        "failure_only_median_r80",
+        "fixed_median_r80",
+        "plr_loss_median_r80",
+    ]
+    missing_boundary_metrics = [metric for metric in required_boundary_metrics if metric not in boundary_metrics]
+    if missing_boundary_metrics:
+        raise ValueError(
+            "paper/figures/boundary_intuition_stats.csv: missing upgraded boundary-figure metric(s): "
+            + ", ".join(missing_boundary_metrics)
+        )
+    if not (
+        boundary_metrics["bgr_final_rauc"] > boundary_metrics["uniform_final_rauc"]
+        > boundary_metrics["failure_only_final_rauc"]
+        > max(boundary_metrics["fixed_final_rauc"], boundary_metrics["plr_loss_final_rauc"])
+    ):
+        raise ValueError(
+            "paper/figures/boundary_intuition_stats.csv: expected seed-0 boundary figure to show "
+            "BGR above uniform and strong baselines"
+        )
+
     summary_stats = read_csv_rows(root / "paper" / "figures" / "summary_stats.csv")
     summary_table = root / "paper" / "figures" / "summary_table.tex"
     summary_rows = [
@@ -4071,6 +4101,7 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "action-label/TFDS plumbing validates 2,048-transition matched BGR/random exports with 7D actions and 8D state",
         "matched action/TFDS construction",
         "Geometric intuition for BGR",
+        "final recovery curves for BGR, uniform, failure-only, fixed-radius, and PLR-loss replay",
         "We treat exact paired sign tests as consistency checks over shared seeds, not as substitutes for effect size",
         "The following local calculation is a design rationale for the radius sampler",
         "Local boundary intuition",
