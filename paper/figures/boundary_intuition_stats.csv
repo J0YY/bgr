@@ -13,3 +13,7 @@ plr_loss_median_r80,0.14479614166030183
 bgr_sample_radius_q25,0.08657664991044112
 bgr_sample_radius_median,0.19093942942392444
 bgr_sample_radius_q75,0.28971486348330494
+grid_margin_rauc_delta,0.03811985705206324
+grid_margin_median_r80_delta,0.01260370543512424
+robot_suffix_rauc_delta,0.011565348612731624
+robot_suffix_median_r80_delta,-0.006547306633402281

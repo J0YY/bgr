@@ -237,18 +237,18 @@
     },
     {
       "path": "paper/figures/boundary_intuition.pdf",
-      "sha256": "9f40dc218f50cd748ef44e0c973d153fb75f177bf49c782beb92518067752ed0",
-      "size_bytes": 25616
+      "sha256": "1b483a1395a3a6241e7310d0b3cc6433c9bcd1cdab4388bedd0de0bf77fce573",
+      "size_bytes": 26745
     },
     {
       "path": "paper/figures/boundary_intuition.png",
-      "sha256": "48a8c58be6a2ee042d253a75488db606f8fa1d94beb55d09f35861f0158dec93",
-      "size_bytes": 73319
+      "sha256": "61ef4353f964ecd2111ccb9a079aeb3ae3b018834b9851f86b972d761b07e77b",
+      "size_bytes": 74909
     },
     {
       "path": "paper/figures/boundary_intuition_stats.csv",
-      "sha256": "e3ee588022677854f856e2d28f8dfc3e66321ca043f8ae8825316fc773481c63",
-      "size_bytes": 534
+      "sha256": "5216fe027e07f661b5eeec70d2dd47cdc55bb08a06fea25b0cd320b1247bca0d",
+      "size_bytes": 723
     },
     {
       "path": "paper/figures/clean_bars.pdf",
@@ -417,18 +417,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "2cc4553e2c230979d4a43ecb2c99cada717c382bf317c0b14057ace57966347f",
-      "size_bytes": 13815
+      "sha256": "488abd635bc647a05609ef1868087f773e21cdee55c93bc527c9796f62334431",
+      "size_bytes": 13816
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "d896e08281e51b25472b5cc123f14a20545c9fe0ccd4bf81ae62e676f32fa5a9",
-      "size_bytes": 292840
+      "sha256": "b83993913e92bb18bdbd95442ebae2c586969b98e1d4ca21bc03b62a1ab90bee",
+      "size_bytes": 296771
     },
     {
       "path": "paper/main.tex",
-      "sha256": "b4ee3045747bd21c5b0ac8888354103a5e132ed3f8c6deee42a354988806a9a2",
-      "size_bytes": 36757
+      "sha256": "ca5fdd29a9a4ca8530a4713d61db7fb67d9b226bbc2d9de60a1afae654097baa",
+      "size_bytes": 36931
     },
     {
       "path": "paper/references.bib",
@@ -732,8 +732,8 @@
     },
     {
       "path": "scripts/aggregate_results.py",
-      "sha256": "f9c3ddad239275163453c10831e85b22e74cb5ba55fd07370af8ecd4dccabefa",
-      "size_bytes": 49150
+      "sha256": "1b04f22e4a26d2a34e9a938861bd6236dc1b6bb2aeea333bea43ced0517a596b",
+      "size_bytes": 51999
     },
     {
       "path": "scripts/analyze_significance.py",
@@ -757,8 +757,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "e130c4512bee5671cc5774da6b208a23abd503a251144dcadb97fbff9ea4195c",
-      "size_bytes": 233076
+      "sha256": "f7c82ff1b543c602e0ef8a155cccdd82b325d1e5176ba0c39112cc31a1ab5108",
+      "size_bytes": 233723
     },
     {
       "path": "scripts/collect_environment.py",

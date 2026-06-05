@@ -835,7 +835,12 @@ def make_boundary_intuition_figure(out_dir: Path, results_dir: Path) -> None:
 
     trace = grid_margin_boundary_trace(results_dir)
 
-    fig, axes = plt.subplots(1, 2, figsize=(6.4, 2.1))
+    fig, axes = plt.subplots(
+        1,
+        3,
+        figsize=(7.2, 2.05),
+        gridspec_kw={"width_ratios": [1.0, 1.22, 0.95]},
+    )
     ax = axes[0]
     ax.plot(sigma, recovery, color="#1f77b4", linewidth=2.0, label="Recovery curve")
     ax.axhline(threshold, color="#666666", linestyle="--", linewidth=1.0, label=r"$0.8 R(0)$")
@@ -846,7 +851,7 @@ def make_boundary_intuition_figure(out_dir: Path, results_dir: Path) -> None:
     ax.set_ylim(0, 1.02)
     ax.set_xlim(0, 1.0)
     ax.grid(alpha=0.22, linewidth=0.5)
-    ax.legend(loc="upper right", fontsize=6.7, frameon=False)
+    ax.legend(loc="upper right", fontsize=6.1, frameon=False)
 
     ax = axes[1]
     empirical_sigma = trace["sigma"]
@@ -885,12 +890,39 @@ def make_boundary_intuition_figure(out_dir: Path, results_dir: Path) -> None:
     ax.set_ylim(0, 1.02)
     ax.set_xlim(0, 1.0)
     ax.grid(alpha=0.22, linewidth=0.5)
-    ax.legend(loc="upper right", fontsize=5.7, frameon=False, ncol=1)
+    ax.legend(loc="upper right", fontsize=5.2, frameon=False, ncol=1)
 
-    fig.tight_layout(w_pad=1.2)
+    cross_metric = metric_cross_checks(results_dir)
+    ax = axes[2]
+    labels = [row["label"] for row in cross_metric]
+    y = np.arange(len(labels))
+    height = 0.32
+    rauc_delta = [row["rauc_delta"] for row in cross_metric]
+    r80_delta = [row["r80_delta"] for row in cross_metric]
+    ax.barh(y - height / 2, rauc_delta, height=height, color="#1f77b4", alpha=0.78, label=r"$\Delta$RAUC")
+    ax.barh(y + height / 2, r80_delta, height=height, color="#ff7f0e", alpha=0.78, label=r"$\Delta r_{80}$")
+    ax.axvline(0.0, color="#444444", linewidth=0.8)
+    ax.set_yticks(y, labels)
+    ax.invert_yaxis()
+    ax.set_xlabel("BGR - Uniform")
+    ax.set_xlim(-0.012, 0.043)
+    ax.grid(axis="x", alpha=0.22, linewidth=0.5)
+    ax.legend(loc="lower right", fontsize=5.7, frameon=False)
+
+    fig.tight_layout(w_pad=0.8)
     fig.savefig(out_dir / "boundary_intuition.pdf")
     fig.savefig(out_dir / "boundary_intuition.png", dpi=200)
     plt.close(fig)
+
+    cross_metric_rows = []
+    for row in cross_metric:
+        key = row["key"]
+        cross_metric_rows.extend(
+            [
+                {"metric": f"{key}_rauc_delta", "value": row["rauc_delta"]},
+                {"metric": f"{key}_median_r80_delta", "value": row["r80_delta"]},
+            ]
+        )
 
     write_csv(
         out_dir / "boundary_intuition_stats.csv",
@@ -907,8 +939,54 @@ def make_boundary_intuition_figure(out_dir: Path, results_dir: Path) -> None:
             {"metric": "bgr_sample_radius_q25", "value": trace["bgr_sample_radius_q25"]},
             {"metric": "bgr_sample_radius_median", "value": trace["bgr_sample_radius_median"]},
             {"metric": "bgr_sample_radius_q75", "value": trace["bgr_sample_radius_q75"]},
+            *cross_metric_rows,
         ],
     )
+
+
+def metric_cross_checks(results_dir: Path) -> list[dict[str, float | str]]:
+    checks = [
+        (
+            "grid_margin",
+            "Grid",
+            results_dir / "grid_margin_full_30seed_v1" / "summary.csv",
+            "bgr",
+            "uniform",
+        ),
+        (
+            "robot_suffix",
+            "Suffix",
+            results_dir / "suffix_strategy_coverage_30seed_v1" / "summary.csv",
+            "bgr_broad",
+            "uniform",
+        ),
+    ]
+    rows: list[dict[str, float | str]] = []
+    for key, label, path, treatment, baseline in checks:
+        table = list(csv.DictReader(path.open("r", encoding="utf-8")))
+        treatment_rows = [row for row in table if row["method"] == treatment]
+        baseline_rows = [row for row in table if row["method"] == baseline]
+        if len(treatment_rows) != len(baseline_rows):
+            raise ValueError(f"cannot pair metric cross-check rows for {path}")
+        rows.append(
+            {
+                "key": key,
+                "label": label,
+                "rauc_delta": mean(
+                    [
+                        float(t_row["final_rauc"]) - float(b_row["final_rauc"])
+                        for t_row, b_row in zip(treatment_rows, baseline_rows, strict=True)
+                    ]
+                ),
+                "r80_delta": mean(
+                    [
+                        float(t_row["final_median_r80"]) - float(b_row["final_median_r80"])
+                        for t_row, b_row in zip(treatment_rows, baseline_rows, strict=True)
+                    ]
+                ),
+            }
+        )
+    return rows
 
 
 def grid_margin_boundary_trace(results_dir: Path) -> dict:

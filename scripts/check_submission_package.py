@@ -3095,6 +3095,10 @@ def check_generated_result_tables(root: Path) -> list[str]:
         "failure_only_median_r80",
         "fixed_median_r80",
         "plr_loss_median_r80",
+        "grid_margin_rauc_delta",
+        "grid_margin_median_r80_delta",
+        "robot_suffix_rauc_delta",
+        "robot_suffix_median_r80_delta",
     ]
     missing_boundary_metrics = [metric for metric in required_boundary_metrics if metric not in boundary_metrics]
     if missing_boundary_metrics:
@@ -3110,6 +3114,16 @@ def check_generated_result_tables(root: Path) -> list[str]:
         raise ValueError(
             "paper/figures/boundary_intuition_stats.csv: expected seed-0 boundary figure to show "
             "BGR above uniform and strong baselines"
+        )
+    if not (
+        boundary_metrics["grid_margin_rauc_delta"] > 0.03
+        and boundary_metrics["grid_margin_median_r80_delta"] > 0.0
+        and 0.0 < boundary_metrics["robot_suffix_rauc_delta"] < 0.02
+        and boundary_metrics["robot_suffix_median_r80_delta"] < 0.0
+    ):
+        raise ValueError(
+            "paper/figures/boundary_intuition_stats.csv: expected metric cross-check panel to show "
+            "grid RAUC/r80 gains and suffix RAUC gain with median-r80 caveat"
         )
 
     summary_stats = read_csv_rows(root / "paper" / "figures" / "summary_stats.csv")

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.31)  5 JUN 2026 20:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.31)  5 JUN 2026 21:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -269,12 +269,12 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 56.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<figures/boundary_intuition.pdf, id=8, 462.52798pt x 151.767pt>
+<figures/boundary_intuition.pdf, id=8, 520.34402pt x 147.4308pt>
 File: figures/boundary_intuition.pdf Graphic file (type pdf)
 <use figures/boundary_intuition.pdf>
 Package pdftex.def Info: figures/boundary_intuition.pdf  used on input line 95.
 
-(pdftex.def)             Requested size: 239.39438pt x 78.55107pt.
+(pdftex.def)             Requested size: 239.39438pt x 67.83023pt.
  [2 <./figures/boundary_intuition.pdf>] [3] (./figures/summary_table.tex)
 (./figures/significance_table.tex) (./figures/estimator_table.tex)
 <figures/grid_margin_learning_curve.pdf, id=47, 462.52798pt x 169.8345pt>
@@ -347,7 +347,7 @@ dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/ut
 mr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (10 pages, 293477 bytes).
+Output written on main.pdf (10 pages, 294759 bytes).
 PDF statistics:
  163 PDF objects out of 1000 (max. 8388607)
  99 compressed objects within 1 object stream
