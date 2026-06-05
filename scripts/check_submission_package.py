@@ -101,6 +101,17 @@ SUBMISSION_MANIFEST = "submission_manifest.json"
 RAW_RUN_ARTIFACT_PATH_MARKERS = ("/slurm/", "/logs/")
 RAW_RUN_ARTIFACT_PREFIXES = ("runs/",)
 RAW_RUN_ARTIFACT_SUFFIXES = (".out", ".err", ".log")
+CONTAINER_WORKFLOW_FILENAMES = (
+    "apptainer.def",
+    "compose.yaml",
+    "compose.yml",
+    "containerfile",
+    "docker-compose.yaml",
+    "docker-compose.yml",
+    "dockerfile",
+    "singularity.def",
+)
+CONTAINER_WORKFLOW_PATH_MARKERS = ("/.devcontainer/",)
 PAPER_NEGATIVE_ARTIFACT_MARKERS = (
     "p4096",
     "commonavail",
@@ -3461,6 +3472,19 @@ def raw_run_artifact_paths(files: list[str]) -> list[str]:
     return sorted(flagged)
 
 
+def container_workflow_artifact_paths(files: list[str]) -> list[str]:
+    flagged: list[str] = []
+    for relative in files:
+        normalized = relative.replace("\\", "/")
+        wrapped = f"/{normalized}"
+        filename = Path(normalized).name.lower()
+        if filename in CONTAINER_WORKFLOW_FILENAMES or any(
+            marker in wrapped for marker in CONTAINER_WORKFLOW_PATH_MARKERS
+        ):
+            flagged.append(relative)
+    return sorted(flagged)
+
+
 def check_required_artifact_scope(root: Path) -> list[str]:
     del root
     required_files = required_submission_files()
@@ -3469,6 +3493,12 @@ def check_required_artifact_scope(root: Path) -> list[str]:
         raise ValueError(
             "required submission artifact(s) include raw run/log output: "
             + ", ".join(raw_paths)
+        )
+    container_paths = container_workflow_artifact_paths(required_files)
+    if container_paths:
+        raise ValueError(
+            "required submission artifact(s) include container workflow output: "
+            + ", ".join(container_paths)
         )
     paper_negative_paths = [
         relative
@@ -3480,7 +3510,7 @@ def check_required_artifact_scope(root: Path) -> list[str]:
             "required submission artifact(s) include paper-negative diagnostic output: "
             + ", ".join(sorted(paper_negative_paths))
         )
-    return ["required submission artifact scope excludes raw logs and paper-negative diagnostics ok"]
+    return ["required submission artifact scope excludes raw logs, container workflows, and paper-negative diagnostics ok"]
 
 
 def latex_dependency_path(source_relative: str, dependency: str, suffix: str) -> str:

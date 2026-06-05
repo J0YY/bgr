@@ -83,6 +83,7 @@ from scripts.check_submission_package import (
     check_title_block_compliance,
     check_toy_30_status,
     check_toy_smoke_experiment,
+    container_workflow_artifact_paths,
     configured_methods,
     data_artifact_text_files,
     double_blind_leaks,
@@ -2499,7 +2500,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
     def test_required_artifact_scope_excludes_current_raw_run_outputs(self):
         self.assertEqual(
             check_required_artifact_scope(Path(".")),
-            ["required submission artifact scope excludes raw logs and paper-negative diagnostics ok"],
+            ["required submission artifact scope excludes raw logs, container workflows, and paper-negative diagnostics ok"],
         )
 
     def test_required_artifact_scope_excludes_current_paper_negative_outputs(self):
@@ -2520,6 +2521,28 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             ],
         ):
             with self.assertRaisesRegex(ValueError, "raw run/log output"):
+                check_required_artifact_scope(Path("."))
+
+    def test_container_workflow_artifact_paths_rejects_docker_workflows(self):
+        self.assertEqual(
+            container_workflow_artifact_paths(
+                [
+                    "Dockerfile",
+                    "docker-compose.yml",
+                    ".devcontainer/devcontainer.json",
+                    "scripts/queue_openvla_oft_eval.sh",
+                ]
+            ),
+            [".devcontainer/devcontainer.json", "Dockerfile", "docker-compose.yml"],
+        )
+
+    def test_required_artifact_scope_rejects_container_workflows(self):
+        required = required_submission_files()
+        with mock.patch(
+            "scripts.check_submission_package.required_submission_files",
+            return_value=required + ["Dockerfile", ".devcontainer/devcontainer.json"],
+        ):
+            with self.assertRaisesRegex(ValueError, "container workflow"):
                 check_required_artifact_scope(Path("."))
 
     def test_required_artifact_scope_rejects_paper_negative_diagnostics(self):
