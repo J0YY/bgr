@@ -6,6 +6,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 
 - Grid-margin mechanism clears the internal mechanism threshold: BGR 0.4342 vs uniform 0.3965, delta +0.0377; margin above +0.03 threshold +0.0077.
 - Weighted OpenVLA audit is already unable to clear the official-checkpoint gate before the final random row: BGR 367/400, official 367/400, random 273/300 available; final random shift pending; identity BGR 99/100. Official episode margin is +0, short of +10 by 10 episodes; the pending random row is ledger completion, not a path to promotion.
+- Proximal-anchor OpenVLA route is in flight, not yet evidence: adaptation jobs BGR 767128/767129/767130 and random 767131/767132/767133 are queued; fixed perturbation jobs official 767134--767138, BGR 767139--767143, and random 767144--767148 must finish before the +10/400 and +0.02 learned-policy gate can be checked.
 - Closest independent benchmark screen is `MiniGrid FourRooms official-package` with treatment `bgr_coverage`: delta vs uniform +0.1075 (4/0/0), worst required-baseline delta +0.0464 (3/1/0), ablation delta +0.0071 (2/2/0), radius delta +0.0000 (0/0/4), failure reason(s): final_median_r80-ceiling-saturated.
 - Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`, `FetchSlide-v4 object-goal calibration`, `FetchPickAndPlace-v4 object-goal calibration`.
 
@@ -50,4 +51,4 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.
 - Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The latest OpenVLA weighted audit is already unable to clear the official-checkpoint gate; the pending random-shift row is ledger completion, not a path to a positive robotics claim.
-- The next acceptance-moving work should change the learned-policy intervention or materially strengthen theory/presentation; another same-protocol MiniGrid/classic-control screen is unlikely to move the gate.
+- The current acceptance-moving learned-policy work is the queued proximal-anchor OpenVLA route; next actions are to poll, sync completed summaries, and apply the preregistered gate before making any paper-positive claim.

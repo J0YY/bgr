@@ -135,6 +135,13 @@ class AcceptanceScorecardTest(unittest.TestCase):
                     '"max_recovery": 0.25, "r80": 0.15}\n'
                 ),
             )
+            _write(
+                root / "AGENTS.md",
+                (
+                    "The proximal-anchor OpenVLA route is queued with "
+                    "BGR jobs 767128--767143 and random jobs 767144--767148.\n"
+                ),
+            )
 
             text = render_markdown(root)
 
@@ -142,6 +149,8 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("BGR 367/400, official 367/400", text)
         self.assertIn("already unable to clear the official-checkpoint gate", text)
         self.assertIn("pending random row is ledger completion", text)
+        self.assertIn("Proximal-anchor OpenVLA route is in flight, not yet evidence", text)
+        self.assertIn("must finish before the +10/400 and +0.02 learned-policy gate", text)
         self.assertIn("MiniGrid LavaGapS7", text)
         self.assertIn("MiniGrid FourRooms official-package", text)
         self.assertIn("final_median_r80-ceiling-saturated", text)
@@ -155,6 +164,7 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("reject-calibration", text)
         self.assertIn("usable-calibration", text)
         self.assertIn("fail", text)
+        self.assertIn("queued proximal-anchor OpenVLA route", text)
 
 
 if __name__ == "__main__":

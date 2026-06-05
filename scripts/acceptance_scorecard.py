@@ -457,6 +457,28 @@ def learned_policy_summary(root: Path) -> str:
     )
 
 
+def learned_policy_inflight_summary(root: Path) -> str | None:
+    """Report preregistered learned-policy runs that are queued but not summarized."""
+    proximal_summary = (
+        root
+        / "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv"
+    )
+    if proximal_summary.exists():
+        return None
+
+    ledger_paths = [root / "AGENTS.md", root / "results/README.md", root / "docs/aaai_acceptance_gap.md"]
+    ledger_text = "\n".join(path.read_text(encoding="utf-8") for path in ledger_paths if path.exists())
+    if "767128" not in ledger_text or "767148" not in ledger_text:
+        return None
+
+    return (
+        "Proximal-anchor OpenVLA route is in flight, not yet evidence: "
+        "adaptation jobs BGR 767128/767129/767130 and random 767131/767132/767133 are queued; "
+        "fixed perturbation jobs official 767134--767138, BGR 767139--767143, and random 767144--767148 "
+        "must finish before the +10/400 and +0.02 learned-policy gate can be checked."
+    )
+
+
 def fmt_comparison(comparison: PairedComparison | None) -> str:
     if comparison is None:
         return "n/a"
@@ -483,6 +505,9 @@ def render_markdown(root: Path) -> str:
         f"- {grid_summary(root)}",
         f"- {learned_policy_summary(root)}",
     ]
+    inflight = learned_policy_inflight_summary(root)
+    if inflight is not None:
+        lines.append(f"- {inflight}")
     if best is not None:
         lines.append(
             f"- Closest independent benchmark screen is `{best.name}` with treatment `{best.treatment}`: "
@@ -548,16 +573,27 @@ def render_markdown(root: Path) -> str:
                 )
                 + " |"
             )
+    priority_lines = [
+        "- The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.",
+        "- The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.",
+        "- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.",
+        "- The latest OpenVLA weighted audit is already unable to clear the official-checkpoint gate; the pending random-shift row is ledger completion, not a path to a positive robotics claim.",
+    ]
+    if inflight is None:
+        priority_lines.append(
+            "- The next acceptance-moving work should change the learned-policy intervention or materially strengthen theory/presentation; another same-protocol MiniGrid/classic-control screen is unlikely to move the gate."
+        )
+    else:
+        priority_lines.append(
+            "- The current acceptance-moving learned-policy work is the queued proximal-anchor OpenVLA route; next actions are to poll, sync completed summaries, and apply the preregistered gate before making any paper-positive claim."
+        )
+
     lines.extend(
         [
             "",
             "## Priority Read",
             "",
-            "- The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.",
-            "- The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.",
-            "- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.",
-            "- The latest OpenVLA weighted audit is already unable to clear the official-checkpoint gate; the pending random-shift row is ledger completion, not a path to a positive robotics claim.",
-            "- The next acceptance-moving work should change the learned-policy intervention or materially strengthen theory/presentation; another same-protocol MiniGrid/classic-control screen is unlikely to move the gate.",
+            *priority_lines,
         ]
     )
     return "\n".join(lines)
