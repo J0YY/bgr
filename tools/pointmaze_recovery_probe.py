@@ -89,6 +89,7 @@ class OfficialPointMazeProbe:
         max_steps: int,
         action_scale: float,
         perturb_cells: int,
+        replay_selection: str,
         replay_distance_min: int,
         replay_distance_max: int,
         position_noise: float,
@@ -110,6 +111,7 @@ class OfficialPointMazeProbe:
         self.max_steps = int(max_steps)
         self.action_scale = float(action_scale)
         self.perturb_cells = int(perturb_cells)
+        self.replay_selection = str(replay_selection)
         self.replay_distance_min = int(replay_distance_min)
         self.replay_distance_max = int(replay_distance_max)
         self.position_noise = float(position_noise)
@@ -166,6 +168,46 @@ class OfficialPointMazeProbe:
                     q[idx, action_idx] += float(np.dot(direction, action))
         return float(blend) * q
 
+    def _articulation_cells(self) -> set[tuple[int, int]]:
+        index = 0
+        visited: set[tuple[int, int]] = set()
+        order: dict[tuple[int, int], int] = {}
+        low: dict[tuple[int, int], int] = {}
+        parent: dict[tuple[int, int], tuple[int, int] | None] = {}
+        articulation: set[tuple[int, int]] = set()
+
+        def visit(cell: tuple[int, int]) -> None:
+            nonlocal index
+            visited.add(cell)
+            order[cell] = index
+            low[cell] = index
+            index += 1
+            children = 0
+            for neighbor in self._neighbors(cell):
+                if neighbor not in visited:
+                    parent[neighbor] = cell
+                    children += 1
+                    visit(neighbor)
+                    low[cell] = min(low[cell], low[neighbor])
+                    if parent.get(cell) is not None and low[neighbor] >= order[cell]:
+                        articulation.add(cell)
+                elif neighbor != parent.get(cell):
+                    low[cell] = min(low[cell], order[neighbor])
+            if parent.get(cell) is None and children > 1:
+                articulation.add(cell)
+
+        for cell in self.free_cells:
+            if cell not in visited:
+                parent[cell] = None
+                visit(cell)
+        return articulation
+
+    def _spread_cells(self, cells: list[tuple[int, int]], count: int) -> list[tuple[int, int]]:
+        if count < len(cells):
+            indexes = np.linspace(0, len(cells) - 1, count, dtype=int)
+            return [cells[int(index)] for index in indexes]
+        return cells
+
     def _select_replay_states(self, count: int) -> list[PointMazeReplayState]:
         reachable = [
             cell
@@ -178,10 +220,17 @@ class OfficialPointMazeProbe:
                 for cell in self.free_cells
                 if 1 <= self.goal_distances.get(cell, 999) <= max(2, self.perturb_cells + 4)
             ]
+        if self.replay_selection == "bottleneck":
+            articulation = self._articulation_cells()
+            bottlenecks = [cell for cell in reachable if cell in articulation]
+            if not bottlenecks:
+                bottlenecks = [cell for cell in reachable if len(self._neighbors(cell)) <= 2]
+            if bottlenecks:
+                reachable = bottlenecks
+        elif self.replay_selection != "distance_spread":
+            raise ValueError(f"unknown replay selection: {self.replay_selection}")
         reachable.sort(key=lambda cell: (self.goal_distances[cell], cell[0], cell[1]))
-        if count < len(reachable):
-            indexes = np.linspace(0, len(reachable) - 1, count, dtype=int)
-            reachable = [reachable[int(index)] for index in indexes]
+        reachable = self._spread_cells(reachable, count)
         return [
             PointMazeReplayState(
                 row=cell[0],
@@ -334,6 +383,7 @@ def run_method(args: argparse.Namespace, method: str, seed: int) -> PointMazePro
         max_steps=args.max_steps,
         action_scale=args.action_scale,
         perturb_cells=args.perturb_cells,
+        replay_selection=args.replay_selection,
         replay_distance_min=args.replay_distance_min,
         replay_distance_max=args.replay_distance_max,
         position_noise=args.position_noise,
@@ -541,6 +591,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--q-init-noise", type=float, default=0.10)
     parser.add_argument("--action-scale", type=float, default=1.0)
     parser.add_argument("--perturb-cells", type=int, default=5)
+    parser.add_argument("--replay-selection", choices=["distance_spread", "bottleneck"], default="distance_spread")
     parser.add_argument("--replay-distance-min", type=int, default=1)
     parser.add_argument("--replay-distance-max", type=int, default=9)
     parser.add_argument("--position-noise", type=float, default=0.12)

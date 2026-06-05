@@ -347,6 +347,27 @@ package and recording its version before any result is run.
      0.2500). The checker rejects it because the effect is inconsistent versus
      uniform, failure-only remains much stronger, and absolute r20 contradicts
      the RAUC gain. Do not scale this update-schedule variant.
+   - The next PointMaze reset-interface follow-up is a topology-bottleneck
+     replay-state selector, implemented before method comparison in
+     `tools/pointmaze_recovery_probe.py` as `--replay-selection bottleneck`.
+     It keeps the official `gymnasium-robotics==1.4.2` PointMaze task and exact
+     `PointEnv.set_state` resets, but chooses replay states from package maze
+     articulation points, falling back to low-degree cells if a maze has no
+     articulation points. This changes the reset-state policy rather than the
+     BGR sampler or metric. Uniform-only seed-0 calibration rejected the
+     default bottleneck controller because U-Maze clean success collapsed to
+     0.0000, and rejected Medium Maze even after a stronger controller because
+     final clean and RAUC were both 0.0000. The fixed U-Maze bottleneck screen
+     uses the stronger controller selected before method comparison:
+     `--max-steps 120 --q-init-blend 2.0 --q-init-noise 0.01 --action-scale 0.6`.
+     Uniform-only seed-0 under this protocol gives final clean 0.5000, final
+     RAUC 0.1875, median r80 0.7000, and absolute r20 0.0667. The
+     preregistered 4-seed command is:
+     `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/pointmaze_recovery_probe.py --out results/pointmaze_umaze_bottleneck_probe_4seed_v1 --env-id PointMaze_UMaze-v3 --methods uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr --replay-selection bottleneck --max-steps 120 --q-init-blend 2.0 --q-init-noise 0.01 --action-scale 0.6 --perturb-cells 3 --replay-distance-min 1 --replay-distance-max 5 --iterations 60 --eval-every 20`.
+     Do not scale it unless default BGR or BGR-Coverage beats uniform,
+     fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on final RAUC
+     with a visible gap, and median r80 plus absolute r20 do not contradict the
+     RAUC effect.
 5. A larger OpenVLA/LIBERO adaptation only if the recipe changes in a way that
    plausibly beats both matched random and the official checkpoint, not merely a
    different perturbation score.

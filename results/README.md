@@ -168,6 +168,21 @@ uniform, fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on final
 RAUC with a visible gap, while median r80 and absolute r20 are non-saturated
 and do not contradict the RAUC effect.
 
+A topology-bottleneck replay-state follow-up is now fixed before method
+comparison. It changes the PointMaze reset-state policy rather than the BGR
+sampler: `--replay-selection bottleneck` chooses package-maze articulation
+points, falling back to low-degree cells if needed. Uniform-only seed-0
+calibration rejected the default bottleneck controller on U-Maze (clean success
+0.0000) and the stronger controller on Medium Maze (final clean and RAUC both
+0.0000). The fixed U-Maze bottleneck protocol uses the stronger controller and
+is noncollapsed under uniform seed 0: final clean 0.5000, final RAUC 0.1875,
+median r80 0.7000, and absolute r20 0.0667. The preregistered 4-seed command
+is:
+`PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/pointmaze_recovery_probe.py --out results/pointmaze_umaze_bottleneck_probe_4seed_v1 --env-id PointMaze_UMaze-v3 --methods uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr --replay-selection bottleneck --max-steps 120 --q-init-blend 2.0 --q-init-noise 0.01 --action-scale 0.6 --perturb-cells 3 --replay-distance-min 1 --replay-distance-max 5 --iterations 60 --eval-every 20`.
+Do not scale it unless default BGR or BGR-Coverage beats uniform, fixed-radius,
+failure-only, TD-loss, and BGR-uniform-radius on final RAUC with a visible gap,
+and median r80 plus absolute r20 do not contradict the RAUC effect.
+
 `results/pointmaze_umaze_recovery_probe_4seed_v1/summary.csv` is the completed
 4-seed screen. It is negative for promotion: final RAUC is 0.5458 for
 failure-only, 0.2201 for uniform, 0.2073 for BGR-Coverage, 0.1406 for BGR,
