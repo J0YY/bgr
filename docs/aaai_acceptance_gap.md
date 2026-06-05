@@ -734,3 +734,8 @@ package and recording its version before any result is run.
   Do not implement a FetchPickAndPlace replay comparison unless this
   calibration first shows usable clean success and a non-flat recovery curve
   under the fixed scripted controller.
+  The completed calibration is negative: clean success is 0.1250, RAUC is
+  0.0625, recovery ranges from 0.0000 to 0.1250, and median r80 is 0.0660.
+  The fixed pick-place controller does not provide a usable clean recovery
+  interface, so do not build or scale a FetchPickAndPlace replay comparison
+  around this controller/interface.

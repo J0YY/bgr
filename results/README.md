@@ -231,6 +231,17 @@ FetchSlide is also rejected as a method route: clean success is 0.2500, RAUC is
 curve is not fully flat, but the scripted controller fails the clean-success
 prerequisite on most replay states.
 
+FetchPickAndPlace-v4 command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --out results/fetchpickplace_object_goal_calibration_2seed_v1 --env-id FetchPickAndPlace-v4 --controller scripted_pick_place --seeds 2 --replay-states 4 --trials 1 --radii 0.00,0.03,0.06,0.09,0.12,0.15 --horizon 100 --controller-gain 6.0 --direction-jitter 0.10
+```
+
+FetchPickAndPlace is also rejected as a method route: clean success is 0.1250,
+RAUC is 0.0625, recovery ranges from 0.0000 to 0.1250, and median r80 is
+0.0660. The fixed pick-place controller does not provide a usable clean
+recovery interface.
+
 Compact artifacts:
 
 - `results/fetchpush_object_goal_calibration_2seed_v1/summary.json`
@@ -239,10 +250,14 @@ Compact artifacts:
 - `results/fetchslide_object_goal_calibration_2seed_v1/summary.json`
 - `results/fetchslide_object_goal_calibration_2seed_v1/recovery_rows.csv`
 - `results/fetchslide_object_goal_calibration_2seed_v1/package_versions.json`
+- `results/fetchpickplace_object_goal_calibration_2seed_v1/summary.json`
+- `results/fetchpickplace_object_goal_calibration_2seed_v1/recovery_rows.csv`
+- `results/fetchpickplace_object_goal_calibration_2seed_v1/package_versions.json`
 
-Do not build FetchPush or FetchSlide replay comparisons around this scripted
-controller/interface unless a new preregistered calibration first produces
-usable clean success and a non-saturated recovery curve.
+Do not build FetchPush, FetchSlide, or FetchPickAndPlace replay comparisons
+around these scripted controller/interfaces unless a new preregistered
+calibration first produces usable clean success and a non-saturated recovery
+curve.
 
 ## Internal Official PointMaze Diagnostic
 

@@ -1,0 +1,16 @@
+{
+  "clean_success": 0.125,
+  "controller": "scripted_pick_place",
+  "controller_gain": 6.0,
+  "direction_jitter": 0.1,
+  "env_id": "FetchPickAndPlace-v4",
+  "horizon": 100,
+  "max_recovery": 0.125,
+  "min_recovery": 0.0,
+  "r80": 0.066,
+  "radii": "0.0000,0.0300,0.0600,0.0900,0.1200,0.1500",
+  "rauc": 0.0625,
+  "replay_states": 4,
+  "seeds": 2,
+  "trials": 1
+}
