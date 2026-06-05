@@ -707,3 +707,10 @@ package and recording its version before any result is run.
   Do not implement or run a FetchPush method comparison unless this calibration
   gives usable clean success, a nontrivial recovery drop across radii, and no
   obvious controller-induced destruction of already-successful states.
+  The completed calibration is negative: clean success is 0.2500, recovery is
+  flat at 0.2500 for every tested radius, RAUC is 0.2500, and median r80 is at
+  the evaluation maximum 0.1200. The successful rows come from replay states
+  that are already solved across all tested perturbations, while the remaining
+  states fail clean and perturbed goals. This does not define a trainable
+  success-failure boundary, so do not build or scale a FetchPush replay
+  comparison around this scripted controller/interface.
