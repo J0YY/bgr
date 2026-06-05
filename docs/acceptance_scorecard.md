@@ -52,3 +52,4 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The latest OpenVLA weighted audit is already unable to clear the official-checkpoint gate; the pending random-shift row is ledger completion, not a path to a positive robotics claim.
 - The current acceptance-moving learned-policy work is the queued proximal-anchor OpenVLA route; next actions are to poll, sync completed summaries, and apply the preregistered gate before making any paper-positive claim.
+- Do not start another same-protocol MiniGrid, classic-control, PointMaze, or FetchReach screen while this is pending; existing screens already show saturated radius checks, stronger-baseline losses, or state-priority-only ablation failures.

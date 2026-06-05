@@ -165,6 +165,7 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("usable-calibration", text)
         self.assertIn("fail", text)
         self.assertIn("queued proximal-anchor OpenVLA route", text)
+        self.assertIn("Do not start another same-protocol MiniGrid", text)
 
 
 if __name__ == "__main__":

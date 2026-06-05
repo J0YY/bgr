@@ -587,6 +587,9 @@ def render_markdown(root: Path) -> str:
         priority_lines.append(
             "- The current acceptance-moving learned-policy work is the queued proximal-anchor OpenVLA route; next actions are to poll, sync completed summaries, and apply the preregistered gate before making any paper-positive claim."
         )
+        priority_lines.append(
+            "- Do not start another same-protocol MiniGrid, classic-control, PointMaze, or FetchReach screen while this is pending; existing screens already show saturated radius checks, stronger-baseline losses, or state-priority-only ablation failures."
+        )
 
     lines.extend(
         [

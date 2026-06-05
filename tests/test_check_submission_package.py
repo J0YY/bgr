@@ -171,7 +171,11 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             "uniform_median_r80,0.332\n"
             "failure_only_median_r80,0.300\n"
             "fixed_median_r80,0.200\n"
-            "plr_loss_median_r80,0.201\n",
+            "plr_loss_median_r80,0.201\n"
+            "grid_margin_rauc_delta,0.038\n"
+            "grid_margin_median_r80_delta,0.013\n"
+            "robot_suffix_rauc_delta,0.012\n"
+            "robot_suffix_median_r80_delta,-0.007\n",
             encoding="utf-8",
         )
 
