@@ -37,6 +37,7 @@ class MiniGridProbeResult:
     final_clean: float
     final_rauc: float
     final_median_r80: float
+    final_abs_r10: float
     rauc_aulc: float
     best_rauc: float
     history: list[dict[str, float]]
@@ -320,6 +321,7 @@ def run_method(args: argparse.Namespace, method: str, seed: int) -> MiniGridProb
         final_clean=final["clean"],
         final_rauc=final["rauc"],
         final_median_r80=final["median_r80"],
+        final_abs_r10=final["abs_r10"],
         rauc_aulc=float(np.trapezoid(ys, xs) / (xs[-1] - xs[0])) if xs[-1] > xs[0] else final["rauc"],
         best_rauc=max(row["rauc"] for row in history),
         history=history,
@@ -391,15 +393,18 @@ def evaluate(bench: OfficialMiniGridFourRoomsProbe, args: argparse.Namespace) ->
     clean: list[float] = []
     raucs: list[float] = []
     radii: list[float] = []
+    abs_r10: list[float] = []
     for replay_idx in range(len(bench.states)):
         curve = np.array([bench.success_prob_from_values(replay_idx, sigma, values) for sigma in grid], dtype=float)
         clean.append(float(curve[0]))
         raucs.append(recovery_auc(grid, curve, sigma_max=1.0))
         radii.append(critical_radius(grid, curve, alpha=args.alpha))
+        abs_r10.append(critical_radius(grid, curve, alpha=args.absolute_radius_alpha, relative_to_clean=False))
     return {
         "clean": float(np.mean(clean)),
         "rauc": float(np.mean(raucs)),
         "median_r80": float(np.median(radii)),
+        "abs_r10": float(np.median(abs_r10)),
     }
 
 
@@ -472,6 +477,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--q-init-blend", type=float, default=0.03)
     parser.add_argument("--q-init-noise", type=float, default=0.06)
     parser.add_argument("--alpha", type=float, default=0.8)
+    parser.add_argument("--absolute-radius-alpha", type=float, default=0.10)
     parser.add_argument("--target-radius", type=float, default=0.45)
     parser.add_argument("--radius-bandwidth", type=float, default=0.35)
     parser.add_argument("--fixed-radius", type=float, default=0.65)
@@ -516,6 +522,7 @@ def main() -> None:
                     "final_clean": result.final_clean,
                     "final_rauc": result.final_rauc,
                     "final_median_r80": result.final_median_r80,
+                    "final_abs_r10": result.final_abs_r10,
                     "rauc_aulc": result.rauc_aulc,
                     "best_rauc": result.best_rauc,
                 }
@@ -536,7 +543,7 @@ def summary(rows: list[dict[str, float | int | str]]) -> str:
     by_method: dict[str, list[dict[str, float | int | str]]] = {}
     for row in rows:
         by_method.setdefault(str(row["method"]), []).append(row)
-    lines = ["method,final_clean_mean,final_rauc_mean,final_median_r80_mean,rauc_aulc_mean,best_rauc_mean"]
+    lines = ["method,final_clean_mean,final_rauc_mean,final_median_r80_mean,final_abs_r10_mean,rauc_aulc_mean,best_rauc_mean"]
     for method, method_rows in sorted(by_method.items()):
         lines.append(
             ",".join(
@@ -545,6 +552,7 @@ def summary(rows: list[dict[str, float | int | str]]) -> str:
                     f"{mean(method_rows, 'final_clean'):.4f}",
                     f"{mean(method_rows, 'final_rauc'):.4f}",
                     f"{mean(method_rows, 'final_median_r80'):.4f}",
+                    f"{mean(method_rows, 'final_abs_r10'):.4f}",
                     f"{mean(method_rows, 'rauc_aulc'):.4f}",
                     f"{mean(method_rows, 'best_rauc'):.4f}",
                 ]

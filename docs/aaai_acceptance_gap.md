@@ -226,6 +226,15 @@ package and recording its version before any result is run.
      RAUC/baseline screen. Do not add this result to the paper or scale the same
      protocol to 30 seeds until a preregistered follow-up resolves the
      non-saturated radius-metric requirement.
+     The preregistered follow-up is
+     `PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_fourrooms_recovery_probe.py --out results/minigrid_fourrooms_recovery_probe_absr10_4seed_v1`.
+     It keeps the same official package versions, task, replay states,
+     perturbation family, methods, seeds, and training budget, and adds
+     `final_abs_r10`, the median largest perturbation radius whose absolute
+     recovery probability is at least 0.10. This follow-up can only justify a
+     30-seed scale-up if BGR-Coverage keeps the RAUC/baseline lead and
+     `final_abs_r10` is not saturated for both BGR-Coverage and uniform and
+     does not contradict the RAUC effect.
 4. PointMaze/D4RL-style continuous navigation only if a real installed benchmark
    package is available. This is the best mechanistic fit because resettable
    continuous states, corridor bottlenecks, and distance-to-goal perturbations
