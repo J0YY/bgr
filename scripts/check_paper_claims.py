@@ -629,6 +629,42 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    pointmaze = read_csv_rows(results_dir / "pointmaze_umaze_recovery_probe_4seed_v1" / "summary.csv")
+    pointmaze_shield = read_csv_rows(results_dir / "pointmaze_umaze_clean_shield_probe_4seed_v1" / "summary.csv")
+    pointmaze_failure_rauc = mean_metric(pointmaze, "failure_only", "final_rauc")
+    pointmaze_uniform_rauc = mean_metric(pointmaze, "uniform", "final_rauc")
+    pointmaze_coverage_rauc = mean_metric(pointmaze, "bgr_coverage", "final_rauc")
+    pointmaze_bgr_rauc = mean_metric(pointmaze, "bgr", "final_rauc")
+    pointmaze_shield_rauc = mean_metric(pointmaze_shield, "bgr_clean_shield", "final_rauc")
+    pointmaze_shield_abs = mean_metric(pointmaze_shield, "bgr_clean_shield", "final_abs_r20")
+    pointmaze_uniform_abs = mean_metric(pointmaze_shield, "uniform", "final_abs_r20")
+    pointmaze_shield_wins = paired_wins(pointmaze_shield, "bgr_clean_shield", "uniform", "final_rauc")
+    pointmaze_shield_pairs = sum(pointmaze_shield_wins)
+    if not (
+        pointmaze_failure_rauc > pointmaze_uniform_rauc
+        and pointmaze_uniform_rauc > pointmaze_coverage_rauc
+        and pointmaze_coverage_rauc > pointmaze_bgr_rauc
+        and pointmaze_shield_rauc > pointmaze_uniform_rauc
+        and pointmaze_shield_rauc < pointmaze_failure_rauc
+        and pointmaze_shield_wins == (2, 2, 0)
+        and pointmaze_shield_abs < pointmaze_uniform_abs
+    ):
+        raise ValueError("Expected PointMaze diagnostics to remain non-promoted negative results")
+    claims.append(
+        Claim(
+            "PointMaze official-package limitation",
+            (
+                f"failure-only reaches {fmt(pointmaze_failure_rauc, 4)} final RAUC, while uniform is "
+                f"{fmt(pointmaze_uniform_rauc, 4)}, BGR-Coverage is {fmt(pointmaze_coverage_rauc, 4)}, "
+                f"default BGR is {fmt(pointmaze_bgr_rauc, 4)}, and BGR-Clean-Shield reaches "
+                f"{fmt(pointmaze_shield_rauc, 4)} with only {pointmaze_shield_wins[0]}/{pointmaze_shield_pairs} "
+                f"paired wins against uniform and lower absolute r20 "
+                f"({fmt(pointmaze_shield_abs, 4)} vs. {fmt(pointmaze_uniform_abs, 4)})"
+            ),
+            "results/pointmaze_umaze_recovery_probe_4seed_v1/summary.csv and pointmaze_umaze_clean_shield_probe_4seed_v1/summary.csv",
+        )
+    )
+
     probe_rows = read_csv_rows(results_dir / "libero_probe_v2" / "summary.csv")
     valid_rows = sum(1 for row in probe_rows if float(row["valid_rate"]) == 1.0 and not row.get("error"))
     claims.append(

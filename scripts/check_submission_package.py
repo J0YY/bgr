@@ -4387,6 +4387,26 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
             raise ValueError(
                 f"{pdf_path}: missing rendered MiniGrid limitation snippet(s): {', '.join(minigrid_missing)}"
             )
+    if "Official PointMaze U-Maze diagnostics also fail" in source_text:
+        pointmaze_required = [
+            ("PointMaze U-Maze diagnostics", "PointMaze UMaze diagnostics"),
+            ("failure-only reaches 0.5458", "failureonly reaches 0.5458"),
+            ("uniform is 0.2201",),
+            ("BGR-Coverage is 0.2073",),
+            ("default BGR is 0.1406",),
+            ("BGR-Clean-Shield reaches 0.2448",),
+            ("2/4 paired wins",),
+            ("0.1167 vs. 0.2500",),
+        ]
+        pointmaze_missing = [
+            snippets[0]
+            for snippets in pointmaze_required
+            if not any(snippet in normalized_rendered_text for snippet in snippets)
+        ]
+        if pointmaze_missing:
+            raise ValueError(
+                f"{pdf_path}: missing rendered PointMaze limitation snippet(s): {', '.join(pointmaze_missing)}"
+            )
     if "held-out seeds 30--59 BGR-vs-uniform replication gives" in source_text:
         grid_required = [
             ("held-out seeds 30-59", "held-out seeds 30--59", "held-out seeds 30–59"),
