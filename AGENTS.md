@@ -9,7 +9,7 @@ Current target: iterate, queue experiments, and reframe the paper until the work
 As of 2026-06-05, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .` reports:
 
 - PASS controlled grid mechanism: pooled RAUC 0.4342 vs 0.3965.
-- FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, and PointMaze remain non-promotable; MiniGrid-LavaGapS7 is the next preregistered external-package screen.
+- FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, MiniGrid LavaGapS7, and PointMaze remain non-promotable.
 - FAIL learned-policy OpenVLA/LIBERO: the latest weighted perturbation audit has non-identity success BGR 367/400 and official 367/400, with matched-random 273/300 available rows and random shift job `766831` still pending on unavailable GPU nodes. The official-checkpoint gate is already impossible because the required margin is +10/400 and +0.02 absolute success.
 - Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
@@ -19,10 +19,10 @@ The practical goal is not to make the paper sound accepted. The practical goal i
 
 - The internal readiness gate is intentionally failing; do not report the paper as AAAI-ready.
 - Controlled grid-margin evidence is positive and mechanistically useful, but it is not enough for a high-confidence main-track acceptance claim.
-- FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, PointMaze, and OpenVLA/LIBERO are currently negative or non-promotable.
+- FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, MiniGrid LavaGapS7, PointMaze, and OpenVLA/LIBERO are currently negative or non-promotable.
 - The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation recipe family; the preregistered weighted perturbation curriculum already failed the official-checkpoint promotion gate.
 - The PointMaze U-Maze topology-bottleneck reset-interface screen is completed and negative. Failure-only reaches 0.3500 final RAUC, while BGR reaches 0.0854 and BGR-Coverage reaches 0.0573; do not scale or promote this protocol.
-- The active external-package screen is official MiniGrid-LavaGapS7 via `tools/minigrid_lavacrossing_recovery_probe.py`. It was calibrated only on uniform before method comparison; run the fixed command in `results/README.md` and promote only if BGR or BGR-Coverage beats uniform, fixed-radius, failure-only, TD-loss, and BGR-uniform-radius with non-contradictory median r80 and absolute r10.
+- The MiniGrid-LavaGapS7 external-package screen is completed and negative. BGR-Coverage trails uniform on mean RAUC (0.4277 vs. 0.4461), default BGR is lower (0.4031), and the state-priority/uniform-radius ablation is highest (0.4627); do not scale or promote this protocol.
 
 ## Evidence Policy
 

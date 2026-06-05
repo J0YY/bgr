@@ -366,6 +366,17 @@ Do not scale it unless BGR or BGR-Coverage beats uniform, fixed-radius,
 failure-only, TD-loss, and BGR-uniform-radius on final RAUC with a visible gap,
 and median r80 plus absolute r10 do not contradict the RAUC effect.
 
+`results/minigrid_lavagap_s7_recovery_probe_4seed_v1/summary.csv` is the
+completed fixed 4-seed LavaGap screen. It is negative for promotion: final RAUC
+is 0.4627 for BGR-uniform-radius, 0.4461 for uniform, 0.4277 for BGR-Coverage,
+0.4094 for TD-loss, 0.4031 for BGR, 0.3353 for failure-only, and 0.1435 for
+fixed-radius. The promotion checker rejects default BGR because it loses to
+uniform (1/4 paired wins, -0.0430 mean RAUC), TD-loss, and the
+state-priority/uniform-radius ablation; absolute r10 also contradicts BGR
+versus uniform (0.6047 vs. 0.6336). It rejects BGR-Coverage because it trails
+uniform on mean RAUC (-0.0184), loses to the state-priority/uniform-radius
+ablation, and has lower median r80 than uniform. Do not scale this protocol.
+
 ## Internal Official MiniGrid-LavaCrossing Diagnostic
 
 The next preregistered external-package screen is official

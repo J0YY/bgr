@@ -543,6 +543,15 @@ package and recording its version before any result is run.
   Do not scale it unless BGR or BGR-Coverage beats uniform, fixed-radius,
   failure-only, TD-loss, and BGR-uniform-radius on final RAUC with a visible
   gap, and median r80 plus absolute r10 do not contradict the RAUC effect.
+  The completed 4-seed screen is negative and should not be scaled: final RAUC
+  is 0.4627 for BGR-uniform-radius, 0.4461 for uniform, 0.4277 for
+  BGR-Coverage, 0.4094 for TD-loss, 0.4031 for BGR, 0.3353 for failure-only,
+  and 0.1435 for fixed-radius. Default BGR loses to uniform with only 1/4
+  paired wins, loses to TD-loss, loses to the state-priority/uniform-radius
+  ablation, and has lower absolute r10 than uniform. BGR-Coverage gets 3/4
+  wins over uniform but still trails on mean RAUC, loses to the
+  state-priority/uniform-radius ablation, and has lower median r80 than
+  uniform. Keep LavaGap as a paper-negative external-package scope screen.
 - Keep scratch negative runs out of the anonymous package unless they are being
   used as explicit limitations.
 - Do not spend more robotics compute on the current OpenVLA recipe family unless

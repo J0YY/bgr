@@ -136,6 +136,17 @@ def independent_benchmark_gate(root: Path) -> GateResult:
             f"MiniGrid-LavaCrossing negative: BGR-Coverage {lava_coverage:.4f}, uniform {lava_uniform:.4f}, uniform-radius {lava_ablation:.4f}"
         )
 
+    lavagap_path = root / "results/minigrid_lavagap_s7_recovery_probe_4seed_v1/summary.csv"
+    if lavagap_path.exists():
+        lavagap = read_rows(lavagap_path)
+        gap_coverage = mean_metric(lavagap, "bgr_coverage", "final_rauc")
+        gap_uniform = mean_metric(lavagap, "uniform", "final_rauc")
+        gap_ablation = mean_metric(lavagap, "bgr_uniform_radius", "final_rauc")
+        if not (gap_coverage > gap_uniform and gap_coverage > gap_ablation):
+            failures.append(
+                f"MiniGrid-LavaGap negative: BGR-Coverage {gap_coverage:.4f}, uniform {gap_uniform:.4f}, uniform-radius {gap_ablation:.4f}"
+            )
+
     pointmaze = read_rows(root / "results/pointmaze_umaze_clean_shield_probe_4seed_v1/summary.csv")
     shield = mean_metric(pointmaze, "bgr_clean_shield", "final_rauc")
     point_uniform = mean_metric(pointmaze, "uniform", "final_rauc")
