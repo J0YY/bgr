@@ -665,9 +665,9 @@ package and recording its version before any result is run.
   checkpoint's four completed non-identity rows also total 367/400, far below
   the preregistered requirement that BGR beat the official checkpoint by at
   least 10/400 episodes and 0.02 absolute success.
-  Live Slurm poll on 2026-06-05 14:34 PDT / 22:34 BST still shows
+  Live Slurm poll on 2026-06-05 16:25 PDT / 2026-06-06 00:25 BST still shows
   matched-random shift job `766831` as `PENDING` for unavailable A6000 GPU
-  nodes, with a Slurm start estimate of 2026-06-07T13:21:02 and no start/end
+  nodes, with a Slurm start estimate of 2026-06-07T14:27:51 and no start/end
   time in `sacct`. The remote `summary.csv` still has the same 14 rows as the
   local `summary_available.csv`, so there is no complete weighted summary to
   sync. Use `scripts/sync_openvla_oft_weighted_perturb_results.sh --poll --no-check`
@@ -706,12 +706,12 @@ package and recording its version before any result is run.
   matched-random jobs `767144`-`767148`. Slurm immediately reported all jobs
   pending; BGR/random perturb rows were dependency-held, and official
   perturb rows serialized identity through shift. A fresh Athena poll on
-  2026-06-05 14:34 PDT / 22:34 BST still showed all jobs pending with no
+  2026-06-05 16:25 PDT / 2026-06-06 00:25 BST still showed all jobs pending with no
   `sacct` start/end times: BGR train job `767128` and official identity job
   `767134` were waiting on unavailable A6000 GPU nodes
   (`ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08]`),
   and every other proximal job was dependency-held. `scontrol show job -dd`
-  reported `StartTime=2026-06-07T13:21:02` and
+  reported `StartTime=2026-06-07T14:27:51` and
   `TresPerNode=gres/gpu:a6000:1` for jobs `767128` and `767134`. Idle g2 nodes
   expose `gpu:a4000`, so a generic/A4000 resubmission is not a protocol-neutral
   acceleration for OpenVLA unless the memory footprint is separately changed
@@ -833,6 +833,22 @@ package and recording its version before any result is run.
   under the fixed scripted controller.
   The completed calibration is negative: clean success is 0.1250, RAUC is
   0.0625, recovery ranges from 0.0000 to 0.1250, and median r80 is 0.0660.
+- highway-env parking-v0 was checked as a genuinely different external package
+  route after the same-protocol MiniGrid/classic-control/PointMaze/FetchReach
+  screens failed. The package was installed in an isolated Python 3.11
+  environment as `highway-env==1.10.1` with `gymnasium==1.3.0`; the default
+  Python 3.14 environment could not resolve the dependency stack, so do not use
+  it for this route. The fixed pre-method command is:
+  `PYTHONPATH=src:. /tmp/bgr_highway311_venv/bin/python tools/highway_parking_recovery_calibration.py --out results/highway_parking_recovery_calibration_12seed_v1 --seeds 12 --radii 0,1,2,3,4,5,6,8,10 --horizon 80`.
+  This uses highway-env's package-owned `parking-v0` goal observation, vehicle
+  dynamics, reward, and success predicate, then perturbs the initial ego pose
+  before running a fixed scripted parking controller. The completed calibration
+  is rejected before method comparison: clean success is 0.3333, recovery ranges
+  from 0.2500 to 0.5000, mean crash rate is 0.5370, RAUC is 0.3750, and median
+  r80 is 9.8000. This is a controller/interface failure rather than BGR
+  evidence. Do not build or scale a highway-env parking replay comparison unless
+  a new preregistered controller or policy first clears clean success and
+  non-saturated recovery prerequisites.
   The fixed pick-place controller does not provide a usable clean recovery
   interface, so do not build or scale a FetchPickAndPlace replay comparison
   around this controller/interface.

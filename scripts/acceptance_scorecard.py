@@ -256,6 +256,10 @@ CALIBRATION_SCREENS = [
         "FetchPickAndPlace-v4 object-goal calibration",
         "results/fetchpickplace_object_goal_calibration_2seed_v1/summary.json",
     ),
+    (
+        "highway-env parking-v0 calibration",
+        "results/highway_parking_recovery_calibration_12seed_v1/summary.json",
+    ),
 ]
 
 

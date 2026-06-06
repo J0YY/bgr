@@ -488,6 +488,11 @@ CHECKED_CLAIM_ARTIFACTS = [
     "results/toy_15seed_v1/summary.csv",
     "results/toy_30seed_v1/summary.csv",
 ]
+SCOPE_DIAGNOSTIC_ARTIFACTS = [
+    "results/highway_parking_recovery_calibration_12seed_v1/package_versions.json",
+    "results/highway_parking_recovery_calibration_12seed_v1/recovery_rows.csv",
+    "results/highway_parking_recovery_calibration_12seed_v1/summary.json",
+]
 OPENVLA_BRIDGE_ARTIFACTS = [
     "scripts/combine_openvla_oft_examples.py",
     "scripts/export_openvla_bgr_finetune_manifest.py",
@@ -555,6 +560,7 @@ TEST_ARTIFACTS = [
     "tests/test_grid_policy_mixed.py",
     "tests/test_frozenlake_recovery.py",
     "tests/test_grid_recovery.py",
+    "tests/test_highway_parking_recovery_calibration.py",
     "tests/test_libero_openvla_recovery_summary.py",
     "tests/test_libero_probe.py",
     "tests/test_metrics.py",
@@ -628,6 +634,7 @@ SUBMISSION_GATE_ARTIFACTS = [
     "scripts/check_acceptance_readiness.py",
     "scripts/check_paper_claims.py",
     "scripts/check_submission_package.py",
+    "tools/highway_parking_recovery_calibration.py",
     "scripts/merge_grid_margin_trials.py",
     "scripts/run_grid_margin_learning_rate_sensitivity.py",
     "scripts/run_grid_margin_regime_sensitivity.py",
@@ -641,6 +648,7 @@ SUBMISSION_GATE_ARTIFACTS = [
     "tests/test_check_acceptance_readiness.py",
     "tests/test_check_paper_claims.py",
     "tests/test_check_submission_package.py",
+    "tests/test_highway_parking_recovery_calibration.py",
     "tests/test_grid_margin_learning_rate_sensitivity.py",
     "tests/test_grid_margin_regime_sensitivity.py",
     "tests/test_grid_margin_stress_sensitivity.py",
@@ -3460,6 +3468,7 @@ def data_artifact_text_files() -> list[str]:
     files.extend(OPENVLA_CLAIM_ARTIFACTS)
     files.extend(AGGREGATE_SOURCE_ARTIFACTS)
     files.extend(SIGNIFICANCE_SOURCE_ARTIFACTS)
+    files.extend(SCOPE_DIAGNOSTIC_ARTIFACTS)
     return sorted(set(files))
 
 

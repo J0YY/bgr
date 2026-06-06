@@ -42,7 +42,7 @@ As of 2026-06-05, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.p
 
 - PASS controlled grid mechanism: pooled RAUC 0.4342 vs 0.3965.
 - FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, MiniGrid LavaGapS7, and PointMaze remain non-promotable.
-- FAIL learned-policy OpenVLA/LIBERO: the latest weighted perturbation audit has non-identity success BGR 367/400 and official 367/400, with matched-random 273/300 available rows and random shift job `766831` still pending on unavailable A6000 GPU nodes as of 2026-06-05 14:34 PDT / 22:34 BST. The official-checkpoint gate is already impossible because the required margin is +10/400 and +0.02 absolute success.
+- FAIL learned-policy OpenVLA/LIBERO: the latest weighted perturbation audit has non-identity success BGR 367/400 and official 367/400, with matched-random 273/300 available rows and random shift job `766831` still pending on unavailable A6000 GPU nodes as of 2026-06-05 16:25 PDT / 2026-06-06 00:25 BST. The official-checkpoint gate is already impossible because the required margin is +10/400 and +0.02 absolute success.
 - Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
 The practical goal is not to make the paper sound accepted. The practical goal is to find or build defensible evidence that survives the acceptance criteria below, then incorporate only those results into `paper/main.tex`.
@@ -70,6 +70,13 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   failure-only replay (0.7309), and has lower non-saturated median r80 than
   uniform (0.5627 vs. 0.6451). BGR-Coverage is also negative at 0.5933 RAUC;
   do not scale or promote this protocol.
+- The highway-env parking-v0 external-package calibration is completed and
+  rejected before method comparison. With `highway-env==1.10.1` in an isolated
+  Python 3.11 venv, the fixed scripted parking controller gets clean success
+  0.3333, recovery range 0.2500--0.5000, mean crash rate 0.5370, RAUC 0.3750,
+  and median r80 9.8000 over 12 seeds. Do not build or scale a highway-env
+  parking replay comparison unless a new preregistered controller or policy
+  first clears clean-success and non-saturated recovery prerequisites.
 
 ## Reviewer-Critique Priorities
 
@@ -98,7 +105,7 @@ Treat the following as the current paper-weakness backlog:
 - Do not use Docker for this workflow.
 - Commit compact artifacts such as `summary.csv` and `package_versions.json`. Leave raw `results.json`, Slurm logs, and scratch directories untracked unless there is a deliberate reason to package them.
 - Use the `athena` Slurm workflow and repository scripts for heavy OpenVLA/LIBERO work. Do not rely on the dirty remote checkout being clean; prefer local wrapper scripts, explicit environment variables, and `GIT_PULL=0` where the remote tree is known to be dirty.
-- The latest completed learned-policy follow-up is the preregistered weighted OpenVLA perturbation curriculum. It is a negative audit: before the matched-random shift row finished, BGR's completed non-identity total was already 367/400, tied with the official checkpoint's 367/400, so it cannot clear the required +10/400 and +0.02 official-checkpoint margins. Poll job `766831` only for ledger completion; the 2026-06-05 14:34 PDT / 22:34 BST remote poll still had it pending for unavailable A6000 GPU nodes with a Slurm start estimate of 2026-06-07T13:21:02. The remote `summary.csv` still has only the same 14 completed rows as local `summary_available.csv`. Use `scripts/sync_openvla_oft_weighted_perturb_results.sh --poll --no-check` to re-poll; the helper writes incomplete syncs to `summary_available.csv` and only writes `summary.csv` if the fixed gate rows are complete. Do not treat the final random-shift row as paper-positive evidence.
+- The latest completed learned-policy follow-up is the preregistered weighted OpenVLA perturbation curriculum. It is a negative audit: before the matched-random shift row finished, BGR's completed non-identity total was already 367/400, tied with the official checkpoint's 367/400, so it cannot clear the required +10/400 and +0.02 official-checkpoint margins. Poll job `766831` only for ledger completion; the 2026-06-05 16:25 PDT / 2026-06-06 00:25 BST remote poll still had it pending for unavailable A6000 GPU nodes with a Slurm start estimate of 2026-06-07T14:27:51. The remote `summary.csv` still has only the same 14 completed rows as local `summary_available.csv`. Use `scripts/sync_openvla_oft_weighted_perturb_results.sh --poll --no-check` to re-poll; the helper writes incomplete syncs to `summary_available.csv` and only writes `summary.csv` if the fixed gate rows are complete. Do not treat the final random-shift row as paper-positive evidence.
 - The latest preregistered learned-policy route is the proximal-anchor
   OpenVLA-OFT adaptation in
   `scripts/queue_openvla_oft_preregistered_proximal_anchor.sh`. It reuses the
@@ -115,10 +122,10 @@ Treat the following as the current paper-weakness backlog:
   official jobs `767134`-`767138`, BGR jobs `767139`-`767143`, and random jobs
   `767144`-`767148`. At submission, all were pending; BGR/random perturb jobs
   were dependency-held, while official perturb jobs serialized by method. A
-  remote Athena poll on 2026-06-05 14:34 PDT / 22:34 BST still showed all jobs
+  remote Athena poll on 2026-06-05 16:25 PDT / 2026-06-06 00:25 BST still showed all jobs
   pending with no `sacct` start/end times: BGR train job `767128` and official
   identity job `767134` were waiting on unavailable A6000 GPU nodes with a
-  Slurm start estimate of 2026-06-07 13:21:02 BST, and all other jobs were
+  Slurm start estimate of 2026-06-07 14:27:51 BST, and all other jobs were
   dependency-held. `scontrol show job -dd` confirmed
   `TresPerNode=gres/gpu:a6000:1`; idle g2 nodes are A4000s, so do not resubmit
   this OpenVLA route as a generic/A4000 job unless the memory requirement is

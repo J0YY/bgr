@@ -8,7 +8,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Weighted OpenVLA audit is already unable to clear the official-checkpoint gate before the final random row: BGR 367/400, official 367/400, random 273/300 available; final random shift pending; identity BGR 99/100. Official episode margin is +0, short of +10 by 10 episodes; the pending random row is ledger completion, not a path to promotion.
 - Proximal-anchor OpenVLA route is in flight, not yet evidence: adaptation jobs BGR 767128/767129/767130 and random 767131/767132/767133 are queued; fixed perturbation jobs official 767134--767138, BGR 767139--767143, and random 767144--767148 must finish before the +10/400 and +0.02 learned-policy gate can be checked.
 - Closest independent benchmark screen is `MiniGrid FourRooms official-package` with treatment `bgr_coverage`: delta vs uniform +0.1075 (4/0/0), worst required-baseline delta +0.0464 (3/1/0), ablation delta +0.0071 (2/2/0), radius delta +0.0000 (0/0/4), failure reason(s): final_median_r80-ceiling-saturated.
-- Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`, `FetchSlide-v4 object-goal calibration`, `FetchPickAndPlace-v4 object-goal calibration`.
+- Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`, `FetchSlide-v4 object-goal calibration`, `FetchPickAndPlace-v4 object-goal calibration`, `highway-env parking-v0 calibration`.
 
 ## Promotion Deficits
 
@@ -50,6 +50,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | FetchPush-v4 object-goal calibration | 0.2500 | 0.2500--0.2500 | 0.1200 | reject-calibration |
 | FetchSlide-v4 object-goal calibration | 0.2500 | 0.1250--0.2500 | 0.0720 | reject-calibration |
 | FetchPickAndPlace-v4 object-goal calibration | 0.1250 | 0.0000--0.1250 | 0.0660 | reject-calibration |
+| highway-env parking-v0 calibration | 0.3333 | 0.2500--0.5000 | 9.8000 | reject-calibration |
 
 ## Priority Read
 

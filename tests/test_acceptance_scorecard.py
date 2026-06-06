@@ -137,6 +137,13 @@ class AcceptanceScorecardTest(unittest.TestCase):
                 ),
             )
             _write(
+                root / "results/highway_parking_recovery_calibration_12seed_v1/summary.json",
+                (
+                    '{"clean_success": 0.3333333333, "min_recovery": 0.25, '
+                    '"max_recovery": 0.50, "r80": 9.8}\n'
+                ),
+            )
+            _write(
                 root / "AGENTS.md",
                 (
                     "The proximal-anchor OpenVLA route is queued with "
@@ -166,6 +173,7 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("FetchPush-v4 object-goal calibration", text)
         self.assertIn("FetchSlide-v4 object-goal calibration", text)
         self.assertIn("FetchPickAndPlace-v4 object-goal calibration", text)
+        self.assertIn("highway-env parking-v0 calibration", text)
         self.assertIn("reject-calibration", text)
         self.assertIn("usable-calibration", text)
         self.assertIn("fail", text)

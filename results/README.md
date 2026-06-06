@@ -131,7 +131,7 @@ Packaged OpenVLA audit artifacts are:
   weighted p2048unique perturbation audit rows available before matched-random
   shift completed; this artifact already proves the official-checkpoint
   promotion gate cannot pass because BGR and official tie at 367/400
-  non-identity successes. A live poll on 2026-06-05 14:34 PDT / 22:34 BST still had
+  non-identity successes. A live poll on 2026-06-05 16:25 PDT / 2026-06-06 00:25 BST still had
   matched-random shift job `766831` pending for unavailable A6000 GPU nodes, so the
   missing row is ledger completion only.
 
@@ -298,6 +298,34 @@ Do not build FetchPush, FetchSlide, or FetchPickAndPlace replay comparisons
 around these scripted controller/interfaces unless a new preregistered
 calibration first produces usable clean success and a non-saturated recovery
 curve.
+
+## Internal highway-env Parking Calibration
+
+This is a pre-method calibration for a different external benchmark package,
+`highway-env==1.10.1`. It uses the package-owned `parking-v0` goal-conditioned
+environment, continuous vehicle dynamics, reward, and success predicate through
+`tools/highway_parking_recovery_calibration.py`; it is not a BGR method
+comparison.
+
+Command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_highway311_venv/bin/python tools/highway_parking_recovery_calibration.py --out results/highway_parking_recovery_calibration_12seed_v1 --seeds 12 --radii 0,1,2,3,4,5,6,8,10 --horizon 80
+```
+
+The route is rejected before method comparison: clean success is only 0.3333,
+recovery ranges from 0.2500 to 0.5000, mean crash rate is 0.5370, RAUC is
+0.3750, and median r80 is 9.8000. The fixed scripted controller therefore does
+not provide a usable clean recovery interface, even though the package itself
+is installable and exposes a real goal-conditioned task. Do not build a
+highway-env parking replay comparison unless a new preregistered controller or
+policy first clears the clean-success and non-saturated recovery prerequisites.
+
+Compact artifacts:
+
+- `results/highway_parking_recovery_calibration_12seed_v1/summary.json`
+- `results/highway_parking_recovery_calibration_12seed_v1/recovery_rows.csv`
+- `results/highway_parking_recovery_calibration_12seed_v1/package_versions.json`
 
 ## Internal Official PointMaze Diagnostic
 
@@ -1579,9 +1607,9 @@ official checkpoint's 367/400, so BGR cannot satisfy the preregistered
 checkpoint. The paper should therefore continue to treat this intervention as a
 negative OpenVLA/LIBERO audit, not a robotics fine-tuning result.
 
-Live Slurm poll on 2026-06-05 14:34 PDT / 22:34 BST still shows matched-random
+Live Slurm poll on 2026-06-05 16:25 PDT / 2026-06-06 00:25 BST still shows matched-random
 shift job `766831` as pending for unavailable A6000 GPU nodes, with estimated
-start 2026-06-07T13:21:02 and no start/end time in `sacct`. The remote
+start 2026-06-07T14:27:51 and no start/end time in `sacct`. The remote
 perturbation `summary.csv` still has the same 14 completed rows as the local
 `summary_available.csv`, so there is no complete weighted summary to sync yet.
 Use
@@ -1664,14 +1692,14 @@ Slurm audit showed all rows pending, with BGR/random perturb rows held on
 dependencies and official perturb rows serialized by method. No result is
 available yet, and this remains an audit until the fixed gate above is checked.
 
-Fresh Athena poll on 2026-06-05 14:34 PDT / 22:34 BST:
+Fresh Athena poll on 2026-06-05 16:25 PDT / 2026-06-06 00:25 BST:
 
 ```text
 767128 PENDING (ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08])
 767134 PENDING (ReqNodeNotAvail, UnavailableNodes:c1-g4-[01-05],c2-g4-[13,16-26],c2-g8-[01-03,05-08])
 767129-767133 PENDING (Dependency)
 767135-767148 PENDING (Dependency)
-StartTime=2026-06-07T13:21:02 for 767128 and 767134
+StartTime=2026-06-07T14:27:51 for 767128 and 767134
 TresPerNode=gres/gpu:a6000:1 for 767128 and 767134
 ```
 
@@ -1694,7 +1722,7 @@ the configured remote run root, prints selected `scontrol show job -dd` details
 including `TresPerNode`, syncs only `summary.csv` files when present, and then
 runs the local perturbation and readiness gates. For the live internal cluster
 workspace, set `REMOTE_RUN_ROOT=/work/<user>/bgr/runs`. The 2026-06-05
-14:34 PDT / 22:34 BST helper poll still showed all jobs pending and both
+16:25 PDT / 2026-06-06 00:25 BST helper poll still showed all jobs pending and both
 expected proximal `summary.csv` files missing.
 
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up

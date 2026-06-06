@@ -1,0 +1,24 @@
+{
+  "angle_stride": 1.618,
+  "clean_success": 0.3333333333333333,
+  "decision": "reject-calibration-low-clean-success",
+  "env_id": "parking-v0",
+  "horizon": 80,
+  "max_recovery": 0.5,
+  "mean_crash_rate": 0.5370370370370371,
+  "min_recovery": 0.25,
+  "r80": 9.8,
+  "radii": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    8.0,
+    10.0
+  ],
+  "rauc": 0.375,
+  "seeds": 12
+}

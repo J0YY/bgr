@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "f2cd2588f580c43db8af5fe1de7cc6d034f8a0ba609d2f2c917c687dd75cf639",
-      "size_bytes": 265905
+      "sha256": "24252f89c5803f98ea60f8636f2e866e89420253696d9f56a753f79f613cf9b4",
+      "size_bytes": 267341
     },
     {
       "path": "results/environment_v1/README.md",
@@ -569,6 +569,21 @@
       "path": "results/grid_margin_target_sensitivity_30seed_v1/summary.csv",
       "sha256": "e5cdfab55fc0ddcc428615b09634801b2cd86f32bdcc139ba439048423c0afa0",
       "size_bytes": 16296
+    },
+    {
+      "path": "results/highway_parking_recovery_calibration_12seed_v1/package_versions.json",
+      "sha256": "9fff10d22a72632f9abefa124477e80468d4f11d04ec4efd812391c49abde99c",
+      "size_bytes": 116
+    },
+    {
+      "path": "results/highway_parking_recovery_calibration_12seed_v1/recovery_rows.csv",
+      "sha256": "04174ce072e1f91725f7d1e0af21617b4858d978c9f23b1713c493e49beec86f",
+      "size_bytes": 1467
+    },
+    {
+      "path": "results/highway_parking_recovery_calibration_12seed_v1/summary.json",
+      "sha256": "19fe2ca6af7b470d601b5d9fa5766b7f2d5c21b09f493004417ea34e4bf204e2",
+      "size_bytes": 397
     },
     {
       "path": "results/libero_openvla_boundary_selection_balanced_v1/aggregate.csv",
@@ -727,8 +742,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "8c5fa4130e086b641a9d6a19df849b01000467dd4d30349fc0f7c375b1f295b7",
-      "size_bytes": 28042
+      "sha256": "bd73d786400387b579962c18f241ad1e20a6e87981b25d7fa6e50edb4d49531c",
+      "size_bytes": 28180
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -742,8 +757,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "64f768f7687a3ed22db3625301c151bc4cb7754f7a71ea2ca9b1824ac40fccce",
-      "size_bytes": 23555
+      "sha256": "e9b7e64822115a47cf1e1cb0109d6b56ef3140285e7961fb4f12b89eda95c53a",
+      "size_bytes": 23663
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -757,8 +772,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "7122b8c2a2d8d18ddab62c4da96e0f26cbda87595271fc436d8d2b38a33e98f1",
-      "size_bytes": 234727
+      "sha256": "8f672f3a60ba8b27c896fc497c7a1b3ad10b07566e5e8c2d742daecc596e5826",
+      "size_bytes": 235213
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1052,8 +1067,8 @@
     },
     {
       "path": "tests/test_acceptance_scorecard.py",
-      "sha256": "a694e2171454e081b0757eb58894f44b125340669c19646163de890e2063480b",
-      "size_bytes": 10833
+      "sha256": "04ce30d43a3a62ec740be8a762046d78fc20da3143eb267f672043032b50cff7",
+      "size_bytes": 11199
     },
     {
       "path": "tests/test_aggregate_results.py",
@@ -1067,8 +1082,8 @@
     },
     {
       "path": "tests/test_check_acceptance_readiness.py",
-      "sha256": "534573ca5f291e4079acb6f657d4e644342cb3e2b66a350ba8db78aa7006e2d5",
-      "size_bytes": 12626
+      "sha256": "53f6d9944b186195072d7a1819216770d3f489567a7ae84da6f8729d6f203b9c",
+      "size_bytes": 13065
     },
     {
       "path": "tests/test_check_candidate_promotion.py",
@@ -1166,6 +1181,11 @@
       "size_bytes": 1384
     },
     {
+      "path": "tests/test_highway_parking_recovery_calibration.py",
+      "sha256": "5c54ca88eec14d1647fd856f5310a080fc15c9c6035973753ed87161bce4d4d6",
+      "size_bytes": 2283
+    },
+    {
       "path": "tests/test_libero_openvla_recovery_summary.py",
       "sha256": "893c6885da3aada85012918e84dc2d14417b37a5eb68e5a3ee48cadf27c4d07d",
       "size_bytes": 1283
@@ -1254,6 +1274,11 @@
       "path": "tests/test_suffix_stress_sensitivity.py",
       "sha256": "ec5a12f333427f5ee2b47a6ccaea9ec3593e4214b1acbd38a5aa7691f8d4caea",
       "size_bytes": 4046
+    },
+    {
+      "path": "tools/highway_parking_recovery_calibration.py",
+      "sha256": "4ba562330fa4faa9c9028cef447a6b011afb7d43dfea734056b6bbb4ca7c684e",
+      "size_bytes": 8651
     }
   ],
   "hash_algorithm": "sha256",

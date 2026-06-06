@@ -211,6 +211,12 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
                 '{"clean_success": 0.25, "min_recovery": 0.25, "max_recovery": 0.25, "r80": 0.15}\n',
                 encoding="utf-8",
             )
+            highway_path = root / "results/highway_parking_recovery_calibration_12seed_v1/summary.json"
+            highway_path.parent.mkdir(parents=True, exist_ok=True)
+            highway_path.write_text(
+                '{"clean_success": 0.3333333333, "min_recovery": 0.25, "max_recovery": 0.50, "r80": 9.8}\n',
+                encoding="utf-8",
+            )
 
             gate = independent_benchmark_gate(root)
 
@@ -218,6 +224,7 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
         self.assertIn("FetchPush calibration invalid", gate.detail)
         self.assertIn("FetchSlide calibration invalid", gate.detail)
         self.assertIn("FetchPickAndPlace calibration invalid", gate.detail)
+        self.assertIn("Highway parking calibration invalid", gate.detail)
         self.assertIn("clean 0.2500", gate.detail)
 
     def test_roadmap_hygiene_rejects_completed_weighted_openvla_as_next_step(self) -> None:

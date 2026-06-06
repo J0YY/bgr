@@ -40,6 +40,7 @@ CALIBRATION_SUMMARIES = [
     ("FetchPush calibration", "results/fetchpush_object_goal_calibration_2seed_v1/summary.json"),
     ("FetchSlide calibration", "results/fetchslide_object_goal_calibration_2seed_v1/summary.json"),
     ("FetchPickAndPlace calibration", "results/fetchpickplace_object_goal_calibration_2seed_v1/summary.json"),
+    ("Highway parking calibration", "results/highway_parking_recovery_calibration_12seed_v1/summary.json"),
 ]
 ROADMAP_DOCS = [
     "AGENTS.md",
