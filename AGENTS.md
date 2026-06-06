@@ -38,11 +38,11 @@ The active objective is to move this repository toward a genuinely high-confiden
 
 Current target: iterate, queue experiments, and reframe the paper until the work is plausibly 90%+ likely to clear the AAAI main-track bar. Current status is below that bar: the strongest positive evidence is still the controlled grid-margin mechanism result, while standard-environment and learned-policy probes remain negative or non-promotable.
 
-As of 2026-06-05, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .` reports:
+As of 2026-06-06, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .` reports:
 
 - PASS controlled grid mechanism: pooled RAUC 0.4342 vs 0.3965.
 - FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, MiniGrid LavaGapS7, and PointMaze remain non-promotable.
-- FAIL learned-policy OpenVLA/LIBERO: the latest weighted perturbation audit has non-identity success BGR 367/400 and official 367/400, with matched-random 273/300 available rows and random shift job `766831` still pending on unavailable A6000 GPU nodes as of 2026-06-05 16:25 PDT / 2026-06-06 00:25 BST. The official-checkpoint gate is already impossible because the required margin is +10/400 and +0.02 absolute success.
+- FAIL learned-policy OpenVLA/LIBERO: the latest weighted perturbation audit has non-identity success BGR 367/400 and official 367/400, with matched-random 273/300 available rows. Random-shift job `766831` completed on Athena, but the remote weighted `summary.csv` still has only 14 completed rows and is missing the random/shift row. The official-checkpoint gate is already impossible because the required margin is +10/400 and +0.02 absolute success. The proximal-anchor route also needs triage: BGR train job `767128` failed and downstream dependency-held jobs cannot produce a valid summary until repaired or explicitly retired.
 - Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
 The practical goal is not to make the paper sound accepted. The practical goal is to find or build defensible evidence that survives the acceptance criteria below, then incorporate only those results into `paper/main.tex`.
@@ -105,7 +105,19 @@ Treat the following as the current paper-weakness backlog:
 - Do not use Docker for this workflow.
 - Commit compact artifacts such as `summary.csv` and `package_versions.json`. Leave raw `results.json`, Slurm logs, and scratch directories untracked unless there is a deliberate reason to package them.
 - Use the `athena` Slurm workflow and repository scripts for heavy OpenVLA/LIBERO work. Do not rely on the dirty remote checkout being clean; prefer local wrapper scripts, explicit environment variables, and `GIT_PULL=0` where the remote tree is known to be dirty.
-- The latest completed learned-policy follow-up is the preregistered weighted OpenVLA perturbation curriculum. It is a negative audit: before the matched-random shift row finished, BGR's completed non-identity total was already 367/400, tied with the official checkpoint's 367/400, so it cannot clear the required +10/400 and +0.02 official-checkpoint margins. Poll job `766831` only for ledger completion; the 2026-06-05 16:25 PDT / 2026-06-06 00:25 BST remote poll still had it pending for unavailable A6000 GPU nodes with a Slurm start estimate of 2026-06-07T14:27:51. The remote `summary.csv` still has only the same 14 completed rows as local `summary_available.csv`. Use `scripts/sync_openvla_oft_weighted_perturb_results.sh --poll --no-check` to re-poll; the helper writes incomplete syncs to `summary_available.csv` and only writes `summary.csv` if the fixed gate rows are complete. Do not treat the final random-shift row as paper-positive evidence.
+- The latest completed learned-policy follow-up is the preregistered weighted
+  OpenVLA perturbation curriculum. It is a negative audit: before the
+  matched-random shift row finished, BGR's completed non-identity total was
+  already 367/400, tied with the official checkpoint's 367/400, so it cannot
+  clear the required +10/400 and +0.02 official-checkpoint margins. A remote
+  Athena poll on 2026-06-06 03:05 PDT / 11:05 BST showed random-shift job
+  `766831` completed successfully, but the remote weighted `summary.csv` still
+  had only 15 lines, meaning header plus 14 completed rows, and did not contain
+  the random/shift row. Do not sync this as complete until the remote log or
+  summarizer explains the missing row. The helper writes incomplete syncs to
+  `summary_available.csv` and only writes `summary.csv` if the fixed gate rows
+  are complete. Do not treat the final random-shift row as paper-positive
+  evidence.
 - The latest preregistered learned-policy route is the proximal-anchor
   OpenVLA-OFT adaptation in
   `scripts/queue_openvla_oft_preregistered_proximal_anchor.sh`. It reuses the
@@ -120,19 +132,17 @@ Treat the following as the current paper-weakness backlog:
   `767131`/`767132`/`767133`. The fixed perturbation evals were submitted with
   BGR dependency `afterok:767129` and random dependency `afterok:767132` as
   official jobs `767134`-`767138`, BGR jobs `767139`-`767143`, and random jobs
-  `767144`-`767148`. At submission, all were pending; BGR/random perturb jobs
-  were dependency-held, while official perturb jobs serialized by method. A
-  remote Athena poll on 2026-06-05 16:25 PDT / 2026-06-06 00:25 BST still showed all jobs
-  pending with no `sacct` start/end times: BGR train job `767128` and official
-  identity job `767134` were waiting on unavailable A6000 GPU nodes with a
-  Slurm start estimate of 2026-06-07 14:27:51 BST, and all other jobs were
-  dependency-held. `scontrol show job -dd` confirmed
-  `TresPerNode=gres/gpu:a6000:1`; idle g2 nodes are A4000s, so do not resubmit
-  this OpenVLA route as a generic/A4000 job unless the memory requirement is
-  separately changed and preregistered. Use
-  `scripts/sync_openvla_oft_proximal_anchor_results.sh --poll --no-check` to
-  re-poll the fixed job IDs and remote summary paths; use `--sync` only after
-  the compact `summary.csv` files exist.
+  `767144`-`767148`. A remote Athena poll on 2026-06-06 03:05 PDT / 11:05 BST
+  showed BGR train job `767128` failed with exit code `1:0`; BGR merge job
+  `767129`, random adapt job `767131`, and downstream BGR/random perturb jobs
+  were dependency-held with `DependencyNeverSatisfied`. Official identity job
+  `767134` completed, official blur job `767135` remained pending on
+  unavailable GPU nodes, and other official perturb jobs were dependency-held.
+  Remote proximal perturb/adapt summaries were still missing. Next action:
+  inspect the remote `767128` failure log and the weighted random-shift log,
+  then either repair a legitimate execution bug under the same preregistered
+  protocol or explicitly record the route as failed. Do not use `--sync` until
+  compact `summary.csv` files exist and pass the fixed gate checker.
 
 ## Paper Workflow
 
