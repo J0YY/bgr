@@ -4852,6 +4852,18 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "stale manuscript framing"):
                 check_manuscript_framing(paper)
 
+    def test_manuscript_framing_rejects_internal_probe_names_as_paper_evidence(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            paper = Path(temp_dir) / "main.tex"
+            paper.write_text(
+                "Additional 4-seed pre-promotion probes also stay negative: Taxi, "
+                "CliffWalking, MountainCar, CartPole, Acrobot, and Pendulum.",
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(ValueError, "stale manuscript framing"):
+                check_manuscript_framing(paper)
+
     def test_manuscript_framing_rejects_collapsed_evidence_tiers(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             paper = Path(temp_dir) / "main.tex"
@@ -4974,7 +4986,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "while still trailing uniform on median critical radius",
                         "Five-seed exploratory variants are reported only as exploratory evidence",
                         "Five-seed exploratory variants and small pre-promotion standard-environment probes are reported only as scope diagnostics",
-                        "Additional 4-seed pre-promotion probes also stay negative",
+                        "Other local tabular and classic-control probes remain internal diagnostics rather than manuscript evidence",
                         "OpenVLA/LIBERO results are learned-policy audits and infrastructure checks, not promoted positive claims",
                         "OpenVLA is a learned-policy audit rather than a robotics training claim",
                         "action-label/TFDS plumbing validates 2,048-transition matched BGR/random exports with 7D actions and 8D state",

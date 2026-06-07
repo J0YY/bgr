@@ -125,6 +125,14 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   The result is negative and should not be scaled or promoted: every method
   ties at final RAUC 0.7500 and median r80 0.2100, with BGR 0/0/4 against
   uniform on final RAUC.
+- The completed Gymnasium MuJoCo InvertedDoublePendulum-v5 route is also
+  non-promotable. The pre-method calibration cleared the reset-interface screen
+  with clean success 1.0000, recovery range 0.0000--1.0000, RAUC 0.4259, and
+  r80 0.2825, but the fixed 4-seed method screen collapses clean success. BGR
+  reaches final RAUC 0.0833 versus uniform 0.0035 with W/L/T 1/0/3, while
+  BGR-Coverage is 0.0000 and clean success falls to 0.2500 for BGR and 0.0000
+  for BGR-Coverage. Treat this as a retired calibration plus negative method
+  audit, not acceptance evidence.
 
 ## Reviewer-Critique Priorities
 
@@ -206,6 +214,10 @@ Treat the following as the current paper-weakness backlog:
 - If `paper/main.tex` changes, rebuild `paper/main.pdf` with pdfTeX on the remote builder, strip PDF metadata with `qpdf`, then run claim and package checks.
 - Do not add positive claims without a corresponding source artifact and checker coverage.
 - Keep OpenVLA/LIBERO phrased as audits unless BGR beats both matched random and the official checkpoint under a fixed promotion gate.
+- Keep local tabular and classic-control probes as internal diagnostics unless
+  a preregistered result clears the evidence policy. Do not name exploratory
+  Taxi, CliffWalking, MountainCar, CartPole, Acrobot, or Pendulum probes in the
+  manuscript as evidence.
 
 ## Required Checks
 
