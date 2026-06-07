@@ -12,6 +12,8 @@ sys.path.insert(0, str(ROOT))
 from bgr.records import LevelRecord  # noqa: E402
 from tools.reacher_recovery_probe import (  # noqa: E402
     LinearReacherPolicy,
+    MAX_BIAS_NORM,
+    MAX_WEIGHT_NORM,
     aggregate_rows,
     parse_ints,
     parse_strings,
@@ -38,6 +40,17 @@ class ReacherRecoveryProbeTest(unittest.TestCase):
         after = np.mean((teacher - policy.predict_unclipped(features)) ** 2)
 
         self.assertLess(after, before)
+
+    def test_linear_policy_update_bounds_large_error(self) -> None:
+        policy = LinearReacherPolicy(kp=1.0, kd=0.1, torque_limit=0.65, learning_rate=1.0)
+        features = np.array([100.0, -100.0, 50.0, -50.0], dtype=float)
+        teacher = np.array([1_000.0, -1_000.0], dtype=float)
+
+        loss = policy.update(features, teacher)
+
+        self.assertTrue(np.isfinite(loss))
+        self.assertLessEqual(float(np.linalg.norm(policy.weights)), MAX_WEIGHT_NORM + 1e-9)
+        self.assertLessEqual(float(np.max(np.abs(policy.bias))), MAX_BIAS_NORM + 1e-9)
 
     def test_aggregate_rows_reports_method_means(self) -> None:
         rows = [

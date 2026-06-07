@@ -1272,8 +1272,8 @@
     },
     {
       "path": "tests/test_reacher_recovery_probe.py",
-      "sha256": "2a34c02de3367809e8a0b0f47ca6788060f1bb044b40396d4c46c6d355fbbade",
-      "size_bytes": 3711
+      "sha256": "13bf4f98412ba5a5deb8c9713fe206c66eb85d4a4a9277213bd199b3549e05e6",
+      "size_bytes": 4315
     },
     {
       "path": "tests/test_render_openvla_teacher_examples.py",
@@ -1312,8 +1312,8 @@
     },
     {
       "path": "tools/reacher_recovery_probe.py",
-      "sha256": "e63b50f9f691d324d8f2bffde2b88290e9d2f670f3af927bcd453d9ea1aaabda",
-      "size_bytes": 22529
+      "sha256": "8486c84bcb74572bb6d1fe5cb6a1785096df0212304d7a6b4f0a6b1a00cab252",
+      "size_bytes": 23317
     }
   ],
   "hash_algorithm": "sha256",

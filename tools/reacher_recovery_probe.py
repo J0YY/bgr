@@ -33,6 +33,11 @@ from tools.reacher_recovery_calibration import (
     target_joint_angles,
 )
 
+MAX_ERROR = 2.0
+MAX_UPDATE_NORM = 0.05
+MAX_WEIGHT_NORM = 8.0
+MAX_BIAS_NORM = 4.0
+
 
 @dataclass(frozen=True, slots=True)
 class ReacherProbeResult:
@@ -75,10 +80,23 @@ class LinearReacherPolicy:
         return np.clip(self.predict_unclipped(self.features(env)), -self.torque_limit, self.torque_limit).astype(np.float32)
 
     def update(self, features: np.ndarray, teacher: np.ndarray) -> float:
+        if not np.all(np.isfinite(features)) or not np.all(np.isfinite(teacher)):
+            return 0.0
         prediction = self.predict_unclipped(features)
-        error = np.asarray(teacher, dtype=float) - prediction
-        self.weights += self.learning_rate * np.outer(error, features)
-        self.bias += self.learning_rate * error
+        if not np.all(np.isfinite(prediction)):
+            prediction = np.zeros_like(teacher, dtype=float)
+        error = np.clip(np.asarray(teacher, dtype=float) - prediction, -MAX_ERROR, MAX_ERROR)
+        weight_update = self.learning_rate * np.outer(error, features)
+        update_norm = float(np.linalg.norm(weight_update))
+        if update_norm > MAX_UPDATE_NORM:
+            weight_update *= MAX_UPDATE_NORM / update_norm
+        bias_update = self.learning_rate * error
+        self.weights += weight_update
+        self.bias += bias_update
+        weight_norm = float(np.linalg.norm(self.weights))
+        if weight_norm > MAX_WEIGHT_NORM:
+            self.weights *= MAX_WEIGHT_NORM / weight_norm
+        self.bias = np.clip(self.bias, -MAX_BIAS_NORM, MAX_BIAS_NORM)
         return float(np.mean(error * error))
 
 
