@@ -9,12 +9,24 @@ claims, or committing results.
 Persistent thread goal: iterate, queue experiments, and reframe the paper until
 it is plausibly 90%+ likely to get into AAAI.
 
+Current answer to "what is our goal?": make the BGR paper genuinely
+main-track-defensible, not merely better phrased. The work is only successful
+when the evidence gates support a high-confidence AAAI submission: independent
+or pre-existing benchmark evidence, a learned-policy win under a fixed gate, a
+stronger formal result, or presentation/theory improvements that materially
+change reviewer risk.
+
 Acceptance reality: the project is not there yet. The current evidence supports
 a careful mechanism study, not a high-confidence AAAI main-track claim. Make
 progress by adding preregistered positive evidence, fixing standard-benchmark or
 learned-policy failures, strengthening the theory, or improving required
 figures/presentation. Do not treat softer wording around unchanged results as
 acceptance progress.
+
+Operational rule of thumb: commit and push clean, explicit checkpoints to
+`origin/main`; do not use Docker for this project; and incorporate new results
+into `paper/main.tex` only after the artifacts and claim/package checks support
+the claim.
 
 ## Standing Instructions
 
