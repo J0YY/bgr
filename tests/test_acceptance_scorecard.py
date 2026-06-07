@@ -377,6 +377,53 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("Active route: no queued learned-policy route is recorded", text)
         self.assertNotIn("all corresponding completed method screens are negative or absent", text)
 
+    def test_active_inverted_double_pendulum_calibration_is_reported(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write(
+                root / "results/grid_margin_full_30seed_v1/summary.csv",
+                "method,seed,final_rauc\nbgr,0,0.44\nuniform,0,0.40\n",
+            )
+            _write(
+                root / "results/grid_margin_full_replication_30seed_v1/summary.csv",
+                "method,seed,final_rauc\nbgr,30,0.43\nuniform,30,0.39\n",
+            )
+            _write(
+                root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE,
+                "\n".join(
+                    [
+                        "method,perturbation,episodes,successes,success_rate",
+                        "bgr,identity,100,98,0.98",
+                        "bgr,blur,100,98,0.98",
+                        "bgr,brightness,100,99,0.99",
+                        "bgr,occlusion,100,73,0.73",
+                        "bgr,shift,100,98,0.98",
+                        "official,identity,100,99,0.99",
+                        "official,blur,100,97,0.97",
+                        "official,brightness,100,98,0.98",
+                        "official,occlusion,100,74,0.74",
+                        "official,shift,100,98,0.98",
+                        "random,identity,100,98,0.98",
+                        "random,blur,100,99,0.99",
+                        "random,brightness,100,98,0.98",
+                        "random,occlusion,100,73,0.73",
+                        "random,shift,100,98,0.98",
+                        "",
+                    ]
+                ),
+            )
+            _write(
+                root / "results/inverted_double_pendulum_recovery_calibration_12seed_v1/summary.json",
+                '{"clean_success": 1.0, "min_recovery": 0.0, "max_recovery": 1.0, "r80": 0.2825}\n',
+            )
+
+            text = render_markdown(root)
+
+        self.assertIn("Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration", text)
+        self.assertIn("Active route: `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration`", text)
+        self.assertIn("fixed all-method screen for the active pre-method calibration route", text)
+        self.assertNotIn("Retired calibrated route(s): `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration`", text)
+
 
 if __name__ == "__main__":
     unittest.main()

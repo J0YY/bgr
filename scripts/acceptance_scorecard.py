@@ -18,6 +18,7 @@ from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_COMPLETE
 COMPLETED_METHOD_SCREEN_BY_CALIBRATION = {
     "Gymnasium MuJoCo Reacher-v5 calibration": "results/reacher_recovery_probe_12seed_v1/summary.csv",
     "Gymnasium MuJoCo InvertedPendulum-v5 calibration": "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
+    "Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration": "results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv",
 }
 
 
@@ -262,6 +263,14 @@ BENCHMARK_SCREENS = [
         "bgr_uniform_radius",
         "final_median_r80",
     ),
+    (
+        "Gymnasium MuJoCo InvertedDoublePendulum-v5",
+        "results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv",
+        ["bgr", "bgr_coverage"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
 ]
 
 CALIBRATION_SCREENS = [
@@ -288,6 +297,10 @@ CALIBRATION_SCREENS = [
     (
         "Gymnasium MuJoCo InvertedPendulum-v5 calibration",
         "results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json",
+    ),
+    (
+        "Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration",
+        "results/inverted_double_pendulum_recovery_calibration_12seed_v1/summary.json",
     ),
 ]
 
@@ -807,7 +820,7 @@ def render_markdown(root: Path) -> str:
     )
     if inflight is None and active_calibrations:
         priority_lines.append(
-            "- The next acceptance-moving work is the fixed InvertedPendulum-v5 all-method screen; do not tune the protocol after seeing its method results."
+            "- The next acceptance-moving work is the fixed all-method screen for the active pre-method calibration route; do not tune the protocol after seeing its method results."
         )
     elif inflight is None and usable_calibrations:
         priority_lines.append(

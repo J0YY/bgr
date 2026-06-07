@@ -459,6 +459,56 @@ Compact artifacts:
 - `results/inverted_pendulum_recovery_probe_4seed_v1/history.csv`
 - `results/inverted_pendulum_recovery_probe_4seed_v1/package_versions.json`
 
+## Internal Gymnasium MuJoCo InvertedDoublePendulum Calibration
+
+This is the active pre-method calibration route for another official Gymnasium
+MuJoCo task, `InvertedDoublePendulum-v5`. It uses Gymnasium's package-owned
+dynamics through `tools/inverted_double_pendulum_recovery_calibration.py`; it
+is not a BGR method comparison. The reset interface starts from the package
+seeded reset state, applies a two-pole angular perturbation, zeros velocities,
+and evaluates a fixed finite-difference LQR balance controller over a 250-step
+survival horizon.
+
+Command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/inverted_double_pendulum_recovery_calibration.py --out results/inverted_double_pendulum_recovery_calibration_12seed_v1
+```
+
+The route clears the pre-method calibration gate: clean success is 1.0000,
+recovery ranges from 0.0000 to 1.0000, RAUC is 0.4259, and r80 is 0.2825 on a
+0--0.90 two-pole perturbation grid. The isolated environment records
+`gymnasium==1.3.0`, `mujoco==3.9.0`, and `numpy==2.4.6`.
+
+Compact artifacts:
+
+- `results/inverted_double_pendulum_recovery_calibration_12seed_v1/summary.json`
+- `results/inverted_double_pendulum_recovery_calibration_12seed_v1/recovery_rows.csv`
+- `results/inverted_double_pendulum_recovery_calibration_12seed_v1/package_versions.json`
+
+This calibration is only permission to run the fixed all-method screen. The
+comparison tool is fixed before method-comparison results at
+`tools/inverted_double_pendulum_recovery_probe.py`. It keeps the official
+`InvertedDoublePendulum-v5` package dynamics, exact MuJoCo state resets,
+two-pole angular perturbation family, 0--0.90 evaluation grid, and a 4-seed
+pre-promotion screen budget. The learner is a linear LQR-feature controller
+initialized at 0.70 times the calibrated LQR gain and trained by imitation of
+the full LQR teacher on replayed perturbed states selected by the replay
+method.
+
+Preregistered command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/inverted_double_pendulum_recovery_probe.py --out results/inverted_double_pendulum_recovery_probe_4seed_v1
+```
+
+Do not tune the learner, replay-state count, perturbation radii, methods,
+seeds, or promotion gate after seeing this result. Do not scale or promote this
+route unless default BGR or BGR-Coverage beats uniform, fixed-radius,
+failure-only, TD/loss-priority, and the state-priority/uniform-radius ablation
+on final RAUC with a visible effect, paired wins over uniform, and
+non-contradictory non-saturated median-r80 metrics.
+
 ## Internal Official PointMaze Diagnostic
 
 The next preregistered external-package screen is official PointMaze U-Maze,
