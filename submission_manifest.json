@@ -1067,8 +1067,8 @@
     },
     {
       "path": "scripts/sync_openvla_oft_perturb_only_anchor_results.sh",
-      "sha256": "e907eff2166dd65e5154f845c6f83827f523f7693af59a8a9a7dc76ad3ad62c8",
-      "size_bytes": 6427
+      "sha256": "7066f165bcf84e48933aa470f4a7fa544ec85d5803d553a29cf3b6287207ebb1",
+      "size_bytes": 9805
     },
     {
       "path": "scripts/sync_openvla_oft_proximal_anchor_results.sh",
@@ -1372,8 +1372,8 @@
     },
     {
       "path": "tests/test_queue_openvla_oft_goal_adapt.py",
-      "sha256": "618bf3f8243143acb2dcf55059d96f8259d617b995dd1da86ac81b08709f3a79",
-      "size_bytes": 19251
+      "sha256": "79f46df6c6adba59a6a81aadd46195653c63a86b972a5253c13f9985b2b6de91",
+      "size_bytes": 19460
     },
     {
       "path": "tests/test_queue_openvla_oft_perturb_eval.py",

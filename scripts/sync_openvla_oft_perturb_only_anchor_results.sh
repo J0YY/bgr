@@ -24,6 +24,8 @@ REMOTE_PERTURB_SUMMARY="${REMOTE_PERTURB_SUMMARY:-${REMOTE_RUN_ROOT}/${PERTURB_A
 LOCAL_ADAPT_SUMMARY="${LOCAL_ADAPT_SUMMARY:-${LOCAL_RESULTS_ROOT}/${ADAPT_ARTIFACT}/summary.csv}"
 LOCAL_PERTURB_SUMMARY="${LOCAL_PERTURB_SUMMARY:-${LOCAL_RESULTS_ROOT}/${PERTURB_ARTIFACT}/summary.csv}"
 LOCAL_AVAILABLE_PERTURB_SUMMARY="${LOCAL_AVAILABLE_PERTURB_SUMMARY:-${LOCAL_RESULTS_ROOT}/${PERTURB_ARTIFACT}/summary_available.csv}"
+REMOTE_ADAPT_LOGS="${REMOTE_ADAPT_LOGS:-${REMOTE_RUN_ROOT}/${ADAPT_ARTIFACT}/logs}"
+REMOTE_PERTURB_LOGS="${REMOTE_PERTURB_LOGS:-${REMOTE_RUN_ROOT}/${PERTURB_ARTIFACT}/logs}"
 
 usage() {
   cat <<USAGE
@@ -42,6 +44,10 @@ Options:
 Remote summaries:
   ${REMOTE_ADAPT_SUMMARY}
   ${REMOTE_PERTURB_SUMMARY}
+
+Remote log fallbacks:
+  ${REMOTE_ADAPT_LOGS}
+  ${REMOTE_PERTURB_LOGS}
 
 Local summaries:
   adapt:                 ${LOCAL_ADAPT_SUMMARY}
@@ -69,6 +75,8 @@ echo "LOCAL_PERTURB_SUMMARY=${LOCAL_PERTURB_SUMMARY}"
 echo "LOCAL_AVAILABLE_PERTURB_SUMMARY=${LOCAL_AVAILABLE_PERTURB_SUMMARY}"
 echo "REMOTE_ADAPT_SUMMARY=${REMOTE_ADAPT_SUMMARY}"
 echo "LOCAL_ADAPT_SUMMARY=${LOCAL_ADAPT_SUMMARY}"
+echo "REMOTE_PERTURB_LOGS=${REMOTE_PERTURB_LOGS}"
+echo "REMOTE_ADAPT_LOGS=${REMOTE_ADAPT_LOGS}"
 
 remote_poll_script=$(cat <<'REMOTE'
 date
@@ -110,6 +118,35 @@ sync_adapt_summary() {
   if ssh -o BatchMode=yes -o ConnectTimeout=8 "${REMOTE_HOST}" "test -f '${REMOTE_ADAPT_SUMMARY}'"; then
     rsync -az "${REMOTE_HOST}:${REMOTE_ADAPT_SUMMARY}" "${LOCAL_ADAPT_SUMMARY}"
     echo "[synced] ${REMOTE_ADAPT_SUMMARY} -> ${LOCAL_ADAPT_SUMMARY}"
+  elif ssh -o BatchMode=yes -o ConnectTimeout=8 "${REMOTE_HOST}" "test -d '${REMOTE_ADAPT_LOGS}/bgr' && test -d '${REMOTE_ADAPT_LOGS}/random'"; then
+    local tmp_logs
+    tmp_logs="$(mktemp -d "${TMPDIR:-/tmp}/perturbonly-adapt-logs.XXXXXX")"
+    rsync -az "${REMOTE_HOST}:${REMOTE_ADAPT_LOGS}/bgr/" "${tmp_logs}/bgr/"
+    rsync -az "${REMOTE_HOST}:${REMOTE_ADAPT_LOGS}/random/" "${tmp_logs}/random/"
+    local tmp_out
+    tmp_out="$(mktemp -d "${TMPDIR:-/tmp}/perturbonly-adapt-summary.XXXXXX")"
+    PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_eval.py \
+      --method-log-dir "bgr=${tmp_logs}/bgr" \
+      --method-log-dir "random=${tmp_logs}/random" \
+      --out "${tmp_out}"
+    python3 - "${tmp_out}/summary.csv" "${LOCAL_ADAPT_SUMMARY}" <<'PY'
+import csv
+import sys
+
+src, dst = sys.argv[1:3]
+with open(src, newline="", encoding="utf-8") as handle:
+    rows = list(csv.DictReader(handle))
+with open(dst, "w", newline="", encoding="utf-8") as handle:
+    writer = csv.DictWriter(
+        handle,
+        fieldnames=["method", "episodes", "successes", "success_rate"],
+        lineterminator="\n",
+    )
+    writer.writeheader()
+    for row in rows:
+        writer.writerow({key: row[key] for key in writer.fieldnames})
+PY
+    echo "[summarized-from-logs] ${REMOTE_ADAPT_LOGS} -> ${LOCAL_ADAPT_SUMMARY}"
   else
     echo "[missing] ${REMOTE_ADAPT_SUMMARY}"
   fi
@@ -118,8 +155,44 @@ sync_adapt_summary() {
 sync_perturb_summary() {
   mkdir -p "$(dirname "${LOCAL_PERTURB_SUMMARY}")"
   if ! ssh -o BatchMode=yes -o ConnectTimeout=8 "${REMOTE_HOST}" "test -f '${REMOTE_PERTURB_SUMMARY}'"; then
-    echo "[missing] ${REMOTE_PERTURB_SUMMARY}"
-    return
+    if ssh -o BatchMode=yes -o ConnectTimeout=8 "${REMOTE_HOST}" "test -d '${REMOTE_PERTURB_LOGS}'"; then
+      local tmp_logs
+      tmp_logs="$(mktemp -d "${TMPDIR:-/tmp}/perturbonly-perturb-logs.XXXXXX")"
+      rsync -az "${REMOTE_HOST}:${REMOTE_PERTURB_LOGS}/" "${tmp_logs}/"
+      local tmp_out
+      tmp_out="$(mktemp -d "${TMPDIR:-/tmp}/perturbonly-perturb-summary.XXXXXX")"
+      PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_perturb_eval.py \
+        --logs-root "${tmp_logs}" \
+        --out "${tmp_out}"
+      local tmp_path="${tmp_out}/summary_stripped.csv"
+      python3 - "${tmp_out}/summary.csv" "${tmp_path}" <<'PY'
+import csv
+import sys
+
+src, dst = sys.argv[1:3]
+fieldnames = ["method", "perturbation", "episodes", "successes", "success_rate"]
+with open(src, newline="", encoding="utf-8") as handle:
+    rows = list(csv.DictReader(handle))
+with open(dst, "w", newline="", encoding="utf-8") as handle:
+    writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
+    writer.writeheader()
+    for row in rows:
+        writer.writerow({key: row[key] for key in fieldnames})
+PY
+      if PYTHONPATH=src:. python3 scripts/check_openvla_perturb_gate.py \
+          --perturb-summary "${tmp_path}" --require-complete >/dev/null 2>&1; then
+        cp "${tmp_path}" "${LOCAL_PERTURB_SUMMARY}"
+        echo "[summarized-complete-from-logs] ${REMOTE_PERTURB_LOGS} -> ${LOCAL_PERTURB_SUMMARY}"
+      else
+        mkdir -p "$(dirname "${LOCAL_AVAILABLE_PERTURB_SUMMARY}")"
+        cp "${tmp_path}" "${LOCAL_AVAILABLE_PERTURB_SUMMARY}"
+        echo "[summarized-incomplete-from-logs] ${REMOTE_PERTURB_LOGS} -> ${LOCAL_AVAILABLE_PERTURB_SUMMARY}"
+      fi
+      return
+    else
+      echo "[missing] ${REMOTE_PERTURB_SUMMARY}"
+      return
+    fi
   fi
 
   local tmp_path

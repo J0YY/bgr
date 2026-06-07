@@ -391,6 +391,8 @@ class QueueOpenVlaOftGoalAdaptTest(unittest.TestCase):
         self.assertIn("JOB_IDS=767789,767790", output)
         self.assertIn("DETAIL_JOB_IDS=767789,767790,767793", output)
         self.assertIn("openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg", output)
+        self.assertIn("REMOTE_PERTURB_LOGS=/tmp/bgr-runs/openvla_oft_perturb_eval_p2048unique", output)
+        self.assertIn("REMOTE_ADAPT_LOGS=/tmp/bgr-runs/openvla_oft_goal_adapt_eval_p2048unique", output)
         self.assertIn("summary_available.csv", output)
         self.assertIn("[dry-run] pass --poll", output)
         self.assertIn("[dry-run] pass --sync", output)
