@@ -189,7 +189,7 @@ Baselines are matched to the decisions BGR changes. Uniform replay samples repla
 
 BGR is useful only if recovery boundaries can be estimated without evaluating dense curves for every replay state. We therefore validate the training-time estimator separately from the replay experiments. For each synthetic state, we compute a dense 201-point reference curve for evaluation only, then compare 17-probe estimators: uniform random radii and active BGR probing initialized with a coarse sweep and then focused near the current critical-radius estimate.
 
-Table~\ref{tab:estimator} shows over 30 paired seeds that active BGR finds the boundary within $\pm0.08$ radius units more often than uniform probing (0.670 vs. 0.595) and lowers mean $r_{80}$ error (0.081 vs. 0.105). Paired exact sign tests support both effects ($p<10^{-3}$). This result does not claim that active probing dominates every fixed grid in this simple one-dimensional setting; rather, it verifies that BGR's boundary estimates are usable at a small fixed rollout budget before final dense-curve evaluation.
+Table~\ref{tab:estimator} shows over 30 paired seeds that active BGR finds the boundary within $\pm0.08$ radius units more often than uniform probing (0.670 vs. 0.595) and lowers mean $r_{80}$ error (0.081 vs. 0.105). The paired consistency is reported in Table~\ref{tab:significance}; the practical point is the fixed-budget effect size, not the p-value. This result does not claim that active probing dominates every fixed grid in this simple one-dimensional setting; rather, it verifies that BGR's boundary estimates are usable at a small fixed rollout budget before final dense-curve evaluation.
 
 \subsection{Synthetic Recovery-Margin Benchmark}
 

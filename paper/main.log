@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.31)  8 JUN 2026 00:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.31)  8 JUN 2026 00:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -241,7 +241,7 @@ Underfull \hbox (badness 2547) in paragraph at lines 38--39
 
 
 Underfull \hbox (badness 1603) in paragraph at lines 48--49
-\T1/ptm/m/n/10 potential prox-ies (Jiang, Grefen-stette, and Rock-t�schel
+\T1/ptm/m/n/10 potential prox-ies (Jiang, Grefen-stette, and Rock-tschel
  []
 
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
@@ -280,7 +280,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [2 <./figures/boundary_intuition.pdf>] [3] (./figures/summary_table.tex)
 (./figures/significance_table.tex) (./figures/estimator_table.tex)
-Underfull \vbox (badness 4713) has occurred while \output is active []
+Underfull \vbox (badness 1424) has occurred while \output is active []
 
 <figures/grid_margin_learning_curve.pdf, id=49, 462.52798pt x 169.8345pt>
 File: figures/grid_margin_learning_curve.pdf Graphic file (type pdf)
@@ -359,7 +359,7 @@ dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/ut
 mr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (10 pages, 296895 bytes).
+Output written on main.pdf (10 pages, 296426 bytes).
 PDF statistics:
  165 PDF objects out of 1000 (max. 8388607)
  99 compressed objects within 1 object stream

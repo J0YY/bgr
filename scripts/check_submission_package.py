@@ -4163,6 +4163,7 @@ def check_manuscript_framing(path: Path) -> list[str]:
             "close to the coarse sweep",
             "The current strongest evidence is controlled procedural margin expansion",
             "full robotics claim still requires action-label validation",
+            "Paired exact sign tests support both effects",
         ]
         if snippet in normalized_text
     ]
@@ -4207,6 +4208,8 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "final recovery curves for BGR, uniform, failure-only, fixed-radius, and PLR-loss replay",
         "inset showing BGR/uniform critical-radius distributions",
         "We treat exact paired sign tests as consistency checks over shared seeds, not as substitutes for effect size",
+        "The paired consistency is reported in Table",
+        "the practical point is the fixed-budget effect size, not the p-value",
         "The following local calculation is a design rationale for the radius sampler and for the radius-level ablation",
         "not a convergence result, global robustness theorem, or global margin-expansion guarantee",
         "Local boundary intuition",
