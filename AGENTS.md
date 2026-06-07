@@ -11,6 +11,10 @@ Last verified: 2026-06-07.
 Persistent thread goal: iterate, queue experiments, and reframe the paper until
 it is plausibly 90%+ likely to get into AAAI.
 
+One-line goal: turn BGR from a careful mechanism study with mostly tailored
+positive evidence into a main-track-defensible paper backed by independent or
+learned-policy evidence that survives fixed gates.
+
 Current answer to "what is our goal?": make the BGR paper genuinely
 main-track-defensible, not merely better phrased. The work is only successful
 when the evidence gates support a high-confidence AAAI submission: independent
