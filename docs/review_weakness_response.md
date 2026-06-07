@@ -21,7 +21,7 @@ to reproduce this read from the current result artifacts.
 | Benchmarks constructed for BGR | Abstract, synthetic section, grid section, evidence contract, and limitations explicitly say synthetic/grid-margin establish mechanism rather than broad dominance. | Need a positive pre-existing benchmark before making stronger main-track claims. | High |
 | Fragile/post-hoc variants | Suffix text explains the first boundary-heavy run undercovered, treats coverage-aware BGR-Suffix as separate manipulation-style support, and says it is not evidence that boundary-only replay is robust. Grid learning-rate caveat remains in text. | The coverage-aware suffix result is still a rescue-style variant; only new preregistered evidence can remove that robustness concern. | Medium |
 | Incremental novelty | Related work and grid ablation now frame the uniform-radius run as a negative control: state priority is held fixed and only the radius rule changes, so the effect cannot be attributed to hard-state prioritization alone. | Novelty still depends on this ablation and the mechanism benchmark. A pre-existing win would make it stronger. | High |
-| Proposition too strong | Proposition is renamed local boundary intuition and explicitly says it is not a convergence, global robustness, or margin-expansion theorem. The method section now adds a finite-grid estimator sample-complexity guarantee over a buffer of states: Hoeffding/union-bound error controls every monotone recovery estimate, and critical-radius error is controlled by grid spacing, local slope, threshold error, and the number of Bernoulli probes. | This still does not prove global learner improvement; it only strengthens the estimator piece. | Medium |
+| Proposition too strong | Proposition is renamed local boundary intuition and explicitly says it is not a convergence or global robustness theorem. The method section now adds a one-step local margin-shift corollary plus a finite-grid estimator sample-complexity guarantee over a buffer of states: Hoeffding/union-bound error controls every monotone recovery estimate, and critical-radius error is controlled by grid spacing, local slope, threshold error, and the number of Bernoulli probes. | This still does not prove global learner improvement; it only strengthens the local sampler/estimator rationale. | Medium |
 | Metrics favor BGR | Protocol states RAUC/AULC are author-defined summaries and reports median r80 disagreements directly. Suffix median-r80 caveat remains in abstract/table text/limitations. | Independent metrics still matter. Any promoted benchmark must avoid saturated or contradictory r80. | High |
 | Feasibility witness is a hidden requirement | Problem setting now states that the witness is a real interface assumption, not free supervision or a learned success oracle; without a reliable witness, BGR is only an audit tool or should not be applied. Promotion is limited to exact or stress-tested witnesses. | Broader claims still require deeper witness-sensitivity evidence. | Medium |
 | Results dump/no intuition | Paper now has boundary-intuition and grid learning-curve figures, plus an evidence-contract table. The boundary-intuition panel now overlays seed-0 recovery curves for BGR, uniform, failure-only, fixed-radius, and PLR-loss replay in the same footprint. | This improves readability but does not add independent positive evidence. | Medium |
@@ -87,6 +87,13 @@ to reproduce this read from the current result artifacts.
   all-method comparison in `tools/reacher_recovery_probe.py` is negative:
   uniform reaches 0.3862 final RAUC, while BGR reaches 0.2907 and BGR-Coverage
   reaches 0.2721. This is scope evidence, not paper evidence.
+- Gymnasium Box2D LunarLander-v3 is completed negative scope evidence, not
+  paper evidence. Its fixed calibration cleared the pre-method gate
+  (clean 0.9167, recovery range 0.5833--0.9167, RAUC 0.7722, r80 0.5300), but
+  the preregistered 4-seed method screen fails promotion: BGR-Coverage has the
+  best mean final RAUC (0.7500 vs. 0.6222 uniform) but wins only 2/4 paired
+  seeds against uniform and has lower median r80 (0.4200 vs. 0.4825). Do not
+  scale or promote this route without a genuinely new preregistered premise.
 - The weighted perturbation curriculum in
   `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh` is now a
   negative learned-policy audit for the fixed learned-policy gate. It changed

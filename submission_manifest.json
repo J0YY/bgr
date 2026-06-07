@@ -417,18 +417,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "cb6cd25afdfdcab4e056b85950ff506ec461bab9a2c6119fb8f283327766d53f",
-      "size_bytes": 14001
+      "sha256": "714fa5fdfce8dfa1a673f163e09460e01368642fd88fd1c771bb2e57246ae4fb",
+      "size_bytes": 14071
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "c89082a112ac91ec02a460a8bf58fce51fa2421f238d73fe7dc4a1305cdeaf17",
-      "size_bytes": 295579
+      "sha256": "73223523f8d7867e686b94b228b62b1063a9136c277ec4ccfa7fc157538e31a6",
+      "size_bytes": 296265
     },
     {
       "path": "paper/main.tex",
-      "sha256": "ff6102600cf209d77b6c4c366040c88be2ae70a051371754be07378ab6932940",
-      "size_bytes": 37357
+      "sha256": "e330d607b797e82eeaa43b727ed1b6a21478efce1b97a6f0672ee38ae2235a42",
+      "size_bytes": 37626
     },
     {
       "path": "paper/references.bib",
@@ -917,8 +917,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "d1e98126bd4c9dc8d3253af3a649e3c40ef4d8740a94a36bba0e8e438cdfc146",
-      "size_bytes": 239653
+      "sha256": "7e5a19e1267586de9b0051ec73a77ce396cd8b32e62a1d97b68988c16d4f0de7",
+      "size_bytes": 239700
     },
     {
       "path": "scripts/collect_environment.py",
