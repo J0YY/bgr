@@ -243,7 +243,14 @@ Treat the following as the current paper-weakness backlog:
   immediately after submission showed prep `767789` and official identity
   `767796` running, with all adaptation and BGR/random perturb jobs pending on
   dependencies. Until compact summaries exist and pass the fixed gate, these
-  are in-flight jobs only, not paper evidence.
+  are in-flight jobs only, not paper evidence. Poll and sync this route with
+  `REMOTE_RUN_ROOT=/work/joy/bgr/runs scripts/sync_openvla_oft_perturb_only_anchor_results.sh --poll`
+  and, once compact summaries exist,
+  `REMOTE_RUN_ROOT=/work/joy/bgr/runs scripts/sync_openvla_oft_perturb_only_anchor_results.sh --sync`.
+  A helper poll at 2026-06-07 22:08:57 BST showed prep `767789` completed
+  cleanly at 22:06:54 BST, BGR adaptation `767790` running on `c1-g4-04`, and
+  official identity eval `767796` running on `c2-g4-24`; perturb-only adapt and
+  perturb compact summaries were still missing.
 
 ## Paper Workflow
 

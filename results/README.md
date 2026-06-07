@@ -2070,7 +2070,20 @@ perturbation evals were then queued with `BGR_DEPENDENCY=afterok:767791` and
 Slurm poll showed prep `767789` and official identity `767796` running; all
 adaptation jobs and BGR/random perturb evals were dependency-pending. These
 queued jobs are not paper evidence unless compact summaries later clear the
-fixed promotion gate.
+fixed promotion gate. Poll and sync compact summaries with:
+
+```bash
+REMOTE_RUN_ROOT=/work/<user>/bgr/runs \
+scripts/sync_openvla_oft_perturb_only_anchor_results.sh --poll
+
+REMOTE_RUN_ROOT=/work/<user>/bgr/runs \
+scripts/sync_openvla_oft_perturb_only_anchor_results.sh --sync
+```
+
+A helper poll at 2026-06-07 22:08:57 BST showed prep `767789` completed
+cleanly at 22:06:54 BST, BGR adaptation `767790` running on `c1-g4-04`, and
+official identity eval `767796` running on `c2-g4-24`; adapt and perturb compact
+summary CSVs were still missing.
 
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 

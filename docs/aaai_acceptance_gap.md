@@ -780,7 +780,15 @@ package and recording its version before any result is run.
   Slurm poll showed prep `767789` and official identity `767796` running, with
   the adaptation jobs and BGR/random perturb evals dependency-pending. This
   route remains in flight and should not be added to `paper/main.tex` unless
-  compact summaries clear the fixed learned-policy promotion gate.
+  compact summaries clear the fixed learned-policy promotion gate. Poll and
+  sync the route with
+  `REMOTE_RUN_ROOT=/work/joy/bgr/runs scripts/sync_openvla_oft_perturb_only_anchor_results.sh --poll`
+  and
+  `REMOTE_RUN_ROOT=/work/joy/bgr/runs scripts/sync_openvla_oft_perturb_only_anchor_results.sh --sync`.
+  A helper poll at 2026-06-07 22:08:57 BST showed prep `767789` completed
+  cleanly at 22:06:54 BST, BGR adaptation `767790` running on `c1-g4-04`, and
+  official identity eval `767796` running on `c2-g4-24`; both compact summary
+  paths were still missing, so the route remains unevaluated.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance
