@@ -86,16 +86,16 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   `gymnasium==1.3.0`, `box2d==2.3.10`, `pygame-ce==2.5.7`, `swig==4.4.1`,
   and `numpy==2.4.6`. The fixed calibration command is
   `PYTHONPATH=src:. /tmp/bgr_lunar_venv/bin/python tools/lunarlander_recovery_calibration.py --out results/lunarlander_recovery_calibration_12seed_v1`.
-  This is not BGR evidence. The fixed 12-seed calibration clears the
+  This is not BGR evidence. The fixed 12-seed calibration cleared the
   pre-method gate with clean success 0.9167, recovery range 0.5833--0.9167,
-  RAUC 0.7722, and median r80 0.5300. The next acceptance-moving step is a
-  fixed all-method LunarLander screen. It is now implemented and preregistered
-  at `tools/lunarlander_recovery_probe.py` with command
-  `PYTHONPATH=src:. /tmp/bgr_lunar_venv/bin/python tools/lunarlander_recovery_probe.py --out results/lunarlander_recovery_probe_4seed_v1`.
-  Do not tune this protocol after seeing outcomes; scale only if BGR or
-  BGR-Coverage beats uniform, fixed-radius, failure-only, TD/loss-priority, and
-  BGR-uniform-radius with at least 3/4 paired wins and non-saturated
-  median-r80 evidence.
+  RAUC 0.7722, and median r80 0.5300. The fixed all-method screen in
+  `tools/lunarlander_recovery_probe.py` is completed and negative under the
+  preregistered gate: BGR-Coverage has the best mean final RAUC (0.7500 vs.
+  0.6222 uniform, 0.7375 fixed, 0.6799 failure-only, 0.7174 TD-loss, and
+  0.7160 BGR-uniform-radius), but it wins only 2/4 paired seeds against
+  uniform and has lower median r80 than uniform (0.4200 vs. 0.4825). Do not
+  scale or promote this LunarLander route without a genuinely new
+  preregistered premise.
 - The PointMaze U-Maze topology-bottleneck reset-interface screen is completed and negative. Failure-only reaches 0.3500 final RAUC, while BGR reaches 0.0854 and BGR-Coverage reaches 0.0573; do not scale or promote this protocol.
 - The MiniGrid-LavaGapS7 external-package screen is completed and negative. BGR-Coverage trails uniform on mean RAUC (0.4277 vs. 0.4461), default BGR is lower (0.4031), and the state-priority/uniform-radius ablation is highest (0.4627); do not scale or promote this protocol.
 - The hard-budget FetchReach-v4 reset-interface follow-up is completed and

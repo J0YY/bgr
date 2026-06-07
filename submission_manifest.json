@@ -7,8 +7,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "7b35f2b8068f566f22fede5d3af22bf59e6ed09718551ae6b2ffca9e8275c2c0",
-      "size_bytes": 31513
+      "sha256": "226dd20d44c8e059c204b8e153d80d96f514a92c2d60e9cff0a67e020ec97b33",
+      "size_bytes": 31581
     },
     {
       "path": "configs/estimator_bgr_full.yaml",
@@ -417,18 +417,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "28a554b36933bb72a0b16763f50ab57861eb6d3af7f2d160c4d044f0d846694e",
-      "size_bytes": 14134
+      "sha256": "cb6cd25afdfdcab4e056b85950ff506ec461bab9a2c6119fb8f283327766d53f",
+      "size_bytes": 14001
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "f0302592ce091c33ab6d5e625ba17053c6096cc8bbf5e638124af28fb893cda3",
-      "size_bytes": 295398
+      "sha256": "c89082a112ac91ec02a460a8bf58fce51fa2421f238d73fe7dc4a1305cdeaf17",
+      "size_bytes": 295579
     },
     {
       "path": "paper/main.tex",
-      "sha256": "eeb0ca016aea99b1009da4572620786113c6e6b7a25614e1c83c81a048fb1cf5",
-      "size_bytes": 37060
+      "sha256": "ff6102600cf209d77b6c4c366040c88be2ae70a051371754be07378ab6932940",
+      "size_bytes": 37357
     },
     {
       "path": "paper/references.bib",
@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "5f613e4ce78b45225c92434cada6d2d47df43bb4e347dcae52ef86597165bcf7",
-      "size_bytes": 288071
+      "sha256": "67b676912a39d09cd4dd3834bf66068da5be485a24c27dd593bfbdf6edb0b982",
+      "size_bytes": 292058
     },
     {
       "path": "results/environment_v1/README.md",
@@ -671,6 +671,41 @@
       "size_bytes": 8931
     },
     {
+      "path": "results/lunarlander_recovery_calibration_12seed_v1/package_versions.json",
+      "sha256": "7cea703fdf0998c7024dfaed6096cc674738b482608c08902047aa2b8eb4b259",
+      "size_bytes": 143
+    },
+    {
+      "path": "results/lunarlander_recovery_calibration_12seed_v1/recovery_rows.csv",
+      "sha256": "7eece8881812d5af620ba99ffa206558826f3fa6001c7adac4f02c2f08532658",
+      "size_bytes": 16086
+    },
+    {
+      "path": "results/lunarlander_recovery_calibration_12seed_v1/summary.json",
+      "sha256": "73355d82aa87c4d9ec0885b221a09714e1b1ebcd87fe243028c26fd914d53fd9",
+      "size_bytes": 677
+    },
+    {
+      "path": "results/lunarlander_recovery_probe_4seed_v1/history.csv",
+      "sha256": "0ec0bce8642704c9fb25c7beac36fb05eb71e41bca699ad1e2a8d06f2a752b5a",
+      "size_bytes": 7992
+    },
+    {
+      "path": "results/lunarlander_recovery_probe_4seed_v1/package_versions.json",
+      "sha256": "7cea703fdf0998c7024dfaed6096cc674738b482608c08902047aa2b8eb4b259",
+      "size_bytes": 143
+    },
+    {
+      "path": "results/lunarlander_recovery_probe_4seed_v1/results.json",
+      "sha256": "c9371e0d5127df124d8628bbfcfaf661df6b4b4608e67e43f167c8f2d7f8a0fc",
+      "size_bytes": 29484
+    },
+    {
+      "path": "results/lunarlander_recovery_probe_4seed_v1/summary.csv",
+      "sha256": "9130cf0a783276980ff1b0da023472b494cd9fa26b183d01890cf448909656d3",
+      "size_bytes": 2679
+    },
+    {
       "path": "results/openvla_action_tfds_validation_v1/summary.json",
       "sha256": "45524181847ef18965b2f60993baef943fcb2b0158368b1bb4d460b8cdded7f2",
       "size_bytes": 1626
@@ -852,8 +887,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "91cb97f2c232f4f9b03f3da193a99d4818b691a8ca8347397eeca54637e5ffed",
-      "size_bytes": 38660
+      "sha256": "04361e54140574088679d2c3c3a583a64f4bb1fb85f595c07d307272d3a34a65",
+      "size_bytes": 39170
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -867,8 +902,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "006bc6cdc642f30eeef6138bdd4d91cb2c70acf0327070d1f3cbe1880c89c9b1",
-      "size_bytes": 31508
+      "sha256": "709e140ffff23f6c8141ef982288efafdd6462cd355e2da194715944ad68c62b",
+      "size_bytes": 33751
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -877,13 +912,13 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "0ac861b75a7e3ca19dbcafd6386fb3881ec9535b4ca68c0de7372c3b960a6aa4",
-      "size_bytes": 94784
+      "sha256": "975ee8c2374292222e62dae5904cd2f64445b588b179bdbe2a562a2b9a0800e2",
+      "size_bytes": 96926
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "ad1c8bc618d45ade0f9dc26a7b462af13246b9db010c5a93a4e85f019efac7dd",
-      "size_bytes": 239052
+      "sha256": "d1e98126bd4c9dc8d3253af3a649e3c40ef4d8740a94a36bba0e8e438cdfc146",
+      "size_bytes": 239653
     },
     {
       "path": "scripts/collect_environment.py",

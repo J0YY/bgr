@@ -508,6 +508,13 @@ SCOPE_DIAGNOSTIC_ARTIFACTS = [
     "results/inverted_pendulum_recovery_probe_4seed_v1/history.csv",
     "results/inverted_pendulum_recovery_probe_4seed_v1/package_versions.json",
     "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
+    "results/lunarlander_recovery_calibration_12seed_v1/package_versions.json",
+    "results/lunarlander_recovery_calibration_12seed_v1/recovery_rows.csv",
+    "results/lunarlander_recovery_calibration_12seed_v1/summary.json",
+    "results/lunarlander_recovery_probe_4seed_v1/history.csv",
+    "results/lunarlander_recovery_probe_4seed_v1/package_versions.json",
+    "results/lunarlander_recovery_probe_4seed_v1/results.json",
+    "results/lunarlander_recovery_probe_4seed_v1/summary.csv",
     "results/reacher_recovery_calibration_12seed_v1/package_versions.json",
     "results/reacher_recovery_calibration_12seed_v1/recovery_rows.csv",
     "results/reacher_recovery_calibration_12seed_v1/summary.json",
@@ -4553,6 +4560,9 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
             ("failure-only 0.5458", "failureonly 0.5458"),
             ("2/4 wins",),
             ("r20 0.1167 vs. 0.2500",),
+            ("LunarLander-v3",),
+            ("BGR-Coverage 0.7500",),
+            ("r80 0.4200 vs. 0.4825",),
         ]
         scope_missing = [
             snippets[0]

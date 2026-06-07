@@ -95,6 +95,14 @@ uniform, fixed-radius, failure-only, TD/loss-priority, and
 BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform and
 non-contradictory, non-saturated median-r80 evidence.
 
+Result: the fixed 4-seed LunarLander screen is a negative near miss. BGR-Coverage
+has the best mean final RAUC at 0.7500, above uniform 0.6222, fixed-radius
+0.7375, failure-only 0.6799, TD-loss 0.7174, and BGR-uniform-radius 0.7160.
+The preregistered promotion checker still rejects it because BGR-Coverage wins
+only 2/4 paired seeds against uniform and median r80 is lower than uniform
+(0.4200 vs. 0.4825). Do not scale or promote this route without a genuinely new
+preregistered premise.
+
 ## Promotion Criteria For A New Independent Benchmark
 
 A new benchmark result should be promoted into `paper/main.tex` only if it meets

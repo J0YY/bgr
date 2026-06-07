@@ -399,6 +399,21 @@ fixed-radius, failure-only, TD/loss-priority, and BGR-uniform-radius on final
 RAUC with at least 3/4 paired wins over uniform and non-contradictory,
 non-saturated median-r80 evidence.
 
+The fixed 4-seed screen is negative under that gate. BGR-Coverage has the best
+mean final RAUC, 0.7500, above uniform 0.6222, fixed-radius 0.7375,
+failure-only 0.6799, TD-loss 0.7174, and BGR-uniform-radius 0.7160. It still
+fails promotion because it wins only 2/4 paired seeds against uniform and its
+median r80 is lower than uniform (0.4200 vs. 0.4825). Default BGR reaches
+0.6479 final RAUC, below fixed-radius, failure-only, TD-loss, and
+BGR-uniform-radius. Do not scale or promote this LunarLander protocol.
+
+Compact artifacts:
+
+- `results/lunarlander_recovery_probe_4seed_v1/summary.csv`
+- `results/lunarlander_recovery_probe_4seed_v1/history.csv`
+- `results/lunarlander_recovery_probe_4seed_v1/results.json`
+- `results/lunarlander_recovery_probe_4seed_v1/package_versions.json`
+
 ## Internal Gymnasium MuJoCo Reacher Calibration
 
 This is a pre-method calibration for a different official Gymnasium MuJoCo

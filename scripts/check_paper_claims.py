@@ -799,6 +799,46 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    lunar = read_csv_rows(results_dir / "lunarlander_recovery_probe_4seed_v1" / "summary.csv")
+    lunar_coverage_rauc = mean_metric(lunar, "bgr_coverage", "final_rauc")
+    lunar_uniform_rauc = mean_metric(lunar, "uniform", "final_rauc")
+    lunar_fixed_rauc = mean_metric(lunar, "fixed", "final_rauc")
+    lunar_failure_rauc = mean_metric(lunar, "failure_only", "final_rauc")
+    lunar_td_rauc = mean_metric(lunar, "td_loss", "final_rauc")
+    lunar_ablation_rauc = mean_metric(lunar, "bgr_uniform_radius", "final_rauc")
+    lunar_coverage_r80 = mean_metric(lunar, "bgr_coverage", "final_median_r80")
+    lunar_uniform_r80 = mean_metric(lunar, "uniform", "final_median_r80")
+    lunar_coverage_wins = paired_wins(lunar, "bgr_coverage", "uniform", "final_rauc")
+    if not (
+        lunar_coverage_rauc > lunar_uniform_rauc
+        and lunar_coverage_rauc > max(lunar_fixed_rauc, lunar_failure_rauc, lunar_td_rauc, lunar_ablation_rauc)
+        and lunar_coverage_wins == (2, 2, 0)
+        and lunar_coverage_r80 < lunar_uniform_r80
+    ):
+        raise ValueError("Expected LunarLander-v3 diagnostic to remain a non-promoted near miss")
+    claims.append(
+        Claim(
+            "LunarLander-v3 official-package limitation",
+            (
+                f"A fixed Box2D LunarLander screen is a near miss: BGR-Coverage has the best mean RAUC "
+                f"({fmt(lunar_coverage_rauc, 4)} vs. {fmt(lunar_uniform_rauc, 4)} uniform) but wins only "
+                f"{lunar_coverage_wins[0]}/4 paired seeds and has lower median $r_{{80}}$ than uniform"
+            ),
+            "results/lunarlander_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "LunarLander-v3 scope-audit table row",
+            (
+                f"LunarLander-v3 & BGR-Coverage {fmt(lunar_coverage_rauc, 4)} & uniform "
+                f"{fmt(lunar_uniform_rauc, 4)}; only {lunar_coverage_wins[0]}/4 wins; "
+                f"r80 {fmt(lunar_coverage_r80, 4)} vs. {fmt(lunar_uniform_r80, 4)} & not promoted"
+            ),
+            "results/lunarlander_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+
     reacher = read_csv_rows(results_dir / "reacher_recovery_probe_12seed_v1" / "summary.csv")
     reacher_bgr_rauc = mean_metric(reacher, "bgr", "final_rauc")
     reacher_coverage_rauc = mean_metric(reacher, "bgr_coverage", "final_rauc")
