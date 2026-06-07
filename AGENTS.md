@@ -86,9 +86,12 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   `gymnasium==1.3.0`, `box2d==2.3.10`, `pygame-ce==2.5.7`, `swig==4.4.1`,
   and `numpy==2.4.6`. The fixed calibration command is
   `PYTHONPATH=src:. /tmp/bgr_lunar_venv/bin/python tools/lunarlander_recovery_calibration.py --out results/lunarlander_recovery_calibration_12seed_v1`.
-  This is not BGR evidence. Only implement a fixed all-method screen if the
-  calibration clears clean success >= 0.80, recovery range >= 0.20, and
-  non-saturated median r80.
+  This is not BGR evidence. The fixed 12-seed calibration clears the
+  pre-method gate with clean success 0.9167, recovery range 0.5833--0.9167,
+  RAUC 0.7722, and median r80 0.5300. The next acceptance-moving step is a
+  fixed all-method LunarLander screen; preregister the replay-state pool,
+  perturbation radii, baselines, seeds, learner, and promotion gate before
+  seeing method outcomes.
 - The PointMaze U-Maze topology-bottleneck reset-interface screen is completed and negative. Failure-only reaches 0.3500 final RAUC, while BGR reaches 0.0854 and BGR-Coverage reaches 0.0573; do not scale or promote this protocol.
 - The MiniGrid-LavaGapS7 external-package screen is completed and negative. BGR-Coverage trails uniform on mean RAUC (0.4277 vs. 0.4461), default BGR is lower (0.4031), and the state-priority/uniform-radius ablation is highest (0.4627); do not scale or promote this protocol.
 - The hard-budget FetchReach-v4 reset-interface follow-up is completed and

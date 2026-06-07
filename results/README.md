@@ -366,6 +366,17 @@ uniform, fixed-radius, failure-only, TD/loss-priority, and the
 state-priority/uniform-radius ablation on final RAUC with a visible effect,
 paired wins over uniform, and non-contradictory non-saturated radius metrics.
 
+The fixed 12-seed calibration clears the pre-method gate: clean success is
+0.9167, recovery ranges from 0.5833 to 0.9167, RAUC is 0.7722, median r80 is
+0.5300 on the 0--1 perturbation grid, and the mean crash rate is 0.1620. This
+is not paper evidence; it only permits a fixed all-method LunarLander screen.
+
+Compact artifacts:
+
+- `results/lunarlander_recovery_calibration_12seed_v1/summary.json`
+- `results/lunarlander_recovery_calibration_12seed_v1/recovery_rows.csv`
+- `results/lunarlander_recovery_calibration_12seed_v1/package_versions.json`
+
 ## Internal Gymnasium MuJoCo Reacher Calibration
 
 This is a pre-method calibration for a different official Gymnasium MuJoCo
