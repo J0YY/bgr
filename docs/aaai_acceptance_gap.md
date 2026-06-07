@@ -717,6 +717,26 @@ package and recording its version before any result is run.
   adaptation compact summaries are still missing, so there is nothing to sync
   or promote until the wrapper is repaired under the same preregistered
   protocol or the route is retired.
+  The wrapper was repaired in commit `cfecfd9` without changing the
+  preregistered objective: the proximal metric is computed under
+  `torch.no_grad()`, and the equivalent proximal gradient is added to
+  `param.grad` after the normal DDP backward pass. The repaired execution tag is
+  `proxanchor_l2_1em0_ddpgradfix_v1`. Repaired adaptation/merge/clean-eval jobs
+  BGR `767657`/`767658`/`767659` and matched random
+  `767660`/`767661`/`767662` completed with exit code `0:0`, resolving the
+  prior ready-twice execution failure. Repaired fixed perturbation evals were
+  submitted as official jobs `767663`-`767667`, BGR jobs `767674`-`767678`, and
+  matched-random jobs `767681`-`767685`. The first BGR perturb retry created an
+  overly loose `afterany` dependency for job `767668`; that job was canceled
+  before execution, and BGR/random perturb evals were then submitted after the
+  repaired checkpoints existed. All repaired perturbation jobs completed with
+  exit code `0:0`. The compact local summaries show non-identity totals BGR
+  368/400, official 367/400, and matched random 368/400, with identity BGR
+  98/100, official 99/100, and matched random 98/100. This route therefore
+  fails the fixed +10/400 and +0.02 learned-policy gate: BGR ties random and is
+  only one episode above the official checkpoint. The result has been added to
+  `paper/main.tex` as negative OpenVLA audit evidence, not as a robotics
+  fine-tuning claim.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

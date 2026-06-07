@@ -19,22 +19,22 @@ OPENVLA_LEGACY_COMPLETE = (
     "officialtrainstats_prereg_fullgoal10x10_v1/summary.csv"
 )
 OPENVLA_PROXIMAL_ANCHOR_COMPLETE = (
-    "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_"
+    "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_"
     "step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv"
 )
 OPENVLA_PROXIMAL_ANCHOR_JOB_IDS = {
-    "bgr_train": "767128",
-    "bgr_merge": "767129",
-    "bgr_clean_eval": "767130",
-    "random_train": "767131",
-    "random_merge": "767132",
-    "random_clean_eval": "767133",
-    "official_first": "767134",
-    "official_last": "767138",
-    "bgr_perturb_first": "767139",
-    "bgr_perturb_last": "767143",
-    "random_perturb_first": "767144",
-    "random_perturb_last": "767148",
+    "bgr_train": "767657",
+    "bgr_merge": "767658",
+    "bgr_clean_eval": "767659",
+    "random_train": "767660",
+    "random_merge": "767661",
+    "random_clean_eval": "767662",
+    "official_first": "767663",
+    "official_last": "767667",
+    "bgr_perturb_first": "767674",
+    "bgr_perturb_last": "767678",
+    "random_perturb_first": "767681",
+    "random_perturb_last": "767685",
 }
 CALIBRATION_SUMMARIES = [
     ("FetchPush calibration", "results/fetchpush_object_goal_calibration_2seed_v1/summary.json"),
@@ -149,19 +149,23 @@ def learned_policy_inflight_detail(root: Path) -> str | None:
     ):
         return None
 
-    if "767128` failed" in ledger_text or "767128 failed" in ledger_text:
+    bgr_train = OPENVLA_PROXIMAL_ANCHOR_JOB_IDS["bgr_train"]
+    if f"{bgr_train}` failed" in ledger_text or f"{bgr_train} failed" in ledger_text:
         return (
             "proximal-anchor route failed before producing evidence: BGR train job "
-            "767128 exited 1:0 with a PyTorch DDP ready-twice error in the proximal-anchor "
+            f"{bgr_train} exited 1:0 with a PyTorch DDP ready-twice error in the proximal-anchor "
             "wrapper, leaving downstream BGR/random jobs dependency-held; repair or retire "
             "the route before applying the learned-policy gate"
         )
 
+    ids = OPENVLA_PROXIMAL_ANCHOR_JOB_IDS
     return (
         "proximal-anchor route unsummarized, not yet evidence: adaptation jobs "
-        "BGR 767128/767129/767130 and random 767131/767132/767133 have no complete "
-        "fixed summaries; fixed perturbation jobs official 767134--767138, BGR "
-        "767139--767143, and random 767144--767148 must finish before the +10/400 "
+        f"BGR {ids['bgr_train']}/{ids['bgr_merge']}/{ids['bgr_clean_eval']} and random "
+        f"{ids['random_train']}/{ids['random_merge']}/{ids['random_clean_eval']} have no complete "
+        f"fixed summaries; fixed perturbation jobs official {ids['official_first']}--{ids['official_last']}, "
+        f"BGR {ids['bgr_perturb_first']}--{ids['bgr_perturb_last']}, and random "
+        f"{ids['random_perturb_first']}--{ids['random_perturb_last']} must finish before the +10/400 "
         "and +0.02 learned-policy gate can be checked"
     )
 

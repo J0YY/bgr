@@ -202,8 +202,8 @@
     },
     {
       "path": "paper/README.md",
-      "sha256": "647d7642a1e3e7bbe8d8d0c8cef48d72cbe8cff2b5607bac2a817392bf8a8ac5",
-      "size_bytes": 6865
+      "sha256": "40455edbf8f184b14821a24fe302e512bcd36afde336b985985721e548e45f35",
+      "size_bytes": 7083
     },
     {
       "path": "paper/ReproducibilityChecklist.log",
@@ -222,7 +222,7 @@
     },
     {
       "path": "paper/figures/aulc_bars.pdf",
-      "sha256": "53490f50a46c06f2d1c0765a895be6bbbb1ecf006d2c14a8fccdf91432bbd39d",
+      "sha256": "037e7e1dc9029d038b03ca0d2c66460928d480222cffcc53e21c9d1ef9bf8b97",
       "size_bytes": 13560
     },
     {
@@ -237,7 +237,7 @@
     },
     {
       "path": "paper/figures/boundary_intuition.pdf",
-      "sha256": "b1c3390b2e6e7e1aa01eea8007c5142cf660a740754b7432b911fce2368cc963",
+      "sha256": "e04065be3fe30becc3bba01737238036388cd5e41d415d473c7758a7234fc007",
       "size_bytes": 28185
     },
     {
@@ -252,7 +252,7 @@
     },
     {
       "path": "paper/figures/clean_bars.pdf",
-      "sha256": "1b48076d8170bfcaa5a16e4db46d2e209d3fb5a7b44fdafcdea5e2854ed98ff3",
+      "sha256": "332cdd81e4512e25afafe0b11f4df95233b68afac881212a27938cb840a9b963",
       "size_bytes": 13265
     },
     {
@@ -262,7 +262,7 @@
     },
     {
       "path": "paper/figures/estimator_r80_mae.pdf",
-      "sha256": "f119c73f2eeb6cd6e43785db59ae21cc2ca4dbd1a51f737812a8b4a28655c2c1",
+      "sha256": "d0b32b5ae9f9b9179cd4cc590bcbb7723c42c75f2abfb75d9c68f5aad7c97a8f",
       "size_bytes": 12952
     },
     {
@@ -302,7 +302,7 @@
     },
     {
       "path": "paper/figures/grid_margin_learning_curve.pdf",
-      "sha256": "52bc3c36aa2c7abaffe5bfb6a1f9ec6f3f36bba14110187b1f0a2f89fdc09545",
+      "sha256": "6b333082b51158410b96b628e736a06d6a0e22b4cbf19aaf2d45981daca4884e",
       "size_bytes": 11986
     },
     {
@@ -362,8 +362,8 @@
     },
     {
       "path": "paper/figures/openvla_adaptation_table.tex",
-      "sha256": "afe3d09a692edf46c649b3398bf1280af4328ab26cb28f4e2c6c4d03b54a2a78",
-      "size_bytes": 521
+      "sha256": "d95dca044de9abd5f13f24a637116892460f02d383c4607f2267e6a4b325bc08",
+      "size_bytes": 633
     },
     {
       "path": "paper/figures/openvla_stats.csv",
@@ -377,7 +377,7 @@
     },
     {
       "path": "paper/figures/rauc_bars.pdf",
-      "sha256": "8fa7f81067abfae52607f87bf59efec451723d3130b4abe16557b96504750983",
+      "sha256": "05838d239ba895ddd6b1260bdab8be631f6689894cdeb624718eda226f625f7c",
       "size_bytes": 13530
     },
     {
@@ -417,18 +417,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "f08b09a55c1e36576795115169fec1aaa836232b2a01942da47a68ec2fc71e9f",
+      "sha256": "8d0e35b75fce5a81f37fc276081856bdc39afb36b2ccd999e3cc87689a4c9caf",
       "size_bytes": 13816
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "98b9cb6df528e1eeadebe30e58198989eb2c1ac645d4658c38ad0207f1045bf7",
-      "size_bytes": 295449
+      "sha256": "aa6a569559a22f26e470168fd1c443a231bed6aff692e8eddcbdb214954c81ff",
+      "size_bytes": 295592
     },
     {
       "path": "paper/main.tex",
-      "sha256": "8669e51253a81c258359eb01453443f78017dfeb3a7e5934d5c55d3eed50705e",
-      "size_bytes": 36817
+      "sha256": "6a0e889d2d42502d998aa337a902a21f8cb11eb984fdba2f02e335ec958ce8cb",
+      "size_bytes": 37005
     },
     {
       "path": "paper/references.bib",
@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "31fc1351e584ff1bd1efc700a2c815a03514e5c15240121195a08b40239128e1",
-      "size_bytes": 267617
+      "sha256": "f4ac84f85aa551a4ea901a5830410b338b72ca37aaf50d2a92bbf48a1226ffa1",
+      "size_bytes": 271111
     },
     {
       "path": "results/environment_v1/README.md",
@@ -742,13 +742,13 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "bcf9bdf1e9527b43603bcac3f91f189d83861fa3434ad49f541f69d75cecf511",
-      "size_bytes": 28419
+      "sha256": "d0b454b15614c4b337a5789d48ad5bc08a8715304f9d12681c38f118518c3537",
+      "size_bytes": 29437
     },
     {
       "path": "scripts/aggregate_results.py",
-      "sha256": "d71426de45d2b8f361abae6730f1edbcd86a73c82cc3932e8dea9d4fb6e9845a",
-      "size_bytes": 53457
+      "sha256": "9cc6b037893590f63e0e833f231131aee809f5ce6116bc9b92c0af8b6ff0f7ca",
+      "size_bytes": 54038
     },
     {
       "path": "scripts/analyze_significance.py",
@@ -757,8 +757,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "9330212d8ef8811d831aade474aeb1b902a4576f629c1e36ab91db98898d46a6",
-      "size_bytes": 23995
+      "sha256": "c8c1fdb545b5c24786963d4fee3e77e5e7e62a78e4af22e71303a7772867720d",
+      "size_bytes": 24365
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -767,8 +767,8 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "a353d8a8e1d0949cf1395d122c6fcd94a97f147b0f2123d2a8354a67580aa097",
-      "size_bytes": 88680
+      "sha256": "58fa965bc2abe7853f6a0fc6f330570bfed4c9157fef952ee3eb770cb99c44d9",
+      "size_bytes": 91121
     },
     {
       "path": "scripts/check_submission_package.py",
@@ -957,8 +957,8 @@
     },
     {
       "path": "scripts/sync_openvla_oft_proximal_anchor_results.sh",
-      "sha256": "63f872bd580cd9a06359b4f928464e300b7395bf7b08c855b435297f9d4d193d",
-      "size_bytes": 4976
+      "sha256": "8fd6a76a701663d8d8988ead935b52cf1774d713e78dd39fdef87bb0c12c9c7f",
+      "size_bytes": 4997
     },
     {
       "path": "scripts/sync_openvla_oft_weighted_perturb_results.sh",
@@ -1067,7 +1067,7 @@
     },
     {
       "path": "tests/test_acceptance_scorecard.py",
-      "sha256": "73baf9af8c3aff3c4622c3e8c4bb4e18c9991d071272df543d54135a7a006f91",
+      "sha256": "af55032c5c22c501d1089436b6735c79570c288893f5256369de997ddc629628",
       "size_bytes": 11255
     },
     {
@@ -1082,7 +1082,7 @@
     },
     {
       "path": "tests/test_check_acceptance_readiness.py",
-      "sha256": "68f971193e51aa4e123ee7dad30959660f952cd1ae9ea4ac937637773cc7c2af",
+      "sha256": "7ca062bcfdc559298bb0de426dafd78a6c1c6c5fb3f45aeb4d0cf330eb1f1c28",
       "size_bytes": 13102
     },
     {

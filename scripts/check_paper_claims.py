@@ -1163,6 +1163,43 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             "results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
         )
     )
+    p2048_proximal_anchor_perturb = read_csv_rows(
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1"
+        / "summary.csv"
+    )
+    proximal_bgr_successes, proximal_bgr_episodes = perturbed_total(p2048_proximal_anchor_perturb, "bgr")
+    proximal_official_successes, proximal_official_episodes = perturbed_total(
+        p2048_proximal_anchor_perturb, "official"
+    )
+    proximal_random_successes, proximal_random_episodes = perturbed_total(
+        p2048_proximal_anchor_perturb, "random"
+    )
+    proximal_identity = {
+        row["method"]: int(row["successes"])
+        for row in p2048_proximal_anchor_perturb
+        if row["perturbation"] == "identity"
+    }
+    if not (
+        proximal_bgr_episodes == proximal_official_episodes == proximal_random_episodes == 400
+        and proximal_bgr_successes == 368
+        and proximal_official_successes == 367
+        and proximal_random_successes == 368
+        and proximal_identity == {"bgr": 98, "official": 99, "random": 98}
+    ):
+        raise ValueError("Expected proximal-anchor OpenVLA audit to tie random and edge official by one episode")
+    claims.append(
+        Claim(
+            "OpenVLA proximal-anchor audit",
+            (
+                f"proximal-anchor objective keeps BGR and matched random tied at "
+                f"{proximal_bgr_successes}/{proximal_bgr_episodes} non-identity successes, "
+                f"only one episode above official ({proximal_official_successes}/{proximal_official_episodes}), "
+                f"with BGR identity at {proximal_identity['bgr']}/100 versus official {proximal_identity['official']}/100"
+            ),
+            "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv",
+        )
+    )
     if not (p1024_pooled_bgr > p1024_pooled_random and p2048_pooled_bgr >= p2048_pooled_random):
         raise ValueError("Expected corrected OpenVLA diagnostics to show a p1024 edge and non-worse p2048 pooled comparison")
     if not (p1024_pooled_bgr < p1024_pooled_official and p2048_pooled_bgr < p2048_pooled_official):
@@ -1287,6 +1324,11 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
         / "openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1"
         / "summary.csv",
     ]
+    p2048_proximal_anchor_paths = [
+        results_dir
+        / "openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1"
+        / "summary.csv",
+    ]
     action_tfds_summary_paths = [
         results_dir / "openvla_action_tfds_validation_v1" / "summary.json",
     ]
@@ -1302,13 +1344,14 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
         "Pooling p2048": p2048_summary_paths + p2048_offset_summary_paths,
         "full-goal identity audit": p2048_fullgoal_summary_paths,
         "10-task visual perturbation audit": p2048_fullgoal_summary_paths,
-        "367/400": p2048_fullgoal_summary_paths + p2048_weighted_perturb_paths,
+        "367/400": p2048_fullgoal_summary_paths + p2048_weighted_perturb_paths + p2048_proximal_anchor_paths,
         "300-step image-augmentation continuation": p2048_imageaug_300_summary_paths,
-        "368/400": p2048_imageaug_300_summary_paths,
+        "368/400": p2048_imageaug_300_summary_paths + p2048_proximal_anchor_paths,
         "1,000-step low-learning-rate continuation": p2048_imageaug_1000_low_lr_summary_paths,
         "366/400": p2048_imageaug_1000_low_lr_summary_paths,
         "370/400": p2048_imageaug_1000_low_lr_summary_paths + p2048_weighted_perturb_paths,
         "weighted perturbation curriculum": p2048_weighted_perturb_paths,
+        "proximal-anchor objective": p2048_proximal_anchor_paths,
         "action-label/TFDS plumbing validates": action_tfds_summary_paths,
         "2,048-transition matched BGR/random exports": action_tfds_summary_paths,
     }

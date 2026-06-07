@@ -42,7 +42,7 @@ As of 2026-06-06, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.p
 
 - PASS controlled grid mechanism: pooled RAUC 0.4342 vs 0.3965.
 - FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, MiniGrid LavaGapS7, and PointMaze remain non-promotable.
-- FAIL learned-policy OpenVLA/LIBERO: the completed weighted perturbation audit has non-identity success BGR 367/400, official 367/400, and matched random 370/400. BGR ties the official checkpoint and trails matched random, so it fails the fixed +10/400 and +0.02 promotion gate. The proximal-anchor route also needs triage: BGR train job `767128` failed with a PyTorch DDP ready-twice error in the proximal-anchor wrapper, and downstream dependency-held jobs cannot produce a valid summary until the route is repaired or explicitly retired.
+- FAIL learned-policy OpenVLA/LIBERO: the latest completed proximal-anchor audit has non-identity success BGR 368/400, official 367/400, and matched random 368/400, with identity BGR 98/100, official 99/100, and random 98/100. BGR ties matched random and beats official by only 1/400, so it fails the fixed +10/400 and +0.02 promotion gate. The earlier weighted perturbation audit is also negative at BGR 367/400, official 367/400, and matched random 370/400.
 - Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
 The practical goal is not to make the paper sound accepted. The practical goal is to find or build defensible evidence that survives the acceptance criteria below, then incorporate only those results into `paper/main.tex`.
@@ -105,16 +105,7 @@ Treat the following as the current paper-weakness backlog:
 - Do not use Docker for this workflow.
 - Commit compact artifacts such as `summary.csv` and `package_versions.json`. Leave raw `results.json`, Slurm logs, and scratch directories untracked unless there is a deliberate reason to package them.
 - Use the `athena` Slurm workflow and repository scripts for heavy OpenVLA/LIBERO work. Do not rely on the dirty remote checkout being clean; prefer local wrapper scripts, explicit environment variables, and `GIT_PULL=0` where the remote tree is known to be dirty.
-- The latest completed learned-policy follow-up is the preregistered weighted
-  OpenVLA perturbation curriculum. It is a negative audit: random-shift job
-  `766831` completed successfully with 97/100 success, producing the complete
-  non-identity totals BGR 367/400, official 367/400, and matched random
-  370/400. BGR ties the official checkpoint and trails matched random, so it
-  cannot clear the required +10/400 and +0.02 promotion margins. The compact
-  local artifact is
-  `results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`.
-  Do not treat this as paper-positive evidence.
-- The latest preregistered learned-policy route is the proximal-anchor
+- The latest completed learned-policy follow-up is the proximal-anchor
   OpenVLA-OFT adaptation in
   `scripts/queue_openvla_oft_preregistered_proximal_anchor.sh`. It reuses the
   fixed weighted perturbation TFDS roots but changes the optimization objective
@@ -122,7 +113,7 @@ Treat the following as the current paper-weakness backlog:
   from their resumed official-checkpoint values. It is promotable only if BGR
   beats both proximal-anchor matched random and the official checkpoint by the
   fixed +10/400 and +0.02 non-identity perturbation gate while preserving clean
-  identity within -1/100. The adaptation chain was submitted on 2026-06-05
+  identity within -1/100. The original adaptation chain was submitted on 2026-06-05
   13:18 PDT / 21:18 BST as BGR train/merge/clean-eval jobs
   `767128`/`767129`/`767130` and random train/merge/clean-eval jobs
   `767131`/`767132`/`767133`. The fixed perturbation evals were submitted with
@@ -138,10 +129,29 @@ Treat the following as the current paper-weakness backlog:
   showed `767128` failed during `normalized_loss.backward()` with PyTorch DDP
   reporting `Expected to mark a variable ready only once` for
   `base_model.model.vision_backbone.fused_featurizer.attn_pool.mlp.fc2.lora_B.default.weight`.
-  Next action: repair the proximal-anchor wrapper under the same preregistered
-  protocol, likely by making the DDP graph static or avoiding parameter use
-  outside the forward graph, or explicitly retire the route. Do not use `--sync`
-  until compact `summary.csv` files exist and pass the fixed gate checker.
+  The wrapper was repaired in commit `cfecfd9` by logging the proximal metric
+  under `torch.no_grad()` and adding the equivalent proximal gradient to
+  `param.grad` after the normal DDP backward pass. The repaired execution tag is
+  `proxanchor_l2_1em0_ddpgradfix_v1`. Repaired adaptation jobs
+  BGR `767657`/`767658`/`767659` and random `767660`/`767661`/`767662`
+  completed successfully. Repaired perturb evals were submitted as official
+  `767663`-`767667`, BGR `767674`-`767678`, and random `767681`-`767685`;
+  BGR/random were submitted after the repaired checkpoints existed because
+  Slurm rejected dependencies on already-completed merge jobs. The compact
+  local artifacts are
+  `results/openvla_oft_goal_adapt_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_step50500_lr5em7_identitylora_imageaug_officialtrainstats_v1/summary.csv`
+  and
+  `results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`.
+  The gate is negative: non-identity BGR 368/400, official 367/400, and random
+  368/400; identity BGR 98/100, official 99/100, and random 98/100. This has
+  been incorporated into `paper/main.tex` and
+  `paper/figures/openvla_adaptation_table.tex` as negative audit evidence, not
+  as a robotics fine-tuning win.
+- The prior completed weighted OpenVLA perturbation curriculum is also a
+  negative audit: random-shift job `766831` completed successfully with 97/100
+  success, producing non-identity totals BGR 367/400, official 367/400, and
+  matched random 370/400. The compact local artifact is
+  `results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`.
 
 ## Paper Workflow
 

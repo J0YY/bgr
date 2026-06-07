@@ -65,6 +65,10 @@ OPENVLA_WEIGHTED_PERTURB_RUN = (
     "openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_"
     "imageaug_officialtrainstats_fullgoal10x10_perturb_v1"
 )
+OPENVLA_PROXIMAL_PERTURB_RUN = (
+    "openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_"
+    "step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1"
+)
 
 
 def main() -> None:
@@ -756,6 +760,16 @@ def load_openvla_adaptation(results_dir: Path) -> list[dict[str, str | int]]:
         (
             "Weighted perturbation non-id.",
             results_dir / OPENVLA_WEIGHTED_PERTURB_RUN / "summary.csv",
+            {"blur", "brightness", "occlusion", "shift"},
+        ),
+        (
+            "Proximal anchor identity",
+            results_dir / OPENVLA_PROXIMAL_PERTURB_RUN / "summary.csv",
+            {"identity"},
+        ),
+        (
+            "Proximal anchor non-id.",
+            results_dir / OPENVLA_PROXIMAL_PERTURB_RUN / "summary.csv",
             {"blur", "brightness", "occlusion", "shift"},
         ),
     ]

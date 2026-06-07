@@ -5,16 +5,15 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 ## Gate Summary
 
 - Grid-margin mechanism clears the internal mechanism threshold: BGR 0.4342 vs uniform 0.3965, delta +0.0377; margin above +0.03 threshold +0.0077.
-- Weighted OpenVLA audit is complete and fails the learned-policy gate: BGR 367/400, official 367/400, random 370/400; identity BGR 99/100. Episode margins are official +0 and random -3, short of the best-comparator +10 gate by 13 episodes.
-- Proximal-anchor OpenVLA route failed before producing evidence: BGR train job 767128 exited 1:0 with a PyTorch DDP ready-twice error, leaving downstream BGR/random jobs dependency-held; repair or retire this route before applying the +10/400 and +0.02 learned-policy gate.
+- Proximal-anchor OpenVLA audit does not clear the learned-policy promotion gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
 - Closest independent benchmark screen is `MiniGrid FourRooms official-package` with treatment `bgr_coverage`: delta vs uniform +0.1075 (4/0/0), worst required-baseline delta +0.0464 (3/1/0), ablation delta +0.0071 (2/2/0), radius delta +0.0000 (0/0/4), failure reason(s): final_median_r80-ceiling-saturated.
 - Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`, `FetchSlide-v4 object-goal calibration`, `FetchPickAndPlace-v4 object-goal calibration`, `highway-env parking-v0 calibration`.
 
 ## Promotion Deficits
 
 - Independent benchmark: no screen clears the 4/4 promotion screen. The closest screen, `MiniGrid FourRooms official-package` with `bgr_coverage`, clears 3/4 gates and fails on final_median_r80-ceiling-saturated.
-- Learned policy: the latest weighted OpenVLA audit is short of the best-comparator promotion gate by 13/400 non-identity episodes and 0.0275 absolute success.
-- Active route: Proximal-anchor OpenVLA route failed before producing evidence: BGR train job 767128 exited 1:0 with a PyTorch DDP ready-twice error, leaving downstream BGR/random jobs dependency-held; repair or retire this route before applying the +10/400 and +0.02 learned-policy gate.
+- Learned policy: Proximal-anchor OpenVLA audit does not clear the learned-policy promotion gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
+- Active route: no queued learned-policy route is recorded in the local ledgers.
 
 ## Independent Benchmark Screens
 
@@ -58,5 +57,4 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.
 - Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The latest OpenVLA weighted audit is complete and fails the learned-policy gate: BGR ties the official checkpoint at 367/400 non-identity successes and trails matched random by 3/400.
-- The current acceptance-moving learned-policy work is proximal-anchor triage: repair the PyTorch DDP ready-twice execution bug under the preregistered protocol or retire the route before spending more OpenVLA compute.
-- Do not start another same-protocol MiniGrid, classic-control, PointMaze, or FetchReach screen while this is pending; existing screens already show saturated radius checks, stronger-baseline losses, or state-priority-only ablation failures.
+- The next acceptance-moving work should change the learned-policy intervention or materially strengthen theory/presentation; another same-protocol MiniGrid/classic-control screen is unlikely to move the gate.

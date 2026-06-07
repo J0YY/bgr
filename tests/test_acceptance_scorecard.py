@@ -148,7 +148,7 @@ class AcceptanceScorecardTest(unittest.TestCase):
                 root / "AGENTS.md",
                 (
                     "The proximal-anchor OpenVLA route is queued with "
-                    "BGR jobs 767128--767143 and random jobs 767144--767148.\n"
+                    "BGR jobs 767657--767678 and random jobs 767681--767685.\n"
                 ),
             )
 

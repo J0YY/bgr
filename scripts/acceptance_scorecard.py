@@ -513,31 +513,53 @@ def learned_policy_summary(root: Path) -> str:
 
 def learned_policy_inflight_summary(root: Path) -> str | None:
     """Report preregistered learned-policy runs that are failed or unsummarized."""
+    proximal_job_ids = {
+        "bgr_train": "767657",
+        "bgr_merge": "767658",
+        "bgr_clean_eval": "767659",
+        "random_train": "767660",
+        "random_merge": "767661",
+        "random_clean_eval": "767662",
+        "official_first": "767663",
+        "official_last": "767667",
+        "bgr_perturb_first": "767674",
+        "bgr_perturb_last": "767678",
+        "random_perturb_first": "767681",
+        "random_perturb_last": "767685",
+    }
     proximal_summary = (
         root
-        / "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv"
+        / "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv"
     )
     if proximal_summary.exists():
         return None
 
     ledger_paths = [root / "AGENTS.md", root / "results/README.md", root / "docs/aaai_acceptance_gap.md"]
     ledger_text = "\n".join(path.read_text(encoding="utf-8") for path in ledger_paths if path.exists())
-    if "767128" not in ledger_text or "767148" not in ledger_text:
+    if (
+        proximal_job_ids["bgr_train"] not in ledger_text
+        or proximal_job_ids["random_perturb_last"] not in ledger_text
+    ):
         return None
 
-    if "767128` failed" in ledger_text or "767128 failed" in ledger_text:
+    bgr_train = proximal_job_ids["bgr_train"]
+    if f"{bgr_train}` failed" in ledger_text or f"{bgr_train} failed" in ledger_text:
         return (
             "Proximal-anchor OpenVLA route failed before producing evidence: "
-            "BGR train job 767128 exited 1:0 with a PyTorch DDP ready-twice error, "
+            f"BGR train job {bgr_train} exited 1:0 with a PyTorch DDP ready-twice error, "
             "leaving downstream BGR/random jobs dependency-held; repair or retire this route "
             "before applying the +10/400 and +0.02 learned-policy gate."
         )
 
     return (
         "Proximal-anchor OpenVLA route is unsummarized, not yet evidence: "
-        "adaptation jobs BGR 767128/767129/767130 and random 767131/767132/767133 "
-        "do not have complete fixed summaries; fixed perturbation jobs official 767134--767138, "
-        "BGR 767139--767143, and random 767144--767148 must finish before the +10/400 "
+        f"adaptation jobs BGR {proximal_job_ids['bgr_train']}/{proximal_job_ids['bgr_merge']}/"
+        f"{proximal_job_ids['bgr_clean_eval']} and random {proximal_job_ids['random_train']}/"
+        f"{proximal_job_ids['random_merge']}/{proximal_job_ids['random_clean_eval']} "
+        f"do not have complete fixed summaries; fixed perturbation jobs official "
+        f"{proximal_job_ids['official_first']}--{proximal_job_ids['official_last']}, "
+        f"BGR {proximal_job_ids['bgr_perturb_first']}--{proximal_job_ids['bgr_perturb_last']}, "
+        f"and random {proximal_job_ids['random_perturb_first']}--{proximal_job_ids['random_perturb_last']} must finish before the +10/400 "
         "and +0.02 learned-policy gate can be checked."
     )
 
@@ -688,7 +710,7 @@ def render_markdown(root: Path) -> str:
         )
     else:
         priority_lines.append(
-            "- The current acceptance-moving learned-policy work is proximal-anchor triage: repair the PyTorch DDP ready-twice execution bug under the preregistered protocol or retire the route before spending more OpenVLA compute."
+            "- The current acceptance-moving learned-policy work is the repaired proximal-anchor OpenVLA route; do not treat it as evidence until compact summaries exist and clear the fixed +10/400 and +0.02 gate."
         )
         priority_lines.append(
             "- Do not start another same-protocol MiniGrid, classic-control, PointMaze, or FetchReach screen while this is pending; existing screens already show saturated radius checks, stronger-baseline losses, or state-priority-only ablation failures."

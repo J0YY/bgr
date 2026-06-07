@@ -1714,6 +1714,67 @@ identity job `767134` completed, but the proximal route has no valid BGR/random
 summary and remains non-evidence until the wrapper is repaired under the same
 preregistered protocol or the route is retired.
 
+Execution repair on 2026-06-06: commit `cfecfd9` keeps the same
+proximal-anchor objective but avoids the DDP double-ready path by logging the
+proximal metric under `torch.no_grad()` and adding the analytically equivalent
+proximal gradient to each trainable parameter after the normal
+`normalized_loss.backward()` call. This is an execution repair, not a tuning
+change. The repaired tag is `proxanchor_l2_1em0_ddpgradfix_v1`, giving
+adaptation artifact
+`openvla_oft_goal_adapt_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_step50500_lr5em7_identitylora_imageaug_officialtrainstats_v1`
+and perturbation artifact
+`openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1`.
+
+Repaired adaptation/merge/clean-eval jobs:
+
+```text
+BGR:    train=767657 merge=767658 clean_eval=767659
+random: train=767660 merge=767661 clean_eval=767662
+```
+
+`sacct` showed all six repaired adaptation/merge/clean-eval jobs completed with
+exit code `0:0`. This confirms the wrapper repair gets through the previous
+DDP failure point, but it is not paper evidence because the perturbation gate is
+still incomplete.
+
+Repaired fixed perturbation eval jobs:
+
+```text
+official: identity=767663 blur=767664 brightness=767665 occlusion=767666 shift=767667
+BGR:      identity=767674 blur=767675 brightness=767676 occlusion=767677 shift=767678
+random:   identity=767681 blur=767682 brightness=767683 occlusion=767684 shift=767685
+```
+
+All repaired perturbation jobs completed with exit code `0:0`. The first
+BGR/random perturb submission attempt used a bare merge job id and produced an
+invalid `afterany` dependency for BGR identity; that job (`767668`) was
+canceled before execution. A retry with `afterok:` dependencies was rejected
+because the merge jobs had already completed, so BGR and random perturb evals
+were submitted only after their checkpoints existed.
+
+Compact local artifacts:
+
+```text
+results/openvla_oft_goal_adapt_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_step50500_lr5em7_identitylora_imageaug_officialtrainstats_v1/summary.csv
+results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv
+```
+
+Summary:
+
+| Method | Identity | Blur | Brightness | Occlusion | Shift | Non-identity |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| BGR proximal anchor | 98/100 | 98/100 | 99/100 | 73/100 | 98/100 | 368/400 = 0.9200 |
+| Official OpenVLA-OFT | 99/100 | 97/100 | 98/100 | 74/100 | 98/100 | 367/400 = 0.9175 |
+| Random proximal anchor | 98/100 | 99/100 | 98/100 | 73/100 | 98/100 | 368/400 = 0.9200 |
+
+Interpretation: the repaired proximal-anchor route clears the execution bug but
+does not clear the learned-policy promotion gate. BGR ties matched random on
+non-identity perturbations and beats the official checkpoint by only 1/400
+episode (+0.0025), far below the preregistered +10/400 and +0.02 margins. Clean
+identity is within the side condition but trails official by one episode. This
+result is incorporated into `paper/main.tex` as another negative OpenVLA audit,
+not as robotics fine-tuning evidence.
+
 Result ingestion helper:
 
 ```bash
@@ -1725,9 +1786,12 @@ The helper polls the fixed jobs, checks the remote compact summaries under
 the configured remote run root, prints selected `scontrol show job -dd` details
 including `TresPerNode`, syncs only `summary.csv` files when present, and then
 runs the local perturbation and readiness gates. For the live internal cluster
-workspace, set `REMOTE_RUN_ROOT=/work/<user>/bgr/runs`. The 2026-06-05
-16:25 PDT / 2026-06-06 00:25 BST helper poll still showed all jobs pending and both
-expected proximal `summary.csv` files missing.
+workspace, set `REMOTE_RUN_ROOT=/work/<user>/bgr/runs`. For this repaired run,
+the remote eval jobs did not write compact summaries directly; the local
+compact CSVs above were generated from copied `*.txt` eval logs with
+`scripts/summarize_openvla_oft_eval.py` and
+`scripts/summarize_openvla_oft_perturb_eval.py`, then stripped to
+double-blind-safe columns.
 
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 

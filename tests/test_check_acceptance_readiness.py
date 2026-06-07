@@ -126,7 +126,7 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
             root = Path(tmp)
             _write_weighted_summary(root)
             (root / "AGENTS.md").write_text(
-                "Proximal anchor jobs: BGR 767128/767129/767130, random 767144--767148.\n",
+                "Proximal anchor jobs: BGR 767657/767658/767659, random 767681--767685.\n",
                 encoding="utf-8",
             )
 
@@ -135,8 +135,8 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
         self.assertFalse(gate.passed)
         self.assertIn("proximal-anchor route unsummarized", gate.detail)
         self.assertIn("not yet evidence", gate.detail)
-        self.assertIn("767128/767129/767130", gate.detail)
-        self.assertIn("767144--767148", gate.detail)
+        self.assertIn("767657/767658/767659", gate.detail)
+        self.assertIn("767681--767685", gate.detail)
         self.assertIn("must finish before the +10/400 and +0.02 learned-policy gate", gate.detail)
 
     def test_learned_policy_gate_reports_incomplete_proximal_anchor_summary(self) -> None:
@@ -144,7 +144,7 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
             root = Path(tmp)
             _write_weighted_summary(root)
             (root / "AGENTS.md").write_text(
-                "Proximal anchor jobs: BGR 767128/767129/767130, random 767144--767148.\n",
+                "Proximal anchor jobs: BGR 767657/767658/767659, random 767681--767685.\n",
                 encoding="utf-8",
             )
             path = root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE

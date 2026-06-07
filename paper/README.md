@@ -108,6 +108,9 @@ on identity. The 1,000-step low-learning-rate continuation is also negative:
 BGR gives 366/400 non-identity perturbation successes, trailing official at
 367/400 and matched random at 370/400. The follow-up weighted perturbation
 curriculum is also negative: BGR and official tie at 367/400 non-identity
-successes while matched random reaches 370/400. OpenVLA therefore remains
-an audit of recovery curves, matched action/TFDS construction, and OpenVLA-OFT plumbing
+successes while matched random reaches 370/400. The repaired proximal-anchor
+objective is likewise negative: BGR and matched random tie at 368/400
+non-identity successes, only one episode above official (367/400), with BGR
+identity at 98/100 versus official 99/100. OpenVLA therefore remains an audit
+of recovery curves, matched action/TFDS construction, and OpenVLA-OFT plumbing
 rather than a robotics success claim.
