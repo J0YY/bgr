@@ -63,6 +63,24 @@ BGR trails matched random by 1/400 (-0.0025), below the fixed +10/400 and +0.02
 requirement. This sharpens the acceptance problem: the current learned-policy
 evidence remains an audit, not positive robotics evidence.
 
+Next independent-benchmark route, opened 2026-06-07: official Gymnasium Box2D
+`LunarLander-v3`. This route is materially different from the retired
+MiniGrid, PointMaze, FetchReach, highway parking, and MuJoCo balance/reacher
+screens: it uses package-owned Box2D contact dynamics, the package heuristic
+controller, and an exact body-state perturbation at a fixed descent checkpoint.
+The isolated environment is `/tmp/bgr_lunar_venv` with `gymnasium==1.3.0`,
+`box2d==2.3.10`, `pygame-ce==2.5.7`, `swig==4.4.1`, and `numpy==2.4.6`.
+
+Fixed pre-method calibration command:
+`PYTHONPATH=src:. /tmp/bgr_lunar_venv/bin/python tools/lunarlander_recovery_calibration.py --out results/lunarlander_recovery_calibration_12seed_v1`
+
+The calibration is only permission to implement a fixed all-method screen. It
+is usable only if clean success is at least 0.80, the recovery range is at
+least 0.20, and median r80 is not saturated at the maximum radius. If it clears,
+the later method screen must be fixed before method outcomes and must use the
+same task, checkpoint, perturbation grid, and promotion rules as the independent
+benchmark criteria below.
+
 ## Promotion Criteria For A New Independent Benchmark
 
 A new benchmark result should be promoted into `paper/main.tex` only if it meets

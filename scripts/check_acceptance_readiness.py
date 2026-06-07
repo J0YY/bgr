@@ -52,6 +52,7 @@ CALIBRATION_SUMMARIES = [
         "InvertedDoublePendulum-v5 calibration",
         "results/inverted_double_pendulum_recovery_calibration_12seed_v1/summary.json",
     ),
+    ("LunarLander-v3 calibration", "results/lunarlander_recovery_calibration_12seed_v1/summary.json"),
 ]
 ROADMAP_DOCS = [
     "AGENTS.md",
@@ -482,7 +483,7 @@ def independent_benchmark_gate(root: Path) -> GateResult:
         min_recovery = float(summary["min_recovery"])
         max_recovery = float(summary["max_recovery"])
         r80 = float(summary["r80"])
-        if clean < 0.75 or abs(max_recovery - min_recovery) < 0.05:
+        if clean < 0.80 or abs(max_recovery - min_recovery) < 0.20:
             failures.append(
                 f"{label} invalid: clean {clean:.4f}, recovery range "
                 f"{min_recovery:.4f}--{max_recovery:.4f}, median-r80 {r80:.4f}"

@@ -153,7 +153,7 @@ class CalibrationScreen:
 
     @property
     def usable(self) -> bool:
-        return self.clean_success >= 0.75 and self.recovery_range >= 0.05
+        return self.clean_success >= 0.80 and self.recovery_range >= 0.20
 
     @property
     def decision(self) -> str:
@@ -303,6 +303,10 @@ CALIBRATION_SCREENS = [
     (
         "Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration",
         "results/inverted_double_pendulum_recovery_calibration_12seed_v1/summary.json",
+    ),
+    (
+        "Gymnasium Box2D LunarLander-v3 calibration",
+        "results/lunarlander_recovery_calibration_12seed_v1/summary.json",
     ),
 ]
 

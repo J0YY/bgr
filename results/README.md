@@ -335,6 +335,37 @@ Compact artifacts:
 - `results/highway_parking_recovery_calibration_12seed_v1/recovery_rows.csv`
 - `results/highway_parking_recovery_calibration_12seed_v1/package_versions.json`
 
+## Internal Gymnasium Box2D LunarLander Calibration
+
+This is the next pre-method calibration for a different official Gymnasium
+task, `LunarLander-v3`. It uses Gymnasium's package-owned Box2D contact
+dynamics, terrain, termination rules, and heuristic controller through
+`tools/lunarlander_recovery_calibration.py`; it is not a BGR method comparison.
+The reset interface rolls the package heuristic to a fixed descent checkpoint,
+then perturbs the exact Box2D lander and leg body state before continuing the
+same heuristic controller.
+
+The isolated environment is `/tmp/bgr_lunar_venv` with `gymnasium==1.3.0`,
+`box2d==2.3.10`, `pygame-ce==2.5.7`, `swig==4.4.1`, and `numpy==2.4.6`,
+leaving repository runtime dependencies unchanged unless the result becomes
+promotable.
+
+Fixed pre-method calibration command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_lunar_venv/bin/python tools/lunarlander_recovery_calibration.py --out results/lunarlander_recovery_calibration_12seed_v1
+```
+
+This calibration is only permission to implement a fixed all-method screen. Do
+not promote LunarLander into the paper or run a method comparison until the
+calibration clears clean success >= 0.80, recovery range >= 0.20, and
+non-saturated median r80. Any later comparison must fix the replay-state pool,
+perturbation radii, baselines, seeds, learner, and promotion gate before seeing
+method results. Promotion should require default BGR or BGR-Coverage to beat
+uniform, fixed-radius, failure-only, TD/loss-priority, and the
+state-priority/uniform-radius ablation on final RAUC with a visible effect,
+paired wins over uniform, and non-contradictory non-saturated radius metrics.
+
 ## Internal Gymnasium MuJoCo Reacher Calibration
 
 This is a pre-method calibration for a different official Gymnasium MuJoCo
