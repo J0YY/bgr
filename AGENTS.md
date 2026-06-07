@@ -232,7 +232,18 @@ Treat the following as the current paper-weakness backlog:
   Prep was submitted after commit `8b69ac7` on 2026-06-07 as Slurm job
   `767789`, writing to
   `/work/joy/bgr/logs/bgr-perturbonly-prep-p2048unique_perturbonly_anchor_prereg-767789.out`.
-  Initial poll showed it running on `c1-g4-04` with `gres/gpu:a6000:1`.
+  Initial poll showed it running on `c1-g4-04` with `gres/gpu:a6000:1`. The
+  dependent adaptation chain was then submitted with `TRAIN_DEPENDENCY=afterok:767789`
+  and `GIT_PULL=0`: BGR train/merge/clean-eval jobs
+  `767790`/`767791`/`767792`, and matched-random train/merge/clean-eval jobs
+  `767793`/`767794`/`767795`. The fixed perturbation evals were submitted with
+  `BGR_DEPENDENCY=afterok:767791` and
+  `RANDOM_DEPENDENCY=afterok:767794`: official jobs `767796`-`767800`, BGR
+  jobs `767801`-`767805`, and matched-random jobs `767806`-`767810`. A poll
+  immediately after submission showed prep `767789` and official identity
+  `767796` running, with all adaptation and BGR/random perturb jobs pending on
+  dependencies. Until compact summaries exist and pass the fixed gate, these
+  are in-flight jobs only, not paper evidence.
 
 ## Paper Workflow
 

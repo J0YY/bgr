@@ -770,6 +770,17 @@ package and recording its version before any result is run.
   Initial Slurm poll showed job `767789` running on `c1-g4-04` with
   `gres/gpu:a6000:1` and stdout
   `/work/joy/bgr/logs/bgr-perturbonly-prep-p2048unique_perturbonly_anchor_prereg-767789.out`.
+  The dependent adaptation chain was submitted after that poll with
+  `TRAIN_DEPENDENCY=afterok:767789` and `GIT_PULL=0`: BGR train/merge/clean-eval
+  jobs `767790`/`767791`/`767792`, and matched-random train/merge/clean-eval
+  jobs `767793`/`767794`/`767795`. The fixed perturbation evals were also
+  queued with `BGR_DEPENDENCY=afterok:767791` and
+  `RANDOM_DEPENDENCY=afterok:767794`: official jobs `767796`-`767800`, BGR jobs
+  `767801`-`767805`, and matched-random jobs `767806`-`767810`. An immediate
+  Slurm poll showed prep `767789` and official identity `767796` running, with
+  the adaptation jobs and BGR/random perturb evals dependency-pending. This
+  route remains in flight and should not be added to `paper/main.tex` unless
+  compact summaries clear the fixed learned-policy promotion gate.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

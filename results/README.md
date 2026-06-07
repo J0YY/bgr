@@ -2059,6 +2059,19 @@ Initial Slurm poll showed job `767789` running on `c1-g4-04` with
 /work/<user>/bgr/runs/openvla_oft_tfds_libero_goal_random_perturbonly_p2048unique_perturbonly_anchor_prereg_v1
 ```
 
+Dependent adaptation and perturbation eval submission audit: after the prep
+poll above, the adaptation stage was queued with
+`TRAIN_DEPENDENCY=afterok:767789` and `GIT_PULL=0`. The BGR chain is
+train/merge/clean-eval jobs `767790`/`767791`/`767792`; the matched-random
+chain is train/merge/clean-eval jobs `767793`/`767794`/`767795`. The fixed
+perturbation evals were then queued with `BGR_DEPENDENCY=afterok:767791` and
+`RANDOM_DEPENDENCY=afterok:767794`: official jobs `767796`-`767800`, BGR jobs
+`767801`-`767805`, and matched-random jobs `767806`-`767810`. An immediate
+Slurm poll showed prep `767789` and official identity `767796` running; all
+adaptation jobs and BGR/random perturb evals were dependency-pending. These
+queued jobs are not paper evidence unless compact summaries later clear the
+fixed promotion gate.
+
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 
 Launched on 2026-06-02 after the p1024 offset-3 follow-up showed only a small
