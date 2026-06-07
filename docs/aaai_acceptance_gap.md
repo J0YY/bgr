@@ -628,7 +628,7 @@ package and recording its version before any result is run.
   the next attempt changes the learned-policy intervention in a preregistered
   way that plausibly beats both official and matched random; the latest
   preregistered run reinforces the current negative audit.
-- The latest preregistered learned-policy intervention is the weighted
+- The completed weighted learned-policy audit was the weighted
   perturbation curriculum, implemented in
   `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh`. It changes the
   OpenVLA-OFT training distribution rather than only changing step count, seed,
@@ -719,7 +719,7 @@ package and recording its version before any result is run.
   `results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`,
   stored without raw log paths for double-blind hygiene. This intervention is
   complete negative evidence, not a robotics fine-tuning win.
-- The next preregistered learned-policy route changes the optimization
+- The completed proximal-anchor learned-policy audit changed the optimization
   objective rather than the data mix:
   `scripts/queue_openvla_oft_preregistered_proximal_anchor.sh`. It reuses the
   already fixed weighted perturbation TFDS roots but adds
@@ -787,8 +787,8 @@ package and recording its version before any result is run.
   only one episode above the official checkpoint. The result has been added to
   `paper/main.tex` as negative OpenVLA audit evidence, not as a robotics
   fine-tuning claim.
-- The next preregistered learned-policy route changes the data/objective
-  combination rather than the clean-mix weighting: perturb-only anchored
+- The completed perturb-only anchored learned-policy audit changed the
+  data/objective combination rather than the clean-mix weighting:
   adaptation in
   `scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh`. This route
   trains only on rendered boundary-band perturbation examples, with no clean

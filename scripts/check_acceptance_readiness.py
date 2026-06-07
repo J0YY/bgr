@@ -73,6 +73,8 @@ STALE_ROADMAP_SNIPPETS = [
     "The current newly opened independent route",
     "The active acceptance-moving work is now the fixed all-method LunarLander screen",
     "The current preregistered learned-policy route is perturb-only anchored",
+    "The latest preregistered learned-policy intervention is",
+    "The next preregistered learned-policy route",
 ]
 
 
