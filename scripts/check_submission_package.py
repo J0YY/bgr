@@ -465,6 +465,7 @@ CHECKED_CLAIM_ARTIFACTS = [
     "results/grid_margin_stress_sensitivity_30seed_v1/summary.csv",
     "results/grid_margin_target_sensitivity_30seed_v1/summary.csv",
     "results/frozenlake_recovery_focused_30seed_v1/summary.csv",
+    "results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv",
     "results/libero_probe_v2/summary.csv",
     "results/reacher_recovery_probe_12seed_v1/summary.csv",
     "results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
@@ -491,6 +492,8 @@ CHECKED_CLAIM_ARTIFACTS = [
     "results/toy_30seed_v1/summary.csv",
 ]
 SCOPE_DIAGNOSTIC_ARTIFACTS = [
+    "results/bsuite_deepsea_recovery_probe_4seed_v1/package_versions.json",
+    "results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv",
     "results/highway_parking_recovery_calibration_12seed_v1/package_versions.json",
     "results/highway_parking_recovery_calibration_12seed_v1/recovery_rows.csv",
     "results/highway_parking_recovery_calibration_12seed_v1/summary.json",
@@ -672,6 +675,7 @@ SUBMISSION_GATE_ARTIFACTS = [
     "scripts/check_paper_claims.py",
     "scripts/check_submission_package.py",
     "tools/highway_parking_recovery_calibration.py",
+    "tools/bsuite_deepsea_recovery_probe.py",
     "tools/inverted_double_pendulum_recovery_calibration.py",
     "tools/inverted_double_pendulum_recovery_probe.py",
     "tools/inverted_pendulum_recovery_calibration.py",

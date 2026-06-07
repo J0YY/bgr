@@ -7,8 +7,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "226dd20d44c8e059c204b8e153d80d96f514a92c2d60e9cff0a67e020ec97b33",
-      "size_bytes": 31581
+      "sha256": "36278f8021d16acd48eb4d35d5d8bce6bf8a938efc168a2589de1710cc26d1fd",
+      "size_bytes": 31671
     },
     {
       "path": "configs/estimator_bgr_full.yaml",
@@ -417,18 +417,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "78228fcba5fce88a48ddc19fe7f60eae62200a090f7f3eedd2844c7a819f208e",
-      "size_bytes": 14068
+      "sha256": "a12c6c81b1aa70168b7147b7071459f4af3ff3b555efc550f929eccadfa99582",
+      "size_bytes": 13995
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "8250a81e8067379a19bb4d9044e8cd3905c5cc74f0164c756f1b6dc537938292",
-      "size_bytes": 295813
+      "sha256": "242826c414da29775778ed5ca403f3b78f9408d1f8dea242924af538a50c7462",
+      "size_bytes": 296082
     },
     {
       "path": "paper/main.tex",
-      "sha256": "bdae27d1e5451bb3d975c354d0ccef557018b2172c88831e90b5e7c5b759789a",
-      "size_bytes": 37704
+      "sha256": "64eb471963607ce86c60f3948536e7d9737c28d132259537b9ff6b2687bdd17e",
+      "size_bytes": 38080
     },
     {
       "path": "paper/references.bib",
@@ -442,8 +442,18 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "67b676912a39d09cd4dd3834bf66068da5be485a24c27dd593bfbdf6edb0b982",
-      "size_bytes": 292058
+      "sha256": "fc751ece2a46fd50b1eb6c6c4f64d76388ff62091d5ac191c64dc89c7f794f24",
+      "size_bytes": 293087
+    },
+    {
+      "path": "results/bsuite_deepsea_recovery_probe_4seed_v1/package_versions.json",
+      "sha256": "aa5ee87714c5858f98f392a6b1103462776e43318a35e6c7982ab3ac3816d089",
+      "size_bytes": 91
+    },
+    {
+      "path": "results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv",
+      "sha256": "63ad6881a48672b9d437d0bcfa1418bdccc31907d34c49b5f013a35a4c44401b",
+      "size_bytes": 1188
     },
     {
       "path": "results/environment_v1/README.md",
@@ -887,8 +897,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "61c3805bcffeac7287b9d118e505edaf7c599aa45353951c8ab8f45dd2682b71",
-      "size_bytes": 39530
+      "sha256": "7a75691093d4589b713c9e7a75714b9482c3acde35511514bc47e4fda439f8b3",
+      "size_bytes": 39776
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -902,8 +912,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "036eabae27aebabe2ec5386645b5efab5dee82d11bd65d13e544f1e3e245e6f6",
-      "size_bytes": 34315
+      "sha256": "c26c7f35402215e348f7a3eab92509be78039d6bec7be36f0e2d1af13a7edd20",
+      "size_bytes": 36592
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -912,13 +922,13 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "975ee8c2374292222e62dae5904cd2f64445b588b179bdbe2a562a2b9a0800e2",
-      "size_bytes": 96926
+      "sha256": "61df071e9b3712b317bb2121c82d0750f349eaa454b39c15041b11fc05cd868d",
+      "size_bytes": 99094
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "13da0564ba4e6983ad73a232058bf4b9153cf51d4b22ac0fce337f6b0d5152e5",
-      "size_bytes": 239895
+      "sha256": "520556392f09ab302a644a1d2ffa56f8e2a710818d7df956c102ab2ec190a9e5",
+      "size_bytes": 240149
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1454,6 +1464,11 @@
       "path": "tests/test_suffix_stress_sensitivity.py",
       "sha256": "ec5a12f333427f5ee2b47a6ccaea9ec3593e4214b1acbd38a5aa7691f8d4caea",
       "size_bytes": 4046
+    },
+    {
+      "path": "tools/bsuite_deepsea_recovery_probe.py",
+      "sha256": "dec1029af05a1e61d6182ea1888b899c766c52f5007b0cb53dce366a9bd94b33",
+      "size_bytes": 19312
     },
     {
       "path": "tools/highway_parking_recovery_calibration.py",

@@ -73,7 +73,7 @@ OpenVLA/LIBERO rows are recovery-curve, selection, and data-plumbing audits; the
 paper does not claim a stable OpenVLA fine-tuning gain over the official
 checkpoint.
 
-Opened external-package pre-promotion route:
+Completed external-package pre-promotion route:
 
 - `results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv`: fixed bsuite
   DeepSea 4-seed screen, preregistered before method outcomes on 2026-06-07.
@@ -81,9 +81,13 @@ Opened external-package pre-promotion route:
   `PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_deepsea_recovery_probe.py --out results/bsuite_deepsea_recovery_probe_4seed_v1`.
   The route uses `bsuite==0.3.6` in an isolated temporary environment,
   package-owned randomized DeepSea action mappings, exact restart states, and a
-  fixed left-column perturbation family. It is not paper evidence unless the
-  candidate-promotion checker accepts the result and a later fixed 30-seed
-  screen clears the full promotion gate.
+  fixed left-column perturbation family. The screen is negative: default BGR
+  reaches 0.1125 final RAUC vs. 0.0844 for uniform, but wins only 2/4 paired
+  seeds, trails the state-priority/uniform-radius ablation at 0.1266, and has
+  lower median r80 than uniform. BGR-Coverage ties uniform on mean RAUC. Do not
+  scale or promote this route without a genuinely new preregistered premise.
+- `results/bsuite_deepsea_recovery_probe_4seed_v1/package_versions.json`:
+  compact package-version record for the same screen.
 
 Packaged FrozenLake diagnostic:
 

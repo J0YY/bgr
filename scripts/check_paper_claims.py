@@ -839,6 +839,47 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    deepsea = read_csv_rows(results_dir / "bsuite_deepsea_recovery_probe_4seed_v1" / "summary.csv")
+    deepsea_bgr_rauc = mean_metric(deepsea, "bgr", "final_rauc")
+    deepsea_coverage_rauc = mean_metric(deepsea, "bgr_coverage", "final_rauc")
+    deepsea_uniform_rauc = mean_metric(deepsea, "uniform", "final_rauc")
+    deepsea_ablation_rauc = mean_metric(deepsea, "bgr_uniform_radius", "final_rauc")
+    deepsea_bgr_r80 = mean_metric(deepsea, "bgr", "final_median_r80")
+    deepsea_uniform_r80 = mean_metric(deepsea, "uniform", "final_median_r80")
+    deepsea_wins = paired_wins(deepsea, "bgr", "uniform", "final_rauc")
+    if not (
+        deepsea_bgr_rauc > deepsea_uniform_rauc
+        and deepsea_bgr_rauc < deepsea_ablation_rauc
+        and deepsea_wins == (2, 1, 1)
+        and deepsea_bgr_r80 < deepsea_uniform_r80
+    ):
+        raise ValueError("Expected bsuite DeepSea diagnostic to remain a non-promoted negative result")
+    claims.append(
+        Claim(
+            "bsuite DeepSea official-package limitation",
+            (
+                f"A bsuite DeepSea screen is also negative: default BGR improves mean RAUC over uniform "
+                f"({fmt(deepsea_bgr_rauc, 4)} vs. {fmt(deepsea_uniform_rauc, 4)}) but wins only "
+                f"{deepsea_wins[0]}/4 seeds, trails the state-priority/uniform-radius ablation "
+                f"({fmt(deepsea_ablation_rauc, 4)}), and has lower median $r_{{80}}$ than uniform "
+                f"({fmt(deepsea_bgr_r80, 4)} vs. {fmt(deepsea_uniform_r80, 4)})"
+            ),
+            "results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "bsuite DeepSea scope-audit table row",
+            (
+                f"bsuite DeepSea & BGR {fmt(deepsea_bgr_rauc, 4)}; "
+                f"BGR-Cov. {fmt(deepsea_coverage_rauc, 4)} & uniform "
+                f"{fmt(deepsea_uniform_rauc, 4)}; uniform-radius {fmt(deepsea_ablation_rauc, 4)}; "
+                f"r80 {fmt(deepsea_bgr_r80, 4)} vs. {fmt(deepsea_uniform_r80, 4)} & negative"
+            ),
+            "results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+
     reacher = read_csv_rows(results_dir / "reacher_recovery_probe_12seed_v1" / "summary.csv")
     reacher_bgr_rauc = mean_metric(reacher, "bgr", "final_rauc")
     reacher_coverage_rauc = mean_metric(reacher, "bgr_coverage", "final_rauc")

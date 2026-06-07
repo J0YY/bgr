@@ -422,7 +422,7 @@ def main() -> None:
 
     (out_dir / "results.json").write_text(json.dumps({"args": vars(args), "results": results}, indent=2), encoding="utf-8")
     with (out_dir / "summary.csv").open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     (out_dir / "package_versions.json").write_text(json.dumps(package_versions(), indent=2, sort_keys=True), encoding="utf-8")

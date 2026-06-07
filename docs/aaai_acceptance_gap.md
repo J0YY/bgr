@@ -102,8 +102,8 @@ only 2/4 paired seeds against uniform and median r80 is lower than uniform
 (0.4200 vs. 0.4825). Do not scale or promote this route without a genuinely new
 preregistered premise.
 
-Next independent-benchmark route, opened 2026-06-07: official bsuite
-`deep_sea`. This route is materially different from the retired local
+Completed independent-benchmark route, opened and evaluated 2026-06-07:
+official bsuite `deep_sea`. This route is materially different from the retired local
 classic-control, MiniGrid, PointMaze, FetchReach, highway parking, Box2D, and
 MuJoCo screens: it uses bsuite's package-owned sparse-reward DeepSea task and
 randomized action mapping. The recovery interface uses exact restart states on
@@ -120,6 +120,15 @@ BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform and
 non-contradictory, non-saturated median-r80 evidence. Passing this 4-seed
 screen is not paper evidence; it is only permission to run the fixed 30-seed
 promotion screen.
+
+Result: the fixed 4-seed bsuite DeepSea screen is negative and should not be
+scaled under this protocol. Default BGR has a mean RAUC edge over uniform
+(0.1125 vs. 0.0844), but it wins only 2/4 paired seeds, trails the
+state-priority/uniform-radius ablation (0.1266), and has lower median r80 than
+uniform (0.3625 vs. 0.5750). BGR-Coverage ties uniform on mean RAUC (0.0844),
+loses to TD-loss (0.0984) and the uniform-radius ablation, and wins only 1/4
+paired seeds against uniform. This directly fails the novelty and
+complementary-metric gates.
 
 ## Promotion Criteria For A New Independent Benchmark
 

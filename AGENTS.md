@@ -177,6 +177,14 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   BGR-Coverage is 0.0000 and clean success falls to 0.2500 for BGR and 0.0000
   for BGR-Coverage. Treat this as a retired calibration plus negative method
   audit, not acceptance evidence.
+- The completed bsuite DeepSea route is negative. It uses `bsuite==0.3.6` in
+  `/tmp/bgr_bsuite_venv`, package-owned randomized DeepSea action mappings,
+  exact restart states, and fixed left-column perturbations. The fixed 4-seed
+  screen in `results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv` gives
+  default BGR 0.1125 final RAUC vs. uniform 0.0844, but BGR wins only 2/4
+  paired seeds, trails the state-priority/uniform-radius ablation at 0.1266,
+  and has lower median r80 than uniform (0.3625 vs. 0.5750). BGR-Coverage ties
+  uniform on mean RAUC. Do not scale or promote this protocol.
 
 ## Reviewer-Critique Priorities
 

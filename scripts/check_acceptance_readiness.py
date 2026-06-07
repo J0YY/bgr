@@ -518,6 +518,39 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"best-r80 {best_lunar_r80:.4f} vs uniform {lunar_uniform_r80:.4f}, W/L/T={best_lunar_wins}"
             )
 
+    deepsea_path = root / "results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv"
+    if deepsea_path.exists():
+        deepsea = read_rows(deepsea_path)
+        deepsea_bgr = mean_metric(deepsea, "bgr", "final_rauc")
+        deepsea_coverage = mean_metric(deepsea, "bgr_coverage", "final_rauc")
+        deepsea_uniform = mean_metric(deepsea, "uniform", "final_rauc")
+        deepsea_failure = mean_metric(deepsea, "failure_only", "final_rauc")
+        deepsea_fixed = mean_metric(deepsea, "fixed", "final_rauc")
+        deepsea_td = mean_metric(deepsea, "td_loss", "final_rauc")
+        deepsea_ablation = mean_metric(deepsea, "bgr_uniform_radius", "final_rauc")
+        deepsea_bgr_r80 = mean_metric(deepsea, "bgr", "final_median_r80")
+        deepsea_coverage_r80 = mean_metric(deepsea, "bgr_coverage", "final_median_r80")
+        deepsea_uniform_r80 = mean_metric(deepsea, "uniform", "final_median_r80")
+        deepsea_bgr_wins = paired_wins(deepsea, "bgr", "uniform", "final_rauc")
+        deepsea_coverage_wins = paired_wins(deepsea, "bgr_coverage", "uniform", "final_rauc")
+        best_deepsea = deepsea_bgr if deepsea_bgr >= deepsea_coverage else deepsea_coverage
+        best_deepsea_r80 = deepsea_bgr_r80 if deepsea_bgr >= deepsea_coverage else deepsea_coverage_r80
+        best_deepsea_wins = deepsea_bgr_wins if deepsea_bgr >= deepsea_coverage else deepsea_coverage_wins
+        if not (
+            best_deepsea > deepsea_uniform
+            and best_deepsea > max(deepsea_failure, deepsea_fixed, deepsea_td, deepsea_ablation)
+            and best_deepsea_wins[0] >= 3
+            and best_deepsea_r80 >= deepsea_uniform_r80
+            and not (best_deepsea_r80 >= 0.99 and deepsea_uniform_r80 >= 0.99)
+            and not (best_deepsea_r80 <= 0.01 and deepsea_uniform_r80 <= 0.01)
+        ):
+            failures.append(
+                f"bsuite DeepSea negative: BGR {deepsea_bgr:.4f}, BGR-Coverage {deepsea_coverage:.4f}, "
+                f"uniform {deepsea_uniform:.4f}, failure-only {deepsea_failure:.4f}, fixed {deepsea_fixed:.4f}, "
+                f"TD-loss {deepsea_td:.4f}, uniform-radius {deepsea_ablation:.4f}, "
+                f"best-r80 {best_deepsea_r80:.4f} vs uniform {deepsea_uniform_r80:.4f}, W/L/T={best_deepsea_wins}"
+            )
+
     for label, relative_path in CALIBRATION_SUMMARIES:
         calibration_path = root / relative_path
         if not calibration_path.exists():

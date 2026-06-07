@@ -30,7 +30,9 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | FrozenLake8x8 | bgr | 30 | +0.0140 (14/16/0) | -0.0032 (14/16/0) | n/a | final_median_r80 | -0.0125 (12/18/0) | 2/4 | fail | required-baseline, final_median_r80-contradiction |
 | MiniGrid LavaGapS7 | bgr_coverage | 4 | -0.0184 (3/1/0) | +0.0183 (1/2/1) | -0.0350 (1/2/1) | final_abs_r10 | +0.0180 (1/1/2) | 2/4 | fail | uniform-gate, state-priority-ablation |
 | MiniGrid FourRooms mid2-5 | bgr | 4 | +0.0557 (2/2/0) | -0.0563 (2/2/0) | +0.0411 (2/2/0) | final_median_r80 | -0.0824 (2/2/0) | 1/4 | fail | uniform-gate, required-baseline, final_median_r80-contradiction |
+| bsuite DeepSea | bgr | 4 | +0.0281 (2/1/1) | +0.0141 (1/3/0) | -0.0141 (1/2/1) | final_median_r80 | -0.2125 (0/1/3) | 1/4 | fail | uniform-gate, state-priority-ablation, final_median_r80-contradiction |
 | PointMaze U-Maze clean-shield | bgr_clean_shield | 4 | +0.0247 (2/2/0) | -0.3010 (0/3/1) | +0.1215 (2/1/1) | final_abs_r20 | -0.1333 (1/2/1) | 1/4 | fail | uniform-gate, required-baseline, final_abs_r20-contradiction |
+| bsuite DeepSea | bgr_coverage | 4 | +0.0000 (1/2/1) | -0.0141 (0/3/1) | -0.0422 (1/3/0) | final_median_r80 | +0.0000 (1/1/2) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
 | Gymnasium MuJoCo InvertedPendulum-v5 | bgr | 4 | +0.0000 (0/0/4) | +0.0000 (0/0/4) | +0.0000 (0/0/4) | final_median_r80 | +0.0000 (0/0/4) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
 | Gymnasium MuJoCo InvertedPendulum-v5 | bgr_coverage | 4 | +0.0000 (0/0/4) | +0.0000 (0/0/4) | +0.0000 (0/0/4) | final_median_r80 | +0.0000 (0/0/4) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
 | Gymnasium MuJoCo InvertedDoublePendulum-v5 | bgr_coverage | 4 | -0.0035 (0/1/3) | +0.0000 (0/0/4) | +0.0000 (0/0/4) | final_median_r80 | +0.0000 (0/0/4) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
