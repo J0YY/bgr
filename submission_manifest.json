@@ -417,18 +417,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "738c01407191280404bb544e56c83a7a33ad4260fcaccf650302258ab15ddd1d",
+      "sha256": "6df858f13c1debdf47d829b203fcbda55cd08a8e59b7b82b12b80da805e22cf3",
       "size_bytes": 14172
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "419193087aefeee8faab4f876e82435f9afa00669a0384c85cd962a2b769d07b",
-      "size_bytes": 295621
+      "sha256": "43cc9dacdb81d7564a5314e82550119ce9ac6aa8fd663fa1ee0fae91ec639dfc",
+      "size_bytes": 295686
     },
     {
       "path": "paper/main.tex",
-      "sha256": "df21046231f46702e497fbf08042499c97daa0d63172b4706329bace2f172e4b",
-      "size_bytes": 37226
+      "sha256": "e262a996580e1315306db90ae2106cc787af31e870b24701aa139eb70d3887a6",
+      "size_bytes": 37310
     },
     {
       "path": "paper/references.bib",
@@ -842,8 +842,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "4def780e10f21c9812df22496f28bb5d0dfa9641b9bde75c5433d04a1a51a695",
-      "size_bytes": 237651
+      "sha256": "8a15af5170248cb16fc2124538fb364c6667b085d55e4e81423a1e9c560f26b0",
+      "size_bytes": 237759
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1172,8 +1172,8 @@
     },
     {
       "path": "tests/test_check_submission_package.py",
-      "sha256": "1b3e840b4e529de5c4386c95714e1237d2a4938b36f3909b7a779105f3ea59fd",
-      "size_bytes": 332485
+      "sha256": "ac179420963f9e6de4759e479024a8a763466ed5cf7b830570561b98acc5de6f",
+      "size_bytes": 333468
     },
     {
       "path": "tests/test_combine_openvla_oft_examples.py",

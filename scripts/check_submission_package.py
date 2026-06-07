@@ -4150,6 +4150,7 @@ def check_manuscript_framing(path: Path) -> list[str]:
         raise ValueError(f"{path}: theory block should be framed as local boundary intuition, not Proposition 1")
     required = [
         "Synthetic and robot-suffix results are smaller and are reported as scoped support",
+        "coverage-aware suffix result is manipulation-style support rather than broad robustness evidence",
         "coverage-aware boundary replay expand recovery margins",
         "Instantiations of the BGR interface",
         "The first three rows are training experiments",

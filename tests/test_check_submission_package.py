@@ -4883,6 +4883,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "local margin-update model.",
                         r"\textbf{Proposition 1.} Fix a replay state.",
                         "In a robot-suffix simulator, a coverage-aware BGR variant improves final object recovery AUC",
+                        "coverage-aware suffix result is manipulation-style support rather than broad robustness evidence",
                         "coverage-aware boundary replay expand recovery margins",
                         "Instantiations of the BGR interface",
                         "The first three rows are training experiments",
@@ -4944,6 +4945,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         r"\textbf{Local Boundary Intuition.} Fix a replay state.",
                         "Synthetic and robot-suffix results are smaller and are reported as scoped support",
                         "In a robot-suffix simulator, a coverage-aware BGR variant improves final object recovery AUC",
+                        "coverage-aware suffix result is manipulation-style support rather than broad robustness evidence",
                         "coverage-aware boundary replay expand recovery margins",
                         "Instantiations of the BGR interface",
                         "The first three rows are training experiments",
@@ -5009,6 +5011,19 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             )
 
             self.assertEqual(check_manuscript_framing(paper), [f"{paper}: manuscript evidence-tier framing ok"])
+
+    def test_manuscript_framing_rejects_abstract_suffix_overclaim(self):
+        source_paper = Path(__file__).resolve().parents[1] / "paper" / "main.tex"
+        manuscript = source_paper.read_text(encoding="utf-8")
+        scoped = "coverage-aware suffix result is manipulation-style support rather than broad robustness evidence"
+        self.assertIn(scoped, manuscript)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            paper = Path(temp_dir) / "main.tex"
+            paper.write_text(manuscript.replace(scoped, "suffix variant is broad robustness evidence"), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "manipulation-style support"):
+                check_manuscript_framing(paper)
 
     def test_manuscript_framing_rejects_weakened_suffix_rescue_scope(self):
         source_paper = Path(__file__).resolve().parents[1] / "paper" / "main.tex"
