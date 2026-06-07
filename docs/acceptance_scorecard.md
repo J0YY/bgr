@@ -56,5 +56,5 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.
 - The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.
 - Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
-- The latest OpenVLA weighted audit is complete and fails the learned-policy gate: BGR ties the official checkpoint at 367/400 non-identity successes and trails matched random by 3/400.
+- The latest proximal-anchor OpenVLA audit is complete and fails the learned-policy gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
 - The next acceptance-moving work should change the learned-policy intervention or materially strengthen theory/presentation; another same-protocol MiniGrid/classic-control screen is unlikely to move the gate.

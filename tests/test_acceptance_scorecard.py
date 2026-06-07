@@ -251,6 +251,73 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertNotIn("latest weighted OpenVLA audit is short", text)
         self.assertNotIn("in flight, not yet evidence", text)
 
+    def test_priority_read_prefers_completed_proximal_anchor_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write(
+                root / "results/grid_margin_full_30seed_v1/summary.csv",
+                "method,seed,final_rauc\nbgr,0,0.44\nuniform,0,0.40\n",
+            )
+            _write(
+                root / "results/grid_margin_full_replication_30seed_v1/summary.csv",
+                "method,seed,final_rauc\nbgr,30,0.43\nuniform,30,0.39\n",
+            )
+            _write(
+                root / OPENVLA_WEIGHTED_COMPLETE,
+                "\n".join(
+                    [
+                        "method,perturbation,episodes,successes,success_rate",
+                        "bgr,identity,100,99,0.99",
+                        "bgr,blur,100,98,0.98",
+                        "bgr,brightness,100,99,0.99",
+                        "bgr,occlusion,100,75,0.75",
+                        "bgr,shift,100,95,0.95",
+                        "official,identity,100,99,0.99",
+                        "official,blur,100,97,0.97",
+                        "official,brightness,100,98,0.98",
+                        "official,occlusion,100,74,0.74",
+                        "official,shift,100,98,0.98",
+                        "random,identity,100,99,0.99",
+                        "random,blur,100,99,0.99",
+                        "random,brightness,100,99,0.99",
+                        "random,occlusion,100,75,0.75",
+                        "random,shift,100,97,0.97",
+                        "",
+                    ]
+                ),
+            )
+            _write(
+                root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE,
+                "\n".join(
+                    [
+                        "method,perturbation,episodes,successes,success_rate",
+                        "bgr,identity,100,98,0.98",
+                        "bgr,blur,100,98,0.98",
+                        "bgr,brightness,100,99,0.99",
+                        "bgr,occlusion,100,73,0.73",
+                        "bgr,shift,100,98,0.98",
+                        "official,identity,100,99,0.99",
+                        "official,blur,100,97,0.97",
+                        "official,brightness,100,98,0.98",
+                        "official,occlusion,100,74,0.74",
+                        "official,shift,100,98,0.98",
+                        "random,identity,100,98,0.98",
+                        "random,blur,100,99,0.99",
+                        "random,brightness,100,98,0.98",
+                        "random,occlusion,100,73,0.73",
+                        "random,shift,100,98,0.98",
+                        "",
+                    ]
+                ),
+            )
+
+            text = render_markdown(root)
+
+        priority_read = text.split("## Priority Read", maxsplit=1)[1]
+        self.assertIn("latest proximal-anchor OpenVLA audit is complete and fails", priority_read)
+        self.assertIn("BGR 368/400, official 367/400, random 368/400", priority_read)
+        self.assertNotIn("latest OpenVLA weighted audit", priority_read)
+
 
 if __name__ == "__main__":
     unittest.main()

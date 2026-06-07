@@ -16,7 +16,7 @@ to reproduce this read from the current result artifacts.
 
 | Review concern | Current paper defense | Remaining gap | Priority |
 | --- | --- | --- | --- |
-| Robotics promise not delivered | Title, abstract, introduction, evidence table, OpenVLA table, and conclusion now frame OpenVLA/LIBERO as an audit rather than a robotics claim. The preregistered image-augmentation audit is included as negative. | Still no stable learned-policy win. Do not spend more compute on the same recipe family. | High |
+| Robotics promise not delivered | Title, abstract, introduction, evidence table, OpenVLA table, and conclusion now frame OpenVLA/LIBERO as an audit rather than a robotics claim. The preregistered weighted image-augmentation and proximal-anchor audits are included as negative. | Still no stable learned-policy win. Do not spend more compute on the same recipe family. | High |
 | Tiny effect sizes hidden by p-values | Protocol section says effect sizes are primary and sign tests are consistency checks. Main text reports absolute RAUC/AULC/clean/r80 differences before p-values. | Synthetic and suffix effects remain small. They should stay scoped support. | High |
 | Benchmarks constructed for BGR | Abstract, synthetic section, grid section, evidence contract, and limitations explicitly say synthetic/grid-margin establish mechanism rather than broad dominance. | Need a positive pre-existing benchmark before making stronger main-track claims. | High |
 | Fragile/post-hoc variants | Suffix text explains the first boundary-heavy run undercovered and promotes only coverage-aware BGR with caveats. Grid learning-rate caveat remains in text. | Coverage-aware suffix still reads like a rescue variant. Keep it positioned as manipulation-style support only. | Medium |
@@ -88,3 +88,13 @@ to reproduce this read from the current result artifacts.
   totals are BGR 367/400, official 367/400, and matched random 370/400. BGR
   ties the official checkpoint and trails matched random, so do not treat this
   recipe family as an active acceptance-moving route.
+- The repaired proximal-anchor route in
+  `scripts/queue_openvla_oft_preregistered_proximal_anchor.sh` is also a
+  completed negative learned-policy audit. It changed the optimization
+  objective with an official-checkpoint proximal L2 anchor and completed after
+  the DDP wrapper repair, but the final non-identity totals are BGR 368/400,
+  official 367/400, and matched random 368/400, with identity BGR 98/100
+  versus official 99/100. This ties matched random and beats official by only
+  one episode, far below the fixed +10/400 and +0.02 gate. Do not spend more
+  compute on clean-mix visual-perturb OpenVLA-OFT variants unless the
+  intervention changes materially.

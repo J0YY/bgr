@@ -698,11 +698,35 @@ def render_markdown(root: Path) -> str:
                 )
                 + " |"
             )
+    if learned_summary.startswith("Proximal-anchor OpenVLA audit"):
+        if "does not clear" in learned_summary:
+            detail = learned_summary.removeprefix(
+                "Proximal-anchor OpenVLA audit does not clear the learned-policy promotion gate: "
+            )
+            learned_priority = (
+                "- The latest proximal-anchor OpenVLA audit is complete and fails the learned-policy gate: "
+                f"{detail}"
+            )
+        elif "clears" in learned_summary:
+            learned_priority = (
+                "- The latest proximal-anchor OpenVLA audit clears the learned-policy gate; "
+                "verify paper claim wording and package checks before promoting it."
+            )
+        else:
+            learned_priority = f"- {learned_summary}"
+    elif learned_summary.startswith("Weighted OpenVLA audit"):
+        learned_priority = (
+            "- The latest OpenVLA weighted audit is complete and fails the learned-policy gate: "
+            "BGR ties the official checkpoint at 367/400 non-identity successes and trails matched random by 3/400."
+        )
+    else:
+        learned_priority = f"- {learned_summary}"
+
     priority_lines = [
         "- The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.",
         "- The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.",
         "- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.",
-        "- The latest OpenVLA weighted audit is complete and fails the learned-policy gate: BGR ties the official checkpoint at 367/400 non-identity successes and trails matched random by 3/400.",
+        learned_priority,
     ]
     if inflight is None:
         priority_lines.append(
