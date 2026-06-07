@@ -81,7 +81,7 @@ if command -v scontrol >/dev/null 2>&1 && [ -n "${DETAIL_JOB_IDS:-}" ]; then
   IFS="${old_ifs}"
   for job_id in "$@"; do
     echo "DETAIL:${job_id}"
-    scontrol show job -dd "${job_id}" | \
+    scontrol show job -dd "${job_id}" 2>/dev/null | \
       egrep 'JobId=|JobState=|Reason=|StartTime=|Partition=|ReqNodeList=|ExcNodeList=|ReqTRES=|TresPerNode=|MinCPUsNode=|MinMemoryNode=' || true
   done
 fi

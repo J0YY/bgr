@@ -789,6 +789,12 @@ package and recording its version before any result is run.
   cleanly at 22:06:54 BST, BGR adaptation `767790` running on `c1-g4-04`, and
   official identity eval `767796` running on `c2-g4-24`; both compact summary
   paths were still missing, so the route remains unevaluated.
+  A later helper poll at 2026-06-07 22:19:57 BST showed BGR train/merge
+  `767790`/`767791`, random train/merge `767793`/`767794`, and official
+  identity `767796` completed cleanly. BGR clean eval `767792`, random clean
+  eval `767795`, BGR identity perturb eval `767801`, random identity perturb
+  eval `767806`, and official blur `767797` were running; compact summaries
+  were still missing, so the route still cannot be scored.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

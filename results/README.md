@@ -2085,6 +2085,13 @@ cleanly at 22:06:54 BST, BGR adaptation `767790` running on `c1-g4-04`, and
 official identity eval `767796` running on `c2-g4-24`; adapt and perturb compact
 summary CSVs were still missing.
 
+A later helper poll at 2026-06-07 22:19:57 BST showed BGR train/merge
+`767790`/`767791`, random train/merge `767793`/`767794`, and official identity
+`767796` completed with exit code `0:0`. BGR clean eval `767792`, random clean
+eval `767795`, BGR identity perturb eval `767801`, random identity perturb eval
+`767806`, and official blur `767797` were running; compact summaries were still
+missing.
+
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 
 Launched on 2026-06-02 after the p1024 offset-3 follow-up showed only a small
