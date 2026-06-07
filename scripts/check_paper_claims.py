@@ -878,6 +878,43 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    inverted_double = read_csv_rows(results_dir / "inverted_double_pendulum_recovery_probe_4seed_v1" / "summary.csv")
+    double_bgr_rauc = mean_metric(inverted_double, "bgr", "final_rauc")
+    double_coverage_rauc = mean_metric(inverted_double, "bgr_coverage", "final_rauc")
+    double_uniform_rauc = mean_metric(inverted_double, "uniform", "final_rauc")
+    double_bgr_clean = mean_metric(inverted_double, "bgr", "final_clean")
+    double_coverage_clean = mean_metric(inverted_double, "bgr_coverage", "final_clean")
+    double_wins = paired_wins(inverted_double, "bgr", "uniform", "final_rauc")
+    if not (
+        double_bgr_rauc > double_uniform_rauc
+        and double_bgr_clean < 0.75
+        and double_coverage_clean == 0.0
+        and double_wins == (1, 0, 3)
+    ):
+        raise ValueError("Expected InvertedDoublePendulum-v5 diagnostic to remain a collapsed negative result")
+    claims.append(
+        Claim(
+            "InvertedDoublePendulum-v5 official-package limitation",
+            (
+                f"InvertedDoublePendulum-v5 gives a tiny BGR RAUC edge ({fmt(double_bgr_rauc, 4)} "
+                f"vs. {fmt(double_uniform_rauc, 4)} uniform) but collapses clean success to "
+                f"{fmt(double_bgr_clean, 4)} for BGR and {fmt(double_coverage_clean, 4)} for BGR-Coverage"
+            ),
+            "results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "InvertedDoublePendulum-v5 scope-audit table row",
+            (
+                f"InvertedDoublePendulum-v5 & BGR {fmt(double_bgr_rauc, 4)}; "
+                f"BGR-Cov. {fmt(double_coverage_rauc, 4)} & uniform {fmt(double_uniform_rauc, 4)}; "
+                f"clean collapse {fmt(double_bgr_clean, 4)}/{fmt(double_coverage_clean, 4)} & negative"
+            ),
+            "results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+
     probe_rows = read_csv_rows(results_dir / "libero_probe_v2" / "summary.csv")
     valid_rows = sum(1 for row in probe_rows if float(row["valid_rate"]) == 1.0 and not row.get("error"))
     claims.append(
