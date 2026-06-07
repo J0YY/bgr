@@ -362,7 +362,7 @@ failure-only, TD/loss-priority, and the state-priority/uniform-radius ablation
 on final RAUC with a visible effect, paired wins over uniform, and
 non-contradictory non-saturated radius metrics.
 
-### Reacher Comparison Preregistration
+### Reacher Comparison Result
 
 The fixed all-method Reacher screen is implemented at
 `tools/reacher_recovery_probe.py` before method-comparison results. It keeps the
@@ -379,12 +379,20 @@ Preregistered command:
 PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/reacher_recovery_probe.py --out results/reacher_recovery_probe_12seed_v1
 ```
 
-Do not edit learner hyperparameters, replay-state count, perturbation radii,
-methods, seeds, or the promotion gate after seeing this result. Do not scale to
-30 seeds or promote to the paper unless default BGR or BGR-Coverage beats
-uniform, fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on final
-RAUC with at least 9/12 paired wins over uniform, a visible mean effect, and
-non-contradictory non-saturated median-r80.
+The fixed 12-seed screen is negative and should not be promoted or scaled.
+Uniform replay has the highest final RAUC (0.3862). Default BGR reaches 0.2907
+with 4/8/0 paired wins/losses/ties against uniform, BGR-Coverage reaches
+0.2721 with 4/8/0 against uniform, BGR-uniform-radius reaches 0.2921,
+failure-only reaches 0.3273, fixed-radius reaches 0.2330, and TD-loss reaches
+0.2501. Median-r80 is also not supportive: BGR is 3.8375, BGR-Coverage is
+3.6708, and uniform is 3.2437.
+
+Compact artifacts:
+
+- `results/reacher_recovery_probe_12seed_v1/summary.csv`
+- `results/reacher_recovery_probe_12seed_v1/aggregate.csv`
+- `results/reacher_recovery_probe_12seed_v1/history.csv`
+- `results/reacher_recovery_probe_12seed_v1/package_versions.json`
 
 ## Internal Official PointMaze Diagnostic
 

@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "9f30d3716b085cda1d7bb4c81bbdeaa3d817eb93fe2b048c9bd01a77070bee1e",
-      "size_bytes": 274137
+      "sha256": "4b034b9ba9d6c8592944d329dbe4ee3103244e8aaf277f3759a8a82b1215cca7",
+      "size_bytes": 274439
     },
     {
       "path": "results/environment_v1/README.md",
@@ -696,6 +696,26 @@
       "size_bytes": 554
     },
     {
+      "path": "results/reacher_recovery_probe_12seed_v1/aggregate.csv",
+      "sha256": "e0c821610fb2d6f7ebd9478ede5ffe5b16c0a013b3cae704b246392662e51a9d",
+      "size_bytes": 505
+    },
+    {
+      "path": "results/reacher_recovery_probe_12seed_v1/history.csv",
+      "sha256": "f2c7a1b8f0288b4446f3b53fb1b2db92e9f9ccbb57c020e314768f4b536e2563",
+      "size_bytes": 20524
+    },
+    {
+      "path": "results/reacher_recovery_probe_12seed_v1/package_versions.json",
+      "sha256": "ac3e3470d1bb01d3a282bce3eeb865663209b0867ae31ba9c319f47c38b9742d",
+      "size_bytes": 100
+    },
+    {
+      "path": "results/reacher_recovery_probe_12seed_v1/summary.csv",
+      "sha256": "770c9c0e81f903a931d1939ed795fc4731b28c2e8b48a15310eb62a7b3ac9594",
+      "size_bytes": 6609
+    },
+    {
       "path": "results/suffix_coverage_full_30seed_v1/summary.csv",
       "sha256": "3d3f2eb12477441bd3299bc7cc9a61d8822595982499c9656e5854e1aad18c2c",
       "size_bytes": 23497
@@ -757,8 +777,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "0bd098e9cf30e6f527ea7374cd60a7db61d96bac8a781fb5f484b64783a9d2a5",
-      "size_bytes": 31959
+      "sha256": "fcc476a69b577a3da5889e4b574e9d54e335dab0563e70e8cda12cb657d30749",
+      "size_bytes": 32215
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -772,8 +792,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "82fbdd7e80dc6ebdfd2ac3aa4549ac8245ca7f5cfa7e300c886c2158845f981a",
-      "size_bytes": 24460
+      "sha256": "b269c9c549a9329e4206c2974197733b8fc624bb2a59d278e58f5ecd4dc7dce4",
+      "size_bytes": 26044
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -787,8 +807,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "07c68ab8feb878a96e6daed5cb7f519bfab614c8216b55aee0b1b461d25e6f3c",
-      "size_bytes": 235788
+      "sha256": "5d5f45c058c975c89d5415f6c4b2cd1a290670d5a601ed8715598c1f3f751b33",
+      "size_bytes": 236040
     },
     {
       "path": "scripts/collect_environment.py",

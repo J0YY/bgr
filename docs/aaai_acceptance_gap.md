@@ -897,9 +897,11 @@ package and recording its version before any result is run.
   calibration controller, and teacher-action imitation updates selected by the
   replay method. The preregistered 12-seed command is:
   `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/reacher_recovery_probe.py --out results/reacher_recovery_probe_12seed_v1`.
-  Do not edit learner hyperparameters, replay-state count, perturbation radii,
-  methods, seeds, or promotion gate after seeing this result. Do not scale to
-  30 seeds or promote to the paper unless default BGR or BGR-Coverage beats
-  uniform, fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on final
-  RAUC with at least 9/12 paired wins over uniform, a visible mean gap, and
-  non-contradictory non-saturated median-r80.
+  The fixed 12-seed result is negative and should not be scaled or promoted:
+  uniform has the highest final RAUC (0.3862), while BGR reaches 0.2907
+  (4/8/0 paired wins/losses/ties against uniform), BGR-Coverage reaches 0.2721
+  (4/8/0), BGR-uniform-radius reaches 0.2921, failure-only reaches 0.3273,
+  fixed-radius reaches 0.2330, and TD-loss reaches 0.2501. Median-r80 is also
+  not supportive: BGR 3.8375, BGR-Coverage 3.6708, and uniform 3.2437. Treat
+  this as scope evidence that the Reacher route did not solve the independent
+  benchmark acceptance gap.

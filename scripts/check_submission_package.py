@@ -495,6 +495,10 @@ SCOPE_DIAGNOSTIC_ARTIFACTS = [
     "results/reacher_recovery_calibration_12seed_v1/package_versions.json",
     "results/reacher_recovery_calibration_12seed_v1/recovery_rows.csv",
     "results/reacher_recovery_calibration_12seed_v1/summary.json",
+    "results/reacher_recovery_probe_12seed_v1/aggregate.csv",
+    "results/reacher_recovery_probe_12seed_v1/history.csv",
+    "results/reacher_recovery_probe_12seed_v1/package_versions.json",
+    "results/reacher_recovery_probe_12seed_v1/summary.csv",
 ]
 OPENVLA_BRIDGE_ARTIFACTS = [
     "scripts/combine_openvla_oft_examples.py",

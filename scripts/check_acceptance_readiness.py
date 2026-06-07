@@ -362,6 +362,30 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"W/L/T={hard_wins}, median-r80 {hard_r80:.4f}"
             )
 
+    reacher_path = root / "results/reacher_recovery_probe_12seed_v1/summary.csv"
+    if reacher_path.exists():
+        reacher = read_rows(reacher_path)
+        reacher_bgr = mean_metric(reacher, "bgr", "final_rauc")
+        reacher_coverage = mean_metric(reacher, "bgr_coverage", "final_rauc")
+        reacher_uniform = mean_metric(reacher, "uniform", "final_rauc")
+        reacher_failure = mean_metric(reacher, "failure_only", "final_rauc")
+        reacher_fixed = mean_metric(reacher, "fixed", "final_rauc")
+        reacher_td = mean_metric(reacher, "td_loss", "final_rauc")
+        reacher_ablation = mean_metric(reacher, "bgr_uniform_radius", "final_rauc")
+        reacher_bgr_wins = paired_wins(reacher, "bgr", "uniform", "final_rauc")
+        reacher_coverage_wins = paired_wins(reacher, "bgr_coverage", "uniform", "final_rauc")
+        best_reacher_wins = reacher_bgr_wins if reacher_bgr >= reacher_coverage else reacher_coverage_wins
+        if not (
+            (reacher_bgr > reacher_uniform or reacher_coverage > reacher_uniform)
+            and max(reacher_bgr, reacher_coverage) > max(reacher_failure, reacher_fixed, reacher_td, reacher_ablation)
+            and best_reacher_wins[0] >= 9
+        ):
+            failures.append(
+                f"Reacher-v5 negative: BGR {reacher_bgr:.4f}, BGR-Coverage {reacher_coverage:.4f}, "
+                f"uniform {reacher_uniform:.4f}, failure-only {reacher_failure:.4f}, fixed {reacher_fixed:.4f}, "
+                f"TD-loss {reacher_td:.4f}, uniform-radius {reacher_ablation:.4f}, W/L/T={best_reacher_wins}"
+            )
+
     for label, relative_path in CALIBRATION_SUMMARIES:
         calibration_path = root / relative_path
         if not calibration_path.exists():

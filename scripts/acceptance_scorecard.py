@@ -241,6 +241,14 @@ BENCHMARK_SCREENS = [
         "bgr_uniform_radius",
         "final_median_r80",
     ),
+    (
+        "Gymnasium MuJoCo Reacher-v5",
+        "results/reacher_recovery_probe_12seed_v1/summary.csv",
+        ["bgr", "bgr_coverage"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
 ]
 
 CALIBRATION_SCREENS = [
@@ -650,7 +658,7 @@ def render_markdown(root: Path) -> str:
     if inflight is None and usable_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in usable_calibrations)
         lines.append(
-            f"- Active route: {names} cleared pre-method calibration only; the fixed Reacher all-method comparison is preregistered and must be run before paper promotion."
+            f"- Active route: {names} cleared pre-method calibration, but the fixed Reacher all-method comparison is negative and not paper-promotable."
         )
     elif inflight is None:
         lines.append(
@@ -746,7 +754,7 @@ def render_markdown(root: Path) -> str:
     if usable_calibrations:
         priority_lines.insert(
             2,
-            "- The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is preregistered, but no method result is promoted yet.",
+            "- The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is now negative and should not be promoted.",
         )
     priority_lines.insert(
         2 if not usable_calibrations else 3,
@@ -754,7 +762,7 @@ def render_markdown(root: Path) -> str:
     )
     if inflight is None and usable_calibrations:
         priority_lines.append(
-            "- The next acceptance-moving work should run the fixed Reacher-v5 all-method comparison and evaluate it against the preregistered promotion gate; the calibration alone is not paper evidence."
+            "- The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; the Reacher route is now scope evidence, not acceptance evidence."
         )
     elif inflight is None:
         priority_lines.append(

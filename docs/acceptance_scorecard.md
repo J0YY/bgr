@@ -14,7 +14,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 
 - Independent benchmark: no screen clears the 4/4 promotion screen. The closest screen, `MiniGrid FourRooms official-package` with `bgr_coverage`, clears 3/4 gates and fails on final_median_r80-ceiling-saturated.
 - Learned policy: Proximal-anchor OpenVLA audit does not clear the learned-policy promotion gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
-- Active route: `Gymnasium MuJoCo Reacher-v5 calibration` cleared pre-method calibration only; the fixed Reacher all-method comparison is preregistered and must be run before paper promotion.
+- Active route: `Gymnasium MuJoCo Reacher-v5 calibration` cleared pre-method calibration, but the fixed Reacher all-method comparison is negative and not paper-promotable.
 
 ## Independent Benchmark Screens
 
@@ -34,8 +34,10 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | FetchReach-v4 goal recovery | bgr | 4 | -0.0500 (0/2/2) | -0.0625 (0/3/1) | -0.0125 (0/1/3) | final_median_r80 | +0.0000 (0/0/4) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
 | MiniGrid LavaCrossing | bgr_coverage | 4 | -0.0618 (0/3/1) | +0.1188 (2/2/0) | -0.0495 (0/3/1) | final_abs_r10 | -0.1305 (0/3/1) | 1/4 | fail | uniform-gate, state-priority-ablation, final_abs_r10-contradiction |
 | PointMaze U-Maze clean-shield | bgr | 4 | -0.0795 (1/3/0) | -0.4052 (0/4/0) | +0.0174 (1/3/0) | final_abs_r20 | -0.2333 (0/2/2) | 1/4 | fail | uniform-gate, required-baseline, final_abs_r20-contradiction |
+| Gymnasium MuJoCo Reacher-v5 | bgr | 12 | -0.0955 (4/8/0) | -0.0366 (6/6/0) | -0.0014 (6/6/0) | final_median_r80 | +0.5938 (3/2/7) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
 | MiniGrid LavaCrossing | bgr | 4 | -0.1012 (1/3/0) | +0.0794 (3/1/0) | -0.0889 (1/3/0) | final_abs_r10 | -0.2164 (0/3/1) | 1/4 | fail | uniform-gate, state-priority-ablation, final_abs_r10-contradiction |
 | MiniGrid FourRooms midband | bgr | 4 | -0.1127 (1/3/0) | -0.2403 (0/4/0) | -0.0749 (1/3/0) | final_median_r80 | +0.0995 (2/2/0) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
+| Gymnasium MuJoCo Reacher-v5 | bgr_coverage | 12 | -0.1140 (4/8/0) | -0.0551 (6/6/0) | -0.0200 (6/6/0) | final_median_r80 | +0.4271 (3/2/7) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
 | FetchReach-v4 hard-budget goal recovery | bgr_coverage | 4 | -0.2188 (1/3/0) | -0.4813 (0/4/0) | -0.0563 (0/3/1) | final_median_r80 | +0.0008 (1/2/1) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
 | MiniGrid LavaGapS7 | bgr | 4 | -0.0430 (1/3/0) | -0.0063 (2/1/1) | -0.0596 (1/2/1) | final_abs_r10 | -0.0289 (0/2/2) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_abs_r10-contradiction |
 | MiniGrid FourRooms midband | bgr_coverage | 4 | -0.0589 (2/2/0) | -0.1864 (0/4/0) | -0.0210 (3/1/0) | final_median_r80 | -0.0748 (0/4/0) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_median_r80-contradiction |
@@ -57,7 +59,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 
 - The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.
 - The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.
-- The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is preregistered, but no method result is promoted yet.
+- The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is now negative and should not be promoted.
 - Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The latest proximal-anchor OpenVLA audit is complete and fails the learned-policy gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
-- The next acceptance-moving work should run the fixed Reacher-v5 all-method comparison and evaluate it against the preregistered promotion gate; the calibration alone is not paper evidence.
+- The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; the Reacher route is now scope evidence, not acceptance evidence.
