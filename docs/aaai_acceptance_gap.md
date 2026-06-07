@@ -795,6 +795,11 @@ package and recording its version before any result is run.
   eval `767795`, BGR identity perturb eval `767801`, random identity perturb
   eval `767806`, and official blur `767797` were running; compact summaries
   were still missing, so the route still cannot be scored.
+  The clean adaptation eval logs were then summarized locally into
+  `results/openvla_oft_goal_adapt_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_v1/summary.csv`.
+  BGR and matched random both score 99/100 clean episodes. This satisfies the
+  clean-floor sanity check for the adapted checkpoints but does not affect the
+  learned-policy promotion gate until the complete perturbation summary exists.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

@@ -2092,6 +2092,12 @@ eval `767795`, BGR identity perturb eval `767801`, random identity perturb eval
 `767806`, and official blur `767797` were running; compact summaries were still
 missing.
 
+Clean adaptation eval logs were summarized locally into
+`results/openvla_oft_goal_adapt_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_v1/summary.csv`.
+BGR and matched random both score 99/100 clean episodes. This is a clean-floor
+sanity check only; the learned-policy promotion gate remains pending until the
+complete official/BGR/random perturbation summary exists.
+
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 
 Launched on 2026-06-02 after the p1024 offset-3 follow-up showed only a small

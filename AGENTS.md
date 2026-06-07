@@ -258,6 +258,11 @@ Treat the following as the current paper-weakness backlog:
   identity perturb eval `767806`, and official blur `767797` were running; the
   remaining perturb jobs were still dependency-pending and compact summaries
   were still missing.
+  The clean adaptation eval logs were summarized locally into
+  `results/openvla_oft_goal_adapt_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_v1/summary.csv`;
+  BGR and matched random both score 99/100 clean episodes. This clears the
+  clean-floor sanity check for the adapted checkpoints but is not a promotion
+  result without the full official/BGR/random perturbation summary.
 
 ## Paper Workflow
 
