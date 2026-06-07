@@ -83,10 +83,11 @@ to reproduce this read from the current result artifacts.
 - Gymnasium MuJoCo Reacher-v5 is the current active pre-method route, not paper
   evidence yet. Its fixed calibration clears clean/non-flat prerequisites
   (clean 0.8333, recovery range 0.5000--0.9167, RAUC 0.7891, r80 3.0000 on a
-  0--4 grid) under `gymnasium==1.3.0` and `mujoco==3.9.0`. The next step must
-  be a preregistered all-method comparison tool fixed before seeing BGR
-  results; promotion requires beating uniform, fixed-radius, failure-only,
-  TD/loss-priority, and the state-priority/uniform-radius ablation with
+  0--4 grid) under `gymnasium==1.3.0` and `mujoco==3.9.0`. The full
+  all-method comparison is now preregistered in
+  `tools/reacher_recovery_probe.py`, but it is still not paper evidence until a
+  fixed run beats uniform, fixed-radius, failure-only, TD-loss, and the
+  state-priority/uniform-radius ablation with a visible mean effect and
   non-contradictory radius metrics.
 - The weighted perturbation curriculum in
   `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh` is now a

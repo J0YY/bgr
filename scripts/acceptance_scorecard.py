@@ -650,7 +650,7 @@ def render_markdown(root: Path) -> str:
     if inflight is None and usable_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in usable_calibrations)
         lines.append(
-            f"- Active route: {names} cleared pre-method calibration only; a fixed all-method comparison is still required before paper promotion."
+            f"- Active route: {names} cleared pre-method calibration only; the fixed Reacher all-method comparison is preregistered and must be run before paper promotion."
         )
     elif inflight is None:
         lines.append(
@@ -746,7 +746,7 @@ def render_markdown(root: Path) -> str:
     if usable_calibrations:
         priority_lines.insert(
             2,
-            "- The usable Reacher-v5 calibration is pre-method evidence only; the next empirical step must fix the full all-method comparison before seeing any BGR results.",
+            "- The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is preregistered, but no method result is promoted yet.",
         )
     priority_lines.insert(
         2 if not usable_calibrations else 3,
@@ -754,7 +754,7 @@ def render_markdown(root: Path) -> str:
     )
     if inflight is None and usable_calibrations:
         priority_lines.append(
-            "- The next acceptance-moving work should implement and preregister the fixed Reacher-v5 all-method comparison; the calibration alone is not paper evidence."
+            "- The next acceptance-moving work should run the fixed Reacher-v5 all-method comparison and evaluate it against the preregistered promotion gate; the calibration alone is not paper evidence."
         )
     elif inflight is None:
         priority_lines.append(

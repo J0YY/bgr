@@ -362,6 +362,30 @@ failure-only, TD/loss-priority, and the state-priority/uniform-radius ablation
 on final RAUC with a visible effect, paired wins over uniform, and
 non-contradictory non-saturated radius metrics.
 
+### Reacher Comparison Preregistration
+
+The fixed all-method Reacher screen is implemented at
+`tools/reacher_recovery_probe.py` before method-comparison results. It keeps the
+same official `Reacher-v5` package dynamics, target sampling, exact MuJoCo state
+resets, two-joint angular perturbation family, 0--4 evaluation grid, and
+12-seed screen budget. The learner is a small linear controller initialized
+below the calibration controller and trained by imitation of a stronger
+inverse-kinematics teacher on replayed perturbed states selected by the replay
+method.
+
+Preregistered command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/reacher_recovery_probe.py --out results/reacher_recovery_probe_12seed_v1
+```
+
+Do not edit learner hyperparameters, replay-state count, perturbation radii,
+methods, seeds, or the promotion gate after seeing this result. Do not scale to
+30 seeds or promote to the paper unless default BGR or BGR-Coverage beats
+uniform, fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on final
+RAUC with at least 9/12 paired wins over uniform, a visible mean effect, and
+non-contradictory non-saturated median-r80.
+
 ## Internal Official PointMaze Diagnostic
 
 The next preregistered external-package screen is official PointMaze U-Maze,

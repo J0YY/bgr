@@ -14,7 +14,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 
 - Independent benchmark: no screen clears the 4/4 promotion screen. The closest screen, `MiniGrid FourRooms official-package` with `bgr_coverage`, clears 3/4 gates and fails on final_median_r80-ceiling-saturated.
 - Learned policy: Proximal-anchor OpenVLA audit does not clear the learned-policy promotion gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
-- Active route: `Gymnasium MuJoCo Reacher-v5 calibration` cleared pre-method calibration only; a fixed all-method comparison is still required before paper promotion.
+- Active route: `Gymnasium MuJoCo Reacher-v5 calibration` cleared pre-method calibration only; the fixed Reacher all-method comparison is preregistered and must be run before paper promotion.
 
 ## Independent Benchmark Screens
 
@@ -57,7 +57,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 
 - The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.
 - The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.
-- The usable Reacher-v5 calibration is pre-method evidence only; the next empirical step must fix the full all-method comparison before seeing any BGR results.
+- The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is preregistered, but no method result is promoted yet.
 - Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The latest proximal-anchor OpenVLA audit is complete and fails the learned-policy gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
-- The next acceptance-moving work should implement and preregister the fixed Reacher-v5 all-method comparison; the calibration alone is not paper evidence.
+- The next acceptance-moving work should run the fixed Reacher-v5 all-method comparison and evaluate it against the preregistered promotion gate; the calibration alone is not paper evidence.

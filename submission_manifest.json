@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "2b90bf9598a689e30ec09e129a6046e37b6c3ff09f1576e3935d16cf40b87c15",
-      "size_bytes": 272973
+      "sha256": "9f30d3716b085cda1d7bb4c81bbdeaa3d817eb93fe2b048c9bd01a77070bee1e",
+      "size_bytes": 274137
     },
     {
       "path": "results/environment_v1/README.md",
@@ -757,8 +757,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "c47c6b7bf4e8f4addfb172c22eada739702cb2f02bb6229f488acad8c3380946",
-      "size_bytes": 31901
+      "sha256": "0bd098e9cf30e6f527ea7374cd60a7db61d96bac8a781fb5f484b64783a9d2a5",
+      "size_bytes": 31959
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -787,8 +787,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "5cba8372d1b8dbde4834a17f4261260dfb30e9f9bb6272ac2e60990f16d14945",
-      "size_bytes": 235705
+      "sha256": "07c68ab8feb878a96e6daed5cb7f519bfab614c8216b55aee0b1b461d25e6f3c",
+      "size_bytes": 235788
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1271,6 +1271,11 @@
       "size_bytes": 2980
     },
     {
+      "path": "tests/test_reacher_recovery_probe.py",
+      "sha256": "2a34c02de3367809e8a0b0f47ca6788060f1bb044b40396d4c46c6d355fbbade",
+      "size_bytes": 3711
+    },
+    {
       "path": "tests/test_render_openvla_teacher_examples.py",
       "sha256": "387e4c4d21ed27f0ed593a4bacbd78d1eb5dd7ccca9afa3f84ffeb6f1eae946b",
       "size_bytes": 4391
@@ -1304,6 +1309,11 @@
       "path": "tools/reacher_recovery_calibration.py",
       "sha256": "06896c50d5340f3a5f2a466ad01b60fae3019fd0aa851923c7d9f9a0f60879bd",
       "size_bytes": 10044
+    },
+    {
+      "path": "tools/reacher_recovery_probe.py",
+      "sha256": "e63b50f9f691d324d8f2bffde2b88290e9d2f670f3af927bcd453d9ea1aaabda",
+      "size_bytes": 22529
     }
   ],
   "hash_algorithm": "sha256",
