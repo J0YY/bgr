@@ -833,6 +833,51 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    inverted = read_csv_rows(results_dir / "inverted_pendulum_recovery_probe_4seed_v1" / "summary.csv")
+    inverted_bgr_rauc = mean_metric(inverted, "bgr", "final_rauc")
+    inverted_coverage_rauc = mean_metric(inverted, "bgr_coverage", "final_rauc")
+    inverted_uniform_rauc = mean_metric(inverted, "uniform", "final_rauc")
+    inverted_fixed_rauc = mean_metric(inverted, "fixed", "final_rauc")
+    inverted_failure_rauc = mean_metric(inverted, "failure_only", "final_rauc")
+    inverted_td_rauc = mean_metric(inverted, "td_loss", "final_rauc")
+    inverted_ablation_rauc = mean_metric(inverted, "bgr_uniform_radius", "final_rauc")
+    inverted_bgr_r80 = mean_metric(inverted, "bgr", "final_median_r80")
+    inverted_wins = paired_wins(inverted, "bgr", "uniform", "final_rauc")
+    if not (
+        inverted_bgr_rauc
+        == inverted_coverage_rauc
+        == inverted_uniform_rauc
+        == inverted_fixed_rauc
+        == inverted_failure_rauc
+        == inverted_td_rauc
+        == inverted_ablation_rauc
+        and inverted_bgr_r80 == mean_metric(inverted, "uniform", "final_median_r80")
+        and inverted_wins == (0, 0, 4)
+    ):
+        raise ValueError("Expected InvertedPendulum-v5 diagnostic to remain a tied negative result")
+    claims.append(
+        Claim(
+            "InvertedPendulum-v5 official-package limitation",
+            (
+                f"InvertedPendulum-v5 MuJoCo screen ties every method at {fmt(inverted_bgr_rauc, 4)} "
+                f"final RAUC and median $r_{{80}}={fmt(inverted_bgr_r80, 4)}"
+            ),
+            "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "InvertedPendulum-v5 scope-audit table row",
+            (
+                f"InvertedPendulum-v5 & BGR {fmt(inverted_bgr_rauc, 4)}; "
+                f"BGR-Cov. {fmt(inverted_coverage_rauc, 4)} & "
+                f"uniform/fixed/failure-only/TD-loss all {fmt(inverted_uniform_rauc, 4)}; "
+                f"{inverted_wins[0]}/{inverted_wins[1]}/{inverted_wins[2]} ties & tied negative"
+            ),
+            "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+
     probe_rows = read_csv_rows(results_dir / "libero_probe_v2" / "summary.csv")
     valid_rows = sum(1 for row in probe_rows if float(row["valid_rate"]) == 1.0 and not row.get("error"))
     claims.append(
