@@ -4,6 +4,31 @@ This file is the project handoff contract for coding agents working in this
 repository. Read it before editing code, running experiments, changing paper
 claims, or committing results.
 
+## Quick Answer
+
+Current goal: iterate, queue experiments, and reframe the BGR paper until it is
+genuinely plausibly 90%+ likely to get into AAAI main track.
+
+Current status: not there yet. The readiness gate still says
+`NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid mechanism result is the
+main positive evidence, while independent/pre-existing benchmarks and
+OpenVLA/LIBERO learned-policy evidence remain failing or non-promotable.
+
+Immediate priority: fix the weaknesses called out by the review, especially the
+lack of new independent positive evidence, the negative standard-environment
+record, incremental novelty, author-defined metric dependence, and robustness
+fragility. Do not just soften language around unchanged results.
+
+Operational defaults:
+
+- Keep committing and pushing clean checkpoints to `origin/main`.
+- Do not use Docker for this project.
+- Use local or temporary virtualenvs for external packages and `athena` for
+  remote LaTeX/OpenVLA/LIBERO workflows.
+- Stage explicit paths only; many `results/` files are intentionally untracked.
+- Incorporate new results into `paper/main.tex` only after artifacts and checks
+  justify the claim.
+
 ## Goal Snapshot
 
 Last verified: 2026-06-07.
