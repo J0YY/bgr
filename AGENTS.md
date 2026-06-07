@@ -205,15 +205,15 @@ Treat the following as the current paper-weakness backlog:
 - Do not use Docker for this workflow.
 - Commit compact artifacts such as `summary.csv` and `package_versions.json`. Leave raw `results.json`, Slurm logs, and scratch directories untracked unless there is a deliberate reason to package them.
 - Use the `athena` Slurm workflow and repository scripts for heavy OpenVLA/LIBERO work. Do not rely on the dirty remote checkout being clean; prefer local wrapper scripts, explicit environment variables, and `GIT_PULL=0` where the remote tree is known to be dirty.
-- The latest completed learned-policy follow-up is the proximal-anchor
+- A completed learned-policy follow-up is the proximal-anchor
   OpenVLA-OFT adaptation in
   `scripts/queue_openvla_oft_preregistered_proximal_anchor.sh`. It reuses the
   fixed weighted perturbation TFDS roots but changes the optimization objective
   with `PROXIMAL_ANCHOR_L2=1.0`, penalizing deviation of trainable parameters
-  from their resumed official-checkpoint values. It is promotable only if BGR
-  beats both proximal-anchor matched random and the official checkpoint by the
-  fixed +10/400 and +0.02 non-identity perturbation gate while preserving clean
-  identity within -1/100. The original adaptation chain was submitted on 2026-06-05
+  from their resumed official-checkpoint values. Its fixed promotion gate
+  required BGR to beat both proximal-anchor matched random and the official
+  checkpoint by +10/400 and +0.02 non-identity perturbation success while
+  preserving clean identity within -1/100. The original adaptation chain was submitted on 2026-06-05
   13:18 PDT / 21:18 BST as BGR train/merge/clean-eval jobs
   `767128`/`767129`/`767130` and random train/merge/clean-eval jobs
   `767131`/`767132`/`767133`. The fixed perturbation evals were submitted with
@@ -281,10 +281,10 @@ Treat the following as the current paper-weakness backlog:
   jobs `767801`-`767805`, and matched-random jobs `767806`-`767810`. A poll
   immediately after submission showed prep `767789` and official identity
   `767796` running, with all adaptation and BGR/random perturb jobs pending on
-  dependencies. Until compact summaries exist and pass the fixed gate, these
-  are in-flight jobs only, not paper evidence. Poll and sync this route with
+  dependencies. At that intermediate poll, these jobs were not paper evidence
+  until compact summaries passed the fixed gate. Historical poll/sync commands:
   `REMOTE_RUN_ROOT=/work/joy/bgr/runs scripts/sync_openvla_oft_perturb_only_anchor_results.sh --poll`
-  and, once compact summaries exist,
+  and
   `REMOTE_RUN_ROOT=/work/joy/bgr/runs scripts/sync_openvla_oft_perturb_only_anchor_results.sh --sync`.
   A helper poll at 2026-06-07 22:08:57 BST showed prep `767789` completed
   cleanly at 22:06:54 BST, BGR adaptation `767790` running on `c1-g4-04`, and

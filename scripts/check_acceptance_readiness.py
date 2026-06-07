@@ -75,6 +75,12 @@ STALE_ROADMAP_SNIPPETS = [
     "The current preregistered learned-policy route is perturb-only anchored",
     "The latest preregistered learned-policy intervention is",
     "The next preregistered learned-policy route",
+    "is now the active pre-method calibration route",
+    "is the next independent pre-method",
+    "route remains in flight",
+    "route remains unevaluated",
+    "route still cannot be scored",
+    "Until compact summaries exist",
 ]
 
 

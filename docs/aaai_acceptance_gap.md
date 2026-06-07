@@ -828,23 +828,23 @@ package and recording its version before any result is run.
   `RANDOM_DEPENDENCY=afterok:767794`: official jobs `767796`-`767800`, BGR jobs
   `767801`-`767805`, and matched-random jobs `767806`-`767810`. An immediate
   Slurm poll showed prep `767789` and official identity `767796` running, with
-  the adaptation jobs and BGR/random perturb evals dependency-pending. This
-  route remains in flight and should not be added to `paper/main.tex` unless
-  compact summaries clear the fixed learned-policy promotion gate. Poll and
-  sync the route with
+  the adaptation jobs and BGR/random perturb evals dependency-pending. At that
+  intermediate point the route was not paper evidence until compact summaries
+  cleared the fixed learned-policy promotion gate. The historical poll and
+  sync commands were:
   `REMOTE_RUN_ROOT=/work/joy/bgr/runs scripts/sync_openvla_oft_perturb_only_anchor_results.sh --poll`
   and
   `REMOTE_RUN_ROOT=/work/joy/bgr/runs scripts/sync_openvla_oft_perturb_only_anchor_results.sh --sync`.
   A helper poll at 2026-06-07 22:08:57 BST showed prep `767789` completed
   cleanly at 22:06:54 BST, BGR adaptation `767790` running on `c1-g4-04`, and
-  official identity eval `767796` running on `c2-g4-24`; both compact summary
-  paths were still missing, so the route remains unevaluated.
+  official identity eval `767796` running on `c2-g4-24`; at that poll both
+  compact summary paths were still missing.
   A later helper poll at 2026-06-07 22:19:57 BST showed BGR train/merge
   `767790`/`767791`, random train/merge `767793`/`767794`, and official
   identity `767796` completed cleanly. BGR clean eval `767792`, random clean
   eval `767795`, BGR identity perturb eval `767801`, random identity perturb
-  eval `767806`, and official blur `767797` were running; compact summaries
-  were still missing, so the route still cannot be scored.
+  eval `767806`, and official blur `767797` were running; at that poll compact
+  summaries were still missing.
   The clean adaptation eval logs were then summarized locally into
   `results/openvla_oft_goal_adapt_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_v1/summary.csv`.
   BGR and matched random both score 99/100 clean episodes. This satisfies the
@@ -985,8 +985,8 @@ package and recording its version before any result is run.
   The fixed pick-place controller does not provide a usable clean recovery
   interface, so do not build or scale a FetchPickAndPlace replay comparison
   around this controller/interface.
-- Gymnasium MuJoCo Reacher-v5 is now the active pre-method calibration route
-  because it changes both package and reset interface relative to the failed
+- Gymnasium MuJoCo Reacher-v5 was a completed independent-benchmark route that
+  changed both package and reset interface relative to the failed
   MiniGrid, PointMaze, FetchReach, and highway screens. The calibration uses
   Gymnasium's package-owned Reacher-v5 dynamics and target sampling, exact
   MuJoCo state resets, two-joint angular perturbations, and a fixed weak
@@ -1018,8 +1018,8 @@ package and recording its version before any result is run.
   not supportive: BGR 3.8375, BGR-Coverage 3.6708, and uniform 3.2437. Treat
   this as scope evidence that the Reacher route did not solve the independent
   benchmark acceptance gap.
-- Gymnasium MuJoCo InvertedPendulum-v5 is the next independent pre-method
-  route because it changes both task family and reset dynamics relative to the
+- Gymnasium MuJoCo InvertedPendulum-v5 was a completed independent pre-method
+  route that changed both task family and reset dynamics relative to the
   failed MiniGrid, PointMaze, FetchReach, highway, and Reacher screens. The
   calibration uses Gymnasium's package-owned InvertedPendulum-v5 dynamics,
   exact MuJoCo state resets, one-dimensional pole-angle perturbations, and a

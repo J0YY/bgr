@@ -709,15 +709,33 @@ def render_markdown(root: Path) -> str:
         )
     rejected_calibrations = [screen for screen in calibrations if not screen.usable]
     usable_calibrations = [screen for screen in calibrations if screen.usable]
+    retired_calibrations = [
+        screen
+        for screen in usable_calibrations
+        if (screen.name in COMPLETED_METHOD_SCREEN_BY_CALIBRATION)
+        and (root / COMPLETED_METHOD_SCREEN_BY_CALIBRATION[screen.name]).exists()
+    ]
+    retired_calibration_names = {screen.name for screen in retired_calibrations}
+    active_calibrations = [
+        screen
+        for screen in usable_calibrations
+        if screen.name not in retired_calibration_names
+    ]
     if rejected_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in rejected_calibrations)
         lines.append(f"- Rejected pre-method calibration route(s): {names}.")
-    if usable_calibrations:
+    if retired_calibrations:
         names = ", ".join(
             f"`{screen.name}` clean {screen.clean_success:.4f}, range {screen.min_recovery:.4f}--{screen.max_recovery:.4f}, r80 {screen.r80:.4f}"
-            for screen in usable_calibrations
+            for screen in retired_calibrations
         )
-        lines.append(f"- Usable pre-method calibration route(s): {names}.")
+        lines.append(f"- Retired calibrated route(s) that cleared pre-method calibration: {names}.")
+    if active_calibrations:
+        names = ", ".join(
+            f"`{screen.name}` clean {screen.clean_success:.4f}, range {screen.min_recovery:.4f}--{screen.max_recovery:.4f}, r80 {screen.r80:.4f}"
+            for screen in active_calibrations
+        )
+        lines.append(f"- Active pre-method calibration route(s): {names}.")
     lines.extend(
         [
             "",
@@ -749,18 +767,6 @@ def render_markdown(root: Path) -> str:
             "internal learned-policy gate; paper incorporation still requires "
             "claim and package checks."
         )
-    retired_calibrations = [
-        screen
-        for screen in usable_calibrations
-        if (screen.name in COMPLETED_METHOD_SCREEN_BY_CALIBRATION)
-        and (root / COMPLETED_METHOD_SCREEN_BY_CALIBRATION[screen.name]).exists()
-    ]
-    retired_calibration_names = {screen.name for screen in retired_calibrations}
-    active_calibrations = [
-        screen
-        for screen in usable_calibrations
-        if screen.name not in retired_calibration_names
-    ]
     if retired_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in retired_calibrations)
         lines.append(
