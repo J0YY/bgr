@@ -799,6 +799,29 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    reacher = read_csv_rows(results_dir / "reacher_recovery_probe_12seed_v1" / "summary.csv")
+    reacher_bgr_rauc = mean_metric(reacher, "bgr", "final_rauc")
+    reacher_coverage_rauc = mean_metric(reacher, "bgr_coverage", "final_rauc")
+    reacher_uniform_rauc = mean_metric(reacher, "uniform", "final_rauc")
+    reacher_wins = paired_wins(reacher, "bgr", "uniform", "final_rauc")
+    if not (
+        reacher_uniform_rauc > reacher_bgr_rauc
+        and reacher_uniform_rauc > reacher_coverage_rauc
+        and reacher_wins == (4, 8, 0)
+    ):
+        raise ValueError("Expected Reacher-v5 diagnostic to remain a non-promoted negative result")
+    claims.append(
+        Claim(
+            "Reacher-v5 official-package limitation",
+            (
+                f"Reacher-v5 MuJoCo screen gives BGR {fmt(reacher_bgr_rauc, 4)} and "
+                f"BGR-Coverage {fmt(reacher_coverage_rauc, 4)} final RAUC versus uniform "
+                f"{fmt(reacher_uniform_rauc, 4)}, with BGR winning only {reacher_wins[0]}/12 paired seeds"
+            ),
+            "results/reacher_recovery_probe_12seed_v1/summary.csv",
+        )
+    )
+
     probe_rows = read_csv_rows(results_dir / "libero_probe_v2" / "summary.csv")
     valid_rows = sum(1 for row in probe_rows if float(row["valid_rate"]) == 1.0 and not row.get("error"))
     claims.append(

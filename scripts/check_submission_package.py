@@ -465,6 +465,7 @@ CHECKED_CLAIM_ARTIFACTS = [
     "results/grid_margin_target_sensitivity_30seed_v1/summary.csv",
     "results/frozenlake_recovery_focused_30seed_v1/summary.csv",
     "results/libero_probe_v2/summary.csv",
+    "results/reacher_recovery_probe_12seed_v1/summary.csv",
     "results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
     "results/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",

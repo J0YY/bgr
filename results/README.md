@@ -86,6 +86,11 @@ Packaged FrozenLake diagnostic:
   RAUC and 13/17 on clean success, median r80 is lower for BGR (0.7967 vs.
   0.8091), best RAUC is lower (0.6491 vs. 0.6565), and failure-only replay is
   stronger on final RAUC, median r80, AULC, and best RAUC in this run.
+- `results/reacher_recovery_probe_12seed_v1/summary.csv`: fixed 12-seed
+  Gymnasium MuJoCo Reacher-v5 all-method screen. It is included as a limitation,
+  not support, because uniform replay has the highest final RAUC (0.3862), while
+  BGR reaches 0.2907 with 4/8/0 paired wins/losses/ties against uniform and
+  BGR-Coverage reaches 0.2721.
 
 Packaged OpenVLA audit artifacts are:
 

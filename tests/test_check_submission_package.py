@@ -1940,6 +1940,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                     "- `results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv`: p2048 1,000-step low-LR image-augmentation continuation audit.",
                     "Packaged FrozenLake diagnostic:",
                     "- `results/frozenlake_recovery_focused_30seed_v1/summary.csv`: canonical Gym FrozenLake8x8-v1 limitation diagnostic.",
+                    "- `results/reacher_recovery_probe_12seed_v1/summary.csv`: fixed Reacher-v5 limitation diagnostic.",
                     "The p4096 and common-availability sections below are retained as paper-negative diagnostics in this ledger only.",
                     "Their summary CSVs are not part of the anonymous submission manifest or archive.",
                     "",

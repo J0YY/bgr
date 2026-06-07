@@ -38,10 +38,10 @@ The active objective is to move this repository toward a genuinely high-confiden
 
 Current target: iterate, queue experiments, and reframe the paper until the work is plausibly 90%+ likely to clear the AAAI main-track bar. Current status is below that bar: the strongest positive evidence is still the controlled grid-margin mechanism result, while standard-environment and learned-policy probes remain negative or non-promotable.
 
-As of 2026-06-06, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .` reports:
+As of 2026-06-07, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .` reports:
 
 - PASS controlled grid mechanism: pooled RAUC 0.4342 vs 0.3965.
-- FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, MiniGrid LavaGapS7, and PointMaze remain non-promotable.
+- FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, MiniGrid LavaGapS7, PointMaze, FetchReach, and Reacher remain non-promotable.
 - FAIL learned-policy OpenVLA/LIBERO: the latest completed proximal-anchor audit has non-identity success BGR 368/400, official 367/400, and matched random 368/400, with identity BGR 98/100, official 99/100, and random 98/100. BGR ties matched random and beats official by only 1/400, so it fails the fixed +10/400 and +0.02 promotion gate. The earlier weighted perturbation audit is also negative at BGR 367/400, official 367/400, and matched random 370/400.
 - Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
@@ -179,6 +179,7 @@ Treat the following as the current paper-weakness backlog:
 - Compile changed Python tools/scripts with `python3 -m py_compile ...`.
 - Run `PYTHONPATH=src:. python3 scripts/check_paper_claims.py --paper paper/main.tex --results-dir results --figures-dir paper/figures` after paper-facing claim changes.
 - Run `PYTHONPATH=src:. python3 scripts/check_submission_package.py --root . --write-required-manifest` and then `PYTHONPATH=src:. python3 scripts/check_submission_package.py --root .` before committing package-facing changes.
+- Run `git diff --check` before committing.
 
 ## Git Hygiene
 
