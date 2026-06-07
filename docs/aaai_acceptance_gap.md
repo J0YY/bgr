@@ -102,6 +102,25 @@ only 2/4 paired seeds against uniform and median r80 is lower than uniform
 (0.4200 vs. 0.4825). Do not scale or promote this route without a genuinely new
 preregistered premise.
 
+Next independent-benchmark route, opened 2026-06-07: official bsuite
+`deep_sea`. This route is materially different from the retired local
+classic-control, MiniGrid, PointMaze, FetchReach, highway parking, Box2D, and
+MuJoCo screens: it uses bsuite's package-owned sparse-reward DeepSea task and
+randomized action mapping. The recovery interface uses exact restart states on
+the DeepSea chain and a fixed adverse perturbation family that shifts the
+restart column leftward away from the narrow rewarding path. The isolated
+environment is `/tmp/bgr_bsuite_venv` with `bsuite==0.3.6`.
+
+The fixed all-method pre-promotion command is:
+`PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_deepsea_recovery_probe.py --out results/bsuite_deepsea_recovery_probe_4seed_v1`.
+
+This can only justify a 30-seed scale-up if default BGR or BGR-Coverage beats
+uniform, fixed-radius, failure-only, TD/loss-priority, and
+BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform and
+non-contradictory, non-saturated median-r80 evidence. Passing this 4-seed
+screen is not paper evidence; it is only permission to run the fixed 30-seed
+promotion screen.
+
 ## Promotion Criteria For A New Independent Benchmark
 
 A new benchmark result should be promoted into `paper/main.tex` only if it meets
