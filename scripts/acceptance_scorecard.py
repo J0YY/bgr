@@ -808,6 +808,11 @@ def render_markdown(root: Path) -> str:
             3,
             "- The InvertedPendulum-v5 calibration also cleared pre-method checks, but its fixed 4-seed method screen ties all methods on final RAUC and median-r80; do not scale or promote it.",
         )
+    if any(screen.name == "Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration" for screen in retired_calibrations):
+        priority_lines.insert(
+            4,
+            "- The InvertedDoublePendulum-v5 calibration cleared pre-method checks, but its fixed 4-seed method screen collapses clean success; the small BGR RAUC edge is not acceptance evidence.",
+        )
     if active_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in active_calibrations)
         priority_lines.insert(

@@ -14,8 +14,8 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 
 - Independent benchmark: no screen clears the 4/4 promotion screen. The closest screen, `MiniGrid FourRooms official-package` with `bgr_coverage`, clears 3/4 gates and fails on final_median_r80-ceiling-saturated.
 - Learned policy: Proximal-anchor OpenVLA audit does not clear the learned-policy promotion gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
-- Retired calibrated route(s): `Gymnasium MuJoCo Reacher-v5 calibration`, `Gymnasium MuJoCo InvertedPendulum-v5 calibration` cleared pre-method calibration, but the corresponding fixed method screen is negative or tied; not active acceptance evidence.
-- Active route: `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration` cleared pre-method calibration; run only the fixed preregistered all-method screen before interpreting it.
+- Retired calibrated route(s): `Gymnasium MuJoCo Reacher-v5 calibration`, `Gymnasium MuJoCo InvertedPendulum-v5 calibration`, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration` cleared pre-method calibration, but the corresponding fixed method screen is negative or tied; not active acceptance evidence.
+- Active route: no queued learned-policy route is recorded in the local ledgers.
 
 ## Independent Benchmark Screens
 
@@ -23,6 +23,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | --- | --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | --- | --- |
 | MiniGrid FourRooms official-package | bgr_coverage | 4 | +0.1075 (4/0/0) | +0.0464 (3/1/0) | +0.0071 (2/2/0) | final_median_r80 | +0.0000 (0/0/4) | 3/4 | fail | final_median_r80-ceiling-saturated |
 | MiniGrid FourRooms abs-r10 follow-up | bgr_coverage | 4 | +0.1075 (4/0/0) | +0.0464 (3/1/0) | +0.0071 (2/2/0) | final_abs_r10 | +0.0000 (0/0/4) | 3/4 | fail | final_abs_r10-floor-saturated |
+| Gymnasium MuJoCo InvertedDoublePendulum-v5 | bgr | 4 | +0.0799 (1/0/3) | +0.0833 (1/0/3) | +0.0833 (1/0/3) | final_median_r80 | -0.1900 (0/1/3) | 2/4 | fail | uniform-gate, final_median_r80-contradiction |
 | MiniGrid FourRooms official-package | bgr | 4 | +0.0641 (3/1/0) | +0.0030 (3/1/0) | -0.0362 (1/3/0) | final_median_r80 | +0.0000 (0/0/4) | 2/4 | fail | state-priority-ablation, final_median_r80-ceiling-saturated |
 | MiniGrid FourRooms abs-r10 follow-up | bgr | 4 | +0.0641 (3/1/0) | +0.0030 (3/1/0) | -0.0362 (1/3/0) | final_abs_r10 | +0.0000 (0/0/4) | 2/4 | fail | state-priority-ablation, final_abs_r10-floor-saturated |
 | FrozenLake8x8 | bgr | 30 | +0.0140 (14/16/0) | -0.0032 (14/16/0) | n/a | final_median_r80 | -0.0125 (12/18/0) | 2/4 | fail | required-baseline, final_median_r80-contradiction |
@@ -31,6 +32,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | PointMaze U-Maze clean-shield | bgr_clean_shield | 4 | +0.0247 (2/2/0) | -0.3010 (0/3/1) | +0.1215 (2/1/1) | final_abs_r20 | -0.1333 (1/2/1) | 1/4 | fail | uniform-gate, required-baseline, final_abs_r20-contradiction |
 | Gymnasium MuJoCo InvertedPendulum-v5 | bgr | 4 | +0.0000 (0/0/4) | +0.0000 (0/0/4) | +0.0000 (0/0/4) | final_median_r80 | +0.0000 (0/0/4) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
 | Gymnasium MuJoCo InvertedPendulum-v5 | bgr_coverage | 4 | +0.0000 (0/0/4) | +0.0000 (0/0/4) | +0.0000 (0/0/4) | final_median_r80 | +0.0000 (0/0/4) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
+| Gymnasium MuJoCo InvertedDoublePendulum-v5 | bgr_coverage | 4 | -0.0035 (0/1/3) | +0.0000 (0/0/4) | +0.0000 (0/0/4) | final_median_r80 | +0.0000 (0/0/4) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
 | PointMaze U-Maze clean-shield | bgr_coverage | 4 | -0.0128 (2/2/0) | -0.3385 (0/4/0) | +0.0840 (3/1/0) | final_abs_r20 | -0.1750 (0/2/2) | 1/4 | fail | uniform-gate, required-baseline, final_abs_r20-contradiction |
 | MiniGrid FourRooms mid2-5 | bgr_coverage | 4 | -0.0257 (1/3/0) | -0.1377 (0/4/0) | -0.0403 (1/3/0) | final_median_r80 | +0.0617 (2/2/0) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
 | FetchReach-v4 goal recovery | bgr_coverage | 4 | -0.0438 (0/1/3) | -0.0562 (0/2/2) | -0.0063 (1/1/2) | final_median_r80 | +0.0000 (0/0/4) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
@@ -65,8 +67,8 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.
 - The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.
 - The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is now negative and should not be promoted.
-- Active pre-method calibration route(s) awaiting fixed comparison result: `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration`.
-- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The InvertedPendulum-v5 calibration also cleared pre-method checks, but its fixed 4-seed method screen ties all methods on final RAUC and median-r80; do not scale or promote it.
+- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
+- The InvertedDoublePendulum-v5 calibration cleared pre-method checks, but its fixed 4-seed method screen collapses clean success; the small BGR RAUC edge is not acceptance evidence.
 - The latest proximal-anchor OpenVLA audit is complete and fails the learned-policy gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
-- The next acceptance-moving work is the fixed all-method screen for the active pre-method calibration route; do not tune the protocol after seeing its method results.
+- The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; the retired MuJoCo routes are scope evidence, not acceptance evidence.

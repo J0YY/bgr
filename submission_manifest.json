@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "43c6b8ea0c859d91e2091f167126ba2b9596c44774b4b3f30523c32d07bb1f26",
-      "size_bytes": 277672
+      "sha256": "c0b83aa855db5cf28ec7c0e69ae4f81d79ef788c28fcac2d0f13d0cef3afc641",
+      "size_bytes": 281017
     },
     {
       "path": "results/environment_v1/README.md",
@@ -584,6 +584,41 @@
       "path": "results/highway_parking_recovery_calibration_12seed_v1/summary.json",
       "sha256": "19fe2ca6af7b470d601b5d9fa5766b7f2d5c21b09f493004417ea34e4bf204e2",
       "size_bytes": 397
+    },
+    {
+      "path": "results/inverted_double_pendulum_recovery_calibration_12seed_v1/package_versions.json",
+      "sha256": "ac3e3470d1bb01d3a282bce3eeb865663209b0867ae31ba9c319f47c38b9742d",
+      "size_bytes": 100
+    },
+    {
+      "path": "results/inverted_double_pendulum_recovery_calibration_12seed_v1/recovery_rows.csv",
+      "sha256": "b3e7b7b38df40e28afb6515a14557ef860dc27fdf5dc9f0f42a9f0c0db8870ff",
+      "size_bytes": 34925
+    },
+    {
+      "path": "results/inverted_double_pendulum_recovery_calibration_12seed_v1/summary.json",
+      "sha256": "b31f2129777d5deb68443a161546e9a8ab110ea685db66c8734f9fdfabeb0334",
+      "size_bytes": 818
+    },
+    {
+      "path": "results/inverted_double_pendulum_recovery_probe_4seed_v1/aggregate.csv",
+      "sha256": "4efa9362bfc32672187b1a0d3d617e8c56719f44d86603931faef72abc9c16dd",
+      "size_bytes": 498
+    },
+    {
+      "path": "results/inverted_double_pendulum_recovery_probe_4seed_v1/history.csv",
+      "sha256": "54cea27a36b5ac2cdcebe31da08a0b0bd415d33046c49c81d1ae727e18770259",
+      "size_bytes": 4698
+    },
+    {
+      "path": "results/inverted_double_pendulum_recovery_probe_4seed_v1/package_versions.json",
+      "sha256": "ac3e3470d1bb01d3a282bce3eeb865663209b0867ae31ba9c319f47c38b9742d",
+      "size_bytes": 100
+    },
+    {
+      "path": "results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv",
+      "sha256": "f3fee9d6bc2dc5332a501855abc2e7eb5ffc9b67b684eadc83554b044e052d4a",
+      "size_bytes": 1903
     },
     {
       "path": "results/inverted_pendulum_recovery_calibration_12seed_v1/package_versions.json",
@@ -812,8 +847,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "65b54460106c2db6310052a239089cb5fbac9ba59b6733f8c27a4b92ec6b344d",
-      "size_bytes": 34655
+      "sha256": "d3d39a663357e29fd4e65314ac38c730de59e73916e40cc93f17bf5190f43182",
+      "size_bytes": 35638
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -827,8 +862,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "fdfaee068ee40a41fdac71929492642b65de74f294992767e492fa9cffdfd60a",
-      "size_bytes": 27910
+      "sha256": "92e56fb0fb473dff712a66f3a26aecad1a983b644514cad1c6ce86b4e30aa523",
+      "size_bytes": 30216
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -842,8 +877,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "8a15af5170248cb16fc2124538fb364c6667b085d55e4e81423a1e9c560f26b0",
-      "size_bytes": 237759
+      "sha256": "131e9c77b5efc459525320a3864b4ff5b22a1adb3c04918ca001eeee9724e08d",
+      "size_bytes": 238593
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1137,8 +1172,8 @@
     },
     {
       "path": "tests/test_acceptance_scorecard.py",
-      "sha256": "12a21d53e2da3ef4f4390ae95317a47d741daea9a5dbcfc3de9fc256749f2581",
-      "size_bytes": 17309
+      "sha256": "9b511ab5bb7600c58f62a631187aaa08aa985b967d68cbf92a297206c24a27de",
+      "size_bytes": 19630
     },
     {
       "path": "tests/test_aggregate_results.py",
@@ -1256,6 +1291,11 @@
       "size_bytes": 2283
     },
     {
+      "path": "tests/test_inverted_double_pendulum_recovery_calibration.py",
+      "sha256": "0601cfc5bf25d4ac281cfdc383b60759915f322c137e54281ac6fa4a4f29c1c5",
+      "size_bytes": 3174
+    },
+    {
       "path": "tests/test_inverted_pendulum_recovery_calibration.py",
       "sha256": "7f4cbfa4ef4e9adc08bd507de7ba27ea88d7f15f5c06f4ade65ac3d0ae191473",
       "size_bytes": 3206
@@ -1369,6 +1409,16 @@
       "path": "tools/highway_parking_recovery_calibration.py",
       "sha256": "4ba562330fa4faa9c9028cef447a6b011afb7d43dfea734056b6bbb4ca7c684e",
       "size_bytes": 8651
+    },
+    {
+      "path": "tools/inverted_double_pendulum_recovery_calibration.py",
+      "sha256": "19710d82a018f3ed40bd63e86d8088dfc154ca182f7054da06cb293d7b83b903",
+      "size_bytes": 11542
+    },
+    {
+      "path": "tools/inverted_double_pendulum_recovery_probe.py",
+      "sha256": "e9805eeaa5d6464246555868356c64c5990a5d8277082e75897873f4511a426e",
+      "size_bytes": 23268
     },
     {
       "path": "tools/inverted_pendulum_recovery_calibration.py",

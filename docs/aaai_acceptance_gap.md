@@ -932,8 +932,8 @@ package and recording its version before any result is run.
   r80 0.2100, and best RAUC 0.7500. BGR has 0/0/4 paired wins/losses/ties
   against uniform on final RAUC, so this route fails the visible-effect,
   paired-win, strong-baseline, and state-priority-ablation gates.
-- Gymnasium MuJoCo InvertedDoublePendulum-v5 is the active independent
-  pre-method route because it changes the MuJoCo task, perturbation geometry,
+- Gymnasium MuJoCo InvertedDoublePendulum-v5 was the next independent
+  pre-method route because it changed the MuJoCo task, perturbation geometry,
   and controller family relative to the retired Reacher-v5 and
   InvertedPendulum-v5 routes. The calibration uses Gymnasium's package-owned
   `InvertedDoublePendulum-v5` dynamics, exact MuJoCo state resets from package
@@ -944,7 +944,7 @@ package and recording its version before any result is run.
   0.0000--1.0000, RAUC 0.4259, and r80 0.2825 on a 0--0.90 perturbation grid
   in the isolated environment (`gymnasium==1.3.0`, `mujoco==3.9.0`,
   `numpy==2.4.6`). This is not BGR evidence.
-  The full comparison tool is fixed before method results at
+  The full comparison tool was fixed before method results at
   `tools/inverted_double_pendulum_recovery_probe.py`. It keeps the same
   official package dynamics, exact MuJoCo reset interface, two-pole
   perturbation family, 0--0.90 evaluation grid, 4-seed pre-promotion screen
@@ -957,3 +957,11 @@ package and recording its version before any result is run.
   failure-only, TD/loss-priority, and BGR-uniform-radius on final RAUC with a
   visible gap, paired wins over uniform, and non-contradictory non-saturated
   median-r80 metrics.
+  The completed 4-seed screen is negative and should not be scaled: default
+  BGR has the highest final RAUC (0.0833 vs. 0.0035 for uniform and 0.0000 for
+  the other baselines), but final clean success collapses to 0.2500 for BGR,
+  0.0000 for BGR-Coverage, and 0.0208 for uniform. The paired RAUC split
+  against uniform is only 1/0/3, and median-r80 is saturated at 0.9000 for
+  every method except the single surviving BGR seed. Treat this as scope
+  evidence that this MuJoCo route does not solve the independent-benchmark
+  acceptance gap.

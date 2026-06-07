@@ -43,6 +43,10 @@ CALIBRATION_SUMMARIES = [
     ("Highway parking calibration", "results/highway_parking_recovery_calibration_12seed_v1/summary.json"),
     ("Reacher-v5 calibration", "results/reacher_recovery_calibration_12seed_v1/summary.json"),
     ("InvertedPendulum-v5 calibration", "results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json"),
+    (
+        "InvertedDoublePendulum-v5 calibration",
+        "results/inverted_double_pendulum_recovery_calibration_12seed_v1/summary.json",
+    ),
 ]
 ROADMAP_DOCS = [
     "AGENTS.md",
@@ -415,6 +419,41 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"BGR-Coverage {inverted_coverage:.4f}, uniform {inverted_uniform:.4f}, "
                 f"failure-only {inverted_failure:.4f}, fixed {inverted_fixed:.4f}, "
                 f"TD-loss {inverted_td:.4f}, uniform-radius {inverted_ablation:.4f}, W/L/T={best_inverted_wins}"
+            )
+
+    inverted_double_path = root / "results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv"
+    if inverted_double_path.exists():
+        inverted_double = read_rows(inverted_double_path)
+        double_bgr = mean_metric(inverted_double, "bgr", "final_rauc")
+        double_coverage = mean_metric(inverted_double, "bgr_coverage", "final_rauc")
+        double_uniform = mean_metric(inverted_double, "uniform", "final_rauc")
+        double_failure = mean_metric(inverted_double, "failure_only", "final_rauc")
+        double_fixed = mean_metric(inverted_double, "fixed", "final_rauc")
+        double_td = mean_metric(inverted_double, "td_loss", "final_rauc")
+        double_ablation = mean_metric(inverted_double, "bgr_uniform_radius", "final_rauc")
+        double_bgr_clean = mean_metric(inverted_double, "bgr", "final_clean")
+        double_coverage_clean = mean_metric(inverted_double, "bgr_coverage", "final_clean")
+        double_bgr_wins = paired_wins(inverted_double, "bgr", "uniform", "final_rauc")
+        double_coverage_wins = paired_wins(inverted_double, "bgr_coverage", "uniform", "final_rauc")
+        best_double_wins = double_bgr_wins if double_bgr >= double_coverage else double_coverage_wins
+        if not (
+            (double_bgr > double_uniform or double_coverage > double_uniform)
+            and max(double_bgr, double_coverage) > max(
+                double_failure,
+                double_fixed,
+                double_td,
+                double_ablation,
+            )
+            and max(double_bgr_clean, double_coverage_clean) >= 0.75
+            and best_double_wins[0] >= 3
+        ):
+            failures.append(
+                f"InvertedDoublePendulum-v5 negative/collapsed: BGR {double_bgr:.4f}, "
+                f"BGR-Coverage {double_coverage:.4f}, uniform {double_uniform:.4f}, "
+                f"failure-only {double_failure:.4f}, fixed {double_fixed:.4f}, "
+                f"TD-loss {double_td:.4f}, uniform-radius {double_ablation:.4f}, "
+                f"BGR clean {double_bgr_clean:.4f}, BGR-Coverage clean {double_coverage_clean:.4f}, "
+                f"W/L/T={best_double_wins}"
             )
 
     for label, relative_path in CALIBRATION_SUMMARIES:

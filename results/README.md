@@ -461,13 +461,13 @@ Compact artifacts:
 
 ## Internal Gymnasium MuJoCo InvertedDoublePendulum Calibration
 
-This is the active pre-method calibration route for another official Gymnasium
+This began as a pre-method calibration route for another official Gymnasium
 MuJoCo task, `InvertedDoublePendulum-v5`. It uses Gymnasium's package-owned
-dynamics through `tools/inverted_double_pendulum_recovery_calibration.py`; it
-is not a BGR method comparison. The reset interface starts from the package
-seeded reset state, applies a two-pole angular perturbation, zeros velocities,
-and evaluates a fixed finite-difference LQR balance controller over a 250-step
-survival horizon.
+dynamics through `tools/inverted_double_pendulum_recovery_calibration.py`; the
+calibration itself is not a BGR method comparison. The reset interface starts
+from the package seeded reset state, applies a two-pole angular perturbation,
+zeros velocities, and evaluates a fixed finite-difference LQR balance
+controller over a 250-step survival horizon.
 
 Command:
 
@@ -486,8 +486,8 @@ Compact artifacts:
 - `results/inverted_double_pendulum_recovery_calibration_12seed_v1/recovery_rows.csv`
 - `results/inverted_double_pendulum_recovery_calibration_12seed_v1/package_versions.json`
 
-This calibration is only permission to run the fixed all-method screen. The
-comparison tool is fixed before method-comparison results at
+This calibration only gave permission to run the fixed all-method screen. The
+comparison tool was fixed before method-comparison results at
 `tools/inverted_double_pendulum_recovery_probe.py`. It keeps the official
 `InvertedDoublePendulum-v5` package dynamics, exact MuJoCo state resets,
 two-pole angular perturbation family, 0--0.90 evaluation grid, and a 4-seed
@@ -508,6 +508,20 @@ route unless default BGR or BGR-Coverage beats uniform, fixed-radius,
 failure-only, TD/loss-priority, and the state-priority/uniform-radius ablation
 on final RAUC with a visible effect, paired wins over uniform, and
 non-contradictory non-saturated median-r80 metrics.
+
+The completed 4-seed screen is negative and should not be scaled. Default BGR
+has the highest final RAUC (0.0833 vs. 0.0035 for uniform and 0.0000 for the
+other baselines), but this comes with clean-success collapse: BGR final clean is
+0.2500, BGR-Coverage is 0.0000, and uniform is 0.0208. The paired RAUC split
+against uniform is only 1/0/3, and median-r80 is saturated at 0.9000 for every
+method except the single surviving BGR seed. This is not acceptance evidence.
+
+Compact artifacts:
+
+- `results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv`
+- `results/inverted_double_pendulum_recovery_probe_4seed_v1/aggregate.csv`
+- `results/inverted_double_pendulum_recovery_probe_4seed_v1/history.csv`
+- `results/inverted_double_pendulum_recovery_probe_4seed_v1/package_versions.json`
 
 ## Internal Official PointMaze Diagnostic
 
