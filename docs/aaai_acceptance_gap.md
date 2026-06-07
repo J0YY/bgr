@@ -81,11 +81,10 @@ the later method screen must be fixed before method outcomes and must use the
 same task, checkpoint, perturbation grid, and promotion rules as the independent
 benchmark criteria below.
 
-Calibration result: the fixed 12-seed run clears the pre-method gate with clean
-success 0.9167, recovery range 0.5833--0.9167, RAUC 0.7722, and median r80
-0.5300. The active acceptance-moving work is now the fixed all-method
-LunarLander screen; do not interpret or tune BGR variants until that screen is
-implemented and preregistered.
+Calibration result: the fixed 12-seed run cleared the pre-method gate with
+clean success 0.9167, recovery range 0.5833--0.9167, RAUC 0.7722, and median
+r80 0.5300. This allowed a fixed all-method LunarLander screen; it did not
+itself create BGR evidence.
 
 The fixed all-method LunarLander screen is now implemented at
 `tools/lunarlander_recovery_probe.py` and preregistered with:

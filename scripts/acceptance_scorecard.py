@@ -893,7 +893,7 @@ def render_markdown(root: Path) -> str:
         )
     elif inflight is None and usable_calibrations:
         priority_lines.append(
-            "- The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; the retired MuJoCo routes are scope evidence, not acceptance evidence."
+            "- The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; retired calibrated routes are scope evidence, not acceptance evidence."
         )
     elif inflight is None:
         priority_lines.append(

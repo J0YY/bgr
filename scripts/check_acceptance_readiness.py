@@ -70,6 +70,9 @@ STALE_ROADMAP_SNIPPETS = [
     "The next harder Gymnasium-Robotics calibration route",
     "The next Gymnasium-Robotics object calibration",
     "Official MiniGrid-LavaCrossingS9N3 is the next",
+    "The current newly opened independent route",
+    "The active acceptance-moving work is now the fixed all-method LunarLander screen",
+    "The current preregistered learned-policy route is perturb-only anchored",
 ]
 
 
