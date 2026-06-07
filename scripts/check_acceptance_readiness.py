@@ -10,9 +10,9 @@ from pathlib import Path
 from statistics import mean
 
 OPENVLA_NON_IDENTITY_PERTURBATIONS = {"blur", "brightness", "occlusion", "shift"}
-OPENVLA_WEIGHTED_AVAILABLE = (
+OPENVLA_WEIGHTED_COMPLETE = (
     "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_"
-    "imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary_available.csv"
+    "imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv"
 )
 OPENVLA_LEGACY_COMPLETE = (
     "results/openvla_oft_perturb_eval_cleanmix_p4096_commonavail_step50500_lr5em7_identitylora_imageaug_"
@@ -149,11 +149,20 @@ def learned_policy_inflight_detail(root: Path) -> str | None:
     ):
         return None
 
+    if "767128` failed" in ledger_text or "767128 failed" in ledger_text:
+        return (
+            "proximal-anchor route failed before producing evidence: BGR train job "
+            "767128 exited 1:0 with a PyTorch DDP ready-twice error in the proximal-anchor "
+            "wrapper, leaving downstream BGR/random jobs dependency-held; repair or retire "
+            "the route before applying the learned-policy gate"
+        )
+
     return (
-        "proximal-anchor route in flight, not yet evidence: adaptation jobs "
-        "BGR 767128/767129/767130 and random 767131/767132/767133 are queued; "
-        "fixed perturbation jobs official 767134--767138, BGR 767139--767143, "
-        "and random 767144--767148 must finish before the +10/400 and +0.02 learned-policy gate can be checked"
+        "proximal-anchor route unsummarized, not yet evidence: adaptation jobs "
+        "BGR 767128/767129/767130 and random 767131/767132/767133 have no complete "
+        "fixed summaries; fixed perturbation jobs official 767134--767138, BGR "
+        "767139--767143, and random 767144--767148 must finish before the +10/400 "
+        "and +0.02 learned-policy gate can be checked"
     )
 
 
@@ -375,7 +384,7 @@ def learned_policy_gate(root: Path) -> GateResult:
     if (root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE).exists():
         return learned_policy_summary_gate(root, OPENVLA_PROXIMAL_ANCHOR_COMPLETE, label="latest proximal-anchor audit")
 
-    weighted_path = root / OPENVLA_WEIGHTED_AVAILABLE
+    weighted_path = root / OPENVLA_WEIGHTED_COMPLETE
     if weighted_path.exists():
         rows = read_rows(weighted_path)
         bgr_success, bgr_episodes = perturbation_total(rows, "bgr", OPENVLA_NON_IDENTITY_PERTURBATIONS)
@@ -393,8 +402,6 @@ def learned_policy_gate(root: Path) -> GateResult:
         official_margin = bgr_success - official_success
         official_rate_margin = bgr_success / bgr_episodes - official_success / official_episodes
         random_detail = f"random {random_success}/{random_episodes}"
-        if random_episodes < 400:
-            random_detail = f"{random_detail} available rows; random shift pending"
         official_gate_impossible = (
             bgr_episodes == 400
             and official_episodes == 400
@@ -402,7 +409,7 @@ def learned_policy_gate(root: Path) -> GateResult:
         )
         gate_detail = ""
         if official_gate_impossible:
-            gate_detail = "; official gate already impossible; pending random row is ledger completion only"
+            gate_detail = "; weighted audit complete and negative against the preregistered gate"
         if inflight_detail:
             gate_detail = f"{gate_detail}; {inflight_detail}"
         clean_floor = max(official_identity, random_identity) - 1

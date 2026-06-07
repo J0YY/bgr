@@ -4414,6 +4414,8 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "only one episode above official (367/400)",
                         "The 1,000-step low-learning-rate continuation is also negative",
                         "BGR gives 366/400 non-identity perturbation successes",
+                        "The follow-up weighted perturbation curriculum is also negative",
+                        "matched random reaches 370/400",
                     ]
                 ),
                 encoding="utf-8",
@@ -4540,6 +4542,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "The 300-step image-augmentation continuation gives BGR and matched random 368/400 perturbed successes each",
                         "only one episode above official (367/400)",
                         "The 1,000-step low-learning-rate continuation is also negative",
+                        "The follow-up weighted perturbation curriculum is also negative",
                     ]
                 ),
                 encoding="utf-8",

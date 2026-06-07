@@ -755,7 +755,7 @@ def load_openvla_adaptation(results_dir: Path) -> list[dict[str, str | int]]:
         ),
         (
             "Weighted perturbation non-id.",
-            results_dir / OPENVLA_WEIGHTED_PERTURB_RUN / "summary_available.csv",
+            results_dir / OPENVLA_WEIGHTED_PERTURB_RUN / "summary.csv",
             {"blur", "brightness", "occlusion", "shift"},
         ),
     ]

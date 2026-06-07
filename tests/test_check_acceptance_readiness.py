@@ -3,14 +3,14 @@ import unittest
 from pathlib import Path
 
 from scripts.check_acceptance_readiness import OPENVLA_PROXIMAL_ANCHOR_COMPLETE
-from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_AVAILABLE
+from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_COMPLETE
 from scripts.check_acceptance_readiness import independent_benchmark_gate
 from scripts.check_acceptance_readiness import learned_policy_gate
 from scripts.check_acceptance_readiness import roadmap_hygiene_gate
 
 
 def _write_weighted_summary(root: Path) -> None:
-    path = root / OPENVLA_WEIGHTED_AVAILABLE
+    path = root / OPENVLA_WEIGHTED_COMPLETE
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         "\n".join(
@@ -30,6 +30,7 @@ def _write_weighted_summary(root: Path) -> None:
                 "random,blur,100,99,0.99",
                 "random,brightness,100,99,0.99",
                 "random,occlusion,100,75,0.75",
+                "random,shift,100,97,0.97",
                 "",
             ]
         ),
@@ -116,9 +117,9 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
         self.assertIn("latest weighted audit", gate.detail)
         self.assertIn("BGR 367/400", gate.detail)
         self.assertIn("official 367/400", gate.detail)
-        self.assertIn("random 273/300 available rows", gate.detail)
+        self.assertIn("random 370/400", gate.detail)
         self.assertIn("official_margin=0", gate.detail)
-        self.assertIn("official gate already impossible", gate.detail)
+        self.assertIn("weighted audit complete and negative", gate.detail)
 
     def test_learned_policy_gate_reports_proximal_anchor_inflight(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -132,7 +133,7 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
             gate = learned_policy_gate(root)
 
         self.assertFalse(gate.passed)
-        self.assertIn("proximal-anchor route in flight", gate.detail)
+        self.assertIn("proximal-anchor route unsummarized", gate.detail)
         self.assertIn("not yet evidence", gate.detail)
         self.assertIn("767128/767129/767130", gate.detail)
         self.assertIn("767144--767148", gate.detail)
@@ -153,7 +154,7 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
             gate = learned_policy_gate(root)
 
         self.assertFalse(gate.passed)
-        self.assertNotIn("proximal-anchor route in flight", gate.detail)
+        self.assertNotIn("proximal-anchor route unsummarized", gate.detail)
         self.assertIn("latest proximal-anchor audit incomplete", gate.detail)
         self.assertIn("missing bgr/blur", gate.detail)
 

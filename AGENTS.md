@@ -42,7 +42,7 @@ As of 2026-06-06, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.p
 
 - PASS controlled grid mechanism: pooled RAUC 0.4342 vs 0.3965.
 - FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, MiniGrid LavaGapS7, and PointMaze remain non-promotable.
-- FAIL learned-policy OpenVLA/LIBERO: the latest weighted perturbation audit has non-identity success BGR 367/400 and official 367/400, with matched-random 273/300 available rows. Random-shift job `766831` completed on Athena, but the remote weighted `summary.csv` still has only 14 completed rows and is missing the random/shift row. The official-checkpoint gate is already impossible because the required margin is +10/400 and +0.02 absolute success. The proximal-anchor route also needs triage: BGR train job `767128` failed and downstream dependency-held jobs cannot produce a valid summary until repaired or explicitly retired.
+- FAIL learned-policy OpenVLA/LIBERO: the completed weighted perturbation audit has non-identity success BGR 367/400, official 367/400, and matched random 370/400. BGR ties the official checkpoint and trails matched random, so it fails the fixed +10/400 and +0.02 promotion gate. The proximal-anchor route also needs triage: BGR train job `767128` failed with a PyTorch DDP ready-twice error in the proximal-anchor wrapper, and downstream dependency-held jobs cannot produce a valid summary until the route is repaired or explicitly retired.
 - Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
 The practical goal is not to make the paper sound accepted. The practical goal is to find or build defensible evidence that survives the acceptance criteria below, then incorporate only those results into `paper/main.tex`.
@@ -106,18 +106,14 @@ Treat the following as the current paper-weakness backlog:
 - Commit compact artifacts such as `summary.csv` and `package_versions.json`. Leave raw `results.json`, Slurm logs, and scratch directories untracked unless there is a deliberate reason to package them.
 - Use the `athena` Slurm workflow and repository scripts for heavy OpenVLA/LIBERO work. Do not rely on the dirty remote checkout being clean; prefer local wrapper scripts, explicit environment variables, and `GIT_PULL=0` where the remote tree is known to be dirty.
 - The latest completed learned-policy follow-up is the preregistered weighted
-  OpenVLA perturbation curriculum. It is a negative audit: before the
-  matched-random shift row finished, BGR's completed non-identity total was
-  already 367/400, tied with the official checkpoint's 367/400, so it cannot
-  clear the required +10/400 and +0.02 official-checkpoint margins. A remote
-  Athena poll on 2026-06-06 03:05 PDT / 11:05 BST showed random-shift job
-  `766831` completed successfully, but the remote weighted `summary.csv` still
-  had only 15 lines, meaning header plus 14 completed rows, and did not contain
-  the random/shift row. Do not sync this as complete until the remote log or
-  summarizer explains the missing row. The helper writes incomplete syncs to
-  `summary_available.csv` and only writes `summary.csv` if the fixed gate rows
-  are complete. Do not treat the final random-shift row as paper-positive
-  evidence.
+  OpenVLA perturbation curriculum. It is a negative audit: random-shift job
+  `766831` completed successfully with 97/100 success, producing the complete
+  non-identity totals BGR 367/400, official 367/400, and matched random
+  370/400. BGR ties the official checkpoint and trails matched random, so it
+  cannot clear the required +10/400 and +0.02 promotion margins. The compact
+  local artifact is
+  `results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`.
+  Do not treat this as paper-positive evidence.
 - The latest preregistered learned-policy route is the proximal-anchor
   OpenVLA-OFT adaptation in
   `scripts/queue_openvla_oft_preregistered_proximal_anchor.sh`. It reuses the
@@ -138,11 +134,14 @@ Treat the following as the current paper-weakness backlog:
   were dependency-held with `DependencyNeverSatisfied`. Official identity job
   `767134` completed, official blur job `767135` remained pending on
   unavailable GPU nodes, and other official perturb jobs were dependency-held.
-  Remote proximal perturb/adapt summaries were still missing. Next action:
-  inspect the remote `767128` failure log and the weighted random-shift log,
-  then either repair a legitimate execution bug under the same preregistered
-  protocol or explicitly record the route as failed. Do not use `--sync` until
-  compact `summary.csv` files exist and pass the fixed gate checker.
+  Remote proximal perturb/adapt summaries were still missing. Log inspection
+  showed `767128` failed during `normalized_loss.backward()` with PyTorch DDP
+  reporting `Expected to mark a variable ready only once` for
+  `base_model.model.vision_backbone.fused_featurizer.attn_pool.mlp.fc2.lora_B.default.weight`.
+  Next action: repair the proximal-anchor wrapper under the same preregistered
+  protocol, likely by making the DDP graph static or avoiding parameter use
+  outside the forward graph, or explicitly retire the route. Do not use `--sync`
+  until compact `summary.csv` files exist and pass the fixed gate checker.
 
 ## Paper Workflow
 

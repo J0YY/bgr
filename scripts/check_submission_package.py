@@ -441,7 +441,7 @@ OPENVLA_CLAIM_ARTIFACTS = [
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
-    "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary_available.csv",
+    "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv",
 ]
 CHECKED_CLAIM_ARTIFACTS = [
     "paper/figures/estimator_stats.csv",
@@ -1506,6 +1506,8 @@ def check_root_readme_openvla_status(root: Path) -> list[str]:
         "only one episode above official (367/400)",
         "The 1,000-step low-learning-rate continuation is also negative",
         "BGR gives 366/400 non-identity perturbation successes",
+        "The follow-up weighted perturbation curriculum is also negative",
+        "matched random reaches 370/400",
     ]
     missing = [snippet for snippet in required if snippet not in normalized_text]
     if missing:
@@ -1545,6 +1547,7 @@ def check_paper_readme_openvla_status(root: Path) -> list[str]:
         "The 10-task visual perturbation audit gives BGR 367/400 perturbed successes",
         "trailing matched random by one episode (368/400)",
         "The 1,000-step low-learning-rate continuation is also negative",
+        "The follow-up weighted perturbation curriculum is also negative",
     ]
     missing = [snippet for snippet in required if snippet not in normalized_text]
     if missing:

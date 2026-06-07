@@ -4,7 +4,7 @@ from pathlib import Path
 
 from scripts.acceptance_scorecard import render_markdown
 from scripts.check_acceptance_readiness import OPENVLA_PROXIMAL_ANCHOR_COMPLETE
-from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_AVAILABLE
+from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_COMPLETE
 
 
 def _write(path: Path, text: str) -> None:
@@ -39,7 +39,7 @@ class AcceptanceScorecardTest(unittest.TestCase):
                 ),
             )
             _write(
-                root / OPENVLA_WEIGHTED_AVAILABLE,
+                root / OPENVLA_WEIGHTED_COMPLETE,
                 "\n".join(
                     [
                         "method,perturbation,episodes,successes,success_rate",
@@ -57,6 +57,7 @@ class AcceptanceScorecardTest(unittest.TestCase):
                         "random,blur,100,99,0.99",
                         "random,brightness,100,99,0.99",
                         "random,occlusion,100,75,0.75",
+                        "random,shift,100,97,0.97",
                         "",
                     ]
                 ),
@@ -155,14 +156,14 @@ class AcceptanceScorecardTest(unittest.TestCase):
 
         self.assertIn("Grid-margin mechanism clears", text)
         self.assertIn("BGR 367/400, official 367/400", text)
-        self.assertIn("already unable to clear the official-checkpoint gate", text)
-        self.assertIn("pending random row is ledger completion", text)
-        self.assertIn("Proximal-anchor OpenVLA route is in flight, not yet evidence", text)
+        self.assertIn("complete and fails the learned-policy gate", text)
+        self.assertIn("trails matched random by 3/400", text)
+        self.assertIn("Proximal-anchor OpenVLA route is unsummarized, not yet evidence", text)
         self.assertIn("must finish before the +10/400 and +0.02 learned-policy gate", text)
         self.assertIn("Promotion Deficits", text)
         self.assertIn("no screen clears the 4/4 promotion screen", text)
-        self.assertIn("short of the official-checkpoint promotion gate by 10/400", text)
-        self.assertIn("proximal-anchor OpenVLA audit is queued but remains non-evidence", text)
+        self.assertIn("short of the best-comparator promotion gate by 13/400", text)
+        self.assertIn("Proximal-anchor OpenVLA route is unsummarized", text)
         self.assertIn("MiniGrid LavaGapS7", text)
         self.assertIn("MiniGrid FourRooms official-package", text)
         self.assertIn("final_median_r80-ceiling-saturated", text)
@@ -177,7 +178,7 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("reject-calibration", text)
         self.assertIn("usable-calibration", text)
         self.assertIn("fail", text)
-        self.assertIn("queued proximal-anchor OpenVLA route", text)
+        self.assertIn("unsummarized, not yet evidence", text)
         self.assertIn("Do not start another same-protocol MiniGrid", text)
 
     def test_render_markdown_prefers_completed_proximal_anchor_summary(self) -> None:
@@ -192,7 +193,7 @@ class AcceptanceScorecardTest(unittest.TestCase):
                 "method,seed,final_rauc\nbgr,30,0.43\nuniform,30,0.39\n",
             )
             _write(
-                root / OPENVLA_WEIGHTED_AVAILABLE,
+                root / OPENVLA_WEIGHTED_COMPLETE,
                 "\n".join(
                     [
                         "method,perturbation,episodes,successes,success_rate",
@@ -210,6 +211,7 @@ class AcceptanceScorecardTest(unittest.TestCase):
                         "random,blur,100,99,0.99",
                         "random,brightness,100,99,0.99",
                         "random,occlusion,100,75,0.75",
+                        "random,shift,100,97,0.97",
                         "",
                     ]
                 ),

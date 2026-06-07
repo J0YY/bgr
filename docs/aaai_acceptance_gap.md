@@ -658,25 +658,17 @@ package and recording its version before any result is run.
   and shift complete, and the partial aggregate remains non-promotable because
   BGR still trails matched random by one episode.
   Occlusion then completed as BGR 75/100, official 74/100, and matched random
-  75/100. BGR and official shift also completed as 95/100 and 98/100,
-  respectively, while matched-random shift was still incomplete. At this point
-  promotion is already impossible even before the final random-shift row:
-  BGR's four completed non-identity rows total 367/400 and the official
-  checkpoint's four completed non-identity rows also total 367/400, far below
-  the preregistered requirement that BGR beat the official checkpoint by at
-  least 10/400 episodes and 0.02 absolute success.
-  Live Slurm poll on 2026-06-05 16:25 PDT / 2026-06-06 00:25 BST still shows
-  matched-random shift job `766831` as `PENDING` for unavailable A6000 GPU
-  nodes, with a Slurm start estimate of 2026-06-07T14:27:51 and no start/end
-  time in `sacct`. The remote `summary.csv` still has the same 14 rows as the
-  local `summary_available.csv`, so there is no complete weighted summary to
-  sync. Use `scripts/sync_openvla_oft_weighted_perturb_results.sh --poll --no-check`
-  for future ledger polls; its sync mode writes incomplete data to
-  `summary_available.csv` and only writes `summary.csv` after the fixed
-  perturbation gate rows are complete. Because the
-  official-checkpoint margin is already +0 rather than the required +10/400,
-  the pending row is ledger completion only and cannot make this intervention
-  promotable.
+  75/100. BGR and official shift also completed as 95/100 and 98/100. A later
+  Athena poll on 2026-06-06 03:05 PDT / 11:05 BST showed matched-random shift
+  job `766831` completed successfully, and log inspection found 97/100 success.
+  The complete weighted audit is therefore BGR 367/400, official 367/400, and
+  matched random 370/400 over non-identity perturbations, with identity at
+  99/100 for all three methods. This fails the preregistered requirement that
+  BGR beat both the official checkpoint and matched random by at least 10/400
+  episodes and 0.02 absolute success. The complete compact artifact is
+  `results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`,
+  stored without raw log paths for double-blind hygiene. This intervention is
+  complete negative evidence, not a robotics fine-tuning win.
 - The next preregistered learned-policy route changes the optimization
   objective rather than the data mix:
   `scripts/queue_openvla_oft_preregistered_proximal_anchor.sh`. It reuses the
@@ -715,8 +707,16 @@ package and recording its version before any result is run.
   `TresPerNode=gres/gpu:a6000:1` for jobs `767128` and `767134`. Idle g2 nodes
   expose `gpu:a4000`, so a generic/A4000 resubmission is not a protocol-neutral
   acceleration for OpenVLA unless the memory footprint is separately changed
-  and preregistered. The perturbation and adaptation compact summaries were
-  both still missing, so there is nothing to sync or promote.
+  and preregistered. A later poll on 2026-06-06 03:05 PDT / 11:05 BST showed
+  BGR train job `767128` failed with exit code `1:0`; log inspection found a
+  PyTorch DDP `Expected to mark a variable ready only once` error at
+  `normalized_loss.backward()` in the proximal-anchor wrapper, naming
+  `base_model.model.vision_backbone.fused_featurizer.attn_pool.mlp.fc2.lora_B.default.weight`.
+  BGR merge, random adapt, and downstream BGR/random perturb jobs were
+  dependency-held with `DependencyNeverSatisfied`. The perturbation and
+  adaptation compact summaries are still missing, so there is nothing to sync
+  or promote until the wrapper is repaired under the same preregistered
+  protocol or the route is retired.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

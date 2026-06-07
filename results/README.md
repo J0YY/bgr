@@ -127,13 +127,11 @@ Packaged OpenVLA audit artifacts are:
   p2048 300-step image-augmentation continuation audit.
 - `results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv`:
   p2048 1,000-step low-LR image-augmentation continuation audit.
-- `results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary_available.csv`:
-  weighted p2048unique perturbation audit rows available before matched-random
-  shift completed; this artifact already proves the official-checkpoint
-  promotion gate cannot pass because BGR and official tie at 367/400
-  non-identity successes. A live poll on 2026-06-05 16:25 PDT / 2026-06-06 00:25 BST still had
-  matched-random shift job `766831` pending for unavailable A6000 GPU nodes, so the
-  missing row is ledger completion only.
+- `results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`:
+  completed weighted p2048unique perturbation audit. BGR is 367/400 on
+  non-identity perturbations, tied with the official checkpoint at 367/400 and
+  below matched random at 370/400, so the preregistered learned-policy
+  promotion gate fails.
 
 The p4096 and common-availability sections below are retained as paper-negative
 diagnostics in this ledger only. Their summary CSVs are not part of the
@@ -1598,26 +1596,21 @@ occlusion and shift are still required for the fixed 400-episode non-identity
 gate, and the completed subtotal still trails matched random by one episode.
 
 Occlusion then completed as BGR 75/100, official 74/100, and matched random
-75/100. BGR and official shift also completed as 95/100 and 98/100,
-respectively, while matched-random shift remained incomplete at the time of
-this ledger update. The promotion gate is already impossible before the final
-random-shift row: BGR's completed non-identity total is 367/400, tied with the
-official checkpoint's 367/400, so BGR cannot satisfy the preregistered
-+10/400 episode and +0.02 absolute-success margins over the official
-checkpoint. The paper should therefore continue to treat this intervention as a
-negative OpenVLA/LIBERO audit, not a robotics fine-tuning result.
+75/100. BGR and official shift also completed as 95/100 and 98/100. A later
+Athena poll on 2026-06-06 03:05 PDT / 11:05 BST showed matched-random shift job
+`766831` completed successfully, and log inspection found 97/100 success. The
+complete weighted audit is therefore BGR 367/400, official 367/400, and
+matched random 370/400 over non-identity perturbations, with identity at
+99/100 for all three methods. This fails the preregistered +10/400 episode and
++0.02 absolute-success margins over both official and matched random. The paper
+should therefore continue to treat this intervention as a negative
+OpenVLA/LIBERO audit, not a robotics fine-tuning result.
 
-Live Slurm poll on 2026-06-05 16:25 PDT / 2026-06-06 00:25 BST still shows matched-random
-shift job `766831` as pending for unavailable A6000 GPU nodes, with estimated
-start 2026-06-07T14:27:51 and no start/end time in `sacct`. The remote
-perturbation `summary.csv` still has the same 14 completed rows as the local
-`summary_available.csv`, so there is no complete weighted summary to sync yet.
-Use
-`scripts/sync_openvla_oft_weighted_perturb_results.sh --poll --no-check` for
-future ledger polls. If the compact remote summary appears but remains
-incomplete, the helper syncs it to `summary_available.csv`; it writes
-`summary.csv` only after `check_openvla_perturb_gate.py --require-complete`
-accepts the fixed rows.
+The complete compact artifact is
+`results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`.
+It was regenerated from the completed Athena text logs using
+`scripts/summarize_openvla_oft_perturb_eval.py`, then stored locally without raw
+log paths for double-blind hygiene.
 
 Promotion gate: weighted BGR must beat weighted matched random and the official
 checkpoint on the fixed non-identity perturbation total by at least 10/400
@@ -1709,6 +1702,17 @@ or promote. A scheduler diagnostic found idle `g2` nodes, but those nodes expose
 `gpu:a4000`, while these OpenVLA jobs retain a typed A6000 GRES request. Do not
 resubmit this route as a generic/A4000 retry unless the memory footprint is
 separately changed and preregistered.
+
+Follow-up Athena poll on 2026-06-06 03:05 PDT / 11:05 BST showed BGR train job
+`767128` failed with exit code `1:0`. Log inspection found the failure at
+`normalized_loss.backward()` in the proximal-anchor wrapper:
+PyTorch DDP reported `Expected to mark a variable ready only once` for
+`base_model.model.vision_backbone.fused_featurizer.attn_pool.mlp.fc2.lora_B.default.weight`.
+BGR merge job `767129`, random adapt job `767131`, and downstream BGR/random
+perturb jobs were dependency-held with `DependencyNeverSatisfied`. Official
+identity job `767134` completed, but the proximal route has no valid BGR/random
+summary and remains non-evidence until the wrapper is repaired under the same
+preregistered protocol or the route is retired.
 
 Result ingestion helper:
 

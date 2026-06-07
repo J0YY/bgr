@@ -82,10 +82,9 @@ to reproduce this read from the current result artifacts.
   rerunning the same MiniGrid/PointMaze/FetchReach protocol family.
 - The weighted perturbation curriculum in
   `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh` is now a
-  negative learned-policy audit for the official-checkpoint gate. It changed
+  negative learned-policy audit for the fixed learned-policy gate. It changed
   the OpenVLA-OFT training distribution by repeating perturbation examples
-  under separate TFDS `mix_source` labels, but BGR's completed non-identity
-  total is already tied with the official checkpoint at 367/400 before the
-  matched-random shift row finishes. Poll the remaining row only for ledger
-  completion; do not treat this recipe family as an active acceptance-moving
-  route.
+  under separate TFDS `mix_source` labels, but the completed non-identity
+  totals are BGR 367/400, official 367/400, and matched random 370/400. BGR
+  ties the official checkpoint and trails matched random, so do not treat this
+  recipe family as an active acceptance-moving route.

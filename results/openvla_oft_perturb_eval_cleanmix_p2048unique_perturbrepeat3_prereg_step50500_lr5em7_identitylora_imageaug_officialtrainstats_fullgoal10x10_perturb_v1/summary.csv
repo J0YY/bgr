@@ -13,3 +13,4 @@ random,identity,100,99,0.99
 random,blur,100,99,0.99
 random,brightness,100,99,0.99
 random,occlusion,100,75,0.75
+random,shift,100,97,0.97

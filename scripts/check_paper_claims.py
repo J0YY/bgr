@@ -1285,7 +1285,7 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
     p2048_weighted_perturb_paths = [
         results_dir
         / "openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1"
-        / "summary_available.csv",
+        / "summary.csv",
     ]
     action_tfds_summary_paths = [
         results_dir / "openvla_action_tfds_validation_v1" / "summary.json",
@@ -1302,18 +1302,19 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
         "Pooling p2048": p2048_summary_paths + p2048_offset_summary_paths,
         "full-goal identity audit": p2048_fullgoal_summary_paths,
         "10-task visual perturbation audit": p2048_fullgoal_summary_paths,
-        "367/400": p2048_fullgoal_summary_paths,
+        "367/400": p2048_fullgoal_summary_paths + p2048_weighted_perturb_paths,
         "300-step image-augmentation continuation": p2048_imageaug_300_summary_paths,
         "368/400": p2048_imageaug_300_summary_paths,
         "1,000-step low-learning-rate continuation": p2048_imageaug_1000_low_lr_summary_paths,
         "366/400": p2048_imageaug_1000_low_lr_summary_paths,
-        "370/400": p2048_imageaug_1000_low_lr_summary_paths,
+        "370/400": p2048_imageaug_1000_low_lr_summary_paths + p2048_weighted_perturb_paths,
         "weighted perturbation curriculum": p2048_weighted_perturb_paths,
-        "273/300": p2048_weighted_perturb_paths,
         "action-label/TFDS plumbing validates": action_tfds_summary_paths,
         "2,048-transition matched BGR/random exports": action_tfds_summary_paths,
     }
     missing: list[str] = []
+    if "273/300" in paper_text:
+        missing.append("273/300: stale partial weighted OpenVLA audit; use the complete 370/400 matched-random total")
     for token, required_paths in guarded_results.items():
         if token not in paper_text:
             continue

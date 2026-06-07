@@ -13,7 +13,7 @@ from statistics import mean
 from scripts.check_acceptance_readiness import OPENVLA_LEGACY_COMPLETE
 from scripts.check_acceptance_readiness import OPENVLA_NON_IDENTITY_PERTURBATIONS
 from scripts.check_acceptance_readiness import OPENVLA_PROXIMAL_ANCHOR_COMPLETE
-from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_AVAILABLE
+from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_COMPLETE
 
 
 @dataclass(frozen=True)
@@ -474,7 +474,7 @@ def learned_policy_summary(root: Path) -> str:
             f"random gap {random_gap:+d} ({random_rate_gap:+.4f}), clean deficit {clean_deficit}."
         )
 
-    weighted = root / OPENVLA_WEIGHTED_AVAILABLE
+    weighted = root / OPENVLA_WEIGHTED_COMPLETE
     if weighted.exists():
         rows = read_rows(weighted)
         bgr_success, bgr_episodes = perturbation_total(rows, "bgr", OPENVLA_NON_IDENTITY_PERTURBATIONS)
@@ -482,19 +482,19 @@ def learned_policy_summary(root: Path) -> str:
         random_success, random_episodes = perturbation_total(rows, "random", OPENVLA_NON_IDENTITY_PERTURBATIONS)
         bgr_identity, identity_episodes = identity_total(rows, "bgr")
         official_gap = bgr_success - official_success
-        official_needed = max(0, 10 - official_gap)
+        random_gap = bgr_success - random_success
+        best_gap = bgr_success - max(official_success, random_success)
+        needed = max(0, 10 - best_gap)
         random_detail = f"random {random_success}/{random_episodes}"
-        if random_episodes < 400:
-            random_detail += " available; final random shift pending"
         status = "non-promotable"
         if bgr_episodes == 400 and official_episodes == 400 and official_gap < 10:
-            status = "already unable to clear the official-checkpoint gate"
+            status = "complete and fails the learned-policy gate"
         return (
-            f"Weighted OpenVLA audit is {status} before the final random row: "
+            f"Weighted OpenVLA audit is {status}: "
             f"BGR {bgr_success}/{bgr_episodes}, official {official_success}/{official_episodes}, "
             f"{random_detail}; identity BGR {bgr_identity}/{identity_episodes}. "
-            f"Official episode margin is {official_gap:+d}, short of +10 by {official_needed} episodes; "
-            f"the pending random row is ledger completion, not a path to promotion."
+            f"Episode margins are official {official_gap:+d} and random {random_gap:+d}, "
+            f"short of the best-comparator +10 gate by {needed} episodes."
         )
 
     legacy = root / OPENVLA_LEGACY_COMPLETE
@@ -512,7 +512,7 @@ def learned_policy_summary(root: Path) -> str:
 
 
 def learned_policy_inflight_summary(root: Path) -> str | None:
-    """Report preregistered learned-policy runs that are queued but not summarized."""
+    """Report preregistered learned-policy runs that are failed or unsummarized."""
     proximal_summary = (
         root
         / "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv"
@@ -525,11 +525,20 @@ def learned_policy_inflight_summary(root: Path) -> str | None:
     if "767128" not in ledger_text or "767148" not in ledger_text:
         return None
 
+    if "767128` failed" in ledger_text or "767128 failed" in ledger_text:
+        return (
+            "Proximal-anchor OpenVLA route failed before producing evidence: "
+            "BGR train job 767128 exited 1:0 with a PyTorch DDP ready-twice error, "
+            "leaving downstream BGR/random jobs dependency-held; repair or retire this route "
+            "before applying the +10/400 and +0.02 learned-policy gate."
+        )
+
     return (
-        "Proximal-anchor OpenVLA route is in flight, not yet evidence: "
-        "adaptation jobs BGR 767128/767129/767130 and random 767131/767132/767133 are queued; "
-        "fixed perturbation jobs official 767134--767138, BGR 767139--767143, and random 767144--767148 "
-        "must finish before the +10/400 and +0.02 learned-policy gate can be checked."
+        "Proximal-anchor OpenVLA route is unsummarized, not yet evidence: "
+        "adaptation jobs BGR 767128/767129/767130 and random 767131/767132/767133 "
+        "do not have complete fixed summaries; fixed perturbation jobs official 767134--767138, "
+        "BGR 767139--767143, and random 767144--767148 must finish before the +10/400 "
+        "and +0.02 learned-policy gate can be checked."
     )
 
 
@@ -592,8 +601,8 @@ def render_markdown(root: Path) -> str:
     if learned_summary.startswith("Weighted OpenVLA audit"):
         lines.append(
             "- Learned policy: the latest weighted OpenVLA audit is short of the "
-            "official-checkpoint promotion gate by 10/400 non-identity episodes "
-            "and 0.02 absolute success before the final random row can matter."
+            "best-comparator promotion gate by 13/400 non-identity episodes "
+            "and 0.0275 absolute success."
         )
     elif "does not clear" in learned_summary or "negative" in learned_summary:
         lines.append(f"- Learned policy: {learned_summary}")
@@ -611,8 +620,7 @@ def render_markdown(root: Path) -> str:
         )
     else:
         lines.append(
-            "- Active route: the proximal-anchor OpenVLA audit is queued but remains "
-            "non-evidence until the fixed clean and perturbation summaries exist."
+            f"- Active route: {inflight}"
         )
     lines.extend(
         [
@@ -672,7 +680,7 @@ def render_markdown(root: Path) -> str:
         "- The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.",
         "- The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.",
         "- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.",
-        "- The latest OpenVLA weighted audit is already unable to clear the official-checkpoint gate; the pending random-shift row is ledger completion, not a path to a positive robotics claim.",
+        "- The latest OpenVLA weighted audit is complete and fails the learned-policy gate: BGR ties the official checkpoint at 367/400 non-identity successes and trails matched random by 3/400.",
     ]
     if inflight is None:
         priority_lines.append(
@@ -680,7 +688,7 @@ def render_markdown(root: Path) -> str:
         )
     else:
         priority_lines.append(
-            "- The current acceptance-moving learned-policy work is the queued proximal-anchor OpenVLA route; next actions are to poll, sync completed summaries, and apply the preregistered gate before making any paper-positive claim."
+            "- The current acceptance-moving learned-policy work is proximal-anchor triage: repair the PyTorch DDP ready-twice execution bug under the preregistered protocol or retire the route before spending more OpenVLA compute."
         )
         priority_lines.append(
             "- Do not start another same-protocol MiniGrid, classic-control, PointMaze, or FetchReach screen while this is pending; existing screens already show saturated radius checks, stronger-baseline losses, or state-priority-only ablation failures."
