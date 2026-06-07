@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.31)  7 JUN 2026 21:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.31)  7 JUN 2026 21:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -304,7 +304,10 @@ Underfull \hbox (badness 2726) in paragraph at lines 245--246
 []\T1/ptm/m/n/10 The OpenVLA-OFT bridge ex-ports 11,776 teacher-
  []
 
-(./figures/openvla_adaptation_table.tex) [6]
+(./figures/openvla_adaptation_table.tex)
+Underfull \vbox (badness 8056) has occurred while \output is active []
+
+ [6]
 Underfull \hbox (badness 1137) in paragraph at lines 288--289
 \T1/ptm/m/n/10 metric checks; Min-i-Grid, Point-Maze, FetchReach, and
  []
@@ -314,11 +317,7 @@ Underfull \hbox (badness 1596) in paragraph at lines 288--289
 \T1/ptm/m/n/10 all meth-ods. Reacher-v5 Mu-JoCo screen gives BGR
  []
 
-(./main.bbl
-Underfull \vbox (badness 1264) has occurred while \output is active []
-
-) [7]
-(./ReproducibilityChecklist.tex
+(./main.bbl) [7] (./ReproducibilityChecklist.tex
 \c@checksubsection=\count283
 \c@checkitem=\count284
 LaTeX Font Info:    Trying to load font information for T1+pcr on input line 51
@@ -362,7 +361,7 @@ dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/ut
 mr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (10 pages, 296137 bytes).
+Output written on main.pdf (10 pages, 296251 bytes).
 PDF statistics:
  165 PDF objects out of 1000 (max. 8388607)
  99 compressed objects within 1 object stream

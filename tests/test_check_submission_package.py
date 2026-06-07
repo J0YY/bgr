@@ -4965,6 +4965,8 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "The main claim is supported by controlled synthetic and procedural grid-margin experiments",
                         "The robot-suffix simulator is a manipulation-style extension",
                         "Gym-style standard-environment probes and OpenVLA/LIBERO results are scope checks and learned-policy audits, not promoted positive claims",
+                        "not evidence that boundary-only replay is robust",
+                        "promoted only after 30-seed confirmation, held-out replication, and stress sweeps",
                         "four stress regimes",
                         "A four-condition 30-seed suffix stress sweep varies teacher quality",
                         "while still trailing uniform on median critical radius",
@@ -5007,6 +5009,19 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             )
 
             self.assertEqual(check_manuscript_framing(paper), [f"{paper}: manuscript evidence-tier framing ok"])
+
+    def test_manuscript_framing_rejects_weakened_suffix_rescue_scope(self):
+        source_paper = Path(__file__).resolve().parents[1] / "paper" / "main.tex"
+        manuscript = source_paper.read_text(encoding="utf-8")
+        scoped = "not evidence that boundary-only replay is robust"
+        self.assertIn(scoped, manuscript)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            paper = Path(temp_dir) / "main.tex"
+            paper.write_text(manuscript.replace(scoped, "evidence that boundary-only replay is robust"), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "boundary-only replay is robust"):
+                check_manuscript_framing(paper)
 
     def test_manuscript_framing_rejects_estimator_guarantee_without_scope_caveat(self):
         source_paper = Path(__file__).resolve().parents[1] / "paper" / "main.tex"

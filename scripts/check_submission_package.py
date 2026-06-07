@@ -4170,6 +4170,8 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "The main claim is supported by controlled synthetic and procedural grid-margin experiments",
         "The robot-suffix simulator is a manipulation-style extension",
         "Gym-style standard-environment probes and OpenVLA/LIBERO results are scope checks and learned-policy audits, not promoted positive claims",
+        "not evidence that boundary-only replay is robust",
+        "promoted only after 30-seed confirmation, held-out replication, and stress sweeps",
         "four stress regimes",
         "A four-condition 30-seed suffix stress sweep varies teacher quality",
         "while still trailing uniform on median critical radius",
