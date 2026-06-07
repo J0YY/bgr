@@ -137,6 +137,11 @@ Packaged OpenVLA audit artifacts are:
   non-identity perturbations, tied with the official checkpoint at 367/400 and
   below matched random at 370/400, so the preregistered learned-policy
   promotion gate fails.
+- `results/openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`:
+  completed perturb-only anchored p2048unique audit. Identity is 99/100 for
+  BGR, official, and matched random; non-identity perturbation success is
+  BGR 371/400, official 367/400, and matched random 372/400, so the
+  preregistered learned-policy promotion gate fails.
 
 The p4096 and common-availability sections below are retained as paper-negative
 diagnostics in this ledger only. Their summary CSVs are not part of the
@@ -2097,6 +2102,30 @@ Clean adaptation eval logs were summarized locally into
 BGR and matched random both score 99/100 clean episodes. This is a clean-floor
 sanity check only; the learned-policy promotion gate remains pending until the
 complete official/BGR/random perturbation summary exists.
+
+Final perturbation jobs `767796`-`767810` completed with exit code `0:0`. The
+remote compact summaries were not written at the expected paths, so
+`scripts/sync_openvla_oft_perturb_only_anchor_results.sh --sync` copied the
+remote eval logs and generated the compact local summary from those logs:
+
+```text
+results/openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv
+```
+
+Summary:
+
+| Method | Identity | Blur | Brightness | Occlusion | Shift | Non-identity |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| BGR perturb-only anchor | 99/100 | 98/100 | 99/100 | 76/100 | 98/100 | 371/400 = 0.9275 |
+| Official OpenVLA-OFT | 99/100 | 97/100 | 98/100 | 74/100 | 98/100 | 367/400 = 0.9175 |
+| Random perturb-only anchor | 99/100 | 99/100 | 99/100 | 76/100 | 98/100 | 372/400 = 0.9300 |
+
+Interpretation: the perturb-only anchored route preserves the clean identity
+side condition for all three methods, but it fails the learned-policy promotion
+gate. BGR beats the official checkpoint by only 4/400 non-identity episodes
+(+0.0100) and trails matched random by 1/400 (-0.0025), below the fixed
++10/400 and +0.02 margins. This is incorporated into the paper only as a
+negative OpenVLA/LIBERO audit, not as robotics fine-tuning evidence.
 
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 

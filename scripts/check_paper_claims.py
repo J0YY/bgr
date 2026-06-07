@@ -1215,6 +1215,46 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv",
         )
     )
+    p2048_perturb_only_anchor_perturb = read_csv_rows(
+        results_dir
+        / "openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1"
+        / "summary.csv"
+    )
+    perturb_only_bgr_successes, perturb_only_bgr_episodes = perturbed_total(
+        p2048_perturb_only_anchor_perturb, "bgr"
+    )
+    perturb_only_official_successes, perturb_only_official_episodes = perturbed_total(
+        p2048_perturb_only_anchor_perturb, "official"
+    )
+    perturb_only_random_successes, perturb_only_random_episodes = perturbed_total(
+        p2048_perturb_only_anchor_perturb, "random"
+    )
+    perturb_only_identity = {
+        row["method"]: int(row["successes"])
+        for row in p2048_perturb_only_anchor_perturb
+        if row["perturbation"] == "identity"
+    }
+    if not (
+        perturb_only_bgr_episodes == perturb_only_official_episodes == perturb_only_random_episodes == 400
+        and perturb_only_bgr_successes == 371
+        and perturb_only_official_successes == 367
+        and perturb_only_random_successes == 372
+        and perturb_only_identity == {"bgr": 99, "official": 99, "random": 99}
+    ):
+        raise ValueError("Expected perturb-only anchored OpenVLA audit to trail matched random")
+    claims.append(
+        Claim(
+            "OpenVLA perturb-only anchored audit",
+            (
+                "perturb-only anchored objective preserves identity for all three methods "
+                f"at {perturb_only_identity['bgr']}/100 and raises BGR to "
+                f"{perturb_only_bgr_successes}/{perturb_only_bgr_episodes} non-identity successes, "
+                f"but official is {perturb_only_official_successes}/{perturb_only_official_episodes} "
+                f"and matched random is {perturb_only_random_successes}/{perturb_only_random_episodes}"
+            ),
+            "results/openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv",
+        )
+    )
     if not (p1024_pooled_bgr > p1024_pooled_random and p2048_pooled_bgr >= p2048_pooled_random):
         raise ValueError("Expected corrected OpenVLA diagnostics to show a p1024 edge and non-worse p2048 pooled comparison")
     if not (p1024_pooled_bgr < p1024_pooled_official and p2048_pooled_bgr < p2048_pooled_official):
@@ -1344,6 +1384,11 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
         / "openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1"
         / "summary.csv",
     ]
+    p2048_perturb_only_anchor_paths = [
+        results_dir
+        / "openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1"
+        / "summary.csv",
+    ]
     action_tfds_summary_paths = [
         results_dir / "openvla_action_tfds_validation_v1" / "summary.json",
     ]
@@ -1367,6 +1412,9 @@ def unverified_result_claims(paper_text: str, results_dir: Path) -> list[str]:
         "370/400": p2048_imageaug_1000_low_lr_summary_paths + p2048_weighted_perturb_paths,
         "weighted perturbation curriculum": p2048_weighted_perturb_paths,
         "proximal-anchor objective": p2048_proximal_anchor_paths,
+        "perturb-only anchored objective": p2048_perturb_only_anchor_paths,
+        "371/400": p2048_perturb_only_anchor_paths,
+        "372/400": p2048_perturb_only_anchor_paths,
         "action-label/TFDS plumbing validates": action_tfds_summary_paths,
         "2,048-transition matched BGR/random exports": action_tfds_summary_paths,
     }

@@ -442,6 +442,7 @@ OPENVLA_CLAIM_ARTIFACTS = [
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
     "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv",
+    "results/openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv",
 ]
 CHECKED_CLAIM_ARTIFACTS = [
     "paper/figures/estimator_stats.csv",

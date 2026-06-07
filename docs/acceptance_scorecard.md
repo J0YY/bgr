@@ -5,8 +5,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 ## Gate Summary
 
 - Grid-margin mechanism clears the internal mechanism threshold: BGR 0.4342 vs uniform 0.3965, delta +0.0377; margin above +0.03 threshold +0.0077.
-- Proximal-anchor OpenVLA audit does not clear the learned-policy promotion gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
-- Perturb-only anchored OpenVLA route is preregistered, not yet evidence: the fixed perturb-only TFDS prep, proximal-anchor BGR/random adaptation, and official/BGR/random 10-task x 10-trial perturbation summaries must finish before the +10/400 and +0.02 learned-policy gate can be checked.
+- Perturb-only anchored OpenVLA audit does not clear the learned-policy promotion gate: BGR 371/400, official 367/400, random 372/400; identity BGR 99/100, official 99/100, random 99/100; official gap +4 (+0.0100), random gap -1 (-0.0025), clean deficit 0.
 - Closest independent benchmark screen is `MiniGrid FourRooms official-package` with treatment `bgr_coverage`: delta vs uniform +0.1075 (4/0/0), worst required-baseline delta +0.0464 (3/1/0), ablation delta +0.0071 (2/2/0), radius delta +0.0000 (0/0/4), failure reason(s): final_median_r80-ceiling-saturated.
 - Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`, `FetchSlide-v4 object-goal calibration`, `FetchPickAndPlace-v4 object-goal calibration`, `highway-env parking-v0 calibration`.
 - Usable pre-method calibration route(s): `Gymnasium MuJoCo Reacher-v5 calibration` clean 0.8333, range 0.5000--0.9167, r80 3.0000, `Gymnasium MuJoCo InvertedPendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2100, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2825.
@@ -14,9 +13,9 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 ## Promotion Deficits
 
 - Independent benchmark: no screen clears the 4/4 promotion screen. The closest screen, `MiniGrid FourRooms official-package` with `bgr_coverage`, clears 3/4 gates and fails on final_median_r80-ceiling-saturated.
-- Learned policy: Proximal-anchor OpenVLA audit does not clear the learned-policy promotion gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
+- Learned policy: Perturb-only anchored OpenVLA audit does not clear the learned-policy promotion gate: BGR 371/400, official 367/400, random 372/400; identity BGR 99/100, official 99/100, random 99/100; official gap +4 (+0.0100), random gap -1 (-0.0025), clean deficit 0.
 - Retired calibrated route(s): `Gymnasium MuJoCo Reacher-v5 calibration`, `Gymnasium MuJoCo InvertedPendulum-v5 calibration`, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration` cleared pre-method calibration, but the corresponding fixed method screen is negative or tied; not active acceptance evidence.
-- Active route: Perturb-only anchored OpenVLA route is preregistered, not yet evidence: the fixed perturb-only TFDS prep, proximal-anchor BGR/random adaptation, and official/BGR/random 10-task x 10-trial perturbation summaries must finish before the +10/400 and +0.02 learned-policy gate can be checked.
+- Active route: no queued learned-policy route is recorded in the local ledgers.
 
 ## Independent Benchmark Screens
 
@@ -71,6 +70,5 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - The InvertedPendulum-v5 calibration also cleared pre-method checks, but its fixed 4-seed method screen ties all methods on final RAUC and median-r80; do not scale or promote it.
 - Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The InvertedDoublePendulum-v5 calibration cleared pre-method checks, but its fixed 4-seed method screen collapses clean success; the small BGR RAUC edge is not acceptance evidence.
-- The latest proximal-anchor OpenVLA audit is complete and fails the learned-policy gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
-- Current acceptance-moving learned-policy work: Perturb-only anchored OpenVLA route is preregistered, not yet evidence: the fixed perturb-only TFDS prep, proximal-anchor BGR/random adaptation, and official/BGR/random 10-task x 10-trial perturbation summaries must finish before the +10/400 and +0.02 learned-policy gate can be checked.
-- Do not start another same-protocol MiniGrid, classic-control, PointMaze, or FetchReach screen while this is pending; existing screens already show saturated radius checks, stronger-baseline losses, or state-priority-only ablation failures.
+- Perturb-only anchored OpenVLA audit does not clear the learned-policy promotion gate: BGR 371/400, official 367/400, random 372/400; identity BGR 99/100, official 99/100, random 99/100; official gap +4 (+0.0100), random gap -1 (-0.0025), clean deficit 0.
+- The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; the retired MuJoCo routes are scope evidence, not acceptance evidence.

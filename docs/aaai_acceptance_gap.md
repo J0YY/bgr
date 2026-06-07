@@ -54,6 +54,15 @@ make the evidence contract unavoidable:
   sign-test p-values;
 - treat the local boundary proposition as design intuition, not a theory claim.
 
+Latest learned-policy audit, completed 2026-06-07: the perturb-only anchored
+OpenVLA-OFT route preserves clean identity success for BGR, matched random, and
+the official checkpoint at 99/100 each, but fails the promotion gate on
+non-identity perturbations. BGR reaches 371/400, official reaches 367/400, and
+matched random reaches 372/400. The official gap is only +4/400 (+0.0100) and
+BGR trails matched random by 1/400 (-0.0025), below the fixed +10/400 and +0.02
+requirement. This sharpens the acceptance problem: the current learned-policy
+evidence remains an audit, not positive robotics evidence.
+
 ## Promotion Criteria For A New Independent Benchmark
 
 A new benchmark result should be promoted into `paper/main.tex` only if it meets
@@ -87,6 +96,8 @@ Do not add another result to the manuscript if it has any of these properties:
 - The result is another authored mechanism environment rather than an
   independent check.
 - The learned-policy result fails to beat the official checkpoint.
+- The learned-policy result fails to beat matched random under the fixed gate,
+  even if it narrowly beats the official checkpoint.
 
 ## Next Experiment Candidates
 

@@ -1,0 +1,16 @@
+method,perturbation,episodes,successes,success_rate
+bgr,identity,100,99,0.99
+bgr,blur,100,98,0.98
+bgr,brightness,100,99,0.99
+bgr,occlusion,100,76,0.76
+bgr,shift,100,98,0.98
+official,identity,100,99,0.99
+official,blur,100,97,0.97
+official,brightness,100,98,0.98
+official,occlusion,100,74,0.74
+official,shift,100,98,0.98
+random,identity,100,99,0.99
+random,blur,100,99,0.99
+random,brightness,100,99,0.99
+random,occlusion,100,76,0.76
+random,shift,100,98,0.98

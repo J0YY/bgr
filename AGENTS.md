@@ -65,7 +65,7 @@ As of 2026-06-07, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.p
 
 - PASS controlled grid mechanism: pooled RAUC 0.4342 vs 0.3965.
 - FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, MiniGrid LavaGapS7, PointMaze, FetchReach, and Reacher remain non-promotable.
-- FAIL learned-policy OpenVLA/LIBERO: the latest completed proximal-anchor audit has non-identity success BGR 368/400, official 367/400, and matched random 368/400, with identity BGR 98/100, official 99/100, and random 98/100. BGR ties matched random and beats official by only 1/400, so it fails the fixed +10/400 and +0.02 promotion gate. The earlier weighted perturbation audit is also negative at BGR 367/400, official 367/400, and matched random 370/400.
+- FAIL learned-policy OpenVLA/LIBERO: the latest completed perturb-only anchored audit has non-identity success BGR 371/400, official 367/400, and matched random 372/400, with identity BGR 99/100, official 99/100, and random 99/100. BGR trails matched random by 1/400 and beats official by only 4/400, so it fails the fixed +10/400 and +0.02 promotion gate. Earlier weighted and proximal-anchor audits are also negative.
 - Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
 The practical goal is not to make the paper sound accepted. The practical goal is to find or build defensible evidence that survives the acceptance criteria below, then incorporate only those results into `paper/main.tex`.
@@ -80,7 +80,7 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   rejected pre-method routes under the current scripted controller/interface;
   do not build replay comparisons around them without a new preregistered
   calibration that first clears clean-success and recovery-curve prerequisites.
-- The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation recipe family; the preregistered weighted perturbation curriculum already failed the official-checkpoint promotion gate.
+- The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation/perturb-only recipe family; the preregistered weighted, proximal-anchor, and perturb-only anchored audits all failed the learned-policy promotion gate.
 - The PointMaze U-Maze topology-bottleneck reset-interface screen is completed and negative. Failure-only reaches 0.3500 final RAUC, while BGR reaches 0.0854 and BGR-Coverage reaches 0.0573; do not scale or promote this protocol.
 - The MiniGrid-LavaGapS7 external-package screen is completed and negative. BGR-Coverage trails uniform on mean RAUC (0.4277 vs. 0.4461), default BGR is lower (0.4031), and the state-priority/uniform-radius ablation is highest (0.4627); do not scale or promote this protocol.
 - The hard-budget FetchReach-v4 reset-interface follow-up is completed and
@@ -212,7 +212,7 @@ Treat the following as the current paper-weakness backlog:
   success, producing non-identity totals BGR 367/400, official 367/400, and
   matched random 370/400. The compact local artifact is
   `results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`.
-- The current preregistered learned-policy route is perturb-only anchored
+- The latest completed learned-policy route is perturb-only anchored
   OpenVLA-OFT adaptation in
   `scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh`. It changes
   the completed clean-mix recipe by training only on rendered boundary-band
@@ -227,8 +227,7 @@ Treat the following as the current paper-weakness backlog:
   `BGR_DEPENDENCY=afterok:<bgr_merge> RANDOM_DEPENDENCY=afterok:<random_merge> scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh --perturb-only --submit-perturb`.
   It is promotable only if BGR beats both perturb-only anchored matched random
   and the official checkpoint by the fixed +10/400 and +0.02 non-identity
-  perturbation gate while preserving clean identity within -1/100. Until compact
-  summaries exist and clear that gate, this route is not paper evidence.
+  perturbation gate while preserving clean identity within -1/100.
   Prep was submitted after commit `8b69ac7` on 2026-06-07 as Slurm job
   `767789`, writing to
   `/work/joy/bgr/logs/bgr-perturbonly-prep-p2048unique_perturbonly_anchor_prereg-767789.out`.
@@ -263,6 +262,16 @@ Treat the following as the current paper-weakness backlog:
   BGR and matched random both score 99/100 clean episodes. This clears the
   clean-floor sanity check for the adapted checkpoints but is not a promotion
   result without the full official/BGR/random perturbation summary.
+  All perturbation jobs `767796`-`767810` then completed with exit code `0:0`;
+  because the remote summaries were not written at the expected paths, the sync
+  helper generated compact summaries from copied eval logs. The final perturb
+  summary is
+  `results/openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`.
+  The gate is negative: non-identity BGR 371/400, official 367/400, and random
+  372/400; identity BGR 99/100, official 99/100, and random 99/100. BGR trails
+  matched random by one episode and beats official by only four episodes, so it
+  fails the fixed +10/400 and +0.02 learned-policy gate. This result should be
+  incorporated only as negative audit evidence.
 
 ## Paper Workflow
 

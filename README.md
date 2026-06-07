@@ -97,6 +97,7 @@ OpenVLA-OFT packaged audit summaries:
 - p2048 300-step image-augmentation continuation audit: `results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv`
 - p2048 1,000-step low-LR image-augmentation continuation audit: `results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv`
 - p2048 weighted perturbation curriculum audit: `results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`
+- p2048 perturb-only anchored audit: `results/openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`
 
 ## Repository Layout
 
@@ -326,6 +327,9 @@ continuation is also negative: BGR gives 366/400 non-identity perturbation
 successes, trailing official at 367/400 and matched random at 370/400. The
 follow-up weighted perturbation curriculum is also negative: BGR and official
 tie at 367/400 non-identity successes while matched random reaches 370/400.
+The perturb-only anchored route preserves identity at 99/100 for all three
+methods and gives BGR 371/400 non-identity successes, but matched random reaches
+372/400 and official reaches 367/400, so it also fails the fixed promotion gate.
 
 ## AAAI Sources
 

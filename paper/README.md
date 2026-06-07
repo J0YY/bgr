@@ -111,6 +111,9 @@ curriculum is also negative: BGR and official tie at 367/400 non-identity
 successes while matched random reaches 370/400. The repaired proximal-anchor
 objective is likewise negative: BGR and matched random tie at 368/400
 non-identity successes, only one episode above official (367/400), with BGR
-identity at 98/100 versus official 99/100. OpenVLA therefore remains an audit
-of recovery curves, matched action/TFDS construction, and OpenVLA-OFT plumbing
+identity at 98/100 versus official 99/100. The perturb-only anchored route is
+also negative: identity is 99/100 for BGR, matched random, and official, while
+non-identity perturbation success is 371/400 for BGR, 372/400 for matched
+random, and 367/400 for official. OpenVLA therefore remains an audit of
+recovery curves, matched action/TFDS construction, and OpenVLA-OFT plumbing
 rather than a robotics success claim.

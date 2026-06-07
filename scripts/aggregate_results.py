@@ -69,6 +69,10 @@ OPENVLA_PROXIMAL_PERTURB_RUN = (
     "openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_"
     "step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1"
 )
+OPENVLA_PERTURB_ONLY_ANCHOR_RUN = (
+    "openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_"
+    "step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1"
+)
 
 
 def main() -> None:
@@ -728,29 +732,14 @@ def write_openvla_table(path: Path, rows: list[dict]) -> None:
 def load_openvla_adaptation(results_dir: Path) -> list[dict[str, str | int]]:
     runs = [
         (
-            "100-step clean identity",
-            results_dir / OPENVLA_FULL_CLEAN_RUN / "summary.csv",
-            {"identity"},
-        ),
-        (
             "100-step non-identity perturbations",
             results_dir / OPENVLA_FULL_PERTURB_RUN / "summary.csv",
             {"blur", "brightness", "occlusion", "shift"},
         ),
         (
-            "300-step image-aug identity",
-            results_dir / OPENVLA_IMAGEAUG_300_RUN / "summary.csv",
-            {"identity"},
-        ),
-        (
             "300-step image-aug non-identity",
             results_dir / OPENVLA_IMAGEAUG_300_RUN / "summary.csv",
             {"blur", "brightness", "occlusion", "shift"},
-        ),
-        (
-            "1000-step low-LR identity",
-            results_dir / OPENVLA_LOWLR_1000_RUN / "summary.csv",
-            {"identity"},
         ),
         (
             "1000-step low-LR non-identity",
@@ -763,13 +752,13 @@ def load_openvla_adaptation(results_dir: Path) -> list[dict[str, str | int]]:
             {"blur", "brightness", "occlusion", "shift"},
         ),
         (
-            "Proximal anchor identity",
-            results_dir / OPENVLA_PROXIMAL_PERTURB_RUN / "summary.csv",
-            {"identity"},
-        ),
-        (
             "Proximal anchor non-id.",
             results_dir / OPENVLA_PROXIMAL_PERTURB_RUN / "summary.csv",
+            {"blur", "brightness", "occlusion", "shift"},
+        ),
+        (
+            "Perturb-only anchor non-id.",
+            results_dir / OPENVLA_PERTURB_ONLY_ANCHOR_RUN / "summary.csv",
             {"blur", "brightness", "occlusion", "shift"},
         ),
     ]
