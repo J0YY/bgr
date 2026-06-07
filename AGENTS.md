@@ -77,8 +77,8 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   and median r80 9.8000 over 12 seeds. Do not build or scale a highway-env
   parking replay comparison unless a new preregistered controller or policy
   first clears clean-success and non-saturated recovery prerequisites.
-- The active independent-benchmark route is now a pre-method Gymnasium MuJoCo
-  Reacher-v5 calibration plus a completed negative method screen, not BGR
+- The completed Reacher independent-benchmark route is a pre-method Gymnasium
+  MuJoCo Reacher-v5 calibration plus a negative method screen, not BGR
   evidence. It uses package-owned Reacher-v5
   dynamics and target sampling, exact MuJoCo state resets, two-joint angular
   perturbations, and a fixed weak inverse-kinematics/PD controller in
@@ -92,6 +92,21 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   The result is negative: uniform final RAUC is 0.3862, BGR is 0.2907 with
   4/8/0 paired wins/losses/ties against uniform, and BGR-Coverage is 0.2721
   with 4/8/0. Do not scale or promote this Reacher route.
+- The active independent-benchmark route is now Gymnasium MuJoCo
+  InvertedPendulum-v5. It uses the existing isolated `/tmp/bgr_pointmaze_venv`
+  environment (`gymnasium==1.3.0`, `mujoco==3.9.0`, `numpy==2.4.6`), exact
+  MuJoCo state resets, pole-angle perturbations, and a fixed PD balance
+  controller. The compact pre-method calibration artifact
+  `results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json`
+  reports clean success 1.0000, recovery range 0.0000--1.0000, RAUC 0.7500,
+  and r80 0.2100 on a 0--0.30 perturbation grid. The fixed all-method
+  comparison is implemented before method results at
+  `tools/inverted_pendulum_recovery_probe.py`. Run exactly:
+  `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/inverted_pendulum_recovery_probe.py --out results/inverted_pendulum_recovery_probe_4seed_v1`.
+  Do not scale or promote it unless default BGR or BGR-Coverage beats uniform,
+  fixed-radius, failure-only, TD/loss-priority, and BGR-uniform-radius on final
+  RAUC with a visible gap, paired wins over uniform, and non-contradictory
+  non-saturated median-r80 metrics.
 
 ## Reviewer-Critique Priorities
 

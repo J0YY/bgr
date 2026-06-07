@@ -249,6 +249,14 @@ BENCHMARK_SCREENS = [
         "bgr_uniform_radius",
         "final_median_r80",
     ),
+    (
+        "Gymnasium MuJoCo InvertedPendulum-v5",
+        "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
+        ["bgr", "bgr_coverage"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
 ]
 
 CALIBRATION_SCREENS = [
@@ -271,6 +279,10 @@ CALIBRATION_SCREENS = [
     (
         "Gymnasium MuJoCo Reacher-v5 calibration",
         "results/reacher_recovery_calibration_12seed_v1/summary.json",
+    ),
+    (
+        "Gymnasium MuJoCo InvertedPendulum-v5 calibration",
+        "results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json",
     ),
 ]
 
@@ -655,11 +667,20 @@ def render_markdown(root: Path) -> str:
             "internal learned-policy gate; paper incorporation still requires "
             "claim and package checks."
         )
-    if inflight is None and usable_calibrations:
-        names = ", ".join(f"`{screen.name}`" for screen in usable_calibrations)
+    completed_negative_calibration_names = {"Gymnasium MuJoCo Reacher-v5 calibration"}
+    active_calibrations = [
+        screen
+        for screen in usable_calibrations
+        if screen.name not in completed_negative_calibration_names
+    ]
+    if inflight is None and active_calibrations:
+        names = ", ".join(f"`{screen.name}`" for screen in active_calibrations)
         lines.append(
-            f"- Active route: {names} cleared pre-method calibration, but the fixed Reacher all-method comparison is negative and not paper-promotable."
+            f"- Active route: {names} cleared pre-method calibration; run only the fixed preregistered all-method screen before interpreting it."
         )
+    elif inflight is None and usable_calibrations:
+        names = ", ".join(f"`{screen.name}`" for screen in usable_calibrations)
+        lines.append(f"- Active route: {names} cleared pre-method calibration, but all corresponding completed method screens are negative or absent.")
     elif inflight is None:
         lines.append(
             "- Active route: no queued learned-policy route is recorded in the local ledgers."
@@ -751,16 +772,26 @@ def render_markdown(root: Path) -> str:
         "- The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.",
         learned_priority,
     ]
-    if usable_calibrations:
+    if any(screen.name == "Gymnasium MuJoCo Reacher-v5 calibration" for screen in usable_calibrations):
         priority_lines.insert(
             2,
             "- The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is now negative and should not be promoted.",
         )
+    if active_calibrations:
+        names = ", ".join(f"`{screen.name}`" for screen in active_calibrations)
+        priority_lines.insert(
+            3,
+            f"- Active pre-method calibration route(s) awaiting fixed comparison result: {names}.",
+        )
     priority_lines.insert(
-        2 if not usable_calibrations else 3,
+        2 if not usable_calibrations else 4,
         "- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.",
     )
-    if inflight is None and usable_calibrations:
+    if inflight is None and active_calibrations:
+        priority_lines.append(
+            "- The next acceptance-moving work is the fixed InvertedPendulum-v5 all-method screen; do not tune the protocol after seeing its method results."
+        )
+    elif inflight is None and usable_calibrations:
         priority_lines.append(
             "- The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; the Reacher route is now scope evidence, not acceptance evidence."
         )

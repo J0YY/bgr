@@ -1,0 +1,31 @@
+{
+  "cart_kd": 0.05,
+  "cart_kp": 0.4,
+  "clean_success": 1.0,
+  "decision": "usable-calibration",
+  "env_id": "InvertedPendulum-v5",
+  "horizon": 200,
+  "kd": 1.0,
+  "kp": 10.0,
+  "max_recovery": 1.0,
+  "mean_max_abs_angle": 0.12427334108805715,
+  "min_recovery": 0.0,
+  "r80": 0.21000000000000002,
+  "radii": [
+    0.0,
+    0.02,
+    0.04,
+    0.06,
+    0.08,
+    0.1,
+    0.12,
+    0.16,
+    0.2,
+    0.25,
+    0.3
+  ],
+  "rauc": 0.75,
+  "recovery_range": 1.0,
+  "seed_offset": 310000,
+  "seeds": 12
+}

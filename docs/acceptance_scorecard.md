@@ -8,13 +8,13 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Proximal-anchor OpenVLA audit does not clear the learned-policy promotion gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
 - Closest independent benchmark screen is `MiniGrid FourRooms official-package` with treatment `bgr_coverage`: delta vs uniform +0.1075 (4/0/0), worst required-baseline delta +0.0464 (3/1/0), ablation delta +0.0071 (2/2/0), radius delta +0.0000 (0/0/4), failure reason(s): final_median_r80-ceiling-saturated.
 - Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`, `FetchSlide-v4 object-goal calibration`, `FetchPickAndPlace-v4 object-goal calibration`, `highway-env parking-v0 calibration`.
-- Usable pre-method calibration route(s): `Gymnasium MuJoCo Reacher-v5 calibration` clean 0.8333, range 0.5000--0.9167, r80 3.0000.
+- Usable pre-method calibration route(s): `Gymnasium MuJoCo Reacher-v5 calibration` clean 0.8333, range 0.5000--0.9167, r80 3.0000, `Gymnasium MuJoCo InvertedPendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2100.
 
 ## Promotion Deficits
 
 - Independent benchmark: no screen clears the 4/4 promotion screen. The closest screen, `MiniGrid FourRooms official-package` with `bgr_coverage`, clears 3/4 gates and fails on final_median_r80-ceiling-saturated.
 - Learned policy: Proximal-anchor OpenVLA audit does not clear the learned-policy promotion gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
-- Active route: `Gymnasium MuJoCo Reacher-v5 calibration` cleared pre-method calibration, but the fixed Reacher all-method comparison is negative and not paper-promotable.
+- Active route: `Gymnasium MuJoCo InvertedPendulum-v5 calibration` cleared pre-method calibration; run only the fixed preregistered all-method screen before interpreting it.
 
 ## Independent Benchmark Screens
 
@@ -54,12 +54,14 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | FetchPickAndPlace-v4 object-goal calibration | 0.1250 | 0.0000--0.1250 | 0.0660 | reject-calibration |
 | highway-env parking-v0 calibration | 0.3333 | 0.2500--0.5000 | 9.8000 | reject-calibration |
 | Gymnasium MuJoCo Reacher-v5 calibration | 0.8333 | 0.5000--0.9167 | 3.0000 | usable-calibration |
+| Gymnasium MuJoCo InvertedPendulum-v5 calibration | 1.0000 | 0.0000--1.0000 | 0.2100 | usable-calibration |
 
 ## Priority Read
 
 - The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.
 - The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.
 - The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is now negative and should not be promoted.
+- Active pre-method calibration route(s) awaiting fixed comparison result: `Gymnasium MuJoCo InvertedPendulum-v5 calibration`.
 - Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The latest proximal-anchor OpenVLA audit is complete and fails the learned-policy gate: BGR 368/400, official 367/400, random 368/400; identity BGR 98/100, official 99/100, random 98/100; official gap +1 (+0.0025), random gap +0 (+0.0000), clean deficit 1.
-- The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; the Reacher route is now scope evidence, not acceptance evidence.
+- The next acceptance-moving work is the fixed InvertedPendulum-v5 all-method screen; do not tune the protocol after seeing its method results.

@@ -905,3 +905,25 @@ package and recording its version before any result is run.
   not supportive: BGR 3.8375, BGR-Coverage 3.6708, and uniform 3.2437. Treat
   this as scope evidence that the Reacher route did not solve the independent
   benchmark acceptance gap.
+- Gymnasium MuJoCo InvertedPendulum-v5 is the next independent pre-method
+  route because it changes both task family and reset dynamics relative to the
+  failed MiniGrid, PointMaze, FetchReach, highway, and Reacher screens. The
+  calibration uses Gymnasium's package-owned InvertedPendulum-v5 dynamics,
+  exact MuJoCo state resets, one-dimensional pole-angle perturbations, and a
+  fixed PD balance controller. The fixed calibration command is:
+  `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/inverted_pendulum_recovery_calibration.py --out results/inverted_pendulum_recovery_calibration_12seed_v1`.
+  It clears the pre-method gate with clean success 1.0000, recovery range
+  0.0000--1.0000, RAUC 0.7500, and r80 0.2100 on a 0--0.30 perturbation grid
+  in the isolated environment (`gymnasium==1.3.0`, `mujoco==3.9.0`,
+  `numpy==2.4.6`). This is not BGR evidence.
+  The full comparison tool is fixed before method results at
+  `tools/inverted_pendulum_recovery_probe.py`. It keeps the same official
+  package dynamics, exact MuJoCo state resets, pole-angle perturbation family,
+  small linear controller initialized below the calibration controller, and
+  teacher-action imitation updates selected by the replay method. The
+  preregistered 4-seed screen command is:
+  `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/inverted_pendulum_recovery_probe.py --out results/inverted_pendulum_recovery_probe_4seed_v1`.
+  Do not scale it unless default BGR or BGR-Coverage beats uniform,
+  fixed-radius, failure-only, TD/loss-priority, and BGR-uniform-radius on final
+  RAUC with a visible gap, paired wins over uniform, and non-contradictory
+  non-saturated median-r80 metrics.

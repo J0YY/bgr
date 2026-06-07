@@ -42,6 +42,7 @@ CALIBRATION_SUMMARIES = [
     ("FetchPickAndPlace calibration", "results/fetchpickplace_object_goal_calibration_2seed_v1/summary.json"),
     ("Highway parking calibration", "results/highway_parking_recovery_calibration_12seed_v1/summary.json"),
     ("Reacher-v5 calibration", "results/reacher_recovery_calibration_12seed_v1/summary.json"),
+    ("InvertedPendulum-v5 calibration", "results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json"),
 ]
 ROADMAP_DOCS = [
     "AGENTS.md",

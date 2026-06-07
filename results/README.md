@@ -399,6 +399,53 @@ Compact artifacts:
 - `results/reacher_recovery_probe_12seed_v1/history.csv`
 - `results/reacher_recovery_probe_12seed_v1/package_versions.json`
 
+## Internal Gymnasium MuJoCo InvertedPendulum Calibration
+
+This is a pre-method calibration for another official Gymnasium MuJoCo task,
+`InvertedPendulum-v5`. It uses Gymnasium's package-owned dynamics through
+`tools/inverted_pendulum_recovery_calibration.py`; it is not a BGR method
+comparison. The reset interface perturbs the pole angle from exact MuJoCo
+states and evaluates a fixed PD balance controller over a 200-step survival
+horizon.
+
+Command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/inverted_pendulum_recovery_calibration.py --out results/inverted_pendulum_recovery_calibration_12seed_v1
+```
+
+The route clears the pre-method calibration gate: clean success is 1.0000,
+recovery ranges from 0.0000 to 1.0000, RAUC is 0.7500, and r80 is 0.2100 on a
+0--0.30 pole-angle perturbation grid. The isolated environment records
+`gymnasium==1.3.0`, `mujoco==3.9.0`, and `numpy==2.4.6`.
+
+Compact artifacts:
+
+- `results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json`
+- `results/inverted_pendulum_recovery_calibration_12seed_v1/recovery_rows.csv`
+- `results/inverted_pendulum_recovery_calibration_12seed_v1/package_versions.json`
+
+This calibration is only permission to run the fixed all-method screen. The
+comparison tool was implemented before method-comparison results at
+`tools/inverted_pendulum_recovery_probe.py`. It keeps the official
+`InvertedPendulum-v5` package dynamics, exact MuJoCo state resets, pole-angle
+perturbation family, 0--0.30 evaluation grid, and a 4-seed pre-promotion screen
+budget. The learner is a small linear controller initialized below the
+calibration controller and trained by imitation of a stronger PD teacher on
+replayed perturbed states selected by the replay method.
+
+Preregistered command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/inverted_pendulum_recovery_probe.py --out results/inverted_pendulum_recovery_probe_4seed_v1
+```
+
+Do not scale or promote this route unless default BGR or BGR-Coverage beats
+uniform, fixed-radius, failure-only, TD/loss-priority, and the
+state-priority/uniform-radius ablation on final RAUC with a visible effect,
+paired wins over uniform, and non-contradictory non-saturated median-r80
+metrics.
+
 ## Internal Official PointMaze Diagnostic
 
 The next preregistered external-package screen is official PointMaze U-Maze,

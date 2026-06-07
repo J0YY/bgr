@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "8149ca7fcfb3065ca6689789941f04c004c0f7c1129d9a2d215c5ce41e0268ff",
-      "size_bytes": 274780
+      "sha256": "4955c8fa7a35682305e0adbeb638361a860b5ab2d75e25b9fd4d56ee40342197",
+      "size_bytes": 277008
     },
     {
       "path": "results/environment_v1/README.md",
@@ -584,6 +584,21 @@
       "path": "results/highway_parking_recovery_calibration_12seed_v1/summary.json",
       "sha256": "19fe2ca6af7b470d601b5d9fa5766b7f2d5c21b09f493004417ea34e4bf204e2",
       "size_bytes": 397
+    },
+    {
+      "path": "results/inverted_pendulum_recovery_calibration_12seed_v1/package_versions.json",
+      "sha256": "ac3e3470d1bb01d3a282bce3eeb865663209b0867ae31ba9c319f47c38b9742d",
+      "size_bytes": 100
+    },
+    {
+      "path": "results/inverted_pendulum_recovery_calibration_12seed_v1/recovery_rows.csv",
+      "sha256": "440710d48bd0749f6e9c043a873d4d7d52cb8e6799ff0c24f2df579470c86fa8",
+      "size_bytes": 8059
+    },
+    {
+      "path": "results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json",
+      "sha256": "27e6bd52a45c2e811660f8760842d71d3eeb83c0004f8b51e59f199d822bd748",
+      "size_bytes": 505
     },
     {
       "path": "results/libero_openvla_boundary_selection_balanced_v1/aggregate.csv",
@@ -777,8 +792,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "fcc476a69b577a3da5889e4b574e9d54e335dab0563e70e8cda12cb657d30749",
-      "size_bytes": 32215
+      "sha256": "50f111fdc4cc97bb2a32d7cf7d42be516664508fdebb70b5c80e96c67e45f949",
+      "size_bytes": 33751
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -792,8 +807,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "b269c9c549a9329e4206c2974197733b8fc624bb2a59d278e58f5ecd4dc7dce4",
-      "size_bytes": 26044
+      "sha256": "8d5c3aec788dd0b61d6929f23326ad5030670dcd1122b3fceb3d073765094173",
+      "size_bytes": 26158
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -807,8 +822,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "c52ca0607fe04d2ad56331e4e6a720d8b9331addfb62dd64d1b1afeaf4623dcd",
-      "size_bytes": 236100
+      "sha256": "dda5498c30047ef8f469857aec64e6252dc6c6af88859e037ea8761919b133ae",
+      "size_bytes": 236677
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1221,6 +1236,16 @@
       "size_bytes": 2283
     },
     {
+      "path": "tests/test_inverted_pendulum_recovery_calibration.py",
+      "sha256": "7f4cbfa4ef4e9adc08bd507de7ba27ea88d7f15f5c06f4ade65ac3d0ae191473",
+      "size_bytes": 3206
+    },
+    {
+      "path": "tests/test_inverted_pendulum_recovery_probe.py",
+      "sha256": "d32b04a3ba9faecc5429f79caf2c0a335edd2d493c50c69e075f8b34ad262d3b",
+      "size_bytes": 4620
+    },
+    {
       "path": "tests/test_libero_openvla_recovery_summary.py",
       "sha256": "893c6885da3aada85012918e84dc2d14417b37a5eb68e5a3ee48cadf27c4d07d",
       "size_bytes": 1283
@@ -1324,6 +1349,16 @@
       "path": "tools/highway_parking_recovery_calibration.py",
       "sha256": "4ba562330fa4faa9c9028cef447a6b011afb7d43dfea734056b6bbb4ca7c684e",
       "size_bytes": 8651
+    },
+    {
+      "path": "tools/inverted_pendulum_recovery_calibration.py",
+      "sha256": "b3cd5226e0f2166efa2212ecdd09ff430e74ac22eb45eda62c29f36e57958d2d",
+      "size_bytes": 8750
+    },
+    {
+      "path": "tools/inverted_pendulum_recovery_probe.py",
+      "sha256": "9abd2c908cca7efb9cfe26dd4344c363e8922b108e50e91bb6269ecca53e69b7",
+      "size_bytes": 23431
     },
     {
       "path": "tools/reacher_recovery_calibration.py",
