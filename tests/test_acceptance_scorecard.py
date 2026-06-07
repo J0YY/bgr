@@ -318,6 +318,65 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("BGR 368/400, official 367/400, random 368/400", priority_read)
         self.assertNotIn("latest OpenVLA weighted audit", priority_read)
 
+    def test_retired_calibrated_routes_are_not_reported_as_active(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write(
+                root / "results/grid_margin_full_30seed_v1/summary.csv",
+                "method,seed,final_rauc\nbgr,0,0.44\nuniform,0,0.40\n",
+            )
+            _write(
+                root / "results/grid_margin_full_replication_30seed_v1/summary.csv",
+                "method,seed,final_rauc\nbgr,30,0.43\nuniform,30,0.39\n",
+            )
+            _write(
+                root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE,
+                "\n".join(
+                    [
+                        "method,perturbation,episodes,successes,success_rate",
+                        "bgr,identity,100,98,0.98",
+                        "bgr,blur,100,98,0.98",
+                        "bgr,brightness,100,99,0.99",
+                        "bgr,occlusion,100,73,0.73",
+                        "bgr,shift,100,98,0.98",
+                        "official,identity,100,99,0.99",
+                        "official,blur,100,97,0.97",
+                        "official,brightness,100,98,0.98",
+                        "official,occlusion,100,74,0.74",
+                        "official,shift,100,98,0.98",
+                        "random,identity,100,98,0.98",
+                        "random,blur,100,99,0.99",
+                        "random,brightness,100,98,0.98",
+                        "random,occlusion,100,73,0.73",
+                        "random,shift,100,98,0.98",
+                        "",
+                    ]
+                ),
+            )
+            _write(
+                root / "results/reacher_recovery_calibration_12seed_v1/summary.json",
+                '{"clean_success": 0.8333, "min_recovery": 0.5, "max_recovery": 0.9167, "r80": 3.0}\n',
+            )
+            _write(
+                root / "results/reacher_recovery_probe_12seed_v1/summary.csv",
+                "method,seed,final_rauc,final_median_r80\nuniform,0,0.38,3.0\nbgr,0,0.29,3.0\n",
+            )
+            _write(
+                root / "results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json",
+                '{"clean_success": 1.0, "min_recovery": 0.0, "max_recovery": 1.0, "r80": 0.21}\n',
+            )
+            _write(
+                root / "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
+                "method,seed,final_rauc,final_median_r80\nuniform,0,0.75,0.21\nbgr,0,0.75,0.21\n",
+            )
+
+            text = render_markdown(root)
+
+        self.assertIn("Retired calibrated route(s): `Gymnasium MuJoCo Reacher-v5 calibration`, `Gymnasium MuJoCo InvertedPendulum-v5 calibration`", text)
+        self.assertIn("not active acceptance evidence", text)
+        self.assertIn("Active route: no queued learned-policy route is recorded", text)
+        self.assertNotIn("all corresponding completed method screens are negative or absent", text)
+
 
 if __name__ == "__main__":
     unittest.main()

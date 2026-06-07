@@ -15,6 +15,11 @@ from scripts.check_acceptance_readiness import OPENVLA_NON_IDENTITY_PERTURBATION
 from scripts.check_acceptance_readiness import OPENVLA_PROXIMAL_ANCHOR_COMPLETE
 from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_COMPLETE
 
+COMPLETED_METHOD_SCREEN_BY_CALIBRATION = {
+    "Gymnasium MuJoCo Reacher-v5 calibration": "results/reacher_recovery_probe_12seed_v1/summary.csv",
+    "Gymnasium MuJoCo InvertedPendulum-v5 calibration": "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
+}
+
 
 @dataclass(frozen=True)
 class PairedComparison:
@@ -667,22 +672,28 @@ def render_markdown(root: Path) -> str:
             "internal learned-policy gate; paper incorporation still requires "
             "claim and package checks."
         )
-    completed_negative_calibration_names = {"Gymnasium MuJoCo Reacher-v5 calibration"}
-    if (root / "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv").exists():
-        completed_negative_calibration_names.add("Gymnasium MuJoCo InvertedPendulum-v5 calibration")
+    retired_calibrations = [
+        screen
+        for screen in usable_calibrations
+        if (screen.name in COMPLETED_METHOD_SCREEN_BY_CALIBRATION)
+        and (root / COMPLETED_METHOD_SCREEN_BY_CALIBRATION[screen.name]).exists()
+    ]
+    retired_calibration_names = {screen.name for screen in retired_calibrations}
     active_calibrations = [
         screen
         for screen in usable_calibrations
-        if screen.name not in completed_negative_calibration_names
+        if screen.name not in retired_calibration_names
     ]
+    if retired_calibrations:
+        names = ", ".join(f"`{screen.name}`" for screen in retired_calibrations)
+        lines.append(
+            f"- Retired calibrated route(s): {names} cleared pre-method calibration, but the corresponding fixed method screen is negative or tied; not active acceptance evidence."
+        )
     if inflight is None and active_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in active_calibrations)
         lines.append(
             f"- Active route: {names} cleared pre-method calibration; run only the fixed preregistered all-method screen before interpreting it."
         )
-    elif inflight is None and usable_calibrations:
-        names = ", ".join(f"`{screen.name}`" for screen in usable_calibrations)
-        lines.append(f"- Active route: {names} cleared pre-method calibration, but all corresponding completed method screens are negative or absent.")
     elif inflight is None:
         lines.append(
             "- Active route: no queued learned-policy route is recorded in the local ledgers."
@@ -779,7 +790,7 @@ def render_markdown(root: Path) -> str:
             2,
             "- The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is now negative and should not be promoted.",
         )
-    if (root / "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv").exists():
+    if any(screen.name == "Gymnasium MuJoCo InvertedPendulum-v5 calibration" for screen in retired_calibrations):
         priority_lines.insert(
             3,
             "- The InvertedPendulum-v5 calibration also cleared pre-method checks, but its fixed 4-seed method screen ties all methods on final RAUC and median-r80; do not scale or promote it.",
@@ -800,7 +811,7 @@ def render_markdown(root: Path) -> str:
         )
     elif inflight is None and usable_calibrations:
         priority_lines.append(
-            "- The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; the Reacher route is now scope evidence, not acceptance evidence."
+            "- The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; the retired MuJoCo routes are scope evidence, not acceptance evidence."
         )
     elif inflight is None:
         priority_lines.append(
