@@ -4161,6 +4161,8 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "active learning selects informative labels under a query budget",
         "The novelty claim is narrow and falsifiable",
         "If state-priority replay with uniform radii or loss-priority replay matches BGR",
+        "The radius-level ablation is therefore a negative control",
+        "state priority is held fixed and only the radius rule changes",
         "changes the target from a level or transition score to an estimated curve crossing",
         "and the replay action from revisiting a hard state to choosing a radius near that crossing",
         "Evidence contract used throughout the experiments",

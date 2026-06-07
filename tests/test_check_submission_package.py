@@ -4894,6 +4894,8 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "active learning selects informative labels under a query budget",
                         "The novelty claim is narrow and falsifiable",
                         "If state-priority replay with uniform radii or loss-priority replay matches BGR",
+                        "The radius-level ablation is therefore a negative control",
+                        "state priority is held fixed and only the radius rule changes",
                         "changes the target from a level or transition score to an estimated curve crossing",
                         "and the replay action from revisiting a hard state to choosing a radius near that crossing",
                         "We use three evidence tiers",
@@ -4953,6 +4955,8 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "active learning selects informative labels under a query budget",
                         "The novelty claim is narrow and falsifiable",
                         "If state-priority replay with uniform radii or loss-priority replay matches BGR",
+                        "The radius-level ablation is therefore a negative control",
+                        "state priority is held fixed and only the radius rule changes",
                         "changes the target from a level or transition score to an estimated curve crossing",
                         "and the replay action from revisiting a hard state to choosing a radius near that crossing",
                         "We use three evidence tiers",
@@ -5015,6 +5019,19 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             paper.write_text(manuscript.replace(scoped, "This certifies boundary localization"), encoding="utf-8")
 
             with self.assertRaisesRegex(ValueError, "This certifies boundary localization"):
+                check_manuscript_framing(paper)
+
+    def test_manuscript_framing_rejects_weakened_radius_ablation_control(self):
+        source_paper = Path(__file__).resolve().parents[1] / "paper" / "main.tex"
+        manuscript = source_paper.read_text(encoding="utf-8")
+        scoped = "state priority is held fixed and only the radius rule changes"
+        self.assertIn(scoped, manuscript)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            paper = Path(temp_dir) / "main.tex"
+            paper.write_text(manuscript.replace(scoped, "state priority and radius sampling both change"), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "state priority is held fixed"):
                 check_manuscript_framing(paper)
 
     def test_manuscript_framing_rejects_weakened_witness_scope(self):
