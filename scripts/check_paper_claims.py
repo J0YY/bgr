@@ -942,13 +942,6 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
 
     sanity = read_csv_rows(results_dir / "openvla_oft_sanity_eval_sanity_v1" / "summary.csv")
     official = one_row(sanity, "method", "oft-goal")
-    claims.append(
-        Claim(
-            "OpenVLA official checkpoint success",
-            ratio(official["successes"], official["episodes"]),
-            "results/openvla_oft_sanity_eval_sanity_v1/summary.csv",
-        )
-    )
 
     final_clean = read_csv_rows(
         results_dir
@@ -961,13 +954,6 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         final_random_clean["successes"], final_random_clean["episodes"]
     ):
         raise ValueError("Expected p1024 BGR/random clean success ratios to match")
-    claims.append(
-        Claim(
-            "OpenVLA final clean BGR vs random",
-            f"BGR and matched random both score {ratio(final_bgr_clean['successes'], final_bgr_clean['episodes'])} clean episodes",
-            "results/openvla_oft_goal_adapt_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
-        )
-    )
 
     final_perturb = read_csv_rows(
         results_dir
@@ -979,33 +965,6 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         / "openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1"
         / "summary.csv"
     )
-    claims.append(
-        Claim(
-            "OpenVLA original mean visual perturbation BGR vs random",
-            (
-                f"{fmt(mean_success_rate(final_perturb, 'bgr', exclude_perturbations={'identity'}), 4)} "
-                f"vs. {fmt(mean_success_rate(final_perturb, 'random', exclude_perturbations={'identity'}), 4)}"
-            ),
-            "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
-        )
-    )
-    claims.append(
-        Claim(
-            "OpenVLA offset mean visual perturbation BGR vs random",
-            (
-                f"{fmt(mean_success_rate(offset_perturb, 'bgr', exclude_perturbations={'identity'}), 4)} "
-                f"vs. {fmt(mean_success_rate(offset_perturb, 'random', exclude_perturbations={'identity'}), 4)}"
-            ),
-            "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
-        )
-    )
-    claims.append(
-        Claim(
-            "OpenVLA offset official mean visual perturbation",
-            f"official reaches {fmt(mean_success_rate(offset_perturb, 'official', exclude_perturbations={'identity'}), 4)}",
-            "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
-        )
-    )
     p1024_pooled_bgr = pooled_success_rate([final_perturb, offset_perturb], "bgr", exclude_perturbations={"identity"})
     p1024_pooled_random = pooled_success_rate(
         [final_perturb, offset_perturb], "random", exclude_perturbations={"identity"}
@@ -1013,25 +972,6 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     p1024_pooled_official = pooled_success_rate(
         [final_perturb, offset_perturb], "official", exclude_perturbations={"identity"}
     )
-    claims.append(
-        Claim(
-            "OpenVLA pooled mean visual perturbation BGR vs random",
-            (
-                f"{fmt(p1024_pooled_bgr, 4)} "
-                f"vs. {fmt(p1024_pooled_random, 4)} "
-                f"for random"
-            ),
-            "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv and offset3 summary.csv",
-        )
-    )
-    claims.append(
-        Claim(
-            "OpenVLA pooled official mean visual perturbation",
-            f"trailing the unadapted official checkpoint at {fmt(p1024_pooled_official, 4)}",
-            "results/openvla_oft_perturb_eval_cleanmix_p1024_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv and offset3 summary.csv",
-        )
-    )
-
     p2048_clean = read_csv_rows(
         results_dir
         / "openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1"
@@ -1043,13 +983,6 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         p2048_random_clean["successes"], p2048_random_clean["episodes"]
     ):
         raise ValueError("Expected p2048 BGR/random clean success ratios to match")
-    claims.append(
-        Claim(
-            "OpenVLA p2048 clean BGR vs random",
-            f"BGR and random tie clean ({ratio(p2048_bgr_clean['successes'], p2048_bgr_clean['episodes'])} each)",
-            "results/openvla_oft_goal_adapt_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
-        )
-    )
 
     p2048_perturb = read_csv_rows(
         results_dir
@@ -1064,31 +997,9 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     p2048_bgr_visual = mean_success_rate(p2048_perturb, "bgr", exclude_perturbations={"identity"})
     p2048_random_visual = mean_success_rate(p2048_perturb, "random", exclude_perturbations={"identity"})
     p2048_official_visual = mean_success_rate(p2048_perturb, "official", exclude_perturbations={"identity"})
-    claims.append(
-        Claim(
-            "OpenVLA original p2048 mean visual perturbation BGR vs random vs official",
-            (
-                f"original perturbations give {fmt(p2048_bgr_visual, 4)} "
-                f"vs. {fmt(p2048_random_visual, 4)} "
-                f"random, tying official at {fmt(p2048_official_visual, 4)}"
-            ),
-            "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv",
-        )
-    )
     p2048_offset_bgr = mean_success_rate(p2048_offset_perturb, "bgr", exclude_perturbations={"identity"})
     p2048_offset_random = mean_success_rate(p2048_offset_perturb, "random", exclude_perturbations={"identity"})
     p2048_offset_official = mean_success_rate(p2048_offset_perturb, "official", exclude_perturbations={"identity"})
-    claims.append(
-        Claim(
-            "OpenVLA p2048 offset mean visual perturbation BGR vs random vs official",
-            (
-                f"Offset-3 gives {fmt(p2048_offset_bgr, 4)} "
-                f"vs. {fmt(p2048_offset_random, 4)} random; "
-                f"official reaches {fmt(p2048_offset_official, 4)}"
-            ),
-            "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_offset3_7trials_v1/summary.csv",
-        )
-    )
     p2048_pooled_bgr = pooled_success_rate(
         [p2048_perturb, p2048_offset_perturb], "bgr", exclude_perturbations={"identity"}
     )
@@ -1098,18 +1009,6 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     p2048_pooled_official = pooled_success_rate(
         [p2048_perturb, p2048_offset_perturb], "official", exclude_perturbations={"identity"}
     )
-    claims.append(
-        Claim(
-            "OpenVLA p2048 pooled mean visual perturbation BGR vs random vs official",
-            (
-                f"Pooling p2048 gives BGR {fmt(p2048_pooled_bgr, 4)} "
-                f"vs. {fmt(p2048_pooled_random, 4)} random, "
-                f"trailing official at {fmt(p2048_pooled_official, 4)}"
-            ),
-            "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_v1/summary.csv and offset3 summary.csv",
-        )
-    )
-
     p2048_fullgoal_clean = read_csv_rows(
         results_dir
         / "openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1"

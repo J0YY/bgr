@@ -4983,6 +4983,9 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "critical radius is within",
                         "This certifies boundary localization, not learner improvement",
                         "BGR depends on a feasibility witness",
+                        "This is a real interface assumption, not free supervision or a learned success oracle",
+                        "When no reliable witness is available, BGR should be treated as an audit tool or not applied",
+                        "We only promote settings where the witness is exact or stress-tested",
                         "synthetic and grid-margin benchmarks are constructed to expose recovery curves",
                         "A canonical Gym FrozenLake8x8-v1 diagnostic reinforces that limitation",
                         "Standard-environment scope audits",
@@ -5012,6 +5015,19 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             paper.write_text(manuscript.replace(scoped, "This certifies boundary localization"), encoding="utf-8")
 
             with self.assertRaisesRegex(ValueError, "This certifies boundary localization"):
+                check_manuscript_framing(paper)
+
+    def test_manuscript_framing_rejects_weakened_witness_scope(self):
+        source_paper = Path(__file__).resolve().parents[1] / "paper" / "main.tex"
+        manuscript = source_paper.read_text(encoding="utf-8")
+        scoped = "When no reliable witness is available, BGR should be treated as an audit tool or not applied"
+        self.assertIn(scoped, manuscript)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            paper = Path(temp_dir) / "main.tex"
+            paper.write_text(manuscript.replace(scoped, "BGR can infer feasibility during replay"), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "When no reliable witness is available"):
                 check_manuscript_framing(paper)
 
     def test_manuscript_framing_rejects_boundary_figure_without_r80_distribution_inset(self):

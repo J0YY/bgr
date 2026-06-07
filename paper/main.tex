@@ -69,7 +69,7 @@ We evaluate robustness with recovery AUC,
 \mathrm{RAUC}_\pi(x)=\frac{1}{\sigma_{\max}}\int_0^{\sigma_{\max}} R_\pi(x,\sigma)d\sigma.
 \end{equation}
 
-BGR depends on a feasibility witness $F(x,\sigma)$ estimating whether perturbed states remain meaningful and solvable by a reference process. This is a real assumption, not free supervision: without it, boundary replay can waste updates on invalid perturbations. Our witnesses are exact reachability checks, teacher/demo suffix models, simulator validity checks, or observed clean OpenVLA success. They are not policy oracles; they filter broken tasks so replay focuses on recoverable boundaries, and the suffix stress sweep varies teacher quality to test one witness-fidelity failure mode.
+BGR depends on a feasibility witness $F(x,\sigma)$ estimating whether perturbed states remain meaningful and solvable by a reference process. This is a real interface assumption, not free supervision or a learned success oracle: without it, boundary replay can waste updates on invalid perturbations or inflate margins with impossible states. Our witnesses are exact reachability checks, teacher/demo suffix models, simulator validity checks, or observed clean OpenVLA success. When no reliable witness is available, BGR should be treated as an audit tool or not applied. We only promote settings where the witness is exact or stress-tested; the suffix stress sweep varies teacher quality to test one witness-fidelity failure mode.
 
 \begin{table}[t]
 \centering
@@ -254,14 +254,15 @@ The OpenVLA-OFT bridge exports 11,776 teacher-action rows; action-label/TFDS plu
 
 In words, the strongest current scale remains negative. A 10-task full-goal identity audit gives 99/100 clean successes for BGR, matched random, and the official checkpoint; the visual perturbation audit gives BGR 367/400 perturbed successes, tying official and trailing matched random by one episode (368/400). A 300-step image-augmentation continuation gives BGR and matched random 368/400 perturbed successes each, only one episode above official (367/400), while BGR trails both on identity. A 1,000-step low-learning-rate continuation is also negative: BGR gives 366/400 non-identity perturbation successes, trailing official at 367/400 and matched random at 370/400. The weighted perturbation curriculum is complete and also negative: BGR and official tie at 367/400 non-identity successes while matched random reaches 370/400. A final proximal-anchor objective keeps BGR and matched random tied at 368/400 non-identity successes, only one episode above official (367/400), with BGR identity at 98/100 versus official 99/100. Across these runs there is no stable official improvement.
 
-The smaller clean-mix diagnostics explain this boundary. The official checkpoint scores 14/15 under the same eval. In p1024, BGR and matched random both score 14/15 clean episodes; perturbations give 0.8333 vs. 0.8000 for random and 0.8167 for official. The offset-3 follow-up gives 0.8643 vs. 0.8571, but official reaches 0.8929. Pooling gives BGR 0.8550 vs. 0.8400 for random, trailing the unadapted official checkpoint at 0.8700. At p2048, BGR and random tie clean (14/15 each); original perturbations give 0.8167 vs. 0.8000 random, tying official at 0.8167. Offset-3 gives 0.8714 vs. 0.8714 random; official reaches 0.8929. Pooling p2048 gives BGR 0.8550 vs. 0.8500 random, trailing official at 0.8700.
-
 \section{Limitations}
 
 BGR requires reset or replay access, a meaningful perturbation family, a feasibility witness, and extra rollouts for boundary estimation. It targets an observed boundary, not a formal robustness certificate. The clearest evidence is controlled procedural margin expansion; the synthetic and grid-margin benchmarks are constructed to expose recovery curves, so they establish mechanism rather than broad benchmark dominance. The paper does not claim a clear win on an independent pre-existing robustness benchmark.
 
 \begin{center}
+\begingroup
 \scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{0.86}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{llll}
 \hline
@@ -281,15 +282,16 @@ InvertedPendulum-v5 & BGR 0.7500; BGR-Cov. 0.7500 & uniform/fixed/failure-only/T
 \end{tabular}}
 \refstepcounter{table}\label{tab:scope-audits}
 {\footnotesize Table~\thetable: Standard-environment scope audits (limitations, not positive claims).}
+\endgroup
 \end{center}
 
-Table~\ref{tab:scope-audits} summarizes standard-environment audits that keep the claim scoped. FrozenLake has a small BGR RAUC edge but loses paired-sign and complementary-metric checks; MiniGrid, PointMaze, FetchReach, and Reacher fail against stronger baselines, complementary radius metrics, or paired wins; and InvertedPendulum ties all methods. Reacher-v5 MuJoCo screen gives BGR 0.2907 and BGR-Coverage 0.2721 final RAUC versus uniform 0.3862, with BGR winning only 4/12 paired seeds. InvertedPendulum-v5 MuJoCo screen ties every method at 0.7500 final RAUC and median $r_{80}=0.2100$, with BGR 0/0/4 against uniform. Additional 4-seed pre-promotion probes also stay negative: Taxi, CliffWalking, MountainCar, CartPole, Acrobot, and Pendulum fail through saturation, stronger baselines, or the state-priority/uniform-radius ablation.
+Table~\ref{tab:scope-audits} keeps the scope explicit. FrozenLake has a small BGR RAUC edge but loses paired-sign and complementary-metric checks; MiniGrid, PointMaze, FetchReach, and Reacher fail against stronger baselines, complementary radius metrics, or paired wins; and InvertedPendulum ties all methods. Reacher-v5 MuJoCo screen gives BGR 0.2907 and BGR-Coverage 0.2721 final RAUC versus uniform 0.3862, with BGR winning only 4/12 paired seeds. InvertedPendulum-v5 MuJoCo screen ties every method at 0.7500 final RAUC and median $r_{80}=0.2100$, with BGR 0/0/4 against uniform. Additional 4-seed pre-promotion probes also stay negative: Taxi, CliffWalking, MountainCar, CartPole, Acrobot, and Pendulum fail through saturation, stronger baselines, or the state-priority/uniform-radius ablation.
 
-The suffix simulator is positive on final RAUC, clean success, transfer RAUC, and AULC, including stress regimes, but gains over uniform are small and uniform retains the median-critical-radius edge. RAUC and AULC are useful for measuring curve expansion, but they are author-defined integrals over chosen radius grids; we report median $r_{80}$ and clean success separately instead of treating RAUC alone as decisive. OpenVLA is a learned-policy audit rather than a robotics training claim: it validates recovery-curve measurement and matched action/TFDS construction, while showing that a full robotics claim still requires stable optimization, clean-data scale, and LIBERO gains over both matched random and the official checkpoint.
+The suffix simulator is positive on final RAUC, clean success, transfer RAUC, and AULC, including stress regimes, but gains are small and uniform retains the median-critical-radius edge. RAUC and AULC are useful for measuring curve expansion, but they are author-defined integrals over chosen radius grids; we report median $r_{80}$ and clean success separately instead of treating RAUC alone as decisive. OpenVLA is a learned-policy audit rather than a robotics training claim: it validates recovery-curve measurement and matched action/TFDS construction, while showing that a full robotics claim still requires stable optimization, clean-data scale, and LIBERO gains over both matched random and the official checkpoint.
 
 \section{Conclusion}
 
-BGR converts recovery-margin measurement into a replay curriculum. The evidence supports a mechanism claim: with reset access, feasible perturbations, and directly trainable recovery curves, sampling near the estimated success--failure boundary improves margin expansion over uniform, fixed-radius, failure-only, and loss-proxy replay. The radius-level ablation is the clearest novelty evidence: hard-state priority alone loses the grid-margin effect when radii are drawn uniformly. Synthetic and grid-margin studies establish the mechanism; suffix results show scoped transfer to manipulation-style replay states. The current learned-policy evidence remains an audit, not the final robotics result.
+BGR converts recovery-margin measurement into a replay curriculum. With reset access, feasible perturbations, and directly trainable recovery curves, boundary replay improves margin expansion over uniform, fixed-radius, failure-only, and loss-proxy replay; hard-state priority alone loses the grid-margin effect when radii are drawn uniformly. Synthetic and grid-margin studies establish the mechanism; suffix results show scoped manipulation-style transfer. The current learned-policy evidence remains an audit, not the final robotics result.
 
 \bibliography{references}
 
