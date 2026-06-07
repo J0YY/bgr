@@ -92,21 +92,20 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   The result is negative: uniform final RAUC is 0.3862, BGR is 0.2907 with
   4/8/0 paired wins/losses/ties against uniform, and BGR-Coverage is 0.2721
   with 4/8/0. Do not scale or promote this Reacher route.
-- The active independent-benchmark route is now Gymnasium MuJoCo
-  InvertedPendulum-v5. It uses the existing isolated `/tmp/bgr_pointmaze_venv`
+- The completed Gymnasium MuJoCo InvertedPendulum-v5 route uses the existing
+  isolated `/tmp/bgr_pointmaze_venv`
   environment (`gymnasium==1.3.0`, `mujoco==3.9.0`, `numpy==2.4.6`), exact
   MuJoCo state resets, pole-angle perturbations, and a fixed PD balance
   controller. The compact pre-method calibration artifact
   `results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json`
   reports clean success 1.0000, recovery range 0.0000--1.0000, RAUC 0.7500,
   and r80 0.2100 on a 0--0.30 perturbation grid. The fixed all-method
-  comparison is implemented before method results at
-  `tools/inverted_pendulum_recovery_probe.py`. Run exactly:
+  comparison was implemented before method results at
+  `tools/inverted_pendulum_recovery_probe.py` and run exactly as:
   `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/inverted_pendulum_recovery_probe.py --out results/inverted_pendulum_recovery_probe_4seed_v1`.
-  Do not scale or promote it unless default BGR or BGR-Coverage beats uniform,
-  fixed-radius, failure-only, TD/loss-priority, and BGR-uniform-radius on final
-  RAUC with a visible gap, paired wins over uniform, and non-contradictory
-  non-saturated median-r80 metrics.
+  The result is negative and should not be scaled or promoted: every method
+  ties at final RAUC 0.7500 and median r80 0.2100, with BGR 0/0/4 against
+  uniform on final RAUC.
 
 ## Reviewer-Critique Priorities
 

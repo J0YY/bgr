@@ -446,6 +446,19 @@ state-priority/uniform-radius ablation on final RAUC with a visible effect,
 paired wins over uniform, and non-contradictory non-saturated median-r80
 metrics.
 
+The completed 4-seed screen is negative and should not be scaled. Every method
+has the same final clean success (1.0000), final RAUC (0.7500), final median
+r80 (0.2100), and best RAUC (0.7500). BGR has 0/0/4 paired wins/losses/ties
+against uniform on final RAUC, so the route fails the visible-effect,
+paired-win, strong-baseline, and state-priority-ablation gates.
+
+Compact artifacts:
+
+- `results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv`
+- `results/inverted_pendulum_recovery_probe_4seed_v1/aggregate.csv`
+- `results/inverted_pendulum_recovery_probe_4seed_v1/history.csv`
+- `results/inverted_pendulum_recovery_probe_4seed_v1/package_versions.json`
+
 ## Internal Official PointMaze Diagnostic
 
 The next preregistered external-package screen is official PointMaze U-Maze,

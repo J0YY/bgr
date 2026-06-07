@@ -387,6 +387,36 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"TD-loss {reacher_td:.4f}, uniform-radius {reacher_ablation:.4f}, W/L/T={best_reacher_wins}"
             )
 
+    inverted_path = root / "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv"
+    if inverted_path.exists():
+        inverted = read_rows(inverted_path)
+        inverted_bgr = mean_metric(inverted, "bgr", "final_rauc")
+        inverted_coverage = mean_metric(inverted, "bgr_coverage", "final_rauc")
+        inverted_uniform = mean_metric(inverted, "uniform", "final_rauc")
+        inverted_failure = mean_metric(inverted, "failure_only", "final_rauc")
+        inverted_fixed = mean_metric(inverted, "fixed", "final_rauc")
+        inverted_td = mean_metric(inverted, "td_loss", "final_rauc")
+        inverted_ablation = mean_metric(inverted, "bgr_uniform_radius", "final_rauc")
+        inverted_bgr_wins = paired_wins(inverted, "bgr", "uniform", "final_rauc")
+        inverted_coverage_wins = paired_wins(inverted, "bgr_coverage", "uniform", "final_rauc")
+        best_inverted_wins = inverted_bgr_wins if inverted_bgr >= inverted_coverage else inverted_coverage_wins
+        if not (
+            (inverted_bgr > inverted_uniform or inverted_coverage > inverted_uniform)
+            and max(inverted_bgr, inverted_coverage) > max(
+                inverted_failure,
+                inverted_fixed,
+                inverted_td,
+                inverted_ablation,
+            )
+            and best_inverted_wins[0] >= 3
+        ):
+            failures.append(
+                f"InvertedPendulum-v5 negative/tied: BGR {inverted_bgr:.4f}, "
+                f"BGR-Coverage {inverted_coverage:.4f}, uniform {inverted_uniform:.4f}, "
+                f"failure-only {inverted_failure:.4f}, fixed {inverted_fixed:.4f}, "
+                f"TD-loss {inverted_td:.4f}, uniform-radius {inverted_ablation:.4f}, W/L/T={best_inverted_wins}"
+            )
+
     for label, relative_path in CALIBRATION_SUMMARIES:
         calibration_path = root / relative_path
         if not calibration_path.exists():

@@ -668,6 +668,8 @@ def render_markdown(root: Path) -> str:
             "claim and package checks."
         )
     completed_negative_calibration_names = {"Gymnasium MuJoCo Reacher-v5 calibration"}
+    if (root / "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv").exists():
+        completed_negative_calibration_names.add("Gymnasium MuJoCo InvertedPendulum-v5 calibration")
     active_calibrations = [
         screen
         for screen in usable_calibrations
@@ -776,6 +778,11 @@ def render_markdown(root: Path) -> str:
         priority_lines.insert(
             2,
             "- The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is now negative and should not be promoted.",
+        )
+    if (root / "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv").exists():
+        priority_lines.insert(
+            3,
+            "- The InvertedPendulum-v5 calibration also cleared pre-method checks, but its fixed 4-seed method screen ties all methods on final RAUC and median-r80; do not scale or promote it.",
         )
     if active_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in active_calibrations)

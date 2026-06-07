@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "4955c8fa7a35682305e0adbeb638361a860b5ab2d75e25b9fd4d56ee40342197",
-      "size_bytes": 277008
+      "sha256": "43c6b8ea0c859d91e2091f167126ba2b9596c44774b4b3f30523c32d07bb1f26",
+      "size_bytes": 277672
     },
     {
       "path": "results/environment_v1/README.md",
@@ -599,6 +599,26 @@
       "path": "results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json",
       "sha256": "27e6bd52a45c2e811660f8760842d71d3eeb83c0004f8b51e59f199d822bd748",
       "size_bytes": 505
+    },
+    {
+      "path": "results/inverted_pendulum_recovery_probe_4seed_v1/aggregate.csv",
+      "sha256": "e0877d4add4507483d689725e335caf1cb0029c6bda6d9048bffc15a300b5a5e",
+      "size_bytes": 498
+    },
+    {
+      "path": "results/inverted_pendulum_recovery_probe_4seed_v1/history.csv",
+      "sha256": "053b04f4fc93b86811caef02345ff143cba40ff54f61b1bb9f87020f830fbcde",
+      "size_bytes": 6728
+    },
+    {
+      "path": "results/inverted_pendulum_recovery_probe_4seed_v1/package_versions.json",
+      "sha256": "ac3e3470d1bb01d3a282bce3eeb865663209b0867ae31ba9c319f47c38b9742d",
+      "size_bytes": 100
+    },
+    {
+      "path": "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
+      "sha256": "e4ab69744026d2d0ae61a145df32c6fab1060f08560663993f7b0582fb156edb",
+      "size_bytes": 1831
     },
     {
       "path": "results/libero_openvla_boundary_selection_balanced_v1/aggregate.csv",
@@ -792,8 +812,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "50f111fdc4cc97bb2a32d7cf7d42be516664508fdebb70b5c80e96c67e45f949",
-      "size_bytes": 33751
+      "sha256": "4373a21e17ac9f832902a2034700c1fbfe2f0f46ad07d368ad2cbea0aca1d815",
+      "size_bytes": 34283
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -807,8 +827,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "8d5c3aec788dd0b61d6929f23326ad5030670dcd1122b3fceb3d073765094173",
-      "size_bytes": 26158
+      "sha256": "fdfaee068ee40a41fdac71929492642b65de74f294992767e492fa9cffdfd60a",
+      "size_bytes": 27910
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -822,8 +842,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "dda5498c30047ef8f469857aec64e6252dc6c6af88859e037ea8761919b133ae",
-      "size_bytes": 236677
+      "sha256": "85d54b5a1a9e479847a1db2f25b7e7d10c86fee12df6aa7cd4bbbfa12756ee00",
+      "size_bytes": 236965
     },
     {
       "path": "scripts/collect_environment.py",

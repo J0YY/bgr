@@ -927,3 +927,8 @@ package and recording its version before any result is run.
   fixed-radius, failure-only, TD/loss-priority, and BGR-uniform-radius on final
   RAUC with a visible gap, paired wins over uniform, and non-contradictory
   non-saturated median-r80 metrics.
+  The completed 4-seed screen is negative and should not be scaled: every
+  method ties at final clean success 1.0000, final RAUC 0.7500, final median
+  r80 0.2100, and best RAUC 0.7500. BGR has 0/0/4 paired wins/losses/ties
+  against uniform on final RAUC, so this route fails the visible-effect,
+  paired-win, strong-baseline, and state-priority-ablation gates.
