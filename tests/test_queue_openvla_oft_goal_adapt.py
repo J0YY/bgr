@@ -159,6 +159,10 @@ class QueueOpenVlaOftGoalAdaptTest(unittest.TestCase):
         self.assertIn("Enabling official-checkpoint proximal anchor", output)
         self.assertIn("proximal_anchor_l2", output)
         self.assertIn("bgr_anchor_params", output)
+        self.assertIn("with torch.no_grad():", output)
+        self.assertIn("normalized_loss.backward()", output)
+        self.assertIn("param.grad.add_", output)
+        self.assertNotIn("loss = loss + bgr_proximal_anchor_l2 * proximal_anchor_loss", output)
 
     def test_dry_run_uses_remote_cache_overrides(self) -> None:
         output = self.run_dry()

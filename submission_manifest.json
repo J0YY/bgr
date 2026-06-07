@@ -837,8 +837,8 @@
     },
     {
       "path": "scripts/queue_openvla_oft_goal_adapt.sh",
-      "sha256": "03a8e8ed184273707f2f6de3eaf3330d4ed810870968995db538502dc807dd51",
-      "size_bytes": 18051
+      "sha256": "63b3d2ab68e569302c4780dbf6de398a34c1c6b66d79923e151eef9f18a6d4fc",
+      "size_bytes": 19101
     },
     {
       "path": "scripts/queue_openvla_oft_long_run.sh",
@@ -1242,8 +1242,8 @@
     },
     {
       "path": "tests/test_queue_openvla_oft_goal_adapt.py",
-      "sha256": "11be1105e1230f5590fb7f7d2718dd9088fc78eef602f4977a3f604cc73171f7",
-      "size_bytes": 14157
+      "sha256": "3b37db63a2a6bc0c8000b65322d561258281ec5ecb5161dff79f2156fcd53a97",
+      "size_bytes": 14417
     },
     {
       "path": "tests/test_queue_openvla_oft_perturb_eval.py",

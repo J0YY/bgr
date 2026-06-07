@@ -234,17 +234,32 @@ def _patched_finetune_script() -> str:
     loss_block = "            # Normalize loss to account for gradient accumulation\n"
     anchor_loss = (
         "            if bgr_proximal_anchor_l2 > 0:\n"
-        + "                proximal_anchor_loss = torch.zeros((), device=device_id, dtype=torch.float32)\n"
-        + "                for param, anchor_param in zip(trainable_params, bgr_anchor_params, strict=True):\n"
-        + "                    proximal_anchor_loss = proximal_anchor_loss + torch.mean((param.float() - anchor_param.float()) ** 2)\n"
-        + "                loss = loss + bgr_proximal_anchor_l2 * proximal_anchor_loss\n"
+        + "                with torch.no_grad():\n"
+        + "                    proximal_anchor_loss = torch.zeros((), device=device_id, dtype=torch.float32)\n"
+        + "                    for param, anchor_param in zip(trainable_params, bgr_anchor_params, strict=True):\n"
+        + "                        proximal_anchor_loss = proximal_anchor_loss + torch.mean((param.float() - anchor_param.float()) ** 2)\n"
         + "                metrics[\"proximal_anchor_l2\"] = proximal_anchor_loss.detach().item()\n"
-        + "                metrics[\"anchored_loss_value\"] = loss.detach().item()\n\n"
+        + "                metrics[\"anchored_loss_value\"] = (loss.detach() + bgr_proximal_anchor_l2 * proximal_anchor_loss).item()\n\n"
         + loss_block
     )
     if loss_block not in source:
         raise RuntimeError("Could not patch loss block for BGR proximal anchor")
     source = source.replace(loss_block, anchor_loss, 1)
+
+    backward_block = "            normalized_loss.backward()\n"
+    proximal_grad = (
+        backward_block
+        + "            if bgr_proximal_anchor_l2 > 0:\n"
+        + "                bgr_grad_accum_steps = float(getattr(cfg, \"grad_accumulation_steps\", getattr(cfg, \"gradient_accumulation_steps\", 1)))\n"
+        + "                for param, anchor_param in zip(trainable_params, bgr_anchor_params, strict=True):\n"
+        + "                    if param.grad is None:\n"
+        + "                        continue\n"
+        + "                    bgr_proximal_grad = (param.detach().float() - anchor_param.float()).to(device=param.grad.device, dtype=param.grad.dtype)\n"
+        + "                    param.grad.add_(bgr_proximal_grad, alpha=2.0 * bgr_proximal_anchor_l2 / (bgr_grad_accum_steps * param.numel()))\n"
+    )
+    if backward_block not in source:
+        raise RuntimeError("Could not patch backward block for BGR proximal anchor")
+    source = source.replace(backward_block, proximal_grad, 1)
 
     out_dir = Path(os.environ.get("BGR_TRAIN_DATASET_STATISTICS_DIR", tempfile.gettempdir()))
     out_dir.mkdir(parents=True, exist_ok=True)
