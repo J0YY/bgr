@@ -821,6 +821,17 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             "results/reacher_recovery_probe_12seed_v1/summary.csv",
         )
     )
+    claims.append(
+        Claim(
+            "Reacher-v5 scope-audit table row",
+            (
+                f"Reacher-v5 & BGR {fmt(reacher_bgr_rauc, 4)}; "
+                f"BGR-Coverage {fmt(reacher_coverage_rauc, 4)} & uniform "
+                f"{fmt(reacher_uniform_rauc, 4)}; BGR wins {reacher_wins[0]}/12 seeds & negative"
+            ),
+            "results/reacher_recovery_probe_12seed_v1/summary.csv",
+        )
+    )
 
     probe_rows = read_csv_rows(results_dir / "libero_probe_v2" / "summary.csv")
     valid_rows = sum(1 for row in probe_rows if float(row["valid_rate"]) == 1.0 and not row.get("error"))
