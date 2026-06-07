@@ -377,6 +377,28 @@ Compact artifacts:
 - `results/lunarlander_recovery_calibration_12seed_v1/recovery_rows.csv`
 - `results/lunarlander_recovery_calibration_12seed_v1/package_versions.json`
 
+### LunarLander Comparison Screen
+
+The fixed all-method LunarLander screen is implemented at
+`tools/lunarlander_recovery_probe.py` before method-comparison results. It
+keeps the same official `LunarLander-v3` package, Box2D dynamics, heuristic
+teacher, fixed burn-in checkpoint, 0--1 perturbation grid, and isolated
+`/tmp/bgr_lunar_venv` package versions as the calibration. The learner is a
+fixed linear imitation policy trained on replayed perturbed states selected by
+the replay method.
+
+Preregistered command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_lunar_venv/bin/python tools/lunarlander_recovery_probe.py --out results/lunarlander_recovery_probe_4seed_v1
+```
+
+Do not tune this protocol after seeing method outcomes. The 4-seed screen can
+only justify a 30-seed scale-up if default BGR or BGR-Coverage beats uniform,
+fixed-radius, failure-only, TD/loss-priority, and BGR-uniform-radius on final
+RAUC with at least 3/4 paired wins over uniform and non-contradictory,
+non-saturated median-r80 evidence.
+
 ## Internal Gymnasium MuJoCo Reacher Calibration
 
 This is a pre-method calibration for a different official Gymnasium MuJoCo

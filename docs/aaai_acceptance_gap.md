@@ -87,6 +87,14 @@ success 0.9167, recovery range 0.5833--0.9167, RAUC 0.7722, and median r80
 LunarLander screen; do not interpret or tune BGR variants until that screen is
 implemented and preregistered.
 
+The fixed all-method LunarLander screen is now implemented at
+`tools/lunarlander_recovery_probe.py` and preregistered with:
+`PYTHONPATH=src:. /tmp/bgr_lunar_venv/bin/python tools/lunarlander_recovery_probe.py --out results/lunarlander_recovery_probe_4seed_v1`.
+It can only justify a 30-seed scale-up if default BGR or BGR-Coverage beats
+uniform, fixed-radius, failure-only, TD/loss-priority, and
+BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform and
+non-contradictory, non-saturated median-r80 evidence.
+
 ## Promotion Criteria For A New Independent Benchmark
 
 A new benchmark result should be promoted into `paper/main.tex` only if it meets

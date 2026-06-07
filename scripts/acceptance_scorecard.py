@@ -21,6 +21,7 @@ COMPLETED_METHOD_SCREEN_BY_CALIBRATION = {
     "Gymnasium MuJoCo Reacher-v5 calibration": "results/reacher_recovery_probe_12seed_v1/summary.csv",
     "Gymnasium MuJoCo InvertedPendulum-v5 calibration": "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
     "Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration": "results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv",
+    "Gymnasium Box2D LunarLander-v3 calibration": "results/lunarlander_recovery_probe_4seed_v1/summary.csv",
 }
 
 
@@ -268,6 +269,14 @@ BENCHMARK_SCREENS = [
     (
         "Gymnasium MuJoCo InvertedDoublePendulum-v5",
         "results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv",
+        ["bgr", "bgr_coverage"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
+    (
+        "Gymnasium Box2D LunarLander-v3",
+        "results/lunarlander_recovery_probe_4seed_v1/summary.csv",
         ["bgr", "bgr_coverage"],
         ["fixed", "failure_only", "td_loss"],
         "bgr_uniform_radius",

@@ -474,6 +474,39 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"W/L/T={best_double_wins}"
             )
 
+    lunar_path = root / "results/lunarlander_recovery_probe_4seed_v1/summary.csv"
+    if lunar_path.exists():
+        lunar = read_rows(lunar_path)
+        lunar_bgr = mean_metric(lunar, "bgr", "final_rauc")
+        lunar_coverage = mean_metric(lunar, "bgr_coverage", "final_rauc")
+        lunar_uniform = mean_metric(lunar, "uniform", "final_rauc")
+        lunar_failure = mean_metric(lunar, "failure_only", "final_rauc")
+        lunar_fixed = mean_metric(lunar, "fixed", "final_rauc")
+        lunar_td = mean_metric(lunar, "td_loss", "final_rauc")
+        lunar_ablation = mean_metric(lunar, "bgr_uniform_radius", "final_rauc")
+        lunar_bgr_r80 = mean_metric(lunar, "bgr", "final_median_r80")
+        lunar_coverage_r80 = mean_metric(lunar, "bgr_coverage", "final_median_r80")
+        lunar_uniform_r80 = mean_metric(lunar, "uniform", "final_median_r80")
+        lunar_bgr_wins = paired_wins(lunar, "bgr", "uniform", "final_rauc")
+        lunar_coverage_wins = paired_wins(lunar, "bgr_coverage", "uniform", "final_rauc")
+        best_lunar = lunar_bgr if lunar_bgr >= lunar_coverage else lunar_coverage
+        best_lunar_r80 = lunar_bgr_r80 if lunar_bgr >= lunar_coverage else lunar_coverage_r80
+        best_lunar_wins = lunar_bgr_wins if lunar_bgr >= lunar_coverage else lunar_coverage_wins
+        if not (
+            best_lunar > lunar_uniform
+            and best_lunar > max(lunar_failure, lunar_fixed, lunar_td, lunar_ablation)
+            and best_lunar_wins[0] >= 3
+            and best_lunar_r80 >= lunar_uniform_r80
+            and not (best_lunar_r80 >= 0.99 and lunar_uniform_r80 >= 0.99)
+            and not (best_lunar_r80 <= 0.01 and lunar_uniform_r80 <= 0.01)
+        ):
+            failures.append(
+                f"LunarLander-v3 negative: BGR {lunar_bgr:.4f}, BGR-Coverage {lunar_coverage:.4f}, "
+                f"uniform {lunar_uniform:.4f}, failure-only {lunar_failure:.4f}, fixed {lunar_fixed:.4f}, "
+                f"TD-loss {lunar_td:.4f}, uniform-radius {lunar_ablation:.4f}, "
+                f"best-r80 {best_lunar_r80:.4f} vs uniform {lunar_uniform_r80:.4f}, W/L/T={best_lunar_wins}"
+            )
+
     for label, relative_path in CALIBRATION_SUMMARIES:
         calibration_path = root / relative_path
         if not calibration_path.exists():
