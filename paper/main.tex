@@ -37,7 +37,7 @@ Our contributions are:
     \item a domain-agnostic replay interface based on replayable decision states, perturbation families, recovery curves, critical radii, and recovery AUC;
     \item an efficient BGR algorithm that actively estimates success--failure boundaries and samples both states and perturbation radii near those boundaries;
     \item an active-estimation validation showing that boundary-focused probes recover critical radii with small budgets;
-    \item synthetic, procedural grid-margin, and robot-suffix simulator benchmarks showing where boundary replay and coverage-aware boundary replay expand recovery margins under paired-seed comparisons, with absolute effect sizes reported ahead of paired consistency checks;
+    \item synthetic, procedural grid-margin, and robot-suffix simulator benchmarks showing where boundary replay and coverage-aware boundary replay expand recovery margins, including a 30-seed grid ablation where state-priority replay with uniform radii loses the effect;
     \item negative standard-environment and OpenVLA/LIBERO audits that define the practical scope of the evidence and separate recovery-margin measurement from robotics fine-tuning claims.
 \end{itemize}
 
@@ -287,7 +287,7 @@ The suffix simulator is positive on final RAUC, clean success, transfer RAUC, an
 
 \section{Conclusion}
 
-BGR converts recovery-margin measurement into a replay curriculum. The evidence supports a specific mechanism claim: when states can be reset, perturbations kept feasible, and recovery curves trained directly, sampling near the estimated success--failure boundary improves margin expansion over uniform, fixed-radius, failure-only, and loss-proxy replay. Synthetic and grid-margin studies establish this mechanism under paired seeds and held-out replication; the suffix simulator shows that radius coverage can carry the interface to manipulation-style replay states. The current learned-policy evidence remains an audit, not the final robotics result.
+BGR converts recovery-margin measurement into a replay curriculum. The evidence supports a specific mechanism claim: when states can be reset, perturbations kept feasible, and recovery curves trained directly, sampling near the estimated success--failure boundary improves margin expansion over uniform, fixed-radius, failure-only, and loss-proxy replay. The strongest novelty evidence is the radius-level ablation: hard-state priority alone loses the grid-margin effect when radii are drawn uniformly. Synthetic and grid-margin studies establish the mechanism under paired seeds and held-out replication; the suffix simulator shows that radius coverage can carry the interface to manipulation-style replay states. The current learned-policy evidence remains an audit, not the final robotics result.
 
 \bibliography{references}
 
