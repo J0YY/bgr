@@ -2038,6 +2038,27 @@ perturbation total by at least 10/400 episodes and at least 0.02 absolute
 success rate, while not trailing clean identity by more than 1/100. A tie,
 one-episode edge, official lead, or matched-random lead remains an audit.
 
+Prep submission audit: submitted after preregistration commit `8b69ac7` on
+2026-06-07 using the live cluster workspace:
+
+```text
+job=767789
+REMOTE_PROJECT=/work/<user>/bgr
+REMOTE_RUN_ROOT=/work/<user>/bgr/runs
+REMOTE_HF_HOME=/work/<user>/cache_home/huggingface
+OPENVLA_OFT_ROOT=/work/<user>/external_validation/openvla_oft_smoke_746850/openvla-oft
+LIBERO_ROOT=/work/<user>/external_validation/openvla_oft_smoke_746850/LIBERO
+stdout=/work/<user>/bgr/logs/bgr-perturbonly-prep-p2048unique_perturbonly_anchor_prereg-767789.out
+```
+
+Initial Slurm poll showed job `767789` running on `c1-g4-04` with
+`gres/gpu:a6000:1`. The prepared TFDS roots, if the job succeeds, are:
+
+```text
+/work/<user>/bgr/runs/openvla_oft_tfds_libero_goal_bgr_perturbonly_p2048unique_perturbonly_anchor_prereg_v1
+/work/<user>/bgr/runs/openvla_oft_tfds_libero_goal_random_perturbonly_p2048unique_perturbonly_anchor_prereg_v1
+```
+
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 
 Launched on 2026-06-02 after the p1024 offset-3 follow-up showed only a small

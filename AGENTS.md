@@ -225,6 +225,10 @@ Treat the following as the current paper-weakness backlog:
   and the official checkpoint by the fixed +10/400 and +0.02 non-identity
   perturbation gate while preserving clean identity within -1/100. Until compact
   summaries exist and clear that gate, this route is not paper evidence.
+  Prep was submitted after commit `8b69ac7` on 2026-06-07 as Slurm job
+  `767789`, writing to
+  `/work/joy/bgr/logs/bgr-perturbonly-prep-p2048unique_perturbonly_anchor_prereg-767789.out`.
+  Initial poll showed it running on `c1-g4-04` with `gres/gpu:a6000:1`.
 
 ## Paper Workflow
 

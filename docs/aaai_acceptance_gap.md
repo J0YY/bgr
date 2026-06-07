@@ -761,6 +761,15 @@ package and recording its version before any result is run.
   0.02 absolute success, while clean identity is no worse than -1/100.
   Anything weaker remains an audit. Do not incorporate this route into
   `paper/main.tex` unless compact summaries exist and clear that fixed gate.
+  Prep was submitted after preregistration commit `8b69ac7` on 2026-06-07 as
+  Slurm job `767789` using the live `/work/joy` workspace
+  (`REMOTE_PROJECT=/work/joy/bgr`, `REMOTE_RUN_ROOT=/work/joy/bgr/runs`,
+  `REMOTE_HF_HOME=/work/joy/cache_home/huggingface`,
+  `OPENVLA_OFT_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft`,
+  `LIBERO_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/LIBERO`).
+  Initial Slurm poll showed job `767789` running on `c1-g4-04` with
+  `gres/gpu:a6000:1` and stdout
+  `/work/joy/bgr/logs/bgr-perturbonly-prep-p2048unique_perturbonly_anchor_prereg-767789.out`.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance
