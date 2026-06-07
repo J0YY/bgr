@@ -6,6 +6,8 @@ claims, or committing results.
 
 ## Goal Snapshot
 
+Last verified: 2026-06-07.
+
 Persistent thread goal: iterate, queue experiments, and reframe the paper until
 it is plausibly 90%+ likely to get into AAAI.
 
@@ -15,6 +17,11 @@ when the evidence gates support a high-confidence AAAI submission: independent
 or pre-existing benchmark evidence, a learned-policy win under a fixed gate, a
 stronger formal result, or presentation/theory improvements that materially
 change reviewer risk.
+
+Current acceptance answer: not ready. The internal readiness check still reports
+`NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid result is positive, but the
+independent/pre-existing benchmark gate and OpenVLA/LIBERO learned-policy gate
+are failing.
 
 Acceptance reality: the project is not there yet. The current evidence supports
 a careful mechanism study, not a high-confidence AAAI main-track claim. Make
