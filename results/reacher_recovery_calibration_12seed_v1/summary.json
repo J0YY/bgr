@@ -1,0 +1,31 @@
+{
+  "angle_stride": 1.618,
+  "clean_success": 0.8333333333333334,
+  "decision": "usable-calibration",
+  "env_id": "Reacher-v5",
+  "horizon": 16,
+  "kd": 0.2,
+  "kp": 2.0,
+  "max_recovery": 0.9166666666666666,
+  "mean_best_distance": 0.02385482331523856,
+  "min_recovery": 0.5,
+  "r80": 2.999999999999999,
+  "radii": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0,
+    1.5,
+    2.0,
+    2.5,
+    3.0,
+    3.5,
+    4.0
+  ],
+  "rauc": 0.7890625,
+  "recovery_range": 0.41666666666666663,
+  "seeds": 12,
+  "success_threshold": 0.025,
+  "torque_limit": 0.4
+}

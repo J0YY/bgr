@@ -872,3 +872,21 @@ package and recording its version before any result is run.
   The fixed pick-place controller does not provide a usable clean recovery
   interface, so do not build or scale a FetchPickAndPlace replay comparison
   around this controller/interface.
+- Gymnasium MuJoCo Reacher-v5 is now the active pre-method calibration route
+  because it changes both package and reset interface relative to the failed
+  MiniGrid, PointMaze, FetchReach, and highway screens. The calibration uses
+  Gymnasium's package-owned Reacher-v5 dynamics and target sampling, exact
+  MuJoCo state resets, two-joint angular perturbations, and a fixed weak
+  inverse-kinematics/PD controller. The fixed command is:
+  `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/reacher_recovery_calibration.py --out results/reacher_recovery_calibration_12seed_v1`.
+  It clears the pre-method gate with clean success 0.8333, recovery range
+  0.5000--0.9167, RAUC 0.7891, and r80 3.0000 on a 0--4 perturbation grid in
+  the isolated environment (`gymnasium==1.3.0`, `mujoco==3.9.0`,
+  `numpy==2.4.6`). This is not BGR evidence. Do not run or promote a Reacher
+  method comparison until the full all-method tool fixes the learner,
+  replay-state pool, perturbation radii, baselines, seeds, and promotion gate
+  before seeing method results. Promotion should require default BGR or
+  BGR-Coverage to beat uniform, fixed-radius, failure-only, TD/loss-priority,
+  and the state-priority/uniform-radius ablation on final RAUC with a visible
+  effect, paired wins over uniform, and non-contradictory non-saturated radius
+  metrics.

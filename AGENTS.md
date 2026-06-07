@@ -77,6 +77,19 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   and median r80 9.8000 over 12 seeds. Do not build or scale a highway-env
   parking replay comparison unless a new preregistered controller or policy
   first clears clean-success and non-saturated recovery prerequisites.
+- The active independent-benchmark route is now a pre-method Gymnasium MuJoCo
+  Reacher-v5 calibration, not BGR evidence. It uses package-owned Reacher-v5
+  dynamics and target sampling, exact MuJoCo state resets, two-joint angular
+  perturbations, and a fixed weak inverse-kinematics/PD controller in
+  `/tmp/bgr_pointmaze_venv` (`gymnasium==1.3.0`, `mujoco==3.9.0`). The compact
+  artifact `results/reacher_recovery_calibration_12seed_v1/summary.json`
+  reports clean success 0.8333, recovery range 0.5000--0.9167, RAUC 0.7891,
+  and r80 3.0000 on a 0--4 perturbation grid. Do not promote this calibration.
+  The next empirical step is to implement and preregister a fixed all-method
+  Reacher comparison before seeing BGR results; promotion requires BGR or
+  BGR-Coverage to beat uniform, fixed-radius, failure-only, TD/loss-priority,
+  and the state-priority/uniform-radius ablation with non-contradictory
+  non-saturated radius metrics.
 
 ## Reviewer-Critique Priorities
 

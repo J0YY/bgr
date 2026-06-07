@@ -492,6 +492,9 @@ SCOPE_DIAGNOSTIC_ARTIFACTS = [
     "results/highway_parking_recovery_calibration_12seed_v1/package_versions.json",
     "results/highway_parking_recovery_calibration_12seed_v1/recovery_rows.csv",
     "results/highway_parking_recovery_calibration_12seed_v1/summary.json",
+    "results/reacher_recovery_calibration_12seed_v1/package_versions.json",
+    "results/reacher_recovery_calibration_12seed_v1/recovery_rows.csv",
+    "results/reacher_recovery_calibration_12seed_v1/summary.json",
 ]
 OPENVLA_BRIDGE_ARTIFACTS = [
     "scripts/combine_openvla_oft_examples.py",
@@ -574,6 +577,7 @@ TEST_ARTIFACTS = [
     "tests/test_queue_openvla_oft_clean_mix_prep.py",
     "tests/test_queue_openvla_oft_goal_adapt.py",
     "tests/test_queue_openvla_oft_perturb_eval.py",
+    "tests/test_reacher_recovery_calibration.py",
     "tests/test_render_openvla_teacher_examples.py",
     "tests/test_robot_suffix.py",
     "tests/test_submission_framing.py",
@@ -635,6 +639,7 @@ SUBMISSION_GATE_ARTIFACTS = [
     "scripts/check_paper_claims.py",
     "scripts/check_submission_package.py",
     "tools/highway_parking_recovery_calibration.py",
+    "tools/reacher_recovery_calibration.py",
     "scripts/merge_grid_margin_trials.py",
     "scripts/run_grid_margin_learning_rate_sensitivity.py",
     "scripts/run_grid_margin_regime_sensitivity.py",

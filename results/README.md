@@ -325,6 +325,43 @@ Compact artifacts:
 - `results/highway_parking_recovery_calibration_12seed_v1/recovery_rows.csv`
 - `results/highway_parking_recovery_calibration_12seed_v1/package_versions.json`
 
+## Internal Gymnasium MuJoCo Reacher Calibration
+
+This is a pre-method calibration for a different official Gymnasium MuJoCo
+task, `Reacher-v5`. It uses Gymnasium's package-owned two-link Reacher dynamics
+and target sampling through `tools/reacher_recovery_calibration.py`; it is not a
+BGR method comparison. The reset interface perturbs the two arm joint angles
+from the package reset state and keeps the package target fixed. Evaluation
+runs a fixed inverse-kinematics/PD controller with deliberately weak torque and
+horizon settings so the calibration measures a recovery boundary rather than a
+solved controller.
+
+Command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/reacher_recovery_calibration.py --out results/reacher_recovery_calibration_12seed_v1
+```
+
+The route clears the pre-method calibration gate: clean success is 0.8333,
+recovery ranges from 0.5000 to 0.9167, RAUC is 0.7891, and r80 is 3.0000 on a
+0--4 joint-perturbation grid. The isolated environment records
+`gymnasium==1.3.0`, `mujoco==3.9.0`, and `numpy==2.4.6`.
+
+Compact artifacts:
+
+- `results/reacher_recovery_calibration_12seed_v1/summary.json`
+- `results/reacher_recovery_calibration_12seed_v1/recovery_rows.csv`
+- `results/reacher_recovery_calibration_12seed_v1/package_versions.json`
+
+This calibration is only permission to implement a fixed all-method screen. Do
+not promote Reacher into the paper or run a method comparison until the full
+comparison tool, replay-state pool, perturbation radii, baselines, seeds,
+learner, and promotion gate are fixed before seeing method results. Promotion
+should require default BGR or BGR-Coverage to beat uniform, fixed-radius,
+failure-only, TD/loss-priority, and the state-priority/uniform-radius ablation
+on final RAUC with a visible effect, paired wins over uniform, and
+non-contradictory non-saturated radius metrics.
+
 ## Internal Official PointMaze Diagnostic
 
 The next preregistered external-package screen is official PointMaze U-Maze,

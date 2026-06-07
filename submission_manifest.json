@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "f4ac84f85aa551a4ea901a5830410b338b72ca37aaf50d2a92bbf48a1226ffa1",
-      "size_bytes": 271111
+      "sha256": "2b90bf9598a689e30ec09e129a6046e37b6c3ff09f1576e3935d16cf40b87c15",
+      "size_bytes": 272973
     },
     {
       "path": "results/environment_v1/README.md",
@@ -681,6 +681,21 @@
       "size_bytes": 948
     },
     {
+      "path": "results/reacher_recovery_calibration_12seed_v1/package_versions.json",
+      "sha256": "ac3e3470d1bb01d3a282bce3eeb865663209b0867ae31ba9c319f47c38b9742d",
+      "size_bytes": 100
+    },
+    {
+      "path": "results/reacher_recovery_calibration_12seed_v1/recovery_rows.csv",
+      "sha256": "ad0ae8b67313db3264358dae9918f5fbf4787c0d0feb78cba1c0ed7c6ec1ebd5",
+      "size_bytes": 6992
+    },
+    {
+      "path": "results/reacher_recovery_calibration_12seed_v1/summary.json",
+      "sha256": "06e48d237e94b182b513871125301a75cca06ea0a9e91ed34667406f058304a3",
+      "size_bytes": 554
+    },
+    {
       "path": "results/suffix_coverage_full_30seed_v1/summary.csv",
       "sha256": "3d3f2eb12477441bd3299bc7cc9a61d8822595982499c9656e5854e1aad18c2c",
       "size_bytes": 23497
@@ -742,8 +757,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "b1f017e55cb1c391a438069dc9363d30dc85a1774c504d1801f4d7c76dc2c9e1",
-      "size_bytes": 30444
+      "sha256": "c47c6b7bf4e8f4addfb172c22eada739702cb2f02bb6229f488acad8c3380946",
+      "size_bytes": 31901
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -757,8 +772,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "c8c1fdb545b5c24786963d4fee3e77e5e7e62a78e4af22e71303a7772867720d",
-      "size_bytes": 24365
+      "sha256": "82fbdd7e80dc6ebdfd2ac3aa4549ac8245ca7f5cfa7e300c886c2158845f981a",
+      "size_bytes": 24460
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -772,8 +787,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "91dbda6084de47aeded64b91296c320cbfa0bcfbd56d035c9346231aa8670c84",
-      "size_bytes": 235395
+      "sha256": "5cba8372d1b8dbde4834a17f4261260dfb30e9f9bb6272ac2e60990f16d14945",
+      "size_bytes": 235705
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1251,6 +1266,11 @@
       "size_bytes": 2099
     },
     {
+      "path": "tests/test_reacher_recovery_calibration.py",
+      "sha256": "5257612c3d6e594981cd2294d0582fee4ab3622514299d2987402c8a4a54ebfc",
+      "size_bytes": 2980
+    },
+    {
       "path": "tests/test_render_openvla_teacher_examples.py",
       "sha256": "387e4c4d21ed27f0ed593a4bacbd78d1eb5dd7ccca9afa3f84ffeb6f1eae946b",
       "size_bytes": 4391
@@ -1279,6 +1299,11 @@
       "path": "tools/highway_parking_recovery_calibration.py",
       "sha256": "4ba562330fa4faa9c9028cef447a6b011afb7d43dfea734056b6bbb4ca7c684e",
       "size_bytes": 8651
+    },
+    {
+      "path": "tools/reacher_recovery_calibration.py",
+      "sha256": "06896c50d5340f3a5f2a466ad01b60fae3019fd0aa851923c7d9f9a0f60879bd",
+      "size_bytes": 10044
     }
   ],
   "hash_algorithm": "sha256",

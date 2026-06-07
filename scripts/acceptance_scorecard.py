@@ -260,6 +260,10 @@ CALIBRATION_SCREENS = [
         "highway-env parking-v0 calibration",
         "results/highway_parking_recovery_calibration_12seed_v1/summary.json",
     ),
+    (
+        "Gymnasium MuJoCo Reacher-v5 calibration",
+        "results/reacher_recovery_calibration_12seed_v1/summary.json",
+    ),
 ]
 
 
@@ -602,9 +606,16 @@ def render_markdown(root: Path) -> str:
             f"failure reason(s): {fmt_reasons(best)}."
         )
     rejected_calibrations = [screen for screen in calibrations if not screen.usable]
+    usable_calibrations = [screen for screen in calibrations if screen.usable]
     if rejected_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in rejected_calibrations)
         lines.append(f"- Rejected pre-method calibration route(s): {names}.")
+    if usable_calibrations:
+        names = ", ".join(
+            f"`{screen.name}` clean {screen.clean_success:.4f}, range {screen.min_recovery:.4f}--{screen.max_recovery:.4f}, r80 {screen.r80:.4f}"
+            for screen in usable_calibrations
+        )
+        lines.append(f"- Usable pre-method calibration route(s): {names}.")
     lines.extend(
         [
             "",
@@ -636,7 +647,12 @@ def render_markdown(root: Path) -> str:
             "internal learned-policy gate; paper incorporation still requires "
             "claim and package checks."
         )
-    if inflight is None:
+    if inflight is None and usable_calibrations:
+        names = ", ".join(f"`{screen.name}`" for screen in usable_calibrations)
+        lines.append(
+            f"- Active route: {names} cleared pre-method calibration only; a fixed all-method comparison is still required before paper promotion."
+        )
+    elif inflight is None:
         lines.append(
             "- Active route: no queued learned-policy route is recorded in the local ledgers."
         )
@@ -725,10 +741,22 @@ def render_markdown(root: Path) -> str:
     priority_lines = [
         "- The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.",
         "- The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.",
-        "- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.",
         learned_priority,
     ]
-    if inflight is None:
+    if usable_calibrations:
+        priority_lines.insert(
+            2,
+            "- The usable Reacher-v5 calibration is pre-method evidence only; the next empirical step must fix the full all-method comparison before seeing any BGR results.",
+        )
+    priority_lines.insert(
+        2 if not usable_calibrations else 3,
+        "- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.",
+    )
+    if inflight is None and usable_calibrations:
+        priority_lines.append(
+            "- The next acceptance-moving work should implement and preregister the fixed Reacher-v5 all-method comparison; the calibration alone is not paper evidence."
+        )
+    elif inflight is None:
         priority_lines.append(
             "- The next acceptance-moving work should change the learned-policy intervention or materially strengthen theory/presentation; another same-protocol MiniGrid/classic-control screen is unlikely to move the gate."
         )
