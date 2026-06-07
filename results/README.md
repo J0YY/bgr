@@ -1991,6 +1991,53 @@ compact CSVs above were generated from copied `*.txt` eval logs with
 `scripts/summarize_openvla_oft_perturb_eval.py`, then stripped to
 double-blind-safe columns.
 
+## Preregistered OpenVLA-OFT Perturb-Only Anchored Adaptation
+
+This is the next learned-policy route after the completed negative clean-mix,
+weighted clean-mix, and proximal-anchor clean-mix audits. It changes the
+training data/objective combination: the RLDS datasets contain only rendered
+boundary-band perturbation examples, with no clean anchor episodes mixed in,
+and the trainer uses a stronger official-checkpoint proximal anchor
+(`PROXIMAL_ANCHOR_L2=5.0`) to protect clean identity behavior.
+
+The implementation is in
+`scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh`. The fixed
+recipe renders matched BGR-boundary and random-balanced perturbation examples
+from `results/openvla_teacher_replay_manifest_v1/teacher_replay_manifest.jsonl`,
+using `MAX_PERTURB_EXAMPLES=2048`, `PERTURB_EPISODES_PER_FAMILY=8`, and
+`MAX_STEPS_PER_EPISODE=64`; exports perturb-only TFDS roots; adapts from the
+official OpenVLA-OFT LIBERO-Goal checkpoint with identity-LoRA, official
+dataset statistics, image augmentation, `ADAPT_STEPS=300`, and `LR=2e-7`; and
+then runs the same official/BGR/random 10-task x 10-trial identity, blur,
+brightness, occlusion, and shift evaluation.
+
+Fixed prep command:
+
+```bash
+scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh --prep-only --submit-prep
+```
+
+Fixed adaptation command after prep succeeds:
+
+```bash
+TRAIN_DEPENDENCY=afterok:<prep_job> \
+scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh --adapt-only --submit-adapt
+```
+
+Fixed perturbation command after BGR/random merge jobs exist:
+
+```bash
+BGR_DEPENDENCY=afterok:<bgr_merge> \
+RANDOM_DEPENDENCY=afterok:<random_merge> \
+scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh --perturb-only --submit-perturb
+```
+
+Promotion gate: perturb-only anchored BGR must beat both perturb-only anchored
+matched random and the official checkpoint on the fixed non-identity
+perturbation total by at least 10/400 episodes and at least 0.02 absolute
+success rate, while not trailing clean identity by more than 1/100. A tie,
+one-episode edge, official lead, or matched-random lead remains an audit.
+
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 
 Launched on 2026-06-02 after the p1024 offset-3 follow-up showed only a small

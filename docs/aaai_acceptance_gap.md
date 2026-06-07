@@ -737,6 +737,30 @@ package and recording its version before any result is run.
   only one episode above the official checkpoint. The result has been added to
   `paper/main.tex` as negative OpenVLA audit evidence, not as a robotics
   fine-tuning claim.
+- The next preregistered learned-policy route changes the data/objective
+  combination rather than the clean-mix weighting: perturb-only anchored
+  adaptation in
+  `scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh`. This route
+  trains only on rendered boundary-band perturbation examples, with no clean
+  anchor episodes mixed into the RLDS data, and adds a stronger
+  official-checkpoint proximal L2 anchor (`PROXIMAL_ANCHOR_L2=5.0`) to protect
+  clean identity behavior. It uses the existing BGR-boundary and matched-random
+  teacher replay manifest, balanced perturbation rendering with
+  `MAX_PERTURB_EXAMPLES=2048`, `PERTURB_EPISODES_PER_FAMILY=8`, official
+  OpenVLA-OFT LIBERO-Goal statistics, identity-LoRA, image augmentation,
+  `ADAPT_STEPS=300`, `LR=2e-7`, and the same fixed 10-task x 10-trial
+  perturbation evaluation. Fixed prep command:
+  `scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh --prep-only --submit-prep`.
+  Fixed adaptation command after prep succeeds:
+  `TRAIN_DEPENDENCY=afterok:<prep_job> scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh --adapt-only --submit-adapt`.
+  Fixed perturbation command after BGR/random merge jobs exist:
+  `BGR_DEPENDENCY=afterok:<bgr_merge> RANDOM_DEPENDENCY=afterok:<random_merge> scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh --perturb-only --submit-perturb`.
+  Promotion uses the same strict learned-policy gate: perturb-only anchored BGR
+  must beat both perturb-only anchored matched random and the official
+  checkpoint by at least 10/400 non-identity perturbation episodes and at least
+  0.02 absolute success, while clean identity is no worse than -1/100.
+  Anything weaker remains an audit. Do not incorporate this route into
+  `paper/main.tex` unless compact summaries exist and clear that fixed gate.
 - After the official MiniGrid-DoorKey and MiniGrid-LavaCrossing negatives, do
   not add more MiniGrid screens under the same tabular recovery-replay protocol.
   The standard-environment route has produced scope evidence, not acceptance

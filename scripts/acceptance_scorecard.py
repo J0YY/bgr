@@ -12,6 +12,8 @@ from statistics import mean
 
 from scripts.check_acceptance_readiness import OPENVLA_LEGACY_COMPLETE
 from scripts.check_acceptance_readiness import OPENVLA_NON_IDENTITY_PERTURBATIONS
+from scripts.check_acceptance_readiness import OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE
+from scripts.check_acceptance_readiness import OPENVLA_PERTURB_ONLY_ANCHOR_MARKER
 from scripts.check_acceptance_readiness import OPENVLA_PROXIMAL_ANCHOR_COMPLETE
 from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_COMPLETE
 
@@ -479,6 +481,43 @@ def missing_openvla_rows(rows: list[dict[str, str]]) -> list[str]:
 
 
 def learned_policy_summary(root: Path) -> str:
+    perturb_only = root / OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE
+    if perturb_only.exists():
+        rows = read_rows(perturb_only)
+        missing = missing_openvla_rows(rows)
+        if missing:
+            return f"Perturb-only anchored OpenVLA audit summary is incomplete; missing {', '.join(missing)}."
+        bgr_success, bgr_episodes = perturbation_total(rows, "bgr", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+        official_success, official_episodes = perturbation_total(rows, "official", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+        random_success, random_episodes = perturbation_total(rows, "random", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+        bgr_identity, identity_episodes = identity_total(rows, "bgr")
+        official_identity, _ = identity_total(rows, "official")
+        random_identity, _ = identity_total(rows, "random")
+        official_gap = bgr_success - official_success
+        random_gap = bgr_success - random_success
+        official_rate_gap = bgr_success / bgr_episodes - official_success / official_episodes
+        random_rate_gap = bgr_success / bgr_episodes - random_success / random_episodes
+        clean_deficit = max(official_identity, random_identity) - bgr_identity
+        passed = (
+            bgr_episodes == 400
+            and official_episodes == 400
+            and random_episodes == 400
+            and official_gap >= 10
+            and random_gap >= 10
+            and official_rate_gap >= 0.02
+            and random_rate_gap >= 0.02
+            and clean_deficit <= 1
+        )
+        status = "clears" if passed else "does not clear"
+        return (
+            f"Perturb-only anchored OpenVLA audit {status} the learned-policy promotion gate: "
+            f"BGR {bgr_success}/{bgr_episodes}, official {official_success}/{official_episodes}, "
+            f"random {random_success}/{random_episodes}; identity BGR {bgr_identity}/{identity_episodes}, "
+            f"official {official_identity}/{identity_episodes}, random {random_identity}/{identity_episodes}; "
+            f"official gap {official_gap:+d} ({official_rate_gap:+.4f}), "
+            f"random gap {random_gap:+d} ({random_rate_gap:+.4f}), clean deficit {clean_deficit}."
+        )
+
     proximal = root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE
     if proximal.exists():
         rows = read_rows(proximal)
@@ -555,6 +594,18 @@ def learned_policy_summary(root: Path) -> str:
 
 def learned_policy_inflight_summary(root: Path) -> str | None:
     """Report preregistered learned-policy runs that are failed or unsummarized."""
+    perturb_only_summary = root / OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE
+    if not perturb_only_summary.exists():
+        ledger_paths = [root / "AGENTS.md", root / "results/README.md", root / "docs/aaai_acceptance_gap.md"]
+        ledger_text = "\n".join(path.read_text(encoding="utf-8") for path in ledger_paths if path.exists())
+        if OPENVLA_PERTURB_ONLY_ANCHOR_MARKER in ledger_text:
+            return (
+                "Perturb-only anchored OpenVLA route is preregistered, not yet evidence: "
+                "the fixed perturb-only TFDS prep, proximal-anchor BGR/random adaptation, "
+                "and official/BGR/random 10-task x 10-trial perturbation summaries must finish "
+                "before the +10/400 and +0.02 learned-policy gate can be checked."
+            )
+
     proximal_job_ids = {
         "bgr_train": "767657",
         "bgr_merge": "767658",
@@ -837,7 +888,7 @@ def render_markdown(root: Path) -> str:
         )
     else:
         priority_lines.append(
-            "- The current acceptance-moving learned-policy work is the repaired proximal-anchor OpenVLA route; do not treat it as evidence until compact summaries exist and clear the fixed +10/400 and +0.02 gate."
+            f"- Current acceptance-moving learned-policy work: {inflight}"
         )
         priority_lines.append(
             "- Do not start another same-protocol MiniGrid, classic-control, PointMaze, or FetchReach screen while this is pending; existing screens already show saturated radius checks, stronger-baseline losses, or state-priority-only ablation failures."

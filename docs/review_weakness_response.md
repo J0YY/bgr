@@ -105,3 +105,11 @@ to reproduce this read from the current result artifacts.
   one episode, far below the fixed +10/400 and +0.02 gate. Do not spend more
   compute on clean-mix visual-perturb OpenVLA-OFT variants unless the
   intervention changes materially.
+- The current preregistered learned-policy route is perturb-only anchored
+  OpenVLA-OFT adaptation in
+  `scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh`. It removes
+  clean anchors from the RLDS training data and uses a stronger proximal anchor
+  (`PROXIMAL_ANCHOR_L2=5.0`) so this is not another clean-mix retry. It remains
+  non-evidence until compact summaries exist and BGR clears the same +10/400
+  and +0.02 gate over both official and matched random while preserving clean
+  identity within -1/100.

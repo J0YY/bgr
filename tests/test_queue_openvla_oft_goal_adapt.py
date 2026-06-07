@@ -9,6 +9,7 @@ SCRIPT = ROOT / "scripts" / "queue_openvla_oft_goal_adapt.sh"
 PREREG_SCRIPT = ROOT / "scripts" / "queue_openvla_oft_preregistered_goal_adapt.sh"
 WEIGHTED_PREREG_SCRIPT = ROOT / "scripts" / "queue_openvla_oft_preregistered_weighted_perturb.sh"
 PROXIMAL_PREREG_SCRIPT = ROOT / "scripts" / "queue_openvla_oft_preregistered_proximal_anchor.sh"
+PERTURB_ONLY_PREREG_SCRIPT = ROOT / "scripts" / "queue_openvla_oft_preregistered_perturb_only_anchor.sh"
 PROXIMAL_SYNC_SCRIPT = ROOT / "scripts" / "sync_openvla_oft_proximal_anchor_results.sh"
 WEIGHTED_SYNC_SCRIPT = ROOT / "scripts" / "sync_openvla_oft_weighted_perturb_results.sh"
 
@@ -142,6 +143,39 @@ class QueueOpenVlaOftGoalAdaptTest(unittest.TestCase):
             check=check,
         )
 
+    def run_perturb_only_preregistered(
+        self, *args: str, check: bool = True, **overrides: str
+    ) -> subprocess.CompletedProcess[str]:
+        env = os.environ.copy()
+        env.update(
+            {
+                "REMOTE_HOST": "example.invalid",
+                "REMOTE_PROJECT": "/tmp/bgr",
+                "REMOTE_LOG_DIR": "/tmp/bgr-logs",
+                "REMOTE_RUN_ROOT": "/tmp/bgr-runs",
+                "REMOTE_HF_HOME": "/tmp/hf-home",
+                "REMOTE_TRANSFORMERS_CACHE": "/tmp/hf-home/hub",
+                "OPENVLA_OFT_ROOT": "/tmp/openvla-oft",
+                "OPENVLA_OFT_TORCHRUN": "/tmp/openvla-oft/.venv/bin/torchrun",
+                "OPENVLA_OFT_PY": "/tmp/openvla-oft/.venv/bin/python",
+                "OPENVLA_OFT_SITE": "/tmp/openvla-oft/.venv/lib/python3.10/site-packages",
+                "LIBERO_ROOT": "/tmp/LIBERO",
+                "OFFICIAL_STATS": "/tmp/official/dataset_statistics.json",
+                "GIT_PULL": "0",
+                "SYNC_CODE": "0",
+            }
+        )
+        env.update(overrides)
+        return subprocess.run(
+            ["bash", str(PERTURB_ONLY_PREREG_SCRIPT), *args],
+            cwd=ROOT,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=check,
+        )
+
     def test_dry_run_defaults_image_augmentation_off(self) -> None:
         output = self.run_dry()
         self.assertIn('--image_aug "False"', output)
@@ -244,6 +278,37 @@ class QueueOpenVlaOftGoalAdaptTest(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("Refusing --submit-perturb without BGR_DEPENDENCY and RANDOM_DEPENDENCY", result.stderr)
 
+    def test_perturb_only_preregistered_prep_dry_run_excludes_clean_anchors(self) -> None:
+        result = self.run_perturb_only_preregistered("--prep-only")
+        output = result.stdout
+        self.assertIn("perturb-only anchored adaptation", output)
+        self.assertIn("PREP_TAG=p2048unique_perturbonly_anchor_prereg", output)
+        self.assertIn("Rendering BGR perturb-only boundary examples", output)
+        self.assertIn("Rendering random perturb-only boundary examples", output)
+        self.assertIn("/tmp/bgr-runs/openvla_oft_tfds_libero_goal_bgr_perturbonly_p2048unique_perturbonly_anchor_prereg_v1", output)
+        self.assertIn('--method bgr_boundary', output)
+        self.assertIn('--method random_balanced', output)
+        self.assertIn('--episodes-per-family "8"', output)
+        self.assertNotIn("clean_anchor", output)
+        self.assertNotIn("native-anchors", output)
+
+    def test_perturb_only_preregistered_adapt_dry_run_pins_anchor_and_roots(self) -> None:
+        result = self.run_perturb_only_preregistered("--adapt-only")
+        output = result.stdout
+        self.assertIn("perturbonly_proxanchor_l2_5em0", output)
+        self.assertIn("PROXIMAL_ANCHOR_L2=5.0", output)
+        self.assertIn('export BGR_PROXIMAL_ANCHOR_L2="5.0"', output)
+        self.assertIn("/tmp/bgr-runs/openvla_oft_tfds_libero_goal_bgr_perturbonly_p2048unique_perturbonly_anchor_prereg_v1", output)
+        self.assertIn("/tmp/bgr-runs/openvla_oft_tfds_libero_goal_random_perturbonly_p2048unique_perturbonly_anchor_prereg_v1", output)
+        self.assertIn('--learning_rate "2e-7"', output)
+        self.assertIn('--max_steps "50300"', output)
+        self.assertIn('--image_aug "True"', output)
+
+    def test_perturb_only_preregistered_refuses_perturb_submit_without_merge_dependencies(self) -> None:
+        result = self.run_perturb_only_preregistered("--perturb-only", "--submit-perturb", check=False)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("Refusing --submit-perturb without BGR_DEPENDENCY and RANDOM_DEPENDENCY", result.stderr)
+
     def test_proximal_sync_dry_run_prints_fixed_paths(self) -> None:
         env = os.environ.copy()
         env.update(
@@ -265,8 +330,8 @@ class QueueOpenVlaOftGoalAdaptTest(unittest.TestCase):
         output = result.stdout
         self.assertIn("Proximal-anchor OpenVLA-OFT result sync", output)
         self.assertIn("REMOTE_HOST=athena-unit", output)
-        self.assertIn("767128,767129", output)
-        self.assertIn("DETAIL_JOB_IDS=767128,767134", output)
+        self.assertIn("767657,767658", output)
+        self.assertIn("DETAIL_JOB_IDS=767657,767674", output)
         self.assertIn("openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0", output)
         self.assertIn("[dry-run] pass --poll", output)
         self.assertIn("[dry-run] pass --sync", output)

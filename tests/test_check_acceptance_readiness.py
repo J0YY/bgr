@@ -2,6 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from scripts.check_acceptance_readiness import OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE
 from scripts.check_acceptance_readiness import OPENVLA_PROXIMAL_ANCHOR_COMPLETE
 from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_COMPLETE
 from scripts.check_acceptance_readiness import independent_benchmark_gate
@@ -105,6 +106,65 @@ def _write_independent_summaries(root: Path) -> None:
 
 
 class CheckAcceptanceReadinessTest(unittest.TestCase):
+    def test_learned_policy_gate_reports_perturb_only_anchor_inflight(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_weighted_summary(root)
+            _write_proximal_summary(root, bgr_shift=98, random_shift=98)
+            docs = root / "docs"
+            docs.mkdir(parents=True)
+            (docs / "aaai_acceptance_gap.md").write_text(
+                "scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh is preregistered.\n",
+                encoding="utf-8",
+            )
+
+            gate = learned_policy_gate(root)
+
+        self.assertFalse(gate.passed)
+        self.assertIn("latest proximal-anchor audit", gate.detail)
+        self.assertIn("perturb-only anchored OpenVLA route preregistered", gate.detail)
+        self.assertIn("+10/400 and +0.02", gate.detail)
+
+    def test_learned_policy_gate_prefers_completed_perturb_only_anchor_summary(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_weighted_summary(root)
+            _write_proximal_summary(root, bgr_shift=98, random_shift=98)
+            path = root / OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(
+                "\n".join(
+                    [
+                        "method,perturbation,episodes,successes,success_rate",
+                        "bgr,identity,100,99,0.99",
+                        "bgr,blur,100,99,0.99",
+                        "bgr,brightness,100,99,0.99",
+                        "bgr,occlusion,100,85,0.85",
+                        "bgr,shift,100,99,0.99",
+                        "official,identity,100,99,0.99",
+                        "official,blur,100,97,0.97",
+                        "official,brightness,100,98,0.98",
+                        "official,occlusion,100,74,0.74",
+                        "official,shift,100,98,0.98",
+                        "random,identity,100,99,0.99",
+                        "random,blur,100,97,0.97",
+                        "random,brightness,100,97,0.97",
+                        "random,occlusion,100,73,0.73",
+                        "random,shift,100,95,0.95",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            gate = learned_policy_gate(root)
+
+        self.assertTrue(gate.passed)
+        self.assertIn("latest perturb-only anchored audit", gate.detail)
+        self.assertIn("BGR 382/400", gate.detail)
+        self.assertIn("official_margin=15", gate.detail)
+        self.assertIn("random_margin=20", gate.detail)
+
     def test_learned_policy_gate_prefers_latest_weighted_official_failure(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -22,6 +22,11 @@ OPENVLA_PROXIMAL_ANCHOR_COMPLETE = (
     "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_"
     "step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv"
 )
+OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE = (
+    "results/openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_"
+    "step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv"
+)
+OPENVLA_PERTURB_ONLY_ANCHOR_MARKER = "queue_openvla_oft_preregistered_perturb_only_anchor.sh"
 OPENVLA_PROXIMAL_ANCHOR_JOB_IDS = {
     "bgr_train": "767657",
     "bgr_merge": "767658",
@@ -140,7 +145,7 @@ def missing_openvla_rows(rows: list[dict[str, str]], methods: set[str], perturba
 
 
 def learned_policy_inflight_detail(root: Path) -> str | None:
-    if (root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE).exists():
+    if (root / OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE).exists():
         return None
 
     ledger_text = ""
@@ -148,6 +153,18 @@ def learned_policy_inflight_detail(root: Path) -> str | None:
         path = root / relative_path
         if path.exists():
             ledger_text += "\n" + path.read_text(encoding="utf-8")
+
+    if OPENVLA_PERTURB_ONLY_ANCHOR_MARKER in ledger_text:
+        return (
+            "perturb-only anchored OpenVLA route preregistered, not yet evidence: "
+            "prepare perturb-only BGR/random TFDS roots, adapt both branches with the stronger "
+            "official-checkpoint proximal anchor, and run the fixed official/BGR/random "
+            "10-task x 10-trial perturbation eval before applying the +10/400 and +0.02 "
+            "learned-policy gate"
+        )
+
+    if (root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE).exists():
+        return None
 
     if (
         OPENVLA_PROXIMAL_ANCHOR_JOB_IDS["bgr_train"] not in ledger_text
@@ -480,8 +497,17 @@ def independent_benchmark_gate(root: Path) -> GateResult:
 
 def learned_policy_gate(root: Path) -> GateResult:
     inflight_detail = learned_policy_inflight_detail(root)
+    if (root / OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE).exists():
+        return learned_policy_summary_gate(
+            root,
+            OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE,
+            label="latest perturb-only anchored audit",
+        )
     if (root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE).exists():
-        return learned_policy_summary_gate(root, OPENVLA_PROXIMAL_ANCHOR_COMPLETE, label="latest proximal-anchor audit")
+        gate = learned_policy_summary_gate(root, OPENVLA_PROXIMAL_ANCHOR_COMPLETE, label="latest proximal-anchor audit")
+        if inflight_detail:
+            return GateResult(gate.name, gate.passed, f"{gate.detail}; {inflight_detail}")
+        return gate
 
     weighted_path = root / OPENVLA_WEIGHTED_COMPLETE
     if weighted_path.exists():

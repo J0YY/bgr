@@ -208,6 +208,23 @@ Treat the following as the current paper-weakness backlog:
   success, producing non-identity totals BGR 367/400, official 367/400, and
   matched random 370/400. The compact local artifact is
   `results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv`.
+- The current preregistered learned-policy route is perturb-only anchored
+  OpenVLA-OFT adaptation in
+  `scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh`. It changes
+  the completed clean-mix recipe by training only on rendered boundary-band
+  perturbation examples, with no clean anchor episodes mixed into the RLDS
+  data, and adds a stronger official-checkpoint proximal L2 anchor
+  (`PROXIMAL_ANCHOR_L2=5.0`) to protect clean identity behavior. Fixed command
+  sequence: prep with
+  `scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh --prep-only --submit-prep`,
+  adapt after prep with
+  `TRAIN_DEPENDENCY=afterok:<prep_job> scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh --adapt-only --submit-adapt`,
+  and perturb-evaluate after BGR/random merge jobs with
+  `BGR_DEPENDENCY=afterok:<bgr_merge> RANDOM_DEPENDENCY=afterok:<random_merge> scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh --perturb-only --submit-perturb`.
+  It is promotable only if BGR beats both perturb-only anchored matched random
+  and the official checkpoint by the fixed +10/400 and +0.02 non-identity
+  perturbation gate while preserving clean identity within -1/100. Until compact
+  summaries exist and clear that gate, this route is not paper evidence.
 
 ## Paper Workflow
 

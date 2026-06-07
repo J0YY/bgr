@@ -529,6 +529,7 @@ OPENVLA_BRIDGE_ARTIFACTS = [
     "scripts/queue_openvla_oft_long_run.sh",
     "scripts/queue_openvla_oft_perturb_eval.sh",
     "scripts/queue_openvla_oft_preregistered_goal_adapt.sh",
+    "scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh",
     "scripts/queue_openvla_oft_preregistered_proximal_anchor.sh",
     "scripts/queue_openvla_oft_preregistered_weighted_perturb.sh",
     "scripts/queue_openvla_sanity_eval.sh",

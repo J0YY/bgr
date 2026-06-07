@@ -2542,6 +2542,13 @@ class CheckSubmissionPackageTest(unittest.TestCase):
 
         self.assertTrue(ALLOWED_TEX_LOG_ARTIFACTS.issubset(required))
 
+    def test_preregistered_openvla_queue_wrappers_are_required_submission_artifacts(self):
+        required = set(required_submission_files())
+
+        self.assertIn("scripts/queue_openvla_oft_preregistered_weighted_perturb.sh", required)
+        self.assertIn("scripts/queue_openvla_oft_preregistered_proximal_anchor.sh", required)
+        self.assertIn("scripts/queue_openvla_oft_preregistered_perturb_only_anchor.sh", required)
+
     def test_required_artifact_scope_excludes_current_raw_run_outputs(self):
         self.assertEqual(
             check_required_artifact_scope(Path(".")),
