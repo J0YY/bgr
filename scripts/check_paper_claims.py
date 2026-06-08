@@ -1029,10 +1029,51 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "MinAtar Breakout compressed scope-audit table row",
             (
-                f"MinAtar BGR {fmt(minatar_bgr_rauc, 4)} & Catch uniform {fmt(catch_uniform_rauc, 4)}; "
-                f"Cartpole TD-loss {fmt(cartpole_td_rauc, 4)}; MinAtar ties uniform"
+                f"Catch uniform {fmt(catch_uniform_rauc, 4)}; "
+                f"Cartpole TD-loss {fmt(cartpole_td_rauc, 4)}"
             ),
             "results/minatar_breakout_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+
+    asterix = read_csv_rows(results_dir / "minatar_asterix_recovery_probe_4seed_v1" / "summary.csv")
+    asterix_bgr_rauc = mean_metric(asterix, "bgr", "final_rauc")
+    asterix_coverage_rauc = mean_metric(asterix, "bgr_coverage", "final_rauc")
+    asterix_uniform_rauc = mean_metric(asterix, "uniform", "final_rauc")
+    asterix_failure_rauc = mean_metric(asterix, "failure_only", "final_rauc")
+    asterix_coverage_wins = paired_wins(asterix, "bgr_coverage", "uniform", "final_rauc")
+    if not (
+        asterix_coverage_rauc > asterix_uniform_rauc
+        and asterix_failure_rauc > asterix_coverage_rauc
+        and asterix_coverage_wins == (1, 2, 1)
+    ):
+        raise ValueError("Expected MinAtar Asterix diagnostic to remain blocked by failure-only and paired signs")
+    claims.append(
+        Claim(
+            "MinAtar Asterix official-package limitation",
+            (
+                f"MinAtar Asterix trails failure-only ({fmt(asterix_coverage_rauc, 4)} vs. "
+                f"{fmt(asterix_failure_rauc, 4)} RAUC)"
+            ),
+            "results/minatar_asterix_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "MinAtar Asterix compressed scope-audit table row",
+            (
+                f"Asterix BGR-Cov. {fmt(asterix_coverage_rauc, 4)}"
+            ),
+            "results/minatar_asterix_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "MinAtar Asterix compressed blocker table row",
+            (
+                f"Asterix failure-only {fmt(asterix_failure_rauc, 4)}"
+            ),
+            "results/minatar_asterix_recovery_probe_4seed_v1/summary.csv",
         )
     )
 

@@ -5519,3 +5519,31 @@ non-saturated prerequisites with clean success 0.8333, recovery range
 0.5000--0.8333, RAUC 0.7188, and r80 5.3333 on the 0--8 seed-fixed
 player-cell displacement grid. This is not BGR evidence; it only authorizes the
 fixed all-method Asterix screen under the same package-backed reset interface.
+
+### `minatar_asterix_recovery_probe_4seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_asterix_recovery_probe.py --out results/minatar_asterix_recovery_probe_4seed_v1
+```
+
+Package environment: `/tmp/bgr_minatar_venv` with `MinAtar==1.0.15` and
+`numpy==2.4.6`.
+
+Mean results over four paired seeds:
+
+| Method | Clean | RAUC | Median r80 | AULC |
+|---|---:|---:|---:|---:|
+| Failure-only | 1.0000 | 0.8625 | 6.2000 | 0.8209 |
+| BGR-Coverage | 1.0000 | 0.8406 | 5.9500 | 0.7400 |
+| BGR-uniform-radius | 1.0000 | 0.8313 | 5.9500 | 0.8143 |
+| Uniform | 1.0000 | 0.8234 | 5.4500 | 0.8000 |
+| BGR | 1.0000 | 0.8047 | 5.3250 | 0.7977 |
+| TD-loss | 1.0000 | 0.8031 | 5.5750 | 0.8080 |
+| Fixed-radius | 0.9250 | 0.7734 | 3.7000 | 0.7773 |
+
+Interpretation: the fixed Asterix all-method screen is negative. BGR-Coverage
+beats uniform on mean RAUC but loses to the failure-only baseline and has only
+1/2/1 paired wins/losses/ties against uniform, so it fails the promotion gate
+and should not be scaled or promoted under this protocol.

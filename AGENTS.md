@@ -20,8 +20,8 @@ OpenVLA/LIBERO learned-policy evidence remain failing or non-promotable. The
 latest bsuite Catch 30-seed scale-up, MiniGrid FourRooms radius-10 rescue,
 HandReach-v3 calibration, highway-fast-v0 lane calibration, and MinAtar
 Breakout all-method screen are also negative, so they do not solve the
-independent-benchmark evidence gap. MinAtar Asterix is now an active
-pre-method calibration route, not paper evidence. The
+independent-benchmark evidence gap. MinAtar Asterix also completed negative
+after its usable calibration, so there is no active independent route. The
 new grid-margin witness-sensitivity diagnostic improves scope support for the
 feasibility-witness assumption but is controlled mechanism evidence, not an
 independent-benchmark win.
@@ -85,9 +85,9 @@ acceptance progress.
 As of the latest checkpoint, MinAtar Breakout is retired as a negative
 independent route: the 12-seed calibration was usable, but the fixed 4-seed
 all-method screen ties uniform on final RAUC and saturates median r80. MinAtar
-Asterix is the active pre-method route: the fixed 12-seed calibration cleared
-clean/non-flat/non-saturated prerequisites, authorizing exactly one fixed
-all-method screen before any interpretation.
+Asterix is also retired negative: the fixed 12-seed calibration cleared
+clean/non-flat/non-saturated prerequisites, but the fixed 4-seed all-method
+screen loses to failure-only replay.
 
 Operational rule of thumb: commit and push clean, explicit checkpoints to
 `origin/main`; do not use Docker for this project; and incorporate new results
@@ -144,16 +144,20 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   `results/minatar_breakout_recovery_probe_4seed_v1/summary.csv` is negative:
   BGR and BGR-Coverage both tie uniform at 0.8896 final RAUC with median r80
   saturated at 5.0000, and failure-only has the best AULC at 0.7721.
-- MinAtar Asterix is the current active pre-method independent route, not
-  positive BGR evidence. The fixed command is
+- MinAtar Asterix is completed negative scope evidence, not positive BGR
+  evidence. The fixed calibration command is
   `PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_asterix_recovery_calibration.py --out results/minatar_asterix_recovery_calibration_12seed_v1`.
   It uses `MinAtar==1.0.15` and `numpy==2.4.6` in `/tmp/bgr_minatar_venv`,
   MinAtar's package-owned Asterix dynamics, a fixed gold-seeking controller
   with one-step enemy avoidance, and seed-fixed random player-cell
   displacements after a 30-step burn-in. The calibration clears the pre-method
   gate with clean success 0.8333, recovery range 0.5000--0.8333, RAUC 0.7188,
-  and r80 5.3333. This only permits a fixed all-method Asterix screen; do not
-  cite it as positive BGR evidence or tune the protocol after method outcomes.
+  and r80 5.3333. The fixed all-method screen at
+  `results/minatar_asterix_recovery_probe_4seed_v1/summary.csv` is negative:
+  failure-only reaches 0.8625 final RAUC, above BGR-Coverage 0.8406, BGR
+  0.8047, and uniform 0.8234; BGR-Coverage wins only 1/4 paired seeds against
+  uniform. Do not scale or promote this route without a genuinely new
+  preregistered premise.
 - FetchPush, FetchSlide, and FetchPickAndPlace object-goal calibrations are
   rejected pre-method routes under the current scripted controller/interface;
   do not build replay comparisons around them without a new preregistered

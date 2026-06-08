@@ -719,6 +719,41 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"W/L/T={best_minatar_wins}"
             )
 
+    asterix_path = root / "results/minatar_asterix_recovery_probe_4seed_v1/summary.csv"
+    if asterix_path.exists():
+        asterix = read_rows(asterix_path)
+        asterix_bgr = mean_metric(asterix, "bgr", "final_rauc")
+        asterix_coverage = mean_metric(asterix, "bgr_coverage", "final_rauc")
+        asterix_uniform = mean_metric(asterix, "uniform", "final_rauc")
+        asterix_failure = mean_metric(asterix, "failure_only", "final_rauc")
+        asterix_fixed = mean_metric(asterix, "fixed", "final_rauc")
+        asterix_td = mean_metric(asterix, "td_loss", "final_rauc")
+        asterix_ablation = mean_metric(asterix, "bgr_uniform_radius", "final_rauc")
+        asterix_bgr_r80 = mean_metric(asterix, "bgr", "final_median_r80")
+        asterix_coverage_r80 = mean_metric(asterix, "bgr_coverage", "final_median_r80")
+        asterix_uniform_r80 = mean_metric(asterix, "uniform", "final_median_r80")
+        asterix_bgr_wins = paired_wins(asterix, "bgr", "uniform", "final_rauc")
+        asterix_coverage_wins = paired_wins(asterix, "bgr_coverage", "uniform", "final_rauc")
+        best_asterix = asterix_bgr if asterix_bgr >= asterix_coverage else asterix_coverage
+        best_asterix_r80 = asterix_bgr_r80 if asterix_bgr >= asterix_coverage else asterix_coverage_r80
+        best_asterix_wins = asterix_bgr_wins if asterix_bgr >= asterix_coverage else asterix_coverage_wins
+        if not (
+            best_asterix - asterix_uniform >= 0.01
+            and best_asterix > max(asterix_failure, asterix_fixed, asterix_td, asterix_ablation)
+            and best_asterix_wins[0] >= 3
+            and best_asterix_r80 >= asterix_uniform_r80
+            and not (best_asterix_r80 >= 7.99 and asterix_uniform_r80 >= 7.99)
+            and not (best_asterix_r80 <= 0.01 and asterix_uniform_r80 <= 0.01)
+        ):
+            failures.append(
+                f"MinAtar Asterix negative: BGR {asterix_bgr:.4f}, "
+                f"BGR-Coverage {asterix_coverage:.4f}, uniform {asterix_uniform:.4f}, "
+                f"failure-only {asterix_failure:.4f}, fixed {asterix_fixed:.4f}, "
+                f"TD-loss {asterix_td:.4f}, uniform-radius {asterix_ablation:.4f}, "
+                f"best-r80 {best_asterix_r80:.4f} vs uniform {asterix_uniform_r80:.4f}, "
+                f"W/L/T={best_asterix_wins}"
+            )
+
     for label, relative_path in CALIBRATION_SUMMARIES:
         calibration_path = root / relative_path
         if not calibration_path.exists():

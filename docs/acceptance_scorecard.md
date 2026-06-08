@@ -8,15 +8,14 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Perturb-only anchored OpenVLA audit does not clear the learned-policy promotion gate: BGR 371/400, official 367/400, random 372/400; identity BGR 99/100, official 99/100, random 99/100; official gap +4 (+0.0100), random gap -1 (-0.0025), clean deficit 0.
 - Closest independent benchmark screen is `MiniGrid FourRooms official-package` with treatment `bgr_coverage`: delta vs uniform +0.1075 (4/0/0), worst required-baseline delta +0.0464 (3/1/0), ablation delta +0.0071 (2/2/0), radius delta +0.0000 (0/0/4), failure reason(s): final_median_r80-ceiling-saturated.
 - Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`, `FetchPush-v4 far-push object-goal calibration`, `FetchSlide-v4 object-goal calibration`, `FetchPickAndPlace-v4 object-goal calibration`, `Gymnasium-Robotics HandReach-v3 calibration`, `highway-env parking-v0 calibration`, `highway-env highway-fast-v0 lane calibration`.
-- Retired calibrated route(s) that cleared pre-method calibration: `MinAtar Breakout calibration` clean 1.0000, range 0.6667--1.0000, r80 0.6000, `Gymnasium MuJoCo Reacher-v5 calibration` clean 0.8333, range 0.5000--0.9167, r80 3.0000, `Gymnasium MuJoCo InvertedPendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2100, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2825, `Gymnasium Box2D LunarLander-v3 calibration` clean 0.9167, range 0.5833--0.9167, r80 0.5300.
-- Active pre-method calibration route(s): `MinAtar Asterix calibration` clean 0.8333, range 0.5000--0.8333, r80 5.3333.
+- Retired calibrated route(s) that cleared pre-method calibration: `MinAtar Breakout calibration` clean 1.0000, range 0.6667--1.0000, r80 0.6000, `MinAtar Asterix calibration` clean 0.8333, range 0.5000--0.8333, r80 5.3333, `Gymnasium MuJoCo Reacher-v5 calibration` clean 0.8333, range 0.5000--0.9167, r80 3.0000, `Gymnasium MuJoCo InvertedPendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2100, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2825, `Gymnasium Box2D LunarLander-v3 calibration` clean 0.9167, range 0.5833--0.9167, r80 0.5300.
 
 ## Promotion Deficits
 
 - Independent benchmark: no screen clears the 4/4 promotion screen. The closest screen, `MiniGrid FourRooms official-package` with `bgr_coverage`, clears 3/4 gates and fails on final_median_r80-ceiling-saturated.
 - Learned policy: Perturb-only anchored OpenVLA audit does not clear the learned-policy promotion gate: BGR 371/400, official 367/400, random 372/400; identity BGR 99/100, official 99/100, random 99/100; official gap +4 (+0.0100), random gap -1 (-0.0025), clean deficit 0.
-- Retired calibrated route(s): `MinAtar Breakout calibration`, `Gymnasium MuJoCo Reacher-v5 calibration`, `Gymnasium MuJoCo InvertedPendulum-v5 calibration`, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration`, `Gymnasium Box2D LunarLander-v3 calibration` cleared pre-method calibration, but the corresponding fixed method screen is negative or tied; not active acceptance evidence.
-- Active route: `MinAtar Asterix calibration` cleared pre-method calibration; run only the fixed preregistered all-method screen before interpreting it.
+- Retired calibrated route(s): `MinAtar Breakout calibration`, `MinAtar Asterix calibration`, `Gymnasium MuJoCo Reacher-v5 calibration`, `Gymnasium MuJoCo InvertedPendulum-v5 calibration`, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration`, `Gymnasium Box2D LunarLander-v3 calibration` cleared pre-method calibration, but the corresponding fixed method screen is negative or tied; not active acceptance evidence.
+- Active route: no queued learned-policy route is recorded in the local ledgers.
 
 ## Independent Benchmark Screens
 
@@ -28,6 +27,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | Gymnasium MuJoCo InvertedDoublePendulum-v5 | bgr | 4 | +0.0799 (1/0/3) | +0.0833 (1/0/3) | +0.0833 (1/0/3) | final_median_r80 | -0.1900 (0/1/3) | 2/4 | fail | uniform-gate, final_median_r80-contradiction |
 | MiniGrid FourRooms official-package | bgr | 4 | +0.0641 (3/1/0) | +0.0030 (3/1/0) | -0.0362 (1/3/0) | final_median_r80 | +0.0000 (0/0/4) | 2/4 | fail | state-priority-ablation, final_median_r80-ceiling-saturated |
 | MiniGrid FourRooms abs-r10 follow-up | bgr | 4 | +0.0641 (3/1/0) | +0.0030 (3/1/0) | -0.0362 (1/3/0) | final_abs_r10 | +0.0000 (0/0/4) | 2/4 | fail | state-priority-ablation, final_abs_r10-floor-saturated |
+| MinAtar Asterix | bgr_coverage | 4 | +0.0172 (1/2/1) | -0.0219 (0/4/0) | +0.0094 (3/1/0) | final_median_r80 | +0.5000 (1/0/3) | 2/4 | fail | uniform-gate, required-baseline |
 | FrozenLake8x8 | bgr | 30 | +0.0140 (14/16/0) | -0.0032 (14/16/0) | n/a | final_median_r80 | -0.0125 (12/18/0) | 2/4 | fail | required-baseline, final_median_r80-contradiction |
 | MiniGrid FourRooms max-radius-10 follow-up | bgr_coverage | 4 | +0.0017 (2/2/0) | +0.0400 (4/0/0) | +0.0064 (3/1/0) | final_median_r80 | +0.0000 (0/0/4) | 2/4 | fail | uniform-gate, final_median_r80-ceiling-saturated |
 | bsuite Cartpole | bgr_coverage | 4 | -0.0018 (2/2/0) | -0.0135 (2/2/0) | +0.0008 (2/2/0) | final_median_r80 | +0.0042 (1/2/1) | 2/4 | fail | uniform-gate, required-baseline |
@@ -56,6 +56,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | MinAtar Breakout | bgr | 4 | +0.0000 (0/0/4) | +0.0000 (0/0/4) | +0.0000 (0/0/4) | final_median_r80 | +0.0000 (0/0/4) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_median_r80-ceiling-saturated |
 | MinAtar Breakout | bgr_coverage | 4 | +0.0000 (0/0/4) | +0.0000 (0/0/4) | +0.0000 (0/0/4) | final_median_r80 | +0.0000 (0/0/4) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_median_r80-ceiling-saturated |
 | bsuite Cartpole | bgr | 4 | -0.0113 (0/4/0) | -0.0229 (0/4/0) | -0.0087 (1/3/0) | final_median_r80 | -0.0208 (1/1/2) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_median_r80-contradiction |
+| MinAtar Asterix | bgr | 4 | -0.0187 (1/3/0) | -0.0578 (0/4/0) | -0.0266 (1/3/0) | final_median_r80 | -0.1250 (2/2/0) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_median_r80-contradiction |
 | bsuite Catch 30-seed | bgr_coverage | 30 | -0.0330 (13/17/0) | -0.1224 (4/26/0) | -0.0136 (15/15/0) | final_median_r80 | -0.0625 (6/11/13) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_median_r80-contradiction |
 | bsuite Catch 30-seed | bgr | 30 | -0.0337 (14/16/0) | -0.1231 (3/24/3) | -0.0142 (20/10/0) | final_median_r80 | -0.0867 (5/9/16) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_median_r80-contradiction |
 | MiniGrid FourRooms max-radius-10 follow-up | bgr | 4 | -0.0422 (1/3/0) | -0.0039 (1/3/0) | -0.0375 (1/3/0) | final_median_r80 | +0.0000 (0/0/4) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_median_r80-ceiling-saturated |
@@ -88,9 +89,8 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.
 - The independent-benchmark route has not produced a promotable screen: early promising screens either fail paired/radius checks or do not survive scale-up, and later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.
 - The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is now negative and should not be promoted.
-- Active pre-method calibration route(s) awaiting fixed comparison result: `MinAtar Asterix calibration`.
-- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The InvertedPendulum-v5 calibration also cleared pre-method checks, but its fixed 4-seed method screen ties all methods on final RAUC and median-r80; do not scale or promote it.
+- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The InvertedDoublePendulum-v5 calibration cleared pre-method checks, but its fixed 4-seed method screen collapses clean success; the small BGR RAUC edge is not acceptance evidence.
 - Perturb-only anchored OpenVLA audit does not clear the learned-policy promotion gate: BGR 371/400, official 367/400, random 372/400; identity BGR 99/100, official 99/100, random 99/100; official gap +4 (+0.0100), random gap -1 (-0.0025), clean deficit 0.
-- The next acceptance-moving work is the fixed all-method screen for the active pre-method calibration route; do not tune the protocol after seeing its method results.
+- The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; retired calibrated routes are scope evidence, not acceptance evidence.
