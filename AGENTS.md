@@ -195,6 +195,16 @@ random clean `98/100`; the partial perturb summary remains BGR identity
 `97/100`, official brightness `98/100`, and random identity `98/100`. The
 fixed perturb gate is still `[INCOMPLETE]`, and readiness remains
 `NOT_READY_FOR_90P_AAAI_CLAIM`.
+Latest poll at 2026-06-08 06:39:41 BST showed a scheduler delay, not new
+evidence: BGR brightness `767864`, official occlusion `767860`, and random
+blur `767878` moved to pending with `BeginTime`, and the remaining official,
+BGR, and random non-identity perturb jobs were still dependency-pending. A
+direct `squeue` check at 2026-06-08 06:41:57 BST showed the pending reason
+changed to `Priority`; estimated starts were official occlusion `767860` at
+2026-06-09 00:28:08 BST and BGR brightness `767864` plus random blur `767878`
+at 2026-06-09 18:31:42 BST. The synced partial summaries are unchanged, the
+fixed perturb gate is still `[INCOMPLETE]`, and no `paper/main.tex` claim
+should change.
 
 Operational defaults:
 
