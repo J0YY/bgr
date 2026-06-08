@@ -185,6 +185,16 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   paired seeds, trails the state-priority/uniform-radius ablation at 0.1266,
   and has lower median r80 than uniform (0.3625 vs. 0.5750). BGR-Coverage ties
   uniform on mean RAUC. Do not scale or promote this protocol.
+- The active bsuite Catch route is the first current independent screen to
+  clear the fixed 4-seed scale-up gate. It uses `bsuite==0.3.6` in
+  `/tmp/bgr_bsuite_venv`, package-owned Catch dynamics, exact restart fields,
+  and fixed paddle-column perturbations. The compact 4-seed artifact
+  `results/bsuite_catch_recovery_probe_4seed_v1/summary.csv` gives default BGR
+  0.9742 final RAUC vs. uniform 0.8388 (+0.1354, 4/0/0), fixed-radius 0.7767,
+  failure-only 0.9336, TD-loss 0.7140, and BGR-uniform-radius 0.8982, with
+  non-contradictory median r80. This is not paper evidence yet. The fixed
+  30-seed command is
+  `PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_catch_recovery_probe.py --seeds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29 --out results/bsuite_catch_recovery_probe_30seed_v1`.
 
 ## Reviewer-Critique Priorities
 

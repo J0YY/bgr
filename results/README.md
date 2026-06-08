@@ -89,7 +89,7 @@ Completed external-package pre-promotion route:
 - `results/bsuite_deepsea_recovery_probe_4seed_v1/package_versions.json`:
   compact package-version record for the same screen.
 
-Opened external-package pre-promotion route:
+Active external-package pre-promotion route:
 
 - `results/bsuite_catch_recovery_probe_4seed_v1/summary.csv`: fixed bsuite
   Catch 4-seed screen, preregistered before method outcomes on 2026-06-07.
@@ -97,9 +97,20 @@ Opened external-package pre-promotion route:
   `PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_catch_recovery_probe.py --out results/bsuite_catch_recovery_probe_4seed_v1`.
   The route uses `bsuite==0.3.6` in an isolated temporary environment,
   package-owned Catch dynamics, exact restart fields, and a fixed paddle-column
-  perturbation family. It is not paper evidence unless the candidate-promotion
-  checker accepts the result and a later fixed 30-seed screen clears the full
-  promotion gate.
+  perturbation family. The 4-seed screen passed the scale-up gate for default
+  BGR: BGR reaches 0.9742 final RAUC vs. uniform 0.8388 (+0.1354, 4/0/0),
+  fixed-radius 0.7767, failure-only 0.9336, TD-loss 0.7140, and
+  BGR-uniform-radius 0.8982, with non-contradictory median r80. This is not
+  paper evidence unless the fixed 30-seed promotion screen also clears the full
+  gate.
+- `results/bsuite_catch_recovery_probe_4seed_v1/package_versions.json`:
+  compact package-version record for the same screen.
+
+Fixed 30-seed bsuite Catch promotion command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_catch_recovery_probe.py --seeds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29 --out results/bsuite_catch_recovery_probe_30seed_v1
+```
 
 Packaged FrozenLake diagnostic:
 
