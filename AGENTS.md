@@ -135,6 +135,16 @@ blur/brightness/occlusion/shift remained dependency-pending. The sync wrote an
 incomplete `summary_available.csv` from logs, but the full perturb and adapt
 summaries were still missing; the promotion gate remained `[INCOMPLETE]`.
 This is not paper evidence yet.
+Latest poll at 2026-06-08 06:17:16 BST showed BGR clean eval `767853`
+completed, official brightness `767859` completed, and BGR identity perturb
+eval `767862` completed. Random clean eval `767856`, random identity perturb
+eval `767868`, official occlusion `767860`, and BGR blur `767863` were running.
+Official shift `767861`, BGR brightness/occlusion/shift `767864`--`767866`,
+and random blur/brightness/occlusion/shift `767878`--`767881` remained
+dependency-pending. The full perturb/adapt summaries were still missing, and
+the fixed OpenVLA perturb promotion gate remained `[INCOMPLETE]` with missing
+non-identity BGR/random rows and official occlusion/shift rows. This still
+cannot be incorporated into `paper/main.tex`.
 
 Operational defaults:
 
