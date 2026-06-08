@@ -584,6 +584,7 @@ TEST_ARTIFACTS = [
     "tests/test_aggregate_results.py",
     "tests/test_analyze_significance.py",
     "tests/test_acceptance_scorecard.py",
+    "tests/test_bsuite_cartpole_recovery_probe.py",
     "tests/test_check_acceptance_readiness.py",
     "tests/test_check_candidate_promotion.py",
     "tests/test_check_paper_claims.py",

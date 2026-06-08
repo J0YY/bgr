@@ -967,8 +967,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "3bb6270daadcacacf660eb95f5ae1f06a847f5b3f6705d2a2879f5f22a143d21",
-      "size_bytes": 240927
+      "sha256": "b3c5728640e69e8aa99908318404a5c7caa79a770d99cb2910ea753e02e3dbd0",
+      "size_bytes": 240979
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1284,6 +1284,11 @@
       "path": "tests/test_analyze_significance.py",
       "sha256": "56594406a331412e2fd30ecb9c014fa62ce9dbb6f7749b7ac70220ba5bda2b84",
       "size_bytes": 37326
+    },
+    {
+      "path": "tests/test_bsuite_cartpole_recovery_probe.py",
+      "sha256": "8e752bbe08312ab4054ed6d353cd2ab93233c780aa193f776e156349d92c6570",
+      "size_bytes": 5102
     },
     {
       "path": "tests/test_check_acceptance_readiness.py",
