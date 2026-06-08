@@ -306,6 +306,14 @@ BENCHMARK_SCREENS = [
         "bgr_uniform_radius",
         "final_median_r80",
     ),
+    (
+        "bsuite Cartpole",
+        "results/bsuite_cartpole_recovery_probe_4seed_v1/summary.csv",
+        ["bgr", "bgr_coverage"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
 ]
 
 CALIBRATION_SCREENS = [

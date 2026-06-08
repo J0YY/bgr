@@ -214,19 +214,21 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   BGR-uniform-radius (0.0558). Median r80 is saturated at 1.0000 for the
   BGR-family methods and uniform. Do not scale or promote this route without a
   genuinely new preregistered premise.
-- Active preregistered route: official bsuite Cartpole. It uses `bsuite==0.3.6`
-  in `/tmp/bgr_bsuite_venv`, package-owned three-action Cartpole dynamics,
-  exact `CartpoleState` restarts, and the package `step_cartpole` function.
-  Replay states are near-upright cart-pole states with nonzero cart,
-  pole-angle, and velocity errors; larger radii perturb bounded cart-position,
-  cart-velocity, pole-angle, and pole-velocity terms while preserving bsuite
-  feasibility limits. The fixed 4-seed command is
+- The completed bsuite Cartpole route is negative. It uses `bsuite==0.3.6` in
+  `/tmp/bgr_bsuite_venv`, package-owned three-action Cartpole dynamics, exact
+  `CartpoleState` restarts, and the package `step_cartpole` function. Replay
+  states are near-upright cart-pole states with nonzero cart, pole-angle, and
+  velocity errors; larger radii perturb bounded cart-position, cart-velocity,
+  pole-angle, and pole-velocity terms while preserving bsuite feasibility
+  limits. The fixed 4-seed command was
   `PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_cartpole_recovery_probe.py --out results/bsuite_cartpole_recovery_probe_4seed_v1`.
-  This screen can justify a 30-seed scale-up only if default BGR or
-  BGR-Coverage beats uniform, fixed-radius, failure-only, TD/loss-priority, and
-  BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform,
-  a mean RAUC gap of at least +0.01, and non-contradictory, non-saturated
-  median-r80 evidence. The 4-seed screen is not paper evidence.
+  Default BGR reaches 0.7464 final RAUC versus 0.7577 for uniform (-0.0113,
+  0/4/0), while BGR-Coverage reaches 0.7559 versus uniform (-0.0018, 2/2/0).
+  Both trail TD-loss replay (0.7694) and fixed-radius replay (0.7604); default
+  BGR also trails BGR-uniform-radius (0.7551). Median r80 is lower for default
+  BGR than uniform (0.9667 vs. 0.9875), while BGR-Coverage is 0.9917 in a
+  near-ceiling regime. Do not scale or promote this route without a genuinely
+  new preregistered premise.
 
 ## Reviewer-Critique Priorities
 

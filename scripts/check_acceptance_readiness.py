@@ -621,6 +621,41 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"W/L/T={best_mountain_wins}"
             )
 
+    cartpole_path = root / "results/bsuite_cartpole_recovery_probe_4seed_v1/summary.csv"
+    if cartpole_path.exists():
+        cartpole = read_rows(cartpole_path)
+        cartpole_bgr = mean_metric(cartpole, "bgr", "final_rauc")
+        cartpole_coverage = mean_metric(cartpole, "bgr_coverage", "final_rauc")
+        cartpole_uniform = mean_metric(cartpole, "uniform", "final_rauc")
+        cartpole_failure = mean_metric(cartpole, "failure_only", "final_rauc")
+        cartpole_fixed = mean_metric(cartpole, "fixed", "final_rauc")
+        cartpole_td = mean_metric(cartpole, "td_loss", "final_rauc")
+        cartpole_ablation = mean_metric(cartpole, "bgr_uniform_radius", "final_rauc")
+        cartpole_bgr_r80 = mean_metric(cartpole, "bgr", "final_median_r80")
+        cartpole_coverage_r80 = mean_metric(cartpole, "bgr_coverage", "final_median_r80")
+        cartpole_uniform_r80 = mean_metric(cartpole, "uniform", "final_median_r80")
+        cartpole_bgr_wins = paired_wins(cartpole, "bgr", "uniform", "final_rauc")
+        cartpole_coverage_wins = paired_wins(cartpole, "bgr_coverage", "uniform", "final_rauc")
+        best_cartpole = cartpole_bgr if cartpole_bgr >= cartpole_coverage else cartpole_coverage
+        best_cartpole_r80 = cartpole_bgr_r80 if cartpole_bgr >= cartpole_coverage else cartpole_coverage_r80
+        best_cartpole_wins = cartpole_bgr_wins if cartpole_bgr >= cartpole_coverage else cartpole_coverage_wins
+        if not (
+            best_cartpole - cartpole_uniform >= 0.01
+            and best_cartpole > max(cartpole_failure, cartpole_fixed, cartpole_td, cartpole_ablation)
+            and best_cartpole_wins[0] >= 3
+            and best_cartpole_r80 >= cartpole_uniform_r80
+            and not (best_cartpole_r80 >= 0.99 and cartpole_uniform_r80 >= 0.99)
+            and not (best_cartpole_r80 <= 0.01 and cartpole_uniform_r80 <= 0.01)
+        ):
+            failures.append(
+                f"bsuite Cartpole negative: BGR {cartpole_bgr:.4f}, "
+                f"BGR-Coverage {cartpole_coverage:.4f}, uniform {cartpole_uniform:.4f}, "
+                f"failure-only {cartpole_failure:.4f}, fixed {cartpole_fixed:.4f}, "
+                f"TD-loss {cartpole_td:.4f}, uniform-radius {cartpole_ablation:.4f}, "
+                f"best-r80 {best_cartpole_r80:.4f} vs uniform {cartpole_uniform_r80:.4f}, "
+                f"W/L/T={best_cartpole_wins}"
+            )
+
     for label, relative_path in CALIBRATION_SUMMARIES:
         calibration_path = root / relative_path
         if not calibration_path.exists():

@@ -147,7 +147,7 @@ Fixed 4-seed bsuite MountainCar pre-promotion command:
 PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_mountaincar_recovery_probe.py --out results/bsuite_mountaincar_recovery_probe_4seed_v1
 ```
 
-Active external-package pre-promotion route:
+Completed external-package pre-promotion route:
 
 - `tools/bsuite_cartpole_recovery_probe.py`: fixed bsuite Cartpole screen,
   preregistered before method outcomes on 2026-06-07. The route uses
@@ -158,6 +158,17 @@ Active external-package pre-promotion route:
   errors; larger radii increase bounded cart-position, cart-velocity,
   pole-angle, and pole-velocity perturbations while preserving bsuite's height
   and cart-position feasibility limits.
+- `results/bsuite_cartpole_recovery_probe_4seed_v1/summary.csv`: fixed 4-seed
+  bsuite Cartpole screen from the preregistered command below. The route is
+  negative and should not be scaled: default BGR reaches 0.7464 final RAUC
+  versus 0.7577 for uniform (-0.0113, 0/4/0), while BGR-Coverage reaches
+  0.7559 versus uniform (-0.0018, 2/2/0). Both trail TD-loss replay (0.7694)
+  and fixed-radius replay (0.7604); default BGR also trails the
+  state-priority/uniform-radius ablation (0.7551). Median r80 is lower for
+  default BGR than uniform (0.9667 vs. 0.9875), while BGR-Coverage is 0.9917 in
+  a near-ceiling regime.
+- `results/bsuite_cartpole_recovery_probe_4seed_v1/package_versions.json`:
+  compact package-version record for the same screen.
 
 Fixed 4-seed bsuite Cartpole pre-promotion command:
 

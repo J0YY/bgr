@@ -196,7 +196,7 @@ r80 is saturated at 1.0000 for BGR, BGR-Coverage, BGR-uniform-radius,
 failure-only, TD-loss, and uniform, so the screen does not measure useful
 boundary expansion.
 
-Active independent-benchmark route, opened and preregistered 2026-06-07:
+Completed independent-benchmark route, opened and evaluated 2026-06-07:
 official bsuite `cartpole`. This route uses bsuite's package-owned three-action
 Cartpole task (`left`, `stay`, `right`), exact `CartpoleState` restarts, and the
 package `step_cartpole` dynamics. Replay states are near-upright cart-pole
@@ -215,6 +215,16 @@ BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform, a
 mean RAUC gap of at least +0.01, and non-contradictory, non-saturated
 median-r80 evidence. Passing this 4-seed screen is not paper evidence; it is
 only permission to run the fixed 30-seed promotion screen.
+
+Result: the fixed 4-seed bsuite Cartpole screen is negative and should not be
+scaled under this protocol. Default BGR reaches 0.7464 final RAUC versus 0.7577
+for uniform (-0.0113, 0/4/0), while BGR-Coverage reaches 0.7559 versus uniform
+(-0.0018, 2/2/0). Both trail TD-loss replay (0.7694) and fixed-radius replay
+(0.7604); default BGR also trails the state-priority/uniform-radius ablation
+(0.7551). Median r80 does not rescue the result: default BGR reaches 0.9667
+versus 0.9875 for uniform, while BGR-Coverage is 0.9917 in a near-ceiling
+regime. Do not scale or promote this Cartpole route without a genuinely new
+preregistered premise.
 
 ## Promotion Criteria For A New Independent Benchmark
 

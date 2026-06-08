@@ -820,9 +820,9 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "LunarLander-v3 official-package limitation",
             (
-                f"A fixed Box2D LunarLander screen is a near miss: BGR-Coverage has the best mean RAUC "
+                f"LunarLander is a near miss: BGR-Coverage has the best mean RAUC "
                 f"({fmt(lunar_coverage_rauc, 4)} vs. {fmt(lunar_uniform_rauc, 4)} uniform) but wins only "
-                f"{lunar_coverage_wins[0]}/4 paired seeds and has lower median $r_{{80}}$ than uniform"
+                f"{lunar_coverage_wins[0]}/4 seeds and has lower median $r_{{80}}$"
             ),
             "results/lunarlander_recovery_probe_4seed_v1/summary.csv",
         )
@@ -854,32 +854,6 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         and deepsea_bgr_r80 < deepsea_uniform_r80
     ):
         raise ValueError("Expected bsuite DeepSea diagnostic to remain a non-promoted negative result")
-    claims.append(
-        Claim(
-            "bsuite DeepSea official-package limitation",
-            (
-                f"A bsuite DeepSea screen is also negative: default BGR improves mean RAUC over uniform "
-                f"({fmt(deepsea_bgr_rauc, 4)} vs. {fmt(deepsea_uniform_rauc, 4)}) but wins only "
-                f"{deepsea_wins[0]}/4 seeds, trails the state-priority/uniform-radius ablation "
-                f"({fmt(deepsea_ablation_rauc, 4)}), and has lower median $r_{{80}}$ than uniform "
-                f"({fmt(deepsea_bgr_r80, 4)} vs. {fmt(deepsea_uniform_r80, 4)})"
-            ),
-            "results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv",
-        )
-    )
-    claims.append(
-        Claim(
-            "bsuite DeepSea scope-audit table row",
-            (
-                f"bsuite DeepSea & BGR {fmt(deepsea_bgr_rauc, 4)}; "
-                f"BGR-Cov. {fmt(deepsea_coverage_rauc, 4)} & uniform "
-                f"{fmt(deepsea_uniform_rauc, 4)}; uniform-radius {fmt(deepsea_ablation_rauc, 4)}; "
-                f"r80 {fmt(deepsea_bgr_r80, 4)} vs. {fmt(deepsea_uniform_r80, 4)} & negative"
-            ),
-            "results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv",
-        )
-    )
-
     catch = read_csv_rows(results_dir / "bsuite_catch_recovery_probe_30seed_v1" / "summary.csv")
     catch_bgr_rauc = mean_metric(catch, "bgr", "final_rauc")
     catch_coverage_rauc = mean_metric(catch, "bgr_coverage", "final_rauc")
@@ -896,30 +870,50 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         and catch_bgr_r80 < catch_uniform_r80
     ):
         raise ValueError("Expected bsuite Catch 30-seed diagnostic to remain a non-promoted negative result")
+
+    cartpole = read_csv_rows(results_dir / "bsuite_cartpole_recovery_probe_4seed_v1" / "summary.csv")
+    cartpole_bgr_rauc = mean_metric(cartpole, "bgr", "final_rauc")
+    cartpole_coverage_rauc = mean_metric(cartpole, "bgr_coverage", "final_rauc")
+    cartpole_uniform_rauc = mean_metric(cartpole, "uniform", "final_rauc")
+    cartpole_td_rauc = mean_metric(cartpole, "td_loss", "final_rauc")
+    cartpole_wins = paired_wins(cartpole, "bgr", "uniform", "final_rauc")
+    if not (
+        cartpole_td_rauc > cartpole_uniform_rauc > cartpole_bgr_rauc
+        and cartpole_td_rauc > cartpole_coverage_rauc
+        and cartpole_wins == (0, 4, 0)
+    ):
+        raise ValueError("Expected bsuite Cartpole diagnostic to remain a non-promoted negative result")
     claims.append(
         Claim(
-            "bsuite Catch 30-seed scale-up limitation",
+            "bsuite compressed scope-audit table row",
             (
-                f"A bsuite Catch scale-up shows the fragility of the 4-seed pre-promotion screen: "
-                f"default BGR passed the 4-seed screen but fails at 30 seeds "
-                f"({fmt(catch_bgr_rauc, 4)} vs. {fmt(catch_uniform_rauc, 4)} uniform), trails "
-                f"failure-only ({fmt(catch_failure_rauc, 4)}) and BGR-uniform-radius "
-                f"({fmt(catch_ablation_rauc, 4)}), and has lower median $r_{{80}}$ than uniform "
-                f"({fmt(catch_bgr_r80, 4)} vs. {fmt(catch_uniform_r80, 4)})"
+                f"bsuite screens & DeepSea BGR {fmt(deepsea_bgr_rauc, 4)}; "
+                f"Catch BGR {fmt(catch_bgr_rauc, 4)}; Cartpole BGR-Cov. {fmt(cartpole_coverage_rauc, 4)} "
+                f"& Catch uniform {fmt(catch_uniform_rauc, 4)}; Cartpole TD-loss {fmt(cartpole_td_rauc, 4)}; "
+                f"r80 often lower/near-ceiling & negative"
+            ),
+            "results/bsuite_cartpole_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "bsuite Catch compressed limitation",
+            (
+                f"bsuite Catch shows scale-up fragility ({fmt(catch_bgr_rauc, 4)} vs. "
+                f"{fmt(catch_uniform_rauc, 4)} uniform after a positive 4-seed screen)"
             ),
             "results/bsuite_catch_recovery_probe_30seed_v1/summary.csv",
         )
     )
     claims.append(
         Claim(
-            "bsuite Catch scope-audit table row",
+            "bsuite Cartpole compressed limitation",
             (
-                f"bsuite Catch & BGR {fmt(catch_bgr_rauc, 4)}; "
-                f"BGR-Cov. {fmt(catch_coverage_rauc, 4)} & uniform "
-                f"{fmt(catch_uniform_rauc, 4)}; failure-only {fmt(catch_failure_rauc, 4)}; "
-                f"r80 {fmt(catch_bgr_r80, 4)} vs. {fmt(catch_uniform_r80, 4)} & negative"
+                f"bsuite Cartpole is also negative: default BGR loses to uniform on all four paired seeds "
+                f"({fmt(cartpole_bgr_rauc, 4)} vs. {fmt(cartpole_uniform_rauc, 4)}), while BGR-Coverage "
+                f"trails TD-loss replay ({fmt(cartpole_coverage_rauc, 4)} vs. {fmt(cartpole_td_rauc, 4)})"
             ),
-            "results/bsuite_catch_recovery_probe_30seed_v1/summary.csv",
+            "results/bsuite_cartpole_recovery_probe_4seed_v1/summary.csv",
         )
     )
 
@@ -938,9 +932,9 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "Reacher-v5 official-package limitation",
             (
-                f"Reacher-v5 MuJoCo screen gives BGR {fmt(reacher_bgr_rauc, 4)} and "
-                f"BGR-Coverage {fmt(reacher_coverage_rauc, 4)} final RAUC versus uniform "
-                f"{fmt(reacher_uniform_rauc, 4)}, with BGR winning only {reacher_wins[0]}/12 paired seeds"
+                f"Reacher-v5 & BGR {fmt(reacher_bgr_rauc, 4)}; "
+                f"BGR-Coverage {fmt(reacher_coverage_rauc, 4)} & uniform "
+                f"{fmt(reacher_uniform_rauc, 4)}; BGR wins {reacher_wins[0]}/12 seeds & negative"
             ),
             "results/reacher_recovery_probe_12seed_v1/summary.csv",
         )
@@ -983,8 +977,10 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "InvertedPendulum-v5 official-package limitation",
             (
-                f"InvertedPendulum-v5 MuJoCo screen ties every method at {fmt(inverted_bgr_rauc, 4)} "
-                f"final RAUC and median $r_{{80}}={fmt(inverted_bgr_r80, 4)}"
+                f"InvertedPendulum-v5 & BGR {fmt(inverted_bgr_rauc, 4)}; "
+                f"BGR-Cov. {fmt(inverted_coverage_rauc, 4)} & "
+                f"uniform/fixed/failure-only/TD-loss all {fmt(inverted_uniform_rauc, 4)}; "
+                f"{inverted_wins[0]}/{inverted_wins[1]}/{inverted_wins[2]} ties & tied negative"
             ),
             "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
         )
