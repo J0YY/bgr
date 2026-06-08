@@ -1,0 +1,39 @@
+{
+  "datasets": {
+    "banknote-authentication": {
+      "name": "banknote-authentication",
+      "version": 1
+    },
+    "blood-transfusion-service-center": {
+      "name": "blood-transfusion-service-center",
+      "version": 1
+    },
+    "climate-model-simulation-crashes": {
+      "name": "climate-model-simulation-crashes",
+      "version": 1
+    },
+    "kc1": {
+      "name": "kc1",
+      "version": 1
+    },
+    "mozilla4": {
+      "name": "mozilla4",
+      "version": 1
+    },
+    "pc1": {
+      "name": "pc1",
+      "version": 1
+    },
+    "phoneme": {
+      "name": "phoneme",
+      "version": 1
+    },
+    "wdbc": {
+      "name": "wdbc",
+      "version": 1
+    }
+  },
+  "numpy": "2.4.2",
+  "python": "3.14.3",
+  "scikit_learn": "1.8.0"
+}

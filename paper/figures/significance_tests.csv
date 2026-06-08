@@ -90,6 +90,10 @@ OpenML diabetes 30-seed,,final_rauc,bgr,uniform,30,0.037300,0.010783,0.015249,0.
 OpenML diabetes 30-seed,,final_rauc,bgr,fixed,30,0.030275,0.010860,0.008066,0.052484,19,11,0,0.200488,higher,true
 OpenML diabetes replication 30-seed,,final_rauc,bgr,uniform,30,0.038267,0.011048,0.015674,0.060859,23,7,0,0.00522288,higher,true
 OpenML diabetes replication 30-seed,,final_rauc,bgr,fixed,30,0.041600,0.011031,0.019041,0.064159,24,6,0,0.00143091,higher,true
+OpenML blood 30-seed,,final_rauc,bgr,uniform,30,0.096825,0.011231,0.073858,0.119792,30,0,0,1.86265e-09,higher,true
+OpenML blood 30-seed,,final_rauc,bgr,fixed,30,0.070525,0.011324,0.047366,0.093684,27,1,2,2.16067e-07,higher,true
+OpenML blood replication 30-seed,,final_rauc,bgr,uniform,30,0.074867,0.010250,0.053906,0.095827,25,5,0,0.000324914,higher,true
+OpenML blood replication 30-seed,,final_rauc,bgr,fixed,30,0.046208,0.008724,0.028369,0.064048,25,5,0,0.000324914,higher,true
 Grid margin target sensitivity 15-seed,target_margin=0.26,final_rauc,bgr_target_0.26,uniform,15,0.046786,0.000547,0.045612,0.047960,15,0,0,6.10352e-05,higher,true
 Grid margin target sensitivity 15-seed,target_margin=0.26,rauc_aulc,bgr_target_0.26,uniform,15,0.045827,0.000377,0.045018,0.046635,15,0,0,6.10352e-05,higher,true
 Grid margin target sensitivity 15-seed,target_margin=0.32,final_rauc,bgr_target_0.32,uniform,15,0.042886,0.000523,0.041763,0.044008,15,0,0,6.10352e-05,higher,true

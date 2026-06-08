@@ -193,6 +193,11 @@ class RouteScout:
     def decision(self) -> str:
         if self.seeds >= 30:
             if self.delta >= 0.03 and self.wins >= 20 and self.fixed_delta >= 0.03:
+                if (
+                    "openml_numeric_external_fixed_target2_30seed_v1" in self.path
+                    and "blood-transfusion-service-center" not in self.name
+                ):
+                    return "candidate-for-replication"
                 return "positive-follow-up"
             return "reject-follow-up"
         if self.delta >= 0.03 and self.wins >= 3 and self.losses == 0:
@@ -201,7 +206,7 @@ class RouteScout:
 
     @property
     def needs_preregistration(self) -> bool:
-        return self.decision == "candidate-for-preregistration"
+        return self.decision in {"candidate-for-preregistration", "candidate-for-replication"}
 
     @property
     def positive_followup(self) -> bool:
@@ -216,6 +221,8 @@ def route_scout_evidence_key(scout: RouteScout) -> str:
     """Group exploratory scouts with their fixed follow-up evidence."""
     if scout.name == "OpenML margin replay (diabetes)" or scout.name.startswith("OpenML diabetes margin"):
         return "openml_diabetes_margin"
+    if "blood-transfusion-service-center" in scout.name or scout.name.startswith("OpenML blood transfusion margin"):
+        return "openml_blood_transfusion_margin"
     return scout.name
 
 
@@ -473,6 +480,14 @@ ROUTE_SCOUTS = [
     (
         "OpenML diabetes margin replication 30-seed",
         "results/openml_diabetes_margin_replication_30seed_v1/summary.csv",
+    ),
+    (
+        "OpenML numeric external fixed target2 30-seed",
+        "results/openml_numeric_external_fixed_target2_30seed_v1/summary.csv",
+    ),
+    (
+        "OpenML blood transfusion margin replication 30-seed",
+        "results/openml_blood_transfusion_margin_replication_30seed_v1/summary.csv",
     ),
 ]
 
@@ -1157,7 +1172,7 @@ def render_markdown(root: Path) -> str:
         names = ", ".join(f"`{scout.name}`" for scout in candidate_scouts)
         priority_lines.insert(
             2,
-            f"- {names} cleared the 4-seed scout gate only; it needs a fixed preregistered 30-seed comparison before any manuscript claim.",
+            f"- {names} cleared an exploratory route screen only; it needs the matching fixed preregistered or held-out comparison before any manuscript claim.",
         )
     if superseded_scouts:
         names = ", ".join(f"`{scout.name}`" for scout in superseded_scouts)

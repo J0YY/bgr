@@ -454,6 +454,12 @@ OPENML_CLAIM_ARTIFACTS = [
     "results/openml_diabetes_margin_replication_30seed_v1/package_versions.json",
     "results/openml_diabetes_margin_replication_30seed_v1/per_seed.csv",
     "results/openml_diabetes_margin_replication_30seed_v1/summary.csv",
+    "results/openml_numeric_external_fixed_target2_30seed_v1/package_versions.json",
+    "results/openml_numeric_external_fixed_target2_30seed_v1/per_seed.csv",
+    "results/openml_numeric_external_fixed_target2_30seed_v1/summary.csv",
+    "results/openml_blood_transfusion_margin_replication_30seed_v1/package_versions.json",
+    "results/openml_blood_transfusion_margin_replication_30seed_v1/per_seed.csv",
+    "results/openml_blood_transfusion_margin_replication_30seed_v1/summary.csv",
 ]
 CHECKED_CLAIM_ARTIFACTS = [
     "paper/figures/estimator_stats.csv",
@@ -3293,10 +3299,16 @@ def check_generated_result_tables(root: Path) -> list[str]:
         ("OpenML diabetes", "BGR"),
         ("OpenML diabetes", "Uniform"),
         ("OpenML diabetes", "Fixed-radius"),
+        ("OpenML blood", "BGR"),
+        ("OpenML blood", "Uniform"),
+        ("OpenML blood", "Fixed-radius"),
         ("RobotSuffix", "BGR-Coverage"),
         ("RobotSuffix", "Uniform"),
     ]
+    present_summary_pairs = {(row.get("benchmark"), row.get("method")) for row in summary_stats}
     for benchmark, method in summary_rows:
+        if (benchmark, method) not in present_summary_pairs:
+            continue
         metrics = {}
         for metric in ["Clean", "RAUC", "MedianR80", "AULC"]:
             matching_rows = [

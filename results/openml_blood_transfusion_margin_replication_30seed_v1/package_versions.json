@@ -1,0 +1,11 @@
+{
+  "datasets": {
+    "blood-transfusion-service-center": {
+      "name": "blood-transfusion-service-center",
+      "version": 1
+    }
+  },
+  "numpy": "2.4.2",
+  "python": "3.14.3",
+  "scikit_learn": "1.8.0"
+}

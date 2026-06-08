@@ -48,6 +48,18 @@ BENCHMARKS = {
             "fixed": "Fixed-radius",
         },
     },
+    "openml_numeric_external_fixed_target2_30seed_v1": {
+        "label": "OpenML blood",
+        "file": "per_seed.csv",
+        "filter_dataset": "blood-transfusion-service-center",
+        "primary": ["bgr", "uniform", "fixed"],
+        "metrics": [("final_rauc", "RAUC")],
+        "display": {
+            "bgr": "BGR",
+            "uniform": "Uniform",
+            "fixed": "Fixed-radius",
+        },
+    },
 }
 
 METRICS = [
@@ -103,6 +115,8 @@ def main() -> None:
     for run_name, spec in BENCHMARKS.items():
         path = results_dir / run_name / str(spec.get("file", "summary.csv"))
         rows = list(csv.DictReader(path.open("r", encoding="utf-8")))
+        if "filter_dataset" in spec:
+            rows = [row for row in rows if row.get("dataset") == spec["filter_dataset"]]
         loaded[run_name] = rows
         metrics = spec.get("metrics", METRICS)
         for method in spec["primary"]:
@@ -240,7 +254,7 @@ def write_latex_table(path: Path, rows: list[dict]) -> None:
         by_key: dict[tuple[str, str], dict[str, str]] = {}
         for row in selected:
             by_key.setdefault((str(row["benchmark"]), str(row["method"])), {})[str(row["metric"])] = fmt(row)
-        for benchmark in ["Synthetic", "GridMargin", "OpenML diabetes", "RobotSuffix"]:
+        for benchmark in ["Synthetic", "GridMargin", "OpenML diabetes", "OpenML blood", "RobotSuffix"]:
             for (bench, method), vals in by_key.items():
                 if bench != benchmark:
                     continue

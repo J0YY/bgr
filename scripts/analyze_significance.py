@@ -19,6 +19,7 @@ class Comparison:
     baseline: str
     metric: str
     direction: str = "higher"
+    dataset: str | None = None
 
 
 COMPARISONS = [
@@ -247,6 +248,36 @@ COMPARISONS = [
         "fixed",
         "final_rauc",
     ),
+    Comparison(
+        "OpenML blood 30-seed",
+        "openml_numeric_external_fixed_target2_30seed_v1/per_seed.csv",
+        "bgr",
+        "uniform",
+        "final_rauc",
+        dataset="blood-transfusion-service-center",
+    ),
+    Comparison(
+        "OpenML blood 30-seed",
+        "openml_numeric_external_fixed_target2_30seed_v1/per_seed.csv",
+        "bgr",
+        "fixed",
+        "final_rauc",
+        dataset="blood-transfusion-service-center",
+    ),
+    Comparison(
+        "OpenML blood replication 30-seed",
+        "openml_blood_transfusion_margin_replication_30seed_v1/per_seed.csv",
+        "bgr",
+        "uniform",
+        "final_rauc",
+    ),
+    Comparison(
+        "OpenML blood replication 30-seed",
+        "openml_blood_transfusion_margin_replication_30seed_v1/per_seed.csv",
+        "bgr",
+        "fixed",
+        "final_rauc",
+    ),
 ]
 OPTIONAL_COMPARISONS: list[Comparison] = []
 
@@ -265,10 +296,12 @@ SUFFIX_STRESS_SENSITIVITY_30_PATH = "suffix_stress_sensitivity_30seed_v1/summary
 GRID_LEARNING_CURVE_PATH = "grid_margin_full_15seed_v1/results.json"
 
 
-def read_summary(path: Path) -> dict[str, dict[int, dict[str, float]]]:
+def read_summary(path: Path, *, dataset: str | None = None) -> dict[str, dict[int, dict[str, float]]]:
     by_method: dict[str, dict[int, dict[str, float]]] = {}
     with path.open(newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle):
+            if dataset is not None and row.get("dataset") != dataset:
+                continue
             method = row["method"]
             seed = int(row["seed"])
             metrics: dict[str, float] = {}
@@ -407,7 +440,9 @@ def result_row(
 def analyze(results_dir: Path) -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
     for comparison in COMPARISONS:
-        rows.append(analyze_comparison(results_dir, comparison))
+        path = results_dir / comparison.summary_path
+        if path.exists():
+            rows.append(analyze_comparison(results_dir, comparison))
     for comparison in OPTIONAL_COMPARISONS:
         path = results_dir / comparison.summary_path
         if path.exists():
@@ -427,7 +462,7 @@ def analyze(results_dir: Path) -> list[dict[str, str]]:
 
 
 def analyze_comparison(results_dir: Path, comparison: Comparison) -> dict[str, str]:
-    data = read_summary(results_dir / comparison.summary_path)
+    data = read_summary(results_dir / comparison.summary_path, dataset=comparison.dataset)
     treatment = data[comparison.treatment]
     baseline = data[comparison.baseline]
     seeds = sorted(set(treatment) & set(baseline))
@@ -757,6 +792,8 @@ def write_latex(rows: list[dict[str, str]], path: Path) -> None:
         ("Grid margin full 30-seed", "final_rauc", "uniform"),
         ("OpenML diabetes 30-seed", "final_rauc", "uniform"),
         ("OpenML diabetes 30-seed", "final_rauc", "fixed"),
+        ("OpenML blood 30-seed", "final_rauc", "uniform"),
+        ("OpenML blood 30-seed", "final_rauc", "fixed"),
         ("Robot suffix coverage-full 30-seed", "final_rauc", "clean_ft"),
         ("Robot suffix coverage-full 30-seed", "final_rauc", "fixed"),
         ("Robot suffix coverage-full 30-seed", "final_rauc", "failure_only"),
@@ -805,6 +842,9 @@ def latex_comparison_label(row: dict[str, str]) -> str:
     if row["benchmark"].startswith("OpenML diabetes"):
         baselines = {"fixed": "fixed-radius", "uniform": "uniform"}
         return f"OpenML diabetes vs {baselines.get(row['baseline'], row['baseline'])}"
+    if row["benchmark"].startswith("OpenML blood"):
+        baselines = {"fixed": "fixed-radius", "uniform": "uniform"}
+        return f"OpenML blood vs {baselines.get(row['baseline'], row['baseline'])}"
     if row["benchmark"].startswith("Robot suffix"):
         baselines = {
             "clean_ft": "clean-only",

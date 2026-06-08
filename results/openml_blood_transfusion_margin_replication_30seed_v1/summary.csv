@@ -1,0 +1,4 @@
+dataset,target_radius,method,n,final_rauc_mean,delta_vs_uniform,wins_vs_uniform,losses_vs_uniform,ties_vs_uniform,decision
+blood-transfusion-service-center,2.0000,uniform,30,0.684600,0.000000,0,0,30,reject-scout
+blood-transfusion-service-center,2.0000,fixed,30,0.713258,0.028658,20,10,0,reject-scout
+blood-transfusion-service-center,2.0000,bgr,30,0.759467,0.074867,25,5,0,reject-scout

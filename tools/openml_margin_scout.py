@@ -28,7 +28,25 @@ OPENML_DATASETS = {
     "sonar": {"name": "sonar", "version": 1},
     "diabetes": {"name": "diabetes", "version": 1},
     "spambase": {"name": "spambase", "version": 1},
+    "banknote-authentication": {"name": "banknote-authentication", "version": 1},
+    "blood-transfusion-service-center": {"name": "blood-transfusion-service-center", "version": 1},
+    "climate-model-simulation-crashes": {"name": "climate-model-simulation-crashes", "version": 1},
+    "kc1": {"name": "kc1", "version": 1},
+    "mozilla4": {"name": "mozilla4", "version": 1},
+    "pc1": {"name": "pc1", "version": 1},
+    "phoneme": {"name": "phoneme", "version": 1},
+    "wdbc": {"name": "wdbc", "version": 1},
 }
+EXTERNAL_VALIDATION_DATASETS = (
+    "banknote-authentication",
+    "blood-transfusion-service-center",
+    "climate-model-simulation-crashes",
+    "kc1",
+    "mozilla4",
+    "pc1",
+    "phoneme",
+    "wdbc",
+)
 
 
 @dataclass(frozen=True)
@@ -61,7 +79,12 @@ def rauc_from_values(radii: np.ndarray, values: Iterable[float]) -> float:
     return float(np.trapezoid(vals, radii) / (radii[-1] - radii[0]))
 
 
-def load_openml_dataset(dataset: str) -> tuple[np.ndarray, np.ndarray]:
+def load_openml_dataset(
+    dataset: str,
+    cache: dict[str, tuple[np.ndarray, np.ndarray]] | None = None,
+) -> tuple[np.ndarray, np.ndarray]:
+    if cache is not None and dataset in cache:
+        return cache[dataset]
     try:
         from sklearn.datasets import fetch_openml
         from sklearn.impute import SimpleImputer
@@ -82,6 +105,8 @@ def load_openml_dataset(dataset: str) -> tuple[np.ndarray, np.ndarray]:
     x_all = np.asarray(data.data, dtype=float)
     x_all = SimpleImputer(strategy="median").fit_transform(x_all)
     y_all = LabelEncoder().fit_transform(np.asarray(data.target))
+    if cache is not None:
+        cache[dataset] = (x_all, y_all)
     return x_all, y_all
 
 
@@ -112,12 +137,13 @@ def run_trial(
     candidate_count: int,
     max_radius: float,
     eval_examples: int,
+    dataset_cache: dict[str, tuple[np.ndarray, np.ndarray]] | None = None,
 ) -> TrialResult:
     from sklearn.linear_model import SGDClassifier
     from sklearn.model_selection import train_test_split
     from sklearn.preprocessing import StandardScaler
 
-    x_all, y_all = load_openml_dataset(dataset)
+    x_all, y_all = load_openml_dataset(dataset, dataset_cache)
     classes = np.unique(y_all)
     x_train, x_eval, y_train, y_eval = train_test_split(
         x_all,
@@ -294,6 +320,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=Path("results/openml_margin_scout_v0"))
     parser.add_argument("--datasets", type=parse_csv, default=list(DEFAULT_DATASETS))
+    parser.add_argument(
+        "--external-validation-suite",
+        action="store_true",
+        help="Use the fixed numeric OpenML external-validation suite instead of DEFAULT_DATASETS.",
+    )
     parser.add_argument("--targets", type=parse_float_csv, default=list(DEFAULT_TARGETS))
     parser.add_argument("--seeds", type=int, default=4)
     parser.add_argument("--seed-start", type=int, default=0)
@@ -303,12 +334,15 @@ def main() -> int:
     parser.add_argument("--max-radius", type=float, default=2.0)
     parser.add_argument("--eval-examples", type=int, default=250)
     args = parser.parse_args()
+    if args.external_validation_suite:
+        args.datasets = list(EXTERNAL_VALIDATION_DATASETS)
 
     unknown = sorted(set(args.datasets) - set(OPENML_DATASETS))
     if unknown:
         raise ValueError(f"unknown dataset(s): {', '.join(unknown)}")
 
     results = []
+    dataset_cache: dict[str, tuple[np.ndarray, np.ndarray]] = {}
     for dataset in args.datasets:
         for target_radius in args.targets:
             for seed in range(args.seed_start, args.seed_start + args.seeds):
@@ -323,6 +357,7 @@ def main() -> int:
                         candidate_count=args.candidate_count,
                         max_radius=args.max_radius,
                         eval_examples=args.eval_examples,
+                        dataset_cache=dataset_cache,
                     )
                     results.append(result)
                     print(

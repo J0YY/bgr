@@ -9,8 +9,9 @@ configs, per-seed result summaries, generated paper tables/figures, OpenVLA
 audit scripts, environment snapshots, and a SHA-256 submission manifest. The
 main evidence includes a 30-seed synthetic mechanism check, active-estimator
 validation, a completed 30-seed
-procedural grid-margin full-baseline comparison, a held-out grid replication, a
-replicated 30-seed OpenML diabetes supervised margin-replay check, a
+procedural grid-margin full-baseline comparison, a held-out grid replication,
+replicated 30-seed OpenML diabetes and blood-transfusion supervised
+margin-replay checks, a
 30-seed robot-suffix coverage comparison, a held-out suffix full-baseline
 replication, and a held-out suffix BGR-vs-uniform replication.
 The package also includes a 30-seed suffix stress sweep over teacher quality,
@@ -44,8 +45,8 @@ Start with `paper/main.pdf` for the anonymous manuscript, then use
 `results/README.md#submission-evidence-index` for the evidence map. The primary
 evidence is the 30-seed synthetic mechanism check, the active-estimator
 validation, the 30-seed grid-margin
-comparison, the held-out grid replication, the replicated OpenML diabetes
-margin-replay check, the 30-seed robot-suffix coverage
+comparison, the held-out grid replication, the replicated OpenML diabetes and
+blood-transfusion margin-replay checks, the 30-seed robot-suffix coverage
 comparison, the held-out suffix full-baseline replication, the held-out suffix
 BGR-vs-uniform replication, the suffix stress sweep, and
 `paper/figures/significance_tests.csv`. OpenVLA/LIBERO entries are scoped audits
@@ -63,7 +64,7 @@ summary artifacts listed in the evidence index.
 | --- | --- | --- |
 | Controlled synthetic recovery-margin training validates the intended BGR sampler before higher-cost runs. | `results/toy_30seed_v1/summary.csv`, `results/toy_15seed_v1/summary.csv`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the synthetic RAUC, AULC, clean-success, and sign-test prose; `scripts/check_submission_package.py` checks the 30-seed synthetic comparison. |
 | Boundary-centered replay expands recovery margins in the main procedural setting. | `results/grid_margin_full_30seed_v1/summary.csv`, `results/grid_margin_full_replication_30seed_v1/summary.csv`, `paper/figures/grid_margin_full_table.tex`, `paper/figures/grid_margin_learning_curve.pdf`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the numeric prose; `scripts/check_submission_package.py` checks paired seeds, ledgers, generated tables, and manifest hashes. |
-| Boundary-radius replay gives a scoped positive result on a pre-existing supervised dataset. | `results/openml_margin_scout_v0/summary.csv`, `results/openml_diabetes_margin_30seed_v1/summary.csv`, `results/openml_diabetes_margin_replication_30seed_v1/summary.csv` | `scripts/check_paper_claims.py` checks the OpenML diabetes prose; `scripts/check_acceptance_readiness.py` checks the original and held-out gates; `scripts/check_submission_package.py` verifies packaged artifact references. |
+| Boundary-radius replay gives scoped positive results on pre-existing supervised datasets. | `results/openml_margin_scout_v0/summary.csv`, `results/openml_diabetes_margin_30seed_v1/summary.csv`, `results/openml_diabetes_margin_replication_30seed_v1/summary.csv`, `results/openml_numeric_external_fixed_target2_30seed_v1/summary.csv`, `results/openml_blood_transfusion_margin_replication_30seed_v1/summary.csv` | `scripts/check_paper_claims.py` checks the OpenML diabetes and blood-transfusion prose; `scripts/check_acceptance_readiness.py` checks the original and held-out gates; `scripts/check_submission_package.py` verifies packaged artifact references. |
 | The feasibility witness is a scoped interface assumption rather than free supervision. | `results/grid_margin_witness_sensitivity_30seed_v1/summary.csv`, `results/suffix_stress_sensitivity_30seed_v1/summary.csv` | `scripts/check_paper_claims.py` checks the grid-margin witness-noise prose; `scripts/check_submission_package.py` keeps witness-scope language required in the manuscript. |
 | Active boundary probing estimates useful critical radii at a small fixed rollout budget. | `paper/figures/estimator_stats.csv`, `paper/figures/estimator_table.tex`, `results/estimator_pair_30seed_v1/summary.csv`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the estimator prose; `scripts/check_submission_package.py` checks the generated estimator table and the 30-seed estimator confirmation. |
 | Radius-level boundary sampling is the important BGR ablation in the grid-margin benchmark. | `results/grid_margin_ablation_30seed_v1/summary.csv`, `results/grid_margin_ablation_replication_30seed_v1/summary.csv`, `results/grid_margin_ablation_15seed_v1/summary.csv`, `paper/figures/grid_margin_ablation_table.tex`, `paper/figures/significance_tests.csv` | `scripts/check_paper_claims.py` checks the ablation prose against the original and held-out 30-seed summaries; `scripts/check_submission_package.py` checks the 30-seed mechanism confirmation and regenerates aggregate tables and significance artifacts exactly. |

@@ -282,14 +282,24 @@ def grid_mechanism_gate(root: Path) -> GateResult:
     )
 
 
-def openml_diabetes_positive_detail(root: Path) -> str | None:
-    original_path = root / "results/openml_diabetes_margin_30seed_v1/per_seed.csv"
-    replication_path = root / "results/openml_diabetes_margin_replication_30seed_v1/per_seed.csv"
+def openml_replicated_positive_detail(
+    root: Path,
+    *,
+    label: str,
+    original_path: Path,
+    replication_path: Path,
+    dataset: str | None = None,
+    min_uniform_wins: int = 20,
+    min_fixed_wins: int = 18,
+) -> str | None:
     if not original_path.exists() or not replication_path.exists():
         return None
 
     original = read_rows(original_path)
     replication = read_rows(replication_path)
+    if dataset is not None:
+        original = [row for row in original if row.get("dataset") == dataset]
+        replication = [row for row in replication if row.get("dataset") == dataset]
     pooled = original + replication
 
     def comparison_detail(rows: list[dict[str, str]]) -> tuple[float, float, tuple[int, int, int], tuple[int, int, int]]:
@@ -311,17 +321,17 @@ def openml_diabetes_positive_detail(root: Path) -> str | None:
     passed = (
         original_uniform_delta >= 0.03
         and original_fixed_delta >= 0.03
-        and original_uniform_wins[0] >= 20
-        and original_fixed_wins[0] >= 18
+        and original_uniform_wins[0] >= min_uniform_wins
+        and original_fixed_wins[0] >= min_fixed_wins
         and replication_uniform_delta >= 0.03
         and replication_fixed_delta >= 0.03
-        and replication_uniform_wins[0] >= 20
-        and replication_fixed_wins[0] >= 18
+        and replication_uniform_wins[0] >= min_uniform_wins
+        and replication_fixed_wins[0] >= min_fixed_wins
     )
     if not passed:
         return None
     return (
-        "OpenML diabetes margin replay positive and replicated: "
+        f"{label} margin replay positive and replicated: "
         f"original dRAUC vs uniform {original_uniform_delta:+.4f} W/L/T={original_uniform_wins}, "
         f"vs fixed {original_fixed_delta:+.4f} W/L/T={original_fixed_wins}; "
         f"held-out dRAUC vs uniform {replication_uniform_delta:+.4f} W/L/T={replication_uniform_wins}, "
@@ -331,9 +341,31 @@ def openml_diabetes_positive_detail(root: Path) -> str | None:
     )
 
 
+def openml_positive_details(root: Path) -> list[str]:
+    details: list[str] = []
+    diabetes = openml_replicated_positive_detail(
+        root,
+        label="OpenML diabetes",
+        original_path=root / "results/openml_diabetes_margin_30seed_v1/per_seed.csv",
+        replication_path=root / "results/openml_diabetes_margin_replication_30seed_v1/per_seed.csv",
+    )
+    if diabetes:
+        details.append(diabetes)
+    blood = openml_replicated_positive_detail(
+        root,
+        label="OpenML blood-transfusion",
+        original_path=root / "results/openml_numeric_external_fixed_target2_30seed_v1/per_seed.csv",
+        replication_path=root / "results/openml_blood_transfusion_margin_replication_30seed_v1/per_seed.csv",
+        dataset="blood-transfusion-service-center",
+    )
+    if blood:
+        details.append(blood)
+    return details
+
+
 def independent_benchmark_gate(root: Path) -> GateResult:
     failures: list[str] = []
-    positive_detail = openml_diabetes_positive_detail(root)
+    positive_details = openml_positive_details(root)
 
     frozen = read_rows(root / "results/frozenlake_recovery_focused_30seed_v1/summary.csv")
     frozen_bgr = mean_metric(frozen, "bgr", "final_rauc")
@@ -821,12 +853,12 @@ def independent_benchmark_gate(root: Path) -> GateResult:
 
     return GateResult(
         "independent/pre-existing benchmark",
-        positive_detail is not None or not failures,
+        bool(positive_details) or not failures,
         (
-            f"{positive_detail}; remaining standard-environment negatives: {'; '.join(failures)}"
-            if positive_detail is not None and failures
-            else positive_detail
-            if positive_detail is not None
+            f"{'; '.join(positive_details)}; remaining standard-environment negatives: {'; '.join(failures)}"
+            if positive_details and failures
+            else "; ".join(positive_details)
+            if positive_details
             else "; ".join(failures)
             if failures
             else "at least one independent benchmark clears the promotion criteria"

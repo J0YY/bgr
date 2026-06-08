@@ -197,7 +197,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             ),
             Claim(
                 "grid failure-only baseline",
-                f"RAUC {fmt(mean_metric(grid, 'failure_only', 'final_rauc'), 4)}",
+                f"Failure-only replay ({fmt(mean_metric(grid, 'failure_only', 'final_rauc'), 4)})",
                 str(grid_summary.relative_to(results_dir.parent)),
             ),
             Claim(
@@ -253,8 +253,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             Claim(
                 "OpenML diabetes original fixed",
                 (
-                    f"{fmt(mean_metric(openml_original, 'fixed', 'final_rauc_mean'), 4)} for fixed-radius "
-                    f"replay (gap {fmt_signed(mean_metric(openml_original, 'bgr', 'final_rauc_mean') - mean_metric(openml_original, 'fixed', 'final_rauc_mean'), 4)}; "
+                    f"{fmt(mean_metric(openml_original, 'fixed', 'final_rauc_mean'), 4)} fixed-radius "
+                    f"(gap {fmt_signed(mean_metric(openml_original, 'bgr', 'final_rauc_mean') - mean_metric(openml_original, 'fixed', 'final_rauc_mean'), 4)}; "
                     f"W/L/T={original_fixed_wlt[0]}/{original_fixed_wlt[1]}/{original_fixed_wlt[2]})"
                 ),
                 "results/openml_diabetes_margin_30seed_v1/per_seed.csv",
@@ -278,7 +278,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             Claim(
                 "OpenML diabetes replication fixed",
                 (
-                    f"{fmt(mean_metric(openml_replication, 'fixed', 'final_rauc_mean'), 4)} for fixed-radius "
+                    f"{fmt(mean_metric(openml_replication, 'fixed', 'final_rauc_mean'), 4)} fixed-radius "
                     f"(gap {fmt_signed(mean_metric(openml_replication, 'bgr', 'final_rauc_mean') - mean_metric(openml_replication, 'fixed', 'final_rauc_mean'), 4)}; "
                     f"W/L/T={replication_fixed_wlt[0]}/{replication_fixed_wlt[1]}/{replication_fixed_wlt[2]})"
                 ),
@@ -288,10 +288,98 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
                 "OpenML diabetes pooled",
                 (
                     f"{fmt(mean_metric(pooled_openml, 'bgr', 'final_rauc'), 4)} versus "
-                    f"{fmt(mean_metric(pooled_openml, 'uniform', 'final_rauc'), 4)} for uniform and "
-                    f"{fmt(mean_metric(pooled_openml, 'fixed', 'final_rauc'), 4)} for fixed-radius"
+                    f"{fmt(mean_metric(pooled_openml, 'uniform', 'final_rauc'), 4)} uniform and "
+                    f"{fmt(mean_metric(pooled_openml, 'fixed', 'final_rauc'), 4)} fixed-radius"
                 ),
                 "results/openml_diabetes_margin_*_30seed_v1/per_seed.csv",
+            ),
+        ]
+    )
+    openml_blood_original_summary = results_dir / "openml_numeric_external_fixed_target2_30seed_v1" / "summary.csv"
+    openml_blood_replication_summary = results_dir / "openml_blood_transfusion_margin_replication_30seed_v1" / "summary.csv"
+    openml_blood_original_per_seed = results_dir / "openml_numeric_external_fixed_target2_30seed_v1" / "per_seed.csv"
+    openml_blood_replication_per_seed = results_dir / "openml_blood_transfusion_margin_replication_30seed_v1" / "per_seed.csv"
+    blood_dataset = "blood-transfusion-service-center"
+    openml_blood_original = [
+        row for row in read_csv_rows(openml_blood_original_summary) if row.get("dataset") == blood_dataset
+    ]
+    openml_blood_replication = read_csv_rows(openml_blood_replication_summary)
+    openml_blood_original_seeds = [
+        row for row in read_csv_rows(openml_blood_original_per_seed) if row.get("dataset") == blood_dataset
+    ]
+    openml_blood_replication_seeds = read_csv_rows(openml_blood_replication_per_seed)
+    pooled_blood = openml_blood_original_seeds + openml_blood_replication_seeds
+    blood_original_uniform_wlt = paired_wins(openml_blood_original_seeds, "bgr", "uniform", "final_rauc")
+    blood_original_fixed_wlt = paired_wins(openml_blood_original_seeds, "bgr", "fixed", "final_rauc")
+    blood_replication_uniform_wlt = paired_wins(openml_blood_replication_seeds, "bgr", "uniform", "final_rauc")
+    blood_replication_fixed_wlt = paired_wins(openml_blood_replication_seeds, "bgr", "fixed", "final_rauc")
+    if not (
+        blood_original_uniform_wlt[0] >= 20
+        and blood_original_fixed_wlt[0] >= 18
+        and blood_replication_uniform_wlt[0] >= 20
+        and blood_replication_fixed_wlt[0] >= 18
+    ):
+        raise ValueError("Expected OpenML blood-transfusion original and held-out comparisons to have paired support")
+    claims.extend(
+        [
+            Claim(
+                "OpenML blood original uniform",
+                (
+                    f"{fmt(mean_metric(openml_blood_original, 'bgr', 'final_rauc_mean'), 4)} versus "
+                    f"{fmt(mean_metric(openml_blood_original, 'uniform', 'final_rauc_mean'), 4)}"
+                ),
+                "results/openml_numeric_external_fixed_target2_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "OpenML blood original uniform WLT",
+                (
+                    f"gap {fmt_signed(mean_metric(openml_blood_original, 'bgr', 'delta_vs_uniform'), 4)}; "
+                    f"W/L/T={blood_original_uniform_wlt[0]}/{blood_original_uniform_wlt[1]}/{blood_original_uniform_wlt[2]}"
+                ),
+                "results/openml_numeric_external_fixed_target2_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML blood original fixed",
+                (
+                    f"{fmt(mean_metric(openml_blood_original, 'fixed', 'final_rauc_mean'), 4)} fixed-radius "
+                    f"(gap {fmt_signed(mean_metric(openml_blood_original, 'bgr', 'final_rauc_mean') - mean_metric(openml_blood_original, 'fixed', 'final_rauc_mean'), 4)}; "
+                    f"W/L/T={blood_original_fixed_wlt[0]}/{blood_original_fixed_wlt[1]}/{blood_original_fixed_wlt[2]})"
+                ),
+                "results/openml_numeric_external_fixed_target2_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML blood replication uniform",
+                (
+                    f"{fmt(mean_metric(openml_blood_replication, 'bgr', 'final_rauc_mean'), 4)} versus "
+                    f"{fmt(mean_metric(openml_blood_replication, 'uniform', 'final_rauc_mean'), 4)}"
+                ),
+                "results/openml_blood_transfusion_margin_replication_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "OpenML blood replication uniform WLT",
+                (
+                    f"gap {fmt_signed(mean_metric(openml_blood_replication, 'bgr', 'delta_vs_uniform'), 4)}; "
+                    f"W/L/T={blood_replication_uniform_wlt[0]}/{blood_replication_uniform_wlt[1]}/{blood_replication_uniform_wlt[2]}"
+                ),
+                "results/openml_blood_transfusion_margin_replication_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML blood replication fixed",
+                (
+                    f"{fmt(mean_metric(openml_blood_replication, 'fixed', 'final_rauc_mean'), 4)} fixed-radius "
+                    f"(gap {fmt_signed(mean_metric(openml_blood_replication, 'bgr', 'final_rauc_mean') - mean_metric(openml_blood_replication, 'fixed', 'final_rauc_mean'), 4)}; "
+                    f"W/L/T={blood_replication_fixed_wlt[0]}/{blood_replication_fixed_wlt[1]}/{blood_replication_fixed_wlt[2]})"
+                ),
+                "results/openml_blood_transfusion_margin_replication_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML blood pooled",
+                (
+                    f"{fmt(mean_metric(pooled_blood, 'bgr', 'final_rauc'), 4)} versus "
+                    f"{fmt(mean_metric(pooled_blood, 'uniform', 'final_rauc'), 4)} uniform and "
+                    f"{fmt(mean_metric(pooled_blood, 'fixed', 'final_rauc'), 4)} fixed-radius"
+                ),
+                "results/openml_blood_transfusion_margin_*_30seed_v1/per_seed.csv",
             ),
         ]
     )
@@ -351,7 +439,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "grid held-out replication RAUC",
             (
-                f"held-out seeds 30--59 BGR-vs-uniform replication gives "
+                f"A held-out seeds 30--59 replication gives "
                 f"{fmt(mean_metric(grid_replication, 'bgr', 'final_rauc'), 4)} "
                 f"vs. {fmt(mean_metric(grid_replication, 'uniform', 'final_rauc'), 4)} RAUC"
             ),
@@ -365,7 +453,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "grid pooled 60-seed RAUC",
             (
-                f"Pooling original and held-out grid sweeps gives "
+                f"pooled original and held-out sweeps give "
                 f"{fmt(mean_metric(grid_pooled, 'bgr', 'final_rauc'), 4)} "
                 f"vs. {fmt(mean_metric(grid_pooled, 'uniform', 'final_rauc'), 4)} RAUC "
                 f"with 60/0 paired wins"
@@ -396,8 +484,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "grid regime sensitivity",
             (
-                f"BGR RAUC {fmt(min(regime_bgr_raucs), 3)}--{fmt(max(regime_bgr_raucs), 3)} "
-                f"vs. uniform {fmt(mean(regime_uniform_raucs), 3)}"
+                f"obstacle regimes ({fmt(min(regime_bgr_raucs), 3)}--{fmt(max(regime_bgr_raucs), 3)} "
+                f"vs. {fmt(mean(regime_uniform_raucs), 3)})"
             ),
             "paper/figures/grid_margin_regime_sensitivity_stats.csv",
         )
@@ -412,8 +500,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "grid stress sensitivity",
             (
-                f"stress RAUC {fmt(min(stress_bgr_raucs), 3)}--{fmt(max(stress_bgr_raucs), 3)} "
-                f"vs. uniform {fmt(min(stress_uniform_raucs), 3)}--{fmt(max(stress_uniform_raucs), 3)}"
+                f"geometry stresses ({fmt(min(stress_bgr_raucs), 3)}--{fmt(max(stress_bgr_raucs), 3)} "
+                f"vs. {fmt(min(stress_uniform_raucs), 3)}--{fmt(max(stress_uniform_raucs), 3)})"
             ),
             "paper/figures/grid_margin_stress_sensitivity_stats.csv",
         )
@@ -632,7 +720,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "suffix pooled median r80 caveat",
             (
-                f"uniform remains higher on median $r_{{80}}$ "
+                f"uniform remains higher on median $r_{{80}}$ pooled "
                 f"({fmt(mean_metric(suffix_pooled, 'uniform', 'final_median_r80'), 4)} "
                 f"vs. {fmt(mean_metric(suffix_pooled, 'bgr_broad', 'final_median_r80'), 4)})"
             ),
@@ -1610,7 +1698,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
 
 
 def missing_claims(paper_text: str, claims: list[Claim]) -> list[Claim]:
-    return [claim for claim in claims if claim.snippet not in paper_text]
+    normalized_paper = " ".join(paper_text.split())
+    return [claim for claim in claims if " ".join(claim.snippet.split()) not in normalized_paper]
 
 
 def forbidden_terms(paper_text: str) -> list[str]:

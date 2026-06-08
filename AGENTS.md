@@ -15,8 +15,9 @@ genuinely plausibly 90%+ likely to get into AAAI main track.
 
 Current status: not there yet. The readiness gate still says
 `NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid mechanism result is the
-main mechanism evidence, and OpenML diabetes is now replicated positive
-pre-existing-dataset margin-replay evidence. Standard-environment recovery
+main mechanism evidence, and OpenML diabetes plus OpenML blood-transfusion are
+now replicated positive pre-existing-dataset margin-replay evidence.
+Standard-environment recovery
 screens and OpenVLA/LIBERO learned-policy evidence remain failing or
 non-promotable. The latest bsuite Catch 30-seed scale-up, MiniGrid FourRooms radius-10 rescue,
 HandReach-v3 calibration, highway-fast-v0 lane calibration, and MinAtar
@@ -29,15 +30,22 @@ its best BGR target gives only 0.8271 vs. 0.8123 RAUC against uniform with a
 The internal sklearn tabular margin replay scout is also rejected: breast
 cancer's best BGR target gives 0.9610 vs. 0.9516 RAUC against uniform, and
 wine's best gives 0.9702 vs. 0.9563, below the +0.03 pre-registration screen.
-The OpenML diabetes margin replay route is now the first replicated positive
+The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,
 and the held-out seeds 30--59 replication gives BGR 0.7056 vs. uniform 0.6673
 (W/L/T=23/7/0) and vs. fixed-radius 0.6640. Pooled across 60 seeds, BGR is
 0.7059 vs. uniform 0.6681 (+0.0378, W/L/T=47/13/0) and vs. fixed-radius
-0.6699 (+0.0359, W/L/T=43/17/0). This is acceptance-moving supervised
-margin-replay evidence, but it still does not solve the learned-policy or
-standard-environment failures by itself.
+0.6699 (+0.0359, W/L/T=43/17/0). A fixed external numeric OpenML suite then
+found a second replicated positive route on blood-transfusion-service-center:
+the original fixed target-2.0 30-seed row gives BGR 0.7625 vs. uniform 0.6657
+(W/L/T=30/0/0) and vs. fixed-radius 0.6920, and the held-out seeds 30--59
+replication gives BGR 0.7595 vs. uniform 0.6846 (W/L/T=25/5/0) and vs.
+fixed-radius 0.7133. Pooled across 60 blood-transfusion seeds, BGR is 0.7610
+vs. uniform 0.6751 (+0.0858, W/L/T=55/5/0) and vs. fixed-radius 0.7026
+(+0.0584, W/L/T=52/6/2). This is acceptance-moving supervised margin-replay
+evidence, but it still does not solve the learned-policy or standard-environment
+failures by itself.
 The new grid-margin witness-sensitivity diagnostic improves scope support for the
 feasibility-witness assumption but is controlled mechanism evidence, not an
 independent-benchmark win.
@@ -117,13 +125,12 @@ with about 96% success so far. Only the partial official/identity
 `summary_available.csv` exists locally; full perturb and adapt summaries are
 still missing, so the route remains incomplete.
 
-Latest paper checkpoint: OpenML diabetes is now incorporated into the main
-summary and paired-effect tables as the first replicated positive
-pre-existing-dataset margin-replay result. `paper/main.pdf` was rebuilt through
-the `athena` pdfTeX workflow, stripped with `/opt/homebrew/bin/qpdf`, and the
-package/claim gates passed before this AGENTS update. This improves the "no new
-positive evidence" weakness but does not change readiness because the
-learned-policy gate still fails.
+Latest paper checkpoint: OpenML diabetes and OpenML blood-transfusion are now
+incorporated into the main summary and paired-effect tables as replicated
+positive pre-existing-dataset margin-replay results. The latest PDF still needs
+the `athena` pdfTeX rebuild and package checks after this source update. This
+improves the "no new positive evidence" weakness but does not change readiness
+because the learned-policy gate still fails.
 Latest poll at 2026-06-08 06:13:20 BST showed the occlusion route past data
 prep and training: prep `767850`, BGR train/merge `767851`/`767852`, and random
 train/merge `767854`/`767855` completed with exit `0:0`. BGR clean eval
@@ -290,7 +297,7 @@ until the readiness gates support that.
 
 The active objective is to move this repository toward a genuinely high-confidence AAAI main-track paper. Do not treat wording-only reframing as success. The core blocker is evidence: a promoted result must beat strong baselines on a fixed or pre-existing benchmark with non-contradictory metrics.
 
-Current target: iterate, queue experiments, and reframe the paper until the work is plausibly 90%+ likely to clear the AAAI main-track bar. Current status is below that bar: the strongest positive evidence now includes the controlled grid-margin mechanism result and replicated OpenML diabetes margin replay, while standard-environment and learned-policy probes remain negative or non-promotable.
+Current target: iterate, queue experiments, and reframe the paper until the work is plausibly 90%+ likely to clear the AAAI main-track bar. Current status is below that bar: the strongest positive evidence now includes the controlled grid-margin mechanism result and replicated OpenML diabetes plus blood-transfusion margin replay, while standard-environment and learned-policy probes remain negative or non-promotable.
 
 As of 2026-06-07, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .` reports:
 
@@ -396,7 +403,16 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   replication command was:
   `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seed-start 30 --seeds 30 --out results/openml_diabetes_margin_replication_30seed_v1`.
   It also stayed positive: BGR 0.7056 vs. uniform 0.6673 (+0.0383,
-  W/L/T=23/7/0) and vs. fixed-radius 0.6640 (+0.0416, W/L/T=24/6/0). This can
+  W/L/T=23/7/0) and vs. fixed-radius 0.6640 (+0.0416, W/L/T=24/6/0). A fixed
+  external numeric OpenML suite at the same target radius 2.0 is mixed overall
+  but adds a replicated blood-transfusion-service-center positive: the command
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --external-validation-suite --targets 2.0 --seeds 30 --out results/openml_numeric_external_fixed_target2_30seed_v1`
+  gives blood-transfusion BGR 0.7625 vs. uniform 0.6657 (+0.0968, W/L/T=30/0/0)
+  and vs. fixed-radius 0.6920 (+0.0705, W/L/T=27/1/2). The held-out command
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets blood-transfusion-service-center --targets 2.0 --seed-start 30 --seeds 30 --out results/openml_blood_transfusion_margin_replication_30seed_v1`
+  gives BGR 0.7595 vs. uniform 0.6846 (+0.0749, W/L/T=25/5/0) and vs.
+  fixed-radius 0.7133 (+0.0462, W/L/T=25/5/0). Phoneme remains a
+  candidate-for-replication only, not paper evidence. This can
   be considered for paper incorporation only with careful framing as
   pre-existing supervised margin-replay evidence, not robotics evidence.
 - The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation/perturb-only recipe family; the preregistered weighted, proximal-anchor, and perturb-only anchored audits all failed the learned-policy promotion gate.

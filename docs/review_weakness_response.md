@@ -7,10 +7,10 @@ now addressed in the manuscript versus what still requires new evidence.
 
 The paper is more defensible as an honest mechanism study, but it is not yet a
 90%+ AAAI main-track accept. The main blocker is still learned-policy evidence,
-not packaging: OpenML diabetes now gives replicated positive pre-existing
-supervised margin-replay evidence, but there is still no standard-environment
-recovery win and no OpenVLA/LIBERO improvement over both matched random and the
-official checkpoint.
+not packaging: OpenML diabetes and blood-transfusion now give replicated
+positive pre-existing supervised margin-replay evidence, but there is still no
+standard-environment recovery win and no OpenVLA/LIBERO improvement over both
+matched random and the official checkpoint.
 Run `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .`
 to reproduce this read from the current result artifacts.
 
@@ -20,13 +20,13 @@ to reproduce this read from the current result artifacts.
 | --- | --- | --- | --- |
 | Robotics promise not delivered | Title, abstract, introduction, evidence table, OpenVLA table, and conclusion now frame OpenVLA/LIBERO as an audit rather than a robotics claim. The preregistered weighted image-augmentation and proximal-anchor audits are included as negative. | Still no stable learned-policy win. Do not spend more compute on the same recipe family. | High |
 | Tiny effect sizes hidden by p-values | Protocol section says effect sizes are primary and sign tests are consistency checks. Main text reports absolute RAUC/AULC/clean/r80 differences before p-values. | Synthetic and suffix effects remain small. They should stay scoped support. | High |
-| Benchmarks constructed for BGR | Abstract, synthetic section, grid section, evidence contract, and limitations explicitly say synthetic/grid-margin establish mechanism rather than broad dominance. OpenML diabetes adds replicated positive pre-existing supervised-dataset evidence. | Still need either a standard-environment recovery win or learned-policy win before making stronger main-track claims. | High |
+| Benchmarks constructed for BGR | Abstract, synthetic section, grid section, evidence contract, and limitations explicitly say synthetic/grid-margin establish mechanism rather than broad dominance. OpenML diabetes and blood-transfusion add replicated positive pre-existing supervised-dataset evidence. | Still need either a standard-environment recovery win or learned-policy win before making stronger main-track claims. | High |
 | Fragile/post-hoc variants | Suffix text explains the first boundary-heavy run undercovered, treats coverage-aware BGR-Suffix as separate manipulation-style support, and says it is not evidence that boundary-only replay is robust. Grid learning-rate caveat remains in text. | The coverage-aware suffix result is still a rescue-style variant; only new preregistered evidence can remove that robustness concern. | Medium |
-| Incremental novelty | Related work and grid ablation now frame the uniform-radius run as a negative control: state priority is held fixed and only the radius rule changes, so the effect cannot be attributed to hard-state prioritization alone. OpenML diabetes makes the radius-selection delta less purely authored. | Novelty still depends on a modest conceptual delta; a learned-policy or standard-environment win would make it stronger. | High |
+| Incremental novelty | Related work and grid ablation now frame the uniform-radius run as a negative control: state priority is held fixed and only the radius rule changes, so the effect cannot be attributed to hard-state prioritization alone. Replicated OpenML diabetes and blood-transfusion make the radius-selection delta less purely authored. | Novelty still depends on a modest conceptual delta; a learned-policy or standard-environment win would make it stronger. | High |
 | Proposition too strong | Proposition is renamed local boundary intuition and explicitly says it is not a convergence or global robustness theorem. The method section now adds a one-step local margin-shift corollary plus a finite-grid estimator sample-complexity guarantee over a buffer of states: Hoeffding/union-bound error controls every monotone recovery estimate, and critical-radius error is controlled by grid spacing, local slope, threshold error, and the number of Bernoulli probes. | This still does not prove global learner improvement; it only strengthens the local sampler/estimator rationale. | Medium |
-| Metrics favor BGR | Protocol states RAUC/AULC are author-defined summaries and reports median r80 disagreements directly. Suffix median-r80 caveat remains in abstract/table text/limitations. OpenML diabetes is still RAUC-only, so the paper frames it as supervised margin-replay evidence rather than a broad recovery benchmark. | Independent metrics still matter. Any promoted standard or learned-policy benchmark must avoid saturated or contradictory r80. | High |
+| Metrics favor BGR | Protocol states RAUC/AULC are author-defined summaries and reports median r80 disagreements directly. Suffix median-r80 caveat remains in abstract/table text/limitations. OpenML results are still RAUC-only, so the paper frames them as supervised margin-replay evidence rather than broad recovery benchmarks. | Independent metrics still matter. Any promoted standard or learned-policy benchmark must avoid saturated or contradictory r80. | High |
 | Feasibility witness is a hidden requirement | Problem setting now states that the witness is a real interface assumption, not free supervision or a learned success oracle; without a reliable witness, BGR is only an audit tool or should not be applied. Promotion is limited to exact or stress-tested witnesses. A 30-seed grid-margin witness diagnostic now shows symmetric 10%/20% witness noise preserves valid accepted rates near 1.0 but lowers true-boundary recall to 0.9001/0.7980. | This is controlled mechanism evidence, not a broad guarantee for learned or noisy simulator witnesses. | Medium |
-| Results dump/no intuition | Paper now has boundary-intuition and grid learning-curve figures, plus an evidence-contract table. The boundary-intuition panel now overlays seed-0 recovery curves for BGR, uniform, failure-only, fixed-radius, and PLR-loss replay in the same footprint. | This improves readability but does not add independent positive evidence. | Medium |
+| Results dump/no intuition | Paper now has boundary-intuition and grid learning-curve figures, plus an evidence-contract table. The boundary-intuition panel now overlays seed-0 recovery curves for BGR, uniform, failure-only, fixed-radius, and PLR-loss replay in the same footprint. | This improves readability; independent positive evidence now comes from replicated OpenML diabetes and blood-transfusion checks. | Medium |
 
 ## Immediate Paper Policy
 
@@ -137,6 +137,16 @@ to reproduce this read from the current result artifacts.
   and vs. fixed-radius 0.6640 (+0.0416, W/L/T=24/6/0). This can address part
   of the independent/pre-existing benchmark critique if incorporated carefully,
   but it does not repair the learned-policy/OpenVLA failure.
+- A fixed external numeric OpenML suite added a second replicated
+  pre-existing-dataset signal. The command
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --external-validation-suite --targets 2.0 --seeds 30 --out results/openml_numeric_external_fixed_target2_30seed_v1`
+  was mixed overall, but blood-transfusion-service-center cleared the fixed
+  gate: BGR 0.7625 vs. uniform 0.6657 (+0.0968, W/L/T=30/0/0) and vs.
+  fixed-radius 0.6920 (+0.0705, W/L/T=27/1/2). The held-out command
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets blood-transfusion-service-center --targets 2.0 --seed-start 30 --seeds 30 --out results/openml_blood_transfusion_margin_replication_30seed_v1`
+  stayed positive: BGR 0.7595 vs. uniform 0.6846 (+0.0749, W/L/T=25/5/0) and
+  vs. fixed-radius 0.7133 (+0.0462, W/L/T=25/5/0). Phoneme is not a paper
+  claim because it has no held-out replication.
 - MinAtar Breakout is completed negative scope evidence, not paper-positive
   evidence. The fixed 12-seed calibration in
   `results/minatar_breakout_recovery_calibration_12seed_v1/summary.json`

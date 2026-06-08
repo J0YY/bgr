@@ -9,8 +9,9 @@ are explicit in the title, introduction, limitations, README, and package
 guards. That improves reviewability, but it does not by itself make the paper a
 90%+ AAAI main-track accept. The remaining acceptance blocker is evidence:
 
-- no clear positive result on a standard recovery environment, despite the new
-  replicated OpenML diabetes pre-existing-dataset margin result;
+- no clear positive result on a standard recovery environment, despite
+  replicated OpenML diabetes and blood-transfusion pre-existing-dataset margin
+  results;
 - no stable learned-policy OpenVLA/LIBERO improvement over both matched random
   and the official checkpoint;
 - suffix and synthetic gains remain small even though paired consistency is
@@ -44,8 +45,8 @@ also rejected: breast cancer's best BGR row gives 0.9610 vs. 0.9516 RAUC
 against uniform (W/L/T=3/1/0), and wine's best gives 0.9702 vs. 0.9563
 (W/L/T=4/0/0), but both gaps are below the +0.03 pre-registration screen. This
 does not solve the independent pre-existing benchmark weakness; the later
-OpenML diabetes follow-up below is the route that changes that part of the
-record.
+OpenML diabetes and blood-transfusion follow-ups below are the routes that
+change that part of the record.
 An OpenML margin scout opened one pre-existing-dataset route, and its fixed
 30-seed follow-up plus held-out replication are now positive: OpenML diabetes
 at target radius 2.0 gives BGR 0.7062 RAUC versus uniform 0.6689 (+0.0373,
@@ -54,6 +55,13 @@ W/L/T=24/6/0) in the first 30 seeds, and BGR 0.7056 versus uniform 0.6673
 both runs. This is real acceptance-moving evidence for a pre-existing
 supervised margin-replay benchmark, but it does not solve the learned-policy
 failure or standard-environment record by itself.
+A fixed external numeric OpenML suite at target radius 2.0 then added a second
+replicated pre-existing-dataset signal. The suite is mixed overall, but
+blood-transfusion-service-center gives BGR 0.7625 versus uniform 0.6657
+(+0.0968, W/L/T=30/0/0) and fixed-radius 0.6920 in the first 30 seeds; held-out
+seeds 30--59 give BGR 0.7595 versus uniform 0.6846 (+0.0749, W/L/T=25/5/0) and
+fixed-radius 0.7133. Phoneme is a candidate-for-replication only, not a paper
+claim.
 The newest standard-environment sequence sharpened the negative record:
 LunarLander is a 4-seed near miss rejected by paired signs and lower median r80,
 bsuite DeepSea trails the state-priority/uniform-radius ablation and has lower
