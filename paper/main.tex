@@ -105,7 +105,7 @@ Robot suffix & demo suffix phase & object/EEF offsets & teacher feasibility\\
 OpenML diabetes & labeled feature vector & standardized L2 noise & label consistency\\
 OpenVLA audit & LIBERO state & object/visual changes & simulator success\\
 \end{tabular}}
-\caption{Instantiations of the BGR interface. The first four rows are training experiments or supervised margin checks; the OpenVLA row is an audit of recovery curves and data plumbing, not a fine-tuning claim.}
+\caption{Instantiations of the BGR interface. The first three rows are training experiments; the OpenML row is a supervised margin check; the OpenVLA row is an audit of recovery curves and data plumbing, not a fine-tuning claim.}
 \label{tab:interface}
 \end{table}
 
@@ -174,6 +174,7 @@ Gym/OpenVLA & scope and audit checks & promoted positive result\\
 \end{table}
 
 Table~\ref{tab:evidence-contract} summarizes the claim boundary before the results. The main claim is supported by controlled synthetic and procedural grid-margin experiments where the recovery-margin object is directly trainable and baselines share paired seeds; the grid result is replicated on held-out seeds and pooled over 60 paired comparisons. A fixed OpenML diabetes check adds pre-existing supervised-dataset evidence for the same radius-selection mechanism. The robot-suffix simulator is a manipulation-style extension: a coverage-aware BGR variant improves final object RAUC, clean success, transfer RAUC, and AULC over uniform suffix replay across original and held-out sweeps and in four stress regimes, while still trailing uniform on median critical radius. Gym-style standard-environment probes and OpenVLA/LIBERO results are scope checks and learned-policy audits, not promoted positive claims.
+Thus independent-benchmark and learned-policy wins remain open requirements rather than hidden claims.
 
 \subsection{Protocol and Metrics}
 
@@ -306,7 +307,7 @@ InvertedDoublePendulum-v5 & BGR 0.0833; BGR-Cov. 0.0000 & uniform 0.0035; clean 
 \endgroup
 \end{center}
 
-Table~\ref{tab:scope-audits} keeps the scope explicit. FrozenLake has a small BGR RAUC edge but loses paired-sign and complementary-metric checks; MiniGrid, PointMaze, FetchReach, Reacher, bsuite, and MinAtar fail against stronger baselines, radius checks, or paired wins; and InvertedPendulum ties all methods. LunarLander is a near miss: BGR-Coverage has the best mean RAUC (0.7500 vs. 0.6222 uniform) but wins only 2/4 seeds and has lower median $r_{80}$. bsuite Catch shows scale-up fragility (0.8446 vs. 0.8782 uniform), bsuite Cartpole trails TD-loss replay, MinAtar Breakout ties uniform and failure-only at 0.8896 RAUC with saturated $r_{80}=5.0000$, and MinAtar Asterix trails failure-only (0.8406 vs. 0.8625 RAUC). InvertedDoublePendulum-v5 gives a tiny BGR RAUC edge (0.0833 vs. 0.0035 uniform) but collapses clean success to 0.2500 for BGR and 0.0000 for BGR-Coverage. FourRooms radius-10, HandReach-v3, and highway-fast-v0 follow-ups close simple rescue paths with saturated or invalid recovery curves. Earlier sklearn digits, breast-cancer, wine, and non-diabetes OpenML scouts remain internal diagnostics rather than manuscript evidence.
+Table~\ref{tab:scope-audits} keeps the scope explicit. FrozenLake has a small BGR RAUC edge but loses paired-sign and complementary-metric checks; MiniGrid, PointMaze, FetchReach, Reacher, bsuite, and MinAtar fail against stronger baselines, radius checks, or paired wins; and InvertedPendulum ties all methods. LunarLander is a near miss: BGR-Coverage has the best mean RAUC (0.7500 vs. 0.6222 uniform) but wins only 2/4 seeds and has lower median $r_{80}$. bsuite Catch shows scale-up fragility (0.8446 vs. 0.8782 uniform), bsuite Cartpole trails TD-loss replay, MinAtar Breakout ties uniform and failure-only at 0.8896 RAUC with saturated $r_{80}=5.0000$, and MinAtar Asterix trails failure-only (0.8406 vs. 0.8625 RAUC). InvertedDoublePendulum-v5 gives a tiny BGR RAUC edge (0.0833 vs. 0.0035 uniform) but collapses clean success to 0.2500 for BGR and 0.0000 for BGR-Coverage. FourRooms radius-10, HandReach-v3, and highway-fast-v0 follow-ups close simple rescue paths with saturated or invalid recovery curves. Other local tabular and classic-control probes remain internal diagnostics rather than manuscript evidence; earlier sklearn digits, breast-cancer, wine, and non-diabetes OpenML scouts are not promoted.
 
 The suffix simulator is positive on final RAUC, clean success, transfer RAUC, and AULC, including stress regimes, but gains are small and uniform retains the median-critical-radius edge. RAUC and AULC are useful for measuring curve expansion, but they are author-defined integrals over chosen radius grids; we report median $r_{80}$ and clean success separately instead of treating RAUC alone as decisive. OpenVLA is a learned-policy audit rather than a robotics training claim: it validates recovery-curve measurement and matched action/TFDS construction, while showing that a full robotics claim still requires stable optimization, clean-data scale, and LIBERO gains over both matched random and the official checkpoint.
 
