@@ -147,6 +147,30 @@ Fixed 4-seed bsuite MountainCar pre-promotion command:
 PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_mountaincar_recovery_probe.py --out results/bsuite_mountaincar_recovery_probe_4seed_v1
 ```
 
+Active external-package pre-promotion route:
+
+- `tools/bsuite_cartpole_recovery_probe.py`: fixed bsuite Cartpole screen,
+  preregistered before method outcomes on 2026-06-07. The route uses
+  `bsuite==0.3.6` in `/tmp/bgr_bsuite_venv`, instantiates bsuite's
+  package-owned three-action Cartpole task, and steps exact `CartpoleState`
+  restarts with the package `step_cartpole` dynamics. Replay states are
+  near-upright cart-pole states with nonzero cart, pole-angle, and velocity
+  errors; larger radii increase bounded cart-position, cart-velocity,
+  pole-angle, and pole-velocity perturbations while preserving bsuite's height
+  and cart-position feasibility limits.
+
+Fixed 4-seed bsuite Cartpole pre-promotion command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_cartpole_recovery_probe.py --out results/bsuite_cartpole_recovery_probe_4seed_v1
+```
+
+Promotion gate: this 4-seed screen can only justify a 30-seed scale-up if
+default BGR or BGR-Coverage beats uniform, fixed-radius, failure-only,
+TD/loss-priority, and BGR-uniform-radius on final RAUC with at least 3/4 paired
+wins over uniform, a mean RAUC gap of at least +0.01, and non-contradictory,
+non-saturated median-r80 evidence. It is not paper evidence.
+
 Packaged FrozenLake diagnostic:
 
 - `results/frozenlake_recovery_focused_30seed_v1/summary.csv` and

@@ -214,6 +214,19 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   BGR-uniform-radius (0.0558). Median r80 is saturated at 1.0000 for the
   BGR-family methods and uniform. Do not scale or promote this route without a
   genuinely new preregistered premise.
+- Active preregistered route: official bsuite Cartpole. It uses `bsuite==0.3.6`
+  in `/tmp/bgr_bsuite_venv`, package-owned three-action Cartpole dynamics,
+  exact `CartpoleState` restarts, and the package `step_cartpole` function.
+  Replay states are near-upright cart-pole states with nonzero cart,
+  pole-angle, and velocity errors; larger radii perturb bounded cart-position,
+  cart-velocity, pole-angle, and pole-velocity terms while preserving bsuite
+  feasibility limits. The fixed 4-seed command is
+  `PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_cartpole_recovery_probe.py --out results/bsuite_cartpole_recovery_probe_4seed_v1`.
+  This screen can justify a 30-seed scale-up only if default BGR or
+  BGR-Coverage beats uniform, fixed-radius, failure-only, TD/loss-priority, and
+  BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform,
+  a mean RAUC gap of at least +0.01, and non-contradictory, non-saturated
+  median-r80 evidence. The 4-seed screen is not paper evidence.
 
 ## Reviewer-Critique Priorities
 

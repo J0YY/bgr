@@ -196,6 +196,26 @@ r80 is saturated at 1.0000 for BGR, BGR-Coverage, BGR-uniform-radius,
 failure-only, TD-loss, and uniform, so the screen does not measure useful
 boundary expansion.
 
+Active independent-benchmark route, opened and preregistered 2026-06-07:
+official bsuite `cartpole`. This route uses bsuite's package-owned three-action
+Cartpole task (`left`, `stay`, `right`), exact `CartpoleState` restarts, and the
+package `step_cartpole` dynamics. Replay states are near-upright cart-pole
+states with nonzero cart, pole-angle, and velocity errors. The fixed
+perturbation family increases bounded cart-position, cart-velocity,
+pole-angle, and pole-velocity error while clipping starts inside bsuite's
+height and cart-position feasibility limits. The isolated environment is
+`/tmp/bgr_bsuite_venv` with `bsuite==0.3.6`.
+
+The fixed all-method pre-promotion command is:
+`PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_cartpole_recovery_probe.py --out results/bsuite_cartpole_recovery_probe_4seed_v1`.
+
+This can only justify a 30-seed scale-up if default BGR or BGR-Coverage beats
+uniform, fixed-radius, failure-only, TD/loss-priority, and
+BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform, a
+mean RAUC gap of at least +0.01, and non-contradictory, non-saturated
+median-r80 evidence. Passing this 4-seed screen is not paper evidence; it is
+only permission to run the fixed 30-seed promotion screen.
+
 ## Promotion Criteria For A New Independent Benchmark
 
 A new benchmark result should be promoted into `paper/main.tex` only if it meets
