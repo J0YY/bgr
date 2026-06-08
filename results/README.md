@@ -78,6 +78,24 @@ OpenVLA/LIBERO rows are recovery-curve, selection, and data-plumbing audits; the
 paper does not claim a stable OpenVLA fine-tuning gain over the official
 checkpoint.
 
+Internal pre-existing-dataset route scout:
+
+- `results/openml_margin_scout_v0/summary.csv`: fixed 4-seed OpenML margin
+  replay scout, run with
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --out results/openml_margin_scout_v0`.
+  This is not submission evidence. It uses OpenML version-1 ionosphere, sonar,
+  diabetes, and spambase through `sklearn.datasets.fetch_openml`, median
+  imputation, label encoding, standardized feature-space fixed-L2
+  perturbations, and an online `SGDClassifier`. Diabetes at target radius 2.0
+  clears only the scout gate: BGR reaches 0.7402 final RAUC versus uniform
+  0.6797 (W/L/T=4/0/0), while fixed-radius replay is 0.6999. The fixed
+  preregistered follow-up command is
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seeds 30 --out results/openml_diabetes_margin_30seed_v1`.
+- `results/openml_margin_scout_v0/per_seed.csv` and
+  `results/openml_margin_scout_v0/package_versions.json`: compact per-seed and
+  package-version records for the same scout (`scikit-learn==1.8.0`,
+  `numpy==2.4.2`, Python 3.14.3).
+
 Completed external-package scope diagnostic:
 
 - `results/minatar_breakout_recovery_calibration_12seed_v1/summary.json`:

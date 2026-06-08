@@ -596,7 +596,7 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("+0.0148 (2/2/0)", text)
         self.assertIn("0.8425 @ 0.8000", text)
         self.assertIn("reject-scout", text)
-        self.assertIn("sklearn pre-existing-dataset route scouts are rejected", text)
+        self.assertIn("Most pre-existing-dataset route scouts are rejected", text)
 
     def test_render_markdown_reports_multi_dataset_route_scout(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -656,6 +656,65 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("+0.0094 (3/1/0)", text)
         self.assertIn("+0.0139 (4/0/0)", text)
         self.assertIn("reject-scout", text)
+
+    def test_render_markdown_reports_promotable_openml_route_scout(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write(
+                root / "results/grid_margin_full_30seed_v1/summary.csv",
+                "method,seed,final_rauc\nbgr,0,0.44\nuniform,0,0.40\n",
+            )
+            _write(
+                root / "results/grid_margin_full_replication_30seed_v1/summary.csv",
+                "method,seed,final_rauc\nbgr,30,0.43\nuniform,30,0.39\n",
+            )
+            _write(
+                root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE,
+                "\n".join(
+                    [
+                        "method,perturbation,episodes,successes,success_rate",
+                        "bgr,identity,100,98,0.98",
+                        "bgr,blur,100,98,0.98",
+                        "bgr,brightness,100,99,0.99",
+                        "bgr,occlusion,100,73,0.73",
+                        "bgr,shift,100,98,0.98",
+                        "official,identity,100,99,0.99",
+                        "official,blur,100,97,0.97",
+                        "official,brightness,100,98,0.98",
+                        "official,occlusion,100,74,0.74",
+                        "official,shift,100,98,0.98",
+                        "random,identity,100,98,0.98",
+                        "random,blur,100,99,0.99",
+                        "random,brightness,100,98,0.98",
+                        "random,occlusion,100,73,0.73",
+                        "random,shift,100,98,0.98",
+                        "",
+                    ]
+                ),
+            )
+            _write(
+                root / "results/openml_margin_scout_v0/summary.csv",
+                "\n".join(
+                    [
+                        "dataset,target_radius,method,n,final_rauc_mean,delta_vs_uniform,wins_vs_uniform,losses_vs_uniform,ties_vs_uniform,decision",
+                        "diabetes,2.0000,uniform,4,0.679687,0.000000,0,0,4,reject-scout",
+                        "diabetes,2.0000,fixed,4,0.699937,0.020250,4,0,0,reject-scout",
+                        "diabetes,2.0000,bgr,4,0.740187,0.060500,4,0,0,candidate-for-preregistration",
+                        "sonar,1.5000,uniform,4,0.737800,0.000000,0,0,4,reject-scout",
+                        "sonar,1.5000,fixed,4,0.749144,0.011344,2,2,0,reject-scout",
+                        "sonar,1.5000,bgr,4,0.766695,0.028896,4,0,0,reject-scout",
+                        "",
+                    ]
+                ),
+            )
+
+            text = render_markdown(root)
+
+        self.assertIn("OpenML margin replay (diabetes)", text)
+        self.assertIn("Route scout(s): `OpenML margin replay (diabetes)` need a fixed preregistered comparison", text)
+        self.assertIn("+0.0605 (4/0/0)", text)
+        self.assertIn("0.6999 @ 2.0000", text)
+        self.assertIn("candidate-for-preregistration", text)
 
 
 if __name__ == "__main__":

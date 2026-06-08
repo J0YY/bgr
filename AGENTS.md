@@ -28,6 +28,12 @@ its best BGR target gives only 0.8271 vs. 0.8123 RAUC against uniform with a
 The internal sklearn tabular margin replay scout is also rejected: breast
 cancer's best BGR target gives 0.9610 vs. 0.9516 RAUC against uniform, and
 wine's best gives 0.9702 vs. 0.9563, below the +0.03 pre-registration screen.
+The OpenML margin replay scout is the current active pre-existing-dataset
+candidate route: OpenML diabetes target radius 2.0 gives 0.7402 vs. 0.6797
+RAUC against uniform with W/L/T=4/0/0, above the 4-seed scout gate, while
+ionosphere, sonar, and spambase remain rejected or near-miss scouts. This is
+not paper evidence; it only permits the fixed preregistered 30-seed follow-up
+below.
 The new grid-margin witness-sensitivity diagnostic improves scope support for the
 feasibility-witness assumption but is controlled mechanism evidence, not an
 independent-benchmark win.
@@ -209,6 +215,19 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   versus 0.9563 uniform and W/L/T=4/0/0. Both gaps are below the +0.03
   pre-registration threshold. Do not add this to the manuscript or scale it
   without a genuinely new preregistered premise.
+- The OpenML margin replay scout is completed and opens one active candidate
+  route. The fixed command is
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --out results/openml_margin_scout_v0`.
+  It uses OpenML version-1 datasets ionosphere, sonar, diabetes, and spambase
+  through `sklearn.datasets.fetch_openml`, median imputation, label encoding,
+  standardized feature-space fixed-L2 perturbations, and an online
+  `SGDClassifier`. OpenML diabetes target radius 2.0 clears the 4-seed scout
+  screen with BGR 0.7402 final RAUC versus uniform 0.6797 and W/L/T=4/0/0;
+  fixed-radius replay is 0.6999 at the same target. Ionosphere, sonar, and
+  spambase are rejected or near-miss scouts. This is not manuscript evidence.
+  The only valid next step for this route is the fixed preregistered 30-seed
+  command:
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seeds 30 --out results/openml_diabetes_margin_30seed_v1`.
 - The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation/perturb-only recipe family; the preregistered weighted, proximal-anchor, and perturb-only anchored audits all failed the learned-policy promotion gate.
 - The grid-margin witness-sensitivity diagnostic is completed and paper-facing
   only as scope evidence for the feasibility-witness assumption. The fixed

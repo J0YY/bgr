@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "dfa782a1f733a02b7f3e240abae53b667fcd34cb740322f8edf6f4da7640fe94",
-      "size_bytes": 304328
+      "sha256": "192cd47ffb23eeb38512b4117df598f32258bcb96ee3b28d3caff10f1f58bca9",
+      "size_bytes": 305433
     },
     {
       "path": "results/bsuite_cartpole_recovery_probe_4seed_v1/package_versions.json",
@@ -1077,8 +1077,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "284af7148f53400efc72a71b839daf8f956b609cdcb047994d798799ea80be47",
-      "size_bytes": 47806
+      "sha256": "ecf827251106c5296e989154b3c332226fc5177a137825723163f4158a6c29d8",
+      "size_bytes": 48196
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -1412,8 +1412,8 @@
     },
     {
       "path": "tests/test_acceptance_scorecard.py",
-      "sha256": "33c0c608e5c934e40b978d41ac2dc64772122918139d5f15d6538ebc1aeefcca",
-      "size_bytes": 30626
+      "sha256": "4c3fafce66068b0583e9b5f3292fb36211f943e62cddb4ede1e8d44be3c4bfb0",
+      "size_bytes": 33541
     },
     {
       "path": "tests/test_aggregate_results.py",

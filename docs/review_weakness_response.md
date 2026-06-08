@@ -117,6 +117,18 @@ to reproduce this read from the current result artifacts.
   0.9563 uniform (W/L/T=4/0/0), both below the +0.03 pre-registration screen.
   Do not use this route to answer the independent-benchmark critique without a
   new preregistered premise.
+- An OpenML margin replay scout now gives one active pre-existing-dataset
+  candidate, but not paper evidence. The fixed command
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --out results/openml_margin_scout_v0`
+  checks OpenML version-1 ionosphere, sonar, diabetes, and spambase with the
+  same online classifier and fixed-L2 standardized-feature perturbation
+  interface. OpenML diabetes at target radius 2.0 clears the 4-seed scout gate:
+  BGR reaches 0.7402 RAUC versus uniform 0.6797 (W/L/T=4/0/0), while
+  fixed-radius replay reaches 0.6999. Ionosphere, sonar, and spambase remain
+  rejected or near-miss scouts. The only valid next step is the fixed 30-seed
+  command
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seeds 30 --out results/openml_diabetes_margin_30seed_v1`;
+  do not add this route to the paper unless that follow-up remains positive.
 - MinAtar Breakout is completed negative scope evidence, not paper-positive
   evidence. The fixed 12-seed calibration in
   `results/minatar_breakout_recovery_calibration_12seed_v1/summary.json`

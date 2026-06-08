@@ -43,6 +43,11 @@ also rejected: breast cancer's best BGR row gives 0.9610 vs. 0.9516 RAUC
 against uniform (W/L/T=3/1/0), and wine's best gives 0.9702 vs. 0.9563
 (W/L/T=4/0/0), but both gaps are below the +0.03 pre-registration screen. This
 does not solve the independent pre-existing benchmark weakness.
+An OpenML margin scout now opens one active pre-existing-dataset route, but it
+is still not paper evidence: OpenML diabetes at target radius 2.0 gives BGR
+0.7402 RAUC versus uniform 0.6797 (W/L/T=4/0/0), while fixed-radius replay is
+0.6999. This clears only the 4-seed scout gate and must be tested with the
+fixed 30-seed command recorded below before any manuscript claim.
 The newest standard-environment sequence sharpened the negative record:
 LunarLander is a 4-seed near miss rejected by paired signs and lower median r80,
 bsuite DeepSea trails the state-priority/uniform-radius ablation and has lower
@@ -169,6 +174,31 @@ for uniform (W/L/T=4/0/0, gap +0.0139). Both are below the +0.03 candidate
 threshold, so this does not support a preregistered paper-facing route. Do not
 add this to the paper or scale it without a genuinely new preregistered
 premise.
+
+Active internal route scout, opened 2026-06-07: OpenML margin replay. This
+route broadens the pre-existing supervised-dataset check beyond built-in sklearn
+datasets. It uses `sklearn.datasets.fetch_openml` on version-1 OpenML datasets
+ionosphere, sonar, diabetes, and spambase; median-imputes numeric features;
+label-encodes targets; standardizes the training split; and compares uniform,
+fixed-radius, and boundary-guided replay with an online `SGDClassifier`.
+
+Fixed scout command:
+`PYTHONPATH=src:. python3 tools/openml_margin_scout.py --out results/openml_margin_scout_v0`
+
+The scout uses `scikit-learn==1.8.0`, `numpy==2.4.2`, and Python 3.14.3 from
+the local environment. OpenML diabetes at target radius 2.0 clears the 4-seed
+candidate gate with BGR final RAUC 0.7402 versus uniform 0.6797, gap +0.0605,
+and W/L/T=4/0/0; fixed-radius replay is 0.6999 at the same target. Ionosphere,
+sonar, and spambase do not clear the gate; sonar at target 1.5 is a near miss
+at +0.0289 with W/L/T=4/0/0.
+
+This is not manuscript evidence. It only permits the following fixed
+preregistered follow-up, with no target retuning or dataset expansion:
+`PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seeds 30 --out results/openml_diabetes_margin_30seed_v1`.
+The route is promotable only if the 30-seed result keeps a visible mean RAUC
+gap over uniform and fixed-radius replay, has paired support that is not driven
+by a small minority of seeds, and does not become another post-hoc metric-only
+claim.
 
 Completed independent-benchmark route, opened and evaluated 2026-06-07:
 official Gymnasium Box2D

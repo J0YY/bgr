@@ -431,6 +431,10 @@ ROUTE_SCOUTS = [
         "sklearn tabular margin replay",
         "results/sklearn_tabular_margin_scout_v0/summary.csv",
     ),
+    (
+        "OpenML margin replay",
+        "results/openml_margin_scout_v0/summary.csv",
+    ),
 ]
 
 
@@ -1085,7 +1089,13 @@ def render_markdown(root: Path) -> str:
     if rejected_scouts:
         priority_lines.insert(
             2,
-            "- The sklearn pre-existing-dataset route scouts are rejected before preregistration: their best BGR rows stay below the +0.03 screen even when paired signs are favorable, and fixed-radius replay is competitive.",
+            "- Most pre-existing-dataset route scouts are rejected before preregistration: their best BGR rows stay below the +0.03 screen even when paired signs are favorable, or fixed-radius replay is competitive.",
+        )
+    if promotable_scouts:
+        names = ", ".join(f"`{scout.name}`" for scout in promotable_scouts)
+        priority_lines.insert(
+            2,
+            f"- {names} cleared the 4-seed scout gate only; it needs a fixed preregistered 30-seed comparison before any manuscript claim.",
         )
     if any(screen.name == "Gymnasium MuJoCo Reacher-v5 calibration" for screen in usable_calibrations):
         priority_lines.insert(
