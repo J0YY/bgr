@@ -21,29 +21,44 @@ def main() -> int:
         default=[],
         help="Maximum rows to keep for a perturbation family, in FAMILY=N form. Can be repeated.",
     )
+    parser.add_argument(
+        "--include-family",
+        action="append",
+        default=[],
+        help="Perturbation family to keep. Can be repeated. When omitted, all families are eligible.",
+    )
     args = parser.parse_args()
 
     caps = _parse_caps(args.cap)
     source_dir = Path(args.source)
     out_dir = Path(args.out)
-    rows = filter_examples(source_dir, out_dir, caps)
+    include_families = set(args.include_family)
+    rows = filter_examples(source_dir, out_dir, caps, include_families=include_families)
     (out_dir / "examples.jsonl").write_text(
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
         encoding="utf-8",
     )
-    summary = _summary(source_dir, rows, caps)
+    summary = _summary(source_dir, rows, caps, include_families)
     (out_dir / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps(summary, sort_keys=True))
     return 0
 
 
-def filter_examples(source_dir: Path, out_dir: Path, caps: dict[str, int]) -> list[dict[str, Any]]:
+def filter_examples(
+    source_dir: Path,
+    out_dir: Path,
+    caps: dict[str, int],
+    *,
+    include_families: set[str] | None = None,
+) -> list[dict[str, Any]]:
     out_dir.mkdir(parents=True, exist_ok=True)
     rows = _load_examples(source_dir / "examples.jsonl")
     kept: list[dict[str, Any]] = []
     counts: Counter[str] = Counter()
     for row in rows:
         family = str(row.get("perturbation_type", ""))
+        if include_families and family not in include_families:
+            continue
         cap = caps.get(family)
         if cap is not None and counts[family] >= cap:
             continue
@@ -90,11 +105,17 @@ def _load_examples(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
-def _summary(source_dir: Path, rows: list[dict[str, Any]], caps: dict[str, int]) -> dict[str, Any]:
+def _summary(
+    source_dir: Path,
+    rows: list[dict[str, Any]],
+    caps: dict[str, int],
+    include_families: set[str],
+) -> dict[str, Any]:
     return {
         "source": str(source_dir),
         "examples": len(rows),
         "caps": dict(sorted(caps.items())),
+        "include_families": sorted(include_families),
         "perturbation_types": dict(sorted(Counter(str(row.get("perturbation_type", "")) for row in rows).items())),
     }
 

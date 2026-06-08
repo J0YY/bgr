@@ -14,6 +14,51 @@ def _write(path: Path, text: str) -> None:
 
 
 class AcceptanceScorecardTest(unittest.TestCase):
+    def test_render_markdown_reports_occlusion_bottleneck_inflight_marker(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write(
+                root / "results/grid_margin_full_30seed_v1/summary.csv",
+                "method,seed,final_rauc\nbgr,0,0.44\nuniform,0,0.40\n",
+            )
+            _write(
+                root / "results/grid_margin_full_replication_30seed_v1/summary.csv",
+                "method,seed,final_rauc\nbgr,30,0.43\nuniform,30,0.39\n",
+            )
+            _write(
+                root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE,
+                "\n".join(
+                    [
+                        "method,perturbation,episodes,successes,success_rate",
+                        "bgr,identity,100,98,0.98",
+                        "bgr,blur,100,98,0.98",
+                        "bgr,brightness,100,99,0.99",
+                        "bgr,occlusion,100,73,0.73",
+                        "bgr,shift,100,98,0.98",
+                        "official,identity,100,99,0.99",
+                        "official,blur,100,97,0.97",
+                        "official,brightness,100,98,0.98",
+                        "official,occlusion,100,74,0.74",
+                        "official,shift,100,98,0.98",
+                        "random,identity,100,98,0.98",
+                        "random,blur,100,99,0.99",
+                        "random,brightness,100,98,0.98",
+                        "random,occlusion,100,73,0.73",
+                        "random,shift,100,98,0.98",
+                        "",
+                    ]
+                ),
+            )
+            _write(
+                root / "AGENTS.md",
+                "scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh is preregistered.\n",
+            )
+
+            text = render_markdown(root)
+
+        self.assertIn("Occlusion-bottleneck OpenVLA route is preregistered, not yet evidence", text)
+        self.assertIn("Active route: Occlusion-bottleneck OpenVLA route is preregistered", text)
+
     def test_render_markdown_reports_perturb_only_anchor_inflight_marker(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

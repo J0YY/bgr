@@ -33,6 +33,28 @@ class FilterOpenVlaOftExamplesTest(unittest.TestCase):
             self.assertFalse((out / "images" / "example_00002.png").exists())
             self.assertTrue((out / "arrays" / "example_00003.npz").exists())
 
+    def test_filters_by_included_family(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            source = root / "source"
+            out = root / "out"
+            rows = [
+                self.write_example(source, 0, "blur"),
+                self.write_example(source, 1, "occlusion"),
+                self.write_example(source, 2, "shift"),
+            ]
+            (source / "examples.jsonl").write_text(
+                "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
+                encoding="utf-8",
+            )
+
+            kept = filter_examples(source, out, {}, include_families={"occlusion"})
+
+            self.assertEqual([row["perturbation_type"] for row in kept], ["occlusion"])
+            self.assertFalse((out / "images" / "example_00000.png").exists())
+            self.assertTrue((out / "images" / "example_00001.png").exists())
+            self.assertFalse((out / "images" / "example_00002.png").exists())
+
     def write_example(self, source: Path, index: int, perturbation_type: str) -> dict[str, str]:
         image = Path("images") / f"example_{index:05d}.png"
         wrist = Path("wrist_images") / f"example_{index:05d}.png"

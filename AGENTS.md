@@ -47,6 +47,42 @@ lack of new independent positive evidence, the negative standard-environment
 record, incremental novelty, author-defined metric dependence, and robustness
 fragility. Do not just soften language around unchanged results.
 
+Active learned-policy route: preregistered OpenVLA-OFT occlusion-bottleneck
+adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.
+This route is motivated by the fixed full-goal visual audit: blur,
+brightness, and shift are near saturated, while occlusion is the only clear
+non-identity bottleneck. The prep builds matched BGR-boundary and random
+clean-plus-occlusion TFDS roots with `OCCLUSION_CAP=512`,
+`OCCLUSION_REPEAT=4`, official stats, identity-LoRA, image augmentation,
+`PROXIMAL_ANCHOR_L2=5.0`, `LR=2e-7`, and `ADAPT_STEPS=400`. It is not a paper
+claim unless the fixed gate passes: BGR must beat both matched random and the
+official checkpoint by at least 10/400 non-identity episodes and at least 0.02
+absolute success rate while not trailing clean identity by more than 1/100.
+Submitted on `athena` in the live `/work/joy` workspace after this route was
+implemented: prep job `767850`; BGR train/merge/clean-eval jobs
+`767851`/`767852`/`767853`; matched-random train/merge/clean-eval jobs
+`767854`/`767855`/`767856`; official perturb-eval jobs `767857`--`767861`;
+BGR perturb-eval jobs `767862`--`767866`; matched-random perturb-eval jobs
+`767868`/`767878`--`767881`. The submission used
+`REMOTE_PROJECT=/work/joy/bgr`, `REMOTE_RUN_ROOT=/work/joy/bgr/runs`,
+`REMOTE_HF_HOME=/work/joy/cache_home/huggingface`,
+`OPENVLA_OFT_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft`,
+`LIBERO_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/LIBERO`,
+`SOURCE_ARTIFACT_ROOT=/work/joy/dreamaudit_jobs/artifacts`, and `GIT_PULL=0`.
+Initial `squeue` showed prep `767850` and official identity `767857` running,
+with adaptation and BGR/random perturb jobs dependency-pending. Do not
+incorporate this route into `paper/main.tex` until compact summaries exist and
+the fixed gate passes.
+Poll/sync helper:
+`scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --no-check`
+and, when summaries or logs exist,
+`scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --sync`. The first
+poll at 2026-06-08 05:39:10 BST showed prep `767850` running on `c1-g4-02`,
+official identity `767857` running on `c1-g4-04`, BGR/random adaptation jobs
+pending on `afterok:767850` (with random also serialized behind BGR train),
+BGR perturb jobs pending on `afterok:767852`, random perturb jobs pending on
+`afterok:767855`, and both expected compact summaries still missing.
+
 Operational defaults:
 
 - Keep committing and pushing clean checkpoints to `origin/main`.

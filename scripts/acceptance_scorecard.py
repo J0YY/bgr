@@ -17,6 +17,13 @@ from scripts.check_acceptance_readiness import OPENVLA_PERTURB_ONLY_ANCHOR_MARKE
 from scripts.check_acceptance_readiness import OPENVLA_PROXIMAL_ANCHOR_COMPLETE
 from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_COMPLETE
 
+OPENVLA_OCCLUSION_BOTTLENECK_MARKER = "scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh"
+OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE = (
+    "results/openvla_oft_perturb_eval_cleanmix_p2048unique_occlusion_bottleneck_prereg_"
+    "proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_"
+    "fullgoal10x10_perturb_v1/summary.csv"
+)
+
 COMPLETED_METHOD_SCREEN_BY_CALIBRATION = {
     "Gymnasium MuJoCo Reacher-v5 calibration": "results/reacher_recovery_probe_12seed_v1/summary.csv",
     "Gymnasium MuJoCo InvertedPendulum-v5 calibration": "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
@@ -684,80 +691,54 @@ def missing_openvla_rows(rows: list[dict[str, str]]) -> list[str]:
     ]
 
 
+def openvla_gate_summary(label: str, rows: list[dict[str, str]]) -> str:
+    missing = missing_openvla_rows(rows)
+    if missing:
+        return f"{label} OpenVLA audit summary is incomplete; missing {', '.join(missing)}."
+    bgr_success, bgr_episodes = perturbation_total(rows, "bgr", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+    official_success, official_episodes = perturbation_total(rows, "official", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+    random_success, random_episodes = perturbation_total(rows, "random", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+    bgr_identity, identity_episodes = identity_total(rows, "bgr")
+    official_identity, _ = identity_total(rows, "official")
+    random_identity, _ = identity_total(rows, "random")
+    official_gap = bgr_success - official_success
+    random_gap = bgr_success - random_success
+    official_rate_gap = bgr_success / bgr_episodes - official_success / official_episodes
+    random_rate_gap = bgr_success / bgr_episodes - random_success / random_episodes
+    clean_deficit = max(official_identity, random_identity) - bgr_identity
+    passed = (
+        bgr_episodes == 400
+        and official_episodes == 400
+        and random_episodes == 400
+        and official_gap >= 10
+        and random_gap >= 10
+        and official_rate_gap >= 0.02
+        and random_rate_gap >= 0.02
+        and clean_deficit <= 1
+    )
+    status = "clears" if passed else "does not clear"
+    return (
+        f"{label} OpenVLA audit {status} the learned-policy promotion gate: "
+        f"BGR {bgr_success}/{bgr_episodes}, official {official_success}/{official_episodes}, "
+        f"random {random_success}/{random_episodes}; identity BGR {bgr_identity}/{identity_episodes}, "
+        f"official {official_identity}/{identity_episodes}, random {random_identity}/{identity_episodes}; "
+        f"official gap {official_gap:+d} ({official_rate_gap:+.4f}), "
+        f"random gap {random_gap:+d} ({random_rate_gap:+.4f}), clean deficit {clean_deficit}."
+    )
+
+
 def learned_policy_summary(root: Path) -> str:
+    occlusion_bottleneck = root / OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE
+    if occlusion_bottleneck.exists():
+        return openvla_gate_summary("Occlusion-bottleneck", read_rows(occlusion_bottleneck))
+
     perturb_only = root / OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE
     if perturb_only.exists():
-        rows = read_rows(perturb_only)
-        missing = missing_openvla_rows(rows)
-        if missing:
-            return f"Perturb-only anchored OpenVLA audit summary is incomplete; missing {', '.join(missing)}."
-        bgr_success, bgr_episodes = perturbation_total(rows, "bgr", OPENVLA_NON_IDENTITY_PERTURBATIONS)
-        official_success, official_episodes = perturbation_total(rows, "official", OPENVLA_NON_IDENTITY_PERTURBATIONS)
-        random_success, random_episodes = perturbation_total(rows, "random", OPENVLA_NON_IDENTITY_PERTURBATIONS)
-        bgr_identity, identity_episodes = identity_total(rows, "bgr")
-        official_identity, _ = identity_total(rows, "official")
-        random_identity, _ = identity_total(rows, "random")
-        official_gap = bgr_success - official_success
-        random_gap = bgr_success - random_success
-        official_rate_gap = bgr_success / bgr_episodes - official_success / official_episodes
-        random_rate_gap = bgr_success / bgr_episodes - random_success / random_episodes
-        clean_deficit = max(official_identity, random_identity) - bgr_identity
-        passed = (
-            bgr_episodes == 400
-            and official_episodes == 400
-            and random_episodes == 400
-            and official_gap >= 10
-            and random_gap >= 10
-            and official_rate_gap >= 0.02
-            and random_rate_gap >= 0.02
-            and clean_deficit <= 1
-        )
-        status = "clears" if passed else "does not clear"
-        return (
-            f"Perturb-only anchored OpenVLA audit {status} the learned-policy promotion gate: "
-            f"BGR {bgr_success}/{bgr_episodes}, official {official_success}/{official_episodes}, "
-            f"random {random_success}/{random_episodes}; identity BGR {bgr_identity}/{identity_episodes}, "
-            f"official {official_identity}/{identity_episodes}, random {random_identity}/{identity_episodes}; "
-            f"official gap {official_gap:+d} ({official_rate_gap:+.4f}), "
-            f"random gap {random_gap:+d} ({random_rate_gap:+.4f}), clean deficit {clean_deficit}."
-        )
+        return openvla_gate_summary("Perturb-only anchored", read_rows(perturb_only))
 
     proximal = root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE
     if proximal.exists():
-        rows = read_rows(proximal)
-        missing = missing_openvla_rows(rows)
-        if missing:
-            return f"Proximal-anchor OpenVLA audit summary is incomplete; missing {', '.join(missing)}."
-        bgr_success, bgr_episodes = perturbation_total(rows, "bgr", OPENVLA_NON_IDENTITY_PERTURBATIONS)
-        official_success, official_episodes = perturbation_total(rows, "official", OPENVLA_NON_IDENTITY_PERTURBATIONS)
-        random_success, random_episodes = perturbation_total(rows, "random", OPENVLA_NON_IDENTITY_PERTURBATIONS)
-        bgr_identity, identity_episodes = identity_total(rows, "bgr")
-        official_identity, _ = identity_total(rows, "official")
-        random_identity, _ = identity_total(rows, "random")
-        official_gap = bgr_success - official_success
-        random_gap = bgr_success - random_success
-        official_rate_gap = bgr_success / bgr_episodes - official_success / official_episodes
-        random_rate_gap = bgr_success / bgr_episodes - random_success / random_episodes
-        clean_deficit = max(official_identity, random_identity) - bgr_identity
-        passed = (
-            bgr_episodes == 400
-            and official_episodes == 400
-            and random_episodes == 400
-            and official_gap >= 10
-            and random_gap >= 10
-            and official_rate_gap >= 0.02
-            and random_rate_gap >= 0.02
-            and clean_deficit <= 1
-        )
-        status = "clears" if passed else "does not clear"
-        return (
-            f"Proximal-anchor OpenVLA audit {status} the learned-policy promotion gate: "
-            f"BGR {bgr_success}/{bgr_episodes}, official {official_success}/{official_episodes}, "
-            f"random {random_success}/{random_episodes}; identity BGR {bgr_identity}/{identity_episodes}, "
-            f"official {official_identity}/{identity_episodes}, random {random_identity}/{identity_episodes}; "
-            f"official gap {official_gap:+d} ({official_rate_gap:+.4f}), "
-            f"random gap {random_gap:+d} ({random_rate_gap:+.4f}), clean deficit {clean_deficit}."
-        )
+        return openvla_gate_summary("Proximal-anchor", read_rows(proximal))
 
     weighted = root / OPENVLA_WEIGHTED_COMPLETE
     if weighted.exists():
@@ -798,6 +779,18 @@ def learned_policy_summary(root: Path) -> str:
 
 def learned_policy_inflight_summary(root: Path) -> str | None:
     """Report preregistered learned-policy runs that are failed or unsummarized."""
+    occlusion_bottleneck_summary = root / OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE
+    if not occlusion_bottleneck_summary.exists():
+        ledger_paths = [root / "AGENTS.md", root / "results/README.md", root / "docs/aaai_acceptance_gap.md"]
+        ledger_text = "\n".join(path.read_text(encoding="utf-8") for path in ledger_paths if path.exists())
+        if OPENVLA_OCCLUSION_BOTTLENECK_MARKER in ledger_text:
+            return (
+                "Occlusion-bottleneck OpenVLA route is preregistered, not yet evidence: "
+                "the clean-plus-occlusion TFDS prep, proximal-anchor BGR/random adaptation, "
+                "and official/BGR/random 10-task x 10-trial perturbation summaries must finish "
+                "before the +10/400 and +0.02 learned-policy gate can be checked."
+            )
+
     perturb_only_summary = root / OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE
     if not perturb_only_summary.exists():
         ledger_paths = [root / "AGENTS.md", root / "results/README.md", root / "docs/aaai_acceptance_gap.md"]
