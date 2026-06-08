@@ -1940,6 +1940,8 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                     "- `results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv`: p2048 1,000-step low-LR image-augmentation continuation audit.",
                     "Packaged FrozenLake diagnostic:",
                     "- `results/frozenlake_recovery_focused_30seed_v1/summary.csv`: canonical Gym FrozenLake8x8-v1 limitation diagnostic.",
+                    "- `results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv`: fixed bsuite DeepSea limitation diagnostic.",
+                    "- `results/bsuite_catch_recovery_probe_30seed_v1/summary.csv`: fixed bsuite Catch scale-up limitation diagnostic.",
                     "- `results/reacher_recovery_probe_12seed_v1/summary.csv`: fixed Reacher-v5 limitation diagnostic.",
                     "The p4096 and common-availability sections below are retained as paper-negative diagnostics in this ledger only.",
                     "Their summary CSVs are not part of the anonymous submission manifest or archive.",
@@ -5002,9 +5004,12 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                         "final recovery curves for BGR, uniform, failure-only, fixed-radius, and PLR-loss replay",
                         "inset showing BGR/uniform critical-radius distributions",
                         "We treat exact paired sign tests as consistency checks over shared seeds, not as substitutes for effect size",
+                        "The paired consistency is reported in Table",
+                        "the practical point is the fixed-budget effect size, not the p-value",
                         "The following local calculation is a design rationale for the radius sampler and for the radius-level ablation",
-                        "not a convergence result, global robustness theorem, or margin-expansion guarantee",
+                        "not a convergence result, global robustness theorem, or global margin-expansion guarantee",
                         "Local boundary intuition",
+                        "local margin-shift corollary",
                         "Finite-grid estimator guarantee",
                         "Hoeffding plus a union bound",
                         "critical radius is within",
@@ -6248,7 +6253,8 @@ class CheckSubmissionPackageTest(unittest.TestCase):
             "failureonly 0.7940 fixed 0.7587. DoorKey-6x6 BGR-Coverage 0.4846 "
             "uniform 0.6384. LavaCrossingS9N3 BGR-Coverage 0.3547 uniform 0.4165. "
             "PointMaze UMaze BGR-Clean-Shield 0.2448 failureonly 0.5458 "
-            "2/4 wins r20 0.1167 vs. 0.2500."
+            "2/4 wins r20 0.1167 vs. 0.2500. LunarLander-v3 "
+            "BGR-Coverage 0.7500 r80 0.4200 vs. 0.4825."
         )
         with mock.patch.object(Path, "read_text", return_value=source), mock.patch(
             "scripts.check_submission_package.pdf_text",

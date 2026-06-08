@@ -113,6 +113,13 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   reports clean 0.6250, recovery range 0.6250--0.8750, RAUC 0.8125, and
   r80 0.1200 under `gymnasium==1.3.0`, `gymnasium_robotics==1.4.2`, and
   `mujoco==3.9.0`. Treat it as a rejected calibration, not an active route.
+- Gymnasium-Robotics HandReach-v3 is also rejected as a pre-method route under
+  the fixed random-shooting ShadowHand controller in `/tmp/bgr_pointmaze_venv`.
+  `results/handreach_recovery_calibration_8seed_v1/summary.json` reports clean
+  success 0.0000, recovery range 0.0000--0.0000, RAUC 0.0000, and r80 0.2000
+  under `gymnasium==1.3.0`, `gymnasium_robotics==1.4.2`, and `mujoco==3.9.0`.
+  Do not build a HandReach replay comparison unless a new preregistered
+  controller first clears the clean-success and non-flat recovery prerequisites.
 - The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation/perturb-only recipe family; the preregistered weighted, proximal-anchor, and perturb-only anchored audits all failed the learned-policy promotion gate.
 - The latest completed independent route is Gymnasium Box2D `LunarLander-v3`
   in `/tmp/bgr_lunar_venv` with

@@ -82,6 +82,12 @@ to reproduce this read from the current result artifacts.
   failure-only 0.8250, uniform 0.6813, fixed-radius 0.6438,
   BGR-uniform-radius 0.5188, BGR-Coverage 0.4625, and BGR 0.4438. Do not scale
   or promote either FetchReach protocol.
+- Gymnasium-Robotics HandReach-v3 is a rejected pre-method route, not paper
+  evidence. The fixed 8-seed calibration with a random-shooting ShadowHand
+  controller has clean success 0.0000, recovery range 0.0000--0.0000, RAUC
+  0.0000, and r80 0.2000. Do not build a replay comparison around this
+  controller/interface unless a new preregistered controller first clears clean
+  success and produces a non-flat recovery curve.
 - The next acceptance-moving result must be a fixed-protocol positive result
   on a truly different external package/reset interface, a genuinely different
   preregistered learned-policy intervention that can beat both official and

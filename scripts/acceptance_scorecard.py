@@ -334,6 +334,10 @@ CALIBRATION_SCREENS = [
         "results/fetchpickplace_object_goal_calibration_2seed_v1/summary.json",
     ),
     (
+        "Gymnasium-Robotics HandReach-v3 calibration",
+        "results/handreach_recovery_calibration_8seed_v1/summary.json",
+    ),
+    (
         "highway-env parking-v0 calibration",
         "results/highway_parking_recovery_calibration_12seed_v1/summary.json",
     ),

@@ -73,6 +73,22 @@ OpenVLA/LIBERO rows are recovery-curve, selection, and data-plumbing audits; the
 paper does not claim a stable OpenVLA fine-tuning gain over the official
 checkpoint.
 
+Completed external-package pre-method calibration:
+
+- `results/handreach_recovery_calibration_8seed_v1/summary.json`: fixed
+  Gymnasium-Robotics HandReach-v3 ShadowHand calibration, run with
+  `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/handreach_recovery_calibration.py --out results/handreach_recovery_calibration_8seed_v1`.
+  This route is rejected before method comparison: clean success is 0.0000,
+  recovery is flat at 0.0000 across the 0.00--0.20 joint-perturbation grid,
+  RAUC is 0.0000, and r80 is 0.2000. The package stack is
+  `gymnasium==1.3.0`, `gymnasium_robotics==1.4.2`, `mujoco==3.9.0`, and
+  `numpy==2.4.6`. Do not promote or scale this route without a new
+  preregistered controller that first clears clean-success and non-flat
+  recovery prerequisites.
+- `results/handreach_recovery_calibration_8seed_v1/package_versions.json` and
+  `results/handreach_recovery_calibration_8seed_v1/recovery_rows.csv`: compact
+  package-version and row-level records for the same rejected calibration.
+
 Completed external-package pre-promotion route:
 
 - `results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv`: fixed bsuite

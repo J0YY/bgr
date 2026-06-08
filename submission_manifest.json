@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "f6392c7d792223194fba2a8b99bf91e3634598f3abc20323300fa2c7a0dda967",
-      "size_bytes": 298537
+      "sha256": "4ad7aabf9fbbc216a0ad75b817e5cfc64e69e3256a063be7b0afe11a0ff69ac1",
+      "size_bytes": 299559
     },
     {
       "path": "results/bsuite_cartpole_recovery_probe_4seed_v1/package_versions.json",
@@ -634,6 +634,21 @@
       "path": "results/grid_margin_target_sensitivity_30seed_v1/summary.csv",
       "sha256": "e5cdfab55fc0ddcc428615b09634801b2cd86f32bdcc139ba439048423c0afa0",
       "size_bytes": 16296
+    },
+    {
+      "path": "results/handreach_recovery_calibration_8seed_v1/package_versions.json",
+      "sha256": "7116ecdd80694bf407d213049347433bce24fece8fc3948164bad863cd2d6278",
+      "size_bytes": 142
+    },
+    {
+      "path": "results/handreach_recovery_calibration_8seed_v1/recovery_rows.csv",
+      "sha256": "d0202d68ad8ab1674f47e44431e302c3fc34b417c50d031d25375d93087a1569",
+      "size_bytes": 3456
+    },
+    {
+      "path": "results/handreach_recovery_calibration_8seed_v1/summary.json",
+      "sha256": "9125668f5f112970b5b816d849e79ec2fdee31a76faf599d8ba812ed06ee7f30",
+      "size_bytes": 472
     },
     {
       "path": "results/highway_parking_recovery_calibration_12seed_v1/package_versions.json",
@@ -952,8 +967,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "3d2de22152882c0beeb9f5aa7cc673412751250ab39ec99870ffe1fb4d184ed1",
-      "size_bytes": 40659
+      "sha256": "e5895983cfe4272b1fffe42b633be6ee69b2144eb601e4c9dea969499b12aa1e",
+      "size_bytes": 40799
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -967,8 +982,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "468ee4eb7657584b2cd9d1feda07c7379d2979b2eb2bdfb26e9467b00da4f5ee",
-      "size_bytes": 43825
+      "sha256": "aa95eb1061b2195879ffb8fbfde59c53385cc934ae28f34dee5bd9cc2e89d15a",
+      "size_bytes": 43923
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -982,8 +997,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "fa9e67d983ec54d3dc78c3a3b2699b1e2314e9ef0eef64c4707c7b90682059c8",
-      "size_bytes": 241408
+      "sha256": "c2894de930df512fd8f5e5bbefe732c02f5a80d3d472374ab2ab28c5f549d0c0",
+      "size_bytes": 241777
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1327,8 +1342,8 @@
     },
     {
       "path": "tests/test_check_submission_package.py",
-      "sha256": "add3994920baf48e0fbd0a63ded90021782c6620888ce5ed943e66854b9547ee",
-      "size_bytes": 334511
+      "sha256": "79b20560a61ba0728a814567f06ef599eee9c6deee33409500399f8f31b32a30",
+      "size_bytes": 335082
     },
     {
       "path": "tests/test_combine_openvla_oft_examples.py",
@@ -1409,6 +1424,11 @@
       "path": "tests/test_grid_recovery.py",
       "sha256": "e25b528de295d6515fc5156e074e2f949b29b00022686d75c4c863df25fd1d28",
       "size_bytes": 1384
+    },
+    {
+      "path": "tests/test_handreach_recovery_calibration.py",
+      "sha256": "1356537ff6d38ad0aadf81c50419694069c5d0c31a6d24c33866d3a885f19130",
+      "size_bytes": 2074
     },
     {
       "path": "tests/test_highway_parking_recovery_calibration.py",
@@ -1554,6 +1574,11 @@
       "path": "tools/fetch_object_goal_recovery_calibration.py",
       "sha256": "016f80c986049431d3778d4560ee6dbd3b593de1528f601e2117bb2541b45294",
       "size_bytes": 13253
+    },
+    {
+      "path": "tools/handreach_recovery_calibration.py",
+      "sha256": "906764a107dbf32f645153a735c51b8ea84cd6bbc9c59fa6d6f2b964c508cb01",
+      "size_bytes": 12978
     },
     {
       "path": "tools/highway_parking_recovery_calibration.py",

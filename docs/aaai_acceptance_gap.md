@@ -1097,6 +1097,21 @@ risk.
   under the fixed scripted controller.
   The completed calibration is negative: clean success is 0.1250, RAUC is
   0.0625, recovery ranges from 0.0000 to 0.1250, and median r80 is 0.0660.
+- Gymnasium-Robotics HandReach-v3 was checked as a materially different
+  package-owned ShadowHand route after the object-goal Fetch calibrations and
+  other standard screens failed. This was a pre-method calibration, not BGR
+  evidence: it asks whether a fixed random-shooting controller over active
+  finger and thumb action dimensions can preserve clean HandReach success and
+  expose a non-flat recovery curve before any replay comparison is implemented.
+  The fixed command is:
+  `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/handreach_recovery_calibration.py --out results/handreach_recovery_calibration_8seed_v1`.
+  The completed calibration is rejected: clean success is 0.0000, recovery is
+  flat at 0.0000 across the 0.00--0.20 joint-perturbation grid, RAUC is 0.0000,
+  and r80 is 0.2000 under `gymnasium==1.3.0`,
+  `gymnasium_robotics==1.4.2`, `mujoco==3.9.0`, and `numpy==2.4.6`.
+  Do not build or scale a HandReach replay comparison around this
+  controller/interface unless a new preregistered controller first clears the
+  0.80 clean-success gate and produces a non-flat recovery curve.
 - highway-env parking-v0 was checked as a genuinely different external package
   route after the same-protocol MiniGrid/classic-control/PointMaze/FetchReach
   screens failed. The package was installed in an isolated Python 3.11
