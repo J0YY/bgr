@@ -11,7 +11,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`, `FetchPush-v4 far-push object-goal calibration`, `FetchSlide-v4 object-goal calibration`, `FetchPickAndPlace-v4 object-goal calibration`, `Gymnasium-Robotics HandReach-v3 calibration`, `highway-env parking-v0 calibration`, `highway-env highway-fast-v0 lane calibration`.
 - Retired calibrated route(s) that cleared pre-method calibration: `MinAtar Breakout calibration` clean 1.0000, range 0.6667--1.0000, r80 0.6000, `MinAtar Asterix calibration` clean 0.8333, range 0.5000--0.8333, r80 5.3333, `Gymnasium MuJoCo Reacher-v5 calibration` clean 0.8333, range 0.5000--0.9167, r80 3.0000, `Gymnasium MuJoCo InvertedPendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2100, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2825, `Gymnasium Box2D LunarLander-v3 calibration` clean 0.9167, range 0.5833--0.9167, r80 0.5300.
 - Rejected route scout(s): `sklearn digits margin replay` best BGR 0.8271 vs uniform 0.8123 (W/L/T=2/2/0), `sklearn tabular margin replay (breast_cancer)` best BGR 0.9610 vs uniform 0.9516 (W/L/T=3/1/0), `sklearn tabular margin replay (wine)` best BGR 0.9702 vs uniform 0.9563 (W/L/T=4/0/0), `OpenML margin replay (ionosphere)` best BGR 0.8429 vs uniform 0.8338 (W/L/T=2/2/0), `OpenML margin replay (sonar)` best BGR 0.7667 vs uniform 0.7378 (W/L/T=4/0/0), `OpenML margin replay (spambase)` best BGR 0.8840 vs uniform 0.8602 (W/L/T=3/1/0).
-- Route scout(s) requiring preregistration before promotion: `OpenML margin replay (diabetes)` best BGR 0.7402 vs uniform 0.6797 (W/L/T=4/0/0).
+- Superseded route scout(s): `OpenML margin replay (diabetes)` already has fixed positive follow-up evidence; no preregistration action remains.
 - Positive pre-existing-dataset follow-up(s): `OpenML diabetes margin 30-seed (diabetes)` BGR 0.7062 vs uniform 0.6689 (W/L/T=24/6/0), fixed gap +0.0303, `OpenML diabetes margin replication 30-seed (diabetes)` BGR 0.7056 vs uniform 0.6673 (W/L/T=23/7/0), fixed gap +0.0416.
 
 ## Promotion Deficits
@@ -20,7 +20,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Learned policy: Perturb-only anchored OpenVLA audit does not clear the learned-policy promotion gate: BGR 371/400, official 367/400, random 372/400; identity BGR 99/100, official 99/100, random 99/100; official gap +4 (+0.0100), random gap -1 (-0.0025), clean deficit 0.
 - Retired calibrated route(s): `MinAtar Breakout calibration`, `MinAtar Asterix calibration`, `Gymnasium MuJoCo Reacher-v5 calibration`, `Gymnasium MuJoCo InvertedPendulum-v5 calibration`, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration`, `Gymnasium Box2D LunarLander-v3 calibration` cleared pre-method calibration, but the corresponding fixed method screen is negative or tied; not active acceptance evidence.
 - Rejected route scout(s): `sklearn digits margin replay`, `sklearn tabular margin replay (breast_cancer)`, `sklearn tabular margin replay (wine)`, `OpenML margin replay (ionosphere)`, `OpenML margin replay (sonar)`, `OpenML margin replay (spambase)` did not clear the +0.03 and 3/4 paired pre-registration screen; not active acceptance evidence.
-- Route scout(s): `OpenML margin replay (diabetes)` need a fixed preregistered comparison before any manuscript claim.
+- Superseded route scout(s): `OpenML margin replay (diabetes)` have fixed positive follow-up evidence; the scout itself is not an active action item.
 - Positive pre-existing-dataset follow-up(s): `OpenML diabetes margin 30-seed (diabetes)`, `OpenML diabetes margin replication 30-seed (diabetes)` clear the internal 30-seed margin-replay follow-up gate and are incorporated into the paper as supervised margin-replay evidence.
 - Active route: Occlusion-bottleneck OpenVLA route is preregistered, not yet evidence: the clean-plus-occlusion TFDS prep, proximal-anchor BGR/random adaptation, and official/BGR/random 10-task x 10-trial perturbation summaries must finish before the +10/400 and +0.02 learned-policy gate can be checked.
 
@@ -80,7 +80,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | sklearn digits margin replay | 1.0000 | 0.8271 | 0.8123 | +0.0148 (2/2/0) | 0.8425 @ 0.8000 | reject-scout |
 | sklearn tabular margin replay (breast_cancer) | 2.0000 | 0.9610 | 0.9516 | +0.0094 (3/1/0) | 0.9566 @ 1.5000 | reject-scout |
 | sklearn tabular margin replay (wine) | 0.5000 | 0.9702 | 0.9563 | +0.0139 (4/0/0) | 0.9586 @ 0.5000 | reject-scout |
-| OpenML margin replay (diabetes) | 2.0000 | 0.7402 | 0.6797 | +0.0605 (4/0/0) | 0.6999 @ 2.0000 | candidate-for-preregistration |
+| OpenML margin replay (diabetes) | 2.0000 | 0.7402 | 0.6797 | +0.0605 (4/0/0) | 0.6999 @ 2.0000 | superseded-by-positive-follow-up |
 | OpenML margin replay (ionosphere) | 1.5000 | 0.8429 | 0.8338 | +0.0090 (2/2/0) | 0.8416 @ 2.0000 | reject-scout |
 | OpenML margin replay (sonar) | 1.5000 | 0.7667 | 0.7378 | +0.0289 (4/0/0) | 0.7701 @ 2.0000 | reject-scout |
 | OpenML margin replay (spambase) | 1.0000 | 0.8840 | 0.8602 | +0.0238 (3/1/0) | 0.8431 @ 2.0000 | reject-scout |
@@ -114,7 +114,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The InvertedDoublePendulum-v5 calibration cleared pre-method checks, but its fixed 4-seed method screen collapses clean success; the small BGR RAUC edge is not acceptance evidence.
 - `OpenML diabetes margin 30-seed (diabetes)`, `OpenML diabetes margin replication 30-seed (diabetes)` now give a replicated positive pre-existing-dataset signal, but it must be framed as supervised margin-replay evidence rather than robotics or standard-environment recovery.
-- `OpenML margin replay (diabetes)` cleared the 4-seed scout gate only; it needs a fixed preregistered 30-seed comparison before any manuscript claim.
+- `OpenML margin replay (diabetes)` is superseded by fixed positive OpenML diabetes follow-ups, so it is no longer a pending preregistration item.
 - Most pre-existing-dataset route scouts are rejected before preregistration: their best BGR rows stay below the +0.03 screen even when paired signs are favorable, or fixed-radius replay is competitive.
 - Perturb-only anchored OpenVLA audit does not clear the learned-policy promotion gate: BGR 371/400, official 367/400, random 372/400; identity BGR 99/100, official 99/100, random 99/100; official gap +4 (+0.0100), random gap -1 (-0.0025), clean deficit 0.
 - Current acceptance-moving learned-policy work: Occlusion-bottleneck OpenVLA route is preregistered, not yet evidence: the clean-plus-occlusion TFDS prep, proximal-anchor BGR/random adaptation, and official/BGR/random 10-task x 10-trial perturbation summaries must finish before the +10/400 and +0.02 learned-policy gate can be checked.

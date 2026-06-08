@@ -124,6 +124,17 @@ the `athena` pdfTeX workflow, stripped with `/opt/homebrew/bin/qpdf`, and the
 package/claim gates passed before this AGENTS update. This improves the "no new
 positive evidence" weakness but does not change readiness because the
 learned-policy gate still fails.
+Latest poll at 2026-06-08 06:13:20 BST showed the occlusion route past data
+prep and training: prep `767850`, BGR train/merge `767851`/`767852`, and random
+train/merge `767854`/`767855` completed with exit `0:0`. BGR clean eval
+`767853`, random clean eval `767856`, official brightness `767859`, BGR
+identity perturb eval `767862`, and random identity perturb eval `767868` were
+running. Official identity `767857` and blur `767858` completed; official
+occlusion/shift, BGR blur/brightness/occlusion/shift, and random
+blur/brightness/occlusion/shift remained dependency-pending. The sync wrote an
+incomplete `summary_available.csv` from logs, but the full perturb and adapt
+summaries were still missing; the promotion gate remained `[INCOMPLETE]`.
+This is not paper evidence yet.
 
 Operational defaults:
 

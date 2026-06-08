@@ -212,6 +212,13 @@ class RouteScout:
         return self.decision.startswith("reject")
 
 
+def route_scout_evidence_key(scout: RouteScout) -> str:
+    """Group exploratory scouts with their fixed follow-up evidence."""
+    if scout.name == "OpenML margin replay (diabetes)" or scout.name.startswith("OpenML diabetes margin"):
+        return "openml_diabetes_margin"
+    return scout.name
+
+
 BENCHMARK_SCREENS = [
     (
         "FrozenLake8x8",
@@ -915,9 +922,19 @@ def render_markdown(root: Path) -> str:
             for screen in retired_calibrations
         )
         lines.append(f"- Retired calibrated route(s) that cleared pre-method calibration: {names}.")
-    rejected_scouts = [scout for scout in scouts if scout.rejected]
-    candidate_scouts = [scout for scout in scouts if scout.needs_preregistration]
     positive_followups = [scout for scout in scouts if scout.positive_followup]
+    positive_followup_keys = {route_scout_evidence_key(scout) for scout in positive_followups}
+    rejected_scouts = [scout for scout in scouts if scout.rejected]
+    superseded_scouts = [
+        scout
+        for scout in scouts
+        if scout.needs_preregistration and route_scout_evidence_key(scout) in positive_followup_keys
+    ]
+    candidate_scouts = [
+        scout
+        for scout in scouts
+        if scout.needs_preregistration and route_scout_evidence_key(scout) not in positive_followup_keys
+    ]
     if rejected_scouts:
         names = ", ".join(
             f"`{scout.name}` best BGR {scout.treatment_mean:.4f} vs uniform {scout.uniform_mean:.4f} "
@@ -932,6 +949,11 @@ def render_markdown(root: Path) -> str:
             for scout in candidate_scouts
         )
         lines.append(f"- Route scout(s) requiring preregistration before promotion: {names}.")
+    if superseded_scouts:
+        names = ", ".join(f"`{scout.name}`" for scout in superseded_scouts)
+        lines.append(
+            f"- Superseded route scout(s): {names} already has fixed positive follow-up evidence; no preregistration action remains."
+        )
     if positive_followups:
         names = ", ".join(
             f"`{scout.name}` BGR {scout.treatment_mean:.4f} vs uniform {scout.uniform_mean:.4f} "
@@ -990,6 +1012,11 @@ def render_markdown(root: Path) -> str:
         names = ", ".join(f"`{scout.name}`" for scout in candidate_scouts)
         lines.append(
             f"- Route scout(s): {names} need a fixed preregistered comparison before any manuscript claim."
+        )
+    if superseded_scouts:
+        names = ", ".join(f"`{scout.name}`" for scout in superseded_scouts)
+        lines.append(
+            f"- Superseded route scout(s): {names} have fixed positive follow-up evidence; the scout itself is not an active action item."
         )
     if positive_followups:
         names = ", ".join(f"`{scout.name}`" for scout in positive_followups)
@@ -1050,6 +1077,9 @@ def render_markdown(root: Path) -> str:
             ]
         )
         for scout in scouts:
+            scout_decision = scout.decision
+            if scout in superseded_scouts:
+                scout_decision = "superseded-by-positive-follow-up"
             lines.append(
                 "| "
                 + " | ".join(
@@ -1060,7 +1090,7 @@ def render_markdown(root: Path) -> str:
                         f"{scout.uniform_mean:.4f}",
                         f"{scout.delta:+.4f} ({scout.wins}/{scout.losses}/{scout.ties})",
                         f"{scout.best_fixed_mean:.4f} @ {scout.best_fixed_target:.4f}",
-                        scout.decision,
+                        scout_decision,
                     ]
                 )
                 + " |"
@@ -1128,6 +1158,12 @@ def render_markdown(root: Path) -> str:
         priority_lines.insert(
             2,
             f"- {names} cleared the 4-seed scout gate only; it needs a fixed preregistered 30-seed comparison before any manuscript claim.",
+        )
+    if superseded_scouts:
+        names = ", ".join(f"`{scout.name}`" for scout in superseded_scouts)
+        priority_lines.insert(
+            2,
+            f"- {names} is superseded by fixed positive OpenML diabetes follow-ups, so it is no longer a pending preregistration item.",
         )
     if positive_followups:
         names = ", ".join(f"`{scout.name}`" for scout in positive_followups)
