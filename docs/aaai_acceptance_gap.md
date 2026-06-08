@@ -56,14 +56,17 @@ both runs. This is real acceptance-moving evidence for a pre-existing
 supervised margin-replay benchmark, but it does not solve the learned-policy
 failure or standard-environment record by itself.
 A fixed external numeric OpenML suite at target radius 2.0 then added
-replicated pre-existing-dataset signals. The suite is mixed overall, but
-blood-transfusion-service-center gives BGR 0.7625 versus uniform 0.6657
-(+0.0968, W/L/T=30/0/0) and fixed-radius 0.6920 in the first 30 seeds; held-out
-seeds 30--59 give BGR 0.7595 versus uniform 0.6846 (+0.0749, W/L/T=25/5/0) and
-fixed-radius 0.7133. Phoneme also clears after held-out replication: original
-BGR 0.7228 versus uniform 0.6896 and fixed-radius 0.6704, held-out BGR 0.7124
-versus uniform 0.6758 (+0.0366, W/L/T=21/9/0) and fixed-radius 0.6792
-(+0.0332, W/L/T=25/5/0).
+replicated pre-existing-dataset signals. The suite is mixed overall, but the
+full held-out repeat is stable at the suite level: original/held-out macro
+means are BGR 0.8055/0.8068, uniform 0.7939/0.7943, and fixed-radius
+0.7864/0.7839; pooled across both runs, BGR is ahead on 6/8 dataset means
+versus uniform and 7/8 versus fixed-radius. Blood-transfusion-service-center
+gives BGR 0.7625 versus uniform 0.6657 (+0.0968, W/L/T=30/0/0) and fixed-radius
+0.6920 in the first 30 seeds; held-out seeds 30--59 give BGR 0.7595 versus
+uniform 0.6846 (+0.0749, W/L/T=25/5/0) and fixed-radius 0.7133. Phoneme also
+clears after held-out replication: original BGR 0.7228 versus uniform 0.6896
+and fixed-radius 0.6704, held-out BGR 0.7124 versus uniform 0.6758 (+0.0366,
+W/L/T=21/9/0) and fixed-radius 0.6792 (+0.0332, W/L/T=25/5/0).
 The newest standard-environment sequence sharpened the negative record:
 LunarLander is a 4-seed near miss rejected by paired signs and lower median r80,
 bsuite DeepSea trails the state-priority/uniform-radius ablation and has lower

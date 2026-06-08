@@ -127,6 +127,32 @@ def paired_wins(rows: list[dict[str, str]], treatment: str, baseline: str, metri
     return wins, losses, ties
 
 
+def dataset_macro_means(rows: list[dict[str, str]]) -> dict[str, float]:
+    datasets = sorted({row["dataset"] for row in rows})
+    return {
+        method: mean(
+            mean(float(row["final_rauc"]) for row in rows if row["dataset"] == dataset and row["method"] == method)
+            for dataset in datasets
+        )
+        for method in ["bgr", "uniform", "fixed"]
+    }
+
+
+def dataset_mean_wins(rows: list[dict[str, str]], baseline: str) -> tuple[float, tuple[int, int, int]]:
+    datasets = sorted({row["dataset"] for row in rows})
+    deltas = []
+    for dataset in datasets:
+        bgr = mean(float(row["final_rauc"]) for row in rows if row["dataset"] == dataset and row["method"] == "bgr")
+        base = mean(
+            float(row["final_rauc"]) for row in rows if row["dataset"] == dataset and row["method"] == baseline
+        )
+        deltas.append(bgr - base)
+    wins = sum(delta > 0.0 for delta in deltas)
+    losses = sum(delta < 0.0 for delta in deltas)
+    ties = len(deltas) - wins - losses
+    return mean(deltas), (wins, losses, ties)
+
+
 def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     claims: list[Claim] = []
 
@@ -458,6 +484,43 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
                     f"{fmt(mean_metric(pooled_phoneme, 'fixed', 'final_rauc'), 4)} fixed-radius"
                 ),
                 "results/openml_phoneme_margin_*_30seed_v1/per_seed.csv",
+            ),
+        ]
+    )
+    openml_external_replication_per_seed = (
+        results_dir / "openml_numeric_external_fixed_target2_replication_30seed_v1" / "per_seed.csv"
+    )
+    openml_external_replication_seeds = read_csv_rows(openml_external_replication_per_seed)
+    openml_external_original_macro = dataset_macro_means(read_csv_rows(openml_blood_original_per_seed))
+    openml_external_replication_macro = dataset_macro_means(openml_external_replication_seeds)
+    pooled_external = read_csv_rows(openml_blood_original_per_seed) + openml_external_replication_seeds
+    pooled_external_uniform_delta, pooled_external_uniform_wlt = dataset_mean_wins(pooled_external, "uniform")
+    pooled_external_fixed_delta, pooled_external_fixed_wlt = dataset_mean_wins(pooled_external, "fixed")
+    if pooled_external_uniform_wlt[0] < 5 or pooled_external_fixed_wlt[0] < 5:
+        raise ValueError("Expected full OpenML external suite to have positive pooled dataset-mean support")
+    claims.extend(
+        [
+            Claim(
+                "OpenML external suite original and held-out macro means",
+                (
+                    f"original/held-out macro means are BGR {fmt(openml_external_original_macro['bgr'], 4)}/"
+                    f"{fmt(openml_external_replication_macro['bgr'], 4)}, uniform "
+                    f"{fmt(openml_external_original_macro['uniform'], 4)}/"
+                    f"{fmt(openml_external_replication_macro['uniform'], 4)}, and fixed-radius "
+                    f"{fmt(openml_external_original_macro['fixed'], 4)}/"
+                    f"{fmt(openml_external_replication_macro['fixed'], 4)}"
+                ),
+                "results/openml_numeric_external_fixed_target2*_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML external suite pooled dataset means",
+                (
+                    f"pooled over both suite runs, BGR is ahead on {pooled_external_uniform_wlt[0]}/8 "
+                    f"dataset means vs. uniform and {pooled_external_fixed_wlt[0]}/8 vs. fixed-radius "
+                    f"(macro gaps {fmt_signed(pooled_external_uniform_delta, 4)}/"
+                    f"{fmt_signed(pooled_external_fixed_delta, 4)})"
+                ),
+                "results/openml_numeric_external_fixed_target2*_30seed_v1/per_seed.csv",
             ),
         ]
     )

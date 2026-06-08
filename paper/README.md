@@ -77,9 +77,12 @@ seeds 30--59 replication in
 0.7056 versus 0.6673 for uniform and 0.6640 for fixed-radius replay. The fixed
 external numeric OpenML suite in
 `results/openml_numeric_external_fixed_target2_30seed_v1/summary.csv` is mixed
-overall but has a replicated blood-transfusion-service-center win: BGR 0.7625
-versus 0.6657 for uniform and 0.6920 for fixed-radius replay, with held-out
-replication in
+overall and now has a held-out full-suite repeat in
+`results/openml_numeric_external_fixed_target2_replication_30seed_v1/summary.csv`.
+The original/held-out suite macro means are BGR 0.8055/0.8068, uniform
+0.7939/0.7943, and fixed-radius 0.7864/0.7839. The suite includes a replicated
+blood-transfusion-service-center win: BGR 0.7625 versus 0.6657 for uniform and
+0.6920 for fixed-radius replay, with held-out replication in
 `results/openml_blood_transfusion_margin_replication_30seed_v1/summary.csv`
 at 0.7595 versus 0.6846 for uniform and 0.7133 for fixed-radius replay. It
 also yields a replicated phoneme result: the original suite row gives BGR

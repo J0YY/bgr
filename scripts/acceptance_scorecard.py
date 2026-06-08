@@ -489,12 +489,8 @@ ROUTE_SCOUTS = [
         "results/openml_numeric_external_fixed_target2_30seed_v1/summary.csv",
     ),
     (
-        "OpenML blood transfusion margin replication 30-seed",
-        "results/openml_blood_transfusion_margin_replication_30seed_v1/summary.csv",
-    ),
-    (
-        "OpenML phoneme margin replication 30-seed",
-        "results/openml_phoneme_margin_replication_30seed_v1/summary.csv",
+        "OpenML numeric external fixed target2 replication 30-seed",
+        "results/openml_numeric_external_fixed_target2_replication_30seed_v1/summary.csv",
     ),
 ]
 

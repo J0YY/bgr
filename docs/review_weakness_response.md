@@ -140,8 +140,12 @@ to reproduce this read from the current result artifacts.
 - A fixed external numeric OpenML suite added additional replicated
   pre-existing-dataset signals. The command
   `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --external-validation-suite --targets 2.0 --seeds 30 --out results/openml_numeric_external_fixed_target2_30seed_v1`
-  was mixed overall, but blood-transfusion-service-center cleared the fixed
-  gate: BGR 0.7625 vs. uniform 0.6657 (+0.0968, W/L/T=30/0/0) and vs.
+  was mixed overall. A held-out full-suite repeat,
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --external-validation-suite --targets 2.0 --seed-start 30 --seeds 30 --out results/openml_numeric_external_fixed_target2_replication_30seed_v1`,
+  gives similar macro means: BGR 0.8068, uniform 0.7943, and fixed-radius
+  0.7839; pooled across the two suite runs, BGR is ahead on 6/8 dataset means
+  versus uniform and 7/8 versus fixed-radius. Blood-transfusion-service-center
+  cleared the fixed gate: BGR 0.7625 vs. uniform 0.6657 (+0.0968, W/L/T=30/0/0) and vs.
   fixed-radius 0.6920 (+0.0705, W/L/T=27/1/2). The held-out command
   `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets blood-transfusion-service-center --targets 2.0 --seed-start 30 --seeds 30 --out results/openml_blood_transfusion_margin_replication_30seed_v1`
   stayed positive: BGR 0.7595 vs. uniform 0.6846 (+0.0749, W/L/T=25/5/0) and
