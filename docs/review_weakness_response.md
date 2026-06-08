@@ -98,6 +98,16 @@ to reproduce this read from the current result artifacts.
   preregistered learned-policy intervention that can beat both official and
   matched random, or a stronger theory/presentation contribution. Do not keep
   rerunning the same MiniGrid/PointMaze/FetchReach/bsuite protocol family.
+- An internal sklearn-digits margin replay scout checked a genuinely
+  pre-existing supervised dataset route, but it is rejected before any paper
+  promotion. The fixed command
+  `PYTHONPATH=src:. python3 tools/sklearn_digits_margin_scout.py --out results/sklearn_digits_margin_scout_v0`
+  compares uniform, fixed-radius, and boundary-guided replay over
+  label-preserving pixel perturbations. Every target row is marked
+  `reject-scout`; the best BGR target is 1.0 with 0.8271 RAUC versus 0.8123 for
+  uniform, only W/L/T=2/2/0, while fixed-radius replay is stronger at target
+  0.8 (0.8425). Do not use this route to answer the independent-benchmark
+  critique without a new preregistered premise.
 - MinAtar Breakout is completed negative scope evidence, not paper-positive
   evidence. The fixed 12-seed calibration in
   `results/minatar_breakout_recovery_calibration_12seed_v1/summary.json`

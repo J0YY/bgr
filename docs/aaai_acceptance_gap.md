@@ -32,6 +32,12 @@ independent-benchmark route: MinAtar Asterix cleared calibration, but the fixed
 all-method screen is negative because failure-only replay is the strongest
 baseline. The earlier MinAtar Breakout calibration also cleared pre-method
 checks, but its fixed all-method screen is tied/saturated negative.
+An internal sklearn-digits margin scout was also opened as a genuinely
+pre-existing supervised dataset route, but it is rejected before paper
+promotion: the best BGR target in
+`results/sklearn_digits_margin_scout_v0/summary.csv` is target radius 1.0 with
+0.8271 final RAUC versus 0.8123 for uniform, only W/L/T=2/2/0, and below the
++0.03 screen threshold. This is not evidence to add to the manuscript.
 The newest standard-environment sequence sharpened the negative record:
 LunarLander is a 4-seed near miss rejected by paired signs and lower median r80,
 bsuite DeepSea trails the state-priority/uniform-radius ablation and has lower
@@ -125,6 +131,23 @@ best final RAUC at 0.8625. BGR-Coverage reaches 0.8406, BGR reaches 0.8047,
 uniform reaches 0.8234, and BGR-Coverage has W/L/T=1/2/1 against uniform.
 Do not scale or promote this route without a genuinely new preregistered
 premise.
+
+Rejected internal route scout, opened 2026-06-07: sklearn digits margin replay.
+This route was checked because it is a pre-existing dataset rather than another
+authored recovery environment. It treats `sklearn.datasets.load_digits` images
+as replay states, uses label-preserving fixed-L2 pixel perturbations as the
+radius family, and compares uniform, fixed-radius, and boundary-guided replay
+with an online `SGDClassifier`. The fixed scout command is:
+`PYTHONPATH=src:. python3 tools/sklearn_digits_margin_scout.py --out results/sklearn_digits_margin_scout_v0`.
+It uses `scikit-learn==1.8.0`, `numpy==2.4.2`, and Python 3.14.3 from the local
+environment. The result is not promotable: across target radii 0.5, 0.8, 1.0,
+1.2, 1.5, 1.8, and 2.0, every row is marked `reject-scout`. The best BGR row is
+target radius 1.0 with final RAUC 0.8271 versus 0.8123 for uniform, but the
+paired split is only W/L/T=2/2/0 and the gap is +0.0148, below the +0.03
+candidate threshold. Fixed-radius replay is strongest at target 0.8 (0.8425),
+so the route does not support the boundary-radius mechanism without post-hoc
+tuning. Do not add this to the paper or scale it without a genuinely new
+preregistered premise.
 
 Completed independent-benchmark route, opened and evaluated 2026-06-07:
 official Gymnasium Box2D

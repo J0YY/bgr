@@ -22,6 +22,9 @@ HandReach-v3 calibration, highway-fast-v0 lane calibration, and MinAtar
 Breakout all-method screen are also negative, so they do not solve the
 independent-benchmark evidence gap. MinAtar Asterix also completed negative
 after its usable calibration, so there is no active independent route. The
+internal sklearn-digits margin replay scout is also rejected before promotion:
+its best BGR target gives only 0.8271 vs. 0.8123 RAUC against uniform with a
+2/2/0 paired split, while fixed-radius replay is stronger at another target.
 new grid-margin witness-sensitivity diagnostic improves scope support for the
 feasibility-witness assumption but is controlled mechanism evidence, not an
 independent-benchmark win.
@@ -181,6 +184,16 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   gives BGR-Coverage 0.1031 final RAUC vs. uniform 0.1014 (W/L/T=2/2/0), only
   0.0064 above BGR-uniform-radius, with median r80 still saturated at 1.0000
   for both BGR-Coverage and uniform. Do not scale or promote this protocol.
+- The sklearn digits margin replay scout is completed and rejected before
+  paper promotion. The fixed command is
+  `PYTHONPATH=src:. python3 tools/sklearn_digits_margin_scout.py --out results/sklearn_digits_margin_scout_v0`.
+  It uses `sklearn.datasets.load_digits`, label-preserving fixed-L2 pixel
+  perturbations, and an online `SGDClassifier` to compare uniform,
+  fixed-radius, and BGR replay across target radii 0.5--2.0. Every target row
+  is marked `reject-scout`; the best BGR row is target 1.0 with 0.8271 RAUC
+  versus 0.8123 uniform and only W/L/T=2/2/0, while fixed-radius replay reaches
+  0.8425 at target 0.8. Do not add this to the manuscript or scale it without a
+  genuinely new preregistered premise.
 - The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation/perturb-only recipe family; the preregistered weighted, proximal-anchor, and perturb-only anchored audits all failed the learned-policy promotion gate.
 - The grid-margin witness-sensitivity diagnostic is completed and paper-facing
   only as scope evidence for the feasibility-witness assumption. The fixed
