@@ -4,6 +4,7 @@ set -euo pipefail
 export REMOTE_HOST="${REMOTE_HOST:-athena}"
 export REMOTE_RUN_ROOT="${REMOTE_RUN_ROOT:-/work/joy/bgr/runs}"
 export LOCAL_RESULTS_ROOT="${LOCAL_RESULTS_ROOT:-results}"
+export ROUTE_LABEL="${ROUTE_LABEL:-Occlusion-bottleneck OpenVLA-OFT}"
 
 export PREP_TAG="${PREP_TAG:-p2048unique_occlusion_bottleneck_prereg}"
 export ANCHOR_TAG="${ANCHOR_TAG:-proxanchor_l2_5em0}"

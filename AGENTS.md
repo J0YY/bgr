@@ -87,6 +87,12 @@ prep `767850` and official identity `767857` still running, all adaptation and
 BGR/random perturb jobs still dependency-pending, and the compact summaries
 still missing. The sync helper now treats existing-but-incomplete remote logs
 as `[pending]` instead of failing the whole poll/sync command.
+Latest poll at 2026-06-08 05:43:31 BST still showed prep `767850` running on
+`c1-g4-02` and official identity `767857` running on `c1-g4-04`; all
+adaptation jobs and BGR/random perturb jobs were still dependency-pending.
+Both compact summary paths were missing, the perturb log directory existed but
+was not summarizable yet, and the readiness decision remained
+`NOT_READY_FOR_90P_AAAI_CLAIM`.
 
 Operational defaults:
 

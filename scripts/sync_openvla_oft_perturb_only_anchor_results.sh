@@ -8,6 +8,7 @@ CHECK_LOCAL=1
 REMOTE_HOST="${REMOTE_HOST:-athena}"
 REMOTE_RUN_ROOT="${REMOTE_RUN_ROOT:-/work/anonymous/bgr/runs}"
 LOCAL_RESULTS_ROOT="${LOCAL_RESULTS_ROOT:-results}"
+ROUTE_LABEL="${ROUTE_LABEL:-Perturb-only anchored OpenVLA-OFT}"
 
 PREP_TAG="${PREP_TAG:-p2048unique_perturbonly_anchor_prereg}"
 ANCHOR_TAG="${ANCHOR_TAG:-perturbonly_proxanchor_l2_5em0}"
@@ -66,7 +67,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-echo "### Perturb-only anchored OpenVLA-OFT result sync"
+echo "### ${ROUTE_LABEL} result sync"
 echo "REMOTE_HOST=${REMOTE_HOST}"
 echo "JOB_IDS=${JOB_IDS}"
 echo "DETAIL_JOB_IDS=${DETAIL_JOB_IDS}"
