@@ -422,13 +422,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "004e89b44c9b1442503cf9820cd03132e14b5362117eaeb09afc02ba9aced3cc",
-      "size_bytes": 296103
+      "sha256": "7894591bc451e096d6aac430ed7c00e36b8ed3331e48961c320a58bfd53ceb51",
+      "size_bytes": 296162
     },
     {
       "path": "paper/main.tex",
-      "sha256": "25f6c7c895c424ccd6a353d57186c4562b56b02ca0f9e5535b47db03bbbbfc8a",
-      "size_bytes": 38093
+      "sha256": "de9deb14d53b505429f73a98a297bee12945bce062d21ec5a4c06d4415c59b50",
+      "size_bytes": 38167
     },
     {
       "path": "paper/references.bib",
@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "6a9cee95b98fdc56adc93412676966dfefaac094befd41fab12cb5ffc97254a2",
-      "size_bytes": 303262
+      "sha256": "dfa782a1f733a02b7f3e240abae53b667fcd34cb740322f8edf6f4da7640fe94",
+      "size_bytes": 304328
     },
     {
       "path": "results/bsuite_cartpole_recovery_probe_4seed_v1/package_versions.json",
@@ -831,6 +831,26 @@
       "size_bytes": 828
     },
     {
+      "path": "results/minatar_asterix_recovery_probe_4seed_v1/aggregate.csv",
+      "sha256": "260763f02b241ae55c01b47e3f4b4ca419acb1964029a2696eb8c50e988a36aa",
+      "size_bytes": 498
+    },
+    {
+      "path": "results/minatar_asterix_recovery_probe_4seed_v1/history.csv",
+      "sha256": "265c0c1d158bd6f4d022177f2b9ad03aeafec5078c93179525010c4fd160dc81",
+      "size_bytes": 4487
+    },
+    {
+      "path": "results/minatar_asterix_recovery_probe_4seed_v1/package_versions.json",
+      "sha256": "1c6d05dfec795e9dba646044b5d2e4c1ed50e88cd6bbce0f6b9535e12b358f8a",
+      "size_bytes": 46
+    },
+    {
+      "path": "results/minatar_asterix_recovery_probe_4seed_v1/summary.csv",
+      "sha256": "13ca44ffe2e5ff3e4141ba8e2c8fc291db6dfaa6993c488a47580bba6aedec42",
+      "size_bytes": 1285
+    },
+    {
       "path": "results/minatar_breakout_recovery_calibration_12seed_v1/package_versions.json",
       "sha256": "1c6d05dfec795e9dba646044b5d2e4c1ed50e88cd6bbce0f6b9535e12b358f8a",
       "size_bytes": 46
@@ -1057,8 +1077,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "f3a1b80b6348defc69da29bee01bc1943dd47f07b0e5ffd1686f841dc3926dfb",
-      "size_bytes": 41843
+      "sha256": "eb63e6262778c2e9d0d662bb192c27df828c8e72cf05f89fbe13114fcc4fdd3f",
+      "size_bytes": 42189
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -1072,8 +1092,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "278748481a018b985fc4228eb1ac05f3cb2ae154d0bc66de8d8e8236f1e9d9fb",
-      "size_bytes": 47834
+      "sha256": "713cd63bf9eb0683a9c0ba9f740b291155fae97b1fb542629c1d0ba35adc7d95",
+      "size_bytes": 50161
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -1082,13 +1102,13 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "c94f320d26011c955378855f9408df0a6b6dc6a23d152b5d945207556a4473c0",
-      "size_bytes": 106996
+      "sha256": "04ebda46f2a65ad05560dd0b0d079927d63fd783c3eedfefb4cf34e8872d14cd",
+      "size_bytes": 108645
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "f9e0931f224a9793204ce684d1020d96ac176b0b66e15efdf565efe0c957dc44",
-      "size_bytes": 243801
+      "sha256": "510918501a805a9a02933085d1b0f98e7eb5180e144f48b26255ab6e5807aabe",
+      "size_bytes": 244180
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1571,6 +1591,11 @@
       "size_bytes": 1802
     },
     {
+      "path": "tests/test_minatar_asterix_recovery_probe.py",
+      "sha256": "1380ae167d18071bde74cf2cefb2088c1ff4572c9744b32910495a07f545cf7f",
+      "size_bytes": 3557
+    },
+    {
       "path": "tests/test_minatar_breakout_recovery_calibration.py",
       "sha256": "9d8eb7a50e9beb326879cb948b0bc1f9bb5362d76a5179cd5a344fd4a7b97312",
       "size_bytes": 1786
@@ -1734,6 +1759,11 @@
       "path": "tools/minatar_asterix_recovery_calibration.py",
       "sha256": "7679e1e7d8f10d88e7e4e429d20ad143a258577f902f9f49ce7e9a4e50b2aeb9",
       "size_bytes": 10879
+    },
+    {
+      "path": "tools/minatar_asterix_recovery_probe.py",
+      "sha256": "10e80564be79e8fd6ff8aa9f1a560ce565d8500e560027fa925c4f697973b5b0",
+      "size_bytes": 21849
     },
     {
       "path": "tools/minatar_breakout_recovery_probe.py",
