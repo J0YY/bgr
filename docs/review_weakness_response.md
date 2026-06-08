@@ -98,6 +98,14 @@ to reproduce this read from the current result artifacts.
   preregistered learned-policy intervention that can beat both official and
   matched random, or a stronger theory/presentation contribution. Do not keep
   rerunning the same MiniGrid/PointMaze/FetchReach/bsuite protocol family.
+- MinAtar Breakout is now the active independent route, but only at the
+  pre-method calibration stage. The fixed 12-seed calibration in
+  `results/minatar_breakout_recovery_calibration_12seed_v1/summary.json`
+  clears clean/non-flat/non-saturated prerequisites under `MinAtar==1.0.15`
+  with clean 1.0000, recovery range 0.6667--1.0000, RAUC 0.7000, and r80
+  0.6000. This is not paper evidence; it only authorizes a fixed all-method
+  screen against uniform, fixed-radius, failure-only, TD/loss-priority, and
+  BGR-uniform-radius baselines.
 - Gymnasium MuJoCo Reacher-v5 is completed negative scope evidence, not paper
   evidence. Its fixed calibration cleared clean/non-flat prerequisites
   (clean 0.8333, recovery range 0.5000--0.9167, RAUC 0.7891, r80 3.0000 on a

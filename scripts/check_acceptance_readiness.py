@@ -49,6 +49,7 @@ CALIBRATION_SUMMARIES = [
     ("HandReach-v3 calibration", "results/handreach_recovery_calibration_8seed_v1/summary.json"),
     ("Highway parking calibration", "results/highway_parking_recovery_calibration_12seed_v1/summary.json"),
     ("Highway lane calibration", "results/highway_lane_recovery_calibration_12seed_v1/summary.json"),
+    ("MinAtar Breakout calibration", "results/minatar_breakout_recovery_calibration_12seed_v1/summary.json"),
     ("Reacher-v5 calibration", "results/reacher_recovery_calibration_12seed_v1/summary.json"),
     ("InvertedPendulum-v5 calibration", "results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json"),
     (

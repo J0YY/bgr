@@ -27,9 +27,10 @@ the evidence has actually cleared the independent-benchmark and learned-policy
 promotion gates.
 
 The generated scorecard now reports why each independent-benchmark screen fails
-the gate. As of the 2026-06-07 refresh, there is no active
-independent-benchmark route that can be promoted under the current evidence
-policy. The newest standard-environment sequence sharpened the negative record:
+the gate. As of the 2026-06-07 MinAtar refresh, the only active
+independent-benchmark route is a pre-method MinAtar Breakout calibration that
+has not yet produced any BGR-vs-baseline method evidence. The newest
+standard-environment sequence sharpened the negative record:
 LunarLander is a 4-seed near miss rejected by paired signs and lower median r80,
 bsuite DeepSea trails the state-priority/uniform-radius ablation and has lower
 median r80, the positive 4-seed bsuite Catch screen failed its fixed 30-seed
@@ -67,6 +68,27 @@ matched random reaches 372/400. The official gap is only +4/400 (+0.0100) and
 BGR trails matched random by 1/400 (-0.0025), below the fixed +10/400 and +0.02
 requirement. This sharpens the acceptance problem: the current learned-policy
 evidence remains an audit, not positive robotics evidence.
+
+Active independent-benchmark route, opened 2026-06-07: MinAtar Breakout. This
+route is materially different from the retired MiniGrid/Gymnasium/bsuite
+screens because it uses MinAtar's package-owned compact Atari-style Breakout
+dynamics, the package's internal state interface, a fixed paddle-tracking
+controller, and signed paddle-cell perturbations after a burn-in checkpoint.
+The isolated environment is `/tmp/bgr_minatar_venv` with `MinAtar==1.0.15` and
+`numpy==2.4.6`; MinAtar is an optional temporary calibration dependency and is
+not vendored.
+
+Fixed pre-method calibration command:
+`PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_breakout_recovery_calibration.py --out results/minatar_breakout_recovery_calibration_12seed_v1`
+
+Calibration result: the fixed 12-seed run clears the pre-method gate with clean
+success 1.0000, recovery range 0.6667--1.0000, RAUC 0.7000, and r80 0.6000 on
+the 0--5 paddle-cell offset grid. This is not BGR evidence. It only permits a
+fixed all-method MinAtar Breakout screen. Do not tune the controller, burn-in,
+horizon, seeds, radii, methods, or promotion gate after seeing this
+calibration. Do not promote or put this route in the paper unless a fixed
+BGR-vs-uniform/fixed/failure-only/TD-loss/BGR-uniform-radius screen clears the
+same independent-benchmark gate with non-contradictory radius evidence.
 
 Completed independent-benchmark route, opened and evaluated 2026-06-07:
 official Gymnasium Box2D

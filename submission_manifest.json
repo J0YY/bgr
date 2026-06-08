@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "23198ba39afa80f683323f99ea8f1cb2ac636d35f04d78337b08ab321644c374",
-      "size_bytes": 300759
+      "sha256": "4861e9e80cf32b9c59e4ee0f11f6697789baaca38c6a6b6b82cd06926bb3e083",
+      "size_bytes": 301700
     },
     {
       "path": "results/bsuite_cartpole_recovery_probe_4seed_v1/package_versions.json",
@@ -816,6 +816,21 @@
       "size_bytes": 2679
     },
     {
+      "path": "results/minatar_breakout_recovery_calibration_12seed_v1/package_versions.json",
+      "sha256": "1c6d05dfec795e9dba646044b5d2e4c1ed50e88cd6bbce0f6b9535e12b358f8a",
+      "size_bytes": 46
+    },
+    {
+      "path": "results/minatar_breakout_recovery_calibration_12seed_v1/recovery_rows.csv",
+      "sha256": "ea5ba5bba3a28216bb3c1d15d3230b0d3edf473cde1156268480101db0b65bb7",
+      "size_bytes": 1764
+    },
+    {
+      "path": "results/minatar_breakout_recovery_calibration_12seed_v1/summary.json",
+      "sha256": "ce42ffac4762fe04ce698bf1339318cba315305eab005e452a9cd708cbb680d5",
+      "size_bytes": 567
+    },
+    {
       "path": "results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1/package_versions.json",
       "sha256": "6747f4953bf0be3bf3b2703c6f3536528d91c5ee1bea92946367889fb0b980d2",
       "size_bytes": 49
@@ -1007,8 +1022,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "79aeebb2be69ab06c0a14656579731d85f84ae72ed0b8d0cc2140b9d5be61c0e",
-      "size_bytes": 41229
+      "sha256": "c09b68d463c0329566a7707a40fad235e81d8b08d31fe4f151127efc8d3feb22",
+      "size_bytes": 41362
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -1022,8 +1037,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "d620e976a47d7aaf5e6b791a08cd7cb2a60ffa5167614e72d4d757d6cca42936",
-      "size_bytes": 45277
+      "sha256": "36e722d2bc31874d1933bedd8f954ad9a74a54f338e925181e25f417064ba1c9",
+      "size_bytes": 45387
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -1037,8 +1052,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "56a1afed0fc6bd62a22cb9bd8e237c93d1b673fabb2bb63360cad8c1699de160",
-      "size_bytes": 242765
+      "sha256": "79c60456924eac889ea290bd836e4161d556593faa1eb7a92af2dd1a1f430eee",
+      "size_bytes": 243066
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1514,6 +1529,11 @@
       "path": "tests/test_metrics.py",
       "sha256": "59e1959820719db72fa95efc6ca7cf7bc47b078ddf5522c43fd51af1756c9f57",
       "size_bytes": 581
+    },
+    {
+      "path": "tests/test_minatar_breakout_recovery_calibration.py",
+      "sha256": "9d8eb7a50e9beb326879cb948b0bc1f9bb5362d76a5179cd5a344fd4a7b97312",
+      "size_bytes": 1786
     },
     {
       "path": "tests/test_openvla_bgr_finetune_manifest.py",

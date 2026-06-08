@@ -9,13 +9,14 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Closest independent benchmark screen is `MiniGrid FourRooms official-package` with treatment `bgr_coverage`: delta vs uniform +0.1075 (4/0/0), worst required-baseline delta +0.0464 (3/1/0), ablation delta +0.0071 (2/2/0), radius delta +0.0000 (0/0/4), failure reason(s): final_median_r80-ceiling-saturated.
 - Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`, `FetchPush-v4 far-push object-goal calibration`, `FetchSlide-v4 object-goal calibration`, `FetchPickAndPlace-v4 object-goal calibration`, `Gymnasium-Robotics HandReach-v3 calibration`, `highway-env parking-v0 calibration`, `highway-env highway-fast-v0 lane calibration`.
 - Retired calibrated route(s) that cleared pre-method calibration: `Gymnasium MuJoCo Reacher-v5 calibration` clean 0.8333, range 0.5000--0.9167, r80 3.0000, `Gymnasium MuJoCo InvertedPendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2100, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2825, `Gymnasium Box2D LunarLander-v3 calibration` clean 0.9167, range 0.5833--0.9167, r80 0.5300.
+- Active pre-method calibration route(s): `MinAtar Breakout calibration` clean 1.0000, range 0.6667--1.0000, r80 0.6000.
 
 ## Promotion Deficits
 
 - Independent benchmark: no screen clears the 4/4 promotion screen. The closest screen, `MiniGrid FourRooms official-package` with `bgr_coverage`, clears 3/4 gates and fails on final_median_r80-ceiling-saturated.
 - Learned policy: Perturb-only anchored OpenVLA audit does not clear the learned-policy promotion gate: BGR 371/400, official 367/400, random 372/400; identity BGR 99/100, official 99/100, random 99/100; official gap +4 (+0.0100), random gap -1 (-0.0025), clean deficit 0.
 - Retired calibrated route(s): `Gymnasium MuJoCo Reacher-v5 calibration`, `Gymnasium MuJoCo InvertedPendulum-v5 calibration`, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration`, `Gymnasium Box2D LunarLander-v3 calibration` cleared pre-method calibration, but the corresponding fixed method screen is negative or tied; not active acceptance evidence.
-- Active route: no queued learned-policy route is recorded in the local ledgers.
+- Active route: `MinAtar Breakout calibration` cleared pre-method calibration; run only the fixed preregistered all-method screen before interpreting it.
 
 ## Independent Benchmark Screens
 
@@ -73,6 +74,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | Gymnasium-Robotics HandReach-v3 calibration | 0.0000 | 0.0000--0.0000 | 0.2000 | reject-calibration |
 | highway-env parking-v0 calibration | 0.3333 | 0.2500--0.5000 | 9.8000 | reject-calibration |
 | highway-env highway-fast-v0 lane calibration | 0.6667 | 0.5833--0.6667 | 6.0000 | reject-calibration |
+| MinAtar Breakout calibration | 1.0000 | 0.6667--1.0000 | 0.6000 | usable-calibration |
 | Gymnasium MuJoCo Reacher-v5 calibration | 0.8333 | 0.5000--0.9167 | 3.0000 | usable-calibration |
 | Gymnasium MuJoCo InvertedPendulum-v5 calibration | 1.0000 | 0.0000--1.0000 | 0.2100 | usable-calibration |
 | Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration | 1.0000 | 0.0000--1.0000 | 0.2825 | usable-calibration |
@@ -83,8 +85,9 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.
 - The independent-benchmark route has not produced a promotable screen: early promising screens either fail paired/radius checks or do not survive scale-up, and later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.
 - The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is now negative and should not be promoted.
-- The InvertedPendulum-v5 calibration also cleared pre-method checks, but its fixed 4-seed method screen ties all methods on final RAUC and median-r80; do not scale or promote it.
+- Active pre-method calibration route(s) awaiting fixed comparison result: `MinAtar Breakout calibration`.
 - Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
+- The InvertedPendulum-v5 calibration also cleared pre-method checks, but its fixed 4-seed method screen ties all methods on final RAUC and median-r80; do not scale or promote it.
 - The InvertedDoublePendulum-v5 calibration cleared pre-method checks, but its fixed 4-seed method screen collapses clean success; the small BGR RAUC edge is not acceptance evidence.
 - Perturb-only anchored OpenVLA audit does not clear the learned-policy promotion gate: BGR 371/400, official 367/400, random 372/400; identity BGR 99/100, official 99/100, random 99/100; official gap +4 (+0.0100), random gap -1 (-0.0025), clean deficit 0.
-- The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; retired calibrated routes are scope evidence, not acceptance evidence.
+- The next acceptance-moving work is the fixed all-method screen for the active pre-method calibration route; do not tune the protocol after seeing its method results.
