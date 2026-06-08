@@ -175,6 +175,16 @@ BGR brightness/occlusion/shift, official occlusion/shift, and all random
 non-identity perturbations, so the fixed perturb gate remains `[INCOMPLETE]`.
 No paper claim should change until the full `summary.csv` exists and the gate
 script returns a positive decision.
+Latest poll at 2026-06-08 06:35:44 BST showed random identity `767868`
+completed after 21:50, random blur `767878` running, BGR brightness `767864`
+running, and official occlusion `767860` running. BGR occlusion/shift
+`767865`/`767866`, official shift `767861`, and random
+brightness/occlusion/shift `767879`--`767881` remained dependency-pending. The
+partial perturb summary now has BGR identity `99/100`, BGR blur `98/100`,
+official identity `99/100`, official blur `97/100`, official brightness
+`98/100`, and random identity `98/100`. The fixed perturb gate remains
+`[INCOMPLETE]`; missing rows still include BGR brightness/occlusion/shift,
+official occlusion/shift, and all random non-identity perturbations.
 
 Operational defaults:
 
