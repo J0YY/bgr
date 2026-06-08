@@ -161,6 +161,20 @@ adapt summary and incomplete perturb `summary_available.csv`, but the full
 perturb summary was missing. Do not incorporate this route into the paper until
 `summary.csv` exists and `scripts/check_openvla_perturb_gate.py` passes the
 fixed +10/400 and +0.02 gate.
+Latest poll at 2026-06-08 06:24:35 BST had the same fixed-gate status:
+BGR blur `767863` and random identity `767868` were running, official
+occlusion `767860` was still pending on `BeginTime`, official shift `767861`
+was pending, and downstream BGR/random non-identity perturb jobs were
+dependency-pending. The perturb gate was still `[INCOMPLETE]`.
+Latest poll at 2026-06-08 06:28:56 BST showed BGR blur `767863` completed at
+`0:0`, BGR brightness `767864` running, official occlusion `767860` running,
+and random identity `767868` still running. The partial perturb summary now has
+BGR identity `99/100`, BGR blur `98/100`, official identity `99/100`, official
+blur `97/100`, and official brightness `98/100`. Missing rows still include
+BGR brightness/occlusion/shift, official occlusion/shift, and all random
+non-identity perturbations, so the fixed perturb gate remains `[INCOMPLETE]`.
+No paper claim should change until the full `summary.csv` exists and the gate
+script returns a positive decision.
 
 Operational defaults:
 
