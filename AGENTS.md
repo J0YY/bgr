@@ -6,6 +6,10 @@ claims, or committing results.
 
 ## Quick Answer
 
+File status: this is the required project `AGENTS.md`. Keep it current whenever
+the goal, acceptance status, experiment route, Docker policy, or push policy
+changes.
+
 Current goal: iterate, queue experiments, and reframe the BGR paper until it is
 genuinely plausibly 90%+ likely to get into AAAI main track.
 
@@ -38,6 +42,9 @@ Operational defaults:
 - Incorporate new results into `paper/main.tex` only after artifacts and checks
   justify the claim; negative route closures may appear only as scoped
   limitations with checker coverage.
+- When the user asks "what is our goal?", answer plainly: get the BGR paper to
+  a genuinely high-confidence AAAI-main case by fixing the review weaknesses
+  with evidence, not by hiding negative results or rephrasing unchanged tables.
 
 ## Goal Snapshot
 
