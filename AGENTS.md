@@ -145,6 +145,22 @@ dependency-pending. The full perturb/adapt summaries were still missing, and
 the fixed OpenVLA perturb promotion gate remained `[INCOMPLETE]` with missing
 non-identity BGR/random rows and official occlusion/shift rows. This still
 cannot be incorporated into `paper/main.tex`.
+Latest poll at 2026-06-08 06:18:48 BST showed random clean eval `767856`
+completed; the synced adapt summary has BGR clean `99/100` and random clean
+`98/100`. The partial perturb summary still had only BGR identity `99/100`,
+official identity `99/100`, official blur `97/100`, and official brightness
+`98/100`. Official occlusion `767860`, BGR blur `767863`, and random identity
+`767868` were still running or not summarizable, with downstream BGR/random
+non-identity perturb jobs pending.
+Latest poll at 2026-06-08 06:22:39 BST still left the fixed perturb gate
+`[INCOMPLETE]`: BGR blur `767863` was running, random identity `767868` was
+running, official occlusion `767860` appeared pending with `BeginTime`, official
+shift `767861` was pending, and all BGR/random brightness/occlusion/shift plus
+random blur jobs were still dependency-pending. The helper regenerated the
+adapt summary and incomplete perturb `summary_available.csv`, but the full
+perturb summary was missing. Do not incorporate this route into the paper until
+`summary.csv` exists and `scripts/check_openvla_perturb_gate.py` passes the
+fixed +10/400 and +0.02 gate.
 
 Operational defaults:
 
