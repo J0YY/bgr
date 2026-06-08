@@ -89,6 +89,18 @@ Completed external-package pre-promotion route:
 - `results/bsuite_deepsea_recovery_probe_4seed_v1/package_versions.json`:
   compact package-version record for the same screen.
 
+Opened external-package pre-promotion route:
+
+- `results/bsuite_catch_recovery_probe_4seed_v1/summary.csv`: fixed bsuite
+  Catch 4-seed screen, preregistered before method outcomes on 2026-06-07.
+  Run with
+  `PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_catch_recovery_probe.py --out results/bsuite_catch_recovery_probe_4seed_v1`.
+  The route uses `bsuite==0.3.6` in an isolated temporary environment,
+  package-owned Catch dynamics, exact restart fields, and a fixed paddle-column
+  perturbation family. It is not paper evidence unless the candidate-promotion
+  checker accepts the result and a later fixed 30-seed screen clears the full
+  promotion gate.
+
 Packaged FrozenLake diagnostic:
 
 - `results/frozenlake_recovery_focused_30seed_v1/summary.csv` and
