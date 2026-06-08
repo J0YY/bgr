@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.31)  8 JUN 2026 02:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.31)  8 JUN 2026 05:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -229,19 +229,19 @@ e
 \c@aaai@corrfn=\count282
 \titlearea=\box54
 \actualheight=\skip55
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 3
-7.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 5
+9.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-Underfull \hbox (badness 2547) in paragraph at lines 38--39
+Underfull \hbox (badness 2547) in paragraph at lines 60--61
 []\T1/ptm/m/n/10 an ef-fi-cient BGR al-go-rithm that ac-tively es-ti-mates
  []
 
 
-Underfull \hbox (badness 1603) in paragraph at lines 48--49
-\T1/ptm/m/n/10 potential prox-ies (Jiang, Grefen-stette, and Rock-tschel
+Underfull \hbox (badness 1603) in paragraph at lines 70--71
+\T1/ptm/m/n/10 potential prox-ies (Jiang, Grefen-stette, and Rock-täschel
  []
 
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
@@ -249,21 +249,21 @@ Underfull \hbox (badness 1603) in paragraph at lines 48--49
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 50--51
+Underfull \hbox (badness 10000) in paragraph at lines 72--73
 []\T1/ptm/m/n/10 Prioritized ex-pe-ri-ence re-play ranks tran-si-tions by
  []
 
 
-Underfull \hbox (badness 1859) in paragraph at lines 50--51
+Underfull \hbox (badness 1859) in paragraph at lines 72--73
 \T1/ptm/m/n/10 dis-tinct from adversarial-example train-ing (Good-fel-low,
  []
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 56.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 78.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 56.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 78.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -272,46 +272,33 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 <figures/boundary_intuition.pdf, id=8, 520.34402pt x 147.4308pt>
 File: figures/boundary_intuition.pdf Graphic file (type pdf)
 <use figures/boundary_intuition.pdf>
-Package pdftex.def Info: figures/boundary_intuition.pdf  used on input line 95.
-
+Package pdftex.def Info: figures/boundary_intuition.pdf  used on input line 118
+.
 (pdftex.def)             Requested size: 239.39438pt x 67.83023pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [2 <./figures/boundary_intuition.pdf>] [3] (./figures/summary_table.tex)
-(./figures/significance_table.tex) (./figures/estimator_table.tex)
-Underfull \vbox (badness 1424) has occurred while \output is active []
-
-<figures/grid_margin_learning_curve.pdf, id=49, 462.52798pt x 169.8345pt>
+ [2] [3 <./figures/boundary_intuition.pdf>] (./figures/summary_table.tex)
+(./figures/significance_table.tex) (./figures/estimator_table.tex) [4]
+<figures/grid_margin_learning_curve.pdf, id=52, 462.52798pt x 169.8345pt>
 File: figures/grid_margin_learning_curve.pdf Graphic file (type pdf)
 <use figures/grid_margin_learning_curve.pdf>
 Package pdftex.def Info: figures/grid_margin_learning_curve.pdf  used on input
-line 210.
+line 235.
 (pdftex.def)             Requested size: 239.39438pt x 87.90239pt.
- [4]
-(./figures/grid_margin_full_table.tex)
-Underfull \vbox (badness 3780) has occurred while \output is active []
 
+Underfull \vbox (badness 3503) has occurred while \output is active []
 
-Underfull \vbox (badness 1226) has occurred while \output is active []
-
- [5 <./figures/grid_margin_learning_curve.pdf>] (./figures/grid_margin_ablation
-_table.tex)
-Underfull \hbox (badness 2173) in paragraph at lines 241--242
+ [5 <./figures/grid_margin_learning_curve.pdf>] (./figures/grid_margin_full_tab
+le.tex)
+(./figures/grid_margin_ablation_table.tex)
+Underfull \hbox (badness 2173) in paragraph at lines 270--271
 []\T1/ptm/m/n/10 A four-condition 30-seed suf-fix stress sweep varies
  []
 
 
-Underfull \hbox (badness 2726) in paragraph at lines 245--246
+Underfull \hbox (badness 2726) in paragraph at lines 274--275
 []\T1/ptm/m/n/10 The OpenVLA-OFT bridge ex-ports 11,776 teacher-
  []
 
-[6]
-Underfull \hbox (badness 1303) in paragraph at lines 281--282
-\T1/ptm/m/n/10 uni-form) but wins only 2/4 seeds and has lower me-
- []
-
-(./main.bbl) [7] (./ReproducibilityChecklist.tex
+[6] (./main.bbl) [7] (./ReproducibilityChecklist.tex
 \c@checksubsection=\count283
 \c@checkitem=\count284
 LaTeX Font Info:    Trying to load font information for T1+pcr on input line 51
@@ -321,21 +308,15 @@ LaTeX Font Info:    Trying to load font information for T1+pcr on input line 51
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 ) [8
 
-] [9]
-Underfull \hbox (badness 4726) in paragraph at lines 175--175
-[]\T1/ptm/m/n/10 This pa-per lists all fi-nal (hyper-)parameters used for each
-model/algorithm in the pa-per's ex-per-i-ments
- []
-
-) [10] (./main.aux) )
+]) [9] (./main.aux) )
 Here is how much of TeX's memory you used:
  4125 strings out of 480247
- 59710 string characters out of 5896151
- 370637 words of memory out of 5000000
+ 59708 string characters out of 5896151
+ 370635 words of memory out of 5000000
  21983 multiletter control sequences out of 15000+600000
  511370 words of font info for 77 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 55i,11n,62p,1716b,272s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,11n,62p,1716b,386s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc
 }</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr
 /share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share
@@ -355,10 +336,10 @@ dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/ut
 mr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (10 pages, 296496 bytes).
+Output written on main.pdf (9 pages, 297287 bytes).
 PDF statistics:
- 165 PDF objects out of 1000 (max. 8388607)
- 99 compressed objects within 1 object stream
+ 162 PDF objects out of 1000 (max. 8388607)
+ 97 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

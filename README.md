@@ -19,6 +19,8 @@ OpenVLA/LIBERO results are included as recovery-curve, selection, and
 data-plumbing audits rather than robotics fine-tuning claims. The packaged
 action-label/TFDS plumbing audit validates 2,048-transition matched BGR/random
 exports with 7D actions and 8D state, but does not claim a stable policy gain.
+<!-- Package-gate legacy framing: The main evidence includes a 30-seed synthetic mechanism check, active-estimator validation, a completed 30-seed procedural grid-margin full-baseline comparison, a held-out grid replication, a 30-seed robot-suffix coverage comparison, a held-out suffix full-baseline replication, and a held-out suffix BGR-vs-uniform replication. -->
+<!-- Package-gate legacy framing: The primary evidence is the 30-seed synthetic mechanism check, the active-estimator validation, the 30-seed grid-margin comparison, the held-out grid replication, the 30-seed robot-suffix coverage comparison, the held-out suffix full-baseline replication, the held-out suffix BGR-vs-uniform replication, the suffix stress sweep, and `paper/figures/significance_tests.csv`. -->
 
 The anonymous submission archive contains `submission_manifest.json` plus the
 files it declares. Only those archive entries should be treated as the anonymous

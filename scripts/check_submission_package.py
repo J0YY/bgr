@@ -444,6 +444,17 @@ OPENVLA_CLAIM_ARTIFACTS = [
     "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv",
     "results/openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv",
 ]
+OPENML_CLAIM_ARTIFACTS = [
+    "results/openml_margin_scout_v0/package_versions.json",
+    "results/openml_margin_scout_v0/per_seed.csv",
+    "results/openml_margin_scout_v0/summary.csv",
+    "results/openml_diabetes_margin_30seed_v1/package_versions.json",
+    "results/openml_diabetes_margin_30seed_v1/per_seed.csv",
+    "results/openml_diabetes_margin_30seed_v1/summary.csv",
+    "results/openml_diabetes_margin_replication_30seed_v1/package_versions.json",
+    "results/openml_diabetes_margin_replication_30seed_v1/per_seed.csv",
+    "results/openml_diabetes_margin_replication_30seed_v1/summary.csv",
+]
 CHECKED_CLAIM_ARTIFACTS = [
     "paper/figures/estimator_stats.csv",
     "paper/figures/grid_margin_learning_curve_stats.csv",
@@ -3580,6 +3591,7 @@ def data_artifact_text_files() -> list[str]:
     )
     files.extend(PAPER_FIGURE_ARTIFACTS)
     files.extend(OPENVLA_CLAIM_ARTIFACTS)
+    files.extend(OPENML_CLAIM_ARTIFACTS)
     files.extend(AGGREGATE_SOURCE_ARTIFACTS)
     files.extend(SIGNIFICANCE_SOURCE_ARTIFACTS)
     files.extend(SCOPE_DIAGNOSTIC_ARTIFACTS)

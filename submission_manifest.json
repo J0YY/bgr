@@ -7,8 +7,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "de9217331b2ded22bc46de2ef2a76533e73834c4dfec19a24173a0b3fbefb419",
-      "size_bytes": 32392
+      "sha256": "bf6a504f9cb9da6bc1a0038ef01c3e4a69476724b90c91b1793719d075eb3193",
+      "size_bytes": 33784
     },
     {
       "path": "configs/estimator_bgr_full.yaml",
@@ -202,8 +202,8 @@
     },
     {
       "path": "paper/README.md",
-      "sha256": "152066f09364302ef5ab66d0b476e1436bf1689ea4004e034aaf5de4b9c6f4ec",
-      "size_bytes": 7305
+      "sha256": "a390b4ce827d4ed25306087a901c45a1d2c9ba2c1f51e3c844adbcb7af0d214e",
+      "size_bytes": 7853
     },
     {
       "path": "paper/ReproducibilityChecklist.log",
@@ -417,18 +417,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "0c3fdd792cadb6382ebfb64b58521c863346f8741ebe691533a931edb9ce6dcd",
-      "size_bytes": 13992
+      "sha256": "16638d0751c596287eba736829a0a18c980f882fbb48c8a639a9d19e09bca5d8",
+      "size_bytes": 13442
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "7894591bc451e096d6aac430ed7c00e36b8ed3331e48961c320a58bfd53ceb51",
-      "size_bytes": 296162
+      "sha256": "5ae0a11e37eae27b7669aa05978fb5c001cefe1ade14a1af3ec64d1829059d97",
+      "size_bytes": 296661
     },
     {
       "path": "paper/main.tex",
-      "sha256": "de9deb14d53b505429f73a98a297bee12945bce062d21ec5a4c06d4415c59b50",
-      "size_bytes": 38167
+      "sha256": "4caed637cd06797bba7bd6a10e8e7c89bfc8f70c140b70e07914a0f6211a0dc4",
+      "size_bytes": 40401
     },
     {
       "path": "paper/references.bib",
@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "192cd47ffb23eeb38512b4117df598f32258bcb96ee3b28d3caff10f1f58bca9",
-      "size_bytes": 305433
+      "sha256": "e1085e5b4abd74e7a2ba0c1ce2404fcd42e0b922847c544dbf5770c2a2e6b1ca",
+      "size_bytes": 306553
     },
     {
       "path": "results/bsuite_cartpole_recovery_probe_4seed_v1/package_versions.json",
@@ -896,6 +896,51 @@
       "size_bytes": 2575
     },
     {
+      "path": "results/openml_diabetes_margin_30seed_v1/package_versions.json",
+      "sha256": "8f05aea04980a11189b166918dc8b94199fb0b5069df73fa56930b36874958ac",
+      "size_bytes": 162
+    },
+    {
+      "path": "results/openml_diabetes_margin_30seed_v1/per_seed.csv",
+      "sha256": "0af28a3d3bd6421e13b39070cc3dc9521c42f780490693e972ef4afbdd9c8326",
+      "size_bytes": 3166
+    },
+    {
+      "path": "results/openml_diabetes_margin_30seed_v1/summary.csv",
+      "sha256": "f8fefa2d6067bf87a3783404b8e2323e410e0936b82274f8930e8c31356ca90c",
+      "size_bytes": 317
+    },
+    {
+      "path": "results/openml_diabetes_margin_replication_30seed_v1/package_versions.json",
+      "sha256": "8f05aea04980a11189b166918dc8b94199fb0b5069df73fa56930b36874958ac",
+      "size_bytes": 162
+    },
+    {
+      "path": "results/openml_diabetes_margin_replication_30seed_v1/per_seed.csv",
+      "sha256": "7c38d90b697929a199527e1f78b0eb5b585437de714af33e91d19fb409db4ced",
+      "size_bytes": 3196
+    },
+    {
+      "path": "results/openml_diabetes_margin_replication_30seed_v1/summary.csv",
+      "sha256": "6dda6cf20bfc055c173c8a5ac1168b7f4d1a9209d9c8f9339cbabc3d88adb4c1",
+      "size_bytes": 318
+    },
+    {
+      "path": "results/openml_margin_scout_v0/package_versions.json",
+      "sha256": "d2f26bd00b192af6460c27870f3a8b96ec767fcefa6750f75e63fc12995e4171",
+      "size_bytes": 370
+    },
+    {
+      "path": "results/openml_margin_scout_v0/per_seed.csv",
+      "sha256": "b28835e7ee6fc1de6d2321fd007337acb1a0423d5984053687f85fdb1c00afcd",
+      "size_bytes": 6526
+    },
+    {
+      "path": "results/openml_margin_scout_v0/summary.csv",
+      "sha256": "d314e87c751c9f1c3b63ca7a7a52a6e17005c2a7ae52775f809d03284229405f",
+      "size_bytes": 3119
+    },
+    {
       "path": "results/openvla_action_tfds_validation_v1/summary.json",
       "sha256": "45524181847ef18965b2f60993baef943fcb2b0158368b1bb4d460b8cdded7f2",
       "size_bytes": 1626
@@ -1077,8 +1122,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "ecf827251106c5296e989154b3c332226fc5177a137825723163f4158a6c29d8",
-      "size_bytes": 48196
+      "sha256": "55a21fbde2fda8fac91e01710b18b1ae292b0109f6e79c172cf359503ca34e3b",
+      "size_bytes": 50206
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -1092,8 +1137,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "713cd63bf9eb0683a9c0ba9f740b291155fae97b1fb542629c1d0ba35adc7d95",
-      "size_bytes": 50161
+      "sha256": "73cbdd908cbf6e597e9977c11ed7e457b275b2bf15a3496016a1827f11ed99b1",
+      "size_bytes": 52898
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -1102,13 +1147,13 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "04ebda46f2a65ad05560dd0b0d079927d63fd783c3eedfefb4cf34e8872d14cd",
-      "size_bytes": 108645
+      "sha256": "20241c2b86f9cda96e8935ca3b493ad6a6b44ad88c55110d93b959bbfd9adb11",
+      "size_bytes": 113486
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "510918501a805a9a02933085d1b0f98e7eb5180e144f48b26255ab6e5807aabe",
-      "size_bytes": 244180
+      "sha256": "dd786f5e0e05e141a18af47b5fcd73b8933c3b463d659b072d63adec783ed080",
+      "size_bytes": 244829
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1412,8 +1457,8 @@
     },
     {
       "path": "tests/test_acceptance_scorecard.py",
-      "sha256": "4c3fafce66068b0583e9b5f3292fb36211f943e62cddb4ede1e8d44be3c4bfb0",
-      "size_bytes": 33541
+      "sha256": "2752a79bd15f98dfc2f4059def2f82448fd8373337d57684cccb086ff61105bc",
+      "size_bytes": 36080
     },
     {
       "path": "tests/test_aggregate_results.py",
@@ -1432,8 +1477,8 @@
     },
     {
       "path": "tests/test_check_acceptance_readiness.py",
-      "sha256": "a4a37d35c4de77cf8b1e6da06367b2d7a8d0f99f47dfaa76b4838324b8b6c139",
-      "size_bytes": 15834
+      "sha256": "85d1439b409cc6c577b7c1d8c5776c6934e22686be2ac855c94940ee77313e81",
+      "size_bytes": 17359
     },
     {
       "path": "tests/test_check_candidate_promotion.py",
