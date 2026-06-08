@@ -82,6 +82,11 @@ official identity `767857` running on `c1-g4-04`, BGR/random adaptation jobs
 pending on `afterok:767850` (with random also serialized behind BGR train),
 BGR perturb jobs pending on `afterok:767852`, random perturb jobs pending on
 `afterok:767855`, and both expected compact summaries still missing.
+Latest poll at 2026-06-08 05:42:04 BST showed the same substantive state:
+prep `767850` and official identity `767857` still running, all adaptation and
+BGR/random perturb jobs still dependency-pending, and the compact summaries
+still missing. The sync helper now treats existing-but-incomplete remote logs
+as `[pending]` instead of failing the whole poll/sync command.
 
 Operational defaults:
 

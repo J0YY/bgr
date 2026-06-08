@@ -125,10 +125,13 @@ sync_adapt_summary() {
     rsync -az "${REMOTE_HOST}:${REMOTE_ADAPT_LOGS}/random/" "${tmp_logs}/random/"
     local tmp_out
     tmp_out="$(mktemp -d "${TMPDIR:-/tmp}/perturbonly-adapt-summary.XXXXXX")"
-    PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_eval.py \
-      --method-log-dir "bgr=${tmp_logs}/bgr" \
-      --method-log-dir "random=${tmp_logs}/random" \
-      --out "${tmp_out}"
+    if ! PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_eval.py \
+        --method-log-dir "bgr=${tmp_logs}/bgr" \
+        --method-log-dir "random=${tmp_logs}/random" \
+        --out "${tmp_out}"; then
+      echo "[pending] ${REMOTE_ADAPT_LOGS} exists but is not summarizable yet"
+      return
+    fi
     python3 - "${tmp_out}/summary.csv" "${LOCAL_ADAPT_SUMMARY}" <<'PY'
 import csv
 import sys
@@ -161,9 +164,12 @@ sync_perturb_summary() {
       rsync -az "${REMOTE_HOST}:${REMOTE_PERTURB_LOGS}/" "${tmp_logs}/"
       local tmp_out
       tmp_out="$(mktemp -d "${TMPDIR:-/tmp}/perturbonly-perturb-summary.XXXXXX")"
-      PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_perturb_eval.py \
-        --logs-root "${tmp_logs}" \
-        --out "${tmp_out}"
+      if ! PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_perturb_eval.py \
+          --logs-root "${tmp_logs}" \
+          --out "${tmp_out}"; then
+        echo "[pending] ${REMOTE_PERTURB_LOGS} exists but is not summarizable yet"
+        return
+      fi
       local tmp_path="${tmp_out}/summary_stripped.csv"
       python3 - "${tmp_out}/summary.csv" "${tmp_path}" <<'PY'
 import csv
