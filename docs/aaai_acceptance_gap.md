@@ -67,6 +67,10 @@ uniform 0.6846 (+0.0749, W/L/T=25/5/0) and fixed-radius 0.7133. Phoneme also
 clears after held-out replication: original BGR 0.7228 versus uniform 0.6896
 and fixed-radius 0.6704, held-out BGR 0.7124 versus uniform 0.6758 (+0.0366,
 W/L/T=21/9/0) and fixed-radius 0.6792 (+0.0332, W/L/T=25/5/0).
+A 30-seed target-radius sensitivity check over the three positive OpenML
+datasets is now recorded as a fragility caveat rather than a new headline:
+BGR-minus-uniform gaps for diabetes/blood/phoneme are +0.005/-0.002/-0.017 at
+radius 1.0, +0.035/+0.066/+0.017 at 1.5, and +0.037/+0.097/+0.033 at 2.0.
 The newest standard-environment sequence sharpened the negative record:
 LunarLander is a 4-seed near miss rejected by paired signs and lower median r80,
 bsuite DeepSea trails the state-priority/uniform-radius ablation and has lower

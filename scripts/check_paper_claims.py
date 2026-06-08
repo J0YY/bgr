@@ -55,6 +55,14 @@ def one_row(rows: list[dict[str, str]], column: str, value: str) -> dict[str, st
     return matches[0]
 
 
+def matching_row(rows: list[dict[str, str]], **criteria: str) -> dict[str, str]:
+    matches = [row for row in rows if all(row.get(column) == value for column, value in criteria.items())]
+    if len(matches) != 1:
+        rendered = ", ".join(f"{column}={value!r}" for column, value in criteria.items())
+        raise ValueError(f"Expected one row matching {rendered}, found {len(matches)}")
+    return matches[0]
+
+
 def fmt(value: float, digits: int) -> str:
     return f"{value:.{digits}f}"
 
@@ -523,6 +531,46 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
                 "results/openml_numeric_external_fixed_target2*_30seed_v1/per_seed.csv",
             ),
         ]
+    )
+    openml_target_sensitivity = read_csv_rows(results_dir / "openml_positive_target_sensitivity_30seed_v1" / "summary.csv")
+    target_datasets = ("diabetes", "blood-transfusion-service-center", "phoneme")
+    target_gaps: dict[str, list[float]] = {}
+    for target in ("1.0000", "1.5000", "2.0000"):
+        target_gaps[target] = [
+            float(
+                matching_row(
+                    openml_target_sensitivity,
+                    dataset=dataset,
+                    target_radius=target,
+                    method="bgr",
+                )["delta_vs_uniform"]
+            )
+            for dataset in target_datasets
+        ]
+    if not (
+        target_gaps["1.0000"][0] < 0.01
+        and target_gaps["1.0000"][1] < 0.0
+        and target_gaps["1.0000"][2] < 0.0
+        and target_gaps["1.5000"][0] > 0.03
+        and target_gaps["1.5000"][1] > 0.03
+        and target_gaps["1.5000"][2] < 0.03
+        and all(delta > 0.03 for delta in target_gaps["2.0000"])
+    ):
+        raise ValueError("Expected OpenML target sensitivity to show radius-dependent positive evidence")
+    claims.append(
+        Claim(
+            "OpenML positive-dataset target sensitivity caveat",
+            (
+                "BGR--uniform gaps for diabetes/blood/phoneme are "
+                f"{fmt_signed(target_gaps['1.0000'][0], 3)}/{fmt_signed(target_gaps['1.0000'][1], 3)}/"
+                f"{fmt_signed(target_gaps['1.0000'][2], 3)} at radius 1.0, "
+                f"{fmt_signed(target_gaps['1.5000'][0], 3)}/{fmt_signed(target_gaps['1.5000'][1], 3)}/"
+                f"{fmt_signed(target_gaps['1.5000'][2], 3)} at 1.5, and "
+                f"{fmt_signed(target_gaps['2.0000'][0], 3)}/{fmt_signed(target_gaps['2.0000'][1], 3)}/"
+                f"{fmt_signed(target_gaps['2.0000'][2], 3)} at 2.0"
+            ),
+            "results/openml_positive_target_sensitivity_30seed_v1/summary.csv",
+        )
     )
     witness = read_csv_rows(results_dir / "grid_margin_witness_sensitivity_30seed_v1" / "summary.csv")
     witness_exact = one_row(witness, "scenario", "exact")

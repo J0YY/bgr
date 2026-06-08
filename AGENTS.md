@@ -45,7 +45,11 @@ fixed-radius 0.7133. The full external numeric OpenML suite also has a
 held-out seeds 30--59 repeat at the same target radius: original/held-out macro
 means are BGR 0.8055/0.8068, uniform 0.7939/0.7943, and fixed-radius
 0.7864/0.7839; pooled across both suite runs, BGR is ahead on 6/8 dataset means
-versus uniform and 7/8 versus fixed-radius. Pooled across 60
+versus uniform and 7/8 versus fixed-radius. A 30-seed target-radius sensitivity
+check over the three positive OpenML datasets is now a fragility caveat:
+BGR-minus-uniform gaps for diabetes/blood/phoneme are +0.005/-0.002/-0.017 at
+radius 1.0, +0.035/+0.066/+0.017 at 1.5, and +0.037/+0.097/+0.033 at 2.0.
+Pooled across 60
 blood-transfusion seeds, BGR is 0.7610 vs. uniform 0.6751 (+0.0858,
 W/L/T=55/5/0) and vs. fixed-radius 0.7026 (+0.0584, W/L/T=52/6/2). A held-out
 phoneme replication has also completed:
@@ -136,11 +140,12 @@ with about 96% success so far. Only the partial official/identity
 `summary_available.csv` exists locally; full perturb and adapt summaries are
 still missing, so the route remains incomplete.
 
-Latest paper checkpoint: OpenML diabetes, blood-transfusion, phoneme, and the
-mixed full external OpenML suite repeat are now incorporated as replicated
-pre-existing supervised margin-replay evidence. This improves the "no new
-positive evidence" and cherry-picking weaknesses but does not change readiness
-because the learned-policy gate still fails.
+Latest paper checkpoint: OpenML diabetes, blood-transfusion, phoneme, the mixed
+full external OpenML suite repeat, and the OpenML positive-dataset target
+sensitivity caveat are now incorporated as replicated pre-existing supervised
+margin-replay evidence plus scope/fragility evidence. This improves the "no new
+positive evidence", cherry-picking, and target-fragility weaknesses but does not
+change readiness because the learned-policy gate still fails.
 Latest poll at 2026-06-08 06:13:20 BST showed the occlusion route past data
 prep and training: prep `767850`, BGR train/merge `767851`/`767852`, and random
 train/merge `767854`/`767855` completed with exit `0:0`. BGR clean eval
@@ -445,6 +450,12 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   the original fixed external suite row gave BGR 0.7228 vs. uniform 0.6896 and
   vs. fixed-radius 0.6704. This is incorporated only with careful framing as
   pre-existing supervised margin-replay evidence, not robotics evidence.
+  A 30-seed target-radius sensitivity run over the three positive OpenML
+  datasets has also completed:
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes,blood-transfusion-service-center,phoneme --targets 1.0,1.5,2.0 --seeds 30 --out results/openml_positive_target_sensitivity_30seed_v1`.
+  Treat it as a fragility caveat, not a new headline: BGR-minus-uniform gaps for
+  diabetes/blood/phoneme are +0.005/-0.002/-0.017 at radius 1.0,
+  +0.035/+0.066/+0.017 at 1.5, and +0.037/+0.097/+0.033 at 2.0.
 - The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation/perturb-only recipe family; the preregistered weighted, proximal-anchor, and perturb-only anchored audits all failed the learned-policy promotion gate.
 - The grid-margin witness-sensitivity diagnostic is completed and paper-facing
   only as scope evidence for the feasibility-witness assumption. The fixed
