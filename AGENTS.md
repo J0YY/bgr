@@ -120,7 +120,7 @@ Operational defaults:
 
 ## Goal Snapshot
 
-Last verified: 2026-06-07.
+Last verified: 2026-06-08.
 
 Persistent thread goal: iterate, queue experiments, and reframe the paper until
 it is plausibly 90%+ likely to get into AAAI.
