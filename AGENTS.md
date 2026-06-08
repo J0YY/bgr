@@ -93,6 +93,13 @@ adaptation jobs and BGR/random perturb jobs were still dependency-pending.
 Both compact summary paths were missing, the perturb log directory existed but
 was not summarizable yet, and the readiness decision remained
 `NOT_READY_FOR_90P_AAAI_CLAIM`.
+Latest poll at 2026-06-08 05:47:09 BST still showed prep `767850` running on
+`c1-g4-02` and official identity `767857` running on `c1-g4-04`; all
+adaptation and BGR/random perturb jobs were still dependency-pending. Remote
+log tails were healthy: prep had advanced to matched-random perturb rendering,
+and official identity eval had reached at least 64/100 episodes with 63
+successes. No compact summaries were available, so no paper claim should be
+changed.
 
 Operational defaults:
 
