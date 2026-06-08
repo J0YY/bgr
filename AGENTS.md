@@ -15,7 +15,10 @@ main positive evidence, while independent/pre-existing benchmarks and
 OpenVLA/LIBERO learned-policy evidence remain failing or non-promotable. The
 latest bsuite Catch 30-seed scale-up, MiniGrid FourRooms radius-10 rescue,
 HandReach-v3 calibration, and highway-fast-v0 lane calibration are also
-negative, so they do not solve the independent-benchmark evidence gap.
+negative, so they do not solve the independent-benchmark evidence gap. The
+new grid-margin witness-sensitivity diagnostic improves scope support for the
+feasibility-witness assumption but is controlled mechanism evidence, not an
+independent-benchmark win.
 
 Immediate priority: fix the weaknesses called out by the review, especially the
 lack of new independent positive evidence, the negative standard-environment
@@ -59,7 +62,10 @@ Current acceptance answer: not ready. The internal readiness check still reports
 independent/pre-existing benchmark gate and OpenVLA/LIBERO learned-policy gate
 are failing. The latest FourRooms radius-10, HandReach-v3, and
 highway-fast-v0 follow-ups close simple rescue paths, but they are negative
-limitations, not acceptance-moving evidence.
+limitations, not acceptance-moving evidence. A 30-seed grid-margin witness
+sensitivity diagnostic now quantifies one reviewer-facing interface assumption:
+exact-witness accepted samples are valid at 1.0000, while symmetric 10%/20%
+witness noise lowers true-boundary recall to 0.9001/0.7980.
 
 Acceptance reality: the project is not there yet. The current evidence supports
 a careful mechanism study, not a high-confidence AAAI main-track claim. Make
@@ -134,6 +140,15 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   0.0064 above BGR-uniform-radius, with median r80 still saturated at 1.0000
   for both BGR-Coverage and uniform. Do not scale or promote this protocol.
 - The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation/perturb-only recipe family; the preregistered weighted, proximal-anchor, and perturb-only anchored audits all failed the learned-policy promotion gate.
+- The grid-margin witness-sensitivity diagnostic is completed and paper-facing
+  only as scope evidence for the feasibility-witness assumption. The fixed
+  command is:
+  `PYTHONPATH=src:. python3 tools/grid_margin_witness_sensitivity.py --config configs/grid_margin_full_30seed.yaml --out results/grid_margin_witness_sensitivity_30seed_v1`.
+  `results/grid_margin_witness_sensitivity_30seed_v1/summary.csv` reports
+  exact valid accepted samples at 1.0000; symmetric 10%/20% witness noise keeps
+  valid-accept rates at 1.0000/0.9999 but lowers true-boundary recall to
+  0.9001/0.7980. Treat this as controlled witness-scope support, not a broad
+  robustness or independent-benchmark result.
 - The latest completed independent route is Gymnasium Box2D `LunarLander-v3`
   in `/tmp/bgr_lunar_venv` with
   `gymnasium==1.3.0`, `box2d==2.3.10`, `pygame-ce==2.5.7`, `swig==4.4.1`,

@@ -1914,6 +1914,7 @@ class CheckSubmissionPackageTest(unittest.TestCase):
                     "- `paper/figures/grid_margin_learning_rate_sensitivity_stats.csv` and `results/grid_margin_learning_rate_sensitivity_30seed_v1/summary.csv`: 30-seed learning-rate table/source; `results/grid_margin_learning_rate_sensitivity_15seed_v1/summary.csv` is retained for provenance.",
                     "- `paper/figures/grid_margin_regime_sensitivity_stats.csv` and `results/grid_margin_regime_sensitivity_30seed_v1/summary.csv`: 30-seed regime table/source; `results/grid_margin_regime_sensitivity_15seed_v1/summary.csv` is retained for provenance.",
                     "- `paper/figures/grid_margin_stress_sensitivity_stats.csv` and `results/grid_margin_stress_sensitivity_30seed_v1/summary.csv`: 30-seed geometry-stress table/source; `results/grid_margin_stress_sensitivity_15seed_v1/summary.csv` is retained for provenance.",
+                    "- `results/grid_margin_witness_sensitivity_30seed_v1/summary.csv`: 30-seed witness sensitivity diagnostic.",
                     "- `paper/figures/suffix_stress_sensitivity_stats.csv` and `results/suffix_stress_sensitivity_30seed_v1/summary.csv`: 30-seed suffix stress table/source; `results/suffix_stress_sensitivity_15seed_v1/summary.csv` is retained for provenance.",
                     "",
                     "Secondary diagnostics are included to scope the claim rather than expand it.",

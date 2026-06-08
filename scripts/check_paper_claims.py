@@ -208,6 +208,35 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             ),
         ]
     )
+    witness = read_csv_rows(results_dir / "grid_margin_witness_sensitivity_30seed_v1" / "summary.csv")
+    witness_exact = one_row(witness, "scenario", "exact")
+    witness_sym10 = one_row(witness, "scenario", "symmetric_10")
+    witness_sym20 = one_row(witness, "scenario", "symmetric_20")
+    exact_valid = float(witness_exact["true_valid_accept_rate_mean"])
+    sym10_valid = float(witness_sym10["true_valid_accept_rate_mean"])
+    sym20_valid = float(witness_sym20["true_valid_accept_rate_mean"])
+    sym10_recall = float(witness_sym10["true_boundary_recall_mean"])
+    sym20_recall = float(witness_sym20["true_boundary_recall_mean"])
+    if not (
+        int(witness_exact["seeds"]) == 30
+        and exact_valid == 1.0
+        and sym10_recall < 0.95
+        and sym20_recall < sym10_recall
+        and sym20_valid > 0.99
+    ):
+        raise ValueError("Expected grid-margin witness diagnostic to show false-negative recall degradation")
+    claims.append(
+        Claim(
+            "grid witness sensitivity diagnostic",
+            (
+                f"30-seed grid-margin witness diagnostic keeps exact-witness valid accepted samples at "
+                f"{fmt(exact_valid, 4)}; symmetric 10\\%/20\\% witness noise preserves valid-accept rates at "
+                f"{fmt(sym10_valid, 4)}/{fmt(sym20_valid, 4)} but lowers true-boundary recall to "
+                f"{fmt(sym10_recall, 4)}/{fmt(sym20_recall, 4)}"
+            ),
+            "results/grid_margin_witness_sensitivity_30seed_v1/summary.csv",
+        )
+    )
     grid_replication = read_csv_rows(results_dir / "grid_margin_full_replication_30seed_v1" / "summary.csv")
     grid_replication_seeds = {
         int(float(row["seed"]))

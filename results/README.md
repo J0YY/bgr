@@ -67,6 +67,11 @@ Packaged grid-margin robustness/scope diagnostics are:
   `results/grid_margin_stress_sensitivity_30seed_v1/summary.csv`: 30-seed
   geometry-stress table/source; `results/grid_margin_stress_sensitivity_15seed_v1/summary.csv`
   is retained for provenance.
+- `results/grid_margin_witness_sensitivity_30seed_v1/summary.csv`: 30-seed
+  witness sensitivity diagnostic for the grid-margin boundary sampler. Exact
+  witness acceptance has valid accepted samples at 1.0000; symmetric 10% and
+  20% witness noise mainly reduces true-boundary recall rather than admitting
+  invalid samples under this controlled boundary-candidate stream.
 
 Secondary diagnostics are included to scope the claim rather than expand it.
 OpenVLA/LIBERO rows are recovery-curve, selection, and data-plumbing audits; the

@@ -7,8 +7,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "d60e5ec6aa65e2394a960642416a887276001bc5e137740dfab7418b54b4d9fc",
-      "size_bytes": 31897
+      "sha256": "de9217331b2ded22bc46de2ef2a76533e73834c4dfec19a24173a0b3fbefb419",
+      "size_bytes": 32392
     },
     {
       "path": "configs/estimator_bgr_full.yaml",
@@ -422,13 +422,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "117391fb8a5102c2dfb13f68bf7267e41d52ea2af73d6e5eed588c5b2d372e2b",
-      "size_bytes": 296652
+      "sha256": "9b7c7789087ffc49a23299d4e275dbed3787036ef1ae07d3b5fbf534fff51146",
+      "size_bytes": 296817
     },
     {
       "path": "paper/main.tex",
-      "sha256": "93077bf86d700bde51d87261199efa04f23198ae81534d03f6c7bad3b49e2a40",
-      "size_bytes": 38328
+      "sha256": "16be2169c188be534b6296b347560c684fdeb2b4b733ff699038fe1089746116",
+      "size_bytes": 38553
     },
     {
       "path": "paper/references.bib",
@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "63850d1aedf8d9338b378b8a7785c45b5170d33c264da167913db8fd631eb055",
-      "size_bytes": 300385
+      "sha256": "23198ba39afa80f683323f99ea8f1cb2ac636d35f04d78337b08ab321644c374",
+      "size_bytes": 300759
     },
     {
       "path": "results/bsuite_cartpole_recovery_probe_4seed_v1/package_versions.json",
@@ -634,6 +634,21 @@
       "path": "results/grid_margin_target_sensitivity_30seed_v1/summary.csv",
       "sha256": "e5cdfab55fc0ddcc428615b09634801b2cd86f32bdcc139ba439048423c0afa0",
       "size_bytes": 16296
+    },
+    {
+      "path": "results/grid_margin_witness_sensitivity_30seed_v1/config.json",
+      "sha256": "9ac3f215463e7521cc37ddb8e865934e2b6574193e81c099fd7995a610d7c3d8",
+      "size_bytes": 1113
+    },
+    {
+      "path": "results/grid_margin_witness_sensitivity_30seed_v1/sample_rows.csv",
+      "sha256": "889cb1f971ef6bfded2322002845c81207684f93ae59059fc7753fe57a34f599",
+      "size_bytes": 25374
+    },
+    {
+      "path": "results/grid_margin_witness_sensitivity_30seed_v1/summary.csv",
+      "sha256": "b3d96812278f7ba2cedc1242b5995b2cde7b9696bbc5f293e702b3a9dde533de",
+      "size_bytes": 843
     },
     {
       "path": "results/handreach_recovery_calibration_8seed_v1/package_versions.json",
@@ -1017,13 +1032,13 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "2b0d803173b49cd482c22f8afc588f0f7c40a875e2b692ac2ec2d118cd91f72f",
-      "size_bytes": 104687
+      "sha256": "b45cea1b69c0f3aae8caaa398d9091873e3bc61a819754eb73341644f2d863a7",
+      "size_bytes": 106219
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "ab8bed6eae57cf32843d0dfd46827931467f5190a136453575095ce0d73620d7",
-      "size_bytes": 242331
+      "sha256": "56a1afed0fc6bd62a22cb9bd8e237c93d1b673fabb2bb63360cad8c1699de160",
+      "size_bytes": 242765
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1367,8 +1382,8 @@
     },
     {
       "path": "tests/test_check_submission_package.py",
-      "sha256": "79b20560a61ba0728a814567f06ef599eee9c6deee33409500399f8f31b32a30",
-      "size_bytes": 335082
+      "sha256": "3d59c33f86e0e3aa9fdc257fbfe9170ed697efff60c86a15c0095ed25c48c9ca",
+      "size_bytes": 335212
     },
     {
       "path": "tests/test_combine_openvla_oft_examples.py",
@@ -1439,6 +1454,11 @@
       "path": "tests/test_grid_margin_trial_merge.py",
       "sha256": "4160a23d92276dc1e9f9ace59c14d205e4eba90445020fb7dfd916d4fbdc33cd",
       "size_bytes": 3228
+    },
+    {
+      "path": "tests/test_grid_margin_witness_sensitivity.py",
+      "sha256": "212ac448f477e9a0474a118fba8f40400036b24656ff1f15c5a99a270128b2a2",
+      "size_bytes": 2024
     },
     {
       "path": "tests/test_grid_policy_mixed.py",
@@ -1604,6 +1624,11 @@
       "path": "tools/fetch_object_goal_recovery_calibration.py",
       "sha256": "016f80c986049431d3778d4560ee6dbd3b593de1528f601e2117bb2541b45294",
       "size_bytes": 13253
+    },
+    {
+      "path": "tools/grid_margin_witness_sensitivity.py",
+      "sha256": "fde5964c5fe2eb472ca444f5208cfd4df5a41a83dd54a128be74a47348b6a8d2",
+      "size_bytes": 11631
     },
     {
       "path": "tools/handreach_recovery_calibration.py",

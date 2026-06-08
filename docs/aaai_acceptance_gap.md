@@ -47,6 +47,10 @@ make the evidence contract unavoidable:
   large effect;
 - describe synthetic and suffix results as modest scoped support, not broad
   robustness evidence;
+- use the new 30-seed grid-margin witness diagnostic only to scope the
+  feasibility-witness assumption: exact acceptance has valid accepted samples at
+  1.0000, while symmetric 10%/20% witness noise lowers true-boundary recall to
+  0.9001/0.7980 without creating a broad robustness guarantee;
 - keep standard-environment diagnostics in the limitations unless they satisfy
   the promotion criteria below;
 - keep OpenVLA/LIBERO framed as an audit until BGR beats both matched random and
