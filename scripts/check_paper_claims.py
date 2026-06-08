@@ -658,6 +658,46 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    minigrid_maxr10 = read_csv_rows(results_dir / "minigrid_fourrooms_recovery_probe_maxr10_4seed_v1" / "summary.csv")
+    maxr10_coverage_rauc = mean_metric(minigrid_maxr10, "bgr_coverage", "final_rauc")
+    maxr10_uniform_rauc = mean_metric(minigrid_maxr10, "uniform", "final_rauc")
+    maxr10_coverage_r80 = mean_metric(minigrid_maxr10, "bgr_coverage", "final_median_r80")
+    maxr10_uniform_r80 = mean_metric(minigrid_maxr10, "uniform", "final_median_r80")
+    maxr10_wins = paired_wins(minigrid_maxr10, "bgr_coverage", "uniform", "final_rauc")
+    if not (
+        maxr10_coverage_rauc > maxr10_uniform_rauc
+        and maxr10_coverage_rauc - maxr10_uniform_rauc < 0.01
+        and maxr10_wins == (2, 2, 0)
+        and maxr10_coverage_r80 == 1.0
+        and maxr10_uniform_r80 == 1.0
+    ):
+        raise ValueError("Expected MiniGrid max-radius-10 diagnostic to remain saturated and non-promotable")
+    claims.append(
+        Claim(
+            "MiniGrid max-radius-10 limitation",
+            (
+                f"widening FourRooms perturbations to Manhattan radius 10 leaves BGR-Coverage at "
+                f"{fmt(maxr10_coverage_rauc, 4)} vs. {fmt(maxr10_uniform_rauc, 4)} uniform "
+                f"(W/L/T={maxr10_wins[0]}/{maxr10_wins[1]}/{maxr10_wins[2]}) with saturated $r_{{80}}="
+                f"{fmt(maxr10_coverage_r80, 4)}$"
+            ),
+            "results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1/summary.csv",
+        )
+    )
+
+    handreach = read_json(results_dir / "handreach_recovery_calibration_8seed_v1" / "summary.json")
+    handreach_clean = float(handreach["clean_success"])
+    handreach_decision = str(handreach["decision"])
+    if handreach_clean != 0.0 or handreach_decision != "reject-calibration-low-clean-success":
+        raise ValueError("Expected HandReach calibration to remain rejected for low clean success")
+    claims.append(
+        Claim(
+            "HandReach-v3 calibration limitation",
+            f"HandReach-v3 random-shooting calibration fails clean success ({fmt(handreach_clean, 4)}) before method comparison",
+            "results/handreach_recovery_calibration_8seed_v1/summary.json",
+        )
+    )
+
     doorkey = read_csv_rows(results_dir / "minigrid_doorkey_recovery_probe_4seed_v1" / "summary.csv")
     doorkey_failure_rauc = mean_metric(doorkey, "failure_only", "final_rauc")
     doorkey_uniform_rauc = mean_metric(doorkey, "uniform", "final_rauc")

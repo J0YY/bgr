@@ -13,7 +13,8 @@ Current status: not there yet. The readiness gate still says
 `NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid mechanism result is the
 main positive evidence, while independent/pre-existing benchmarks and
 OpenVLA/LIBERO learned-policy evidence remain failing or non-promotable. The
-latest bsuite Catch 30-seed scale-up is also negative, so it does not solve the
+latest bsuite Catch 30-seed scale-up, MiniGrid FourRooms radius-10 rescue, and
+HandReach-v3 calibration route are also negative, so they do not solve the
 independent-benchmark evidence gap.
 
 Immediate priority: fix the weaknesses called out by the review, especially the
@@ -25,11 +26,15 @@ Operational defaults:
 
 - Keep committing and pushing clean checkpoints to `origin/main`.
 - Do not use Docker for this project.
+- Why no Docker: the submission/package gate forbids Docker artifacts, and the
+  established workflows use local temporary virtualenvs plus `athena` Slurm for
+  heavyweight LaTeX/OpenVLA/LIBERO work.
 - Use local or temporary virtualenvs for external packages and `athena` for
   remote LaTeX/OpenVLA/LIBERO workflows.
 - Stage explicit paths only; many `results/` files are intentionally untracked.
 - Incorporate new results into `paper/main.tex` only after artifacts and checks
-  justify the claim.
+  justify the claim; negative route closures may appear only as scoped
+  limitations with checker coverage.
 
 ## Goal Snapshot
 
@@ -52,7 +57,9 @@ change reviewer risk.
 Current acceptance answer: not ready. The internal readiness check still reports
 `NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid result is positive, but the
 independent/pre-existing benchmark gate and OpenVLA/LIBERO learned-policy gate
-are failing.
+are failing. The latest FourRooms radius-10 and HandReach-v3 follow-ups close
+simple rescue paths, but they are negative limitations, not acceptance-moving
+evidence.
 
 Acceptance reality: the project is not there yet. The current evidence supports
 a careful mechanism study, not a high-confidence AAAI main-track claim. Make

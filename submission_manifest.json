@@ -422,13 +422,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "85568367b8d5e561cd6d023398a8921f3c1ef72be0138ac37b76d7df311fe6c7",
-      "size_bytes": 295871
+      "sha256": "5b34059a63c002c796bad18828dd6ace8067187fe7445ef3e73d1d507db69410",
+      "size_bytes": 296225
     },
     {
       "path": "paper/main.tex",
-      "sha256": "c294d368305d8522397375b24877f6ba9fe6d7bb41ee0352587c32ce28adb01f",
-      "size_bytes": 37824
+      "sha256": "922bfde59d9380e56aeb3338d4f82dd398e1b8d03b9f7c48823761a9e7619f52",
+      "size_bytes": 38119
     },
     {
       "path": "paper/references.bib",
@@ -1002,8 +1002,8 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "da2a67dca18a68ca92ae21b072fbc1ab1b111f98224addbd0400eb946c277ee2",
-      "size_bytes": 101141
+      "sha256": "0763ee7b9751b8652536d47247d5c0a1f74d6a576258e137340e12bfd07d5339",
+      "size_bytes": 103318
     },
     {
       "path": "scripts/check_submission_package.py",
