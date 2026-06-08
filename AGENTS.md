@@ -107,6 +107,12 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   rejected pre-method routes under the current scripted controller/interface;
   do not build replay comparisons around them without a new preregistered
   calibration that first clears clean-success and recovery-curve prerequisites.
+  A 2026-06-07 opt-in `scripted_push_far` controller scout for FetchPush
+  improves the compact calibration but still fails the clean-success gate:
+  `results/fetchpush_object_goal_calibration_far_push_2seed_v1/summary.json`
+  reports clean 0.6250, recovery range 0.6250--0.8750, RAUC 0.8125, and
+  r80 0.1200 under `gymnasium==1.3.0`, `gymnasium_robotics==1.4.2`, and
+  `mujoco==3.9.0`. Treat it as a rejected calibration, not an active route.
 - The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation/perturb-only recipe family; the preregistered weighted, proximal-anchor, and perturb-only anchored audits all failed the learned-policy promotion gate.
 - The latest completed independent route is Gymnasium Box2D `LunarLander-v3`
   in `/tmp/bgr_lunar_venv` with

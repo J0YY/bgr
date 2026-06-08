@@ -322,6 +322,10 @@ CALIBRATION_SCREENS = [
         "results/fetchpush_object_goal_calibration_2seed_v1/summary.json",
     ),
     (
+        "FetchPush-v4 far-push object-goal calibration",
+        "results/fetchpush_object_goal_calibration_far_push_2seed_v1/summary.json",
+    ),
+    (
         "FetchSlide-v4 object-goal calibration",
         "results/fetchslide_object_goal_calibration_2seed_v1/summary.json",
     ),

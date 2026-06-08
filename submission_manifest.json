@@ -521,6 +521,21 @@
       "size_bytes": 6328
     },
     {
+      "path": "results/fetchpush_object_goal_calibration_far_push_2seed_v1/package_versions.json",
+      "sha256": "dc22c352b5a7631d4f494c1048eae115651f8a9eca22580b86708f205ce8def2",
+      "size_bytes": 81
+    },
+    {
+      "path": "results/fetchpush_object_goal_calibration_far_push_2seed_v1/recovery_rows.csv",
+      "sha256": "565259705e18ab58c70e6e187f5d33df63ce37aebfd54b8283b7218646b593f1",
+      "size_bytes": 1763
+    },
+    {
+      "path": "results/fetchpush_object_goal_calibration_far_push_2seed_v1/summary.json",
+      "sha256": "4cdf0c2722b7a84c99228a02ff20919982af7ecbedb9775709bbdf48915eb436",
+      "size_bytes": 368
+    },
+    {
       "path": "results/frozenlake_recovery_focused_30seed_v1/results.json",
       "sha256": "da62c06bf099b1eecb6e7bbdc4971bb70111425a9786346956b83fcff47fb4df",
       "size_bytes": 400777
@@ -937,8 +952,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "8f7a2bc1713796ecc376dfd6b9ad03fab96395541fabf964bce5e88ba15a5131",
-      "size_bytes": 40505
+      "sha256": "3d2de22152882c0beeb9f5aa7cc673412751250ab39ec99870ffe1fb4d184ed1",
+      "size_bytes": 40659
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -952,8 +967,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "b4b7c504fe3e865ba094a5a03a8f2f81c864446b189c3cb21002f53284e8ab57",
-      "size_bytes": 43709
+      "sha256": "468ee4eb7657584b2cd9d1feda07c7379d2979b2eb2bdfb26e9467b00da4f5ee",
+      "size_bytes": 43825
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -967,8 +982,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "b3c5728640e69e8aa99908318404a5c7caa79a770d99cb2910ea753e02e3dbd0",
-      "size_bytes": 240979
+      "sha256": "fa9e67d983ec54d3dc78c3a3b2699b1e2314e9ef0eef64c4707c7b90682059c8",
+      "size_bytes": 241408
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1336,6 +1351,11 @@
       "size_bytes": 3547
     },
     {
+      "path": "tests/test_fetch_object_goal_recovery_calibration.py",
+      "sha256": "bc65dbe6084794e029332224e74220e365c198b93c9d0d779bf984a94888760b",
+      "size_bytes": 1419
+    },
+    {
       "path": "tests/test_filter_openvla_oft_examples.py",
       "sha256": "0420223459744bad0c38c63cf4c7d9053625d34ead7fe3586d5d17c073d9d875",
       "size_bytes": 2115
@@ -1529,6 +1549,11 @@
       "path": "tools/bsuite_mountaincar_recovery_probe.py",
       "sha256": "d5ed21117b4af840998f90a0d9288ca9f40b9ad8a81c496bfb817703ce87b24a",
       "size_bytes": 26572
+    },
+    {
+      "path": "tools/fetch_object_goal_recovery_calibration.py",
+      "sha256": "016f80c986049431d3778d4560ee6dbd3b593de1528f601e2117bb2541b45294",
+      "size_bytes": 13253
     },
     {
       "path": "tools/highway_parking_recovery_calibration.py",

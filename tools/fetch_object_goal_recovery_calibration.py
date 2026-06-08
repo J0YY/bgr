@@ -87,7 +87,16 @@ def clipped_goal(base_goal: np.ndarray, direction: np.ndarray, sigma: float, cen
     return goal
 
 
-def push_action(obs: dict[str, np.ndarray], *, threshold: float, gain: float) -> np.ndarray:
+def push_action(
+    obs: dict[str, np.ndarray],
+    *,
+    threshold: float,
+    gain: float,
+    behind_distance: float = 0.035,
+    ahead_distance: float = 0.040,
+    z_offset: float = 0.002,
+    approach_tolerance: float = 0.018,
+) -> np.ndarray:
     raw = np.array(obs["observation"], dtype=float)
     gripper = raw[0:3]
     obj = raw[3:6]
@@ -103,11 +112,14 @@ def push_action(obs: dict[str, np.ndarray], *, threshold: float, gain: float) ->
     else:
         unit_xy = direction_xy / norm
 
-    behind = obj[:2] - 0.035 * unit_xy
-    if float(np.linalg.norm(gripper[:2] - behind)) > 0.018:
-        target = np.array([behind[0], behind[1], obj[2] + 0.002], dtype=float)
+    behind = obj[:2] - float(behind_distance) * unit_xy
+    if float(np.linalg.norm(gripper[:2] - behind)) > float(approach_tolerance):
+        target = np.array([behind[0], behind[1], obj[2] + float(z_offset)], dtype=float)
     else:
-        target = np.array([goal[0] + 0.04 * unit_xy[0], goal[1] + 0.04 * unit_xy[1], obj[2] + 0.002], dtype=float)
+        target = np.array(
+            [goal[0] + float(ahead_distance) * unit_xy[0], goal[1] + float(ahead_distance) * unit_xy[1], obj[2] + float(z_offset)],
+            dtype=float,
+        )
 
     action = np.zeros(4, dtype=float)
     action[:3] = np.clip(float(gain) * (target - gripper), -1.0, 1.0)
@@ -156,6 +168,16 @@ def pick_place_action(obs: dict[str, np.ndarray], *, threshold: float, gain: flo
 def controller_action(controller: str, obs: dict[str, np.ndarray], *, threshold: float, gain: float) -> np.ndarray:
     if controller == "scripted_push":
         return push_action(obs, threshold=threshold, gain=gain)
+    if controller == "scripted_push_far":
+        return push_action(
+            obs,
+            threshold=threshold,
+            gain=gain,
+            behind_distance=0.070,
+            ahead_distance=0.080,
+            z_offset=0.010,
+            approach_tolerance=0.025,
+        )
     if controller == "scripted_pick_place":
         return pick_place_action(obs, threshold=threshold, gain=gain)
     raise ValueError(f"unknown controller: {controller}")
@@ -303,7 +325,11 @@ def main() -> int:
     parser.add_argument("--trials", type=int, default=2)
     parser.add_argument("--radii", default="0.00,0.02,0.04,0.06,0.08,0.12")
     parser.add_argument("--horizon", type=int, default=80)
-    parser.add_argument("--controller", choices=["scripted_push", "scripted_pick_place"], default="scripted_push")
+    parser.add_argument(
+        "--controller",
+        choices=["scripted_push", "scripted_push_far", "scripted_pick_place"],
+        default="scripted_push",
+    )
     parser.add_argument("--controller-gain", type=float, default=6.0)
     parser.add_argument("--direction-jitter", type=float, default=0.10)
     parser.add_argument("--alpha", type=float, default=0.80)

@@ -1068,6 +1068,13 @@ risk.
   states fail clean and perturbed goals. This does not define a trainable
   success-failure boundary, so do not build or scale a FetchPush replay
   comparison around this scripted controller/interface.
+  A 2026-06-07 opt-in controller scout added `scripted_push_far`, which
+  approaches farther behind the object and uses a longer fixed horizon:
+  `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --env-id FetchPush-v4 --seeds 2 --replay-states 4 --trials 1 --horizon 200 --controller scripted_push_far --controller-gain 10.0 --out results/fetchpush_object_goal_calibration_far_push_2seed_v1`.
+  This improves the compact calibration but is still rejected: clean success is
+  0.6250, recovery range is 0.6250--0.8750, RAUC is 0.8125, and r80 is 0.1200.
+  Do not reopen FetchPush unless a preregistered controller first clears the
+  0.80 clean-success gate on the same fixed calibration logic.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
   same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:
