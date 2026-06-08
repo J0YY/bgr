@@ -7,8 +7,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "abc3d857b694dec1fdbbd049603c7eeee670b47d3453daafa727f2285c79d8d4",
-      "size_bytes": 31746
+      "sha256": "d60e5ec6aa65e2394a960642416a887276001bc5e137740dfab7418b54b4d9fc",
+      "size_bytes": 31897
     },
     {
       "path": "configs/estimator_bgr_full.yaml",
@@ -952,8 +952,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "bbba4ab1c4eec349dbe1f7df91d3abbcd3691bffbb3f9ed774fab38632ebc9bf",
-      "size_bytes": 43633
+      "sha256": "b4b7c504fe3e865ba094a5a03a8f2f81c864446b189c3cb21002f53284e8ab57",
+      "size_bytes": 43709
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -1292,8 +1292,8 @@
     },
     {
       "path": "tests/test_check_acceptance_readiness.py",
-      "sha256": "5c2cd5866b8309ef28ec9ff1dae6091d44bf4b8a491be6035ebcc77aab2762cc",
-      "size_bytes": 15854
+      "sha256": "a4a37d35c4de77cf8b1e6da06367b2d7a8d0f99f47dfaa76b4838324b8b6c139",
+      "size_bytes": 15834
     },
     {
       "path": "tests/test_check_candidate_promotion.py",

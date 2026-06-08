@@ -333,7 +333,7 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
                 encoding="utf-8",
             )
             (docs / "aaai_acceptance_gap.md").write_text(
-                "The latest preregistered learned-policy intervention is the weighted perturbation curriculum. "
+                "The weighted perturbation curriculum is a completed learned-policy audit. "
                 "This intervention is now a negative audit for the official-checkpoint gate.\n",
                 encoding="utf-8",
             )

@@ -31,6 +31,13 @@ to reproduce this read from the current result artifacts.
 - Do not promote FourRooms, Acrobot, Pendulum, CliffWalking, Taxi, MountainCar,
   CartPole, FrozenLake, or OpenVLA adaptation as positive evidence under
   current results.
+- Do not promote the newer standard-environment sequence either:
+  LunarLander-v3 is a near miss rejected by paired signs and median-r80,
+  bsuite DeepSea trails the state-priority/uniform-radius ablation, the
+  positive 4-seed bsuite Catch screen failed its fixed 30-seed scale-up,
+  bsuite MountainCar has only a tiny sub-threshold RAUC edge with saturated
+  r80, and bsuite Cartpole loses to uniform and TD-loss. These are limitations,
+  not acceptance-moving evidence.
 - Keep FourRooms internal: the preregistered 4-seed screen has BGR and
   BGR-Coverage below uniform, fixed-radius, failure-only, TD-loss, and the
   state-priority/uniform-radius ablation, with saturated or contradictory
@@ -79,7 +86,7 @@ to reproduce this read from the current result artifacts.
   on a truly different external package/reset interface, a genuinely different
   preregistered learned-policy intervention that can beat both official and
   matched random, or a stronger theory/presentation contribution. Do not keep
-  rerunning the same MiniGrid/PointMaze/FetchReach protocol family.
+  rerunning the same MiniGrid/PointMaze/FetchReach/bsuite protocol family.
 - Gymnasium MuJoCo Reacher-v5 is completed negative scope evidence, not paper
   evidence. Its fixed calibration cleared clean/non-flat prerequisites
   (clean 0.8333, recovery range 0.5000--0.9167, RAUC 0.7891, r80 3.0000 on a

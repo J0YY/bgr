@@ -81,6 +81,8 @@ STALE_ROADMAP_SNIPPETS = [
     "route remains unevaluated",
     "route still cannot be scored",
     "Until compact summaries exist",
+    "As of the 2026-06-05 refresh",
+    "Next independent-benchmark route",
 ]
 
 

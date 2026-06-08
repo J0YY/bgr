@@ -27,16 +27,17 @@ the evidence has actually cleared the independent-benchmark and learned-policy
 promotion gates.
 
 The generated scorecard now reports why each independent-benchmark screen fails
-the gate. As of the 2026-06-05 refresh, the closest screen is the
-official-package MiniGrid FourRooms BGR-Coverage run: it has a visible RAUC lead
-over uniform and required baselines, but fails because both the original
-relative-radius metric and the absolute-r10 follow-up are saturated. The
-non-saturated midband distance-2-to-5 follow-up is also negative because default
-BGR trails fixed-radius and failure-only replay, wins only 2/4 paired seeds over
-uniform, and has lower median r80 than uniform. Any further independent-benchmark
-attempt should therefore fix non-saturated radius evidence before method
-comparison and avoid rerunning the same MiniGrid protocol unless the premise
-materially changes.
+the gate. As of the 2026-06-07 refresh, there is no active
+independent-benchmark route that can be promoted under the current evidence
+policy. The newest standard-environment sequence sharpened the negative record:
+LunarLander is a 4-seed near miss rejected by paired signs and lower median r80,
+bsuite DeepSea trails the state-priority/uniform-radius ablation and has lower
+median r80, the positive 4-seed bsuite Catch screen failed its fixed 30-seed
+scale-up, bsuite MountainCar has only a tiny sub-threshold RAUC edge with
+saturated r80, and bsuite Cartpole loses to uniform and TD-loss. Any further
+acceptance-moving benchmark attempt therefore needs a materially different
+reset/interface premise, not another rerun of the same small recovery-probe
+family.
 
 After the weak-reject style review, the immediate paper-defense priority is not
 to amplify p-values or add more authored toy wins. The manuscript should instead
@@ -63,7 +64,8 @@ BGR trails matched random by 1/400 (-0.0025), below the fixed +10/400 and +0.02
 requirement. This sharpens the acceptance problem: the current learned-policy
 evidence remains an audit, not positive robotics evidence.
 
-Next independent-benchmark route, opened 2026-06-07: official Gymnasium Box2D
+Completed independent-benchmark route, opened and evaluated 2026-06-07:
+official Gymnasium Box2D
 `LunarLander-v3`. This route is materially different from the retired
 MiniGrid, PointMaze, FetchReach, highway parking, and MuJoCo balance/reacher
 screens: it uses package-owned Box2D contact dynamics, the package heuristic
@@ -74,22 +76,20 @@ The isolated environment is `/tmp/bgr_lunar_venv` with `gymnasium==1.3.0`,
 Fixed pre-method calibration command:
 `PYTHONPATH=src:. /tmp/bgr_lunar_venv/bin/python tools/lunarlander_recovery_calibration.py --out results/lunarlander_recovery_calibration_12seed_v1`
 
-The calibration is only permission to implement a fixed all-method screen. It
-is usable only if clean success is at least 0.80, the recovery range is at
-least 0.20, and median r80 is not saturated at the maximum radius. If it clears,
-the later method screen must be fixed before method outcomes and must use the
-same task, checkpoint, perturbation grid, and promotion rules as the independent
-benchmark criteria below.
+The calibration was only permission to implement a fixed all-method screen. It
+was usable only if clean success was at least 0.80, the recovery range was at
+least 0.20, and median r80 was not saturated at the maximum radius. It cleared,
+but the later fixed all-method screen failed the promotion criteria below.
 
 Calibration result: the fixed 12-seed run cleared the pre-method gate with
 clean success 0.9167, recovery range 0.5833--0.9167, RAUC 0.7722, and median
 r80 0.5300. This allowed a fixed all-method LunarLander screen; it did not
 itself create BGR evidence.
 
-The fixed all-method LunarLander screen is now implemented at
+The fixed all-method LunarLander screen was implemented at
 `tools/lunarlander_recovery_probe.py` and preregistered with:
 `PYTHONPATH=src:. /tmp/bgr_lunar_venv/bin/python tools/lunarlander_recovery_probe.py --out results/lunarlander_recovery_probe_4seed_v1`.
-It can only justify a 30-seed scale-up if default BGR or BGR-Coverage beats
+It could only justify a 30-seed scale-up if default BGR or BGR-Coverage beat
 uniform, fixed-radius, failure-only, TD/loss-priority, and
 BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform and
 non-contradictory, non-saturated median-r80 evidence.
@@ -264,18 +264,18 @@ Do not add another result to the manuscript if it has any of these properties:
 
 ## Next Experiment Candidates
 
-Stop-rule after the FourRooms screen: do not add more local classic-control or
-small tabular recovery probes under this evidence plan. FrozenLake, Taxi,
-CliffWalking, FourRooms, MountainCar, CartPole, Acrobot, and Pendulum now cover
-the obvious low-cost standard-environment checks, and none meets the promotion
-gate. Further acceptance-moving evidence should use either (a) an installed
-external benchmark package with recognizable task definitions and no local
-reimplementation of the environment, or (b) a genuinely different learned-policy
-intervention. A local dependency check on 2026-06-05 found `gymnasium`, `gym`,
-`minigrid`, `d4rl`, `metaworld`, `procgen`, `mujoco`, and
-`stable_baselines3` absent from the current Python environment, so the next
-external benchmark attempt must start by installing/verifying the benchmark
-package and recording its version before any result is run.
+Stop-rule after the 2026-06-07 standard-benchmark refresh: do not add more
+local classic-control, MiniGrid, bsuite, or small tabular recovery probes under
+this evidence plan unless the reset/interface premise materially changes.
+FrozenLake, Taxi, CliffWalking, FourRooms, MountainCar, CartPole, Acrobot,
+Pendulum, LunarLander, Reacher, FetchReach, PointMaze, and the bsuite
+DeepSea/Catch/MountainCar/Cartpole sequence now cover the obvious low-cost
+standard-environment checks, and none meets the promotion gate. Further
+acceptance-moving evidence should use either (a) a materially different
+external benchmark/reset interface with package version recorded before any
+result is run, (b) a genuinely different learned-policy intervention, or (c) a
+stronger theory/presentation contribution that materially changes reviewer
+risk.
 
 1. Taxi-v3 recovery replay, with taxi-position perturbations and fixed
    passenger/destination state. An optimized internal probe now exists at
