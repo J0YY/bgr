@@ -48,6 +48,8 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | Gymnasium MuJoCo Reacher-v5 | bgr_coverage | 12 | -0.1140 (4/8/0) | -0.0551 (6/6/0) | -0.0200 (6/6/0) | final_median_r80 | +0.4271 (3/2/7) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
 | FetchReach-v4 hard-budget goal recovery | bgr_coverage | 4 | -0.2188 (1/3/0) | -0.4813 (0/4/0) | -0.0563 (0/3/1) | final_median_r80 | +0.0008 (1/2/1) | 1/4 | fail | uniform-gate, required-baseline, state-priority-ablation |
 | Gymnasium Box2D LunarLander-v3 | bgr | 4 | +0.0257 (1/3/0) | -0.0896 (1/3/0) | -0.0681 (2/2/0) | final_median_r80 | -0.0950 (3/1/0) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_median_r80-contradiction |
+| bsuite Catch 30-seed | bgr_coverage | 30 | -0.0330 (13/17/0) | -0.1224 (4/26/0) | -0.0136 (15/15/0) | final_median_r80 | -0.0625 (6/11/13) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_median_r80-contradiction |
+| bsuite Catch 30-seed | bgr | 30 | -0.0337 (14/16/0) | -0.1231 (3/24/3) | -0.0142 (20/10/0) | final_median_r80 | -0.0867 (5/9/16) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_median_r80-contradiction |
 | MiniGrid LavaGapS7 | bgr | 4 | -0.0430 (1/3/0) | -0.0063 (2/1/1) | -0.0596 (1/2/1) | final_abs_r10 | -0.0289 (0/2/2) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_abs_r10-contradiction |
 | MiniGrid FourRooms midband | bgr_coverage | 4 | -0.0589 (2/2/0) | -0.1864 (0/4/0) | -0.0210 (3/1/0) | final_median_r80 | -0.0748 (0/4/0) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_median_r80-contradiction |
 | MiniGrid DoorKey | bgr_coverage | 4 | -0.1538 (0/2/2) | -0.1613 (1/3/0) | -0.0093 (1/2/1) | final_abs_r10 | -0.1569 (0/2/2) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_abs_r10-contradiction |
@@ -70,7 +72,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 ## Priority Read
 
 - The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.
-- The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.
+- The independent-benchmark route has not produced a promotable screen: early promising screens either fail paired/radius checks or do not survive scale-up, and later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.
 - The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is now negative and should not be promoted.
 - The InvertedPendulum-v5 calibration also cleared pre-method checks, but its fixed 4-seed method screen ties all methods on final RAUC and median-r80; do not scale or promote it.
 - Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.

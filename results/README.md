@@ -89,7 +89,7 @@ Completed external-package pre-promotion route:
 - `results/bsuite_deepsea_recovery_probe_4seed_v1/package_versions.json`:
   compact package-version record for the same screen.
 
-Active external-package pre-promotion route:
+Completed external-package pre-promotion route:
 
 - `results/bsuite_catch_recovery_probe_4seed_v1/summary.csv`: fixed bsuite
   Catch 4-seed screen, preregistered before method outcomes on 2026-06-07.
@@ -100,11 +100,20 @@ Active external-package pre-promotion route:
   perturbation family. The 4-seed screen passed the scale-up gate for default
   BGR: BGR reaches 0.9742 final RAUC vs. uniform 0.8388 (+0.1354, 4/0/0),
   fixed-radius 0.7767, failure-only 0.9336, TD-loss 0.7140, and
-  BGR-uniform-radius 0.8982, with non-contradictory median r80. This is not
-  paper evidence unless the fixed 30-seed promotion screen also clears the full
-  gate.
+  BGR-uniform-radius 0.8982, with non-contradictory median r80. This was only
+  permission to run the fixed 30-seed promotion screen.
 - `results/bsuite_catch_recovery_probe_4seed_v1/package_versions.json`:
   compact package-version record for the same screen.
+- `results/bsuite_catch_recovery_probe_30seed_v1/summary.csv`: fixed bsuite
+  Catch 30-seed promotion screen from the preregistered command below. The
+  scale-up is negative: default BGR reaches 0.8446 final RAUC vs. 0.8782 for
+  uniform (14/16/0), BGR-Coverage reaches 0.8452 vs. 0.8782 (13/17/0),
+  failure-only reaches 0.9676, and BGR-uniform-radius reaches 0.8588. Median
+  r80 also contradicts the boundary-improvement story: default BGR 0.8367 and
+  BGR-Coverage 0.8608 trail uniform 0.9233. Do not promote this route without a
+  genuinely new preregistered premise.
+- `results/bsuite_catch_recovery_probe_30seed_v1/package_versions.json`:
+  compact package-version record for the 30-seed screen.
 
 Fixed 30-seed bsuite Catch promotion command:
 

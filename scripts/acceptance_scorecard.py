@@ -290,6 +290,14 @@ BENCHMARK_SCREENS = [
         "bgr_uniform_radius",
         "final_median_r80",
     ),
+    (
+        "bsuite Catch 30-seed",
+        "results/bsuite_catch_recovery_probe_30seed_v1/summary.csv",
+        ["bgr", "bgr_coverage"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
 ]
 
 CALIBRATION_SCREENS = [
@@ -873,7 +881,7 @@ def render_markdown(root: Path) -> str:
 
     priority_lines = [
         "- The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.",
-        "- The independent-benchmark route has not produced a promotable screen: the closest external-package screen with a visible RAUC lead fails because the radius metric is saturated, while later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.",
+        "- The independent-benchmark route has not produced a promotable screen: early promising screens either fail paired/radius checks or do not survive scale-up, and later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.",
         learned_priority,
     ]
     if any(screen.name == "Gymnasium MuJoCo Reacher-v5 calibration" for screen in usable_calibrations):

@@ -880,6 +880,49 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    catch = read_csv_rows(results_dir / "bsuite_catch_recovery_probe_30seed_v1" / "summary.csv")
+    catch_bgr_rauc = mean_metric(catch, "bgr", "final_rauc")
+    catch_coverage_rauc = mean_metric(catch, "bgr_coverage", "final_rauc")
+    catch_uniform_rauc = mean_metric(catch, "uniform", "final_rauc")
+    catch_failure_rauc = mean_metric(catch, "failure_only", "final_rauc")
+    catch_ablation_rauc = mean_metric(catch, "bgr_uniform_radius", "final_rauc")
+    catch_bgr_r80 = mean_metric(catch, "bgr", "final_median_r80")
+    catch_uniform_r80 = mean_metric(catch, "uniform", "final_median_r80")
+    catch_wins = paired_wins(catch, "bgr", "uniform", "final_rauc")
+    if not (
+        catch_failure_rauc > catch_uniform_rauc > catch_bgr_rauc
+        and catch_ablation_rauc > catch_bgr_rauc
+        and catch_wins == (14, 16, 0)
+        and catch_bgr_r80 < catch_uniform_r80
+    ):
+        raise ValueError("Expected bsuite Catch 30-seed diagnostic to remain a non-promoted negative result")
+    claims.append(
+        Claim(
+            "bsuite Catch 30-seed scale-up limitation",
+            (
+                f"A bsuite Catch scale-up shows the fragility of the 4-seed pre-promotion screen: "
+                f"default BGR passed the 4-seed screen but fails at 30 seeds "
+                f"({fmt(catch_bgr_rauc, 4)} vs. {fmt(catch_uniform_rauc, 4)} uniform), trails "
+                f"failure-only ({fmt(catch_failure_rauc, 4)}) and BGR-uniform-radius "
+                f"({fmt(catch_ablation_rauc, 4)}), and has lower median $r_{{80}}$ than uniform "
+                f"({fmt(catch_bgr_r80, 4)} vs. {fmt(catch_uniform_r80, 4)})"
+            ),
+            "results/bsuite_catch_recovery_probe_30seed_v1/summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "bsuite Catch scope-audit table row",
+            (
+                f"bsuite Catch & BGR {fmt(catch_bgr_rauc, 4)}; "
+                f"BGR-Cov. {fmt(catch_coverage_rauc, 4)} & uniform "
+                f"{fmt(catch_uniform_rauc, 4)}; failure-only {fmt(catch_failure_rauc, 4)}; "
+                f"r80 {fmt(catch_bgr_r80, 4)} vs. {fmt(catch_uniform_r80, 4)} & negative"
+            ),
+            "results/bsuite_catch_recovery_probe_30seed_v1/summary.csv",
+        )
+    )
+
     reacher = read_csv_rows(results_dir / "reacher_recovery_probe_12seed_v1" / "summary.csv")
     reacher_bgr_rauc = mean_metric(reacher, "bgr", "final_rauc")
     reacher_coverage_rauc = mean_metric(reacher, "bgr_coverage", "final_rauc")

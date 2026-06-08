@@ -130,8 +130,9 @@ loses to TD-loss (0.0984) and the uniform-radius ablation, and wins only 1/4
 paired seeds against uniform. This directly fails the novelty and
 complementary-metric gates.
 
-Active independent-benchmark route, opened 2026-06-07: official bsuite `catch`.
-This route differs from the retired bsuite DeepSea chain screen: it uses
+Completed independent-benchmark route, opened and evaluated 2026-06-07:
+official bsuite `catch`. This route differs from the retired bsuite DeepSea
+chain screen: it uses
 bsuite's package-owned Catch task definition with falling-ball/paddle dynamics,
 exact restart fields, and a fixed perturbation family that shifts the paddle
 away from the ball while preserving a feasible catch before the terminal row.
@@ -157,10 +158,14 @@ and BGR-uniform-radius. This 4-seed screen is still not paper evidence.
 The fixed 30-seed promotion command is:
 `PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_catch_recovery_probe.py --seeds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29 --out results/bsuite_catch_recovery_probe_30seed_v1`.
 
-Promote the 30-seed result into `paper/main.tex` only if default BGR beats
-uniform with at least 24/30 paired wins and a visible mean RAUC gap, also beats
-fixed-radius, failure-only, TD-loss, and BGR-uniform-radius on final RAUC, and
-has non-contradictory, non-saturated median-r80 evidence.
+Result: the fixed 30-seed bsuite Catch promotion screen is negative and should
+not be promoted. The 4-seed result did not survive scale-up: default BGR reaches
+0.8446 final RAUC versus 0.8782 for uniform (14/16/0), BGR-Coverage reaches
+0.8452 versus 0.8782 (13/17/0), failure-only reaches 0.9676, and
+BGR-uniform-radius reaches 0.8588. Median r80 also contradicts the boundary
+improvement story: default BGR 0.8367 and BGR-Coverage 0.8608 trail uniform
+0.9233. Do not scale or promote this Catch route without a genuinely new
+preregistered premise.
 
 ## Promotion Criteria For A New Independent Benchmark
 

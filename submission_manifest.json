@@ -7,8 +7,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "36278f8021d16acd48eb4d35d5d8bce6bf8a938efc168a2589de1710cc26d1fd",
-      "size_bytes": 31671
+      "sha256": "abc3d857b694dec1fdbbd049603c7eeee670b47d3453daafa727f2285c79d8d4",
+      "size_bytes": 31746
     },
     {
       "path": "configs/estimator_bgr_full.yaml",
@@ -417,18 +417,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "a12c6c81b1aa70168b7147b7071459f4af3ff3b555efc550f929eccadfa99582",
+      "sha256": "d61e2c9f1a9edbfaf03340409d412a486a3e3588532af4dabfc7516e829dafae",
       "size_bytes": 13995
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "242826c414da29775778ed5ca403f3b78f9408d1f8dea242924af538a50c7462",
-      "size_bytes": 296082
+      "sha256": "1f872733fab4502ae38fc2b5c578bc1f05aa463ebbc01828412992020eff5589",
+      "size_bytes": 296278
     },
     {
       "path": "paper/main.tex",
-      "sha256": "64eb471963607ce86c60f3948536e7d9737c28d132259537b9ff6b2687bdd17e",
-      "size_bytes": 38080
+      "sha256": "cc8d424c7e958d1eaa2c9b87400bada38e75bfa76ca4deaf0cb427cfacaf7520",
+      "size_bytes": 38434
     },
     {
       "path": "paper/references.bib",
@@ -442,8 +442,28 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "fc751ece2a46fd50b1eb6c6c4f64d76388ff62091d5ac191c64dc89c7f794f24",
-      "size_bytes": 293087
+      "sha256": "0b4c379da02d271d95125a3df72b17a686a27984e5986dda66f3efc707a79e24",
+      "size_bytes": 295056
+    },
+    {
+      "path": "results/bsuite_catch_recovery_probe_30seed_v1/package_versions.json",
+      "sha256": "aa5ee87714c5858f98f392a6b1103462776e43318a35e6c7982ab3ac3816d089",
+      "size_bytes": 91
+    },
+    {
+      "path": "results/bsuite_catch_recovery_probe_30seed_v1/summary.csv",
+      "sha256": "67c02faf75ddcadaf14be94c6a22ae6031ac57cc8aed20e64a6958a588911f06",
+      "size_bytes": 15839
+    },
+    {
+      "path": "results/bsuite_catch_recovery_probe_4seed_v1/package_versions.json",
+      "sha256": "aa5ee87714c5858f98f392a6b1103462776e43318a35e6c7982ab3ac3816d089",
+      "size_bytes": 91
+    },
+    {
+      "path": "results/bsuite_catch_recovery_probe_4seed_v1/summary.csv",
+      "sha256": "114532d57796bc2b77a9a6330c2d42dc2ba749b411d5b10dbdf6b98b18edb7f4",
+      "size_bytes": 2169
     },
     {
       "path": "results/bsuite_deepsea_recovery_probe_4seed_v1/package_versions.json",
@@ -897,8 +917,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "7a75691093d4589b713c9e7a75714b9482c3acde35511514bc47e4fda439f8b3",
-      "size_bytes": 39776
+      "sha256": "8c84e4a807f6de7a36c20070d369fdf91845c6b7a9a97ebe1222d6fddc7dc1a6",
+      "size_bytes": 40003
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -912,8 +932,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "c26c7f35402215e348f7a3eab92509be78039d6bec7be36f0e2d1af13a7edd20",
-      "size_bytes": 36592
+      "sha256": "5fbdf952363a667759ebc8a78aab0898152595d311e9c19223e606290642aae9",
+      "size_bytes": 38781
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -922,13 +942,13 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "61df071e9b3712b317bb2121c82d0750f349eaa454b39c15041b11fc05cd868d",
-      "size_bytes": 99094
+      "sha256": "130a7696588f71b9444641e40bc4383b4d02cbd43721aacc55cfaed35d1326c5",
+      "size_bytes": 101352
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "520556392f09ab302a644a1d2ffa56f8e2a710818d7df956c102ab2ec190a9e5",
-      "size_bytes": 240149
+      "sha256": "2784a2887d410a0db9b93a52888fe02d0af01bc5ed5d4ea6f8802e8aae1aad84",
+      "size_bytes": 240536
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1464,6 +1484,11 @@
       "path": "tests/test_suffix_stress_sensitivity.py",
       "sha256": "ec5a12f333427f5ee2b47a6ccaea9ec3593e4214b1acbd38a5aa7691f8d4caea",
       "size_bytes": 4046
+    },
+    {
+      "path": "tools/bsuite_catch_recovery_probe.py",
+      "sha256": "ab6835ec278638329742084503c63071b437b7b301303d25bf5978ce82fb6525",
+      "size_bytes": 20575
     },
     {
       "path": "tools/bsuite_deepsea_recovery_probe.py",

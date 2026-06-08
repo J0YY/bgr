@@ -551,6 +551,41 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"best-r80 {best_deepsea_r80:.4f} vs uniform {deepsea_uniform_r80:.4f}, W/L/T={best_deepsea_wins}"
             )
 
+    catch_path = root / "results/bsuite_catch_recovery_probe_30seed_v1/summary.csv"
+    if catch_path.exists():
+        catch = read_rows(catch_path)
+        catch_bgr = mean_metric(catch, "bgr", "final_rauc")
+        catch_coverage = mean_metric(catch, "bgr_coverage", "final_rauc")
+        catch_uniform = mean_metric(catch, "uniform", "final_rauc")
+        catch_failure = mean_metric(catch, "failure_only", "final_rauc")
+        catch_fixed = mean_metric(catch, "fixed", "final_rauc")
+        catch_td = mean_metric(catch, "td_loss", "final_rauc")
+        catch_ablation = mean_metric(catch, "bgr_uniform_radius", "final_rauc")
+        catch_bgr_r80 = mean_metric(catch, "bgr", "final_median_r80")
+        catch_coverage_r80 = mean_metric(catch, "bgr_coverage", "final_median_r80")
+        catch_uniform_r80 = mean_metric(catch, "uniform", "final_median_r80")
+        catch_bgr_wins = paired_wins(catch, "bgr", "uniform", "final_rauc")
+        catch_coverage_wins = paired_wins(catch, "bgr_coverage", "uniform", "final_rauc")
+        best_catch = catch_bgr if catch_bgr >= catch_coverage else catch_coverage
+        best_catch_r80 = catch_bgr_r80 if catch_bgr >= catch_coverage else catch_coverage_r80
+        best_catch_wins = catch_bgr_wins if catch_bgr >= catch_coverage else catch_coverage_wins
+        if not (
+            best_catch > catch_uniform
+            and best_catch > max(catch_failure, catch_fixed, catch_td, catch_ablation)
+            and best_catch_wins[0] >= 24
+            and best_catch_r80 >= catch_uniform_r80
+            and not (best_catch_r80 >= 0.99 and catch_uniform_r80 >= 0.99)
+            and not (best_catch_r80 <= 0.01 and catch_uniform_r80 <= 0.01)
+        ):
+            failures.append(
+                f"bsuite Catch 30-seed negative: BGR {catch_bgr:.4f}, "
+                f"BGR-Coverage {catch_coverage:.4f}, uniform {catch_uniform:.4f}, "
+                f"failure-only {catch_failure:.4f}, fixed {catch_fixed:.4f}, "
+                f"TD-loss {catch_td:.4f}, uniform-radius {catch_ablation:.4f}, "
+                f"best-r80 {best_catch_r80:.4f} vs uniform {catch_uniform_r80:.4f}, "
+                f"W/L/T={best_catch_wins}"
+            )
+
     for label, relative_path in CALIBRATION_SUMMARIES:
         calibration_path = root / relative_path
         if not calibration_path.exists():
