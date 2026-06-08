@@ -68,6 +68,15 @@ The 30-seed stress confirmation
 wins for final RAUC, RAUC AULC, and clean success under diffuse-boundary,
 low-feasibility, and sharp-low-margin stress cases, while leaving diffuse
 median r80 as a non-promoted caveat.
+A fixed pre-existing-dataset OpenML diabetes margin-replay follow-up is also
+included. The original 30-seed run in
+`results/openml_diabetes_margin_30seed_v1/summary.csv` gives BGR 0.7062 RAUC
+versus 0.6689 for uniform and 0.6759 for fixed-radius replay; the held-out
+seeds 30--59 replication in
+`results/openml_diabetes_margin_replication_30seed_v1/summary.csv` gives BGR
+0.7056 versus 0.6673 for uniform and 0.6640 for fixed-radius replay. The paper
+frames this as supervised margin-replay evidence, not a standard-environment or
+robotics result.
 A held-out seeds 30-59 grid-margin replication again gives BGR higher RAUC than
 uniform (0.4340 vs. 0.3967) with 30/0 paired wins. Pooling the original and
 held-out grid sweeps gives 0.4342 vs. 0.3965 RAUC with 60/0 paired wins. The

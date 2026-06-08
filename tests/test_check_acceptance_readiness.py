@@ -105,6 +105,22 @@ def _write_independent_summaries(root: Path) -> None:
         path.write_text(text, encoding="utf-8")
 
 
+def _write_openml_diabetes_per_seed(root: Path, relative_path: str, *, seed_start: int) -> None:
+    lines = ["dataset,target_radius,method,seed,final_rauc"]
+    for offset in range(30):
+        seed = seed_start + offset
+        lines.extend(
+            [
+                f"diabetes,2.0000,uniform,{seed},0.650000",
+                f"diabetes,2.0000,fixed,{seed},0.660000",
+                f"diabetes,2.0000,bgr,{seed},0.710000",
+            ]
+        )
+    path = root / relative_path
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 class CheckAcceptanceReadinessTest(unittest.TestCase):
     def test_learned_policy_gate_reports_perturb_only_anchor_inflight(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -287,6 +303,28 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
         self.assertIn("FetchPickAndPlace calibration invalid", gate.detail)
         self.assertIn("Highway parking calibration invalid", gate.detail)
         self.assertIn("clean 0.2500", gate.detail)
+
+    def test_independent_gate_accepts_replicated_openml_diabetes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_independent_summaries(root)
+            _write_openml_diabetes_per_seed(
+                root,
+                "results/openml_diabetes_margin_30seed_v1/per_seed.csv",
+                seed_start=0,
+            )
+            _write_openml_diabetes_per_seed(
+                root,
+                "results/openml_diabetes_margin_replication_30seed_v1/per_seed.csv",
+                seed_start=30,
+            )
+
+            gate = independent_benchmark_gate(root)
+
+        self.assertTrue(gate.passed)
+        self.assertIn("OpenML diabetes margin replay positive and replicated", gate.detail)
+        self.assertIn("pooled dRAUC vs uniform +0.0600", gate.detail)
+        self.assertIn("remaining standard-environment negatives", gate.detail)
 
     def test_roadmap_hygiene_rejects_completed_weighted_openvla_as_next_step(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

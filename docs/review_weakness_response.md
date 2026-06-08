@@ -117,18 +117,24 @@ to reproduce this read from the current result artifacts.
   0.9563 uniform (W/L/T=4/0/0), both below the +0.03 pre-registration screen.
   Do not use this route to answer the independent-benchmark critique without a
   new preregistered premise.
-- An OpenML margin replay scout now gives one active pre-existing-dataset
-  candidate, but not paper evidence. The fixed command
+- An OpenML margin replay scout now gives the first replicated positive
+  pre-existing-dataset result in this response thread. The fixed command
   `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --out results/openml_margin_scout_v0`
   checks OpenML version-1 ionosphere, sonar, diabetes, and spambase with the
   same online classifier and fixed-L2 standardized-feature perturbation
   interface. OpenML diabetes at target radius 2.0 clears the 4-seed scout gate:
   BGR reaches 0.7402 RAUC versus uniform 0.6797 (W/L/T=4/0/0), while
   fixed-radius replay reaches 0.6999. Ionosphere, sonar, and spambase remain
-  rejected or near-miss scouts. The only valid next step is the fixed 30-seed
+  rejected or near-miss scouts. The fixed 30-seed
   command
-  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seeds 30 --out results/openml_diabetes_margin_30seed_v1`;
-  do not add this route to the paper unless that follow-up remains positive.
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seeds 30 --out results/openml_diabetes_margin_30seed_v1`
+  stayed positive: BGR 0.7062 vs. uniform 0.6689 (+0.0373, W/L/T=24/6/0) and
+  vs. fixed-radius 0.6759 (+0.0303, W/L/T=19/11/0). The held-out command
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seed-start 30 --seeds 30 --out results/openml_diabetes_margin_replication_30seed_v1`
+  also stayed positive: BGR 0.7056 vs. uniform 0.6673 (+0.0383, W/L/T=23/7/0)
+  and vs. fixed-radius 0.6640 (+0.0416, W/L/T=24/6/0). This can address part
+  of the independent/pre-existing benchmark critique if incorporated carefully,
+  but it does not repair the learned-policy/OpenVLA failure.
 - MinAtar Breakout is completed negative scope evidence, not paper-positive
   evidence. The fixed 12-seed calibration in
   `results/minatar_breakout_recovery_calibration_12seed_v1/summary.json`

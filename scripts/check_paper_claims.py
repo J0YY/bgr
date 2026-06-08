@@ -59,6 +59,10 @@ def fmt(value: float, digits: int) -> str:
     return f"{value:.{digits}f}"
 
 
+def fmt_signed(value: float, digits: int) -> str:
+    return f"{value:+.{digits}f}"
+
+
 def fmt_pvalue(value: float) -> str:
     if value < 0.0001:
         return "<0.0001"
@@ -205,6 +209,89 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
                 "grid fixed-radius baseline",
                 f"({fmt(mean_metric(grid, 'fixed', 'final_rauc'), 4)})",
                 str(grid_summary.relative_to(results_dir.parent)),
+            ),
+        ]
+    )
+    openml_original_summary = results_dir / "openml_diabetes_margin_30seed_v1" / "summary.csv"
+    openml_replication_summary = results_dir / "openml_diabetes_margin_replication_30seed_v1" / "summary.csv"
+    openml_original_per_seed = results_dir / "openml_diabetes_margin_30seed_v1" / "per_seed.csv"
+    openml_replication_per_seed = results_dir / "openml_diabetes_margin_replication_30seed_v1" / "per_seed.csv"
+    openml_original = read_csv_rows(openml_original_summary)
+    openml_replication = read_csv_rows(openml_replication_summary)
+    openml_original_seeds = read_csv_rows(openml_original_per_seed)
+    openml_replication_seeds = read_csv_rows(openml_replication_per_seed)
+    pooled_openml = openml_original_seeds + openml_replication_seeds
+    original_uniform_wlt = paired_wins(openml_original_seeds, "bgr", "uniform", "final_rauc")
+    original_fixed_wlt = paired_wins(openml_original_seeds, "bgr", "fixed", "final_rauc")
+    replication_uniform_wlt = paired_wins(openml_replication_seeds, "bgr", "uniform", "final_rauc")
+    replication_fixed_wlt = paired_wins(openml_replication_seeds, "bgr", "fixed", "final_rauc")
+    if not (
+        original_uniform_wlt[0] >= 20
+        and original_fixed_wlt[0] >= 18
+        and replication_uniform_wlt[0] >= 20
+        and replication_fixed_wlt[0] >= 18
+    ):
+        raise ValueError("Expected OpenML diabetes original and held-out comparisons to have paired support")
+    claims.extend(
+        [
+            Claim(
+                "OpenML diabetes original uniform",
+                (
+                    f"{fmt(mean_metric(openml_original, 'bgr', 'final_rauc_mean'), 4)} versus "
+                    f"{fmt(mean_metric(openml_original, 'uniform', 'final_rauc_mean'), 4)}"
+                ),
+                "results/openml_diabetes_margin_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "OpenML diabetes original uniform WLT",
+                (
+                    f"gap {fmt_signed(mean_metric(openml_original, 'bgr', 'delta_vs_uniform'), 4)}; "
+                    f"W/L/T={original_uniform_wlt[0]}/{original_uniform_wlt[1]}/{original_uniform_wlt[2]}"
+                ),
+                "results/openml_diabetes_margin_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML diabetes original fixed",
+                (
+                    f"{fmt(mean_metric(openml_original, 'fixed', 'final_rauc_mean'), 4)} for fixed-radius "
+                    f"replay (gap {fmt_signed(mean_metric(openml_original, 'bgr', 'final_rauc_mean') - mean_metric(openml_original, 'fixed', 'final_rauc_mean'), 4)}; "
+                    f"W/L/T={original_fixed_wlt[0]}/{original_fixed_wlt[1]}/{original_fixed_wlt[2]})"
+                ),
+                "results/openml_diabetes_margin_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML diabetes replication uniform",
+                (
+                    f"{fmt(mean_metric(openml_replication, 'bgr', 'final_rauc_mean'), 4)} versus "
+                    f"{fmt(mean_metric(openml_replication, 'uniform', 'final_rauc_mean'), 4)}"
+                ),
+                "results/openml_diabetes_margin_replication_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "OpenML diabetes replication uniform WLT",
+                (
+                    f"gap {fmt_signed(mean_metric(openml_replication, 'bgr', 'delta_vs_uniform'), 4)}; "
+                    f"W/L/T={replication_uniform_wlt[0]}/{replication_uniform_wlt[1]}/{replication_uniform_wlt[2]}"
+                ),
+                "results/openml_diabetes_margin_replication_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML diabetes replication fixed",
+                (
+                    f"{fmt(mean_metric(openml_replication, 'fixed', 'final_rauc_mean'), 4)} for fixed-radius "
+                    f"(gap {fmt_signed(mean_metric(openml_replication, 'bgr', 'final_rauc_mean') - mean_metric(openml_replication, 'fixed', 'final_rauc_mean'), 4)}; "
+                    f"W/L/T={replication_fixed_wlt[0]}/{replication_fixed_wlt[1]}/{replication_fixed_wlt[2]})"
+                ),
+                "results/openml_diabetes_margin_replication_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML diabetes pooled",
+                (
+                    f"{fmt(mean_metric(pooled_openml, 'bgr', 'final_rauc'), 4)} versus "
+                    f"{fmt(mean_metric(pooled_openml, 'uniform', 'final_rauc'), 4)} for uniform and "
+                    f"{fmt(mean_metric(pooled_openml, 'fixed', 'final_rauc'), 4)} for fixed-radius"
+                ),
+                "results/openml_diabetes_margin_*_30seed_v1/per_seed.csv",
             ),
         ]
     )

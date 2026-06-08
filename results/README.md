@@ -89,12 +89,28 @@ Internal pre-existing-dataset route scout:
   perturbations, and an online `SGDClassifier`. Diabetes at target radius 2.0
   clears only the scout gate: BGR reaches 0.7402 final RAUC versus uniform
   0.6797 (W/L/T=4/0/0), while fixed-radius replay is 0.6999. The fixed
-  preregistered follow-up command is
+  preregistered follow-up command was
   `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seeds 30 --out results/openml_diabetes_margin_30seed_v1`.
 - `results/openml_margin_scout_v0/per_seed.csv` and
   `results/openml_margin_scout_v0/package_versions.json`: compact per-seed and
   package-version records for the same scout (`scikit-learn==1.8.0`,
   `numpy==2.4.2`, Python 3.14.3).
+- `results/openml_diabetes_margin_30seed_v1/summary.csv`: fixed 30-seed
+  OpenML diabetes follow-up with the scout-selected target radius 2.0 and no
+  target retuning. BGR reaches 0.7062 final RAUC versus uniform 0.6689
+  (+0.0373, W/L/T=24/6/0) and fixed-radius 0.6759 (+0.0303,
+  W/L/T=19/11/0).
+- `results/openml_diabetes_margin_replication_30seed_v1/summary.csv`: held-out
+  seeds 30--59 replication, run with
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seed-start 30 --seeds 30 --out results/openml_diabetes_margin_replication_30seed_v1`.
+  BGR reaches 0.7056 final RAUC versus uniform 0.6673 (+0.0383, W/L/T=23/7/0)
+  and fixed-radius 0.6640 (+0.0416, W/L/T=24/6/0).
+- `results/openml_diabetes_margin_30seed_v1/per_seed.csv`,
+  `results/openml_diabetes_margin_30seed_v1/package_versions.json`,
+  `results/openml_diabetes_margin_replication_30seed_v1/per_seed.csv`, and
+  `results/openml_diabetes_margin_replication_30seed_v1/package_versions.json`:
+  compact per-seed and package-version records for the fixed OpenML diabetes
+  follow-up and held-out replication.
 
 Completed external-package scope diagnostic:
 

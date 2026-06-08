@@ -15,9 +15,10 @@ genuinely plausibly 90%+ likely to get into AAAI main track.
 
 Current status: not there yet. The readiness gate still says
 `NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid mechanism result is the
-main positive evidence, while independent/pre-existing benchmarks and
-OpenVLA/LIBERO learned-policy evidence remain failing or non-promotable. The
-latest bsuite Catch 30-seed scale-up, MiniGrid FourRooms radius-10 rescue,
+main mechanism evidence, and OpenML diabetes is now replicated positive
+pre-existing-dataset margin-replay evidence. Standard-environment recovery
+screens and OpenVLA/LIBERO learned-policy evidence remain failing or
+non-promotable. The latest bsuite Catch 30-seed scale-up, MiniGrid FourRooms radius-10 rescue,
 HandReach-v3 calibration, highway-fast-v0 lane calibration, and MinAtar
 Breakout all-method screen are also negative, so they do not solve the
 independent-benchmark evidence gap. MinAtar Asterix also completed negative
@@ -28,12 +29,15 @@ its best BGR target gives only 0.8271 vs. 0.8123 RAUC against uniform with a
 The internal sklearn tabular margin replay scout is also rejected: breast
 cancer's best BGR target gives 0.9610 vs. 0.9516 RAUC against uniform, and
 wine's best gives 0.9702 vs. 0.9563, below the +0.03 pre-registration screen.
-The OpenML margin replay scout is the current active pre-existing-dataset
-candidate route: OpenML diabetes target radius 2.0 gives 0.7402 vs. 0.6797
-RAUC against uniform with W/L/T=4/0/0, above the 4-seed scout gate, while
-ionosphere, sonar, and spambase remain rejected or near-miss scouts. This is
-not paper evidence; it only permits the fixed preregistered 30-seed follow-up
-below.
+The OpenML diabetes margin replay route is now the first replicated positive
+pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
+BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,
+and the held-out seeds 30--59 replication gives BGR 0.7056 vs. uniform 0.6673
+(W/L/T=23/7/0) and vs. fixed-radius 0.6640. Pooled across 60 seeds, BGR is
+0.7059 vs. uniform 0.6681 (+0.0378, W/L/T=47/13/0) and vs. fixed-radius
+0.6699 (+0.0359, W/L/T=43/17/0). This is acceptance-moving supervised
+margin-replay evidence, but it still does not solve the learned-policy or
+standard-environment failures by itself.
 The new grid-margin witness-sensitivity diagnostic improves scope support for the
 feasibility-witness assumption but is controlled mechanism evidence, not an
 independent-benchmark win.
@@ -79,11 +83,12 @@ stronger formal result, or presentation/theory improvements that materially
 change reviewer risk.
 
 Current acceptance answer: not ready. The internal readiness check still reports
-`NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid result is positive, but the
-independent/pre-existing benchmark gate and OpenVLA/LIBERO learned-policy gate
-are failing. The latest FourRooms radius-10, HandReach-v3, and
-highway-fast-v0 follow-ups close simple rescue paths, but they are negative
-limitations, not acceptance-moving evidence. A 30-seed grid-margin witness
+`NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid result is positive and the
+OpenML diabetes pre-existing-dataset follow-up/replication now clears the
+independent/pre-existing gate, but OpenVLA/LIBERO learned-policy evidence is
+still failing and the standard-environment recovery record is still negative.
+The latest FourRooms radius-10, HandReach-v3, and highway-fast-v0 follow-ups
+close simple rescue paths, but they are negative limitations. A 30-seed grid-margin witness
 sensitivity diagnostic now quantifies one reviewer-facing interface assumption:
 exact-witness accepted samples are valid at 1.0000, while symmetric 10%/20%
 witness noise lowers true-boundary recall to 0.9001/0.7980.
@@ -126,12 +131,12 @@ until the readiness gates support that.
 
 The active objective is to move this repository toward a genuinely high-confidence AAAI main-track paper. Do not treat wording-only reframing as success. The core blocker is evidence: a promoted result must beat strong baselines on a fixed or pre-existing benchmark with non-contradictory metrics.
 
-Current target: iterate, queue experiments, and reframe the paper until the work is plausibly 90%+ likely to clear the AAAI main-track bar. Current status is below that bar: the strongest positive evidence is still the controlled grid-margin mechanism result, while standard-environment and learned-policy probes remain negative or non-promotable.
+Current target: iterate, queue experiments, and reframe the paper until the work is plausibly 90%+ likely to clear the AAAI main-track bar. Current status is below that bar: the strongest positive evidence now includes the controlled grid-margin mechanism result and replicated OpenML diabetes margin replay, while standard-environment and learned-policy probes remain negative or non-promotable.
 
 As of 2026-06-07, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .` reports:
 
 - PASS controlled grid mechanism: pooled RAUC 0.4342 vs 0.3965.
-- FAIL independent/pre-existing benchmarks: FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, MiniGrid LavaGapS7, PointMaze, FetchReach, and Reacher remain non-promotable.
+- PASS independent/pre-existing benchmark: OpenML diabetes margin replay is positive and replicated, with pooled BGR 0.7059 vs. uniform 0.6681 (+0.0378, W/L/T=47/13/0) and vs. fixed-radius 0.6699 (+0.0359, W/L/T=43/17/0). Standard-environment recovery screens such as FrozenLake, MiniGrid, PointMaze, FetchReach, Reacher, bsuite, MinAtar, and LunarLander remain non-promotable or negative.
 - FAIL learned-policy OpenVLA/LIBERO: the latest completed perturb-only anchored audit has non-identity success BGR 371/400, official 367/400, and matched random 372/400, with identity BGR 99/100, official 99/100, and random 99/100. BGR trails matched random by 1/400 and beats official by only 4/400, so it fails the fixed +10/400 and +0.02 promotion gate. Earlier weighted and proximal-anchor audits are also negative.
 - Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
@@ -215,8 +220,8 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   versus 0.9563 uniform and W/L/T=4/0/0. Both gaps are below the +0.03
   pre-registration threshold. Do not add this to the manuscript or scale it
   without a genuinely new preregistered premise.
-- The OpenML margin replay scout is completed and opens one active candidate
-  route. The fixed command is
+- The OpenML margin replay scout is completed and opened one candidate route.
+  The fixed command is
   `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --out results/openml_margin_scout_v0`.
   It uses OpenML version-1 datasets ionosphere, sonar, diabetes, and spambase
   through `sklearn.datasets.fetch_openml`, median imputation, label encoding,
@@ -224,10 +229,17 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   `SGDClassifier`. OpenML diabetes target radius 2.0 clears the 4-seed scout
   screen with BGR 0.7402 final RAUC versus uniform 0.6797 and W/L/T=4/0/0;
   fixed-radius replay is 0.6999 at the same target. Ionosphere, sonar, and
-  spambase are rejected or near-miss scouts. This is not manuscript evidence.
-  The only valid next step for this route is the fixed preregistered 30-seed
-  command:
+  spambase are rejected or near-miss scouts. The fixed preregistered 30-seed
+  command was:
   `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seeds 30 --out results/openml_diabetes_margin_30seed_v1`.
+  It stayed positive: BGR 0.7062 vs. uniform 0.6689 (+0.0373, W/L/T=24/6/0)
+  and vs. fixed-radius 0.6759 (+0.0303, W/L/T=19/11/0). The held-out
+  replication command was:
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seed-start 30 --seeds 30 --out results/openml_diabetes_margin_replication_30seed_v1`.
+  It also stayed positive: BGR 0.7056 vs. uniform 0.6673 (+0.0383,
+  W/L/T=23/7/0) and vs. fixed-radius 0.6640 (+0.0416, W/L/T=24/6/0). This can
+  be considered for paper incorporation only with careful framing as
+  pre-existing supervised margin-replay evidence, not robotics evidence.
 - The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation/perturb-only recipe family; the preregistered weighted, proximal-anchor, and perturb-only anchored audits all failed the learned-policy promotion gate.
 - The grid-margin witness-sensitivity diagnostic is completed and paper-facing
   only as scope evidence for the feasibility-witness assumption. The fixed

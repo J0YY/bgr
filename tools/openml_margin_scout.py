@@ -296,6 +296,7 @@ def main() -> int:
     parser.add_argument("--datasets", type=parse_csv, default=list(DEFAULT_DATASETS))
     parser.add_argument("--targets", type=parse_float_csv, default=list(DEFAULT_TARGETS))
     parser.add_argument("--seeds", type=int, default=4)
+    parser.add_argument("--seed-start", type=int, default=0)
     parser.add_argument("--steps", type=int, default=8)
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--candidate-count", type=int, default=128)
@@ -310,7 +311,7 @@ def main() -> int:
     results = []
     for dataset in args.datasets:
         for target_radius in args.targets:
-            for seed in range(args.seeds):
+            for seed in range(args.seed_start, args.seed_start + args.seeds):
                 for method in METHODS:
                     result = run_trial(
                         dataset=dataset,

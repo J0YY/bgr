@@ -282,8 +282,58 @@ def grid_mechanism_gate(root: Path) -> GateResult:
     )
 
 
+def openml_diabetes_positive_detail(root: Path) -> str | None:
+    original_path = root / "results/openml_diabetes_margin_30seed_v1/per_seed.csv"
+    replication_path = root / "results/openml_diabetes_margin_replication_30seed_v1/per_seed.csv"
+    if not original_path.exists() or not replication_path.exists():
+        return None
+
+    original = read_rows(original_path)
+    replication = read_rows(replication_path)
+    pooled = original + replication
+
+    def comparison_detail(rows: list[dict[str, str]]) -> tuple[float, float, tuple[int, int, int], tuple[int, int, int]]:
+        bgr = mean_metric(rows, "bgr", "final_rauc")
+        uniform = mean_metric(rows, "uniform", "final_rauc")
+        fixed = mean_metric(rows, "fixed", "final_rauc")
+        return (
+            bgr - uniform,
+            bgr - fixed,
+            paired_wins(rows, "bgr", "uniform", "final_rauc"),
+            paired_wins(rows, "bgr", "fixed", "final_rauc"),
+        )
+
+    original_uniform_delta, original_fixed_delta, original_uniform_wins, original_fixed_wins = comparison_detail(original)
+    replication_uniform_delta, replication_fixed_delta, replication_uniform_wins, replication_fixed_wins = comparison_detail(
+        replication
+    )
+    pooled_uniform_delta, pooled_fixed_delta, pooled_uniform_wins, pooled_fixed_wins = comparison_detail(pooled)
+    passed = (
+        original_uniform_delta >= 0.03
+        and original_fixed_delta >= 0.03
+        and original_uniform_wins[0] >= 20
+        and original_fixed_wins[0] >= 18
+        and replication_uniform_delta >= 0.03
+        and replication_fixed_delta >= 0.03
+        and replication_uniform_wins[0] >= 20
+        and replication_fixed_wins[0] >= 18
+    )
+    if not passed:
+        return None
+    return (
+        "OpenML diabetes margin replay positive and replicated: "
+        f"original dRAUC vs uniform {original_uniform_delta:+.4f} W/L/T={original_uniform_wins}, "
+        f"vs fixed {original_fixed_delta:+.4f} W/L/T={original_fixed_wins}; "
+        f"held-out dRAUC vs uniform {replication_uniform_delta:+.4f} W/L/T={replication_uniform_wins}, "
+        f"vs fixed {replication_fixed_delta:+.4f} W/L/T={replication_fixed_wins}; "
+        f"pooled dRAUC vs uniform {pooled_uniform_delta:+.4f} W/L/T={pooled_uniform_wins}, "
+        f"vs fixed {pooled_fixed_delta:+.4f} W/L/T={pooled_fixed_wins}"
+    )
+
+
 def independent_benchmark_gate(root: Path) -> GateResult:
     failures: list[str] = []
+    positive_detail = openml_diabetes_positive_detail(root)
 
     frozen = read_rows(root / "results/frozenlake_recovery_focused_30seed_v1/summary.csv")
     frozen_bgr = mean_metric(frozen, "bgr", "final_rauc")
@@ -771,8 +821,16 @@ def independent_benchmark_gate(root: Path) -> GateResult:
 
     return GateResult(
         "independent/pre-existing benchmark",
-        not failures,
-        "; ".join(failures) if failures else "at least one independent benchmark clears the promotion criteria",
+        positive_detail is not None or not failures,
+        (
+            f"{positive_detail}; remaining standard-environment negatives: {'; '.join(failures)}"
+            if positive_detail is not None and failures
+            else positive_detail
+            if positive_detail is not None
+            else "; ".join(failures)
+            if failures
+            else "at least one independent benchmark clears the promotion criteria"
+        ),
     )
 
 

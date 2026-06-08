@@ -11,6 +11,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Retired calibrated route(s) that cleared pre-method calibration: `MinAtar Breakout calibration` clean 1.0000, range 0.6667--1.0000, r80 0.6000, `MinAtar Asterix calibration` clean 0.8333, range 0.5000--0.8333, r80 5.3333, `Gymnasium MuJoCo Reacher-v5 calibration` clean 0.8333, range 0.5000--0.9167, r80 3.0000, `Gymnasium MuJoCo InvertedPendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2100, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2825, `Gymnasium Box2D LunarLander-v3 calibration` clean 0.9167, range 0.5833--0.9167, r80 0.5300.
 - Rejected route scout(s): `sklearn digits margin replay` best BGR 0.8271 vs uniform 0.8123 (W/L/T=2/2/0), `sklearn tabular margin replay (breast_cancer)` best BGR 0.9610 vs uniform 0.9516 (W/L/T=3/1/0), `sklearn tabular margin replay (wine)` best BGR 0.9702 vs uniform 0.9563 (W/L/T=4/0/0), `OpenML margin replay (ionosphere)` best BGR 0.8429 vs uniform 0.8338 (W/L/T=2/2/0), `OpenML margin replay (sonar)` best BGR 0.7667 vs uniform 0.7378 (W/L/T=4/0/0), `OpenML margin replay (spambase)` best BGR 0.8840 vs uniform 0.8602 (W/L/T=3/1/0).
 - Route scout(s) requiring preregistration before promotion: `OpenML margin replay (diabetes)` best BGR 0.7402 vs uniform 0.6797 (W/L/T=4/0/0).
+- Positive pre-existing-dataset follow-up(s): `OpenML diabetes margin 30-seed (diabetes)` BGR 0.7062 vs uniform 0.6689 (W/L/T=24/6/0), fixed gap +0.0303, `OpenML diabetes margin replication 30-seed (diabetes)` BGR 0.7056 vs uniform 0.6673 (W/L/T=23/7/0), fixed gap +0.0416.
 
 ## Promotion Deficits
 
@@ -19,6 +20,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Retired calibrated route(s): `MinAtar Breakout calibration`, `MinAtar Asterix calibration`, `Gymnasium MuJoCo Reacher-v5 calibration`, `Gymnasium MuJoCo InvertedPendulum-v5 calibration`, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration`, `Gymnasium Box2D LunarLander-v3 calibration` cleared pre-method calibration, but the corresponding fixed method screen is negative or tied; not active acceptance evidence.
 - Rejected route scout(s): `sklearn digits margin replay`, `sklearn tabular margin replay (breast_cancer)`, `sklearn tabular margin replay (wine)`, `OpenML margin replay (ionosphere)`, `OpenML margin replay (sonar)`, `OpenML margin replay (spambase)` did not clear the +0.03 and 3/4 paired pre-registration screen; not active acceptance evidence.
 - Route scout(s): `OpenML margin replay (diabetes)` need a fixed preregistered comparison before any manuscript claim.
+- Positive pre-existing-dataset follow-up(s): `OpenML diabetes margin 30-seed (diabetes)`, `OpenML diabetes margin replication 30-seed (diabetes)` clear the internal 30-seed margin-replay follow-up gate; paper incorporation still needs claim checks and careful framing.
 - Active route: no queued learned-policy route is recorded in the local ledgers.
 
 ## Independent Benchmark Screens
@@ -81,6 +83,8 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | OpenML margin replay (ionosphere) | 1.5000 | 0.8429 | 0.8338 | +0.0090 (2/2/0) | 0.8416 @ 2.0000 | reject-scout |
 | OpenML margin replay (sonar) | 1.5000 | 0.7667 | 0.7378 | +0.0289 (4/0/0) | 0.7701 @ 2.0000 | reject-scout |
 | OpenML margin replay (spambase) | 1.0000 | 0.8840 | 0.8602 | +0.0238 (3/1/0) | 0.8431 @ 2.0000 | reject-scout |
+| OpenML diabetes margin 30-seed (diabetes) | 2.0000 | 0.7062 | 0.6689 | +0.0373 (24/6/0) | 0.6759 @ 2.0000 | positive-follow-up |
+| OpenML diabetes margin replication 30-seed (diabetes) | 2.0000 | 0.7056 | 0.6673 | +0.0383 (23/7/0) | 0.6640 @ 2.0000 | positive-follow-up |
 
 ## Pre-Method Calibrations
 
@@ -103,11 +107,12 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 ## Priority Read
 
 - The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.
-- The independent-benchmark route has not produced a promotable screen: early promising screens either fail paired/radius checks or do not survive scale-up, and later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.
+- The standard-environment recovery route still has not produced a promotable screen: early promising screens either fail paired/radius checks or do not survive scale-up, and later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.
 - The usable Reacher-v5 calibration is pre-method evidence only; the fixed full all-method comparison is now negative and should not be promoted.
 - The InvertedPendulum-v5 calibration also cleared pre-method checks, but its fixed 4-seed method screen ties all methods on final RAUC and median-r80; do not scale or promote it.
 - Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The InvertedDoublePendulum-v5 calibration cleared pre-method checks, but its fixed 4-seed method screen collapses clean success; the small BGR RAUC edge is not acceptance evidence.
+- `OpenML diabetes margin 30-seed (diabetes)`, `OpenML diabetes margin replication 30-seed (diabetes)` now give a replicated positive pre-existing-dataset signal, but it must be framed as supervised margin-replay evidence rather than robotics or standard-environment recovery.
 - `OpenML margin replay (diabetes)` cleared the 4-seed scout gate only; it needs a fixed preregistered 30-seed comparison before any manuscript claim.
 - Most pre-existing-dataset route scouts are rejected before preregistration: their best BGR rows stay below the +0.03 screen even when paired signs are favorable, or fixed-radius replay is competitive.
 - Perturb-only anchored OpenVLA audit does not clear the learned-policy promotion gate: BGR 371/400, official 367/400, random 372/400; identity BGR 99/100, official 99/100, random 99/100; official gap +4 (+0.0100), random gap -1 (-0.0025), clean deficit 0.

@@ -9,7 +9,8 @@ are explicit in the title, introduction, limitations, README, and package
 guards. That improves reviewability, but it does not by itself make the paper a
 90%+ AAAI main-track accept. The remaining acceptance blocker is evidence:
 
-- no clear positive result on an independent pre-existing benchmark;
+- no clear positive result on a standard recovery environment, despite the new
+  replicated OpenML diabetes pre-existing-dataset margin result;
 - no stable learned-policy OpenVLA/LIBERO improvement over both matched random
   and the official checkpoint;
 - suffix and synthetic gains remain small even though paired consistency is
@@ -26,12 +27,12 @@ verify that claims match artifacts, while this readiness check verifies whether
 the evidence has actually cleared the independent-benchmark and learned-policy
 promotion gates.
 
-The generated scorecard now reports why each independent-benchmark screen fails
-the gate. As of the 2026-06-07 Asterix refresh, there is again no active
-independent-benchmark route: MinAtar Asterix cleared calibration, but the fixed
-all-method screen is negative because failure-only replay is the strongest
-baseline. The earlier MinAtar Breakout calibration also cleared pre-method
-checks, but its fixed all-method screen is tied/saturated negative.
+The generated scorecard now reports why each standard-environment recovery
+screen fails the gate. As of the 2026-06-07 Asterix refresh, the MinAtar
+Asterix route cleared calibration, but the fixed all-method screen is negative
+because failure-only replay is the strongest baseline. The earlier MinAtar
+Breakout calibration also cleared pre-method checks, but its fixed all-method
+screen is tied/saturated negative.
 An internal sklearn-digits margin scout was also opened as a genuinely
 pre-existing supervised dataset route, but it is rejected before paper
 promotion: the best BGR target in
@@ -42,12 +43,17 @@ A second sklearn tabular scout over built-in breast-cancer and wine datasets is
 also rejected: breast cancer's best BGR row gives 0.9610 vs. 0.9516 RAUC
 against uniform (W/L/T=3/1/0), and wine's best gives 0.9702 vs. 0.9563
 (W/L/T=4/0/0), but both gaps are below the +0.03 pre-registration screen. This
-does not solve the independent pre-existing benchmark weakness.
-An OpenML margin scout now opens one active pre-existing-dataset route, but it
-is still not paper evidence: OpenML diabetes at target radius 2.0 gives BGR
-0.7402 RAUC versus uniform 0.6797 (W/L/T=4/0/0), while fixed-radius replay is
-0.6999. This clears only the 4-seed scout gate and must be tested with the
-fixed 30-seed command recorded below before any manuscript claim.
+does not solve the independent pre-existing benchmark weakness; the later
+OpenML diabetes follow-up below is the route that changes that part of the
+record.
+An OpenML margin scout opened one pre-existing-dataset route, and its fixed
+30-seed follow-up plus held-out replication are now positive: OpenML diabetes
+at target radius 2.0 gives BGR 0.7062 RAUC versus uniform 0.6689 (+0.0373,
+W/L/T=24/6/0) in the first 30 seeds, and BGR 0.7056 versus uniform 0.6673
+(+0.0383, W/L/T=23/7/0) on seeds 30--59. BGR also beats fixed-radius replay in
+both runs. This is real acceptance-moving evidence for a pre-existing
+supervised margin-replay benchmark, but it does not solve the learned-policy
+failure or standard-environment record by itself.
 The newest standard-environment sequence sharpened the negative record:
 LunarLander is a 4-seed near miss rejected by paired signs and lower median r80,
 bsuite DeepSea trails the state-priority/uniform-radius ablation and has lower
@@ -192,13 +198,25 @@ and W/L/T=4/0/0; fixed-radius replay is 0.6999 at the same target. Ionosphere,
 sonar, and spambase do not clear the gate; sonar at target 1.5 is a near miss
 at +0.0289 with W/L/T=4/0/0.
 
-This is not manuscript evidence. It only permits the following fixed
-preregistered follow-up, with no target retuning or dataset expansion:
+This scout permitted the following fixed preregistered follow-up, with no
+target retuning or dataset expansion:
 `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seeds 30 --out results/openml_diabetes_margin_30seed_v1`.
-The route is promotable only if the 30-seed result keeps a visible mean RAUC
-gap over uniform and fixed-radius replay, has paired support that is not driven
-by a small minority of seeds, and does not become another post-hoc metric-only
-claim.
+The 30-seed result stayed positive: BGR final RAUC 0.7062 versus uniform
+0.6689 (gap +0.0373, W/L/T=24/6/0) and fixed-radius 0.6759 (gap +0.0303,
+W/L/T=19/11/0).
+
+Held-out replication command:
+`PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes --targets 2.0 --seed-start 30 --seeds 30 --out results/openml_diabetes_margin_replication_30seed_v1`.
+The held-out seeds 30--59 replication also stayed positive: BGR final RAUC
+0.7056 versus uniform 0.6673 (gap +0.0383, W/L/T=23/7/0) and fixed-radius
+0.6640 (gap +0.0416, W/L/T=24/6/0). Pooled over both 30-seed runs, BGR is
+0.7059 versus uniform 0.6681 (gap +0.0378, W/L/T=47/13/0) and fixed-radius
+0.6699 (gap +0.0359, W/L/T=43/17/0).
+
+This result should be considered for paper incorporation as scoped,
+pre-existing supervised margin-replay evidence. It should not be presented as a
+standard-environment recovery result, a robotics result, or a replacement for
+the negative OpenVLA/LIBERO audit.
 
 Completed independent-benchmark route, opened and evaluated 2026-06-07:
 official Gymnasium Box2D

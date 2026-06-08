@@ -1,0 +1,4 @@
+dataset,target_radius,method,n,final_rauc_mean,delta_vs_uniform,wins_vs_uniform,losses_vs_uniform,ties_vs_uniform,decision
+diabetes,2.0000,uniform,30,0.667308,0.000000,0,0,30,reject-scout
+diabetes,2.0000,fixed,30,0.663975,-0.003333,15,15,0,reject-scout
+diabetes,2.0000,bgr,30,0.705575,0.038267,23,7,0,reject-scout

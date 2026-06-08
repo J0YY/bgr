@@ -174,18 +174,35 @@ class RouteScout:
     wins: int
     losses: int
     ties: int
+    seeds: int
     best_fixed_mean: float
     best_fixed_target: float
 
     @property
+    def fixed_delta(self) -> float:
+        return self.treatment_mean - self.best_fixed_mean
+
+    @property
     def decision(self) -> str:
+        if self.seeds >= 30:
+            if self.delta >= 0.03 and self.wins >= 20 and self.fixed_delta >= 0.03:
+                return "positive-follow-up"
+            return "reject-follow-up"
         if self.delta >= 0.03 and self.wins >= 3 and self.losses == 0:
             return "candidate-for-preregistration"
         return "reject-scout"
 
     @property
-    def promotable(self) -> bool:
+    def needs_preregistration(self) -> bool:
         return self.decision == "candidate-for-preregistration"
+
+    @property
+    def positive_followup(self) -> bool:
+        return self.decision == "positive-follow-up"
+
+    @property
+    def rejected(self) -> bool:
+        return self.decision.startswith("reject")
 
 
 BENCHMARK_SCREENS = [
@@ -435,6 +452,14 @@ ROUTE_SCOUTS = [
         "OpenML margin replay",
         "results/openml_margin_scout_v0/summary.csv",
     ),
+    (
+        "OpenML diabetes margin 30-seed",
+        "results/openml_diabetes_margin_30seed_v1/summary.csv",
+    ),
+    (
+        "OpenML diabetes margin replication 30-seed",
+        "results/openml_diabetes_margin_replication_30seed_v1/summary.csv",
+    ),
 ]
 
 
@@ -603,6 +628,7 @@ def route_scouts(root: Path) -> list[RouteScout]:
                     wins=int(best_bgr["wins_vs_uniform"]),
                     losses=int(best_bgr["losses_vs_uniform"]),
                     ties=int(best_bgr["ties_vs_uniform"]),
+                    seeds=int(best_bgr["n"]),
                     best_fixed_mean=float(best_fixed["final_rauc_mean"]),
                     best_fixed_target=float(best_fixed["target_radius"]),
                 )
@@ -896,8 +922,9 @@ def render_markdown(root: Path) -> str:
             for screen in retired_calibrations
         )
         lines.append(f"- Retired calibrated route(s) that cleared pre-method calibration: {names}.")
-    rejected_scouts = [scout for scout in scouts if not scout.promotable]
-    promotable_scouts = [scout for scout in scouts if scout.promotable]
+    rejected_scouts = [scout for scout in scouts if scout.rejected]
+    candidate_scouts = [scout for scout in scouts if scout.needs_preregistration]
+    positive_followups = [scout for scout in scouts if scout.positive_followup]
     if rejected_scouts:
         names = ", ".join(
             f"`{scout.name}` best BGR {scout.treatment_mean:.4f} vs uniform {scout.uniform_mean:.4f} "
@@ -905,13 +932,20 @@ def render_markdown(root: Path) -> str:
             for scout in rejected_scouts
         )
         lines.append(f"- Rejected route scout(s): {names}.")
-    if promotable_scouts:
+    if candidate_scouts:
         names = ", ".join(
             f"`{scout.name}` best BGR {scout.treatment_mean:.4f} vs uniform {scout.uniform_mean:.4f} "
             f"(W/L/T={scout.wins}/{scout.losses}/{scout.ties})"
-            for scout in promotable_scouts
+            for scout in candidate_scouts
         )
         lines.append(f"- Route scout(s) requiring preregistration before promotion: {names}.")
+    if positive_followups:
+        names = ", ".join(
+            f"`{scout.name}` BGR {scout.treatment_mean:.4f} vs uniform {scout.uniform_mean:.4f} "
+            f"(W/L/T={scout.wins}/{scout.losses}/{scout.ties}), fixed gap {scout.fixed_delta:+.4f}"
+            for scout in positive_followups
+        )
+        lines.append(f"- Positive pre-existing-dataset follow-up(s): {names}.")
     if active_calibrations:
         names = ", ".join(
             f"`{screen.name}` clean {screen.clean_success:.4f}, range {screen.min_recovery:.4f}--{screen.max_recovery:.4f}, r80 {screen.r80:.4f}"
@@ -959,10 +993,15 @@ def render_markdown(root: Path) -> str:
         lines.append(
             f"- Rejected route scout(s): {names} did not clear the +0.03 and 3/4 paired pre-registration screen; not active acceptance evidence."
         )
-    if promotable_scouts:
-        names = ", ".join(f"`{scout.name}`" for scout in promotable_scouts)
+    if candidate_scouts:
+        names = ", ".join(f"`{scout.name}`" for scout in candidate_scouts)
         lines.append(
             f"- Route scout(s): {names} need a fixed preregistered comparison before any manuscript claim."
+        )
+    if positive_followups:
+        names = ", ".join(f"`{scout.name}`" for scout in positive_followups)
+        lines.append(
+            f"- Positive pre-existing-dataset follow-up(s): {names} clear the internal 30-seed margin-replay follow-up gate; paper incorporation still needs claim checks and careful framing."
         )
     if inflight is None and active_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in active_calibrations)
@@ -1083,7 +1122,7 @@ def render_markdown(root: Path) -> str:
 
     priority_lines = [
         "- The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.",
-        "- The independent-benchmark route has not produced a promotable screen: early promising screens either fail paired/radius checks or do not survive scale-up, and later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.",
+        "- The standard-environment recovery route still has not produced a promotable screen: early promising screens either fail paired/radius checks or do not survive scale-up, and later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.",
         learned_priority,
     ]
     if rejected_scouts:
@@ -1091,11 +1130,17 @@ def render_markdown(root: Path) -> str:
             2,
             "- Most pre-existing-dataset route scouts are rejected before preregistration: their best BGR rows stay below the +0.03 screen even when paired signs are favorable, or fixed-radius replay is competitive.",
         )
-    if promotable_scouts:
-        names = ", ".join(f"`{scout.name}`" for scout in promotable_scouts)
+    if candidate_scouts:
+        names = ", ".join(f"`{scout.name}`" for scout in candidate_scouts)
         priority_lines.insert(
             2,
             f"- {names} cleared the 4-seed scout gate only; it needs a fixed preregistered 30-seed comparison before any manuscript claim.",
+        )
+    if positive_followups:
+        names = ", ".join(f"`{scout.name}`" for scout in positive_followups)
+        priority_lines.insert(
+            2,
+            f"- {names} now give a replicated positive pre-existing-dataset signal, but it must be framed as supervised margin-replay evidence rather than robotics or standard-environment recovery.",
         )
     if any(screen.name == "Gymnasium MuJoCo Reacher-v5 calibration" for screen in usable_calibrations):
         priority_lines.insert(
