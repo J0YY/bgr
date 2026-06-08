@@ -22,6 +22,7 @@ COMPLETED_METHOD_SCREEN_BY_CALIBRATION = {
     "Gymnasium MuJoCo InvertedPendulum-v5 calibration": "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
     "Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration": "results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv",
     "Gymnasium Box2D LunarLander-v3 calibration": "results/lunarlander_recovery_probe_4seed_v1/summary.csv",
+    "MinAtar Breakout calibration": "results/minatar_breakout_recovery_probe_4seed_v1/summary.csv",
 }
 
 
@@ -317,6 +318,14 @@ BENCHMARK_SCREENS = [
     (
         "bsuite Cartpole",
         "results/bsuite_cartpole_recovery_probe_4seed_v1/summary.csv",
+        ["bgr", "bgr_coverage"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
+    (
+        "MinAtar Breakout",
+        "results/minatar_breakout_recovery_probe_4seed_v1/summary.csv",
         ["bgr", "bgr_coverage"],
         ["fixed", "failure_only", "td_loss"],
         "bgr_uniform_radius",

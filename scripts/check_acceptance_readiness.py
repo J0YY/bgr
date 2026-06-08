@@ -683,6 +683,41 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"W/L/T={best_cartpole_wins}"
             )
 
+    minatar_path = root / "results/minatar_breakout_recovery_probe_4seed_v1/summary.csv"
+    if minatar_path.exists():
+        minatar = read_rows(minatar_path)
+        minatar_bgr = mean_metric(minatar, "bgr", "final_rauc")
+        minatar_coverage = mean_metric(minatar, "bgr_coverage", "final_rauc")
+        minatar_uniform = mean_metric(minatar, "uniform", "final_rauc")
+        minatar_failure = mean_metric(minatar, "failure_only", "final_rauc")
+        minatar_fixed = mean_metric(minatar, "fixed", "final_rauc")
+        minatar_td = mean_metric(minatar, "td_loss", "final_rauc")
+        minatar_ablation = mean_metric(minatar, "bgr_uniform_radius", "final_rauc")
+        minatar_bgr_r80 = mean_metric(minatar, "bgr", "final_median_r80")
+        minatar_coverage_r80 = mean_metric(minatar, "bgr_coverage", "final_median_r80")
+        minatar_uniform_r80 = mean_metric(minatar, "uniform", "final_median_r80")
+        minatar_bgr_wins = paired_wins(minatar, "bgr", "uniform", "final_rauc")
+        minatar_coverage_wins = paired_wins(minatar, "bgr_coverage", "uniform", "final_rauc")
+        best_minatar = minatar_bgr if minatar_bgr >= minatar_coverage else minatar_coverage
+        best_minatar_r80 = minatar_bgr_r80 if minatar_bgr >= minatar_coverage else minatar_coverage_r80
+        best_minatar_wins = minatar_bgr_wins if minatar_bgr >= minatar_coverage else minatar_coverage_wins
+        if not (
+            best_minatar - minatar_uniform >= 0.01
+            and best_minatar > max(minatar_failure, minatar_fixed, minatar_td, minatar_ablation)
+            and best_minatar_wins[0] >= 3
+            and best_minatar_r80 >= minatar_uniform_r80
+            and not (best_minatar_r80 >= 0.99 and minatar_uniform_r80 >= 0.99)
+            and not (best_minatar_r80 <= 0.01 and minatar_uniform_r80 <= 0.01)
+        ):
+            failures.append(
+                f"MinAtar Breakout negative/saturated: BGR {minatar_bgr:.4f}, "
+                f"BGR-Coverage {minatar_coverage:.4f}, uniform {minatar_uniform:.4f}, "
+                f"failure-only {minatar_failure:.4f}, fixed {minatar_fixed:.4f}, "
+                f"TD-loss {minatar_td:.4f}, uniform-radius {minatar_ablation:.4f}, "
+                f"best-r80 {best_minatar_r80:.4f} vs uniform {minatar_uniform_r80:.4f}, "
+                f"W/L/T={best_minatar_wins}"
+            )
+
     for label, relative_path in CALIBRATION_SUMMARIES:
         calibration_path = root / relative_path
         if not calibration_path.exists():

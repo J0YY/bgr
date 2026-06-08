@@ -422,13 +422,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "9b7c7789087ffc49a23299d4e275dbed3787036ef1ae07d3b5fbf534fff51146",
-      "size_bytes": 296817
+      "sha256": "004e89b44c9b1442503cf9820cd03132e14b5362117eaeb09afc02ba9aced3cc",
+      "size_bytes": 296103
     },
     {
       "path": "paper/main.tex",
-      "sha256": "16be2169c188be534b6296b347560c684fdeb2b4b733ff699038fe1089746116",
-      "size_bytes": 38553
+      "sha256": "25f6c7c895c424ccd6a353d57186c4562b56b02ca0f9e5535b47db03bbbbfc8a",
+      "size_bytes": 38093
     },
     {
       "path": "paper/references.bib",
@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "4861e9e80cf32b9c59e4ee0f11f6697789baaca38c6a6b6b82cd06926bb3e083",
-      "size_bytes": 301700
+      "sha256": "04cc5f510157a76d1a0e12f844991966c4f23750ee0f36cae97267062f31cef8",
+      "size_bytes": 302566
     },
     {
       "path": "results/bsuite_cartpole_recovery_probe_4seed_v1/package_versions.json",
@@ -831,6 +831,26 @@
       "size_bytes": 567
     },
     {
+      "path": "results/minatar_breakout_recovery_probe_4seed_v1/aggregate.csv",
+      "sha256": "48e05390b1861ddd70839e422776f5e2b9927dba95d4765e8c0713c68f1c208d",
+      "size_bytes": 498
+    },
+    {
+      "path": "results/minatar_breakout_recovery_probe_4seed_v1/history.csv",
+      "sha256": "db3a9fba6b73ea19f2ade3b221e8485b59593ca5ec5eacb8ed91149831c26921",
+      "size_bytes": 5880
+    },
+    {
+      "path": "results/minatar_breakout_recovery_probe_4seed_v1/package_versions.json",
+      "sha256": "1c6d05dfec795e9dba646044b5d2e4c1ed50e88cd6bbce0f6b9535e12b358f8a",
+      "size_bytes": 46
+    },
+    {
+      "path": "results/minatar_breakout_recovery_probe_4seed_v1/summary.csv",
+      "sha256": "005f2247ff4ec6e560267813b2700063145ad4af405c37a660573d5f35e44207",
+      "size_bytes": 2123
+    },
+    {
       "path": "results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1/package_versions.json",
       "sha256": "6747f4953bf0be3bf3b2703c6f3536528d91c5ee1bea92946367889fb0b980d2",
       "size_bytes": 49
@@ -1022,8 +1042,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "c09b68d463c0329566a7707a40fad235e81d8b08d31fe4f151127efc8d3feb22",
-      "size_bytes": 41362
+      "sha256": "858e468a87f2ae3d2a3340f7a03554faf5baced877aecbb23df0d08a77676d9b",
+      "size_bytes": 41712
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -1037,8 +1057,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "36e722d2bc31874d1933bedd8f954ad9a74a54f338e925181e25f417064ba1c9",
-      "size_bytes": 45387
+      "sha256": "ce852f7f7321572e75df5e5a31327e1dfc2d9eac6d935fcb4c75b97b2e185eb2",
+      "size_bytes": 47726
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -1047,13 +1067,13 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "b45cea1b69c0f3aae8caaa398d9091873e3bc61a819754eb73341644f2d863a7",
-      "size_bytes": 106219
+      "sha256": "c94f320d26011c955378855f9408df0a6b6dc6a23d152b5d945207556a4473c0",
+      "size_bytes": 106996
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "79c60456924eac889ea290bd836e4161d556593faa1eb7a92af2dd1a1f430eee",
-      "size_bytes": 243066
+      "sha256": "551e87182a05770ef6da4abf6bbc4e6ec0a1feaf09411b4d7159dfc82e354ad7",
+      "size_bytes": 243451
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1536,6 +1556,11 @@
       "size_bytes": 1786
     },
     {
+      "path": "tests/test_minatar_breakout_recovery_probe.py",
+      "sha256": "dfe197677ea592fe33b336dbc1e3accf2297903d91b3607c9ebdd2b404e09752",
+      "size_bytes": 3561
+    },
+    {
       "path": "tests/test_openvla_bgr_finetune_manifest.py",
       "sha256": "3052d023fb641385f5f11812d798298b9b5ed834ddcf6e0c062ed2a13ab1d5cc",
       "size_bytes": 1849
@@ -1684,6 +1709,11 @@
       "path": "tools/inverted_pendulum_recovery_probe.py",
       "sha256": "9abd2c908cca7efb9cfe26dd4344c363e8922b108e50e91bb6269ecca53e69b7",
       "size_bytes": 23431
+    },
+    {
+      "path": "tools/minatar_breakout_recovery_probe.py",
+      "sha256": "fe82956177d0e7b2e9301d7ba199b1ac3abe3972b0ce2172ae7c2360b9b80d40",
+      "size_bytes": 24009
     },
     {
       "path": "tools/reacher_recovery_calibration.py",

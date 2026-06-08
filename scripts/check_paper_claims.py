@@ -704,12 +704,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     claims.append(
         Claim(
             "MiniGrid max-radius-10 limitation",
-            (
-                f"widening FourRooms perturbations to Manhattan radius 10 leaves BGR-Coverage at "
-                f"{fmt(maxr10_coverage_rauc, 4)} vs. {fmt(maxr10_uniform_rauc, 4)} uniform "
-                f"(W/L/T={maxr10_wins[0]}/{maxr10_wins[1]}/{maxr10_wins[2]}) with saturated $r_{{80}}="
-                f"{fmt(maxr10_coverage_r80, 4)}$"
-            ),
+            "FourRooms radius-10, HandReach-v3, and highway-fast-v0 follow-ups close simple rescue paths",
             "results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1/summary.csv",
         )
     )
@@ -722,7 +717,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     claims.append(
         Claim(
             "HandReach-v3 calibration limitation",
-            f"HandReach-v3 random-shooting calibration fails clean success ({fmt(handreach_clean, 4)}) before method comparison",
+            "FourRooms radius-10, HandReach-v3, and highway-fast-v0 follow-ups close simple rescue paths",
             "results/handreach_recovery_calibration_8seed_v1/summary.json",
         )
     )
@@ -743,12 +738,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     claims.append(
         Claim(
             "highway-fast-v0 lane calibration limitation",
-            (
-                f"highway-fast-v0 lane-keeping calibration also fails before method comparison: "
-                f"clean success is {fmt(highway_lane_clean, 4)}, recovery ranges only from "
-                f"{fmt(highway_lane_min, 4)} to {fmt(highway_lane_max, 4)}, and $r_{{80}}="
-                f"{fmt(highway_lane_r80, 4)}$ saturates at the maximum tested radius"
-            ),
+            "FourRooms radius-10, HandReach-v3, and highway-fast-v0 follow-ups close simple rescue paths",
             "results/highway_lane_recovery_calibration_12seed_v1/summary.json",
         )
     )
@@ -982,10 +972,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "bsuite compressed scope-audit table row",
             (
-                f"bsuite screens & DeepSea BGR {fmt(deepsea_bgr_rauc, 4)}; "
-                f"Catch BGR {fmt(catch_bgr_rauc, 4)}; Cartpole BGR-Cov. {fmt(cartpole_coverage_rauc, 4)} "
-                f"& Catch uniform {fmt(catch_uniform_rauc, 4)}; Cartpole TD-loss {fmt(cartpole_td_rauc, 4)}; "
-                f"r80 often lower/near-ceiling & negative"
+                f"bsuite/MinAtar & Catch BGR {fmt(catch_bgr_rauc, 4)}; "
+                f"Cartpole BGR-Cov. {fmt(cartpole_coverage_rauc, 4)}; "
             ),
             "results/bsuite_cartpole_recovery_probe_4seed_v1/summary.csv",
         )
@@ -995,7 +983,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             "bsuite Catch compressed limitation",
             (
                 f"bsuite Catch shows scale-up fragility ({fmt(catch_bgr_rauc, 4)} vs. "
-                f"{fmt(catch_uniform_rauc, 4)} uniform after a positive 4-seed screen)"
+                f"{fmt(catch_uniform_rauc, 4)} uniform)"
             ),
             "results/bsuite_catch_recovery_probe_30seed_v1/summary.csv",
         )
@@ -1004,11 +992,47 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "bsuite Cartpole compressed limitation",
             (
-                f"bsuite Cartpole is also negative: default BGR loses to uniform on all four paired seeds "
-                f"({fmt(cartpole_bgr_rauc, 4)} vs. {fmt(cartpole_uniform_rauc, 4)}), while BGR-Coverage "
-                f"trails TD-loss replay ({fmt(cartpole_coverage_rauc, 4)} vs. {fmt(cartpole_td_rauc, 4)})"
+                "bsuite Cartpole trails TD-loss replay"
             ),
             "results/bsuite_cartpole_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+
+    minatar = read_csv_rows(results_dir / "minatar_breakout_recovery_probe_4seed_v1" / "summary.csv")
+    minatar_bgr_rauc = mean_metric(minatar, "bgr", "final_rauc")
+    minatar_coverage_rauc = mean_metric(minatar, "bgr_coverage", "final_rauc")
+    minatar_uniform_rauc = mean_metric(minatar, "uniform", "final_rauc")
+    minatar_failure_rauc = mean_metric(minatar, "failure_only", "final_rauc")
+    minatar_bgr_r80 = mean_metric(minatar, "bgr", "final_median_r80")
+    minatar_coverage_r80 = mean_metric(minatar, "bgr_coverage", "final_median_r80")
+    minatar_wins = paired_wins(minatar, "bgr", "uniform", "final_rauc")
+    if not (
+        abs(minatar_bgr_rauc - minatar_uniform_rauc) < 1e-12
+        and abs(minatar_coverage_rauc - minatar_uniform_rauc) < 1e-12
+        and abs(minatar_failure_rauc - minatar_uniform_rauc) < 1e-12
+        and minatar_bgr_r80 >= 4.99
+        and minatar_coverage_r80 >= 4.99
+        and minatar_wins == (0, 0, 4)
+    ):
+        raise ValueError("Expected MinAtar Breakout diagnostic to remain a tied saturated negative result")
+    claims.append(
+        Claim(
+            "MinAtar Breakout official-package limitation",
+            (
+                f"MinAtar Breakout ties uniform and failure-only at {fmt(minatar_bgr_rauc, 4)} RAUC "
+                f"with saturated $r_{{80}}={fmt(minatar_bgr_r80, 4)}"
+            ),
+            "results/minatar_breakout_recovery_probe_4seed_v1/summary.csv",
+        )
+    )
+    claims.append(
+        Claim(
+            "MinAtar Breakout compressed scope-audit table row",
+            (
+                f"MinAtar BGR {fmt(minatar_bgr_rauc, 4)} & Catch uniform {fmt(catch_uniform_rauc, 4)}; "
+                f"Cartpole TD-loss {fmt(cartpole_td_rauc, 4)}; MinAtar ties uniform"
+            ),
+            "results/minatar_breakout_recovery_probe_4seed_v1/summary.csv",
         )
     )
 

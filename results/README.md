@@ -78,7 +78,7 @@ OpenVLA/LIBERO rows are recovery-curve, selection, and data-plumbing audits; the
 paper does not claim a stable OpenVLA fine-tuning gain over the official
 checkpoint.
 
-Completed external-package pre-method calibration:
+Completed external-package scope diagnostic:
 
 - `results/minatar_breakout_recovery_calibration_12seed_v1/summary.json`:
   fixed MinAtar Breakout pre-method calibration, run with
@@ -87,11 +87,25 @@ Completed external-package pre-method calibration:
   paddle-tracking controller, and signed paddle-cell offsets after a burn-in
   checkpoint. It clears the pre-method gate with clean success 1.0000,
   recovery range 0.6667--1.0000, RAUC 0.7000, and r80 0.6000. Treat it as
-  permission to run one fixed all-method screen, not as BGR evidence.
+  permission for the fixed all-method screen below, not as BGR evidence.
 - `results/minatar_breakout_recovery_calibration_12seed_v1/package_versions.json`
   and `results/minatar_breakout_recovery_calibration_12seed_v1/recovery_rows.csv`:
-  compact package-version and row-level records for the same active calibration
+  compact package-version and row-level records for the same calibration
   (`MinAtar==1.0.15`, `numpy==2.4.6`).
+- `results/minatar_breakout_recovery_probe_4seed_v1/summary.csv`: fixed
+  MinAtar Breakout all-method screen, run with
+  `PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_breakout_recovery_probe.py --out results/minatar_breakout_recovery_probe_4seed_v1`.
+  This route is negative and should not be scaled or promoted: default BGR and
+  BGR-Coverage both tie uniform at 0.8896 final RAUC with W/L/T=0/0/4, median
+  r80 saturates at 5.0000, and failure-only has the best AULC at 0.7721.
+- `results/minatar_breakout_recovery_probe_4seed_v1/aggregate.csv`,
+  `results/minatar_breakout_recovery_probe_4seed_v1/history.csv`, and
+  `results/minatar_breakout_recovery_probe_4seed_v1/package_versions.json`:
+  compact aggregate, learning-history, and package-version records for the same
+  negative scope diagnostic.
+
+Completed external-package pre-method calibration:
+
 - `results/handreach_recovery_calibration_8seed_v1/summary.json`: fixed
   Gymnasium-Robotics HandReach-v3 ShadowHand calibration, run with
   `PYTHONPATH=src:. /tmp/bgr_pointmaze_venv/bin/python tools/handreach_recovery_calibration.py --out results/handreach_recovery_calibration_8seed_v1`.

@@ -18,14 +18,12 @@ Current status: not there yet. The readiness gate still says
 main positive evidence, while independent/pre-existing benchmarks and
 OpenVLA/LIBERO learned-policy evidence remain failing or non-promotable. The
 latest bsuite Catch 30-seed scale-up, MiniGrid FourRooms radius-10 rescue,
-HandReach-v3 calibration, and highway-fast-v0 lane calibration are also
-negative, so they do not solve the independent-benchmark evidence gap. The
+HandReach-v3 calibration, highway-fast-v0 lane calibration, and MinAtar
+Breakout all-method screen are also negative, so they do not solve the
+independent-benchmark evidence gap. The
 new grid-margin witness-sensitivity diagnostic improves scope support for the
 feasibility-witness assumption but is controlled mechanism evidence, not an
 independent-benchmark win.
-The newest active route is MinAtar Breakout: the fixed pre-method calibration
-cleared clean/non-flat/non-saturated checks, so it authorizes exactly one fixed
-all-method screen before any interpretation.
 
 Immediate priority: fix the weaknesses called out by the review, especially the
 lack of new independent positive evidence, the negative standard-environment
@@ -83,9 +81,9 @@ progress by adding preregistered positive evidence, fixing standard-benchmark or
 learned-policy failures, strengthening the theory, or improving required
 figures/presentation. Do not treat softer wording around unchanged results as
 acceptance progress.
-As of the latest checkpoint, MinAtar Breakout is the active independent route:
-the 12-seed calibration is usable, but there is not yet a BGR-vs-baseline
-method result.
+As of the latest checkpoint, MinAtar Breakout is retired as a negative
+independent route: the 12-seed calibration was usable, but the fixed 4-seed
+all-method screen ties uniform on final RAUC and saturates median r80.
 
 Operational rule of thumb: commit and push clean, explicit checkpoints to
 `origin/main`; do not use Docker for this project; and incorporate new results
@@ -129,7 +127,8 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
 - The internal readiness gate is intentionally failing; do not report the paper as AAAI-ready.
 - Controlled grid-margin evidence is positive and mechanistically useful, but it is not enough for a high-confidence main-track acceptance claim.
 - FrozenLake, MiniGrid FourRooms, MiniGrid DoorKey, MiniGrid LavaCrossing, MiniGrid LavaGapS7, PointMaze, and OpenVLA/LIBERO are currently negative or non-promotable.
-- The active independent route is MinAtar Breakout, not yet paper evidence. The
+- MinAtar Breakout is completed negative scope evidence, not positive BGR
+  evidence. The
   fixed pre-method calibration command is
   `PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_breakout_recovery_calibration.py --out results/minatar_breakout_recovery_calibration_12seed_v1`.
   It uses `MinAtar==1.0.15` and `numpy==2.4.6` in `/tmp/bgr_minatar_venv`,
@@ -137,7 +136,10 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   controller, and signed paddle-cell offsets after a burn-in checkpoint. The
   calibration clears the pre-method gate with clean success 1.0000, recovery
   range 0.6667--1.0000, RAUC 0.7000, and r80 0.6000. This only permits a
-  fixed all-method screen; do not cite it as positive BGR evidence.
+  fixed all-method screen; the completed screen at
+  `results/minatar_breakout_recovery_probe_4seed_v1/summary.csv` is negative:
+  BGR and BGR-Coverage both tie uniform at 0.8896 final RAUC with median r80
+  saturated at 5.0000, and failure-only has the best AULC at 0.7721.
 - FetchPush, FetchSlide, and FetchPickAndPlace object-goal calibrations are
   rejected pre-method routes under the current scripted controller/interface;
   do not build replay comparisons around them without a new preregistered
