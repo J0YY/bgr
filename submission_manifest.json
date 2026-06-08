@@ -1077,8 +1077,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "eb63e6262778c2e9d0d662bb192c27df828c8e72cf05f89fbe13114fcc4fdd3f",
-      "size_bytes": 42189
+      "sha256": "dc8be32cf14db608087f2913d60c86ed559510284aa03a7767ba6565e1ee6e08",
+      "size_bytes": 47144
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -1412,8 +1412,8 @@
     },
     {
       "path": "tests/test_acceptance_scorecard.py",
-      "sha256": "ee69e7277030ac541adcdb720b32b5014ed884d87261b06ff0219473ddce5560",
-      "size_bytes": 24857
+      "sha256": "0863eeb0980e2186374803e6deac165a5d5c1c9aeca7a489eb7aeb40a4347be4",
+      "size_bytes": 27761
     },
     {
       "path": "tests/test_aggregate_results.py",

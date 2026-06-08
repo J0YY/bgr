@@ -163,6 +163,31 @@ class CalibrationScreen:
         return "usable-calibration" if self.usable else "reject-calibration"
 
 
+@dataclass(frozen=True)
+class RouteScout:
+    name: str
+    path: str
+    target_radius: float
+    treatment_mean: float
+    uniform_mean: float
+    delta: float
+    wins: int
+    losses: int
+    ties: int
+    best_fixed_mean: float
+    best_fixed_target: float
+
+    @property
+    def decision(self) -> str:
+        if self.delta >= 0.03 and self.wins >= 3 and self.losses == 0:
+            return "candidate-for-preregistration"
+        return "reject-scout"
+
+    @property
+    def promotable(self) -> bool:
+        return self.decision == "candidate-for-preregistration"
+
+
 BENCHMARK_SCREENS = [
     (
         "FrozenLake8x8",
@@ -397,6 +422,13 @@ CALIBRATION_SCREENS = [
     ),
 ]
 
+ROUTE_SCOUTS = [
+    (
+        "sklearn digits margin replay",
+        "results/sklearn_digits_margin_scout_v0/summary.csv",
+    ),
+]
+
 
 def read_rows(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
@@ -521,6 +553,45 @@ def calibration_screens(root: Path) -> list[CalibrationScreen]:
             )
         )
     return screens
+
+
+def route_scouts(root: Path) -> list[RouteScout]:
+    scouts: list[RouteScout] = []
+    for name, rel_path in ROUTE_SCOUTS:
+        path = root / rel_path
+        if not path.exists():
+            continue
+        rows = read_rows(path)
+        bgr_rows = [row for row in rows if row["method"] == "bgr"]
+        uniform_rows = {
+            float(row["target_radius"]): float(row["final_rauc_mean"])
+            for row in rows
+            if row["method"] == "uniform"
+        }
+        fixed_rows = [row for row in rows if row["method"] == "fixed"]
+        if not bgr_rows or not uniform_rows or not fixed_rows:
+            continue
+        best_bgr = max(bgr_rows, key=lambda row: float(row["final_rauc_mean"]))
+        best_fixed = max(fixed_rows, key=lambda row: float(row["final_rauc_mean"]))
+        target = float(best_bgr["target_radius"])
+        treatment_mean = float(best_bgr["final_rauc_mean"])
+        uniform_mean = uniform_rows[target]
+        scouts.append(
+            RouteScout(
+                name=name,
+                path=rel_path,
+                target_radius=target,
+                treatment_mean=treatment_mean,
+                uniform_mean=uniform_mean,
+                delta=treatment_mean - uniform_mean,
+                wins=int(best_bgr["wins_vs_uniform"]),
+                losses=int(best_bgr["losses_vs_uniform"]),
+                ties=int(best_bgr["ties_vs_uniform"]),
+                best_fixed_mean=float(best_fixed["final_rauc_mean"]),
+                best_fixed_target=float(best_fixed["target_radius"]),
+            )
+        )
+    return scouts
 
 
 def grid_summary(root: Path) -> str:
@@ -763,6 +834,7 @@ def fmt_reasons(candidate: BenchmarkCandidate) -> str:
 def render_markdown(root: Path) -> str:
     candidates = sorted(benchmark_candidates(root), key=lambda candidate: candidate.priority_key, reverse=True)
     calibrations = calibration_screens(root)
+    scouts = route_scouts(root)
     best = candidates[0] if candidates else None
     learned_summary = learned_policy_summary(root)
     lines = [
@@ -808,6 +880,22 @@ def render_markdown(root: Path) -> str:
             for screen in retired_calibrations
         )
         lines.append(f"- Retired calibrated route(s) that cleared pre-method calibration: {names}.")
+    rejected_scouts = [scout for scout in scouts if not scout.promotable]
+    promotable_scouts = [scout for scout in scouts if scout.promotable]
+    if rejected_scouts:
+        names = ", ".join(
+            f"`{scout.name}` best BGR {scout.treatment_mean:.4f} vs uniform {scout.uniform_mean:.4f} "
+            f"(W/L/T={scout.wins}/{scout.losses}/{scout.ties})"
+            for scout in rejected_scouts
+        )
+        lines.append(f"- Rejected route scout(s): {names}.")
+    if promotable_scouts:
+        names = ", ".join(
+            f"`{scout.name}` best BGR {scout.treatment_mean:.4f} vs uniform {scout.uniform_mean:.4f} "
+            f"(W/L/T={scout.wins}/{scout.losses}/{scout.ties})"
+            for scout in promotable_scouts
+        )
+        lines.append(f"- Route scout(s) requiring preregistration before promotion: {names}.")
     if active_calibrations:
         names = ", ".join(
             f"`{screen.name}` clean {screen.clean_success:.4f}, range {screen.min_recovery:.4f}--{screen.max_recovery:.4f}, r80 {screen.r80:.4f}"
@@ -849,6 +937,16 @@ def render_markdown(root: Path) -> str:
         names = ", ".join(f"`{screen.name}`" for screen in retired_calibrations)
         lines.append(
             f"- Retired calibrated route(s): {names} cleared pre-method calibration, but the corresponding fixed method screen is negative or tied; not active acceptance evidence."
+        )
+    if rejected_scouts:
+        names = ", ".join(f"`{scout.name}`" for scout in rejected_scouts)
+        lines.append(
+            f"- Rejected route scout(s): {names} did not clear the +0.03 and 3/4 paired pre-registration screen; not active acceptance evidence."
+        )
+    if promotable_scouts:
+        names = ", ".join(f"`{scout.name}`" for scout in promotable_scouts)
+        lines.append(
+            f"- Route scout(s): {names} need a fixed preregistered comparison before any manuscript claim."
         )
     if inflight is None and active_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in active_calibrations)
@@ -893,6 +991,32 @@ def render_markdown(root: Path) -> str:
             )
             + " |"
         )
+    if scouts:
+        lines.extend(
+            [
+                "",
+                "## Route Scouts",
+                "",
+                "| Scout | Best BGR target | BGR RAUC | Uniform RAUC | dRAUC vs uniform (W/L/T) | Best fixed-radius RAUC | Decision |",
+                "| --- | ---: | ---: | ---: | ---: | ---: | --- |",
+            ]
+        )
+        for scout in scouts:
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        scout.name,
+                        f"{scout.target_radius:.4f}",
+                        f"{scout.treatment_mean:.4f}",
+                        f"{scout.uniform_mean:.4f}",
+                        f"{scout.delta:+.4f} ({scout.wins}/{scout.losses}/{scout.ties})",
+                        f"{scout.best_fixed_mean:.4f} @ {scout.best_fixed_target:.4f}",
+                        scout.decision,
+                    ]
+                )
+                + " |"
+            )
     if calibrations:
         lines.extend(
             [
@@ -946,6 +1070,11 @@ def render_markdown(root: Path) -> str:
         "- The independent-benchmark route has not produced a promotable screen: early promising screens either fail paired/radius checks or do not survive scale-up, and later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.",
         learned_priority,
     ]
+    if rejected_scouts:
+        priority_lines.insert(
+            2,
+            "- The sklearn-digits pre-existing-dataset scout is rejected before preregistration: the best BGR row has only a small 2/2 paired edge and fixed-radius replay is stronger at another target.",
+        )
     if any(screen.name == "Gymnasium MuJoCo Reacher-v5 calibration" for screen in usable_calibrations):
         priority_lines.insert(
             2,

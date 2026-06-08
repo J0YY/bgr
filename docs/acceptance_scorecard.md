@@ -9,12 +9,14 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - Closest independent benchmark screen is `MiniGrid FourRooms official-package` with treatment `bgr_coverage`: delta vs uniform +0.1075 (4/0/0), worst required-baseline delta +0.0464 (3/1/0), ablation delta +0.0071 (2/2/0), radius delta +0.0000 (0/0/4), failure reason(s): final_median_r80-ceiling-saturated.
 - Rejected pre-method calibration route(s): `FetchPush-v4 object-goal calibration`, `FetchPush-v4 far-push object-goal calibration`, `FetchSlide-v4 object-goal calibration`, `FetchPickAndPlace-v4 object-goal calibration`, `Gymnasium-Robotics HandReach-v3 calibration`, `highway-env parking-v0 calibration`, `highway-env highway-fast-v0 lane calibration`.
 - Retired calibrated route(s) that cleared pre-method calibration: `MinAtar Breakout calibration` clean 1.0000, range 0.6667--1.0000, r80 0.6000, `MinAtar Asterix calibration` clean 0.8333, range 0.5000--0.8333, r80 5.3333, `Gymnasium MuJoCo Reacher-v5 calibration` clean 0.8333, range 0.5000--0.9167, r80 3.0000, `Gymnasium MuJoCo InvertedPendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2100, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration` clean 1.0000, range 0.0000--1.0000, r80 0.2825, `Gymnasium Box2D LunarLander-v3 calibration` clean 0.9167, range 0.5833--0.9167, r80 0.5300.
+- Rejected route scout(s): `sklearn digits margin replay` best BGR 0.8271 vs uniform 0.8123 (W/L/T=2/2/0).
 
 ## Promotion Deficits
 
 - Independent benchmark: no screen clears the 4/4 promotion screen. The closest screen, `MiniGrid FourRooms official-package` with `bgr_coverage`, clears 3/4 gates and fails on final_median_r80-ceiling-saturated.
 - Learned policy: Perturb-only anchored OpenVLA audit does not clear the learned-policy promotion gate: BGR 371/400, official 367/400, random 372/400; identity BGR 99/100, official 99/100, random 99/100; official gap +4 (+0.0100), random gap -1 (-0.0025), clean deficit 0.
 - Retired calibrated route(s): `MinAtar Breakout calibration`, `MinAtar Asterix calibration`, `Gymnasium MuJoCo Reacher-v5 calibration`, `Gymnasium MuJoCo InvertedPendulum-v5 calibration`, `Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration`, `Gymnasium Box2D LunarLander-v3 calibration` cleared pre-method calibration, but the corresponding fixed method screen is negative or tied; not active acceptance evidence.
+- Rejected route scout(s): `sklearn digits margin replay` did not clear the +0.03 and 3/4 paired pre-registration screen; not active acceptance evidence.
 - Active route: no queued learned-policy route is recorded in the local ledgers.
 
 ## Independent Benchmark Screens
@@ -66,6 +68,12 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | FetchReach-v4 hard-budget goal recovery | bgr | 4 | -0.2375 (0/3/1) | -0.5000 (0/4/0) | -0.0750 (1/2/1) | final_median_r80 | -0.0097 (0/3/1) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_median_r80-contradiction |
 | MiniGrid DoorKey | bgr | 4 | -0.2697 (0/4/0) | -0.2772 (0/4/0) | -0.1252 (0/4/0) | final_abs_r10 | -0.2503 (0/2/2) | 0/4 | fail | uniform-gate, required-baseline, state-priority-ablation, final_abs_r10-contradiction |
 
+## Route Scouts
+
+| Scout | Best BGR target | BGR RAUC | Uniform RAUC | dRAUC vs uniform (W/L/T) | Best fixed-radius RAUC | Decision |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| sklearn digits margin replay | 1.0000 | 0.8271 | 0.8123 | +0.0148 (2/2/0) | 0.8425 @ 0.8000 | reject-scout |
+
 ## Pre-Method Calibrations
 
 | Calibration | Clean | Recovery range | Median r80 | Decision |
@@ -92,5 +100,6 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 - The InvertedPendulum-v5 calibration also cleared pre-method checks, but its fixed 4-seed method screen ties all methods on final RAUC and median-r80; do not scale or promote it.
 - Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.
 - The InvertedDoublePendulum-v5 calibration cleared pre-method checks, but its fixed 4-seed method screen collapses clean success; the small BGR RAUC edge is not acceptance evidence.
+- The sklearn-digits pre-existing-dataset scout is rejected before preregistration: the best BGR row has only a small 2/2 paired edge and fixed-radius replay is stronger at another target.
 - Perturb-only anchored OpenVLA audit does not clear the learned-policy promotion gate: BGR 371/400, official 367/400, random 372/400; identity BGR 99/100, official 99/100, random 99/100; official gap +4 (+0.0100), random gap -1 (-0.0025), clean deficit 0.
 - The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; retired calibrated routes are scope evidence, not acceptance evidence.
