@@ -231,6 +231,22 @@ COMPARISONS = [
     Comparison("Estimator 30-seed", "estimator_pair_30seed_v1/summary.csv", "active", "uniform", "boundary_hit_rate"),
     Comparison("Estimator 30-seed", "estimator_pair_30seed_v1/summary.csv", "active", "uniform", "r80_mae", "lower"),
     Comparison("Estimator 30-seed", "estimator_pair_30seed_v1/summary.csv", "active", "uniform", "rauc_mae", "lower"),
+    Comparison("OpenML diabetes 30-seed", "openml_diabetes_margin_30seed_v1/per_seed.csv", "bgr", "uniform", "final_rauc"),
+    Comparison("OpenML diabetes 30-seed", "openml_diabetes_margin_30seed_v1/per_seed.csv", "bgr", "fixed", "final_rauc"),
+    Comparison(
+        "OpenML diabetes replication 30-seed",
+        "openml_diabetes_margin_replication_30seed_v1/per_seed.csv",
+        "bgr",
+        "uniform",
+        "final_rauc",
+    ),
+    Comparison(
+        "OpenML diabetes replication 30-seed",
+        "openml_diabetes_margin_replication_30seed_v1/per_seed.csv",
+        "bgr",
+        "fixed",
+        "final_rauc",
+    ),
 ]
 OPTIONAL_COMPARISONS: list[Comparison] = []
 
@@ -255,11 +271,15 @@ def read_summary(path: Path) -> dict[str, dict[int, dict[str, float]]]:
         for row in csv.DictReader(handle):
             method = row["method"]
             seed = int(row["seed"])
-            by_method.setdefault(method, {})[seed] = {
-                key: float(value)
-                for key, value in row.items()
-                if key not in {"method", "seed"} and value != ""
-            }
+            metrics: dict[str, float] = {}
+            for key, value in row.items():
+                if key in {"method", "seed"} or value == "":
+                    continue
+                try:
+                    metrics[key] = float(value)
+                except ValueError:
+                    continue
+            by_method.setdefault(method, {})[seed] = metrics
     return by_method
 
 
@@ -735,6 +755,8 @@ def write_latex(rows: list[dict[str, str]], path: Path) -> None:
     table_keys = [
         ("Synthetic margin 30-seed", "final_rauc", "uniform"),
         ("Grid margin full 30-seed", "final_rauc", "uniform"),
+        ("OpenML diabetes 30-seed", "final_rauc", "uniform"),
+        ("OpenML diabetes 30-seed", "final_rauc", "fixed"),
         ("Robot suffix coverage-full 30-seed", "final_rauc", "clean_ft"),
         ("Robot suffix coverage-full 30-seed", "final_rauc", "fixed"),
         ("Robot suffix coverage-full 30-seed", "final_rauc", "failure_only"),
@@ -780,6 +802,9 @@ def latex_comparison_label(row: dict[str, str]) -> str:
         return "Synthetic vs uniform"
     if row["benchmark"] in {"Grid margin 15-seed", "Grid margin full 30-seed"}:
         return "Grid vs uniform"
+    if row["benchmark"].startswith("OpenML diabetes"):
+        baselines = {"fixed": "fixed-radius", "uniform": "uniform"}
+        return f"OpenML diabetes vs {baselines.get(row['baseline'], row['baseline'])}"
     if row["benchmark"].startswith("Robot suffix"):
         baselines = {
             "clean_ft": "clean-only",

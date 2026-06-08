@@ -188,7 +188,7 @@ Baselines are matched to the decisions BGR changes. Uniform replay samples repla
 \centering
 \small
 \resizebox{\textwidth}{!}{\input{figures/summary_table.tex}}
-\caption{Results generated from anonymous artifact CSVs. Synthetic, grid-margin full-baseline, and robot-suffix coverage comparisons use 30 paired seeds, with held-out 30-seed BGR-vs-uniform replications reported in text for grid and suffix. BGR is strongest in the synthetic and procedural grid-margin settings. In the lightweight robot-suffix simulator, the coverage-aware BGR-Suffix variant improves clean success, final object RAUC, transfer RAUC, and AULC over uniform suffix replay, but uniform retains a higher median critical radius.}
+\caption{Thirty-seed result summary from artifact CSVs. OpenML diabetes is a supervised margin-replay check, so only RAUC applies; held-out replications for grid, OpenML, and suffix are reported in text. BGR is strongest in the procedural grid-margin and OpenML diabetes checks. BGR-Suffix improves clean success, final object RAUC, transfer RAUC, and AULC, but uniform keeps the higher median critical radius.}
 \label{tab:current-results}
 \end{table*}
 
@@ -196,7 +196,7 @@ Baselines are matched to the decisions BGR changes. Uniform replay samples repla
 \centering
 \small
 \resizebox{\textwidth}{!}{\input{figures/significance_table.tex}}
-\caption{Selected paired effect sizes for the central claims, including the completed 30-seed synthetic, estimator, grid, and suffix full-baseline confirmations. Mean differences and 95\% confidence intervals are the primary quantities; W/L/T and exact sign-test $p$ values report consistency of direction over paired seeds. Synthetic, estimator, grid full-baseline, and suffix coverage-full comparisons use 30 paired seeds.}
+\caption{Selected paired effect sizes. Mean differences and 95\% confidence intervals are the primary quantities; W/L/T and exact sign-test $p$ values report paired-seed direction consistency. All listed comparisons use 30 paired seeds.}
 \label{tab:significance}
 \end{table*}
 
@@ -271,7 +271,7 @@ A four-condition 30-seed suffix stress sweep varies teacher quality, clutter, fe
 
 We audited the real-simulator path as premise validation. A GPU/EGL LIBERO-Goal probe completed 75/75 valid radius rows over five tasks, three reset states, five object-perturbation radii, and four trials per radius. Fixed-policy OpenVLA audits show clean replay success of 1.0, recovery drops under occlusion, blur, and shift, and BGR-boundary selection in the observed counterfactual-failure band $[0.25,0.75]$ slightly more often than random-balanced selection (0.625 vs. 0.575).
 
-The OpenVLA-OFT bridge exports 11,776 teacher-action rows; action-label/TFDS plumbing validates 2,048-transition matched BGR/random exports with 7D actions and 8D state, stock loader ingestion, and matched 10-step LoRA checkpoint smokes. These audits validate the interface but do not support a robotics success claim. A 10-task full-goal identity audit gives 99/100 clean successes for BGR, matched random, and the official checkpoint; the visual perturbation audit gives BGR 367/400 perturbed successes, tying official and trailing matched random by one episode (368/400). A 300-step image-augmentation continuation gives BGR and matched random 368/400 perturbed successes each, only one episode above official (367/400), while BGR trails both on identity. A 1,000-step low-learning-rate continuation is also negative: BGR gives 366/400 non-identity perturbation successes, trailing official at 367/400 and matched random at 370/400. The weighted perturbation curriculum is complete and also negative: BGR and official tie at 367/400 non-identity successes while matched random reaches 370/400. A proximal-anchor objective keeps BGR and matched random tied at 368/400 non-identity successes, only one episode above official (367/400), with BGR identity at 98/100 versus official 99/100. The perturb-only anchored objective preserves identity for all three methods at 99/100 and raises BGR to 371/400 non-identity successes, but official is 367/400 and matched random is 372/400, so BGR still fails the fixed +10/400 and 0.02 gate by trailing the matched control. Across these runs there is no stable official improvement and no stable learned-policy improvement over both comparators.
+The OpenVLA-OFT bridge exports 11,776 teacher-action rows; action-label/TFDS plumbing validates 2,048-transition matched BGR/random exports with 7D actions and 8D state, stock loader ingestion, and matched 10-step LoRA checkpoint smokes. The adaptation audits remain negative. Identity is 99/100 for BGR, matched random, and official in the full-goal audit; visual perturbation gives BGR 367/400, official 367/400, and random 368/400. Image augmentation gives BGR/random 368/400 vs. official 367/400 but worse BGR identity; low-LR continuation gives BGR 366/400 vs. official 367/400 and random 370/400. Weighted perturbation ties official at 367/400 while random reaches 370/400; proximal anchor ties random at 368/400 with BGR identity 98/100 vs. official 99/100. Perturb-only anchoring preserves identity at 99/100 and raises BGR to 371/400, but official is 367/400 and random is 372/400, so BGR still fails the fixed +10/400 and 0.02 gate. Across these runs there is no stable official improvement or learned-policy improvement over both comparators.
 
 \section{Limitations}
 
@@ -288,18 +288,12 @@ BGR requires reset or replay access, a meaningful perturbation family, a feasibi
 \textbf{Audit} & \textbf{BGR-family result} & \textbf{Blocking evidence} & \textbf{Decision}\\
 \hline
 FrozenLake8x8 & BGR 0.5453; clean 0.5581 & uniform 0.5312; signs 14/16, 13/17 & not promoted\\
-MiniGrid FourRooms & BGR-Coverage 0.6077 & uniform 0.6665; failure-only 0.7940; fixed 0.7587 & negative\\
-FourRooms mid2--5 & BGR 0.6747; BGR-Cov. 0.5933 & fixed 0.6779; failure-only 0.7309; r80 0.5627 vs. 0.6451 & not promoted\\
-DoorKey-6x6 & BGR-Coverage 0.4846; BGR 0.3687 & uniform 0.6384; failure-only 0.6459 & negative\\
-LavaCrossingS9N3 & BGR-Coverage 0.3547; BGR 0.3153 & uniform 0.4165; lower abs. radius & negative\\
-LavaGapS7 & BGR-Coverage 0.4277; BGR 0.4031 & uniform 0.4461; uniform-radius 0.4627 & negative\\
-PointMaze U-Maze & BGR-Clean-Shield 0.2448; BGR 0.1406 & failure-only 0.5458; 2/4 wins; r20 0.1167 vs. 0.2500 & not promoted\\
-FetchReach-v4 & BGR-Coverage 0.4625; BGR 0.4438 & uniform 0.6813; failure-only 0.8250; TD-loss 0.9437 & negative\\
+MiniGrid & FourRooms BGR-Coverage 0.6077; DoorKey-6x6 BGR-Coverage 0.4846, BGR 0.3687; LavaCrossingS9N3 BGR-Coverage 0.3547, BGR 0.3153 & failure-only 0.7940; fixed 0.7587; uniform 0.6384/0.4165; failure-only 0.6459; lower abs. radius & negative\\
+FourRooms mid2--5/LavaGapS7 & BGR 0.6747; BGR-Cov. 0.5933/0.4277; BGR 0.4031 & fixed 0.6779; failure-only 0.7309; r80 0.5627 vs. 0.6451; uniform 0.4461; uniform-radius 0.4627 & not promoted\\
+PointMaze/FetchReach & PointMaze U-Maze BGR-Clean-Shield 0.2448, BGR 0.1406; FetchReach BGR-Coverage 0.4625, BGR 0.4438 & failure-only 0.5458/0.8250; 2/4 wins; r20 0.1167 vs. 0.2500; uniform 0.6813; TD-loss 0.9437 & not promoted\\
 LunarLander-v3 & BGR-Coverage 0.7500 & uniform 0.6222; only 2/4 wins; r80 0.4200 vs. 0.4825 & not promoted\\
 bsuite/MinAtar & Catch BGR 0.8446; Cartpole BGR-Cov. 0.7559; Asterix BGR-Cov. 0.8406 & Catch uniform 0.8782; Cartpole TD-loss 0.7694; Asterix failure-only 0.8625 & negative\\
-Reacher-v5 & BGR 0.2907; BGR-Coverage 0.2721 & uniform 0.3862; BGR wins 4/12 seeds & negative\\
-InvertedPendulum-v5 & BGR 0.7500; BGR-Cov. 0.7500 & uniform/fixed/failure-only/TD-loss all 0.7500; 0/0/4 ties & tied negative\\
-InvertedDoublePendulum-v5 & BGR 0.0833; BGR-Cov. 0.0000 & uniform 0.0035; clean collapse 0.2500/0.0000 & negative\\
+MuJoCo & Reacher-v5 BGR 0.2907, BGR-Coverage 0.2721; InvertedPendulum-v5 BGR 0.7500, BGR-Cov. 0.7500; InvertedDoublePendulum-v5 BGR 0.0833, BGR-Cov. 0.0000 & Reacher uniform 0.3862, BGR wins 4/12 seeds; Pendulum uniform/fixed/failure-only/TD-loss all 0.7500; DoublePendulum uniform 0.0035 with clean collapse 0.2500/0.0000 & negative\\
 \hline
 \end{tabular}}
 \refstepcounter{table}\label{tab:scope-audits}

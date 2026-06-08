@@ -734,11 +734,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     claims.append(
         Claim(
             "MiniGrid official-package limitation",
-            (
-                f"MiniGrid FourRooms & BGR-Coverage {fmt(minigrid_coverage_rauc, 4)} "
-                f"& uniform {fmt(minigrid_uniform_rauc, 4)}; failure-only "
-                f"{fmt(minigrid_failure_rauc, 4)}; fixed {fmt(minigrid_fixed_rauc, 4)} & negative"
-            ),
+            f"FourRooms BGR-Coverage {fmt(minigrid_coverage_rauc, 4)}",
             "results/minigrid_fourrooms_recovery_probe_midband_4seed_v1/summary.csv",
         )
     )
@@ -765,10 +761,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "MiniGrid mid2-5 limitation",
             (
-                f"FourRooms mid2--5 & BGR {fmt(minigrid_mid25_bgr_rauc, 4)}; "
-                f"BGR-Cov. {fmt(minigrid_mid25_coverage_rauc, 4)} & fixed "
-                f"{fmt(minigrid_mid25_fixed_rauc, 4)}; failure-only {fmt(minigrid_mid25_failure_rauc, 4)}; "
-                f"r80 {fmt(minigrid_mid25_bgr_r80, 4)} vs. {fmt(minigrid_mid25_uniform_r80, 4)} & not promoted"
+                f"FourRooms mid2--5/LavaGapS7 & BGR {fmt(minigrid_mid25_bgr_rauc, 4)}; "
+                f"BGR-Cov. {fmt(minigrid_mid25_coverage_rauc, 4)}"
             ),
             "results/minigrid_fourrooms_recovery_probe_mid2_5_4seed_v1/summary.csv",
         )
@@ -849,11 +843,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     claims.append(
         Claim(
             "MiniGrid-DoorKey official-package limitation",
-            (
-                f"DoorKey-6x6 & BGR-Coverage {fmt(doorkey_coverage_rauc, 4)}; "
-                f"BGR {fmt(doorkey_bgr_rauc, 4)} & uniform {fmt(doorkey_uniform_rauc, 4)}; "
-                f"failure-only {fmt(doorkey_failure_rauc, 4)} & negative"
-            ),
+            f"DoorKey-6x6 BGR-Coverage {fmt(doorkey_coverage_rauc, 4)}, BGR {fmt(doorkey_bgr_rauc, 4)}",
             "results/minigrid_doorkey_recovery_probe_4seed_v1/summary.csv",
         )
     )
@@ -877,11 +867,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     claims.append(
         Claim(
             "MiniGrid-LavaCrossing official-package limitation",
-            (
-                f"LavaCrossingS9N3 & BGR-Coverage {fmt(lavacrossing_coverage_rauc, 4)}; "
-                f"BGR {fmt(lavacrossing_bgr_rauc, 4)} & uniform {fmt(lavacrossing_uniform_rauc, 4)}; "
-                "lower abs. radius & negative"
-            ),
+            f"LavaCrossingS9N3 BGR-Coverage {fmt(lavacrossing_coverage_rauc, 4)}, BGR {fmt(lavacrossing_bgr_rauc, 4)}",
             "results/minigrid_lavacrossing_recovery_probe_4seed_v1/summary.csv",
         )
     )
@@ -901,9 +887,9 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "MiniGrid-LavaGap official-package limitation",
             (
-                f"LavaGapS7 & BGR-Coverage {fmt(lavagap_coverage_rauc, 4)}; "
-                f"BGR {fmt(lavagap_bgr_rauc, 4)} & uniform {fmt(lavagap_uniform_rauc, 4)}; "
-                f"uniform-radius {fmt(lavagap_ablation_rauc, 4)} & negative"
+                f"FourRooms mid2--5/LavaGapS7 & BGR {fmt(minigrid_mid25_bgr_rauc, 4)}; "
+                f"BGR-Cov. {fmt(minigrid_mid25_coverage_rauc, 4)}/{fmt(lavagap_coverage_rauc, 4)}; "
+                f"BGR {fmt(lavagap_bgr_rauc, 4)}"
             ),
             "results/minigrid_lavagap_s7_recovery_probe_4seed_v1/summary.csv",
         )
@@ -934,10 +920,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "PointMaze official-package limitation",
             (
-                f"PointMaze U-Maze & BGR-Clean-Shield {fmt(pointmaze_shield_rauc, 4)}; "
-                f"BGR {fmt(pointmaze_bgr_rauc, 4)} & failure-only {fmt(pointmaze_failure_rauc, 4)}; "
-                f"{pointmaze_shield_wins[0]}/{pointmaze_shield_pairs} wins; r20 "
-                f"{fmt(pointmaze_shield_abs, 4)} vs. {fmt(pointmaze_uniform_abs, 4)} & not promoted"
+                f"PointMaze U-Maze BGR-Clean-Shield {fmt(pointmaze_shield_rauc, 4)}, "
+                f"BGR {fmt(pointmaze_bgr_rauc, 4)}"
             ),
             "results/pointmaze_umaze_recovery_probe_4seed_v1/summary.csv and pointmaze_umaze_clean_shield_probe_4seed_v1/summary.csv",
         )
@@ -962,10 +946,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "FetchReach official-package limitation",
             (
-                f"FetchReach-v4 & BGR-Coverage {fmt(fetchreach_hard_coverage_rauc, 4)}; "
-                f"BGR {fmt(fetchreach_hard_bgr_rauc, 4)} & uniform {fmt(fetchreach_hard_uniform_rauc, 4)}; "
-                f"failure-only {fmt(fetchreach_hard_failure_rauc, 4)}; "
-                f"TD-loss {fmt(fetchreach_hard_td_rauc, 4)} & negative"
+                f"FetchReach BGR-Coverage {fmt(fetchreach_hard_coverage_rauc, 4)}, "
+                f"BGR {fmt(fetchreach_hard_bgr_rauc, 4)}"
             ),
             "results/fetchreach_goal_recovery_hard_probe_4seed_v1/summary.csv",
         )
@@ -1179,9 +1161,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "Reacher-v5 official-package limitation",
             (
-                f"Reacher-v5 & BGR {fmt(reacher_bgr_rauc, 4)}; "
-                f"BGR-Coverage {fmt(reacher_coverage_rauc, 4)} & uniform "
-                f"{fmt(reacher_uniform_rauc, 4)}; BGR wins {reacher_wins[0]}/12 seeds & negative"
+                f"Reacher-v5 BGR {fmt(reacher_bgr_rauc, 4)}, "
+                f"BGR-Coverage {fmt(reacher_coverage_rauc, 4)}"
             ),
             "results/reacher_recovery_probe_12seed_v1/summary.csv",
         )
@@ -1190,9 +1171,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "Reacher-v5 scope-audit table row",
             (
-                f"Reacher-v5 & BGR {fmt(reacher_bgr_rauc, 4)}; "
-                f"BGR-Coverage {fmt(reacher_coverage_rauc, 4)} & uniform "
-                f"{fmt(reacher_uniform_rauc, 4)}; BGR wins {reacher_wins[0]}/12 seeds & negative"
+                f"Reacher uniform {fmt(reacher_uniform_rauc, 4)}, "
+                f"BGR wins {reacher_wins[0]}/12 seeds"
             ),
             "results/reacher_recovery_probe_12seed_v1/summary.csv",
         )
@@ -1224,10 +1204,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "InvertedPendulum-v5 official-package limitation",
             (
-                f"InvertedPendulum-v5 & BGR {fmt(inverted_bgr_rauc, 4)}; "
-                f"BGR-Cov. {fmt(inverted_coverage_rauc, 4)} & "
-                f"uniform/fixed/failure-only/TD-loss all {fmt(inverted_uniform_rauc, 4)}; "
-                f"{inverted_wins[0]}/{inverted_wins[1]}/{inverted_wins[2]} ties & tied negative"
+                f"InvertedPendulum-v5 BGR {fmt(inverted_bgr_rauc, 4)}, "
+                f"BGR-Cov. {fmt(inverted_coverage_rauc, 4)}"
             ),
             "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
         )
@@ -1236,10 +1214,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "InvertedPendulum-v5 scope-audit table row",
             (
-                f"InvertedPendulum-v5 & BGR {fmt(inverted_bgr_rauc, 4)}; "
-                f"BGR-Cov. {fmt(inverted_coverage_rauc, 4)} & "
-                f"uniform/fixed/failure-only/TD-loss all {fmt(inverted_uniform_rauc, 4)}; "
-                f"{inverted_wins[0]}/{inverted_wins[1]}/{inverted_wins[2]} ties & tied negative"
+                f"Pendulum uniform/fixed/failure-only/TD-loss all {fmt(inverted_uniform_rauc, 4)}"
             ),
             "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
         )
@@ -1274,9 +1249,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "InvertedDoublePendulum-v5 scope-audit table row",
             (
-                f"InvertedDoublePendulum-v5 & BGR {fmt(double_bgr_rauc, 4)}; "
-                f"BGR-Cov. {fmt(double_coverage_rauc, 4)} & uniform {fmt(double_uniform_rauc, 4)}; "
-                f"clean collapse {fmt(double_bgr_clean, 4)}/{fmt(double_coverage_clean, 4)} & negative"
+                f"InvertedDoublePendulum-v5 BGR {fmt(double_bgr_rauc, 4)}, "
+                f"BGR-Cov. {fmt(double_coverage_rauc, 4)}"
             ),
             "results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv",
         )
@@ -1430,10 +1404,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
     claims.append(
         Claim(
             "OpenVLA p2048 full-goal clean audit",
-            (
-                f"full-goal identity audit gives {fullgoal_clean_ratios['bgr']} clean successes "
-                "for BGR, matched random, and the official checkpoint"
-            ),
+            f"Identity is {fullgoal_clean_ratios['bgr']} for BGR, matched random, and official in the full-goal audit",
             "results/openvla_oft_clean_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
         )
     )
@@ -1468,8 +1439,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "OpenVLA p2048 full-goal visual perturbation audit",
             (
-                f"BGR {bgr_successes}/{bgr_episodes} perturbed successes, tying official "
-                f"and trailing matched random by one episode ({random_successes}/{random_episodes})"
+                f"visual perturbation gives BGR {bgr_successes}/{bgr_episodes}, "
+                f"official {official_successes}/{official_episodes}, and random {random_successes}/{random_episodes}"
             ),
             "results/openvla_oft_perturb_eval_cleanmix_p2048_step50100_lr1em6_identitylora_officialtrainstats_fullgoal10x10_v1/summary.csv",
         )
@@ -1500,10 +1471,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "OpenVLA p2048 300-step image-augmentation audit",
             (
-                f"300-step image-augmentation continuation gives BGR and matched random "
-                f"{imageaug_bgr_successes}/{imageaug_bgr_episodes} perturbed successes each, "
-                f"only one episode above official ({imageaug_official_successes}/{imageaug_official_episodes}), "
-                "while BGR trails both on identity"
+                f"Image augmentation gives BGR/random {imageaug_bgr_successes}/{imageaug_bgr_episodes} "
+                f"vs. official {imageaug_official_successes}/{imageaug_official_episodes} but worse BGR identity"
             ),
             "results/openvla_oft_perturb_eval_cleanmix_p2048_step50300_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
         )
@@ -1537,10 +1506,9 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "OpenVLA p2048 1,000-step low-LR image-augmentation audit",
             (
-                f"1,000-step low-learning-rate continuation is also negative: BGR gives "
-                f"{low_lr_bgr_successes}/{low_lr_bgr_episodes} non-identity perturbation successes, "
-                f"trailing official at {low_lr_official_successes}/{low_lr_official_episodes} "
-                f"and matched random at {low_lr_random_successes}/{low_lr_random_episodes}"
+                f"low-LR continuation gives BGR {low_lr_bgr_successes}/{low_lr_bgr_episodes} "
+                f"vs. official {low_lr_official_successes}/{low_lr_official_episodes} "
+                f"and random {low_lr_random_successes}/{low_lr_random_episodes}"
             ),
             "results/openvla_oft_perturb_eval_cleanmix_p2048_step51000_lr1em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_v1/summary.csv",
         )
@@ -1574,10 +1542,8 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "OpenVLA proximal-anchor audit",
             (
-                f"proximal-anchor objective keeps BGR and matched random tied at "
-                f"{proximal_bgr_successes}/{proximal_bgr_episodes} non-identity successes, "
-                f"only one episode above official ({proximal_official_successes}/{proximal_official_episodes}), "
-                f"with BGR identity at {proximal_identity['bgr']}/100 versus official {proximal_identity['official']}/100"
+                f"proximal anchor ties random at {proximal_bgr_successes}/{proximal_bgr_episodes} "
+                f"with BGR identity {proximal_identity['bgr']}/100 vs. official {proximal_identity['official']}/100"
             ),
             "results/openvla_oft_perturb_eval_cleanmix_p2048unique_perturbrepeat3_prereg_proxanchor_l2_1em0_ddpgradfix_v1_step50500_lr5em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv",
         )
@@ -1613,11 +1579,10 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "OpenVLA perturb-only anchored audit",
             (
-                "perturb-only anchored objective preserves identity for all three methods "
-                f"at {perturb_only_identity['bgr']}/100 and raises BGR to "
-                f"{perturb_only_bgr_successes}/{perturb_only_bgr_episodes} non-identity successes, "
+                f"Perturb-only anchoring preserves identity at {perturb_only_identity['bgr']}/100 "
+                f"and raises BGR to {perturb_only_bgr_successes}/{perturb_only_bgr_episodes}, "
                 f"but official is {perturb_only_official_successes}/{perturb_only_official_episodes} "
-                f"and matched random is {perturb_only_random_successes}/{perturb_only_random_episodes}"
+                f"and random is {perturb_only_random_successes}/{perturb_only_random_episodes}"
             ),
             "results/openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv",
         )

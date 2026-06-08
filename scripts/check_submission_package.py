@@ -3290,18 +3290,26 @@ def check_generated_result_tables(root: Path) -> list[str]:
         ("Synthetic", "Loss-priority"),
         ("GridMargin", "BGR"),
         ("GridMargin", "Uniform"),
+        ("OpenML diabetes", "BGR"),
+        ("OpenML diabetes", "Uniform"),
+        ("OpenML diabetes", "Fixed-radius"),
         ("RobotSuffix", "BGR-Coverage"),
         ("RobotSuffix", "Uniform"),
     ]
     for benchmark, method in summary_rows:
         metrics = {}
         for metric in ["Clean", "RAUC", "MedianR80", "AULC"]:
-            row = one_stats_row(
-                [item for item in summary_stats if item.get("benchmark") == benchmark and item.get("method") == method],
-                key="metric",
-                value=metric,
-            )
-            metrics[metric] = latex_mean_sem(row["mean"], row["sem"])
+            matching_rows = [
+                item
+                for item in summary_stats
+                if item.get("benchmark") == benchmark
+                and item.get("method") == method
+                and item.get("metric") == metric
+            ]
+            if matching_rows:
+                metrics[metric] = latex_mean_sem(matching_rows[0]["mean"], matching_rows[0]["sem"])
+            else:
+                metrics[metric] = "--"
         expected = (
             f"{benchmark} & {method} & {metrics['Clean']} & {metrics['RAUC']} & "
             f"{metrics['MedianR80']} & {metrics['AULC']}"
@@ -4302,8 +4310,8 @@ def check_manuscript_framing(path: Path) -> list[str]:
         "synthetic and grid-margin benchmarks are constructed to expose recovery curves",
         "Standard-environment scope audits",
         "RAUC and AULC are useful for measuring curve expansion, but they are author-defined integrals",
-        "300-step image-augmentation continuation",
-        "1,000-step low-learning-rate continuation",
+        "Image augmentation gives BGR/random",
+        "low-LR continuation gives BGR",
         "measure learned-policy brittleness and build matched fine-tuning datasets",
         "current adaptation does not establish stable gains over the official checkpoint",
         "BGR converts recovery-margin measurement into a replay curriculum",
@@ -4544,7 +4552,7 @@ def check_main_pdf(path: Path) -> list[str]:
         "OpenVLA/LIBERO audits",
         "not promoted positive claims",
         "run ledger files",
-        "30-seed synthetic, estimator, grid, and suffix",
+        "Selected paired effect sizes",
         "Suffix RAUC vs clean-only",
         "Suffix RAUC vs loss-priority",
         "Suffix transfer vs uniform",
@@ -4635,7 +4643,7 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
             ("uniform 0.6384",),
             ("LavaCrossingS9N3",),
             ("BGR-Coverage 0.3547",),
-            ("uniform 0.4165",),
+            ("uniform 0.4165", "0.4165"),
             ("PointMaze U-Maze", "PointMaze UMaze"),
             ("BGR-Clean-Shield 0.2448",),
             ("failure-only 0.5458", "failureonly 0.5458"),
@@ -4674,7 +4682,7 @@ def check_rendered_source_sync(source_path: Path, pdf_path: Path) -> list[str]:
             ("LavaCrossingS9N3",),
             ("BGR-Coverage 0.3547",),
             ("BGR 0.3153",),
-            ("uniform 0.4165",),
+            ("uniform 0.4165", "0.4165"),
             ("lower abs. radius",),
         ]
         lavacrossing_missing = [

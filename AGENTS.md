@@ -107,6 +107,23 @@ BGR/random perturb jobs remained dependency-pending. The sync produced only a
 partial `summary_available.csv` row for official/identity; the full perturb
 summary and adapt summary were still missing, and the promotion gate remained
 incomplete rather than positive evidence.
+Latest poll at 2026-06-08 05:52:55 BST showed prep `767850` still running on
+`c1-g4-02`, official identity `767857` completed at 99/100, and official blur
+`767858` running on `c1-g4-04`. BGR/random train, merge, clean-eval, and
+perturb-eval jobs remained dependency-pending. Remote log tails were healthy:
+prep had finished the BGR clean-plus-occlusion TFDS root and moved to
+matched-random TFDS generation; official blur had reached roughly episode 28/29
+with about 96% success so far. Only the partial official/identity
+`summary_available.csv` exists locally; full perturb and adapt summaries are
+still missing, so the route remains incomplete.
+
+Latest paper checkpoint: OpenML diabetes is now incorporated into the main
+summary and paired-effect tables as the first replicated positive
+pre-existing-dataset margin-replay result. `paper/main.pdf` was rebuilt through
+the `athena` pdfTeX workflow, stripped with `/opt/homebrew/bin/qpdf`, and the
+package/claim gates passed before this AGENTS update. This improves the "no new
+positive evidence" weakness but does not change readiness because the
+learned-policy gate still fails.
 
 Operational defaults:
 
