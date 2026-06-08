@@ -108,6 +108,13 @@ to reproduce this read from the current result artifacts.
   BGR and BGR-Coverage both tie uniform at 0.8896 final RAUC with W/L/T=0/0/4,
   median r80 saturates at 5.0000, and failure-only has the best AULC. Do not
   scale or promote this route without a genuinely new preregistered premise.
+- MinAtar Asterix is the current active pre-method independent route, not
+  paper evidence. The fixed 12-seed calibration in
+  `results/minatar_asterix_recovery_calibration_12seed_v1/summary.json` clears
+  clean/non-flat/non-saturated prerequisites under `MinAtar==1.0.15` with clean
+  0.8333, recovery range 0.5000--0.8333, RAUC 0.7188, and r80 5.3333. This
+  authorizes exactly one fixed all-method screen; do not tune the protocol
+  after seeing method results.
 - Gymnasium MuJoCo Reacher-v5 is completed negative scope evidence, not paper
   evidence. Its fixed calibration cleared clean/non-flat prerequisites
   (clean 0.8333, recovery range 0.5000--0.9167, RAUC 0.7891, r80 3.0000 on a

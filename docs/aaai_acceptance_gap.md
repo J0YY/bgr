@@ -27,9 +27,11 @@ the evidence has actually cleared the independent-benchmark and learned-policy
 promotion gates.
 
 The generated scorecard now reports why each independent-benchmark screen fails
-the gate. As of the 2026-06-07 MinAtar refresh, there is again no active
-independent-benchmark route: the MinAtar Breakout calibration cleared
-pre-method checks, but the fixed all-method screen is tied/saturated negative.
+the gate. As of the 2026-06-07 Asterix refresh, there is one active
+pre-method independent-benchmark route: MinAtar Asterix cleared calibration and
+therefore authorizes exactly one fixed all-method screen before interpretation.
+The earlier MinAtar Breakout calibration cleared pre-method checks, but its
+fixed all-method screen is tied/saturated negative.
 The newest standard-environment sequence sharpened the negative record:
 LunarLander is a 4-seed near miss rejected by paired signs and lower median r80,
 bsuite DeepSea trails the state-priority/uniform-radius ablation and has lower
@@ -96,6 +98,22 @@ Breakout states. The result is negative: default BGR and BGR-Coverage both tie
 uniform at 0.8896 final RAUC with W/L/T=0/0/4, median r80 saturates at 5.0000,
 and failure-only has the best AULC at 0.7721. Do not scale or promote this
 route without a genuinely new preregistered premise.
+
+Active independent-benchmark route, opened 2026-06-07: MinAtar Asterix. This is
+still MinAtar, but it uses different package-owned game dynamics from Breakout:
+moving enemies/gold, vertical and horizontal player motion, and an
+entity-avoidance controller. It is a pre-method calibration only, not BGR
+evidence. The isolated environment is `/tmp/bgr_minatar_venv` with
+`MinAtar==1.0.15` and `numpy==2.4.6`.
+
+Fixed pre-method calibration command:
+`PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_asterix_recovery_calibration.py --out results/minatar_asterix_recovery_calibration_12seed_v1`
+
+Calibration result: the fixed 12-seed run clears the pre-method gate with clean
+success 0.8333, recovery range 0.5000--0.8333, RAUC 0.7188, and r80 5.3333 on
+the 0--8 seed-fixed player-cell displacement grid after a 30-step burn-in and
+60-step recovery horizon. This only permits a fixed all-method Asterix screen;
+do not cite it as positive BGR evidence.
 
 Completed independent-benchmark route, opened and evaluated 2026-06-07:
 official Gymnasium Box2D

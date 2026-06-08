@@ -5502,3 +5502,20 @@ Interpretation: the 15-seed paired extension supports the clean-success,
 transfer, and sample-efficiency claims for BGR-Broad (p=0.00006), while
 preserving the limitation that uniform remains slightly higher on final
 object-perturbation RAUC.
+
+### `minatar_asterix_recovery_calibration_12seed_v1`
+
+Command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_asterix_recovery_calibration.py --out results/minatar_asterix_recovery_calibration_12seed_v1
+```
+
+Package environment: `/tmp/bgr_minatar_venv` with `MinAtar==1.0.15` and
+`numpy==2.4.6`.
+
+Result: the fixed Asterix pre-method calibration clears the clean/non-flat/
+non-saturated prerequisites with clean success 0.8333, recovery range
+0.5000--0.8333, RAUC 0.7188, and r80 5.3333 on the 0--8 seed-fixed
+player-cell displacement grid. This is not BGR evidence; it only authorizes the
+fixed all-method Asterix screen under the same package-backed reset interface.

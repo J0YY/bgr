@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "04cc5f510157a76d1a0e12f844991966c4f23750ee0f36cae97267062f31cef8",
-      "size_bytes": 302566
+      "sha256": "6a9cee95b98fdc56adc93412676966dfefaac094befd41fab12cb5ffc97254a2",
+      "size_bytes": 303262
     },
     {
       "path": "results/bsuite_cartpole_recovery_probe_4seed_v1/package_versions.json",
@@ -816,6 +816,21 @@
       "size_bytes": 2679
     },
     {
+      "path": "results/minatar_asterix_recovery_calibration_12seed_v1/package_versions.json",
+      "sha256": "1c6d05dfec795e9dba646044b5d2e4c1ed50e88cd6bbce0f6b9535e12b358f8a",
+      "size_bytes": 46
+    },
+    {
+      "path": "results/minatar_asterix_recovery_calibration_12seed_v1/recovery_rows.csv",
+      "sha256": "552b38ce9871b8f65abfc04a2b566d1b59d744b2766f8baac3535797ac11bafd",
+      "size_bytes": 2619
+    },
+    {
+      "path": "results/minatar_asterix_recovery_calibration_12seed_v1/summary.json",
+      "sha256": "3a65d23e692513a995ea391ec1fff2a432367078d6facc76e1a7f7ddc704900b",
+      "size_bytes": 828
+    },
+    {
       "path": "results/minatar_breakout_recovery_calibration_12seed_v1/package_versions.json",
       "sha256": "1c6d05dfec795e9dba646044b5d2e4c1ed50e88cd6bbce0f6b9535e12b358f8a",
       "size_bytes": 46
@@ -1042,8 +1057,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "858e468a87f2ae3d2a3340f7a03554faf5baced877aecbb23df0d08a77676d9b",
-      "size_bytes": 41712
+      "sha256": "f3a1b80b6348defc69da29bee01bc1943dd47f07b0e5ffd1686f841dc3926dfb",
+      "size_bytes": 41843
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -1057,8 +1072,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "ce852f7f7321572e75df5e5a31327e1dfc2d9eac6d935fcb4c75b97b2e185eb2",
-      "size_bytes": 47726
+      "sha256": "278748481a018b985fc4228eb1ac05f3cb2ae154d0bc66de8d8e8236f1e9d9fb",
+      "size_bytes": 47834
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -1072,8 +1087,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "551e87182a05770ef6da4abf6bbc4e6ec0a1feaf09411b4d7159dfc82e354ad7",
-      "size_bytes": 243451
+      "sha256": "f9e0931f224a9793204ce684d1020d96ac176b0b66e15efdf565efe0c957dc44",
+      "size_bytes": 243801
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1551,6 +1566,11 @@
       "size_bytes": 581
     },
     {
+      "path": "tests/test_minatar_asterix_recovery_calibration.py",
+      "sha256": "a0e553b811a5279aeb8e0894d264cd299f16ca811d3109e5a9ba0e7f395a495e",
+      "size_bytes": 1802
+    },
+    {
       "path": "tests/test_minatar_breakout_recovery_calibration.py",
       "sha256": "9d8eb7a50e9beb326879cb948b0bc1f9bb5362d76a5179cd5a344fd4a7b97312",
       "size_bytes": 1786
@@ -1709,6 +1729,11 @@
       "path": "tools/inverted_pendulum_recovery_probe.py",
       "sha256": "9abd2c908cca7efb9cfe26dd4344c363e8922b108e50e91bb6269ecca53e69b7",
       "size_bytes": 23431
+    },
+    {
+      "path": "tools/minatar_asterix_recovery_calibration.py",
+      "sha256": "7679e1e7d8f10d88e7e4e429d20ad143a258577f902f9f49ce7e9a4e50b2aeb9",
+      "size_bytes": 10879
     },
     {
       "path": "tools/minatar_breakout_recovery_probe.py",

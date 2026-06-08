@@ -367,6 +367,10 @@ CALIBRATION_SCREENS = [
         "results/minatar_breakout_recovery_calibration_12seed_v1/summary.json",
     ),
     (
+        "MinAtar Asterix calibration",
+        "results/minatar_asterix_recovery_calibration_12seed_v1/summary.json",
+    ),
+    (
         "Gymnasium MuJoCo Reacher-v5 calibration",
         "results/reacher_recovery_calibration_12seed_v1/summary.json",
     ),
