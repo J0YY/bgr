@@ -185,6 +185,16 @@ official identity `99/100`, official blur `97/100`, official brightness
 `98/100`, and random identity `98/100`. The fixed perturb gate remains
 `[INCOMPLETE]`; missing rows still include BGR brightness/occlusion/shift,
 official occlusion/shift, and all random non-identity perturbations.
+Latest poll at 2026-06-08 06:38:14 BST showed no promotable change yet. BGR
+brightness `767864`, official occlusion `767860`, and random blur `767878`
+were running; BGR occlusion/shift `767865`/`767866`, official shift `767861`,
+and random brightness/occlusion/shift `767879`--`767881` were still
+dependency-pending. The adapt summary remains BGR clean `99/100` and matched
+random clean `98/100`; the partial perturb summary remains BGR identity
+`99/100`, BGR blur `98/100`, official identity `99/100`, official blur
+`97/100`, official brightness `98/100`, and random identity `98/100`. The
+fixed perturb gate is still `[INCOMPLETE]`, and readiness remains
+`NOT_READY_FOR_90P_AAAI_CLAIM`.
 
 Operational defaults:
 
