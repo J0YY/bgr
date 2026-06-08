@@ -698,6 +698,32 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    highway_lane = read_json(results_dir / "highway_lane_recovery_calibration_12seed_v1" / "summary.json")
+    highway_lane_clean = float(highway_lane["clean_success"])
+    highway_lane_min = float(highway_lane["min_recovery"])
+    highway_lane_max = float(highway_lane["max_recovery"])
+    highway_lane_r80 = float(highway_lane["r80"])
+    highway_lane_radii = [float(value) for value in highway_lane["radii"]]
+    highway_lane_decision = str(highway_lane["decision"])
+    if not (
+        highway_lane_clean < 0.80
+        and highway_lane_decision == "reject-calibration-low-clean-success"
+        and abs(highway_lane_r80 - highway_lane_radii[-1]) < 1e-12
+    ):
+        raise ValueError("Expected highway-fast-v0 lane calibration to remain rejected before method comparison")
+    claims.append(
+        Claim(
+            "highway-fast-v0 lane calibration limitation",
+            (
+                f"highway-fast-v0 lane-keeping calibration also fails before method comparison: "
+                f"clean success is {fmt(highway_lane_clean, 4)}, recovery ranges only from "
+                f"{fmt(highway_lane_min, 4)} to {fmt(highway_lane_max, 4)}, and $r_{{80}}="
+                f"{fmt(highway_lane_r80, 4)}$ saturates at the maximum tested radius"
+            ),
+            "results/highway_lane_recovery_calibration_12seed_v1/summary.json",
+        )
+    )
+
     doorkey = read_csv_rows(results_dir / "minigrid_doorkey_recovery_probe_4seed_v1" / "summary.csv")
     doorkey_failure_rauc = mean_metric(doorkey, "failure_only", "final_rauc")
     doorkey_uniform_rauc = mean_metric(doorkey, "uniform", "final_rauc")

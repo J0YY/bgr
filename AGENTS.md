@@ -13,9 +13,9 @@ Current status: not there yet. The readiness gate still says
 `NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid mechanism result is the
 main positive evidence, while independent/pre-existing benchmarks and
 OpenVLA/LIBERO learned-policy evidence remain failing or non-promotable. The
-latest bsuite Catch 30-seed scale-up, MiniGrid FourRooms radius-10 rescue, and
-HandReach-v3 calibration route are also negative, so they do not solve the
-independent-benchmark evidence gap.
+latest bsuite Catch 30-seed scale-up, MiniGrid FourRooms radius-10 rescue,
+HandReach-v3 calibration, and highway-fast-v0 lane calibration are also
+negative, so they do not solve the independent-benchmark evidence gap.
 
 Immediate priority: fix the weaknesses called out by the review, especially the
 lack of new independent positive evidence, the negative standard-environment
@@ -57,9 +57,9 @@ change reviewer risk.
 Current acceptance answer: not ready. The internal readiness check still reports
 `NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid result is positive, but the
 independent/pre-existing benchmark gate and OpenVLA/LIBERO learned-policy gate
-are failing. The latest FourRooms radius-10 and HandReach-v3 follow-ups close
-simple rescue paths, but they are negative limitations, not acceptance-moving
-evidence.
+are failing. The latest FourRooms radius-10, HandReach-v3, and
+highway-fast-v0 follow-ups close simple rescue paths, but they are negative
+limitations, not acceptance-moving evidence.
 
 Acceptance reality: the project is not there yet. The current evidence supports
 a careful mechanism study, not a high-confidence AAAI main-track claim. Make
@@ -168,6 +168,12 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   and median r80 9.8000 over 12 seeds. Do not build or scale a highway-env
   parking replay comparison unless a new preregistered controller or policy
   first clears clean-success and non-saturated recovery prerequisites.
+- The highway-env highway-fast-v0 lane-driving calibration is also rejected
+  before method comparison. With `highway-env==1.10.1` in the isolated Python
+  3.11 venv, the fixed idle lane-keep policy gets clean success 0.6667,
+  recovery range 0.5833--0.6667, mean crash rate 0.3810, RAUC 0.6181, and
+  saturated r80 6.0000 over 12 seeds. Do not build or scale a highway-env lane
+  replay comparison around this controller/interface.
 - The completed Reacher independent-benchmark route is a pre-method Gymnasium
   MuJoCo Reacher-v5 calibration plus a negative method screen, not BGR
   evidence. It uses package-owned Reacher-v5

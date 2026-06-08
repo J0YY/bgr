@@ -112,6 +112,11 @@ to reproduce this read from the current result artifacts.
   best mean final RAUC (0.7500 vs. 0.6222 uniform) but wins only 2/4 paired
   seeds against uniform and has lower median r80 (0.4200 vs. 0.4825). Do not
   scale or promote this route without a genuinely new preregistered premise.
+- highway-env highway-fast-v0 lane driving is a rejected pre-method
+  calibration, not paper evidence. Its fixed idle lane-keep policy has clean
+  success 0.6667, recovery range 0.5833--0.6667, RAUC 0.6181, and saturated
+  r80 6.0000 over 12 seeds, so it fails before any BGR comparison is allowed.
+  Do not build or scale this route around the current controller/interface.
 - The weighted perturbation curriculum in
   `scripts/queue_openvla_oft_preregistered_weighted_perturb.sh` is now a
   negative learned-policy audit for the fixed learned-policy gate. It changed

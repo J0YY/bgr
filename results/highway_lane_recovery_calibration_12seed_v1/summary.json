@@ -1,0 +1,28 @@
+{
+  "clean_success": 0.6666666666666666,
+  "decision": "reject-calibration-low-clean-success",
+  "env_id": "highway-fast-v0",
+  "heading_gain": 0.12,
+  "horizon": 40,
+  "lanes_count": 3,
+  "max_recovery": 0.6666666666666666,
+  "mean_crash_rate": 0.38095238095238093,
+  "mean_on_road_rate": 1.0,
+  "min_recovery": 0.5833333333333334,
+  "policy": "idle-lane-keep",
+  "policy_frequency": 5,
+  "r80": 6.0,
+  "radii": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0
+  ],
+  "rauc": 0.6180555555555556,
+  "seeds": 12,
+  "simulation_frequency": 15,
+  "vehicles_count": 15
+}

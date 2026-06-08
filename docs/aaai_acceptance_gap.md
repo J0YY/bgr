@@ -1137,9 +1137,17 @@ risk.
   evidence. Do not build or scale a highway-env parking replay comparison unless
   a new preregistered controller or policy first clears clean success and
   non-saturated recovery prerequisites.
-  The fixed pick-place controller does not provide a usable clean recovery
-  interface, so do not build or scale a FetchPickAndPlace replay comparison
-  around this controller/interface.
+- highway-env highway-fast-v0 lane driving was checked as a second highway-env
+  route because it uses package-owned traffic dynamics, collision termination,
+  kinematic observations, and discrete lane/speed actions rather than the
+  parking goal interface. This was pre-method calibration, not BGR evidence.
+  The fixed command is:
+  `PYTHONPATH=src:. /tmp/bgr_highway311_venv/bin/python tools/highway_lane_recovery_calibration.py --out results/highway_lane_recovery_calibration_12seed_v1`.
+  The completed calibration is rejected before method comparison: clean success
+  is 0.6667, recovery ranges from 0.5833 to 0.6667, mean crash rate is 0.3810,
+  RAUC is 0.6181, and median r80 saturates at 6.0000. Do not build or scale a
+  highway-env lane replay comparison around the current idle lane-keep
+  controller/interface.
 - Gymnasium MuJoCo Reacher-v5 was a completed independent-benchmark route that
   changed both package and reset interface relative to the failed
   MiniGrid, PointMaze, FetchReach, and highway screens. The calibration uses
