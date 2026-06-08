@@ -1,0 +1,4 @@
+dataset,target_radius,method,n,final_rauc_mean,delta_vs_uniform,wins_vs_uniform,losses_vs_uniform,ties_vs_uniform,decision
+phoneme,2.0000,uniform,30,0.675808,0.000000,0,0,30,reject-scout
+phoneme,2.0000,fixed,30,0.679233,0.003425,16,14,0,reject-scout
+phoneme,2.0000,bgr,30,0.712392,0.036583,21,9,0,reject-scout

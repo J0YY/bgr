@@ -81,9 +81,13 @@ overall but has a replicated blood-transfusion-service-center win: BGR 0.7625
 versus 0.6657 for uniform and 0.6920 for fixed-radius replay, with held-out
 replication in
 `results/openml_blood_transfusion_margin_replication_30seed_v1/summary.csv`
-at 0.7595 versus 0.6846 for uniform and 0.7133 for fixed-radius replay. The
-paper frames these as supervised margin-replay evidence, not
-standard-environment or robotics results.
+at 0.7595 versus 0.6846 for uniform and 0.7133 for fixed-radius replay. It
+also yields a replicated phoneme result: the original suite row gives BGR
+0.7228 versus 0.6896 for uniform and 0.6704 for fixed-radius replay, and
+`results/openml_phoneme_margin_replication_30seed_v1/summary.csv` gives BGR
+0.7124 versus 0.6758 for uniform and 0.6792 for fixed-radius replay. The paper
+frames these as supervised margin-replay evidence, not standard-environment or
+robotics results.
 A held-out seeds 30-59 grid-margin replication again gives BGR higher RAUC than
 uniform (0.4340 vs. 0.3967) with 30/0 paired wins. Pooling the original and
 held-out grid sweeps gives 0.4342 vs. 0.3965 RAUC with 60/0 paired wins. The

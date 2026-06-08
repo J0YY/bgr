@@ -383,6 +383,84 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             ),
         ]
     )
+    openml_phoneme_replication_summary = results_dir / "openml_phoneme_margin_replication_30seed_v1" / "summary.csv"
+    openml_phoneme_replication_per_seed = results_dir / "openml_phoneme_margin_replication_30seed_v1" / "per_seed.csv"
+    phoneme_dataset = "phoneme"
+    openml_phoneme_original = [
+        row for row in read_csv_rows(openml_blood_original_summary) if row.get("dataset") == phoneme_dataset
+    ]
+    openml_phoneme_replication = read_csv_rows(openml_phoneme_replication_summary)
+    openml_phoneme_original_seeds = [
+        row for row in read_csv_rows(openml_blood_original_per_seed) if row.get("dataset") == phoneme_dataset
+    ]
+    openml_phoneme_replication_seeds = read_csv_rows(openml_phoneme_replication_per_seed)
+    pooled_phoneme = openml_phoneme_original_seeds + openml_phoneme_replication_seeds
+    phoneme_original_uniform_wlt = paired_wins(openml_phoneme_original_seeds, "bgr", "uniform", "final_rauc")
+    phoneme_original_fixed_wlt = paired_wins(openml_phoneme_original_seeds, "bgr", "fixed", "final_rauc")
+    phoneme_replication_uniform_wlt = paired_wins(openml_phoneme_replication_seeds, "bgr", "uniform", "final_rauc")
+    phoneme_replication_fixed_wlt = paired_wins(openml_phoneme_replication_seeds, "bgr", "fixed", "final_rauc")
+    if not (
+        phoneme_original_uniform_wlt[0] >= 20
+        and phoneme_original_fixed_wlt[0] >= 18
+        and phoneme_replication_uniform_wlt[0] >= 20
+        and phoneme_replication_fixed_wlt[0] >= 18
+    ):
+        raise ValueError("Expected OpenML phoneme original and held-out comparisons to have paired support")
+    claims.extend(
+        [
+            Claim(
+                "OpenML phoneme original uniform",
+                (
+                    f"{fmt(mean_metric(openml_phoneme_original, 'bgr', 'final_rauc_mean'), 4)} versus "
+                    f"{fmt(mean_metric(openml_phoneme_original, 'uniform', 'final_rauc_mean'), 4)}"
+                ),
+                "results/openml_numeric_external_fixed_target2_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "OpenML phoneme original fixed",
+                (
+                    f"{fmt(mean_metric(openml_phoneme_original, 'fixed', 'final_rauc_mean'), 4)} fixed-radius "
+                    f"(gap {fmt_signed(mean_metric(openml_phoneme_original, 'bgr', 'final_rauc_mean') - mean_metric(openml_phoneme_original, 'fixed', 'final_rauc_mean'), 4)}; "
+                    f"W/L/T={phoneme_original_fixed_wlt[0]}/{phoneme_original_fixed_wlt[1]}/{phoneme_original_fixed_wlt[2]})"
+                ),
+                "results/openml_numeric_external_fixed_target2_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML phoneme replication uniform",
+                (
+                    f"{fmt(mean_metric(openml_phoneme_replication, 'bgr', 'final_rauc_mean'), 4)} versus "
+                    f"{fmt(mean_metric(openml_phoneme_replication, 'uniform', 'final_rauc_mean'), 4)}"
+                ),
+                "results/openml_phoneme_margin_replication_30seed_v1/summary.csv",
+            ),
+            Claim(
+                "OpenML phoneme replication uniform WLT",
+                (
+                    f"gap {fmt_signed(mean_metric(openml_phoneme_replication, 'bgr', 'delta_vs_uniform'), 4)}; "
+                    f"W/L/T={phoneme_replication_uniform_wlt[0]}/{phoneme_replication_uniform_wlt[1]}/{phoneme_replication_uniform_wlt[2]}"
+                ),
+                "results/openml_phoneme_margin_replication_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML phoneme replication fixed",
+                (
+                    f"{fmt(mean_metric(openml_phoneme_replication, 'fixed', 'final_rauc_mean'), 4)} fixed-radius "
+                    f"(gap {fmt_signed(mean_metric(openml_phoneme_replication, 'bgr', 'final_rauc_mean') - mean_metric(openml_phoneme_replication, 'fixed', 'final_rauc_mean'), 4)}; "
+                    f"W/L/T={phoneme_replication_fixed_wlt[0]}/{phoneme_replication_fixed_wlt[1]}/{phoneme_replication_fixed_wlt[2]})"
+                ),
+                "results/openml_phoneme_margin_replication_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML phoneme pooled",
+                (
+                    f"{fmt(mean_metric(pooled_phoneme, 'bgr', 'final_rauc'), 4)} versus "
+                    f"{fmt(mean_metric(pooled_phoneme, 'uniform', 'final_rauc'), 4)} uniform and "
+                    f"{fmt(mean_metric(pooled_phoneme, 'fixed', 'final_rauc'), 4)} fixed-radius"
+                ),
+                "results/openml_phoneme_margin_*_30seed_v1/per_seed.csv",
+            ),
+        ]
+    )
     witness = read_csv_rows(results_dir / "grid_margin_witness_sensitivity_30seed_v1" / "summary.csv")
     witness_exact = one_row(witness, "scenario", "exact")
     witness_sym10 = one_row(witness, "scenario", "symmetric_10")

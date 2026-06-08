@@ -94,6 +94,10 @@ OpenML blood 30-seed,,final_rauc,bgr,uniform,30,0.096825,0.011231,0.073858,0.119
 OpenML blood 30-seed,,final_rauc,bgr,fixed,30,0.070525,0.011324,0.047366,0.093684,27,1,2,2.16067e-07,higher,true
 OpenML blood replication 30-seed,,final_rauc,bgr,uniform,30,0.074867,0.010250,0.053906,0.095827,25,5,0,0.000324914,higher,true
 OpenML blood replication 30-seed,,final_rauc,bgr,fixed,30,0.046208,0.008724,0.028369,0.064048,25,5,0,0.000324914,higher,true
+OpenML phoneme 30-seed,,final_rauc,bgr,uniform,30,0.033208,0.008717,0.015381,0.051036,21,9,0,0.0427739,higher,true
+OpenML phoneme 30-seed,,final_rauc,bgr,fixed,30,0.052433,0.011740,0.028425,0.076441,23,7,0,0.00522288,higher,true
+OpenML phoneme replication 30-seed,,final_rauc,bgr,uniform,30,0.036583,0.009719,0.016709,0.056458,21,9,0,0.0427739,higher,true
+OpenML phoneme replication 30-seed,,final_rauc,bgr,fixed,30,0.033158,0.007591,0.017634,0.048683,25,5,0,0.000324914,higher,true
 Grid margin target sensitivity 15-seed,target_margin=0.26,final_rauc,bgr_target_0.26,uniform,15,0.046786,0.000547,0.045612,0.047960,15,0,0,6.10352e-05,higher,true
 Grid margin target sensitivity 15-seed,target_margin=0.26,rauc_aulc,bgr_target_0.26,uniform,15,0.045827,0.000377,0.045018,0.046635,15,0,0,6.10352e-05,higher,true
 Grid margin target sensitivity 15-seed,target_margin=0.32,final_rauc,bgr_target_0.32,uniform,15,0.042886,0.000523,0.041763,0.044008,15,0,0,6.10352e-05,higher,true

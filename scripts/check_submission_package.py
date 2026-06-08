@@ -460,6 +460,9 @@ OPENML_CLAIM_ARTIFACTS = [
     "results/openml_blood_transfusion_margin_replication_30seed_v1/package_versions.json",
     "results/openml_blood_transfusion_margin_replication_30seed_v1/per_seed.csv",
     "results/openml_blood_transfusion_margin_replication_30seed_v1/summary.csv",
+    "results/openml_phoneme_margin_replication_30seed_v1/package_versions.json",
+    "results/openml_phoneme_margin_replication_30seed_v1/per_seed.csv",
+    "results/openml_phoneme_margin_replication_30seed_v1/summary.csv",
 ]
 CHECKED_CLAIM_ARTIFACTS = [
     "paper/figures/estimator_stats.csv",

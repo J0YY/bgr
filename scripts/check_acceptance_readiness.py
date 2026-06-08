@@ -360,6 +360,15 @@ def openml_positive_details(root: Path) -> list[str]:
     )
     if blood:
         details.append(blood)
+    phoneme = openml_replicated_positive_detail(
+        root,
+        label="OpenML phoneme",
+        original_path=root / "results/openml_numeric_external_fixed_target2_30seed_v1/per_seed.csv",
+        replication_path=root / "results/openml_phoneme_margin_replication_30seed_v1/per_seed.csv",
+        dataset="phoneme",
+    )
+    if phoneme:
+        details.append(phoneme)
     return details
 
 

@@ -15,11 +15,11 @@ genuinely plausibly 90%+ likely to get into AAAI main track.
 
 Current status: not there yet. The readiness gate still says
 `NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid mechanism result is the
-main mechanism evidence, and OpenML diabetes plus OpenML blood-transfusion are
-now replicated positive pre-existing-dataset margin-replay evidence.
-Standard-environment recovery
-screens and OpenVLA/LIBERO learned-policy evidence remain failing or
-non-promotable. The latest bsuite Catch 30-seed scale-up, MiniGrid FourRooms radius-10 rescue,
+main mechanism evidence, and OpenML diabetes, blood-transfusion, and phoneme
+are now replicated positive pre-existing-dataset margin-replay evidence.
+Standard-environment recovery screens and OpenVLA/LIBERO learned-policy evidence
+remain failing or non-promotable. The latest bsuite Catch 30-seed scale-up,
+MiniGrid FourRooms radius-10 rescue,
 HandReach-v3 calibration, highway-fast-v0 lane calibration, and MinAtar
 Breakout all-method screen are also negative, so they do not solve the
 independent-benchmark evidence gap. MinAtar Asterix also completed negative
@@ -43,9 +43,15 @@ the original fixed target-2.0 30-seed row gives BGR 0.7625 vs. uniform 0.6657
 replication gives BGR 0.7595 vs. uniform 0.6846 (W/L/T=25/5/0) and vs.
 fixed-radius 0.7133. Pooled across 60 blood-transfusion seeds, BGR is 0.7610
 vs. uniform 0.6751 (+0.0858, W/L/T=55/5/0) and vs. fixed-radius 0.7026
-(+0.0584, W/L/T=52/6/2). This is acceptance-moving supervised margin-replay
-evidence, but it still does not solve the learned-policy or standard-environment
-failures by itself.
+(+0.0584, W/L/T=52/6/2). A held-out phoneme replication has also completed:
+the original fixed target-2.0 30-seed row gives BGR 0.7228 vs. uniform 0.6896
+(W/L/T=21/9/0) and vs. fixed-radius 0.6704 (W/L/T=23/7/0); the held-out
+seeds 30--59 replication gives BGR 0.7124 vs. uniform 0.6758 (W/L/T=21/9/0)
+and vs. fixed-radius 0.6792 (W/L/T=25/5/0). Pooled across 60 phoneme seeds,
+BGR is 0.7176 vs. uniform 0.6827 (+0.0349, W/L/T=42/18/0) and vs.
+fixed-radius 0.6748 (+0.0428, W/L/T=48/12/0). This is acceptance-moving
+supervised margin-replay evidence, but it still does not solve the
+learned-policy or standard-environment failures by itself.
 The new grid-margin witness-sensitivity diagnostic improves scope support for the
 feasibility-witness assumption but is controlled mechanism evidence, not an
 independent-benchmark win.
@@ -127,10 +133,12 @@ still missing, so the route remains incomplete.
 
 Latest paper checkpoint: OpenML diabetes and OpenML blood-transfusion are now
 incorporated into the main summary and paired-effect tables as replicated
-positive pre-existing-dataset margin-replay results. The latest PDF still needs
-the `athena` pdfTeX rebuild and package checks after this source update. This
-improves the "no new positive evidence" weakness but does not change readiness
-because the learned-policy gate still fails.
+positive pre-existing-dataset margin-replay results. OpenML phoneme has a
+completed held-out replication and should be incorporated into the paper/checker
+stack in the next clean checkpoint. The latest PDF still needs the `athena`
+pdfTeX rebuild and package checks after this source update. This improves the
+"no new positive evidence" weakness but does not change readiness because the
+learned-policy gate still fails.
 Latest poll at 2026-06-08 06:13:20 BST showed the occlusion route past data
 prep and training: prep `767850`, BGR train/merge `767851`/`767852`, and random
 train/merge `767854`/`767855` completed with exit `0:0`. BGR clean eval
@@ -212,6 +220,15 @@ changed to `Priority`; estimated starts were official occlusion `767860` at
 at 2026-06-09 18:31:42 BST. The synced partial summaries are unchanged, the
 fixed perturb gate is still `[INCOMPLETE]`, and no `paper/main.tex` claim
 should change.
+Latest poll at 2026-06-08 07:14:45 BST showed the route still incomplete:
+BGR brightness `767864`, random blur `767878`, and official occlusion `767860`
+were pending on `Priority`; official shift `767861`, BGR occlusion/shift
+`767865`/`767866`, and random brightness/occlusion/shift `767879`--`767881`
+were dependency-pending. Completed rows available locally are BGR identity
+`99/100`, BGR blur `98/100`, official identity `99/100`, official blur
+`97/100`, official brightness `98/100`, and random identity `98/100`; adapt
+clean is BGR `99/100` and matched random `98/100`. The full perturb summary is
+still missing, so the fixed perturb gate remains `[INCOMPLETE]`.
 
 Operational defaults:
 
@@ -250,9 +267,10 @@ change reviewer risk.
 
 Current acceptance answer: not ready. The internal readiness check still reports
 `NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid result is positive and the
-OpenML diabetes pre-existing-dataset follow-up/replication now clears the
-independent/pre-existing gate, but OpenVLA/LIBERO learned-policy evidence is
-still failing and the standard-environment recovery record is still negative.
+OpenML diabetes, blood-transfusion, and phoneme pre-existing-dataset
+follow-up/replication evidence now clears the independent/pre-existing gate,
+but OpenVLA/LIBERO learned-policy evidence is still failing and the
+standard-environment recovery record is still negative.
 The latest FourRooms radius-10, HandReach-v3, and highway-fast-v0 follow-ups
 close simple rescue paths, but they are negative limitations. A 30-seed grid-margin witness
 sensitivity diagnostic now quantifies one reviewer-facing interface assumption:
@@ -297,12 +315,12 @@ until the readiness gates support that.
 
 The active objective is to move this repository toward a genuinely high-confidence AAAI main-track paper. Do not treat wording-only reframing as success. The core blocker is evidence: a promoted result must beat strong baselines on a fixed or pre-existing benchmark with non-contradictory metrics.
 
-Current target: iterate, queue experiments, and reframe the paper until the work is plausibly 90%+ likely to clear the AAAI main-track bar. Current status is below that bar: the strongest positive evidence now includes the controlled grid-margin mechanism result and replicated OpenML diabetes plus blood-transfusion margin replay, while standard-environment and learned-policy probes remain negative or non-promotable.
+Current target: iterate, queue experiments, and reframe the paper until the work is plausibly 90%+ likely to clear the AAAI main-track bar. Current status is below that bar: the strongest positive evidence now includes the controlled grid-margin mechanism result and replicated OpenML diabetes, blood-transfusion, and phoneme margin replay, while standard-environment and learned-policy probes remain negative or non-promotable.
 
 As of 2026-06-07, `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .` reports:
 
 - PASS controlled grid mechanism: pooled RAUC 0.4342 vs 0.3965.
-- PASS independent/pre-existing benchmark: OpenML diabetes margin replay is positive and replicated, with pooled BGR 0.7059 vs. uniform 0.6681 (+0.0378, W/L/T=47/13/0) and vs. fixed-radius 0.6699 (+0.0359, W/L/T=43/17/0). Standard-environment recovery screens such as FrozenLake, MiniGrid, PointMaze, FetchReach, Reacher, bsuite, MinAtar, and LunarLander remain non-promotable or negative.
+- PASS independent/pre-existing benchmark: OpenML diabetes, blood-transfusion, and phoneme margin replay are positive and replicated. Pooled BGR-vs-uniform RAUC gaps are +0.0378 for diabetes, +0.0858 for blood-transfusion, and +0.0349 for phoneme; each also beats fixed-radius replay in the pooled comparison. Standard-environment recovery screens such as FrozenLake, MiniGrid, PointMaze, FetchReach, Reacher, bsuite, MinAtar, and LunarLander remain non-promotable or negative.
 - FAIL learned-policy OpenVLA/LIBERO: the latest completed perturb-only anchored audit has non-identity success BGR 371/400, official 367/400, and matched random 372/400, with identity BGR 99/100, official 99/100, and random 99/100. BGR trails matched random by 1/400 and beats official by only 4/400, so it fails the fixed +10/400 and +0.02 promotion gate. Earlier weighted and proximal-anchor audits are also negative.
 - Decision: `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
@@ -411,10 +429,15 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   and vs. fixed-radius 0.6920 (+0.0705, W/L/T=27/1/2). The held-out command
   `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets blood-transfusion-service-center --targets 2.0 --seed-start 30 --seeds 30 --out results/openml_blood_transfusion_margin_replication_30seed_v1`
   gives BGR 0.7595 vs. uniform 0.6846 (+0.0749, W/L/T=25/5/0) and vs.
-  fixed-radius 0.7133 (+0.0462, W/L/T=25/5/0). Phoneme remains a
-  candidate-for-replication only, not paper evidence. This can
-  be considered for paper incorporation only with careful framing as
-  pre-existing supervised margin-replay evidence, not robotics evidence.
+  fixed-radius 0.7133 (+0.0462, W/L/T=25/5/0). The held-out phoneme
+  replication command was:
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets phoneme --targets 2.0 --seed-start 30 --seeds 30 --out results/openml_phoneme_margin_replication_30seed_v1`.
+  It also stayed positive: BGR 0.7124 vs. uniform 0.6758 (+0.0366,
+  W/L/T=21/9/0) and vs. fixed-radius 0.6792 (+0.0332, W/L/T=25/5/0), after
+  the original fixed external suite row gave BGR 0.7228 vs. uniform 0.6896 and
+  vs. fixed-radius 0.6704. This can be considered for paper incorporation only
+  with careful framing as pre-existing supervised margin-replay evidence, not
+  robotics evidence.
 - The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation/perturb-only recipe family; the preregistered weighted, proximal-anchor, and perturb-only anchored audits all failed the learned-policy promotion gate.
 - The grid-margin witness-sensitivity diagnostic is completed and paper-facing
   only as scope evidence for the feasibility-witness assumption. The fixed

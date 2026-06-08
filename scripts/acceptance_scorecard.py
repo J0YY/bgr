@@ -196,6 +196,7 @@ class RouteScout:
                 if (
                     "openml_numeric_external_fixed_target2_30seed_v1" in self.path
                     and "blood-transfusion-service-center" not in self.name
+                    and "phoneme" not in self.name
                 ):
                     return "candidate-for-replication"
                 return "positive-follow-up"
@@ -223,6 +224,8 @@ def route_scout_evidence_key(scout: RouteScout) -> str:
         return "openml_diabetes_margin"
     if "blood-transfusion-service-center" in scout.name or scout.name.startswith("OpenML blood transfusion margin"):
         return "openml_blood_transfusion_margin"
+    if "phoneme" in scout.name or scout.name.startswith("OpenML phoneme margin"):
+        return "openml_phoneme_margin"
     return scout.name
 
 
@@ -488,6 +491,10 @@ ROUTE_SCOUTS = [
     (
         "OpenML blood transfusion margin replication 30-seed",
         "results/openml_blood_transfusion_margin_replication_30seed_v1/summary.csv",
+    ),
+    (
+        "OpenML phoneme margin replication 30-seed",
+        "results/openml_phoneme_margin_replication_30seed_v1/summary.csv",
     ),
 ]
 

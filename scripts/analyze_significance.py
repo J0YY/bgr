@@ -278,6 +278,36 @@ COMPARISONS = [
         "fixed",
         "final_rauc",
     ),
+    Comparison(
+        "OpenML phoneme 30-seed",
+        "openml_numeric_external_fixed_target2_30seed_v1/per_seed.csv",
+        "bgr",
+        "uniform",
+        "final_rauc",
+        dataset="phoneme",
+    ),
+    Comparison(
+        "OpenML phoneme 30-seed",
+        "openml_numeric_external_fixed_target2_30seed_v1/per_seed.csv",
+        "bgr",
+        "fixed",
+        "final_rauc",
+        dataset="phoneme",
+    ),
+    Comparison(
+        "OpenML phoneme replication 30-seed",
+        "openml_phoneme_margin_replication_30seed_v1/per_seed.csv",
+        "bgr",
+        "uniform",
+        "final_rauc",
+    ),
+    Comparison(
+        "OpenML phoneme replication 30-seed",
+        "openml_phoneme_margin_replication_30seed_v1/per_seed.csv",
+        "bgr",
+        "fixed",
+        "final_rauc",
+    ),
 ]
 OPTIONAL_COMPARISONS: list[Comparison] = []
 
@@ -845,6 +875,9 @@ def latex_comparison_label(row: dict[str, str]) -> str:
     if row["benchmark"].startswith("OpenML blood"):
         baselines = {"fixed": "fixed-radius", "uniform": "uniform"}
         return f"OpenML blood vs {baselines.get(row['baseline'], row['baseline'])}"
+    if row["benchmark"].startswith("OpenML phoneme"):
+        baselines = {"fixed": "fixed-radius", "uniform": "uniform"}
+        return f"OpenML phoneme vs {baselines.get(row['baseline'], row['baseline'])}"
     if row["benchmark"].startswith("Robot suffix"):
         baselines = {
             "clean_ft": "clean-only",
