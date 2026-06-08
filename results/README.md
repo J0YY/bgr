@@ -121,6 +121,26 @@ Fixed 30-seed bsuite Catch promotion command:
 PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_catch_recovery_probe.py --seeds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29 --out results/bsuite_catch_recovery_probe_30seed_v1
 ```
 
+Active external-package pre-promotion route:
+
+- `tools/bsuite_mountaincar_recovery_probe.py`: fixed bsuite MountainCar
+  screen, preregistered before method outcomes on 2026-06-07. The route uses
+  `bsuite==0.3.6` in `/tmp/bgr_bsuite_venv`, instantiates bsuite's
+  package-owned MountainCar task, and steps exact private restart fields during
+  recovery rollouts. Replay states are right-moving MountainCar states; larger
+  perturbation radii move starts back toward the low-energy valley anchor. The
+  fixed 4-seed screen can only justify a 30-seed promotion run if default BGR or
+  BGR-Coverage beats uniform, fixed-radius, failure-only, TD/loss-priority, and
+  BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform, a
+  mean RAUC gap of at least +0.01, and non-contradictory, non-saturated median
+  r80 evidence.
+
+Fixed 4-seed bsuite MountainCar pre-promotion command:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_mountaincar_recovery_probe.py --out results/bsuite_mountaincar_recovery_probe_4seed_v1
+```
+
 Packaged FrozenLake diagnostic:
 
 - `results/frozenlake_recovery_focused_30seed_v1/summary.csv` and

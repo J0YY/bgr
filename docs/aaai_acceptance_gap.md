@@ -167,6 +167,25 @@ improvement story: default BGR 0.8367 and BGR-Coverage 0.8608 trail uniform
 0.9233. Do not scale or promote this Catch route without a genuinely new
 preregistered premise.
 
+Active independent-benchmark route, opened 2026-06-07: official bsuite
+`mountain_car`. This route differs from the retired local MountainCar diagnostic
+by instantiating bsuite's package-owned MountainCar task and stepping its
+private restart fields for the recovery rollouts. The perturbation family is
+fixed before method outcomes: replay states are right-moving MountainCar states,
+and larger radii move starts back toward the low-energy valley anchor, requiring
+the learner to recover momentum and position before reaching the package goal.
+The isolated environment is `/tmp/bgr_bsuite_venv` with `bsuite==0.3.6`.
+
+The fixed all-method pre-promotion command is:
+`PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_mountaincar_recovery_probe.py --out results/bsuite_mountaincar_recovery_probe_4seed_v1`.
+
+This can only justify a 30-seed scale-up if default BGR or BGR-Coverage beats
+uniform, fixed-radius, failure-only, TD/loss-priority, and
+BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform, a
+mean RAUC gap of at least +0.01, and non-contradictory, non-saturated
+median-r80 evidence. Passing this 4-seed screen is not paper evidence; it is
+only permission to run the fixed 30-seed promotion screen.
+
 ## Promotion Criteria For A New Independent Benchmark
 
 A new benchmark result should be promoted into `paper/main.tex` only if it meets

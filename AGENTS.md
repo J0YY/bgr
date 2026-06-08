@@ -202,6 +202,18 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   boundary-improvement story: default BGR 0.8367 and BGR-Coverage 0.8608 trail
   uniform 0.9233. Do not scale or promote this Catch route without a genuinely
   new preregistered premise.
+- The active bsuite MountainCar route is preregistered but not yet evidence. It
+  uses `bsuite==0.3.6` in `/tmp/bgr_bsuite_venv`, instantiates bsuite's
+  package-owned MountainCar task, and steps exact private restart fields during
+  recovery rollouts. Replay states are right-moving MountainCar states; larger
+  perturbation radii move starts back toward the low-energy valley anchor. The
+  fixed 4-seed command is
+  `PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_mountaincar_recovery_probe.py --out results/bsuite_mountaincar_recovery_probe_4seed_v1`.
+  The route can only justify 30-seed scale-up if default BGR or BGR-Coverage
+  beats uniform, fixed-radius, failure-only, TD/loss-priority, and
+  BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform, a
+  mean RAUC gap of at least +0.01, and non-contradictory, non-saturated median
+  r80 evidence. Passing the 4-seed screen is not paper evidence.
 
 ## Reviewer-Critique Priorities
 
