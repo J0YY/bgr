@@ -342,8 +342,8 @@ def load_ablation(path: Path) -> list[dict[str, str | float | int]]:
         "bgr": "BGR",
         "bgr_no_uncertainty": "No uncertainty",
         "bgr_no_sharpness": "No sharpness",
-        "bgr_uniform_radius": "Uniform radius",
-        "uniform": "Uniform replay",
+        "bgr_uniform_radius": "BGR state + uniform radius",
+        "uniform": "Uniform state + uniform radius",
     }
     out: list[dict[str, str | float | int]] = []
     for method in ["bgr", "bgr_no_uncertainty", "bgr_no_sharpness", "bgr_uniform_radius", "uniform"]:
