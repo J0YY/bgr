@@ -100,6 +100,13 @@ log tails were healthy: prep had advanced to matched-random perturb rendering,
 and official identity eval had reached at least 64/100 episodes with 63
 successes. No compact summaries were available, so no paper claim should be
 changed.
+Latest poll at 2026-06-08 05:50:33 BST showed official identity job `767857`
+completed successfully with 99/100 clean successes, official blur job `767858`
+running, and prep job `767850` still running. BGR/random adaptation and all
+BGR/random perturb jobs remained dependency-pending. The sync produced only a
+partial `summary_available.csv` row for official/identity; the full perturb
+summary and adapt summary were still missing, and the promotion gate remained
+incomplete rather than positive evidence.
 
 Operational defaults:
 

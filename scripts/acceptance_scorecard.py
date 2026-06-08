@@ -994,7 +994,7 @@ def render_markdown(root: Path) -> str:
     if positive_followups:
         names = ", ".join(f"`{scout.name}`" for scout in positive_followups)
         lines.append(
-            f"- Positive pre-existing-dataset follow-up(s): {names} clear the internal 30-seed margin-replay follow-up gate; paper incorporation still needs claim checks and careful framing."
+            f"- Positive pre-existing-dataset follow-up(s): {names} clear the internal 30-seed margin-replay follow-up gate and are incorporated into the paper as supervised margin-replay evidence."
         )
     if inflight is None and active_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in active_calibrations)
