@@ -427,6 +427,10 @@ ROUTE_SCOUTS = [
         "sklearn digits margin replay",
         "results/sklearn_digits_margin_scout_v0/summary.csv",
     ),
+    (
+        "sklearn tabular margin replay",
+        "results/sklearn_tabular_margin_scout_v0/summary.csv",
+    ),
 ]
 
 
@@ -562,35 +566,43 @@ def route_scouts(root: Path) -> list[RouteScout]:
         if not path.exists():
             continue
         rows = read_rows(path)
-        bgr_rows = [row for row in rows if row["method"] == "bgr"]
-        uniform_rows = {
-            float(row["target_radius"]): float(row["final_rauc_mean"])
-            for row in rows
-            if row["method"] == "uniform"
-        }
-        fixed_rows = [row for row in rows if row["method"] == "fixed"]
-        if not bgr_rows or not uniform_rows or not fixed_rows:
-            continue
-        best_bgr = max(bgr_rows, key=lambda row: float(row["final_rauc_mean"]))
-        best_fixed = max(fixed_rows, key=lambda row: float(row["final_rauc_mean"]))
-        target = float(best_bgr["target_radius"])
-        treatment_mean = float(best_bgr["final_rauc_mean"])
-        uniform_mean = uniform_rows[target]
-        scouts.append(
-            RouteScout(
-                name=name,
-                path=rel_path,
-                target_radius=target,
-                treatment_mean=treatment_mean,
-                uniform_mean=uniform_mean,
-                delta=treatment_mean - uniform_mean,
-                wins=int(best_bgr["wins_vs_uniform"]),
-                losses=int(best_bgr["losses_vs_uniform"]),
-                ties=int(best_bgr["ties_vs_uniform"]),
-                best_fixed_mean=float(best_fixed["final_rauc_mean"]),
-                best_fixed_target=float(best_fixed["target_radius"]),
+        if rows and "dataset" in rows[0]:
+            grouped_rows: dict[str, list[dict[str, str]]] = {}
+            for row in rows:
+                grouped_rows.setdefault(row["dataset"], []).append(row)
+        else:
+            grouped_rows = {"": rows}
+        for dataset, scout_rows in grouped_rows.items():
+            bgr_rows = [row for row in scout_rows if row["method"] == "bgr"]
+            uniform_rows = {
+                float(row["target_radius"]): float(row["final_rauc_mean"])
+                for row in scout_rows
+                if row["method"] == "uniform"
+            }
+            fixed_rows = [row for row in scout_rows if row["method"] == "fixed"]
+            if not bgr_rows or not uniform_rows or not fixed_rows:
+                continue
+            best_bgr = max(bgr_rows, key=lambda row: float(row["final_rauc_mean"]))
+            best_fixed = max(fixed_rows, key=lambda row: float(row["final_rauc_mean"]))
+            target = float(best_bgr["target_radius"])
+            treatment_mean = float(best_bgr["final_rauc_mean"])
+            uniform_mean = uniform_rows[target]
+            scout_name = f"{name} ({dataset})" if dataset else name
+            scouts.append(
+                RouteScout(
+                    name=scout_name,
+                    path=rel_path,
+                    target_radius=target,
+                    treatment_mean=treatment_mean,
+                    uniform_mean=uniform_mean,
+                    delta=treatment_mean - uniform_mean,
+                    wins=int(best_bgr["wins_vs_uniform"]),
+                    losses=int(best_bgr["losses_vs_uniform"]),
+                    ties=int(best_bgr["ties_vs_uniform"]),
+                    best_fixed_mean=float(best_fixed["final_rauc_mean"]),
+                    best_fixed_target=float(best_fixed["target_radius"]),
+                )
             )
-        )
     return scouts
 
 
@@ -1073,7 +1085,7 @@ def render_markdown(root: Path) -> str:
     if rejected_scouts:
         priority_lines.insert(
             2,
-            "- The sklearn-digits pre-existing-dataset scout is rejected before preregistration: the best BGR row has only a small 2/2 paired edge and fixed-radius replay is stronger at another target.",
+            "- The sklearn pre-existing-dataset route scouts are rejected before preregistration: their best BGR rows stay below the +0.03 screen even when paired signs are favorable, and fixed-radius replay is competitive.",
         )
     if any(screen.name == "Gymnasium MuJoCo Reacher-v5 calibration" for screen in usable_calibrations):
         priority_lines.insert(

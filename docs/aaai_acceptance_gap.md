@@ -38,6 +38,11 @@ promotion: the best BGR target in
 `results/sklearn_digits_margin_scout_v0/summary.csv` is target radius 1.0 with
 0.8271 final RAUC versus 0.8123 for uniform, only W/L/T=2/2/0, and below the
 +0.03 screen threshold. This is not evidence to add to the manuscript.
+A second sklearn tabular scout over built-in breast-cancer and wine datasets is
+also rejected: breast cancer's best BGR row gives 0.9610 vs. 0.9516 RAUC
+against uniform (W/L/T=3/1/0), and wine's best gives 0.9702 vs. 0.9563
+(W/L/T=4/0/0), but both gaps are below the +0.03 pre-registration screen. This
+does not solve the independent pre-existing benchmark weakness.
 The newest standard-environment sequence sharpened the negative record:
 LunarLander is a 4-seed near miss rejected by paired signs and lower median r80,
 bsuite DeepSea trails the state-priority/uniform-radius ablation and has lower
@@ -148,6 +153,22 @@ candidate threshold. Fixed-radius replay is strongest at target 0.8 (0.8425),
 so the route does not support the boundary-radius mechanism without post-hoc
 tuning. Do not add this to the paper or scale it without a genuinely new
 preregistered premise.
+
+Rejected internal route scout, opened 2026-06-07: sklearn tabular margin
+replay. This route extended the pre-existing supervised-dataset check from
+digits to built-in tabular datasets, using standardized feature-space
+fixed-radius perturbations and the same online `SGDClassifier` replay screen.
+The fixed scout command is:
+`PYTHONPATH=src:. python3 tools/sklearn_tabular_margin_scout.py --out results/sklearn_tabular_margin_scout_v0`.
+It uses `scikit-learn==1.8.0`, `numpy==2.4.2`, and Python 3.14.3 from the local
+environment. The result is not promotable: every breast-cancer and wine target
+row is marked `reject-scout`. Breast cancer's best BGR row is target radius 2.0
+with final RAUC 0.9610 versus 0.9516 for uniform (W/L/T=3/1/0, gap +0.0094).
+Wine's best BGR row is target radius 0.5 with final RAUC 0.9702 versus 0.9563
+for uniform (W/L/T=4/0/0, gap +0.0139). Both are below the +0.03 candidate
+threshold, so this does not support a preregistered paper-facing route. Do not
+add this to the paper or scale it without a genuinely new preregistered
+premise.
 
 Completed independent-benchmark route, opened and evaluated 2026-06-07:
 official Gymnasium Box2D

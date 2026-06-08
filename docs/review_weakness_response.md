@@ -108,6 +108,15 @@ to reproduce this read from the current result artifacts.
   uniform, only W/L/T=2/2/0, while fixed-radius replay is stronger at target
   0.8 (0.8425). Do not use this route to answer the independent-benchmark
   critique without a new preregistered premise.
+- An internal sklearn tabular margin replay scout checked the same idea on
+  built-in breast-cancer and wine datasets, and it is also rejected before any
+  paper promotion. The fixed command
+  `PYTHONPATH=src:. python3 tools/sklearn_tabular_margin_scout.py --out results/sklearn_tabular_margin_scout_v0`
+  marks every target row `reject-scout`; breast cancer's best BGR row is
+  0.9610 vs. 0.9516 uniform (W/L/T=3/1/0), and wine's best is 0.9702 vs.
+  0.9563 uniform (W/L/T=4/0/0), both below the +0.03 pre-registration screen.
+  Do not use this route to answer the independent-benchmark critique without a
+  new preregistered premise.
 - MinAtar Breakout is completed negative scope evidence, not paper-positive
   evidence. The fixed 12-seed calibration in
   `results/minatar_breakout_recovery_calibration_12seed_v1/summary.json`

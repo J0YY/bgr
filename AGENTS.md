@@ -25,7 +25,10 @@ after its usable calibration, so there is no active independent route. The
 internal sklearn-digits margin replay scout is also rejected before promotion:
 its best BGR target gives only 0.8271 vs. 0.8123 RAUC against uniform with a
 2/2/0 paired split, while fixed-radius replay is stronger at another target.
-new grid-margin witness-sensitivity diagnostic improves scope support for the
+The internal sklearn tabular margin replay scout is also rejected: breast
+cancer's best BGR target gives 0.9610 vs. 0.9516 RAUC against uniform, and
+wine's best gives 0.9702 vs. 0.9563, below the +0.03 pre-registration screen.
+The new grid-margin witness-sensitivity diagnostic improves scope support for the
 feasibility-witness assumption but is controlled mechanism evidence, not an
 independent-benchmark win.
 
@@ -194,6 +197,18 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   versus 0.8123 uniform and only W/L/T=2/2/0, while fixed-radius replay reaches
   0.8425 at target 0.8. Do not add this to the manuscript or scale it without a
   genuinely new preregistered premise.
+- The sklearn tabular margin replay scout is also completed and rejected before
+  paper promotion. The fixed command is
+  `PYTHONPATH=src:. python3 tools/sklearn_tabular_margin_scout.py --out results/sklearn_tabular_margin_scout_v0`.
+  It uses `sklearn.datasets.load_breast_cancer` and `load_wine`,
+  label-preserving fixed-L2 standardized-feature perturbations, and an online
+  `SGDClassifier` to compare uniform, fixed-radius, and BGR replay across
+  target radii 0.5--2.0. Every target row is marked `reject-scout`; breast
+  cancer's best BGR row is target 2.0 with 0.9610 RAUC versus 0.9516 uniform
+  and W/L/T=3/1/0, while wine's best BGR row is target 0.5 with 0.9702 RAUC
+  versus 0.9563 uniform and W/L/T=4/0/0. Both gaps are below the +0.03
+  pre-registration threshold. Do not add this to the manuscript or scale it
+  without a genuinely new preregistered premise.
 - The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation/perturb-only recipe family; the preregistered weighted, proximal-anchor, and perturb-only anchored audits all failed the learned-policy promotion gate.
 - The grid-margin witness-sensitivity diagnostic is completed and paper-facing
   only as scope evidence for the feasibility-witness assumption. The fixed
