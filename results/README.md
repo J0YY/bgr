@@ -121,19 +121,25 @@ Fixed 30-seed bsuite Catch promotion command:
 PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_catch_recovery_probe.py --seeds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29 --out results/bsuite_catch_recovery_probe_30seed_v1
 ```
 
-Active external-package pre-promotion route:
+Completed external-package pre-promotion route:
 
-- `tools/bsuite_mountaincar_recovery_probe.py`: fixed bsuite MountainCar
-  screen, preregistered before method outcomes on 2026-06-07. The route uses
+- `tools/bsuite_mountaincar_recovery_probe.py`: fixed bsuite MountainCar screen,
+  preregistered before method outcomes on 2026-06-07. The route uses
   `bsuite==0.3.6` in `/tmp/bgr_bsuite_venv`, instantiates bsuite's
   package-owned MountainCar task, and steps exact private restart fields during
   recovery rollouts. Replay states are right-moving MountainCar states; larger
-  perturbation radii move starts back toward the low-energy valley anchor. The
-  fixed 4-seed screen can only justify a 30-seed promotion run if default BGR or
-  BGR-Coverage beats uniform, fixed-radius, failure-only, TD/loss-priority, and
-  BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform, a
-  mean RAUC gap of at least +0.01, and non-contradictory, non-saturated median
-  r80 evidence.
+  perturbation radii move starts back toward the low-energy valley anchor.
+- `results/bsuite_mountaincar_recovery_probe_4seed_v1/summary.csv`: fixed
+  4-seed bsuite MountainCar screen from the preregistered command below. The
+  route is negative and should not be scaled: default BGR reaches 0.0532 final
+  RAUC versus 0.0497 for uniform (+0.0036, 3/1/0), below the preregistered +0.01
+  threshold; BGR-Coverage reaches 0.0553, below fixed-radius replay (0.1420),
+  failure-only replay (0.0653), and BGR-uniform-radius (0.0558). Median r80 is
+  saturated at 1.0000 for BGR, BGR-Coverage, BGR-uniform-radius, failure-only,
+  TD-loss, and uniform, so the screen does not measure useful boundary
+  expansion.
+- `results/bsuite_mountaincar_recovery_probe_4seed_v1/package_versions.json`:
+  compact package-version record for the same screen.
 
 Fixed 4-seed bsuite MountainCar pre-promotion command:
 

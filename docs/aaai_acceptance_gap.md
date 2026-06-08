@@ -167,14 +167,15 @@ improvement story: default BGR 0.8367 and BGR-Coverage 0.8608 trail uniform
 0.9233. Do not scale or promote this Catch route without a genuinely new
 preregistered premise.
 
-Active independent-benchmark route, opened 2026-06-07: official bsuite
-`mountain_car`. This route differs from the retired local MountainCar diagnostic
-by instantiating bsuite's package-owned MountainCar task and stepping its
-private restart fields for the recovery rollouts. The perturbation family is
-fixed before method outcomes: replay states are right-moving MountainCar states,
-and larger radii move starts back toward the low-energy valley anchor, requiring
-the learner to recover momentum and position before reaching the package goal.
-The isolated environment is `/tmp/bgr_bsuite_venv` with `bsuite==0.3.6`.
+Completed independent-benchmark route, opened and evaluated 2026-06-07:
+official bsuite `mountain_car`. This route differs from the retired local
+MountainCar diagnostic by instantiating bsuite's package-owned MountainCar task
+and stepping its private restart fields for the recovery rollouts. The
+perturbation family was fixed before method outcomes: replay states are
+right-moving MountainCar states, and larger radii move starts back toward the
+low-energy valley anchor, requiring the learner to recover momentum and
+position before reaching the package goal. The isolated environment is
+`/tmp/bgr_bsuite_venv` with `bsuite==0.3.6`.
 
 The fixed all-method pre-promotion command is:
 `PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_mountaincar_recovery_probe.py --out results/bsuite_mountaincar_recovery_probe_4seed_v1`.
@@ -185,6 +186,15 @@ BGR-uniform-radius on final RAUC with at least 3/4 paired wins over uniform, a
 mean RAUC gap of at least +0.01, and non-contradictory, non-saturated
 median-r80 evidence. Passing this 4-seed screen is not paper evidence; it is
 only permission to run the fixed 30-seed promotion screen.
+
+Result: the fixed 4-seed bsuite MountainCar screen is negative and should not
+be scaled under this protocol. Default BGR reaches 0.0532 final RAUC versus
+0.0497 for uniform (+0.0036, 3/1/0), but the gap is below the preregistered
++0.01 threshold; BGR-Coverage reaches 0.0553, still below fixed-radius replay
+(0.1420), failure-only replay (0.0653), and BGR-uniform-radius (0.0558). Median
+r80 is saturated at 1.0000 for BGR, BGR-Coverage, BGR-uniform-radius,
+failure-only, TD-loss, and uniform, so the screen does not measure useful
+boundary expansion.
 
 ## Promotion Criteria For A New Independent Benchmark
 

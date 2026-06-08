@@ -586,6 +586,41 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"W/L/T={best_catch_wins}"
             )
 
+    mountaincar_path = root / "results/bsuite_mountaincar_recovery_probe_4seed_v1/summary.csv"
+    if mountaincar_path.exists():
+        mountaincar = read_rows(mountaincar_path)
+        mountain_bgr = mean_metric(mountaincar, "bgr", "final_rauc")
+        mountain_coverage = mean_metric(mountaincar, "bgr_coverage", "final_rauc")
+        mountain_uniform = mean_metric(mountaincar, "uniform", "final_rauc")
+        mountain_failure = mean_metric(mountaincar, "failure_only", "final_rauc")
+        mountain_fixed = mean_metric(mountaincar, "fixed", "final_rauc")
+        mountain_td = mean_metric(mountaincar, "td_loss", "final_rauc")
+        mountain_ablation = mean_metric(mountaincar, "bgr_uniform_radius", "final_rauc")
+        mountain_bgr_r80 = mean_metric(mountaincar, "bgr", "final_median_r80")
+        mountain_coverage_r80 = mean_metric(mountaincar, "bgr_coverage", "final_median_r80")
+        mountain_uniform_r80 = mean_metric(mountaincar, "uniform", "final_median_r80")
+        mountain_bgr_wins = paired_wins(mountaincar, "bgr", "uniform", "final_rauc")
+        mountain_coverage_wins = paired_wins(mountaincar, "bgr_coverage", "uniform", "final_rauc")
+        best_mountain = mountain_bgr if mountain_bgr >= mountain_coverage else mountain_coverage
+        best_mountain_r80 = mountain_bgr_r80 if mountain_bgr >= mountain_coverage else mountain_coverage_r80
+        best_mountain_wins = mountain_bgr_wins if mountain_bgr >= mountain_coverage else mountain_coverage_wins
+        if not (
+            best_mountain - mountain_uniform >= 0.01
+            and best_mountain > max(mountain_failure, mountain_fixed, mountain_td, mountain_ablation)
+            and best_mountain_wins[0] >= 3
+            and best_mountain_r80 >= mountain_uniform_r80
+            and not (best_mountain_r80 >= 0.99 and mountain_uniform_r80 >= 0.99)
+            and not (best_mountain_r80 <= 0.01 and mountain_uniform_r80 <= 0.01)
+        ):
+            failures.append(
+                f"bsuite MountainCar negative/saturated: BGR {mountain_bgr:.4f}, "
+                f"BGR-Coverage {mountain_coverage:.4f}, uniform {mountain_uniform:.4f}, "
+                f"failure-only {mountain_failure:.4f}, fixed {mountain_fixed:.4f}, "
+                f"TD-loss {mountain_td:.4f}, uniform-radius {mountain_ablation:.4f}, "
+                f"best-r80 {best_mountain_r80:.4f} vs uniform {mountain_uniform_r80:.4f}, "
+                f"W/L/T={best_mountain_wins}"
+            )
+
     for label, relative_path in CALIBRATION_SUMMARIES:
         calibration_path = root / relative_path
         if not calibration_path.exists():

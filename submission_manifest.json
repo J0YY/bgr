@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "0b4c379da02d271d95125a3df72b17a686a27984e5986dda66f3efc707a79e24",
-      "size_bytes": 295056
+      "sha256": "d22e6403252cc36ae54f1f7c562de3b6ee5b02c9c0c8ccd3798d824de12a5177",
+      "size_bytes": 296538
     },
     {
       "path": "results/bsuite_catch_recovery_probe_30seed_v1/package_versions.json",
@@ -474,6 +474,16 @@
       "path": "results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv",
       "sha256": "63ad6881a48672b9d437d0bcfa1418bdccc31907d34c49b5f013a35a4c44401b",
       "size_bytes": 1188
+    },
+    {
+      "path": "results/bsuite_mountaincar_recovery_probe_4seed_v1/package_versions.json",
+      "sha256": "aa5ee87714c5858f98f392a6b1103462776e43318a35e6c7982ab3ac3816d089",
+      "size_bytes": 91
+    },
+    {
+      "path": "results/bsuite_mountaincar_recovery_probe_4seed_v1/summary.csv",
+      "sha256": "5864d76391ae5c32eadee3eb63f3fd7020384d932bdc638e42f6345dd6df9a8c",
+      "size_bytes": 2548
     },
     {
       "path": "results/environment_v1/README.md",
@@ -917,8 +927,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "8c84e4a807f6de7a36c20070d369fdf91845c6b7a9a97ebe1222d6fddc7dc1a6",
-      "size_bytes": 40003
+      "sha256": "e7367d6beda2efe225b0ede29674e7ce3b8d5a5ef89df346e6da1ad6f594adb0",
+      "size_bytes": 40257
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -932,8 +942,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "5fbdf952363a667759ebc8a78aab0898152595d311e9c19223e606290642aae9",
-      "size_bytes": 38781
+      "sha256": "c65f53fbcd498d8cd74f24856147ed103ef4ce9f828231a8a44ade3ca6958ca9",
+      "size_bytes": 41239
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -947,8 +957,8 @@
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "2784a2887d410a0db9b93a52888fe02d0af01bc5ed5d4ea6f8802e8aae1aad84",
-      "size_bytes": 240536
+      "sha256": "6ebf5539a69904400494493b158070ed61d2a7c301b7582e059f71ef1a5e467e",
+      "size_bytes": 240736
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1494,6 +1504,11 @@
       "path": "tools/bsuite_deepsea_recovery_probe.py",
       "sha256": "dec1029af05a1e61d6182ea1888b899c766c52f5007b0cb53dce366a9bd94b33",
       "size_bytes": 19312
+    },
+    {
+      "path": "tools/bsuite_mountaincar_recovery_probe.py",
+      "sha256": "d5ed21117b4af840998f90a0d9288ca9f40b9ad8a81c496bfb817703ce87b24a",
+      "size_bytes": 26572
     },
     {
       "path": "tools/highway_parking_recovery_calibration.py",
