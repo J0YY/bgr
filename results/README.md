@@ -89,6 +89,19 @@ Completed external-package pre-method calibration:
   `results/handreach_recovery_calibration_8seed_v1/recovery_rows.csv`: compact
   package-version and row-level records for the same rejected calibration.
 
+Completed external-package scope diagnostic:
+
+- `results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1/summary.csv`:
+  fixed MiniGrid FourRooms measurement-window follow-up, run with
+  `PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_fourrooms_recovery_probe.py --out results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1 --max-radius 10`.
+  This route is negative and should not be promoted: BGR-Coverage reaches
+  0.1031 final RAUC vs. 0.1014 for uniform (+0.0017, W/L/T=2/2/0), barely
+  exceeds BGR-uniform-radius at 0.0967, and median r80 remains saturated at
+  1.0000 for both BGR-Coverage and uniform.
+- `results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1/package_versions.json`:
+  compact package-version record for the same scope diagnostic
+  (`gymnasium==1.3.0`, `minigrid==3.1.0`).
+
 Completed external-package pre-promotion route:
 
 - `results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv`: fixed bsuite

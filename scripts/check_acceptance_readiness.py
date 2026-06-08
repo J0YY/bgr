@@ -300,6 +300,27 @@ def independent_benchmark_gate(root: Path) -> GateResult:
             f"MiniGrid-FourRooms negative: BGR-Coverage {four_coverage:.4f}, uniform {four_uniform:.4f}, failure-only {four_failure:.4f}"
         )
 
+    four_maxr10_path = root / "results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1/summary.csv"
+    if four_maxr10_path.exists():
+        four_maxr10 = read_rows(four_maxr10_path)
+        maxr10_coverage = mean_metric(four_maxr10, "bgr_coverage", "final_rauc")
+        maxr10_uniform = mean_metric(four_maxr10, "uniform", "final_rauc")
+        maxr10_ablation = mean_metric(four_maxr10, "bgr_uniform_radius", "final_rauc")
+        maxr10_r80 = mean_metric(four_maxr10, "bgr_coverage", "final_median_r80")
+        maxr10_uniform_r80 = mean_metric(four_maxr10, "uniform", "final_median_r80")
+        maxr10_wins = paired_wins(four_maxr10, "bgr_coverage", "uniform", "final_rauc")
+        if not (
+            maxr10_coverage - maxr10_uniform >= 0.01
+            and maxr10_coverage > maxr10_ablation
+            and maxr10_wins[0] >= 3
+            and not (maxr10_r80 >= 0.99 and maxr10_uniform_r80 >= 0.99)
+        ):
+            failures.append(
+                f"MiniGrid-FourRooms max-r10 negative: BGR-Coverage {maxr10_coverage:.4f}, "
+                f"uniform {maxr10_uniform:.4f}, uniform-radius {maxr10_ablation:.4f}, "
+                f"W/L/T={maxr10_wins}, median-r80 {maxr10_r80:.4f} vs uniform {maxr10_uniform_r80:.4f}"
+            )
+
     four_mid25_path = root / "results/minigrid_fourrooms_recovery_probe_mid2_5_4seed_v1/summary.csv"
     if four_mid25_path.exists():
         four_mid25 = read_rows(four_mid25_path)

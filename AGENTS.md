@@ -120,6 +120,12 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   under `gymnasium==1.3.0`, `gymnasium_robotics==1.4.2`, and `mujoco==3.9.0`.
   Do not build a HandReach replay comparison unless a new preregistered
   controller first clears the clean-success and non-flat recovery prerequisites.
+- MiniGrid FourRooms has no remaining same-protocol radius-window rescue. The
+  max-radius-10 follow-up at
+  `results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1/summary.csv`
+  gives BGR-Coverage 0.1031 final RAUC vs. uniform 0.1014 (W/L/T=2/2/0), only
+  0.0064 above BGR-uniform-radius, with median r80 still saturated at 1.0000
+  for both BGR-Coverage and uniform. Do not scale or promote this protocol.
 - The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation/perturb-only recipe family; the preregistered weighted, proximal-anchor, and perturb-only anchored audits all failed the learned-policy promotion gate.
 - The latest completed independent route is Gymnasium Box2D `LunarLander-v3`
   in `/tmp/bgr_lunar_venv` with

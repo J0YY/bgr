@@ -436,6 +436,15 @@ risk.
      floor-saturated radius metrics as well as ceiling-saturated ones. MiniGrid
      remains the most promising independent benchmark path because the
      BGR-Coverage RAUC effect is visible on an external package task.
+     A later fixed measurement-window audit widened the official MiniGrid
+     FourRooms perturbation support to Manhattan radius 10 before seeing the
+     new method outcomes:
+     `PYTHONPATH=src:. /tmp/bgr_minigrid_venv/bin/python tools/minigrid_fourrooms_recovery_probe.py --out results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1 --max-radius 10`.
+     This closes the simple "wider radius window" rescue. BGR-Coverage reaches
+     only 0.1031 final RAUC versus 0.1014 for uniform (+0.0017, W/L/T=2/2/0),
+     barely exceeds BGR-uniform-radius at 0.0967, and median r80 remains
+     saturated at 1.0000 for both BGR-Coverage and uniform. Do not scale or
+     promote the max-radius-10 FourRooms protocol.
      A baseline-only replay-distance calibration was run before any method
      comparison for the next screen. The original spread selector was too hard
      at small absolute radii, the goalward selector was too easy, and a

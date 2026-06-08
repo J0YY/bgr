@@ -187,6 +187,14 @@ BENCHMARK_SCREENS = [
         "final_abs_r10",
     ),
     (
+        "MiniGrid FourRooms max-radius-10 follow-up",
+        "results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1/summary.csv",
+        ["bgr_coverage", "bgr"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
+    (
         "MiniGrid FourRooms midband",
         "results/minigrid_fourrooms_recovery_probe_midband_4seed_v1/summary.csv",
         ["bgr_coverage", "bgr"],

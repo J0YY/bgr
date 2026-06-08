@@ -61,6 +61,11 @@ to reproduce this read from the current result artifacts.
 - The MiniGrid absolute-r10 follow-up also stays internal: the RAUC lead
   persists, but `final_abs_r10` is 0.0 for every method, so the auxiliary
   radius metric floor-saturates.
+- The MiniGrid FourRooms max-radius-10 measurement-window follow-up also stays
+  internal: BGR-Coverage reaches only 0.1031 final RAUC vs. 0.1014 for uniform
+  (2/2/0), barely exceeds BGR-uniform-radius at 0.0967, and median r80 remains
+  saturated at 1.0000 for both BGR-Coverage and uniform. This closes the simple
+  wider-radius-window rescue.
 - Official MiniGrid-DoorKey is internal and paper-limitation evidence only:
   BGR-Coverage and default BGR lose to uniform and strong baselines, with
   lower absolute-radius checks than uniform.

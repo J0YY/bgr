@@ -509,6 +509,8 @@ SCOPE_DIAGNOSTIC_ARTIFACTS = [
     "results/handreach_recovery_calibration_8seed_v1/package_versions.json",
     "results/handreach_recovery_calibration_8seed_v1/recovery_rows.csv",
     "results/handreach_recovery_calibration_8seed_v1/summary.json",
+    "results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1/package_versions.json",
+    "results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1/summary.csv",
     "results/highway_parking_recovery_calibration_12seed_v1/package_versions.json",
     "results/highway_parking_recovery_calibration_12seed_v1/recovery_rows.csv",
     "results/highway_parking_recovery_calibration_12seed_v1/summary.json",
