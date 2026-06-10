@@ -2927,6 +2927,29 @@ random identity `774850` running; the replacement BGR identity/occlusion chain
 352/359 and matched-random identity 38/39. The readiness gate still reports
 `NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim changes.
 
+Latest status at 2026-06-10 10:54:30 BST: no hard-occlusion route had a
+complete compact `summary.csv`, so no fixed promotion gate could be run. The
+0.65 transfer route still had all three hard-occlusion evals running:
+official `774712` at 22:16, BGR `774714` at 24:11, and matched random
+`774716` at 24:11; direct partial tails were official 73/101, BGR 73/104, and
+matched random 74/105. The 0.80 transfer route remained identity-only:
+official identity `774917` was running at 44:14, BGR identity `774920` at
+35:43, matched-random identity `774922` at 18:41, and all three occlusion jobs
+were dependency-pending; direct tails were official 366/373, BGR 280/288, and
+active matched random 140/149. The A6000 adaptation route moved past BGR
+training: prep `774717`, BGR adaptation `774718`, and BGR merge `774719`
+completed, BGR clean `774720` and official identity `774724` were running,
+matched-random adaptation `774721` was resource-pending, and BGR identity
+`774726` was priority-pending; official identity tail was 166/173. The A40
+fallback had prep, BGR adaptation/merge/clean, matched-random
+adaptation/merge/clean, and official identity completed; official identity was
+393/400, official occlusion `774847` had just started, replacement BGR
+identity `775102` and matched-random identity `774850` were running, and
+replacement BGR/matched-random occlusion jobs `775103`/`774851` were
+dependency-pending. Direct A40 partials were BGR identity 55/57, official
+occlusion 1/3, and matched-random identity 107/112. The latest readiness check
+still reports `NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim changes.
+
 Sync/poll helper:
 
 ```bash
