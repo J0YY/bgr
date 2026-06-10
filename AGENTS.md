@@ -221,6 +221,38 @@ jobs pending. Poll/sync with
 Do not incorporate this route into `paper/main.tex` unless a complete
 `summary.csv` exists and the fixed gate passes.
 
+Latest all-route OpenVLA poll at 2026-06-10 15:25 BST found no new complete
+gateable summary. The micro route remains scheduler-limited: BGR train
+`776998` and official identity `777037` are priority-pending with estimated
+starts at 2026-06-13 14:07:41 BST, all micro merge/clean/perturb children are
+dependency-pending, and no logs or compact summaries exist. The 0.80
+identity-anchored A6000 route also remains incomplete: random train `776036`
+is priority-pending for 2026-06-10 20:08:00 BST, BGR identity `776042` for
+2026-06-11 15:23:58 BST, and BGR clean `776035` plus official identity
+`776040` for 2026-06-13 14:07:41 BST; the remote perturb-log directory has
+only incomplete official-identity output and no summarizable compact row. The
+0.80 strict A6000 route has BGR train `776541` and official identity `776548`
+priority-pending for 2026-06-13 14:07:41 BST, with children dependency-pending
+and no logs. The 0.90 strict A40 route remains earlier in the A40 queue with
+prep `776601` and official identity `776611` priority-pending for
+2026-06-11 22:02:14 BST. The 0.80 identity-anchor A40 fallback remains
+priority/dependency-pending with BGR train `776291` and official identity
+`776300` estimated for 2026-06-11 22:02:14 BST. The 0.80 transfer route is
+still incomplete because matched-random occlusion `774923` is priority-pending
+for 2026-06-11 08:07:00 BST; partial rows are unchanged and already
+non-promotable under the fixed gate: BGR identity/occlusion 391/400 and
+305/400 versus official 393/400 and 296/400, with matched-random identity
+389/400. The 0.65 A6000 adaptation remains incomplete because matched-random
+occlusion `774729` is priority-pending, and already fails the identity side
+condition and official occlusion margin: BGR identity/occlusion 389/400 and
+301/400 versus official 393/400 and 297/400, with matched-random identity
+390/400. The 0.65 A40 fallback remains incomplete because replacement BGR
+occlusion `775103` and matched-random occlusion `774851` are priority-pending;
+partial rows are BGR identity 391/400, official identity 393/400, official
+occlusion 295/400, and matched-random identity 392/400, so it also cannot
+become a positive result under the identity side condition. No paper claim
+should change until a complete `summary.csv` exists and the fixed gate passes.
+
 Newest active learned-policy route: hard-occlusion 0.90 strict
 identity-anchored OpenVLA-OFT adaptation. This was queued after the 0.65
 transfer gate completed negative and the 0.80 transfer route showed a near-miss
