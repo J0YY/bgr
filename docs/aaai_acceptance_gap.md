@@ -56,17 +56,16 @@ random 369/400, with identity rows BGR 99/100, official 99/100, and random
 98/100. This replaces the older perturb-only audit as the latest
 learned-policy gate read and remains a failure against the +10/400 and +0.02
 promotion rule.
-The 2026-06-10 hard-occlusion follow-ups are also not promotable on partial
-evidence. At 19:14 BST, the 0.80 transfer route had BGR occlusion 305/400
-versus official 296/400, one episode short of the +10/400 official-margin gate,
-with identity BGR 391/400 versus official 393/400 and matched-random occlusion
-still running. The 0.65 adapted route had BGR occlusion 301/400 versus
-official 297/400, well below the fixed margin, with matched-random occlusion
-still running. The A40 0.65 adapted fallback had only identity and official
-occlusion rows synced after a failed original BGR identity job and a replacement
-completion; BGR occlusion was still pending. These rows should be closed out by
-syncing final summaries, but they must not be promoted unless a complete
-summary passes the fixed gate.
+The 2026-06-10 hard-occlusion follow-ups are also not promotable. The completed
+0.80 transfer route has BGR occlusion 305/400 versus official and matched
+random at 296/400, one episode short of the +10/400 margin gate, and identity
+BGR 391/400 versus official 393/400. The completed 0.65 adapted route has BGR
+identity/occlusion 389/400 and 301/400, official 393/400 and 297/400, and
+matched random 390/400 and 304/400; it fails by identity, matched-random
+occlusion, and the small official margin. The A40 0.65 adapted fallback remains
+already non-promotable on partial identity rows. Remaining identity-anchored
+0.80/0.90 variants are incomplete and must not be promoted unless complete
+summaries pass the fixed gate.
 A fixed head-interpolation follow-up was queued on 2026-06-10 to test whether
 the near-miss 0.80 transfer route can preserve the occlusion gain while
 recovering identity success. It copies the completed BGR and matched-random
@@ -975,6 +974,17 @@ risk.
   `774696` and is synced locally. It is a near miss: BGR clears fixed-radius
   but misses the +0.03 uniform gap on the extension and pooled 120-seed
   readout. Retire the row unless a genuinely new preregistered premise exists.
+- A fixed all-binary numeric OpenML target-1.5 sweep was submitted on
+  2026-06-10 as a broad CPU check while OpenVLA GPU jobs wait. It combines all
+  numeric binary OpenML datasets currently registered in
+  `tools/openml_margin_scout.py` from the default, external-validation, broad,
+  and secondary numeric suites, uses `TARGETS=1.5` with the existing numeric
+  preprocessing, and runs original seeds 0--29 plus held-out seeds 30--59.
+  Slurm jobs are `780049` and `780050`, both started at 21:02 BST. Treat this
+  as pending broad supervised pre-existing benchmark evidence only; do not use
+  it as a learned-policy or standard-control claim, and do not promote it
+  unless the fixed synced readout beats both uniform and fixed-radius replay at
+  macro or clearly replicated dataset level.
 - The Blackjack independent-route scout completed negative: all nine configs in
   `results/blackjack_recovery_scout_8seed_v1/config_summary.csv` have
   `candidate=False`. Do not scale or promote it without a materially new

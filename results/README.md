@@ -176,6 +176,23 @@ Internal pre-existing-dataset route scout:
   target-1.5 seeds, BGR is 0.7938 vs. uniform 0.7678 (+0.0260) and fixed
   0.7748 (+0.0190), below the +0.03 fixed follow-up standard. Treat this as a
   mixed-type OpenML near miss/fragility diagnostic, not manuscript evidence.
+- Active all-binary numeric OpenML target-1.5 sweep, opened 2026-06-10: this is
+  a fixed broad CPU check over the 32 numeric binary OpenML datasets currently
+  registered in `tools/openml_margin_scout.py`, combining the default,
+  external-validation, broad, and secondary numeric suites. It uses the existing
+  numeric preprocessing, `TARGETS=1.5`, `SEEDS=30`, `STEPS=8`,
+  `BATCH_SIZE=64`, `CANDIDATE_COUNT=128`, and `EVAL_EXAMPLES=250`. Original
+  seeds 0--29 were submitted as Slurm job `780049`, writing to
+  `/work/joy/bgr/runs/openml_all_binary_numeric_target15_30seed_v1_780049`;
+  held-out seeds 30--59 were submitted as Slurm job `780050`, writing to
+  `/work/joy/bgr/runs/openml_all_binary_numeric_target15_replication_30seed_v1_780050`.
+  Both jobs started on 2026-06-10 at 21:02 BST. This route is not paper evidence
+  unless the synced fixed readout shows a broad macro or clearly replicated
+  dataset-level win over both uniform and fixed-radius replay; it remains
+  supervised pre-existing benchmark evidence, not standard-control or
+  learned-policy evidence.
+  Sync with:
+  `ORIG_JOB_ID=780049 REP_JOB_ID=780050 ORIG_PREFIX=openml_all_binary_numeric_target15_30seed_v1 REP_PREFIX=openml_all_binary_numeric_target15_replication_30seed_v1 scripts/sync_openml_mixed_binary_results.sh`.
 
 Completed external-package scope diagnostics:
 
@@ -3895,6 +3912,22 @@ micro A6000 route had official identity complete and BGR identity running; the
 0.80 strict A6000 route had official occlusion and BGR identity running; the
 0.80 identity-anchor A40 fallback had official identity running; the 0.80 micro
 A40 and 0.90 strict A40 routes had no summarizable logs yet.
+
+Latest broad hard-occlusion poll/sync at 2026-06-10 20:59--21:00 BST closes
+the A6000 0.65 adaptation route negative with a complete summary at
+`results/openvla_oft_perturb_eval_hardocc065_adapt_step50400_lr2em7_v1/summary.csv`:
+BGR identity/occlusion are 389/400 and 301/400, official is 393/400 and
+297/400, and matched random is 390/400 and 304/400. The fixed gate fails
+because BGR trails the best identity comparator by four episodes, trails
+matched random on occlusion by three episodes, and is only +4/400 over
+official. The 0.80 identity-anchored A6000 route is still non-promotable by
+identity but has official/BGR occlusion running and matched-random occlusion
+priority-pending. The 0.80 micro A6000 and 0.80 strict A6000 routes have
+partial logs but no full summary; the 0.80 identity-anchor A40, 0.80 micro A40,
+and 0.90 strict A40 routes remain incomplete. The head-interpolation route
+queued below had prep `779973` estimated for 2026-06-11 07:57:50 BST and
+official identity `779974` estimated for 2026-06-11 08:03:53 BST, with all
+downstream jobs dependency-pending.
 
 New hard-occlusion 0.80 head-interpolation route queued on 2026-06-10
 20:56 BST: `scripts/queue_openvla_oft_hard_occlusion080_headinterp_results.sh`

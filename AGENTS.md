@@ -53,9 +53,10 @@ successes versus official 297/400 and matched random 296/400, only +3/+4
 episodes and +0.0075/+0.0100 success rate rather than the fixed +10/400 and
 +0.02 promotion margin; identity is again BGR 391/400, official 393/400, and
 matched random 389/400. The 0.65 adaptation route has BGR identity 389/400
-versus official 393/400 and BGR occlusion 301/400 versus official 297/400,
-missing both the +10 episode and +0.02 rate gates. The A40 adaptation fallback
-is also already closed negative on identity side condition with BGR identity
+versus official 393/400 and BGR occlusion 301/400 versus official 297/400 and
+matched random 304/400, failing both the identity side condition and the
+matched-random comparison. The A40 adaptation fallback is also already closed
+negative on identity side condition with BGR identity
 391/400 versus official 393/400. Still-running identity-anchored hard-occlusion
 routes remain incomplete and must not be incorporated into `paper/main.tex`
 unless their full summaries pass the fixed gate. A new fixed hard-occlusion
@@ -79,6 +80,15 @@ perturbation
 occlusion-bottleneck route was negative as well: BGR reaches 365/400
 non-identity successes versus official 367/400 and matched random 369/400,
 with identity BGR 99/100, official 99/100, and random 98/100. The
+new broad CPU supervised check is a fixed all-binary numeric OpenML target-1.5
+sweep over all current numeric binary OpenML datasets already registered in
+`tools/openml_margin_scout.py`. Original seeds 0--29 were submitted as Slurm
+job `780049`, and held-out seeds 30--59 were submitted as job `780050`; both
+started on 2026-06-10 at 21:02 BST with `TARGETS=1.5`, `SEEDS=30`,
+`PREPROCESSING=numeric`, and 32 datasets. This is not paper evidence unless the
+synced macro and dataset-level results beat uniform and fixed-radius replay
+under the same fixed readout; it is a broad pre-existing supervised benchmark
+check, not a learned-policy or standard-control win. The
 internal sklearn-digits margin replay scout is also rejected before promotion:
 its best BGR target gives only 0.8271 vs. 0.8123 RAUC against uniform with a
 2/2/0 paired split, while fixed-radius replay is stronger at another target.
