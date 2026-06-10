@@ -55,6 +55,11 @@ CALIBRATION_SUMMARIES = [
     ("Highway lane calibration", "results/highway_lane_recovery_calibration_12seed_v1/summary.json"),
     ("MinAtar Breakout calibration", "results/minatar_breakout_recovery_calibration_12seed_v1/summary.json"),
     ("MinAtar Asterix calibration", "results/minatar_asterix_recovery_calibration_12seed_v1/summary.json"),
+    ("MinAtar Freeway calibration", "results/minatar_freeway_recovery_calibration_20seed_v1/summary.json"),
+    (
+        "MinAtar Space Invaders calibration",
+        "results/minatar_space_invaders_recovery_calibration_20seed_v1/summary.json",
+    ),
     ("Reacher-v5 calibration", "results/reacher_recovery_calibration_12seed_v1/summary.json"),
     ("InvertedPendulum-v5 calibration", "results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json"),
     (
@@ -847,6 +852,46 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"TD-loss {asterix_td:.4f}, uniform-radius {asterix_ablation:.4f}, "
                 f"best-r80 {best_asterix_r80:.4f} vs uniform {asterix_uniform_r80:.4f}, "
                 f"W/L/T={best_asterix_wins}"
+            )
+
+    for label, relative_path, radius_ceiling in [
+        ("MinAtar Freeway", "results/minatar_freeway_recovery_probe_4seed_v1/summary.csv", 9.0),
+        ("MinAtar Space Invaders", "results/minatar_space_invaders_recovery_probe_4seed_v1/summary.csv", 6.0),
+    ]:
+        minatar_route_path = root / relative_path
+        if not minatar_route_path.exists():
+            continue
+        minatar_route = read_rows(minatar_route_path)
+        route_bgr = mean_metric(minatar_route, "bgr", "final_rauc")
+        route_coverage = mean_metric(minatar_route, "bgr_coverage", "final_rauc")
+        route_uniform = mean_metric(minatar_route, "uniform", "final_rauc")
+        route_failure = mean_metric(minatar_route, "failure_only", "final_rauc")
+        route_fixed = mean_metric(minatar_route, "fixed", "final_rauc")
+        route_td = mean_metric(minatar_route, "td_loss", "final_rauc")
+        route_ablation = mean_metric(minatar_route, "bgr_uniform_radius", "final_rauc")
+        route_bgr_r80 = mean_metric(minatar_route, "bgr", "final_median_r80")
+        route_coverage_r80 = mean_metric(minatar_route, "bgr_coverage", "final_median_r80")
+        route_uniform_r80 = mean_metric(minatar_route, "uniform", "final_median_r80")
+        route_bgr_wins = paired_wins(minatar_route, "bgr", "uniform", "final_rauc")
+        route_coverage_wins = paired_wins(minatar_route, "bgr_coverage", "uniform", "final_rauc")
+        best_route = route_bgr if route_bgr >= route_coverage else route_coverage
+        best_route_r80 = route_bgr_r80 if route_bgr >= route_coverage else route_coverage_r80
+        best_route_wins = route_bgr_wins if route_bgr >= route_coverage else route_coverage_wins
+        if not (
+            best_route - route_uniform >= 0.01
+            and best_route > max(route_failure, route_fixed, route_td, route_ablation)
+            and best_route_wins[0] >= 3
+            and best_route_r80 >= route_uniform_r80
+            and not (best_route_r80 >= radius_ceiling - 1e-12 and route_uniform_r80 >= radius_ceiling - 1e-12)
+            and not (best_route_r80 <= 0.01 and route_uniform_r80 <= 0.01)
+        ):
+            failures.append(
+                f"{label} negative/tied: BGR {route_bgr:.4f}, "
+                f"BGR-Coverage {route_coverage:.4f}, uniform {route_uniform:.4f}, "
+                f"failure-only {route_failure:.4f}, fixed {route_fixed:.4f}, "
+                f"TD-loss {route_td:.4f}, uniform-radius {route_ablation:.4f}, "
+                f"best-r80 {best_route_r80:.4f} vs uniform {route_uniform_r80:.4f}, "
+                f"W/L/T={best_route_wins}"
             )
 
     for label, relative_path in CALIBRATION_SUMMARIES:

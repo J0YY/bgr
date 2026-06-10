@@ -40,6 +40,16 @@ a complete tie across BGR, BGR-Coverage, BGR-uniform-radius, uniform, fixed,
 failure-only, and TD-loss at 0.5667 final RAUC, clean 0.9000, median r80
 3.7000, and AULC 0.5667. Low-data Freeway scouts also tied, so this route
 should not be scaled without a new premise.
+The same 2026-06-10 MinAtar pass also closes Space Invaders and Seaquest. Space
+Invaders cleared pre-method calibration with clean 1.0000, recovery range
+0.0000--1.0000, RAUC 0.4167, and r80 2.2000, but the fixed all-method screen
+is a complete tie across BGR, BGR-Coverage, BGR-uniform-radius, uniform, fixed,
+failure-only, and TD-loss at 0.4167 final RAUC, clean 1.0000, median r80
+2.2000, and AULC 0.4167. Seaquest is rejected before formal promotion: the
+best local controller window is fragile, falling below the clean gate at
+30 seeds, and a 4-seed method scout loses to fixed-radius replay (fixed 0.1667
+RAUC vs. BGR 0.0677 and uniform 0.0938). Neither route should be scaled
+without a genuinely new preregistered premise.
 The latest OpenVLA/LIBERO occlusion-bottleneck route is completed negative:
 BGR reaches 365/400 non-identity successes versus official 367/400 and matched
 random 369/400, with identity rows BGR 99/100, official 99/100, and random

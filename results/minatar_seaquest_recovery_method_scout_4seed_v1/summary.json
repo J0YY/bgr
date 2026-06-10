@@ -1,0 +1,41 @@
+{
+  "decision": "reject-scout-fixed-radius-dominates",
+  "env_id": "minatar-seaquest",
+  "game": "seaquest",
+  "note": "Local 4-seed method scout on the fragile original-controller y-down calibration window. Not a formal paper-facing all-method screen.",
+  "policy_init_steps": 100,
+  "replay_seeds": 12,
+  "results": {
+    "bgr": {
+      "clean": 0.27083333333333337,
+      "final_median_r80": 4.2,
+      "final_rauc": 0.06770833333333334
+    },
+    "bgr_uniform_radius": {
+      "clean": 0.0625,
+      "final_median_r80": 6.0,
+      "final_rauc": 0.015625
+    },
+    "failure_only": {
+      "clean": 0.18749999999999997,
+      "final_median_r80": 6.0,
+      "final_rauc": 0.057291666666666664
+    },
+    "fixed": {
+      "clean": 0.6041666666666666,
+      "final_median_r80": 2.4,
+      "final_rauc": 0.16666666666666666
+    },
+    "td_loss": {
+      "clean": 0.020833333333333332,
+      "final_median_r80": 6.0,
+      "final_rauc": 0.005208333333333333
+    },
+    "uniform": {
+      "clean": 0.25,
+      "final_median_r80": 6.0,
+      "final_rauc": 0.09375
+    }
+  },
+  "seeds": 4
+}

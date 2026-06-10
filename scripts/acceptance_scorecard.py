@@ -31,6 +31,8 @@ COMPLETED_METHOD_SCREEN_BY_CALIBRATION = {
     "Gymnasium Box2D LunarLander-v3 calibration": "results/lunarlander_recovery_probe_4seed_v1/summary.csv",
     "MinAtar Breakout calibration": "results/minatar_breakout_recovery_probe_4seed_v1/summary.csv",
     "MinAtar Asterix calibration": "results/minatar_asterix_recovery_probe_4seed_v1/summary.csv",
+    "MinAtar Freeway calibration": "results/minatar_freeway_recovery_probe_4seed_v1/summary.csv",
+    "MinAtar Space Invaders calibration": "results/minatar_space_invaders_recovery_probe_4seed_v1/summary.csv",
 }
 
 
@@ -406,6 +408,22 @@ BENCHMARK_SCREENS = [
         "bgr_uniform_radius",
         "final_median_r80",
     ),
+    (
+        "MinAtar Freeway",
+        "results/minatar_freeway_recovery_probe_4seed_v1/summary.csv",
+        ["bgr", "bgr_coverage"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
+    (
+        "MinAtar Space Invaders",
+        "results/minatar_space_invaders_recovery_probe_4seed_v1/summary.csv",
+        ["bgr", "bgr_coverage"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
 ]
 
 CALIBRATION_SCREENS = [
@@ -444,6 +462,14 @@ CALIBRATION_SCREENS = [
     (
         "MinAtar Asterix calibration",
         "results/minatar_asterix_recovery_calibration_12seed_v1/summary.json",
+    ),
+    (
+        "MinAtar Freeway calibration",
+        "results/minatar_freeway_recovery_calibration_20seed_v1/summary.json",
+    ),
+    (
+        "MinAtar Space Invaders calibration",
+        "results/minatar_space_invaders_recovery_calibration_20seed_v1/summary.json",
     ),
     (
         "Gymnasium MuJoCo Reacher-v5 calibration",

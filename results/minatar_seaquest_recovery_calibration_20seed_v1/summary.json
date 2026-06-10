@@ -1,0 +1,56 @@
+{
+  "burn_in": 10,
+  "clean_success": 0.8,
+  "decision": "usable-fragile-scout-not-promoted",
+  "env_id": "minatar-seaquest",
+  "game": "seaquest",
+  "horizon": 40,
+  "max_recovery": 0.8,
+  "mean_curve": [
+    0.8,
+    0.8,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "mean_reward": 0.2857142857142857,
+  "mean_terminal_rate": 0.7571428571428571,
+  "min_recovery": 0.0,
+  "note": "Rejected before promotion because 30-seed clean falls below 0.80 and 4-seed method scout loses to fixed-radius replay.",
+  "perturbation": "downward-sub-y-displacement",
+  "policy": "original-local-seaquest-heuristic-controller",
+  "r80": 1.2,
+  "radii": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0
+  ],
+  "rauc": 0.20000000000000004,
+  "recovery_range": 0.8,
+  "reward_curve": [
+    1.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "reward_threshold": 1,
+  "seeds": 20,
+  "terminal_curve": [
+    0.15,
+    0.15,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ]
+}

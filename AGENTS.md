@@ -23,9 +23,11 @@ MiniGrid FourRooms radius-10 rescue,
 HandReach-v3 calibration, highway-fast-v0 lane calibration, and MinAtar
 Breakout all-method screen are also negative, so they do not solve the
 independent-benchmark evidence gap. MinAtar Asterix also completed negative
-after its usable calibration. A new MinAtar Freeway route cleared pre-method
-calibration but the fixed all-method screen tied every method, so it is also
-retired and there is no active independent route. The latest completed
+after its usable calibration. New MinAtar Freeway and Space Invaders routes
+cleared pre-method calibration but their fixed all-method screens tied every
+method, so they are retired. A Seaquest scout found a fragile 20-seed
+calibration window, but the method scout lost to fixed-radius replay and is
+rejected before promotion. There is no active independent route. The latest completed
 OpenVLA/LIBERO occlusion-bottleneck route is negative: BGR reaches 365/400
 non-identity successes versus official 367/400 and matched random 369/400,
 with identity BGR 99/100, official 99/100, and random 98/100. The
@@ -249,7 +251,7 @@ were dependency-pending. Completed rows available locally are BGR identity
 clean is BGR `99/100` and matched random `98/100`. The full perturb summary is
 still missing, so the fixed perturb gate remains `[INCOMPLETE]`.
 
-Latest independent-route scout: MinAtar Freeway. The fixed pre-method
+Completed independent-route closure: MinAtar Freeway. The fixed pre-method
 calibration command
 `PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_freeway_recovery_calibration.py --out results/minatar_freeway_recovery_calibration_20seed_v1`
 cleared the calibration gate with clean 0.9000, recovery range
@@ -261,6 +263,29 @@ failure-only, and TD-loss all have clean 0.9000, final RAUC 0.5667, median
 r80 3.7000, AULC 0.5667, and best RAUC 0.5667. Low-data exploratory Freeway
 scouts with init steps 0/20/100 and iterations 20/50 also tied. Do not scale
 or promote Freeway without a genuinely new preregistered premise.
+
+Latest independent-route closure: MinAtar Space Invaders. The fixed
+pre-method calibration command
+`PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_space_invaders_recovery_calibration.py --out results/minatar_space_invaders_recovery_calibration_20seed_v1`
+cleared the calibration gate with clean 1.0000, recovery range
+0.0000--1.0000, RAUC 0.4167, and r80 2.2000 under `MinAtar==1.0.15`.
+The authorized all-method screen
+`PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_space_invaders_recovery_probe.py --out results/minatar_space_invaders_recovery_probe_4seed_v1`
+is a complete tie: BGR, BGR-Coverage, BGR-uniform-radius, uniform, fixed,
+failure-only, and TD-loss all have clean 1.0000, final RAUC 0.4167, median
+r80 2.2000, AULC 0.4167, and best RAUC 0.4167. Do not scale or promote Space
+Invaders without a genuinely new preregistered premise.
+
+Rejected pre-method/method scout: MinAtar Seaquest. A broad local scout found a
+fragile candidate with the original heuristic controller, downward submarine-y
+perturbations, burn-in 10, horizon 40, and reward threshold 1. The same window
+gives clean 0.8000, recovery range 0.0000--0.8000, RAUC 0.2000, and r80 1.2000
+over 20 seeds, but falls to clean 0.7333 over 30 seeds. A 4-seed method scout
+is not promotable: fixed-radius replay reaches 0.1667 RAUC with clean 0.6042,
+while BGR reaches only 0.0677 RAUC with clean 0.2708 and uniform reaches 0.0938
+RAUC. Do not build a formal Seaquest screen unless a new preregistered
+controller first clears a stable clean-success gate and avoids fixed-radius
+dominance.
 
 Operational defaults:
 

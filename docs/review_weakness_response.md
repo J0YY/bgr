@@ -14,7 +14,11 @@ matched random and the official checkpoint.
 The newest OpenVLA occlusion-bottleneck route is complete and negative
 (BGR 365/400 non-identity successes, official 367/400, matched random
 369/400). The newest MinAtar Freeway independent route cleared calibration but
-the all-method screen tied every method, so it is not acceptance evidence.
+the all-method screen tied every method. MinAtar Space Invaders repeated the
+same pattern: usable calibration, then a complete all-method tie. A Seaquest
+scout found a fragile 20-seed calibration window, but the method scout lost to
+fixed-radius replay and is rejected before promotion. None of these are
+acceptance evidence.
 Run `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .`
 to reproduce this read from the current result artifacts.
 
