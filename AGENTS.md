@@ -178,7 +178,16 @@ still below the stricter +0.03 fixed-radius margin used for earlier
 dataset-level promotion. Treat this as a small macro-positive supervised
 pre-existing benchmark aggregation, not a learned-policy or standard-control
 win. The deterministic readout is saved at
-`results/openml_all_binary_numeric_target15_analysis_780049_780050.txt`. The
+`results/openml_all_binary_numeric_target15_analysis_780049_780050.txt`. A
+third independent seed block was queued on 2026-06-10 as Slurm job `781423`
+using the same 32-dataset numeric target-1.5 protocol, `SEED_START=60`, and
+`SEEDS=30`, with output
+`/work/joy/bgr/runs/openml_all_binary_numeric_target15_thirdsplit_30seed_v1_781423`
+and log `/work/joy/bgr/logs/bgr-openml-mixed-binary-781423.out`. Initial
+`squeue` showed it `PENDING` on `Resources`, with no log yet. This is not a
+new claim until synced and analyzed; if it stays macro-positive, it only
+strengthens the supervised pre-existing benchmark aggregation and still does
+not solve the standard-control or learned-policy gap. The
 internal sklearn-digits margin replay scout is also rejected before promotion:
 its best BGR target gives only 0.8271 vs. 0.8123 RAUC against uniform with a
 2/2/0 paired split, while fixed-radius replay is stronger at another target.

@@ -1055,6 +1055,13 @@ risk.
   useful pre-existing supervised benchmark evidence, but the effect is small
   and the suite still contains large negative rows, so do not use it as a
   learned-policy, robotics, or standard-control claim.
+- A third all-binary numeric OpenML target-1.5 seed block was queued on
+  2026-06-10 as Slurm job `781423`, using `SEED_START=60`, `SEEDS=30`, and the
+  same 32 registered numeric binary datasets. It writes to
+  `/work/joy/bgr/runs/openml_all_binary_numeric_target15_thirdsplit_30seed_v1_781423`
+  and log `/work/joy/bgr/logs/bgr-openml-mixed-binary-781423.out`. Initial
+  `squeue` showed `PENDING` on `Resources`; no result or paper claim exists
+  until it syncs and the fixed readout is generated.
 - The Blackjack independent-route scout completed negative: all nine configs in
   `results/blackjack_recovery_scout_8seed_v1/config_summary.csv` have
   `candidate=False`. Do not scale or promote it without a materially new
