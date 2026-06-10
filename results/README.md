@@ -2728,6 +2728,12 @@ priority-pending with estimated start 2026-06-10 15:15:13 BST; all
 BGR/random adaptation and dependent perturb-eval jobs remained
 dependency-pending. No compact `summary.csv` exists, so the route is still
 not gateable or paper evidence.
+Latest poll/sync at 2026-06-10 12:48:57 BST showed the same scheduler state:
+prep `776029` was still running, official identity `776040` remained
+priority-pending, and all downstream BGR/random adaptation plus perturb-eval
+jobs remained dependency-pending. Direct prep-log inspection remained healthy
+and had advanced to matched-random hard-occlusion perturbation rendering at
+2026-06-10T12:46:53+01:00. No compact `summary.csv` exists.
 
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
@@ -3409,6 +3415,18 @@ replacement BGR identity `775102` are pending, and occlusion children remain
 dependency-pending. The 0.80 identity-anchored route is the live
 acceptance-moving candidate; prep `776029` is now running and healthy, but no
 compact summary exists.
+
+Latest status at 2026-06-10 12:48:57 BST: no active hard-occlusion route is
+gateable. The 0.80 identity-anchored prep `776029` is still running and
+healthy, now rendering matched-random perturbations. The 0.80 transfer route
+still lacks matched-random rows; random identity `774922` is running with
+direct tail 278/288, and random occlusion `774923` is dependency-pending. The
+A6000 0.65 adaptation route is still incomplete and already non-promotable by
+identity; direct occlusion tails are official 247/346, BGR 81/139, and matched
+random 78/108. The A40 fallback remains incomplete with random identity
+`774850` running at direct tail 357/364, official occlusion `774847` and
+replacement BGR identity `775102` pending, and occlusion children
+dependency-pending. Readiness still reports `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
 Sync/poll helper:
 

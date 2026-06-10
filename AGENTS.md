@@ -626,6 +626,13 @@ Official identity `776040` remained priority-pending with estimated start
 identity-eval, and occlusion-eval jobs remained dependency-pending. No compact
 `summary.csv` exists, so this route remains the live acceptance-moving
 candidate but is not gateable or paper evidence.
+Latest poll/sync at 2026-06-10 12:48:57 BST showed the same scheduler state:
+prep `776029` was still running, official identity `776040` was
+priority-pending, and every downstream BGR/random adaptation and perturb eval
+job was dependency-pending. Direct prep-log inspection remained healthy and had
+advanced to `Rendering matched-random perturbations at
+2026-06-10T12:46:53+01:00`. No compact `summary.csv` or perturb logs exist
+yet for this route, so it remains incomplete.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -871,6 +878,12 @@ at 390/400. Official/BGR/matched-random occlusion jobs `774725`/`774727`/
 `774729` were running. Direct partial occlusion tails were official 224/323,
 BGR 79/130, and matched random 76/99; these are not gateable, but they do not
 rescue the identity failure.
+Latest poll/sync at 2026-06-10 12:48:57 BST still left the A6000 0.65
+adaptation route incomplete: official/BGR/matched-random occlusion jobs
+`774725`/`774727`/`774729` were running. Direct partial tails were official
+247/346, BGR 81/139, and matched random 78/108. The identity rows remain
+BGR 389/400, official 393/400, and matched random 390/400, so this route is
+already non-promotable regardless of the final occlusion rows.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000
