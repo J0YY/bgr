@@ -2764,6 +2764,13 @@ adaptation `776036` was priority-pending with estimated start
 2026-06-10 15:03:53 BST; downstream BGR/random clean and perturb eval children
 remained dependency-pending. Direct official identity parsing showed 71/74
 successes so far. No compact `summary.csv` exists.
+Latest direct poll at 2026-06-10 13:07:59 BST showed BGR clean eval `776035`
+running after BGR merge completed. BGR identity eval `776042` and
+matched-random adaptation `776036` were priority-pending; BGR occlusion
+`776043`, official occlusion `776041`, and random eval children remained
+dependency-pending. Official identity `776040` was still running with direct
+parsed tail 101/107. The active BGR clean-eval log had started but did not yet
+contain parseable totals. No compact `summary.csv` exists.
 
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
@@ -3532,6 +3539,17 @@ at 12/14 by direct parse. Readiness still reports
 Sync helper note: `scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh`
 now excludes `rollouts/` media while syncing remote logs, so compact summaries
 can be rebuilt from text logs without repeated rsync disconnects.
+
+Latest status at 2026-06-10 13:07:59 BST: no active hard-occlusion route is
+gateable. The 0.80 identity-anchored route has BGR clean eval `776035`
+running, official identity `776040` running with direct parsed tail 101/107,
+BGR identity `776042` priority-pending, and matched-random adaptation `776036`
+priority-pending. The 0.80 transfer, A6000 0.65 adaptation, and A40 fallback
+routes remain incomplete or already non-promotable as above. The generated
+scorecard still warns not to start another same-protocol MiniGrid,
+classic-control, PointMaze, or FetchReach screen while this learned-policy
+route is pending, because those screens already fail through saturation,
+stronger-baseline losses, or state-priority ablation failures.
 
 Sync/poll helper:
 

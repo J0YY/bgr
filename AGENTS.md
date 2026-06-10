@@ -668,6 +668,13 @@ with estimated start 2026-06-10 15:03:53 BST; BGR/random clean and perturb eval
 children remained dependency-pending. Official identity `776040` was still
 running with direct parsed tail 71/74. The compact `summary.csv` is still
 missing and the route remains incomplete.
+Latest direct poll at 2026-06-10 13:07:59 BST showed BGR clean eval `776035`
+running after BGR merge completed, BGR identity eval `776042`
+priority-pending, matched-random adaptation `776036` priority-pending, and all
+occlusion children still dependency-pending. Official identity `776040` was
+still running with direct parsed tail 101/107. The active BGR clean-eval log
+had started but had not yet emitted parseable totals. No compact `summary.csv`
+exists, so the route remains incomplete.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -951,6 +958,11 @@ Operational sync update: `scripts/sync_openvla_oft_hard_occlusion_transfer_resul
 now excludes `rollouts/` media during remote-log sync and copies only text logs
 needed for compact summaries. This fixes repeated rsync code 12/255 drops while
 preserving the local gate path.
+Experiment-routing note at 2026-06-10 13:08 BST: the generated scorecard still
+warns not to start another same-protocol MiniGrid, classic-control, PointMaze,
+or FetchReach screen while the active learned-policy route is pending; existing
+screens already fail by saturation, stronger-baseline loss, or state-priority
+ablation. No duplicate standard-environment cluster job was launched.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000
