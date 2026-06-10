@@ -3598,6 +3598,26 @@ is only +4/400. Treat this as negative/incomplete scope information, not paper
 evidence. The 0.80 transfer and both 0.80 identity-anchored routes remain the
 live learned-policy paths, but they are still missing complete summaries.
 
+Latest status at 2026-06-10 13:49:03 BST: fresh syncs keep the readiness
+decision unchanged. The A6000 0.65 adaptation route remains incomplete and is
+already non-promotable: partial rows are BGR identity/occlusion 389/400 and
+301/400, official identity/occlusion 393/400 and 297/400, and matched-random
+identity 390/400; matched-random occlusion `774729` is still priority-pending.
+The identity side condition fails and the BGR-over-official occlusion margin is
+only +4/400. The A40 0.65 fallback now has replacement BGR identity complete
+at 391/400, official identity 393/400, and matched-random identity 392/400,
+so it also fails the fixed identity side condition by trailing the best
+identity comparator by two episodes; official occlusion `774847` was running,
+replacement BGR occlusion `775103` and matched-random occlusion `774851` were
+priority-pending, and original failed child `774849` remains ignored. The 0.80
+transfer route is still missing matched-random occlusion `774923` and is
+already identity-deficient with BGR 391/400 vs. official 393/400. The A6000
+0.80 identity-anchored route has official identity `776040` and BGR identity
+`776042` priority-pending with estimated starts on 2026-06-11, while the
+same-protocol A40 fallback has BGR train `776291` and official identity
+`776300` priority-pending with estimated starts on 2026-06-12. No active
+0.80 identity-anchored route has a compact summary yet; no paper claim changes.
+
 Sync/poll helper:
 
 ```bash
