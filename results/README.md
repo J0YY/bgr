@@ -7043,11 +7043,16 @@ Submitted jobs:
 | BGR-Coverage | 778105 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_bgr_coverage_v1_778105` |
 | BGR | 778106 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_bgr_v1_778106` |
 
-Latest poll at 2026-06-10 17:36--17:39 BST showed all seven jobs still
-running. Partial synced rows are not paper evidence: uniform seed 0 has RAUC
-0.3875; fixed seeds 0/1 have 0.3375/0.3625; BGR-uniform-radius seed 0 has
-0.3625; BGR-Coverage seed 0 has 0.3125; and BGR seed 0 has 0.3125. The
-completed sparse-probe protocol is already rejected by
+Latest poll at 2026-06-10 17:57--18:00 BST showed dense default BGR, TD-loss,
+and failure-only still running. Dense BGR-Coverage is already completed
+negative before promotion: uniform seeds 0--3 have RAUC
+0.3875/0.3375/0.1750/0.3000 (mean 0.3000), fixed has
+0.3375/0.3625/0.1500/0.1750 (mean 0.2563), BGR-uniform-radius has
+0.3625/0.3625/0.1500/0.2750 (mean 0.2875), and BGR-Coverage has
+0.3125/0.3875/0.1750/0.2500 (mean 0.2812). The checker rejects dense
+BGR-Coverage versus uniform (W/L/T=1/2/1, delta -0.0188), versus
+BGR-uniform-radius (delta -0.0063), and on the median-r80 contradiction. The
+completed sparse-probe protocol is also rejected by
 `tools/check_candidate_promotion.py`: sparse BGR-Coverage has mean RAUC 0.1875
 versus uniform 0.2531 (W/L/T=0/4/0), and sparse BGR has mean RAUC 0.1531
 versus uniform 0.2531 (W/L/T=0/3/1), with both also trailing TD-loss and the

@@ -120,12 +120,19 @@ on `athena` at 2026-06-10 17:30 BST:
 `778104` BGR-uniform-radius, `778105` BGR-Coverage, and `778106` BGR. They use
 the same dense probes, `TARGET_RADIUS=0.046`, `RADIUS_BANDWIDTH=0.050`, and
 write to `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_<method>_v1_<job>`.
-The 2026-06-10 17:36--17:39 BST poll showed all seven densecommon jobs still
-running; partial local rows included uniform seed 0 at 0.3875, fixed seeds 0/1
-at 0.3375/0.3625, BGR-uniform-radius seed 0 at 0.3625, BGR-Coverage seed 0 at
-0.3125, and BGR seed 0 at 0.3125. Treat this route as in-flight and not paper
-evidence unless the completed matched dense common-protocol summary clears the
-candidate-promotion checks.
+The matched dense-probe BGR-Coverage row is now completed negative before
+promotion: dense uniform seeds 0--3 have RAUC 0.3875/0.3375/0.1750/0.3000
+(mean 0.3000), dense fixed has 0.3375/0.3625/0.1500/0.1750 (mean 0.2563),
+dense BGR-uniform-radius has 0.3625/0.3625/0.1500/0.2750 (mean 0.2875), and
+dense BGR-Coverage has 0.3125/0.3875/0.1750/0.2500 (mean 0.2812).
+`tools/check_candidate_promotion.py` rejects dense BGR-Coverage versus uniform
+(W/L/T=1/2/1, delta -0.0188), versus the uniform-radius ablation (delta
+-0.0063), and on the median-r80 contradiction. The dense default-BGR job
+`778106`, failure-only job `778102`, and TD-loss job `778103` were still
+running at the 2026-06-10 17:57--18:00 BST poll, with only seed-0 rows locally.
+Treat dense default BGR as incomplete and not paper evidence unless the
+completed matched dense common-protocol summary clears the candidate-promotion
+checks.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,

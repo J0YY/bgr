@@ -1427,10 +1427,16 @@ risk.
   17:30 BST: jobs `778100` uniform, `778101` fixed, `778102` failure-only,
   `778103` TD-loss, `778104` BGR-uniform-radius, `778105` BGR-Coverage, and
   `778106` BGR. These jobs use the same dense probes, `TARGET_RADIUS=0.046`,
-  and `RADIUS_BANDWIDTH=0.050`; the 17:36--17:39 BST poll showed all seven
-  still running with only partial seed-0/seed-1 rows. Do not promote or scale
-  FetchPush object-state unless the completed matched dense summary clears the
-  fixed candidate-promotion checks.
+  and `RADIUS_BANDWIDTH=0.050`. The matched dense-probe BGR-Coverage row is
+  now completed negative before promotion: dense uniform has mean RAUC 0.3000,
+  dense fixed 0.2563, dense BGR-uniform-radius 0.2875, and dense BGR-Coverage
+  0.2812. `tools/check_candidate_promotion.py` rejects dense BGR-Coverage
+  versus uniform (W/L/T=1/2/1, delta -0.0188), versus the uniform-radius
+  ablation (delta -0.0063), and on the median-r80 contradiction. The dense
+  default-BGR, failure-only, and TD-loss jobs were still running at the
+  2026-06-10 17:57--18:00 BST poll, so default BGR remains incomplete rather
+  than promoted. Do not promote or scale FetchPush object-state unless the
+  completed matched dense summary clears the fixed candidate-promotion checks.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
   same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:
