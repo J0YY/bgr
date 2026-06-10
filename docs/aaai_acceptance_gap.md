@@ -34,6 +34,18 @@ Asterix route cleared calibration, but the fixed all-method screen is negative
 because failure-only replay is the strongest baseline. The earlier MinAtar
 Breakout calibration also cleared pre-method checks, but its fixed all-method
 screen is tied/saturated negative.
+The 2026-06-10 Freeway route also does not change this: it cleared pre-method
+calibration under MinAtar package dynamics, but the fixed all-method screen is
+a complete tie across BGR, BGR-Coverage, BGR-uniform-radius, uniform, fixed,
+failure-only, and TD-loss at 0.5667 final RAUC, clean 0.9000, median r80
+3.7000, and AULC 0.5667. Low-data Freeway scouts also tied, so this route
+should not be scaled without a new premise.
+The latest OpenVLA/LIBERO occlusion-bottleneck route is completed negative:
+BGR reaches 365/400 non-identity successes versus official 367/400 and matched
+random 369/400, with identity rows BGR 99/100, official 99/100, and random
+98/100. This replaces the older perturb-only audit as the latest
+learned-policy gate read and remains a failure against the +10/400 and +0.02
+promotion rule.
 An internal sklearn-digits margin scout was also opened as a genuinely
 pre-existing supervised dataset route, but it is rejected before paper
 promotion: the best BGR target in
@@ -67,10 +79,11 @@ uniform 0.6846 (+0.0749, W/L/T=25/5/0) and fixed-radius 0.7133. Phoneme also
 clears after held-out replication: original BGR 0.7228 versus uniform 0.6896
 and fixed-radius 0.6704, held-out BGR 0.7124 versus uniform 0.6758 (+0.0366,
 W/L/T=21/9/0) and fixed-radius 0.6792 (+0.0332, W/L/T=25/5/0).
-A 30-seed target-radius sensitivity check over the three positive OpenML
+A 60-seed target-radius sensitivity check over the three positive OpenML
 datasets is now recorded as a fragility caveat rather than a new headline:
-BGR-minus-uniform gaps for diabetes/blood/phoneme are +0.005/-0.002/-0.017 at
-radius 1.0, +0.035/+0.066/+0.017 at 1.5, and +0.037/+0.097/+0.033 at 2.0.
+pooled BGR-minus-uniform gaps for diabetes/blood/phoneme are
++0.002/-0.002/-0.007 at radius 1.0, +0.032/+0.065/+0.014 at 1.5, and
++0.038/+0.086/+0.035 at 2.0.
 The newest standard-environment sequence sharpened the negative record:
 LunarLander is a 4-seed near miss rejected by paired signs and lower median r80,
 bsuite DeepSea trails the state-priority/uniform-radius ablation and has lower

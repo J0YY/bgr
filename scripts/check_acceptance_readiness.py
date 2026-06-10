@@ -26,6 +26,10 @@ OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE = (
     "results/openvla_oft_perturb_eval_p2048unique_perturbonly_anchor_prereg_perturbonly_proxanchor_l2_5em0_"
     "step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv"
 )
+OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE = (
+    "results/openvla_oft_perturb_eval_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_"
+    "step50400_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv"
+)
 OPENVLA_PERTURB_ONLY_ANCHOR_MARKER = "queue_openvla_oft_preregistered_perturb_only_anchor.sh"
 OPENVLA_PROXIMAL_ANCHOR_JOB_IDS = {
     "bgr_train": "767657",
@@ -877,6 +881,12 @@ def independent_benchmark_gate(root: Path) -> GateResult:
 
 def learned_policy_gate(root: Path) -> GateResult:
     inflight_detail = learned_policy_inflight_detail(root)
+    if (root / OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE).exists():
+        return learned_policy_summary_gate(
+            root,
+            OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE,
+            label="latest occlusion-bottleneck audit",
+        )
     if (root / OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE).exists():
         return learned_policy_summary_gate(
             root,

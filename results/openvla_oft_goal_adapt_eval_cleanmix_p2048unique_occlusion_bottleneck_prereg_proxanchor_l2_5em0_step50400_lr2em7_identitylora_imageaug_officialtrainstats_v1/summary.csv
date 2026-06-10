@@ -1,0 +1,3 @@
+method,episodes,successes,success_rate
+bgr,100,99,0.99
+random,100,98,0.98

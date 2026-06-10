@@ -11,6 +11,10 @@ not packaging: OpenML diabetes, blood-transfusion, and phoneme now give
 replicated positive pre-existing supervised margin-replay evidence, but there is still no
 standard-environment recovery win and no OpenVLA/LIBERO improvement over both
 matched random and the official checkpoint.
+The newest OpenVLA occlusion-bottleneck route is complete and negative
+(BGR 365/400 non-identity successes, official 367/400, matched random
+369/400). The newest MinAtar Freeway independent route cleared calibration but
+the all-method screen tied every method, so it is not acceptance evidence.
 Run `PYTHONPATH=src:. python3 scripts/check_acceptance_readiness.py --root .`
 to reproduce this read from the current result artifacts.
 
@@ -155,12 +159,14 @@ to reproduce this read from the current result artifacts.
   `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets phoneme --targets 2.0 --seed-start 30 --seeds 30 --out results/openml_phoneme_margin_replication_30seed_v1`
   gives BGR 0.7124 vs. uniform 0.6758 (+0.0366, W/L/T=21/9/0) and vs.
   fixed-radius 0.6792 (+0.0332, W/L/T=25/5/0).
-- A 30-seed target-radius sensitivity check over the three positive OpenML
+- A 60-seed target-radius sensitivity check over the three positive OpenML
   datasets is now included as a fragility caveat rather than a new headline:
   `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes,blood-transfusion-service-center,phoneme --targets 1.0,1.5,2.0 --seeds 30 --out results/openml_positive_target_sensitivity_30seed_v1`
-  gives BGR-minus-uniform gaps for diabetes/blood/phoneme of
-  +0.005/-0.002/-0.017 at radius 1.0, +0.035/+0.066/+0.017 at 1.5, and
-  +0.037/+0.097/+0.033 at 2.0.
+  and
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes,blood-transfusion-service-center,phoneme --targets 1.0,1.5,2.0 --seed-start 30 --seeds 30 --out results/openml_positive_target_sensitivity_replication_30seed_v1`
+  give pooled BGR-minus-uniform gaps for diabetes/blood/phoneme of
+  +0.002/-0.002/-0.007 at radius 1.0, +0.032/+0.065/+0.014 at 1.5, and
+  +0.038/+0.086/+0.035 at 2.0.
 - MinAtar Breakout is completed negative scope evidence, not paper-positive
   evidence. The fixed 12-seed calibration in
   `results/minatar_breakout_recovery_calibration_12seed_v1/summary.json`

@@ -23,7 +23,12 @@ MiniGrid FourRooms radius-10 rescue,
 HandReach-v3 calibration, highway-fast-v0 lane calibration, and MinAtar
 Breakout all-method screen are also negative, so they do not solve the
 independent-benchmark evidence gap. MinAtar Asterix also completed negative
-after its usable calibration, so there is no active independent route. The
+after its usable calibration. A new MinAtar Freeway route cleared pre-method
+calibration but the fixed all-method screen tied every method, so it is also
+retired and there is no active independent route. The latest completed
+OpenVLA/LIBERO occlusion-bottleneck route is negative: BGR reaches 365/400
+non-identity successes versus official 367/400 and matched random 369/400,
+with identity BGR 99/100, official 99/100, and random 98/100. The
 internal sklearn-digits margin replay scout is also rejected before promotion:
 its best BGR target gives only 0.8271 vs. 0.8123 RAUC against uniform with a
 2/2/0 paired split, while fixed-radius replay is stronger at another target.
@@ -45,10 +50,10 @@ fixed-radius 0.7133. The full external numeric OpenML suite also has a
 held-out seeds 30--59 repeat at the same target radius: original/held-out macro
 means are BGR 0.8055/0.8068, uniform 0.7939/0.7943, and fixed-radius
 0.7864/0.7839; pooled across both suite runs, BGR is ahead on 6/8 dataset means
-versus uniform and 7/8 versus fixed-radius. A 30-seed target-radius sensitivity
-check over the three positive OpenML datasets is now a fragility caveat:
-BGR-minus-uniform gaps for diabetes/blood/phoneme are +0.005/-0.002/-0.017 at
-radius 1.0, +0.035/+0.066/+0.017 at 1.5, and +0.037/+0.097/+0.033 at 2.0.
+versus uniform and 7/8 versus fixed-radius. A 60-seed target-radius sensitivity
+check over the three positive OpenML datasets is now a fragility caveat: pooled
+BGR-minus-uniform gaps for diabetes/blood/phoneme are +0.002/-0.002/-0.007 at
+radius 1.0, +0.032/+0.065/+0.014 at 1.5, and +0.038/+0.086/+0.035 at 2.0.
 Pooled across 60
 blood-transfusion seeds, BGR is 0.7610 vs. uniform 0.6751 (+0.0858,
 W/L/T=55/5/0) and vs. fixed-radius 0.7026 (+0.0584, W/L/T=52/6/2). A held-out
@@ -70,7 +75,7 @@ lack of new independent positive evidence, the negative standard-environment
 record, incremental novelty, author-defined metric dependence, and robustness
 fragility. Do not just soften language around unchanged results.
 
-Active learned-policy route: preregistered OpenVLA-OFT occlusion-bottleneck
+Completed learned-policy route (negative, not active): preregistered OpenVLA-OFT occlusion-bottleneck
 adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.
 This route is motivated by the fixed full-goal visual audit: blur,
 brightness, and shift are near saturated, while occlusion is the only clear
@@ -96,6 +101,13 @@ Initial `squeue` showed prep `767850` and official identity `767857` running,
 with adaptation and BGR/random perturb jobs dependency-pending. Do not
 incorporate this route into `paper/main.tex` until compact summaries exist and
 the fixed gate passes.
+Final sync on 2026-06-10 reconstructed compact summaries from completed remote
+logs. All listed jobs completed with exit `0:0`, but the fixed promotion gate
+failed: non-identity totals are BGR 365/400, official 367/400, and random
+369/400; identity rows are BGR 99/100, official 99/100, and random 98/100.
+Per perturbation, BGR is blur 98/100, brightness 98/100, occlusion 75/100,
+and shift 94/100; official is 97/98/74/98 and random is 99/98/74/98. Treat
+this as negative learned-policy evidence, not an active route or paper claim.
 Poll/sync helper:
 `scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --no-check`
 and, when summaries or logs exist,
@@ -236,6 +248,19 @@ were dependency-pending. Completed rows available locally are BGR identity
 `97/100`, official brightness `98/100`, and random identity `98/100`; adapt
 clean is BGR `99/100` and matched random `98/100`. The full perturb summary is
 still missing, so the fixed perturb gate remains `[INCOMPLETE]`.
+
+Latest independent-route scout: MinAtar Freeway. The fixed pre-method
+calibration command
+`PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_freeway_recovery_calibration.py --out results/minatar_freeway_recovery_calibration_20seed_v1`
+cleared the calibration gate with clean 0.9000, recovery range
+0.4000--0.9000, RAUC 0.5667, and r80 1.8667 under `MinAtar==1.0.15`.
+The authorized all-method screen
+`PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_freeway_recovery_probe.py --out results/minatar_freeway_recovery_probe_4seed_v1`
+is a complete tie: BGR, BGR-Coverage, BGR-uniform-radius, uniform, fixed,
+failure-only, and TD-loss all have clean 0.9000, final RAUC 0.5667, median
+r80 3.7000, AULC 0.5667, and best RAUC 0.5667. Low-data exploratory Freeway
+scouts with init steps 0/20/100 and iterations 20/50 also tied. Do not scale
+or promote Freeway without a genuinely new preregistered premise.
 
 Operational defaults:
 
@@ -450,12 +475,14 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   the original fixed external suite row gave BGR 0.7228 vs. uniform 0.6896 and
   vs. fixed-radius 0.6704. This is incorporated only with careful framing as
   pre-existing supervised margin-replay evidence, not robotics evidence.
-  A 30-seed target-radius sensitivity run over the three positive OpenML
+  A 60-seed target-radius sensitivity run over the three positive OpenML
   datasets has also completed:
   `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes,blood-transfusion-service-center,phoneme --targets 1.0,1.5,2.0 --seeds 30 --out results/openml_positive_target_sensitivity_30seed_v1`.
-  Treat it as a fragility caveat, not a new headline: BGR-minus-uniform gaps for
-  diabetes/blood/phoneme are +0.005/-0.002/-0.017 at radius 1.0,
-  +0.035/+0.066/+0.017 at 1.5, and +0.037/+0.097/+0.033 at 2.0.
+  Its held-out repeat is:
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets diabetes,blood-transfusion-service-center,phoneme --targets 1.0,1.5,2.0 --seed-start 30 --seeds 30 --out results/openml_positive_target_sensitivity_replication_30seed_v1`.
+  Treat it as a fragility caveat, not a new headline: pooled BGR-minus-uniform
+  gaps for diabetes/blood/phoneme are +0.002/-0.002/-0.007 at radius 1.0,
+  +0.032/+0.065/+0.014 at 1.5, and +0.038/+0.086/+0.035 at 2.0.
 - The next acceptance-moving work must change the learned-policy intervention, use a truly different independent benchmark/reset interface, or materially strengthen theory/presentation. Do not spend more cycles on same-protocol MiniGrid/classic-control screens unless the premise changes. Do not spend more compute on the current OpenVLA-OFT clean-mix/visual-perturbation/perturb-only recipe family; the preregistered weighted, proximal-anchor, and perturb-only anchored audits all failed the learned-policy promotion gate.
 - The grid-margin witness-sensitivity diagnostic is completed and paper-facing
   only as scope evidence for the feasibility-witness assumption. The fixed
