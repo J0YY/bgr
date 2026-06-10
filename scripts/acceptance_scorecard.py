@@ -371,6 +371,22 @@ BENCHMARK_SCREENS = [
         "final_abs_r10",
     ),
     (
+        "MiniGrid DynamicObstacles",
+        "results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/summary.csv",
+        ["bgr_coverage", "bgr"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
+    (
+        "MiniGrid DynamicObstacles clean-shield",
+        "results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/summary.csv",
+        ["bgr_clean_shield", "bgr_coverage", "bgr"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
+    (
         "PointMaze U-Maze clean-shield",
         "results/pointmaze_umaze_clean_shield_probe_4seed_v1/summary.csv",
         ["bgr_clean_shield", "bgr_coverage", "bgr"],

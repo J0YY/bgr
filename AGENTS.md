@@ -44,23 +44,21 @@ jobs `774312` and `774346`: the 10-dataset suite is mixed and not a macro win
 adds replicated dataset-level positives on MagicTelescope and haberman. This is
 additional supervised pre-existing-dataset evidence only, not a
 standard-environment or learned-policy win. The latest completed OpenVLA/LIBERO
-hard-occlusion transfer diagnostic is also negative: at occlusion fraction
-0.65, BGR reaches 300/400 successes versus official 297/400 and matched random
-296/400, which is only +3/+4 episodes and +0.0075/+0.0100 success rate rather
-than the fixed +10/400 and +0.02 promotion margin; identity is BGR 391/400,
-official 393/400, and matched random 389/400, so BGR also violates the
-identity side condition. The partial hard-occlusion 0.80 transfer and 0.65
-adaptation summaries are now classified as closed negative by the readiness
-checker even before matched-random occlusion finishes: the 0.80 transfer route
-has BGR identity 391/400 versus official 393/400 and BGR occlusion 305/400
-versus official 296/400, which misses the fixed +10 episode gate by one; the
-0.65 adaptation route has BGR identity 389/400 versus official 393/400 and
-BGR occlusion 301/400 versus official 297/400, missing both the +10 episode
-and +0.02 rate gates. The A40 adaptation fallback is also already closed
-negative on identity side condition with BGR identity 391/400 versus official
-393/400. Still-running identity-anchored hard-occlusion routes remain
-incomplete and must not be incorporated into `paper/main.tex` unless their full
-summaries pass the fixed gate. The earlier completed full perturbation
+hard-occlusion transfer diagnostics are also negative. At occlusion fraction
+0.80, BGR reaches 305/400 non-identity successes versus official 296/400 and
+matched random 296/400, but the +9 episode margin misses the fixed +10/400
+gate and identity is BGR 391/400 versus official 393/400, violating the
+identity side condition. At occlusion fraction 0.65, BGR reaches 300/400
+successes versus official 297/400 and matched random 296/400, only +3/+4
+episodes and +0.0075/+0.0100 success rate rather than the fixed +10/400 and
++0.02 promotion margin; identity is again BGR 391/400, official 393/400, and
+matched random 389/400. The 0.65 adaptation route has BGR identity 389/400
+versus official 393/400 and BGR occlusion 301/400 versus official 297/400,
+missing both the +10 episode and +0.02 rate gates. The A40 adaptation fallback
+is also already closed negative on identity side condition with BGR identity
+391/400 versus official 393/400. Still-running identity-anchored hard-occlusion
+routes remain incomplete and must not be incorporated into `paper/main.tex`
+unless their full summaries pass the fixed gate. The earlier completed full perturbation
 occlusion-bottleneck route was negative as well: BGR reaches 365/400
 non-identity successes versus official 367/400 and matched random 369/400,
 with identity BGR 99/100, official 99/100, and random 98/100. The
@@ -257,47 +255,37 @@ uniform-radius ablation; it also rejects default BGR versus uniform
 (delta -0.0394, W/L/T=0/4/0), failure-only, TD-loss, and BGR-uniform-radius,
 with a median-r80 contradiction. Treat this fixed DynamicObstacles route as
 completed negative, not paper evidence.
-Active DynamicObstacles follow-up: a separate `bgr_clean_shield` scout was
-added to the same tool to test a new clean-preservation premise after the fixed
-screen showed BGR-family clean recovery collapse. The clean-shield rule trains
-at sigma 0 when selected-state clean success falls below 0.65 and adds a clean
-anchor after boundary updates with probability 0.25. A bounded 4-seed common
-baseline scout was submitted on `athena` as Slurm job `779412` with
-`ARTIFACT_PREFIX=minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1` and
-`METHODS=uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_clean_shield,bgr_coverage,bgr`.
-It writes to
-`/work/joy/bgr/runs/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412`
-and syncs with
-`JOB_ID=779412 ARTIFACT_PREFIX=minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1 scripts/sync_minigrid_dynamic_obstacles_probe.sh`.
-This is not paper evidence unless the completed summary clears
-`tools/check_candidate_promotion.py` for `bgr_clean_shield` against uniform,
-fixed, failure-only, TD-loss, and BGR-uniform-radius without contradictory or
-saturated radius metrics.
+Completed DynamicObstacles clean-preservation follow-up: a separate
+`bgr_clean_shield` scout tested a new premise after the fixed screen showed
+BGR-family clean recovery collapse. The clean-shield rule trains at sigma 0
+when selected-state clean success falls below 0.65 and adds a clean anchor
+after boundary updates with probability 0.25. The bounded 4-seed common
+baseline scout completed on `athena` as Slurm job `779412` and synced to
+`results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/`.
+It is negative: mean RAUC is failure-only 0.6513, TD-loss 0.6195, uniform
+0.6082, fixed 0.6047, BGR-uniform-radius 0.5923, BGR-Clean-Shield 0.5689,
+default BGR 0.5689, and BGR-Coverage 0.5307. The candidate checker rejects
+BGR-Clean-Shield versus uniform (delta -0.0394, W/L/T=1/3/0), fixed,
+failure-only, TD-loss, and BGR-uniform-radius; it also rejects BGR-Coverage and
+default BGR. Treat this route as completed negative, not paper evidence.
 
-Latest OpenVLA poll/sync at 2026-06-10 19:43 BST: the near-term hard-occlusion
-transfer/adaptation routes are still not paper evidence. The 0.80 transfer
-route synced an incomplete compact summary with BGR identity 391/400, official
-identity 393/400, random identity 389/400, BGR occlusion 305/400, and official
-occlusion 296/400 while matched-random occlusion job `774923` was still
-running at about 58 minutes. This is already one episode short of the fixed
-+10/400 official promotion margin, before the random comparator is known. The
-0.65 adapted route
-synced BGR identity 389/400, official identity 393/400, random identity
-390/400, BGR occlusion 301/400, and official occlusion 297/400 while
-matched-random occlusion job `774729` was still running at about 54 minutes;
-this also fails the official margin. The A40 0.65 adapted fallback synced only identity and
-official rows after original BGR identity job `774848` failed and replacement
-`775102` completed; BGR occlusion replacement job `775103` is pending into
-2026-06-11 and random occlusion `774851` was running. The A6000 0.80
-identity-anchor route had official identity `776040`, BGR identity `776042`,
-and random identity `776044` running, with occlusion jobs dependency-pending;
-the strict route had official identity complete and BGR identity running.
-Micro/A40/0.90 variants remain priority- or dependency-pending. Keep
-polling/syncing for
-closure, but do not promote these partial routes. The still-active
-hard-occlusion 0.80/0.90 identity-anchor, strict, micro, and A40 variants
-remain queued/running and require complete summaries plus the fixed gate before
-any manuscript claim.
+Latest OpenVLA poll/sync at 2026-06-10 20:16 BST: the hard-occlusion 0.80
+transfer route is now complete and negative under the fixed gate. The synced
+summary has BGR identity 391/400, official identity 393/400, matched-random
+identity 389/400, BGR occlusion 305/400, official occlusion 296/400, and
+matched-random occlusion 296/400. `scripts/check_openvla_perturb_gate.py`
+reports `[FAIL]`: BGR is only +9/400 over both comparators on hard occlusion
+and trails official identity by two, so it misses the +10/400 episode margin
+and the identity side condition. The 0.80 identity-anchored A6000 route remains
+incomplete with official and BGR occlusion running and matched-random occlusion
+pending; the 0.80 micro A6000 route has official identity complete and BGR
+identity running; the 0.80 strict A6000 route has official occlusion and BGR
+identity running; the 0.80 identity-anchor A40, 0.80 micro A40, and 0.90 strict
+A40 variants remain pending or dependency-pending. Keep polling/syncing for
+closure, but do not promote any partial route. No new same-protocol
+standard-environment job was launched: the current scorecard rejects that route
+family, and the active queue already covers the current identity-preserving
+hard-occlusion learned-policy premises.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,

@@ -908,6 +908,47 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"W/L/T={best_dynamic_wins}"
             )
 
+    dynamic_clean_shield_path = root / "results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/summary.csv"
+    if dynamic_clean_shield_path.exists():
+        dynamic = read_rows(dynamic_clean_shield_path)
+        dynamic_bgr = mean_metric(dynamic, "bgr", "final_rauc")
+        dynamic_clean_shield = mean_metric(dynamic, "bgr_clean_shield", "final_rauc")
+        dynamic_coverage = mean_metric(dynamic, "bgr_coverage", "final_rauc")
+        dynamic_uniform = mean_metric(dynamic, "uniform", "final_rauc")
+        dynamic_failure = mean_metric(dynamic, "failure_only", "final_rauc")
+        dynamic_fixed = mean_metric(dynamic, "fixed", "final_rauc")
+        dynamic_td = mean_metric(dynamic, "td_loss", "final_rauc")
+        dynamic_ablation = mean_metric(dynamic, "bgr_uniform_radius", "final_rauc")
+        dynamic_bgr_r80 = mean_metric(dynamic, "bgr", "final_median_r80")
+        dynamic_clean_shield_r80 = mean_metric(dynamic, "bgr_clean_shield", "final_median_r80")
+        dynamic_coverage_r80 = mean_metric(dynamic, "bgr_coverage", "final_median_r80")
+        dynamic_uniform_r80 = mean_metric(dynamic, "uniform", "final_median_r80")
+        dynamic_bgr_wins = paired_wins(dynamic, "bgr", "uniform", "final_rauc")
+        dynamic_clean_shield_wins = paired_wins(dynamic, "bgr_clean_shield", "uniform", "final_rauc")
+        dynamic_coverage_wins = paired_wins(dynamic, "bgr_coverage", "uniform", "final_rauc")
+        candidates = [
+            (dynamic_bgr, dynamic_bgr_r80, dynamic_bgr_wins),
+            (dynamic_clean_shield, dynamic_clean_shield_r80, dynamic_clean_shield_wins),
+            (dynamic_coverage, dynamic_coverage_r80, dynamic_coverage_wins),
+        ]
+        best_dynamic, best_dynamic_r80, best_dynamic_wins = max(candidates, key=lambda item: (item[0], item[2][0]))
+        if not (
+            best_dynamic > dynamic_uniform
+            and best_dynamic > max(dynamic_failure, dynamic_fixed, dynamic_td, dynamic_ablation)
+            and best_dynamic_wins[0] >= 3
+            and best_dynamic_r80 >= dynamic_uniform_r80
+            and not (best_dynamic_r80 >= 0.99 and dynamic_uniform_r80 >= 0.99)
+            and not (best_dynamic_r80 <= 0.01 and dynamic_uniform_r80 <= 0.01)
+        ):
+            failures.append(
+                f"MiniGrid DynamicObstacles clean-shield negative: BGR {dynamic_bgr:.4f}, "
+                f"BGR-Clean-Shield {dynamic_clean_shield:.4f}, BGR-Coverage {dynamic_coverage:.4f}, "
+                f"uniform {dynamic_uniform:.4f}, failure-only {dynamic_failure:.4f}, fixed {dynamic_fixed:.4f}, "
+                f"TD-loss {dynamic_td:.4f}, uniform-radius {dynamic_ablation:.4f}, "
+                f"best-r80 {best_dynamic_r80:.4f} vs uniform {dynamic_uniform_r80:.4f}, "
+                f"W/L/T={best_dynamic_wins}"
+            )
+
     deepsea_path = root / "results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv"
     if deepsea_path.exists():
         deepsea = read_rows(deepsea_path)

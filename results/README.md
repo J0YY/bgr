@@ -177,27 +177,7 @@ Internal pre-existing-dataset route scout:
   0.7748 (+0.0190), below the +0.03 fixed follow-up standard. Treat this as a
   mixed-type OpenML near miss/fragility diagnostic, not manuscript evidence.
 
-Active external-package scout:
-
-- `tools/minigrid_dynamic_obstacles_recovery_probe.py` now also includes a
-  `bgr_clean_shield` follow-up for official MiniGrid DynamicObstacles. This is
-  a separate clean-preservation premise motivated by the fixed screen below:
-  when selected-state clean success is below 0.65, it trains at sigma 0, and it
-  adds a clean anchor after nonzero boundary updates with probability 0.25. A
-  bounded common-baseline 4-seed scout was submitted to `athena` as job
-  `779412` with
-  `ARTIFACT_PREFIX=minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1` and
-  `METHODS=uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_clean_shield,bgr_coverage,bgr`.
-  It writes to
-  `/work/joy/bgr/runs/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412`
-  and syncs with
-  `JOB_ID=779412 ARTIFACT_PREFIX=minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1 scripts/sync_minigrid_dynamic_obstacles_probe.sh`.
-  This is not manuscript evidence unless the completed summary clears
-  `tools/check_candidate_promotion.py` for `bgr_clean_shield` against uniform,
-  fixed, failure-only, TD-loss, and BGR-uniform-radius without saturated or
-  contradictory radius metrics.
-
-Completed external-package scope diagnostic:
+Completed external-package scope diagnostics:
 
 - `results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/summary.csv`:
   fixed official MiniGrid DynamicObstacles all-method screen submitted to
@@ -217,6 +197,24 @@ Completed external-package scope diagnostic:
   `results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/slurm/bgr-minigrid-dynamic-779232.out`:
   row-level, package-version, and Slurm records for the same negative route
   (`gymnasium==1.3.0`, `minigrid==3.0.0`).
+- `results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/summary.csv`:
+  fixed clean-preservation follow-up for the same official MiniGrid
+  DynamicObstacles interface, submitted to `athena` as job `779412`. The
+  `bgr_clean_shield` premise trains at sigma 0 when selected-state clean
+  success is below 0.65 and adds a clean anchor after nonzero boundary updates
+  with probability 0.25. It is also negative and should not be scaled or
+  promoted: mean RAUC is failure-only 0.6513, TD-loss 0.6195, uniform 0.6082,
+  fixed 0.6047, BGR-uniform-radius 0.5923, BGR-Clean-Shield 0.5689, default
+  BGR 0.5689, and BGR-Coverage 0.5307. The candidate checker rejects
+  BGR-Clean-Shield versus uniform (delta -0.0394, W/L/T=1/3/0), fixed,
+  failure-only, TD-loss, and BGR-uniform-radius; it rejects BGR-Coverage and
+  default BGR as well.
+- `results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/results.jsonl`,
+  `results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/package_versions.json`,
+  and
+  `results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/slurm/bgr-minigrid-dynamic-779412.out`:
+  row-level, package-version, and Slurm records for the clean-shield negative
+  route (`gymnasium==1.3.0`, `minigrid==3.0.0`).
 
 Completed external-package scope diagnostic:
 
@@ -3872,6 +3870,18 @@ route remained priority/dependency-pending with estimated A40 starts at
 2026-06-11 22:02:14 BST. The 0.65 adaptation and A40 fallback were still
 incomplete but already non-promotable due to identity deficits and small
 occlusion margins.
+
+Latest broad hard-occlusion sync at 2026-06-10 20:16 BST closes the 0.80
+transfer route negative. The full summary at
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_v1/summary.csv`
+has BGR identity 391/400, official identity 393/400, matched-random identity
+389/400, BGR occlusion 305/400, official occlusion 296/400, and matched-random
+occlusion 296/400. The fixed gate fails because the occlusion edge is only
++9/400 over both comparators, one episode below the +10/400 requirement, and
+BGR trails official identity by two episodes. The remaining 0.80/0.90
+identity-anchored, strict, micro, and A40 variants are still incomplete and
+must not be promoted unless a complete `summary.csv` passes the same fixed
+gate.
 
 Additional strict identity-preservation route queued on 2026-06-10 14:18 BST:
 fixed hard-occlusion 0.90 strict identity-anchored OpenVLA-OFT adaptation. This
