@@ -59,6 +59,15 @@ its best BGR target gives only 0.8271 vs. 0.8123 RAUC against uniform with a
 The internal sklearn tabular margin replay scout is also rejected: breast
 cancer's best BGR target gives 0.9610 vs. 0.9516 RAUC against uniform, and
 wine's best gives 0.9702 vs. 0.9563, below the +0.03 pre-registration screen.
+A 2026-06-10 FetchPush object-goal controller/horizon calibration follow-up
+fixed the local calibration harness so `--horizon` is honored via
+`max_episode_steps` and added a new `scripted_push_sweep` controller, but it is
+also rejected before method comparison: the best compact/wide scouts reach
+clean success 0.8750 with recovery 0.7500--0.8750, yet the critical radius is
+saturated at the tested maximum (`decision:
+reject-calibration-radius-saturated`). Do not build a FetchPush method
+comparison from this interface without a new perturbation premise that first
+creates a non-saturated boundary.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,
@@ -360,6 +369,26 @@ current identity-preserving hard-occlusion learned-policy premises. The next
 empirical addition should be a materially different external reset interface or
 a genuinely different learned-policy intervention, not another minor rerun of
 the exhausted recipes.
+Latest all-route OpenVLA poll at 2026-06-10 16:10--16:11 BST still found no
+complete gateable positive result. The 0.80 transfer route remains incomplete
+because matched-random occlusion `774923` is priority-pending with estimated
+start 2026-06-11 08:06:00 BST; available rows remain BGR identity/occlusion
+391/400 and 305/400, official 393/400 and 296/400, and matched-random identity
+389/400, so identity already blocks promotion. The 0.65 A6000 adaptation is
+incomplete because matched-random occlusion `774729` is priority-pending; its
+available BGR identity/occlusion rows are 389/400 and 301/400 versus official
+393/400 and 297/400 and matched-random identity 390/400, so it is already
+non-promotable. The 0.65 A40 fallback remains incomplete because replacement
+BGR occlusion `775103` and matched-random occlusion `774851` are
+priority-pending, while BGR identity 391/400 trails official 393/400 and
+matched random 392/400. The 0.80 identity-anchor A6000 route remains
+priority/dependency-pending, with random train `776036` estimated for
+2026-06-10 20:00:00 BST and official/BGR identity work estimated for
+2026-06-13 14:07:41 BST. The A40 identity-anchor, A40 micro, and 0.90 strict
+A40 routes remain priority/dependency-pending with front jobs estimated for
+2026-06-11 22:02:14 BST, and the A6000 micro/strict routes remain
+priority/dependency-pending with front jobs estimated for
+2026-06-13 14:07:41 BST. No OpenVLA paper claim should change.
 
 Newest acceleration route: hard-occlusion 0.80 micro identity-anchored
 OpenVLA-OFT A40 fallback. This is a resource fallback for the already fixed
@@ -2026,6 +2055,16 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   reports clean 0.6250, recovery range 0.6250--0.8750, RAUC 0.8125, and
   r80 0.1200 under `gymnasium==1.3.0`, `gymnasium_robotics==1.4.2`, and
   `mujoco==3.9.0`. Treat it as a rejected calibration, not an active route.
+  A 2026-06-10 follow-up fixed the calibration script so `--horizon` controls
+  Gymnasium `max_episode_steps` and added a materially different
+  `scripted_push_sweep` controller. The named compact artifact
+  `results/fetchpush_object_goal_calibration_sweep_g8_h250_2seed_v1/summary.json`
+  gives clean 0.8750, recovery range 0.7500--0.8750, RAUC 0.7812, and
+  `decision=reject-calibration-radius-saturated`; the wider-radius artifact
+  `results/fetchpush_object_goal_calibration_sweep_g8_h250_xwide_2seed_v1/summary.json`
+  gives the same clean/range with RAUC 0.7583 and
+  `decision=reject-calibration-radius-saturated`. This improves controller
+  clean success but still does not create a non-saturated boundary for BGR.
 - Gymnasium-Robotics HandReach-v3 is also rejected as a pre-method route under
   the fixed random-shooting ShadowHand controller in `/tmp/bgr_pointmaze_venv`.
   `results/handreach_recovery_calibration_8seed_v1/summary.json` reports clean

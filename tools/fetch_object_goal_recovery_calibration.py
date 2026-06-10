@@ -126,6 +126,42 @@ def push_action(
     return action
 
 
+def push_sweep_action(obs: dict[str, np.ndarray], *, threshold: float, gain: float) -> np.ndarray:
+    raw = np.array(obs["observation"], dtype=float)
+    gripper = raw[0:3]
+    obj = raw[3:6]
+    goal = np.array(obs["desired_goal"], dtype=float)
+    distance = float(np.linalg.norm(np.array(obs["achieved_goal"], dtype=float) - goal))
+    if distance <= threshold:
+        return np.zeros(4, dtype=float)
+
+    direction_xy = goal[:2] - obj[:2]
+    norm = float(np.linalg.norm(direction_xy))
+    if norm < 1e-8:
+        unit_xy = np.array([1.0, 0.0], dtype=float)
+    else:
+        unit_xy = direction_xy / norm
+    perp_xy = np.array([-unit_xy[1], unit_xy[0]], dtype=float)
+
+    rel_xy = gripper[:2] - obj[:2]
+    behind_component = float(np.dot(rel_xy, unit_xy))
+    lateral_error = float(abs(np.dot(rel_xy, perp_xy)))
+    target_z = obj[2] + 0.012
+
+    # Re-align behind the object whenever contact geometry drifts, then push
+    # through the goal rather than stopping at the nominal target.
+    if behind_component > -0.035 or lateral_error > 0.018 or abs(float(gripper[2] - target_z)) > 0.018:
+        target_xy = obj[:2] - 0.085 * unit_xy
+    else:
+        overshoot = max(0.085, min(0.14, 0.60 * norm))
+        target_xy = goal[:2] + overshoot * unit_xy
+
+    target = np.array([target_xy[0], target_xy[1], target_z], dtype=float)
+    action = np.zeros(4, dtype=float)
+    action[:3] = np.clip(float(gain) * (target - gripper), -1.0, 1.0)
+    return action
+
+
 def pick_place_action(obs: dict[str, np.ndarray], *, threshold: float, gain: float) -> np.ndarray:
     raw = np.array(obs["observation"], dtype=float)
     gripper = raw[0:3]
@@ -178,6 +214,8 @@ def controller_action(controller: str, obs: dict[str, np.ndarray], *, threshold:
             z_offset=0.010,
             approach_tolerance=0.025,
         )
+    if controller == "scripted_push_sweep":
+        return push_sweep_action(obs, threshold=threshold, gain=gain)
     if controller == "scripted_pick_place":
         return pick_place_action(obs, threshold=threshold, gain=gain)
     raise ValueError(f"unknown controller: {controller}")
@@ -244,7 +282,7 @@ def calibrate(args: argparse.Namespace) -> tuple[list[CalibrationRow], dict[str,
 
     gym.register_envs(gymnasium_robotics)
     radii = parse_radii(args.radii)
-    env = gym.make(args.env_id)
+    env = gym.make(args.env_id, max_episode_steps=args.horizon)
     rows: list[CalibrationRow] = []
     try:
         states = make_replay_states(env, args)
@@ -282,6 +320,15 @@ def calibrate(args: argparse.Namespace) -> tuple[list[CalibrationRow], dict[str,
         values = [float(row.success) for row in rows if abs(row.sigma - float(sigma)) < 1e-12]
         by_radius.append(float(np.mean(values)))
     curve = np.array(by_radius, dtype=float)
+    r80 = float(critical_radius(radii, curve, alpha=args.alpha))
+    if float(curve[0]) < 0.80:
+        decision = "reject-calibration-low-clean-success"
+    elif float(np.max(curve) - np.min(curve)) < 0.10:
+        decision = "reject-calibration-flat-recovery"
+    elif r80 >= float(radii[-1]) - 1e-12:
+        decision = "reject-calibration-radius-saturated"
+    else:
+        decision = "usable-calibration"
     summary = {
         "env_id": args.env_id,
         "seeds": args.seeds,
@@ -294,9 +341,10 @@ def calibrate(args: argparse.Namespace) -> tuple[list[CalibrationRow], dict[str,
         "direction_jitter": args.direction_jitter,
         "clean_success": float(curve[0]),
         "rauc": float(recovery_auc(radii, curve, sigma_max=float(radii[-1]))),
-        "r80": float(critical_radius(radii, curve, alpha=args.alpha)),
+        "r80": r80,
         "min_recovery": float(np.min(curve)),
         "max_recovery": float(np.max(curve)),
+        "decision": decision,
     }
     return rows, summary
 
@@ -327,7 +375,7 @@ def main() -> int:
     parser.add_argument("--horizon", type=int, default=80)
     parser.add_argument(
         "--controller",
-        choices=["scripted_push", "scripted_push_far", "scripted_pick_place"],
+        choices=["scripted_push", "scripted_push_far", "scripted_push_sweep", "scripted_pick_place"],
         default="scripted_push",
     )
     parser.add_argument("--controller-gain", type=float, default=6.0)

@@ -489,6 +489,19 @@ FetchPush is rejected as a method route: clean success is 0.2500, recovery is
 flat at 0.2500 over all tested radii, RAUC is 0.2500, and median r80 is at the
 evaluation maximum 0.1200.
 
+FetchPush-v4 corrected-horizon sweep-controller commands:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_fetch_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --env-id FetchPush-v4 --seeds 2 --replay-states 4 --trials 2 --radii 0.00,0.02,0.04,0.06,0.08,0.12 --horizon 250 --controller scripted_push_sweep --controller-gain 8.0 --out results/fetchpush_object_goal_calibration_sweep_g8_h250_2seed_v1
+PYTHONPATH=src:. /tmp/bgr_fetch_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --env-id FetchPush-v4 --seeds 2 --replay-states 4 --trials 2 --radii 0.00,0.08,0.16,0.24,0.32,0.40,0.50,0.60 --horizon 250 --controller scripted_push_sweep --controller-gain 8.0 --out results/fetchpush_object_goal_calibration_sweep_g8_h250_xwide_2seed_v1
+```
+
+The 2026-06-10 follow-up fixes the calibration tool so `--horizon` controls
+Gymnasium `max_episode_steps` and adds a `scripted_push_sweep` controller. It
+improves clean success to 0.8750, but both compact and wide radius grids are
+still rejected with `decision=reject-calibration-radius-saturated`: recovery
+only ranges from 0.7500 to 0.8750 and r80 remains at the tested maximum.
+
 FetchSlide-v4 command:
 
 ```bash
@@ -516,6 +529,12 @@ Compact artifacts:
 - `results/fetchpush_object_goal_calibration_2seed_v1/summary.json`
 - `results/fetchpush_object_goal_calibration_2seed_v1/recovery_rows.csv`
 - `results/fetchpush_object_goal_calibration_2seed_v1/package_versions.json`
+- `results/fetchpush_object_goal_calibration_sweep_g8_h250_2seed_v1/summary.json`
+- `results/fetchpush_object_goal_calibration_sweep_g8_h250_2seed_v1/recovery_rows.csv`
+- `results/fetchpush_object_goal_calibration_sweep_g8_h250_2seed_v1/package_versions.json`
+- `results/fetchpush_object_goal_calibration_sweep_g8_h250_xwide_2seed_v1/summary.json`
+- `results/fetchpush_object_goal_calibration_sweep_g8_h250_xwide_2seed_v1/recovery_rows.csv`
+- `results/fetchpush_object_goal_calibration_sweep_g8_h250_xwide_2seed_v1/package_versions.json`
 - `results/fetchslide_object_goal_calibration_2seed_v1/summary.json`
 - `results/fetchslide_object_goal_calibration_2seed_v1/recovery_rows.csv`
 - `results/fetchslide_object_goal_calibration_2seed_v1/package_versions.json`

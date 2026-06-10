@@ -1364,6 +1364,22 @@ risk.
   0.6250, recovery range is 0.6250--0.8750, RAUC is 0.8125, and r80 is 0.1200.
   Do not reopen FetchPush unless a preregistered controller first clears the
   0.80 clean-success gate on the same fixed calibration logic.
+  A 2026-06-10 follow-up found and fixed a calibration-harness issue: the
+  `--horizon` argument had not overridden Gymnasium's default TimeLimit, so the
+  tool now passes `max_episode_steps=args.horizon` to `gym.make`. The same
+  follow-up added a materially different `scripted_push_sweep` controller that
+  re-aligns behind the object and pushes through the goal. The fixed compact
+  command was:
+  `PYTHONPATH=src:. /tmp/bgr_fetch_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --env-id FetchPush-v4 --seeds 2 --replay-states 4 --trials 2 --radii 0.00,0.02,0.04,0.06,0.08,0.12 --horizon 250 --controller scripted_push_sweep --controller-gain 8.0 --out results/fetchpush_object_goal_calibration_sweep_g8_h250_2seed_v1`.
+  It improves clean success to 0.8750 with recovery range 0.7500--0.8750 and
+  RAUC 0.7812, but is still rejected because r80 is saturated at the tested
+  maximum and the summary decision is `reject-calibration-radius-saturated`.
+  The wider-radius check
+  `PYTHONPATH=src:. /tmp/bgr_fetch_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --env-id FetchPush-v4 --seeds 2 --replay-states 4 --trials 2 --radii 0.00,0.08,0.16,0.24,0.32,0.40,0.50,0.60 --horizon 250 --controller scripted_push_sweep --controller-gain 8.0 --out results/fetchpush_object_goal_calibration_sweep_g8_h250_xwide_2seed_v1`
+  keeps clean 0.8750 and recovery 0.7500--0.8750, but remains saturated with
+  r80 at 0.6000 and the same rejection decision. This route should not proceed
+  to replay-method comparison without a new perturbation premise that produces
+  a non-saturated success-failure boundary.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
   same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:
