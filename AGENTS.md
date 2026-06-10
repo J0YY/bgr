@@ -298,6 +298,12 @@ only an identity-row `summary_available.csv` with official 393/400, BGR
 391/400, and matched random 389/400; the compact `summary.csv` was still
 missing. Direct hard-occlusion tails were partial and not gateable: official
 133/222, BGR 134/220, and matched random 132/221. No paper claim changes.
+Latest poll/sync at 2026-06-10 11:28:56 BST still had the 0.65 transfer route
+in hard-occlusion progress: official `774712` was running at 56:42, BGR
+`774714` at 58:37, and matched random `774716` at 58:37. The helper again
+synced only an identity-row `summary_available.csv`; the compact `summary.csv`
+was missing. Direct tails remained partial and not gateable: official 145/241,
+BGR 147/238, and matched random 143/238.
 
 Active learned-policy diagnostic route: fixed hard-occlusion 0.80 transfer
 eval of the completed OpenVLA-OFT occlusion-bottleneck checkpoints. This was
@@ -424,6 +430,14 @@ only official/BGR identity rows at 393/400 and 391/400. Direct occlusion tails
 were official 74/135 and BGR 72/103, while the active matched-random identity
 log remains partial/stale at 317/327. The compact `summary.csv` is still
 missing, so no fixed gate can be run.
+Latest poll/sync at 2026-06-10 11:29:24 BST still left the 0.80 transfer route
+incomplete: official occlusion `774919` was running at 30:00, BGR occlusion
+`774921` at 21:29, matched-random identity `774922` was pending on `Priority`
+with estimated start 2026-06-11 11:25:00 BST, and matched-random occlusion
+`774923` remained dependency-pending. Direct partial tails showed official
+occlusion 78/152 and BGR occlusion 77/123; matched-random still has no
+complete identity or occlusion row, so the apparent BGR-official partial gap is
+not gateable. The compact `summary.csv` is still missing.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -560,6 +574,15 @@ matched-random identity `774728` was pending on `Resources` with estimated
 start 2026-06-10 15:15:13 BST. Official/BGR/matched-random occlusion evals
 remained dependency-pending. Direct tails were BGR identity 87/91 and official
 identity complete at 393/400. No compact summary exists and no gate can be run.
+Latest poll/sync at 2026-06-10 11:29:45 BST showed the A6000 adaptation route
+still incomplete but moving: official identity `774724` completed with 393/400,
+BGR identity `774726` was running at 17:47, matched-random identity `774728`
+had started and was running at 3:46, random clean `774723` was still running,
+official occlusion `774725` was pending on `Priority`, and BGR/random occlusion
+jobs `774727`/`774729` were dependency-pending. The synced
+`summary_available.csv` has only official identity. Direct identity tails were
+BGR 113/120 and matched random 23/23. No compact summary exists and no gate can
+be run.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000
@@ -723,6 +746,14 @@ original failed BGR identity/occlusion chain `774848`/`774849` remains ignored.
 Direct partial tails were official occlusion 82/158, replacement BGR identity
 204/211, and matched-random identity 256/263. The fixed gate remains
 incomplete.
+Latest A40 poll/sync at 2026-06-10 11:30:01 BST still had no compact summary:
+official occlusion `774847` was running at 35:38, replacement BGR identity
+`775102` was pending on `Priority` with estimated start 2026-06-11 22:02:14
+BST, matched-random identity `774850` was pending on `Resources` with estimated
+start 2026-06-10 23:25:59 BST, and replacement BGR/matched-random occlusions
+were still dependency-pending. The original failed BGR chain `774848`/`774849`
+remains ignored. The synced `summary_available.csv` still contains only
+official identity 393/400, and the fixed gate remains incomplete.
 
 Completed learned-policy route (negative, not active): preregistered OpenVLA-OFT occlusion-bottleneck
 adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.
