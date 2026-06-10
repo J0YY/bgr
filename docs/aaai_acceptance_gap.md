@@ -107,7 +107,13 @@ official identity `780060` pending on resources with estimated start
 or summary. Latest poll/sync at 2026-06-10 22:13 BST showed official identity
 `780060` running, BGR identity `780062` and matched-random identity `780064`
 priority-pending, and all occlusion jobs
-dependency-pending. Both
+dependency-pending. Latest poll/sync at 2026-06-10 22:20 BST showed official
+identity `780060`, BGR identity `780062`, and matched-random identity `780064`
+running, with occlusion jobs `780061`/`780063`/`780065` still
+dependency-pending. Live identity tails were official 131/137, BGR 51/53, and
+matched random 26/27, so the route is neither promotable nor impossible yet.
+Do not launch another overlapping OpenVLA variant while this LoRA-full
+head-interpolation route is unresolved. Both
 head-interpolation routes remain non-evidence unless the full summary passes
 the same fixed +10/400, +0.02, and identity-preservation gate. The latest
 0.80 identity-anchored base route is closed negative with complete rows:

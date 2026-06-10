@@ -116,7 +116,14 @@ the same fixed +10/400, +0.02, and identity-preservation gate passes. Latest
 poll/sync at 2026-06-10 22:13 BST showed this LoRA-full route past prep:
 official identity `780060` was running, BGR identity `780062` and random
 identity `780064` were priority-pending, and all occlusion jobs were
-dependency-pending. The
+dependency-pending. Latest poll/sync at 2026-06-10 22:20 BST showed the
+LoRA-full route still incomplete but active: official identity `780060`, BGR
+identity `780062`, and matched-random identity `780064` were running, while
+official/BGR/random occlusion jobs `780061`/`780063`/`780065` remained
+dependency-pending. Live identity log tails at 2026-06-10 22:20 BST showed
+official 131/137, BGR 51/53, and matched random 26/27; this is not gateable
+evidence and does not yet rule the route out. Do not launch another
+overlapping OpenVLA variant while this LoRA-full route remains unresolved. The
 latest 0.80 identity-anchored base route is closed negative with complete
 rows: BGR identity/occlusion are 389/400 and 303/400, official is 393/400 and
 296/400, and matched random is 393/400 and 302/400. The fixed gate reports
@@ -2623,6 +2630,14 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   paired seeds, trails the state-priority/uniform-radius ablation at 0.1266,
   and has lower median r80 than uniform (0.3625 vs. 0.5750). BGR-Coverage ties
   uniform on mean RAUC. Do not scale or promote this protocol.
+- Additional same-family DeepSea changed-premise scouts on 2026-06-10 also do
+  not open an independent-benchmark route. `size20_lowrows` is all-zero and
+  saturated. `size20_boundaryheavy` gives BGR-Coverage 0.0219 RAUC vs. uniform
+  0.0156 but trails TD-loss 0.0266 and is below the +0.01 scout gap.
+  `size16_late` is effectively tied across methods. `size10_short` gives
+  default BGR 0.1808 vs. uniform 0.1406, but wins only 1/4 paired seeds, trails
+  TD-loss 0.1875, and has lower median r80 than uniform. Treat these untracked
+  scouts as rejected diagnostics, not paper evidence or scale-up candidates.
 - The completed bsuite Catch route is negative after scale-up. It uses
   `bsuite==0.3.6` in `/tmp/bgr_bsuite_venv`, package-owned Catch dynamics,
   exact restart fields, and fixed paddle-column perturbations. The compact
