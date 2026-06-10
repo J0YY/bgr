@@ -1465,6 +1465,14 @@ risk.
   `778553` via `scripts/queue_openml_mixed_binary_suite.sh`, using target
   radii 0.5, 1.0, 1.5, and 2.0. This is not paper evidence unless a row clears
   the scout gate and then survives fixed 30-seed plus held-out replication.
+  Job `778553` completed with exit `0:0`. No row cleared the strict scout gate:
+  the largest BGR gains, credit-approval target 2.0 (+0.0598), credit-approval
+  target 1.5 (+0.0509), adult target 2.0 (+0.0315), and bank-marketing target
+  2.0 (+0.0312), all had W/L/T=3/1/0 versus uniform. To avoid single-row
+  cherry-picking, fixed all-dataset/all-target 30-seed diagnostics were queued:
+  original seeds 0--29 as job `778596` and held-out seeds 30--59 as job
+  `778597`. Treat these as route-closing/route-promoting diagnostics only, not
+  manuscript evidence.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
   same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:

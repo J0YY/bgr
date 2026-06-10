@@ -179,6 +179,24 @@ showed healthy credit-g rows, including some BGR-positive target-1.0/1.5 rows,
 but no conclusion should be drawn until `summary.csv` exists. If candidates
 clear the 4-seed scout gate, run fixed 30-seed and held-out 30-seed follow-ups
 before making any manuscript claim.
+The 4-seed mixed OpenML scout `778553` completed with exit `0:0` and synced to
+`results/openml_mixed_binary_scout_v1_778553/`. No row cleared the strict scout
+gate because every positive-looking row had at least one paired loss versus
+uniform. The top BGR rows were credit-approval target 2.0, BGR 0.8447 vs.
+uniform 0.7849 (+0.0598, W/L/T=3/1/0) and fixed 0.7949; credit-approval target
+1.5, BGR 0.8358 vs. uniform 0.7849 (+0.0509, W/L/T=3/1/0); adult target 2.0,
+BGR 0.7963 vs. uniform 0.7648 (+0.0315, W/L/T=3/1/0) and fixed 0.7628; and
+bank-marketing target 2.0, BGR 0.8847 vs. uniform 0.8534 (+0.0312,
+W/L/T=3/1/0) and fixed 0.8631. Treat these as near-misses, not candidates. To
+avoid cherry-picking a single near-miss row, fixed all-dataset/all-target
+30-seed mixed-suite diagnostics were submitted before any manuscript use:
+original seeds 0--29 job `778596`, writing to
+`/work/joy/bgr/runs/openml_mixed_binary_target_sensitivity_30seed_v1_778596`,
+and held-out seeds 30--59 job `778597`, writing to
+`/work/joy/bgr/runs/openml_mixed_binary_target_sensitivity_replication_30seed_v1_778597`.
+Initial poll showed `778596` running on `cnode401` and `778597` pending on
+resources. These jobs are route-closing/route-promoting diagnostics only; no
+paper claim should change unless fixed summaries pass the follow-up gates.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,

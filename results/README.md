@@ -142,6 +142,23 @@ Internal pre-existing-dataset route scout:
   `/work/joy/bgr/logs/bgr-openml-mixed-binary-778553.out`. Do not promote it
   unless a row clears the 4-seed scout gate and then passes fixed 30-seed and
   held-out 30-seed follow-ups.
+  Job `778553` completed with exit `0:0` and synced to
+  `results/openml_mixed_binary_scout_v1_778553/`. No row cleared the strict
+  4-seed scout gate because all positive-looking rows had one paired loss.
+  Top near-misses are credit-approval target 2.0, BGR 0.8447 vs. uniform
+  0.7849 (+0.0598, W/L/T=3/1/0) and fixed 0.7949; credit-approval target 1.5,
+  BGR 0.8358 vs. uniform 0.7849 (+0.0509, W/L/T=3/1/0); adult target 2.0, BGR
+  0.7963 vs. uniform 0.7648 (+0.0315, W/L/T=3/1/0) and fixed 0.7628; and
+  bank-marketing target 2.0, BGR 0.8847 vs. uniform 0.8534 (+0.0312,
+  W/L/T=3/1/0) and fixed 0.8631.
+  Fixed all-dataset/all-target 30-seed diagnostics were queued before any
+  manuscript use: original seeds 0--29 job `778596` writes to
+  `/work/joy/bgr/runs/openml_mixed_binary_target_sensitivity_30seed_v1_778596`,
+  and held-out seeds 30--59 job `778597` writes to
+  `/work/joy/bgr/runs/openml_mixed_binary_target_sensitivity_replication_30seed_v1_778597`.
+  Initial poll showed `778596` running on `cnode401` and `778597` pending on
+  resources. Treat these as diagnostics until fixed summaries exist and pass
+  follow-up gates.
 
 Completed external-package scope diagnostic:
 
