@@ -252,6 +252,38 @@ partial rows are BGR identity 391/400, official identity 393/400, official
 occlusion 295/400, and matched-random identity 392/400, so it also cannot
 become a positive result under the identity side condition. No paper claim
 should change until a complete `summary.csv` exists and the fixed gate passes.
+Latest all-route OpenVLA poll at 2026-06-10 15:33 BST again found no complete
+gateable summary. The micro route is unchanged: BGR train `776998` and
+official identity `777037` are priority-pending with estimated starts at
+2026-06-13 14:07:41 BST, all children are dependency-pending, and no logs or
+summaries exist. The 0.80 identity-anchored A6000 route remains incomplete:
+matched-random train `776036` is priority-pending for 2026-06-10 20:24:00 BST,
+BGR identity `776042` for 2026-06-11 15:23:58 BST, and BGR clean `776035`
+plus official identity `776040` for 2026-06-13 14:07:41 BST; only an
+incomplete official-identity log exists. The 0.80 strict A6000 route remains
+priority/dependency-pending with BGR train `776541` and official identity
+`776548` estimated for 2026-06-13 14:07:41 BST, while the 0.90 strict A40 route
+and 0.80 identity-anchor A40 fallback remain priority/dependency-pending with
+front jobs estimated for 2026-06-11 22:02:14 BST. The 0.80 transfer route now
+has completed official identity/occlusion, BGR identity/occlusion, and
+matched-random identity rows, but matched-random occlusion `774923` remains
+priority-pending for 2026-06-11 08:25:00 BST; partial rows are BGR
+identity/occlusion 391/400 and 305/400, official 393/400 and 296/400, and
+matched-random identity 389/400, so the route is still incomplete and already
+violates the fixed identity side condition. The 0.65 A6000 adaptation now has
+completed BGR occlusion 301/400 in addition to official occlusion 297/400 and
+all identity rows, but matched-random occlusion `774729` remains
+priority-pending; it is still incomplete and already non-promotable because BGR
+identity is 389/400 vs. official 393/400. The 0.65 A40 fallback has completed
+replacement BGR identity 391/400, official identity 393/400, official
+occlusion 295/400, and matched-random identity 392/400; replacement BGR
+occlusion `775103` and matched-random occlusion `774851` remain
+priority-pending for 2026-06-11 22:02:14 BST, so the route is incomplete and
+already fails the identity side condition. No new same-protocol
+standard-environment job was launched: the current scorecard still rejects that
+route family by saturation, stronger-baseline losses, or state-priority
+ablation failures, and the only acceptance-moving active work remains the
+pending hard-occlusion identity-anchored OpenVLA routes.
 
 Newest active learned-policy route: hard-occlusion 0.90 strict
 identity-anchored OpenVLA-OFT adaptation. This was queued after the 0.65
