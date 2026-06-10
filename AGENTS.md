@@ -299,10 +299,27 @@ remain incomplete and already violate the fixed identity side condition. The
 0.65 A40 fallback is still missing replacement BGR occlusion `775103` and
 matched-random occlusion `774851`, and already violates the identity side
 condition. Explicit partial gate checks on the three available
-`summary_available.csv` files returned `[INCOMPLETE]`. No additional micro A40
-fallback was launched because it would duplicate the already queued micro
-premise rather than create independent or learned-policy evidence with a new
-intervention.
+`summary_available.csv` files returned `[INCOMPLETE]`.
+
+Newest acceleration route: hard-occlusion 0.80 micro identity-anchored
+OpenVLA-OFT A40 fallback. This is a resource fallback for the already fixed
+micro premise, not a new claim: it reuses the completed hard-occlusion 0.80
+identity-anchor TFDS roots but requests A40 GPUs under separate artifact tags
+with the same `ADAPT_STEPS=50`, `LR=5e-8`, `PROXIMAL_ANCHOR_L2=100.0`,
+identity-LoRA, image augmentation, official stats, and identity plus occlusion
+fraction 0.80 evaluation over 10 LIBERO-Goal tasks x 40 trials. Submitted on
+`athena` at 2026-06-10 15:47 BST: BGR train/merge/clean-eval
+`777254`/`777255`/`777256`; matched-random train/merge/clean-eval
+`777257`/`777259`/`777261`; official identity/occlusion `777264`/`777265`;
+BGR identity/occlusion `777266`/`777268`; matched-random identity/occlusion
+`777269`/`777270`. Initial poll showed BGR train `777254` and official
+identity `777264` priority-pending with estimated starts at
+2026-06-11 22:02:14 BST, all dependent jobs pending, and no remote logs or
+compact summary yet. Poll/sync with
+`scripts/sync_openvla_oft_hard_occlusion080_identityanchor_micro_a40_results.sh --poll --sync --no-check`.
+Do not incorporate this route into `paper/main.tex` unless a complete
+`summary.csv` exists and the fixed +10/400, +0.02, and identity-side-condition
+gate passes.
 
 Newest active learned-policy route: hard-occlusion 0.90 strict
 identity-anchored OpenVLA-OFT adaptation. This was queued after the 0.65
