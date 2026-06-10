@@ -7060,6 +7060,22 @@ BGR-uniform-radius ablation. After completion, sync each dense output with
 `OUT_PREFIX=<prefix> JOB_ID=<job> scripts/sync_fetchpush_object_state_probe.sh`,
 combine the seven `summary.csv` files with structured CSV parsing, and run:
 
+Latest poll at 2026-06-10 18:05 BST showed the same active-job state:
+failure-only `778102`, TD-loss `778103`, and default BGR `778106` were still
+running after roughly 34 minutes, and their local summaries still contain only
+seed 0. A partial combined check rejects BGR-Coverage under the fixed gate and
+rejects default BGR as incomplete. Do not retune this dense FetchPush protocol
+until the fixed common-protocol rows finish and the final combined summary has
+been checked.
+
+Follow-up sync at 2026-06-10 18:08 BST completed dense TD-loss and dense
+default BGR. Dense default BGR is rejected before promotion: mean RAUC is
+0.2750 versus uniform 0.3000 (W/L/T=0/2/2), fixed 0.2563, TD-loss 0.2687, and
+BGR-uniform-radius 0.2875; its median-r80 is also below uniform. Dense
+BGR-Coverage remains rejected at 0.2812 versus uniform 0.3000. Failure-only
+`778102` was still running at the 18:09 BST poll, so sync it before writing the
+final dense-common closure, but neither BGR-family treatment is promotable.
+
 ```bash
 PYTHONPATH=src:. python3 tools/check_candidate_promotion.py <combined-summary.csv> --treatment bgr_coverage --min-seeds 4 --min-wins 3 --min-delta 0.01
 PYTHONPATH=src:. python3 tools/check_candidate_promotion.py <combined-summary.csv> --treatment bgr --min-seeds 4 --min-wins 3 --min-delta 0.01

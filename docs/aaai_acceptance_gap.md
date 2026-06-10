@@ -1437,6 +1437,17 @@ risk.
   2026-06-10 17:57--18:00 BST poll, so default BGR remains incomplete rather
   than promoted. Do not promote or scale FetchPush object-state unless the
   completed matched dense summary clears the fixed candidate-promotion checks.
+  A follow-up poll at 2026-06-10 18:05 BST showed the same state: jobs
+  `778102`, `778103`, and `778106` were still running, while the partial
+  combined checker rejects dense BGR-Coverage and rejects default BGR as
+  incomplete with only seed 0 available. Do not retune this same target/band
+  while the fixed common-protocol rows are still incomplete.
+  The 2026-06-10 18:08 BST sync then completed dense TD-loss and dense default
+  BGR. Dense default BGR is rejected before promotion at 0.2750 mean RAUC
+  versus uniform 0.3000 (W/L/T=0/2/2) and BGR-uniform-radius 0.2875, with a
+  lower median-r80 than uniform. Failure-only `778102` is still running, but
+  the BGR-family dense route is already not promotable because both default
+  BGR and BGR-Coverage fail the uniform comparison.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
   same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:

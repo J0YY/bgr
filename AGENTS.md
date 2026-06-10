@@ -133,6 +133,24 @@ running at the 2026-06-10 17:57--18:00 BST poll, with only seed-0 rows locally.
 Treat dense default BGR as incomplete and not paper evidence unless the
 completed matched dense common-protocol summary clears the candidate-promotion
 checks.
+Latest poll at 2026-06-10 18:05 BST showed the same dense FetchPush status:
+failure-only `778102`, TD-loss `778103`, and default BGR `778106` were still
+running on CPU nodes after roughly 34 minutes. Local summaries remain complete
+only for uniform, fixed, BGR-uniform-radius, and BGR-Coverage; failure-only,
+TD-loss, and default BGR still have only seed 0 locally. A combined partial
+candidate check again rejects dense BGR-Coverage, and rejects default BGR as
+incomplete with seed 0 already below uniform, fixed, failure-only, and
+BGR-uniform-radius. Do not retune the dense FetchPush target/bandwidth while
+these fixed common-protocol jobs are still incomplete.
+Follow-up sync at 2026-06-10 18:08 BST closed dense TD-loss and dense default
+BGR, while failure-only `778102` remained running. Dense default BGR is now
+rejected before promotion: mean RAUC is 0.2750 versus uniform 0.3000
+(W/L/T=0/2/2), fixed 0.2563, TD-loss 0.2687, and BGR-uniform-radius 0.2875,
+with median-r80 lower than uniform. Dense BGR-Coverage remains rejected at
+0.2812 versus uniform 0.3000 and BGR-uniform-radius 0.2875. The only missing
+row for final dense route closure is the completed four-seed failure-only
+summary; sync `778102` when it finishes, but neither BGR-family treatment can
+be promoted because both already fail versus uniform.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,
@@ -468,6 +486,19 @@ also priority/dependency-pending with front jobs estimated for 2026-06-11
 priority/dependency-pending with front jobs estimated for 2026-06-11
 14:21:02--15:23:58 BST and later perturb jobs still dependency-pending. No
 OpenVLA paper claim should change.
+Latest all-route OpenVLA poll at 2026-06-10 18:05 BST still found no complete
+gateable summary. The hard-occlusion 0.80 transfer route synced an incomplete
+`summary_available.csv`: official identity/occlusion and BGR
+identity/occlusion are complete, matched-random identity is complete, but
+matched-random occlusion `774923` remains priority-pending with estimated start
+2026-06-11 10:04 BST. The 0.80 identity-anchor A6000 route remains
+priority/dependency-pending, with random train `776036`, BGR identity `776042`,
+and official identity `776040` now estimated around 2026-06-10 22:56--23:04
+BST; downstream occlusion rows are dependency-pending. The 0.80 identity-anchor
+A40 fallback and 0.90 strict A40 route remain priority/dependency-pending with
+front jobs estimated for 2026-06-11 22:02:14 BST. No new same-protocol OpenVLA
+job was launched in this checkpoint because the active queue already covers the
+current identity-preserving hard-occlusion premises.
 
 Newest acceleration route: hard-occlusion 0.80 micro identity-anchored
 OpenVLA-OFT A40 fallback. This is a resource fallback for the already fixed
