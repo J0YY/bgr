@@ -1130,6 +1130,45 @@ state-priority-only ablation in this harder variant but loses to uniform and all
 strong baselines, so CliffWalking remains an internal negative
 independent-benchmark probe rather than paper evidence.
 
+## Internal Taxi-v3 Diagnostics
+
+`results/taxi_recovery_probe_4seed_v1/summary.csv` is a 4-seed diagnostic on
+canonical Taxi-v3-style tabular dynamics with exact package-state resets and
+Manhattan taxi-position perturbations around replay states. The fixed command
+was:
+
+```bash
+PYTHONPATH=src:. python3 tools/taxi_recovery_probe.py --out results/taxi_recovery_probe_4seed_v1
+```
+
+The default budget is negative and saturated: failure-only reaches 1.0000 final
+RAUC, uniform reaches 0.9963, TD-loss reaches 0.9960, BGR-uniform-radius
+reaches 0.9763, BGR-Coverage reaches 0.9650, and default BGR reaches 0.9578.
+BGR and BGR-Coverage lose to uniform on all four paired seeds, and median r80
+is saturated at 1.0000 for every method.
+
+To avoid discarding Taxi solely because the default budget saturates, a
+uniform-only hard-budget calibration was fixed before the follow-up all-method
+comparison:
+
+```bash
+PYTHONPATH=src:. python3 tools/taxi_recovery_probe.py --out results/taxi_recovery_uniform_calibration_iter70_blend005_4seed_v1 --methods uniform --iterations 70 --eval-every 35 --q-init-blend 0.05 --q-init-noise 0.12 --learning-rate 0.25 --epsilon 0.10
+```
+
+This calibration gives uniform clean 0.8458, final RAUC 0.7596, and median r80
+0.4007. The fixed all-method hard-budget command was:
+
+```bash
+PYTHONPATH=src:. python3 tools/taxi_recovery_probe.py --out results/taxi_recovery_hard_probe_4seed_v1 --methods uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr --iterations 70 --eval-every 35 --q-init-blend 0.05 --q-init-noise 0.12 --learning-rate 0.25 --epsilon 0.10
+```
+
+This hard-budget screen is also negative: failure-only reaches 0.9692 final
+RAUC, uniform 0.7596, fixed-radius 0.7497, TD-loss 0.5812, BGR-Coverage
+0.5696, default BGR 0.5516, and BGR-uniform-radius 0.5345. BGR and
+BGR-Coverage lose to uniform on all four paired seeds. Keep Taxi out of the
+paper and do not scale this route without a materially new preregistered
+premise.
+
 ## Internal Acrobot Diagnostic
 
 `results/acrobot_recovery_probe_4seed_v1/summary.csv` is a 4-seed

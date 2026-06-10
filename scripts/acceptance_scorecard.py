@@ -23,6 +23,14 @@ OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE = (
     "proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_"
     "fullgoal10x10_perturb_v1/summary.csv"
 )
+OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE = (
+    "results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc065_transfer_step50400_lr2em7_v1/summary.csv"
+)
+OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE = (
+    "results/openvla_oft_perturb_eval_hardocc065_adapt_step50400_lr2em7_v1/summary.csv"
+)
+OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion_transfer_results.sh"
+OPENVLA_HARD_OCCLUSION_ADAPT_MARKER = "sync_openvla_oft_hard_occlusion_adapt_results.sh"
 
 COMPLETED_METHOD_SCREEN_BY_CALIBRATION = {
     "Gymnasium MuJoCo Reacher-v5 calibration": "results/reacher_recovery_probe_12seed_v1/summary.csv",
@@ -330,6 +338,22 @@ BENCHMARK_SCREENS = [
         "FetchReach-v4 hard-budget goal recovery",
         "results/fetchreach_goal_recovery_hard_probe_4seed_v1/summary.csv",
         ["bgr_coverage", "bgr"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
+    (
+        "Gymnasium Taxi-v3 default budget",
+        "results/taxi_recovery_probe_4seed_v1/summary.csv",
+        ["bgr", "bgr_coverage"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
+    (
+        "Gymnasium Taxi-v3 hard budget",
+        "results/taxi_recovery_hard_probe_4seed_v1/summary.csv",
+        ["bgr", "bgr_coverage"],
         ["fixed", "failure_only", "td_loss"],
         "bgr_uniform_radius",
         "final_median_r80",
@@ -856,10 +880,24 @@ def learned_policy_summary(root: Path) -> str:
 
 def learned_policy_inflight_summary(root: Path) -> str | None:
     """Report preregistered learned-policy runs that are failed or unsummarized."""
+    ledger_paths = [root / "AGENTS.md", root / "results/README.md", root / "docs/aaai_acceptance_gap.md"]
+    ledger_text = "\n".join(path.read_text(encoding="utf-8") for path in ledger_paths if path.exists())
+    active: list[str] = []
+    if (
+        OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER in ledger_text
+        and not (root / OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE).exists()
+    ):
+        active.append("hard-occlusion transfer eval is queued/running and missing a complete summary")
+    if (
+        OPENVLA_HARD_OCCLUSION_ADAPT_MARKER in ledger_text
+        and not (root / OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE).exists()
+    ):
+        active.append("hard-occlusion adaptation is queued and missing logs/summary")
+    if active:
+        return "; ".join(active)
+
     occlusion_bottleneck_summary = root / OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE
     if not occlusion_bottleneck_summary.exists():
-        ledger_paths = [root / "AGENTS.md", root / "results/README.md", root / "docs/aaai_acceptance_gap.md"]
-        ledger_text = "\n".join(path.read_text(encoding="utf-8") for path in ledger_paths if path.exists())
         if OPENVLA_OCCLUSION_BOTTLENECK_MARKER in ledger_text:
             return (
                 "Occlusion-bottleneck OpenVLA route is preregistered, not yet evidence: "

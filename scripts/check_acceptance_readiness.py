@@ -30,7 +30,15 @@ OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE = (
     "results/openvla_oft_perturb_eval_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_"
     "step50400_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1/summary.csv"
 )
+OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE = (
+    "results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc065_transfer_step50400_lr2em7_v1/summary.csv"
+)
+OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE = (
+    "results/openvla_oft_perturb_eval_hardocc065_adapt_step50400_lr2em7_v1/summary.csv"
+)
 OPENVLA_PERTURB_ONLY_ANCHOR_MARKER = "queue_openvla_oft_preregistered_perturb_only_anchor.sh"
+OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion_transfer_results.sh"
+OPENVLA_HARD_OCCLUSION_ADAPT_MARKER = "sync_openvla_oft_hard_occlusion_adapt_results.sh"
 OPENVLA_PROXIMAL_ANCHOR_JOB_IDS = {
     "bgr_train": "767657",
     "bgr_merge": "767658",
@@ -173,14 +181,32 @@ def missing_openvla_rows(rows: list[dict[str, str]], methods: set[str], perturba
 
 
 def learned_policy_inflight_detail(root: Path) -> str | None:
-    if (root / OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE).exists():
-        return None
-
     ledger_text = ""
     for relative_path in ["AGENTS.md", "results/README.md", "docs/aaai_acceptance_gap.md"]:
         path = root / relative_path
         if path.exists():
             ledger_text += "\n" + path.read_text(encoding="utf-8")
+
+    inflight: list[str] = []
+    if (
+        OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER in ledger_text
+        and not (root / OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE).exists()
+    ):
+        inflight.append(
+            "hard-occlusion transfer OpenVLA route is queued/running and still missing a complete summary"
+        )
+    if (
+        OPENVLA_HARD_OCCLUSION_ADAPT_MARKER in ledger_text
+        and not (root / OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE).exists()
+    ):
+        inflight.append(
+            "hard-occlusion adaptation OpenVLA route is queued and still missing logs/summary"
+        )
+    if inflight:
+        return "; ".join(inflight)
+
+    if (root / OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE).exists():
+        return None
 
     if OPENVLA_PERTURB_ONLY_ANCHOR_MARKER in ledger_text:
         return (
@@ -912,6 +938,46 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"W/L/T={best_route_wins}"
             )
 
+    for label, relative_path in [
+        ("Gymnasium Taxi-v3 default budget", "results/taxi_recovery_probe_4seed_v1/summary.csv"),
+        ("Gymnasium Taxi-v3 hard budget", "results/taxi_recovery_hard_probe_4seed_v1/summary.csv"),
+    ]:
+        taxi_path = root / relative_path
+        if not taxi_path.exists():
+            continue
+        taxi = read_rows(taxi_path)
+        taxi_bgr = mean_metric(taxi, "bgr", "final_rauc")
+        taxi_coverage = mean_metric(taxi, "bgr_coverage", "final_rauc")
+        taxi_uniform = mean_metric(taxi, "uniform", "final_rauc")
+        taxi_failure = mean_metric(taxi, "failure_only", "final_rauc")
+        taxi_fixed = mean_metric(taxi, "fixed", "final_rauc")
+        taxi_td = mean_metric(taxi, "td_loss", "final_rauc")
+        taxi_ablation = mean_metric(taxi, "bgr_uniform_radius", "final_rauc")
+        taxi_bgr_r80 = mean_metric(taxi, "bgr", "final_median_r80")
+        taxi_coverage_r80 = mean_metric(taxi, "bgr_coverage", "final_median_r80")
+        taxi_uniform_r80 = mean_metric(taxi, "uniform", "final_median_r80")
+        taxi_bgr_wins = paired_wins(taxi, "bgr", "uniform", "final_rauc")
+        taxi_coverage_wins = paired_wins(taxi, "bgr_coverage", "uniform", "final_rauc")
+        best_taxi = taxi_bgr if taxi_bgr >= taxi_coverage else taxi_coverage
+        best_taxi_r80 = taxi_bgr_r80 if taxi_bgr >= taxi_coverage else taxi_coverage_r80
+        best_taxi_wins = taxi_bgr_wins if taxi_bgr >= taxi_coverage else taxi_coverage_wins
+        if not (
+            best_taxi - taxi_uniform >= 0.01
+            and best_taxi > max(taxi_failure, taxi_fixed, taxi_td, taxi_ablation)
+            and best_taxi_wins[0] >= 3
+            and best_taxi_r80 >= taxi_uniform_r80
+            and not (best_taxi_r80 >= 0.99 and taxi_uniform_r80 >= 0.99)
+            and not (best_taxi_r80 <= 0.01 and taxi_uniform_r80 <= 0.01)
+        ):
+            failures.append(
+                f"{label} negative: BGR {taxi_bgr:.4f}, "
+                f"BGR-Coverage {taxi_coverage:.4f}, uniform {taxi_uniform:.4f}, "
+                f"failure-only {taxi_failure:.4f}, fixed {taxi_fixed:.4f}, "
+                f"TD-loss {taxi_td:.4f}, uniform-radius {taxi_ablation:.4f}, "
+                f"best-r80 {best_taxi_r80:.4f} vs uniform {taxi_uniform_r80:.4f}, "
+                f"W/L/T={best_taxi_wins}"
+            )
+
     for label, relative_path in CALIBRATION_SUMMARIES:
         calibration_path = root / relative_path
         if not calibration_path.exists():
@@ -945,11 +1011,14 @@ def independent_benchmark_gate(root: Path) -> GateResult:
 def learned_policy_gate(root: Path) -> GateResult:
     inflight_detail = learned_policy_inflight_detail(root)
     if (root / OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE).exists():
-        return learned_policy_summary_gate(
+        gate = learned_policy_summary_gate(
             root,
             OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE,
             label="latest occlusion-bottleneck audit",
         )
+        if inflight_detail:
+            return GateResult(gate.name, gate.passed, f"{gate.detail}; {inflight_detail}")
+        return gate
     if (root / OPENVLA_PERTURB_ONLY_ANCHOR_COMPLETE).exists():
         return learned_policy_summary_gate(
             root,

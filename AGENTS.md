@@ -31,7 +31,12 @@ calibration window, but the method scout lost to fixed-radius replay and is
 rejected before promotion. A new Gymnasium Blackjack package-state recovery
 scout completed negative on `athena` as Slurm job `774192`; this was only a
 scout for a different independent reset interface, not paper evidence, and all
-nine perturbation/target-radius configs are rejected before promotion. A broader
+nine perturbation/target-radius configs are rejected before promotion. A new
+Gymnasium Taxi-v3 package-state recovery screen is also completed negative:
+the default 4-seed protocol is saturated and trails failure-only/TD-loss, while
+the preregistered hard-budget follow-up calibrated from uniform-only runs gives
+BGR-Coverage 0.5696 and BGR 0.5516 RAUC versus uniform 0.7596 and failure-only
+0.9692. Do not scale or promote Taxi without a materially new premise. A broader
 fixed OpenML numeric-suite
 target-2.0 run and held-out seeds 30--59 replication completed on `athena` as
 jobs `774312` and `774346`: the 10-dataset suite is mixed and not a macro win
@@ -171,6 +176,11 @@ and `774715` running, with occlusion jobs dependency-pending. Poll/sync with
 `scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --no-check`
 and, when logs or summaries exist,
 `scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --sync`.
+Latest poll at 2026-06-10 09:45:12 BST showed identity jobs `774711`,
+`774713`, and `774715` still running at about 20:30 elapsed; occlusion jobs
+`774712`, `774714`, and `774716` remained dependency-pending behind the
+corresponding identity jobs. Remote identity logs exist, but
+`summary.csv` is still missing, so no gate can be run yet.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -197,6 +207,12 @@ Poll/sync with
 `scripts/sync_openvla_oft_hard_occlusion_adapt_results.sh --poll --no-check`
 and, when logs or summaries exist,
 `scripts/sync_openvla_oft_hard_occlusion_adapt_results.sh --sync`.
+Latest poll at 2026-06-10 09:45:12 BST still showed prep `774717` and
+official identity `774724` pending on unavailable nodes, with estimated starts
+unchanged from the earlier scheduler report (`774717` at 2026-06-10 10:59:06
+BST and `774724` at 2026-06-10 21:24:42 BST). All adapted BGR/random jobs and
+occlusion eval jobs remain dependency-pending; no logs or summary exist for the
+adapted route yet.
 
 Completed learned-policy route (negative, not active): preregistered OpenVLA-OFT occlusion-bottleneck
 adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.
@@ -428,6 +444,26 @@ failure-only 0.3898 and only 5/3 paired wins; and `dealer_signed` target 3.0
 BGR-Coverage 0.4402 vs. uniform 0.4414, failure-only 0.4498, and
 BGR-uniform-radius 0.4514. Do not scale or promote Blackjack without a
 materially new preregistered premise.
+
+Completed independent-route scout: Gymnasium Taxi-v3 package-state recovery.
+This route uses exact tabular Taxi dynamics, resettable package states, and
+Manhattan taxi-position perturbations around replay states. The default fixed
+4-seed command was:
+`PYTHONPATH=src:. python3 tools/taxi_recovery_probe.py --out results/taxi_recovery_probe_4seed_v1`.
+It is negative and saturated: failure-only reaches 1.0000 RAUC, uniform 0.9963,
+TD-loss 0.9960, BGR-uniform-radius 0.9763, BGR-Coverage 0.9650, and BGR
+0.9578, with median r80 saturated at 1.0000. A uniform-only hard-budget
+calibration fixed the non-saturated follow-up at 70 iterations, q-init blend
+0.05, q-init noise 0.12, learning rate 0.25, and epsilon 0.10:
+`PYTHONPATH=src:. python3 tools/taxi_recovery_probe.py --out results/taxi_recovery_uniform_calibration_iter70_blend005_4seed_v1 --methods uniform --iterations 70 --eval-every 35 --q-init-blend 0.05 --q-init-noise 0.12 --learning-rate 0.25 --epsilon 0.10`.
+The calibration gives uniform clean 0.8458, RAUC 0.7596, and median r80 0.4007.
+The fixed all-method hard-budget command was:
+`PYTHONPATH=src:. python3 tools/taxi_recovery_probe.py --out results/taxi_recovery_hard_probe_4seed_v1 --methods uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr --iterations 70 --eval-every 35 --q-init-blend 0.05 --q-init-noise 0.12 --learning-rate 0.25 --epsilon 0.10`.
+This is also negative: failure-only reaches 0.9692 RAUC, uniform 0.7596, fixed
+0.7497, TD-loss 0.5812, BGR-Coverage 0.5696, BGR 0.5516, and
+BGR-uniform-radius 0.5345; BGR and BGR-Coverage lose to uniform on all four
+paired seeds. Treat Taxi as a closed negative independent route unless a
+materially new preregistered premise is introduced.
 
 Completed pre-existing-dataset broadening run: fixed broad numeric OpenML suite.
 `tools/openml_margin_scout.py` now has `--broad-numeric-suite`, a predeclared
