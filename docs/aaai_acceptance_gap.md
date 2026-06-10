@@ -74,8 +74,8 @@ official checkpoint with `ALPHA=0.75`, scales LoRA-B tensors by the same alpha,
 and evaluates identity plus occlusion fraction 0.80 over 10 LIBERO-Goal tasks x
 40 trials. Submitted jobs are prep `779973`, official `779974`/`779975`, BGR
 `779976`/`779977`, and matched random `779978`/`779979`. Latest poll/sync at
-2026-06-10 21:21 BST showed prep `779973` completed at 21:16:12 and official
-identity `779974` running since 21:16:24 on `c1-g4-02`; BGR identity
+2026-06-10 21:29 BST showed prep `779973` completed at 21:16:12 and official
+identity `779974` still running since 21:16:24 on `c1-g4-02`; BGR identity
 `779976` and matched-random identity `779978` were priority-pending, and the
 occlusion evals were dependency-pending. Logs exist, but no compact summary or
 summarizable completed eval row exists yet. A second fixed
@@ -86,7 +86,7 @@ shrinking them with the heads. This tests the concrete failure mode from the
 0.80 transfer near miss: repair identity without discarding the occlusion
 adaptation. Submitted jobs are prep `780059`, official `780060`/`780061`, BGR
 `780062`/`780063`, and matched random `780064`/`780065`; latest poll/sync at
-2026-06-10 21:18 BST still showed prep `780059` and official identity
+2026-06-10 21:29 BST still showed prep `780059` and official identity
 `780060` priority-pending, downstream evals dependency-pending, and no logs or
 summary. Both
 head-interpolation routes remain non-evidence unless the full summary passes
@@ -95,10 +95,12 @@ partial identity-anchored 0.80 routes already fail the identity side condition:
 BGR identity is 389/400 for the base route, 387/400 for the micro route, and
 388/400 for the strict route, each trailing official identity 393/400 by more
 than one episode. The base route now also has BGR occlusion 303/400 available,
-but official and matched-random occlusion rows were still running or missing at
-the latest poll. The strict route partial summary now has official occlusion
-296/400, while BGR occlusion and matched-random rows are still running or
-missing; both routes are already non-promotable on identity.
+plus matched-random identity 393/400, while official and matched-random
+occlusion rows were still running at the latest poll. The strict route partial
+summary now has official occlusion 296/400, while BGR occlusion and
+matched-random rows are still running or missing; these routes are already
+non-promotable on identity. The 0.90 strict A40 route still has only a running
+official identity eval and no summarized rows.
 An internal sklearn-digits margin scout was also opened as a genuinely
 pre-existing supervised dataset route, but it is rejected before paper
 promotion: the best BGR target in
@@ -1003,9 +1005,10 @@ risk.
   and secondary numeric suites, uses `TARGETS=1.5` with the existing numeric
   preprocessing, and runs original seeds 0--29 plus held-out seeds 30--59.
   Slurm jobs are `780049` and `780050`, both started at 21:02 BST. Latest sync
-  at 2026-06-10 21:21 BST showed both jobs still running on `cnode404`, with
-  healthy Slurm log tails advanced into Bioresponse but no remote run directory
-  or `per_seed.csv` available for paired analysis. Treat this as pending broad
+  at 2026-06-10 21:29 BST showed both jobs still running on `cnode404`, with
+  no remote run directory or `per_seed.csv` available for paired analysis. Log
+  tails showed the original run finishing `mc1` and starting `jm1`, while the
+  held-out repeat was finishing `mc1`. Treat this as pending broad
   supervised pre-existing benchmark evidence only; do not use it as a
   learned-policy or standard-control claim, and do not promote it unless the
   fixed synced readout beats both uniform and fixed-radius replay at macro or
