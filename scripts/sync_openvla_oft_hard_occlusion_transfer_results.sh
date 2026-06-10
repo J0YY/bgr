@@ -122,6 +122,73 @@ with open(dst, "w", newline="", encoding="utf-8") as handle:
 PY
 }
 
+summarize_remote_logs() {
+  local dst="$1"
+  ssh -o BatchMode=yes -o ConnectTimeout=8 "${REMOTE_HOST}" \
+    "python3 - '${REMOTE_LOGS}'" >"${dst}" <<'PY'
+import csv
+import re
+import sys
+from pathlib import Path
+
+logs_root = Path(sys.argv[1])
+final_re = re.compile(r"Overall success rate:\s*([0-9.]+)")
+episodes_re = re.compile(r"Total episodes:\s*(\d+)")
+successes_re = re.compile(r"Total successes:\s*(\d+)")
+perturbation_order = {
+    "identity": 0,
+    "blur": 1,
+    "brightness": 2,
+    "occlusion": 3,
+    "shift": 4,
+}
+
+
+def last(pattern, text):
+    matches = list(pattern.finditer(text))
+    return matches[-1].group(1) if matches else None
+
+
+rows = []
+if logs_root.exists():
+    for method_dir in sorted(path for path in logs_root.iterdir() if path.is_dir()):
+        perturbation_dirs = sorted(
+            (path for path in method_dir.iterdir() if path.is_dir()),
+            key=lambda path: (perturbation_order.get(path.name, len(perturbation_order)), path.name),
+        )
+        for perturbation_dir in perturbation_dirs:
+            logs = sorted(perturbation_dir.glob("*.txt"), key=lambda path: path.stat().st_mtime)
+            for log in reversed(logs):
+                text = log.read_text(encoding="utf-8", errors="replace")
+                episodes = last(episodes_re, text)
+                successes = last(successes_re, text)
+                success_rate = last(final_re, text)
+                if episodes is None or successes is None or success_rate is None:
+                    continue
+                rows.append(
+                    {
+                        "method": method_dir.name,
+                        "perturbation": perturbation_dir.name,
+                        "episodes": episodes,
+                        "successes": successes,
+                        "success_rate": success_rate,
+                    }
+                )
+                break
+
+if not rows:
+    raise SystemExit(f"No complete perturbation eval logs found under {logs_root}")
+
+writer = csv.DictWriter(
+    sys.stdout,
+    fieldnames=["method", "perturbation", "episodes", "successes", "success_rate"],
+    lineterminator="\n",
+)
+writer.writeheader()
+writer.writerows(rows)
+PY
+}
+
 sync_summary() {
   mkdir -p "$(dirname "${LOCAL_SUMMARY}")"
 
@@ -134,27 +201,16 @@ sync_summary() {
       return
     fi
   elif ssh -o BatchMode=yes -o ConnectTimeout=8 "${REMOTE_HOST}" "test -d '${REMOTE_LOGS}'"; then
-    local tmp_logs
-    tmp_logs="$(mktemp -d "${TMPDIR:-/tmp}/hardocc-openvla-logs.XXXXXX")"
-    if ! rsync -az --exclude='rollouts/**' --exclude='*/rollouts/**' \
-        "${REMOTE_HOST}:${REMOTE_LOGS}/" "${tmp_logs}/"; then
-      echo "[pending] failed to rsync ${REMOTE_LOGS}"
-      rm -rf "${tmp_logs}"
-      rm -f "${tmp_path}"
-      return
-    fi
-    local tmp_out
-    tmp_out="$(mktemp -d "${TMPDIR:-/tmp}/hardocc-openvla-summary.XXXXXX")"
-    if ! PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_perturb_eval.py \
-        --logs-root "${tmp_logs}" \
-        --out "${tmp_out}"; then
+    local tmp_remote_summary
+    tmp_remote_summary="$(mktemp "$(dirname "${LOCAL_SUMMARY}")/.hardocc-remote-summary.XXXXXX")"
+    if ! summarize_remote_logs "${tmp_remote_summary}"; then
       echo "[pending] ${REMOTE_LOGS} exists but is not summarizable yet"
-      rm -rf "${tmp_logs}" "${tmp_out}"
+      rm -f "${tmp_remote_summary}"
       rm -f "${tmp_path}"
       return
     fi
-    strip_summary "${tmp_out}/summary.csv" "${tmp_path}"
-    rm -rf "${tmp_logs}" "${tmp_out}"
+    strip_summary "${tmp_remote_summary}" "${tmp_path}"
+    rm -f "${tmp_remote_summary}"
   else
     echo "[missing] ${REMOTE_SUMMARY} and ${REMOTE_LOGS}"
     rm -f "${tmp_path}"

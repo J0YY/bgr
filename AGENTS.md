@@ -675,6 +675,15 @@ occlusion children still dependency-pending. Official identity `776040` was
 still running with direct parsed tail 101/107. The active BGR clean-eval log
 had started but had not yet emitted parseable totals. No compact `summary.csv`
 exists, so the route remains incomplete.
+Latest poll/sync at 2026-06-10 13:15:05 BST showed a scheduler/preemption
+delay rather than new evidence: official identity `776040`, BGR clean eval
+`776035`, BGR identity eval `776042`, and matched-random adaptation `776036`
+were all priority-pending with zero current elapsed time; official occlusion
+`776041`, BGR occlusion `776043`, and matched-random eval children
+`776044`/`776045` remained dependency-pending. Estimated starts had slipped to
+2026-06-11 00:14--14:21 BST for the runnable jobs. The remote perturb-log
+directory exists but contains no complete perturb-eval logs, so no
+`summary_available.csv` or `summary.csv` exists locally for this route.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -953,11 +962,20 @@ adaptation route incomplete and non-promotable. The synced incomplete
 three identity rows. Direct parsed tails for the still-running occlusion jobs
 were BGR 123/209 and matched random 88/156. The identity side condition remains
 failed.
+Latest poll/sync at 2026-06-10 13:15:05 BST still left the A6000 0.65
+adaptation route incomplete and already non-promotable by identity. Official
+occlusion remains complete at 297/400, BGR occlusion `774727` was running at
+1:00:19, and matched-random occlusion `774729` was priority-pending. The
+synced incomplete local summary still has only BGR/official/random identity
+rows plus official occlusion; the BGR identity row is 389/400 vs. official
+393/400 and random 390/400, so the fixed identity side condition is already
+violated.
 
 Operational sync update: `scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh`
-now excludes `rollouts/` media during remote-log sync and copies only text logs
-needed for compact summaries. This fixes repeated rsync code 12/255 drops while
-preserving the local gate path.
+now summarizes complete remote text logs in place over SSH and streams only the
+compact CSV rows needed for local `summary_available.csv` generation. This
+avoids repeated rsync code 12/255 drops from live log trees and preserves the
+local gate path without copying `rollouts/` media.
 Experiment-routing note at 2026-06-10 13:08 BST: the generated scorecard still
 warns not to start another same-protocol MiniGrid, classic-control, PointMaze,
 or FetchReach screen while the active learned-policy route is pending; existing

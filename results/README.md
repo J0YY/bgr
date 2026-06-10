@@ -2771,6 +2771,21 @@ matched-random adaptation `776036` were priority-pending; BGR occlusion
 dependency-pending. Official identity `776040` was still running with direct
 parsed tail 101/107. The active BGR clean-eval log had started but did not yet
 contain parseable totals. No compact `summary.csv` exists.
+Latest poll/sync at 2026-06-10 13:15:05 BST showed no gateable evidence and a
+scheduler/preemption delay: official identity `776040`, BGR clean eval
+`776035`, BGR identity eval `776042`, and matched-random adaptation `776036`
+were priority-pending with zero current elapsed time, while official occlusion
+`776041`, BGR occlusion `776043`, and matched-random eval children
+`776044`/`776045` were dependency-pending. Estimated starts for runnable jobs
+had slipped into 2026-06-11. The remote perturb-log directory exists but has no
+complete perturb-eval logs, so there is still no local `summary.csv` or
+`summary_available.csv` for this identity-anchored route.
+
+Operational sync note: `scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh`
+now parses complete remote text logs over SSH and streams compact CSV rows
+directly into local `summary_available.csv` files. This avoids rsyncing live
+log trees and `rollouts/` media, which had repeatedly caused rsync code 12/255
+failures while jobs were still writing.
 
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
