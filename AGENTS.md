@@ -618,6 +618,14 @@ prep `776029` remained priority-pending with estimated start 2026-06-10
 estimated start 2026-06-10 23:36:39 BST, and every BGR/random adaptation and
 dependent perturb-eval job remained dependency-pending. There are still no
 remote logs or compact summaries, so the route is not gateable.
+Latest poll/sync at 2026-06-10 12:45:39 BST showed prep `776029` running since
+12:39:19 on an A6000 node; direct log tail was healthy and had advanced to
+`Rendering BGR boundary perturbations at 2026-06-10T12:43:36+01:00`.
+Official identity `776040` remained priority-pending with estimated start
+2026-06-10 15:15:13 BST, while all BGR/random adaptation, merge, clean-eval,
+identity-eval, and occlusion-eval jobs remained dependency-pending. No compact
+`summary.csv` exists, so this route remains the live acceptance-moving
+candidate but is not gateable or paper evidence.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -855,6 +863,14 @@ BGR occlusion `774727`, and matched-random occlusion `774729` were running;
 matched-random identity `774728` completed with 390/400. The synced
 `summary_available.csv` has only identity rows, and no complete `summary.csv`
 exists, so no positive paper claim can be made from this route.
+Latest poll/sync at 2026-06-10 12:45:39 BST still had the A6000 0.65
+adaptation route incomplete and non-promotable by the fixed identity side
+condition: official identity `774724` completed at 393/400, BGR identity
+`774726` completed at 389/400, and matched-random identity `774728` completed
+at 390/400. Official/BGR/matched-random occlusion jobs `774725`/`774727`/
+`774729` were running. Direct partial occlusion tails were official 224/323,
+BGR 79/130, and matched random 76/99; these are not gateable, but they do not
+rescue the identity failure.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000

@@ -2720,6 +2720,14 @@ state: prep `776029` remained priority-pending with estimated start
 priority-pending with estimated start 2026-06-10 23:36:39 BST, and every
 BGR/random adaptation plus dependent perturb-eval job remained
 dependency-pending. No logs or compact summaries existed yet.
+Latest poll/sync at 2026-06-10 12:45:39 BST showed prep `776029` running since
+12:39:19 on an A6000 node. Direct prep-log inspection was healthy and had
+advanced to BGR hard-occlusion perturbation rendering at
+2026-06-10T12:43:36+01:00. Official identity `776040` remained
+priority-pending with estimated start 2026-06-10 15:15:13 BST; all
+BGR/random adaptation and dependent perturb-eval jobs remained
+dependency-pending. No compact `summary.csv` exists, so the route is still
+not gateable or paper evidence.
 
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
@@ -3382,6 +3390,25 @@ running, official occlusion `774847` and replacement BGR identity `775102`
 pending, and both occlusion children dependency-pending. The 0.80
 identity-anchored route remains the live acceptance-moving candidate, but its
 prep and official identity jobs are still priority-pending with no logs.
+
+Latest status at 2026-06-10 12:45:39 BST: the completed 0.65 transfer route
+is formally negative under the fixed hard-occlusion gate:
+`scripts/check_openvla_perturb_gate.py` reports BGR 300/400, official 297/400,
+and matched random 296/400 on occlusion, but only a +3 episode/+0.0075 margin
+over the best comparator and a 2-episode identity deficit (BGR 391/400 vs.
+official 393/400). The 0.80 transfer route remains incomplete: official and
+BGR identity/occlusion rows are available (official 393/400 and 296/400; BGR
+391/400 and 305/400), matched-random identity `774922` is running with direct
+tail 248/258, and matched-random occlusion `774923` is dependency-pending. The
+A6000 0.65 adaptation route remains incomplete and already non-promotable by
+identity: BGR 389/400 trails official 393/400 and matched random 390/400;
+official/BGR/random occlusion jobs are still running, with partial tails
+224/323, 79/130, and 76/99 respectively. The A40 fallback remains incomplete:
+matched-random identity `774850` is running, official occlusion `774847` and
+replacement BGR identity `775102` are pending, and occlusion children remain
+dependency-pending. The 0.80 identity-anchored route is the live
+acceptance-moving candidate; prep `776029` is now running and healthy, but no
+compact summary exists.
 
 Sync/poll helper:
 
