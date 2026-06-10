@@ -181,6 +181,10 @@ BGR identity/occlusion `776615`/`776616`; matched-random identity/occlusion
 `776617`/`776619`. Initial poll showed prep `776601` and official identity
 `776611` priority-pending with estimated starts at 2026-06-11 22:02:14 BST,
 all other jobs dependency-pending, and no remote logs or compact summaries.
+Latest poll at 2026-06-10 14:22:28 BST showed the same substantive state:
+prep `776601` and official identity `776611` were still priority-pending with
+estimated starts at 2026-06-11 22:02:14 BST, all adaptation/eval children were
+dependency-pending, and no remote logs or compact summaries existed.
 Poll/sync with
 `scripts/sync_openvla_oft_hard_occlusion090_identityanchor_strict_results.sh --poll --sync --no-check`.
 Do not incorporate this route into `paper/main.tex` unless a complete
@@ -195,20 +199,23 @@ on hard occlusion fraction 0.80 with a shorter, more strongly anchored update
 promotion gate. It is not paper evidence unless `summary.csv` exists and the
 fixed gate passes. Poll/sync with
 `scripts/sync_openvla_oft_hard_occlusion080_identityanchor_results.sh --poll --sync --no-check`.
-Latest poll/sync at 2026-06-10 14:14:23 BST showed this A6000 0.80
+Latest poll/sync at 2026-06-10 14:22:11 BST showed this A6000 0.80
 identity-anchored route still scheduler-limited rather than gateable:
 official identity `776040` and BGR identity `776042` were priority-pending
-with estimated starts at 2026-06-11 14:21:02 BST, official/BGR occlusion and all random
-perturb evals were dependency-pending, and no compact summary exists. The
-same-protocol A40 fallback remained earlier in the queue: BGR train `776291`
-and official identity `776300` were priority-pending with estimated starts at
-2026-06-11 22:02:14 BST, all downstream A40 jobs were dependency-pending, and
-no remote logs or summary existed. Do not incorporate either 0.80
+with estimated starts at 2026-06-11 17:55:00 BST, official/BGR occlusion and
+all random perturb evals were dependency-pending, and no compact summary
+exists. The same-protocol A40 fallback remained earlier in the queue: BGR train
+`776291` and official identity `776300` were priority-pending with estimated
+starts at 2026-06-11 22:02:14 BST, all downstream A40 jobs were
+dependency-pending, and no remote logs or summary existed. The 0.80 transfer
+route also remains incomplete: matched-random occlusion `774923` is still
+priority-pending, while BGR already has only a +9/400 occlusion edge over
+official and a 2-episode identity deficit. Do not incorporate either 0.80
 identity-anchored route into
 `paper/main.tex` unless a complete `summary.csv` exists and the fixed
 identity/occlusion gate passes.
 
-Latest hard-occlusion status at 2026-06-10 14:14:37 BST also closes two
+Latest hard-occlusion status at 2026-06-10 14:22:28 BST also closes two
 nearby learned-policy routes as non-promotable even though their full summaries
 are incomplete. The A6000 0.65 adaptation route has BGR identity 389/400,
 official identity 393/400, matched-random identity 390/400, BGR occlusion

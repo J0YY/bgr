@@ -3699,6 +3699,17 @@ state: BGR train `776541` and official identity `776548` remained
 priority-pending with estimated starts at 2026-06-11 14:21:02 BST, all other
 strict-route jobs remained dependency-pending, and no remote logs or compact
 summaries existed.
+Latest broad hard-occlusion poll at 2026-06-10 14:22:11--14:22:28 BST kept the
+learned-policy gate unchanged. The 0.80 transfer route remained incomplete with
+matched-random occlusion `774923` priority-pending; BGR already has only a
++9/400 hard-occlusion edge over official and trails official identity by two
+episodes. The A6000 0.80 identity-anchor and 0.80 strict routes were still
+priority/dependency-pending, with updated A6000 estimated starts at
+2026-06-11 17:55:00 BST. The A40 0.80 identity-anchor and the 0.90 strict
+route remained priority/dependency-pending with estimated A40 starts at
+2026-06-11 22:02:14 BST. The 0.65 adaptation and A40 fallback were still
+incomplete but already non-promotable due to identity deficits and small
+occlusion margins.
 
 Additional strict identity-preservation route queued on 2026-06-10 14:18 BST:
 fixed hard-occlusion 0.90 strict identity-anchored OpenVLA-OFT adaptation. This
@@ -3733,6 +3744,11 @@ Initial 0.90 strict-route poll at 2026-06-10 14:18:41 BST showed prep
 `776601` and official identity `776611` priority-pending with estimated starts
 at 2026-06-11 22:02:14 BST, all adaptation, merge, clean-eval, and downstream
 perturb-eval jobs dependency-pending, and no remote logs or compact summaries.
+Latest 0.90 strict-route poll at 2026-06-10 14:22:28 BST showed the same
+substantive state: prep `776601` and official identity `776611` remained
+priority-pending with estimated starts at 2026-06-11 22:02:14 BST, all
+adaptation, merge, clean-eval, and downstream perturb-eval jobs remained
+dependency-pending, and no remote logs or compact summaries existed.
 Poll/sync with
 `scripts/sync_openvla_oft_hard_occlusion090_identityanchor_strict_results.sh --poll --sync --no-check`.
 Do not incorporate this route into `paper/main.tex` unless a complete
