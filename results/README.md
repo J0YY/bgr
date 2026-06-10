@@ -2524,6 +2524,13 @@ hard-occlusion jobs `774712`, `774714`, and `774716` remained
 dependency-pending. The sync found identity logs only and could not build a
 compact summary yet, so this route remains incomplete.
 
+Latest poll/sync at 2026-06-10 10:21:07 BST: identity eval jobs `774711`,
+`774713`, and `774715` were still running at about 56:25 elapsed, and
+hard-occlusion jobs `774712`, `774714`, and `774716` remained
+dependency-pending. Log tails were healthy: BGR identity had reached 370/378
+successes, official identity 328/335, and matched random identity 365/375. No
+compact summary exists yet.
+
 ## Queued OpenVLA-OFT Hard-Occlusion 0.80 Transfer Diagnostic
 
 Queued on 2026-06-10 before any 0.65 occlusion rows were available. This is a
@@ -2600,6 +2607,13 @@ running at 9:02 elapsed and BGR identity `774920` had started on `c2-g4-17` at
 estimated start 2026-06-10 12:56:05 BST, and hard-occlusion jobs `774919`,
 `774921`, and `774923` were dependency-pending. The sync found identity logs
 only and could not build a compact summary yet.
+
+Latest poll/sync at 2026-06-10 10:21:07 BST: official identity `774917` was
+running at 10:51 elapsed and BGR identity `774920` at 2:20 elapsed, while
+matched-random identity `774922` remained priority-pending with estimated start
+2026-06-10 12:56:05 BST. Hard-occlusion jobs `774919`, `774921`, and `774923`
+were still dependency-pending. Log tails showed official identity 80/84 and
+BGR identity 12/12 so far. No compact summary exists yet.
 
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
@@ -2774,6 +2788,16 @@ saving the checkpoint; BGR merge `774818` and matched-random adaptation
 were still pending. The sync found only official identity logs and could not
 build a compact summary yet, so no fixed promotion gate can be run and no paper
 claim changes.
+
+Latest status at 2026-06-10 10:21:07 BST: the A6000 adaptation route was
+unchanged, with prep `774717` resource-pending and official identity `774724`
+still unavailable-node pending. The A40 fallback had no gateable change: prep
+`774816` and BGR adaptation `774817` were completed with exit `0:0`, BGR merge
+`774818` and matched-random adaptation `774820` were priority-pending, official
+identity `774846` was running at 15:58 elapsed with a log tail of 118/124
+successes, and all BGR/random perturb eval and occlusion jobs were still
+dependency-pending. No compact summary exists yet, so no fixed promotion gate
+can be run and no paper claim changes.
 
 Sync/poll helper:
 
