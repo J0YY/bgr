@@ -49,7 +49,18 @@ hard-occlusion transfer diagnostic is also negative: at occlusion fraction
 296/400, which is only +3/+4 episodes and +0.0075/+0.0100 success rate rather
 than the fixed +10/400 and +0.02 promotion margin; identity is BGR 391/400,
 official 393/400, and matched random 389/400, so BGR also violates the
-identity side condition. The earlier completed full perturbation
+identity side condition. The partial hard-occlusion 0.80 transfer and 0.65
+adaptation summaries are now classified as closed negative by the readiness
+checker even before matched-random occlusion finishes: the 0.80 transfer route
+has BGR identity 391/400 versus official 393/400 and BGR occlusion 305/400
+versus official 296/400, which misses the fixed +10 episode gate by one; the
+0.65 adaptation route has BGR identity 389/400 versus official 393/400 and
+BGR occlusion 301/400 versus official 297/400, missing both the +10 episode
+and +0.02 rate gates. The A40 adaptation fallback is also already closed
+negative on identity side condition with BGR identity 391/400 versus official
+393/400. Still-running identity-anchored hard-occlusion routes remain
+incomplete and must not be incorporated into `paper/main.tex` unless their full
+summaries pass the fixed gate. The earlier completed full perturbation
 occlusion-bottleneck route was negative as well: BGR reaches 365/400
 non-identity successes versus official 367/400 and matched random 369/400,
 with identity BGR 99/100, official 99/100, and random 98/100. The

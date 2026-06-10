@@ -229,6 +229,66 @@ def missing_openvla_rows(rows: list[dict[str, str]], methods: set[str], perturba
     ]
 
 
+def partial_openvla_failure_detail(
+    root: Path,
+    relative_path: str,
+    *,
+    label: str,
+    non_identity_perturbations: set[str],
+    min_episode_margin: int = 10,
+    min_rate_margin: float = 0.02,
+    max_identity_deficit: int = 1,
+) -> str | None:
+    available_path = root / Path(relative_path).with_name("summary_available.csv")
+    if not available_path.exists():
+        return None
+    rows = read_rows(available_path)
+    present = {(row.get("method"), row.get("perturbation")): row for row in rows}
+    reasons: list[str] = []
+
+    bgr_identity = present.get(("bgr", "identity"))
+    if bgr_identity is not None:
+        bgr_identity_success = int(float(bgr_identity["successes"]))
+        for comparator in ("official", "random"):
+            comparator_identity = present.get((comparator, "identity"))
+            if comparator_identity is None:
+                continue
+            comparator_success = int(float(comparator_identity["successes"]))
+            identity_deficit = comparator_success - bgr_identity_success
+            if identity_deficit > max_identity_deficit:
+                reasons.append(
+                    f"identity BGR {bgr_identity_success}/{int(float(bgr_identity['episodes']))} "
+                    f"trails {comparator} {comparator_success}/{int(float(comparator_identity['episodes']))} "
+                    f"by {identity_deficit} > {max_identity_deficit}"
+                )
+
+    for comparator in ("official", "random"):
+        try:
+            bgr_success, bgr_episodes = perturbation_total(rows, "bgr", non_identity_perturbations)
+            comparator_success, comparator_episodes = perturbation_total(rows, comparator, non_identity_perturbations)
+        except ValueError:
+            continue
+        if bgr_episodes != comparator_episodes:
+            continue
+        episode_margin = bgr_success - comparator_success
+        rate_margin = bgr_success / bgr_episodes - comparator_success / comparator_episodes
+        failed_thresholds: list[str] = []
+        if episode_margin < min_episode_margin:
+            failed_thresholds.append(f"margin {episode_margin} < +{min_episode_margin}")
+        if rate_margin < min_rate_margin:
+            failed_thresholds.append(f"rate {rate_margin:+.4f} < +{min_rate_margin:.2f}")
+        if failed_thresholds:
+            reasons.append(
+                f"non-identity BGR {bgr_success}/{bgr_episodes} vs {comparator} "
+                f"{comparator_success}/{comparator_episodes} gives margin {episode_margin} "
+                f"and rate {rate_margin:+.4f}; fails {' and '.join(failed_thresholds)}"
+            )
+
+    if not reasons:
+        return None
+    return f"{label} closed negative on partial summary: {'; '.join(reasons)}"
+
+
 def learned_policy_inflight_detail(root: Path) -> str | None:
     ledger_text = ""
     for relative_path in ["AGENTS.md", "results/README.md", "docs/aaai_acceptance_gap.md"]:
@@ -237,76 +297,78 @@ def learned_policy_inflight_detail(root: Path) -> str | None:
             ledger_text += "\n" + path.read_text(encoding="utf-8")
 
     inflight: list[str] = []
-    if (
-        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_COMPLETE).exists()
-    ):
-        inflight.append(
-            "hard-occlusion 0.80 micro identity-anchored OpenVLA adaptation route is queued/running and still missing a complete summary"
+
+    def append_openvla_route(marker: str, complete_path: str, label: str, pending_detail: str) -> None:
+        if marker not in ledger_text or (root / complete_path).exists():
+            return
+        partial_failure = partial_openvla_failure_detail(
+            root,
+            complete_path,
+            label=label,
+            non_identity_perturbations={"occlusion"},
         )
-    if (
-        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_A40_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_A40_COMPLETE).exists()
-    ):
-        inflight.append(
-            "hard-occlusion 0.80 micro identity-anchored A40 OpenVLA adaptation route is queued/running and still missing a complete summary"
-        )
-    if (
-        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_COMPLETE).exists()
-    ):
-        inflight.append(
-            "hard-occlusion 0.80 identity-anchored OpenVLA adaptation route is queued/running and still missing a complete summary"
-        )
-    if (
-        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_COMPLETE).exists()
-    ):
-        inflight.append(
-            "hard-occlusion 0.80 identity-anchored A40 OpenVLA adaptation route is queued/running and still missing a complete summary"
-        )
-    if (
-        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_STRICT_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_STRICT_COMPLETE).exists()
-    ):
-        inflight.append(
-            "hard-occlusion 0.80 strict identity-anchored OpenVLA adaptation route is queued/running and still missing a complete summary"
-        )
-    if (
-        OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_COMPLETE).exists()
-    ):
-        inflight.append(
-            "hard-occlusion 0.90 strict identity-anchored OpenVLA adaptation route is queued/running and still missing a complete summary"
-        )
-    if (
-        OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE).exists()
-    ):
-        inflight.append(
-            "hard-occlusion 0.80 transfer OpenVLA route is queued/running and still missing a complete summary"
-        )
-    if (
-        OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE).exists()
-    ):
-        inflight.append(
-            "hard-occlusion transfer OpenVLA route is queued/running and still missing a complete summary"
-        )
-    if (
-        OPENVLA_HARD_OCCLUSION_ADAPT_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE).exists()
-    ):
-        inflight.append(
-            "hard-occlusion adaptation OpenVLA route is queued and still missing logs/summary"
-        )
-    if (
-        OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE).exists()
-    ):
-        inflight.append(
-            "hard-occlusion A40 fallback OpenVLA adaptation route is queued/running and still missing a complete summary"
-        )
+        inflight.append(partial_failure or pending_detail)
+
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_MARKER,
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_COMPLETE,
+        "hard-occlusion 0.80 micro identity-anchored OpenVLA adaptation",
+        "hard-occlusion 0.80 micro identity-anchored OpenVLA adaptation route is queued/running and still missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_A40_MARKER,
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_A40_COMPLETE,
+        "hard-occlusion 0.80 micro identity-anchored A40 OpenVLA adaptation",
+        "hard-occlusion 0.80 micro identity-anchored A40 OpenVLA adaptation route is queued/running and still missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MARKER,
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_COMPLETE,
+        "hard-occlusion 0.80 identity-anchored OpenVLA adaptation",
+        "hard-occlusion 0.80 identity-anchored OpenVLA adaptation route is queued/running and still missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_MARKER,
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_COMPLETE,
+        "hard-occlusion 0.80 identity-anchored A40 OpenVLA adaptation",
+        "hard-occlusion 0.80 identity-anchored A40 OpenVLA adaptation route is queued/running and still missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_STRICT_MARKER,
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_STRICT_COMPLETE,
+        "hard-occlusion 0.80 strict identity-anchored OpenVLA adaptation",
+        "hard-occlusion 0.80 strict identity-anchored OpenVLA adaptation route is queued/running and still missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_MARKER,
+        OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_COMPLETE,
+        "hard-occlusion 0.90 strict identity-anchored OpenVLA adaptation",
+        "hard-occlusion 0.90 strict identity-anchored OpenVLA adaptation route is queued/running and still missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER,
+        OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE,
+        "hard-occlusion 0.80 transfer OpenVLA route",
+        "hard-occlusion 0.80 transfer OpenVLA route is queued/running and still missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER,
+        OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE,
+        "hard-occlusion transfer OpenVLA route",
+        "hard-occlusion transfer OpenVLA route is queued/running and still missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION_ADAPT_MARKER,
+        OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE,
+        "hard-occlusion adaptation OpenVLA route",
+        "hard-occlusion adaptation OpenVLA route is queued and still missing logs/summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER,
+        OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE,
+        "hard-occlusion A40 fallback OpenVLA adaptation",
+        "hard-occlusion A40 fallback OpenVLA adaptation route is queued/running and still missing a complete summary",
+    )
     if inflight:
         return "; ".join(inflight)
 

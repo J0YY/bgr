@@ -16,6 +16,7 @@ from scripts.check_acceptance_readiness import OPENVLA_PERTURB_ONLY_ANCHOR_COMPL
 from scripts.check_acceptance_readiness import OPENVLA_PERTURB_ONLY_ANCHOR_MARKER
 from scripts.check_acceptance_readiness import OPENVLA_PROXIMAL_ANCHOR_COMPLETE
 from scripts.check_acceptance_readiness import OPENVLA_WEIGHTED_COMPLETE
+from scripts.check_acceptance_readiness import partial_openvla_failure_detail
 
 OPENVLA_OCCLUSION_BOTTLENECK_MARKER = "scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh"
 OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE = (
@@ -990,68 +991,78 @@ def learned_policy_inflight_summary(root: Path) -> str | None:
     ledger_paths = [root / "AGENTS.md", root / "results/README.md", root / "docs/aaai_acceptance_gap.md"]
     ledger_text = "\n".join(path.read_text(encoding="utf-8") for path in ledger_paths if path.exists())
     active: list[str] = []
-    if (
-        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_COMPLETE).exists()
-    ):
-        active.append(
-            "hard-occlusion 0.80 micro identity-anchored adaptation is queued/running and missing a complete summary"
+
+    def append_openvla_route(marker: str, complete_path: str, label: str, pending_detail: str) -> None:
+        if marker not in ledger_text or (root / complete_path).exists():
+            return
+        partial_failure = partial_openvla_failure_detail(
+            root,
+            complete_path,
+            label=label,
+            non_identity_perturbations={"occlusion"},
         )
-    if (
-        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_A40_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_A40_COMPLETE).exists()
-    ):
-        active.append(
-            "hard-occlusion 0.80 micro identity-anchored A40 adaptation is queued/running and missing a complete summary"
-        )
-    if (
-        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_COMPLETE).exists()
-    ):
-        active.append(
-            "hard-occlusion 0.80 identity-anchored adaptation is queued/running and missing a complete summary"
-        )
-    if (
-        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_COMPLETE).exists()
-    ):
-        active.append(
-            "hard-occlusion 0.80 identity-anchored A40 adaptation is queued/running and missing a complete summary"
-        )
-    if (
-        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_STRICT_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_STRICT_COMPLETE).exists()
-    ):
-        active.append(
-            "hard-occlusion 0.80 strict identity-anchored adaptation is queued/running and missing a complete summary"
-        )
-    if (
-        OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_COMPLETE).exists()
-    ):
-        active.append(
-            "hard-occlusion 0.90 strict identity-anchored adaptation is queued/running and missing a complete summary"
-        )
-    if (
-        OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE).exists()
-    ):
-        active.append("hard-occlusion 0.80 transfer eval is queued/running and missing a complete summary")
-    if (
-        OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE).exists()
-    ):
-        active.append("hard-occlusion transfer eval is queued/running and missing a complete summary")
-    if (
-        OPENVLA_HARD_OCCLUSION_ADAPT_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE).exists()
-    ):
-        active.append("hard-occlusion adaptation is queued and missing logs/summary")
-    if (
-        OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER in ledger_text
-        and not (root / OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE).exists()
-    ):
-        active.append("hard-occlusion A40 fallback adaptation is queued/running and missing a complete summary")
+        active.append(partial_failure or pending_detail)
+
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_MARKER,
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_COMPLETE,
+        "hard-occlusion 0.80 micro identity-anchored OpenVLA adaptation",
+        "hard-occlusion 0.80 micro identity-anchored adaptation is queued/running and missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_A40_MARKER,
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_A40_COMPLETE,
+        "hard-occlusion 0.80 micro identity-anchored A40 OpenVLA adaptation",
+        "hard-occlusion 0.80 micro identity-anchored A40 adaptation is queued/running and missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MARKER,
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_COMPLETE,
+        "hard-occlusion 0.80 identity-anchored OpenVLA adaptation",
+        "hard-occlusion 0.80 identity-anchored adaptation is queued/running and missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_MARKER,
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_COMPLETE,
+        "hard-occlusion 0.80 identity-anchored A40 OpenVLA adaptation",
+        "hard-occlusion 0.80 identity-anchored A40 adaptation is queued/running and missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_STRICT_MARKER,
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_STRICT_COMPLETE,
+        "hard-occlusion 0.80 strict identity-anchored OpenVLA adaptation",
+        "hard-occlusion 0.80 strict identity-anchored adaptation is queued/running and missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_MARKER,
+        OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_COMPLETE,
+        "hard-occlusion 0.90 strict identity-anchored OpenVLA adaptation",
+        "hard-occlusion 0.90 strict identity-anchored adaptation is queued/running and missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER,
+        OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE,
+        "hard-occlusion 0.80 transfer OpenVLA route",
+        "hard-occlusion 0.80 transfer eval is queued/running and missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER,
+        OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE,
+        "hard-occlusion transfer OpenVLA route",
+        "hard-occlusion transfer eval is queued/running and missing a complete summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION_ADAPT_MARKER,
+        OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE,
+        "hard-occlusion adaptation OpenVLA route",
+        "hard-occlusion adaptation is queued and missing logs/summary",
+    )
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER,
+        OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE,
+        "hard-occlusion A40 fallback OpenVLA adaptation",
+        "hard-occlusion A40 fallback adaptation is queued/running and missing a complete summary",
+    )
     if active:
         return "; ".join(active)
 
