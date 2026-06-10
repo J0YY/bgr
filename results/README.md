@@ -2745,6 +2745,18 @@ prep `776029` running, official identity `776040` priority-pending, and all
 downstream BGR/random adaptation plus perturb-eval jobs dependency-pending.
 Direct prep-log inspection showed TFDS generation had reached 49 train
 examples. No compact `summary.csv` exists.
+Latest poll/sync at 2026-06-10 12:56:06 BST showed prep `776029` completed
+successfully at 12:54:41, official identity `776040` running since 12:54:52 on
+`c1-g4-02`, and BGR adaptation `776033` priority-pending with estimated start
+2026-06-10 15:15:13 BST. BGR/random merge, clean-eval, identity-eval, and
+occlusion-eval children remained dependency-pending. Direct official identity
+tail was 6/6. No compact `summary.csv` exists.
+Latest poll/sync at 2026-06-10 13:00:40 BST showed BGR adaptation `776033`
+running since 12:59:53 on `c1-g4-03` and official identity `776040` still
+running on `c1-g4-02`. Downstream BGR/random merge, clean-eval, identity-eval,
+and occlusion-eval children remained dependency-pending. Direct official
+identity parsing showed 41/42 successes so far. No compact `summary.csv`
+exists.
 
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
@@ -3464,6 +3476,35 @@ incomplete with random identity `774850` running at direct tail 390/398,
 official occlusion `774847` and replacement BGR identity `775102` pending, and
 occlusion children dependency-pending. Readiness still reports
 `NOT_READY_FOR_90P_AAAI_CLAIM`.
+
+Latest status at 2026-06-10 12:56:06 BST: no active hard-occlusion route is
+gateable. The 0.80 identity-anchored route passed prep and started official
+identity eval, but all BGR/random train/eval work remains pending. The 0.80
+transfer route still lacks matched-random rows; random identity `774922` is
+running with direct tail 355/365, random occlusion `774923` is
+dependency-pending, and the route is already non-promotable by identity
+(BGR 391/400 vs. official 393/400). The A6000 0.65 adaptation route remains
+incomplete and non-promotable by identity; direct occlusion tails are official
+286/387, BGR 83/161, and matched random 88/134. The A40 fallback now has
+official/random identity 393/400 and 392/400, replacement BGR identity
+`775102` running with direct tail 204/211, and all occlusion rows incomplete.
+Readiness remains `NOT_READY_FOR_90P_AAAI_CLAIM`.
+
+Latest status at 2026-06-10 13:00:40 BST: no active hard-occlusion route is
+gateable. The 0.80 identity-anchored route has BGR adaptation `776033` running
+and official identity `776040` running with direct parsed tail 41/42, but
+matched BGR/random summaries are still missing. The 0.80 transfer route still
+lacks matched-random rows; random identity `774922` is running with direct
+tail 388/399 and random occlusion `774923` is dependency-pending, while the
+completed BGR/official identity rows already make the route non-promotable
+(391/400 vs. 393/400). The A6000 0.65 adaptation route has official occlusion
+completed at 297/400, BGR occlusion running at 119/198, and matched random
+occlusion running at 88/147; identity rows already violate the side condition
+(BGR 389/400 vs. official 393/400 and random 390/400). The A40 fallback has
+replacement BGR identity `775102` running with direct parsed tail 34/34,
+official occlusion `774847` pending on resources, random occlusion `774851`
+pending on priority, and replacement BGR occlusion `775103`
+dependency-pending. Readiness still reports `NOT_READY_FOR_90P_AAAI_CLAIM`.
 
 Sync/poll helper:
 

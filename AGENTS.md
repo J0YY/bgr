@@ -646,6 +646,21 @@ for the identity-anchored route: prep `776029` running, official identity
 dependency-pending. Direct prep-log tail showed TFDS generation progressing to
 49 train examples. There is still no compact `summary.csv`; no paper claim can
 change.
+Latest poll/sync at 2026-06-10 12:56:06 BST showed concrete progress on the
+identity-anchored route: prep `776029` completed successfully at 12:54:41, and
+official identity eval `776040` started at 12:54:52 on `c1-g4-02`. BGR
+adaptation `776033` became priority-pending with estimated start
+2026-06-10 15:15:13 BST; BGR/random merge, clean-eval, identity-eval, and
+occlusion-eval children remained dependency-pending. Direct official identity
+tail showed 6/6 successes. No compact `summary.csv` exists, so this route is
+still incomplete and not paper evidence.
+Latest poll/sync at 2026-06-10 13:00:40 BST showed the identity-anchored route
+now actively training/evaluating: BGR adaptation `776033` started at 12:59:53
+on `c1-g4-03`, and official identity `776040` was still running on `c1-g4-02`
+after 5:48 elapsed. BGR/random merge, clean-eval, identity-eval, and
+occlusion-eval children remained dependency-pending. Direct official identity
+log parsing showed 41/42 successes so far. No compact `summary.csv` exists, so
+the route is still incomplete and cannot support a paper claim.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -907,6 +922,17 @@ Latest poll/sync at 2026-06-10 12:53:42 BST still left the A6000 0.65
 adaptation route incomplete. Direct occlusion tails were official 275/375,
 BGR 82/154, and matched random 86/126. This route remains non-promotable by
 identity and the partial occlusion trajectory is also unfavorable to BGR.
+Latest poll/sync at 2026-06-10 12:56:06 BST still left the A6000 0.65
+adaptation route incomplete and non-promotable. Official/BGR/random occlusion
+jobs `774725`/`774727`/`774729` were still running; direct tails were official
+286/387, BGR 83/161, and matched random 88/134.
+Latest poll/sync at 2026-06-10 13:00:40 BST kept the A6000 0.65 adaptation
+route incomplete and non-promotable. Official occlusion `774725` completed
+successfully at 297/400, while BGR occlusion `774727` and matched-random
+occlusion `774729` were still running with direct parsed tails of 119/198 and
+88/147. The completed identity rows remain BGR 389/400, official 393/400, and
+matched random 390/400, so the route already violates the identity side
+condition.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000
