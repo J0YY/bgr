@@ -999,6 +999,13 @@ synced incomplete local summary still has only BGR/official/random identity
 rows plus official occlusion; the BGR identity row is 389/400 vs. official
 393/400 and random 390/400, so the fixed identity side condition is already
 violated.
+Latest poll/sync at 2026-06-10 13:35:04 BST showed BGR occlusion `774727`
+completed successfully at 301/400. The A6000 0.65 adaptation route remains
+incomplete because matched-random occlusion `774729` is still priority-pending,
+and it remains non-promotable regardless: identity is BGR 389/400, official
+393/400, and matched random 390/400, while BGR's completed occlusion row is
+only +4/400 over official and below the fixed +10/400 and +0.02 promotion
+threshold.
 
 Operational sync update: `scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh`
 now summarizes complete remote text logs in place over SSH and streams only the

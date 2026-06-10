@@ -3587,6 +3587,17 @@ is not paper evidence unless `summary.csv` exists and the gate passes. Sync it
 with
 `scripts/sync_openvla_oft_hard_occlusion080_identityanchor_a40_results.sh --poll --sync --no-check`.
 
+Latest status at 2026-06-10 13:35:04 BST: the A6000 0.65 adaptation route
+gained one completed row but still does not solve the learned-policy gate. BGR
+occlusion `774727` completed at 301/400, compared with official occlusion
+297/400. Matched-random occlusion `774729` remains priority-pending, so the
+route has no complete `summary.csv`; more importantly, the completed identity
+rows already violate the fixed side condition with BGR 389/400 vs. official
+393/400 and matched random 390/400, and the BGR-over-official occlusion margin
+is only +4/400. Treat this as negative/incomplete scope information, not paper
+evidence. The 0.80 transfer and both 0.80 identity-anchored routes remain the
+live learned-policy paths, but they are still missing complete summaries.
+
 Sync/poll helper:
 
 ```bash
