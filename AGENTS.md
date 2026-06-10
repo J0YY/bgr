@@ -195,6 +195,32 @@ lack of new independent positive evidence, the negative standard-environment
 record, incremental novelty, author-defined metric dependence, and robustness
 fragility. Do not just soften language around unchanged results.
 
+Newest active learned-policy route: hard-occlusion 0.80 micro
+identity-anchored OpenVLA-OFT adaptation. This was queued after the 0.80
+transfer route became a near miss on occlusion (+9/400 over official) but
+failed the fixed identity side condition by trailing official 391/400 vs.
+393/400. The route reuses the completed hard-occlusion 0.80 identity-anchor
+TFDS roots and tests a smaller, more strongly anchored update:
+`ADAPT_STEPS=50`, `LR=5e-8`, and `PROXIMAL_ANCHOR_L2=100.0`, with
+identity-LoRA, image augmentation, official stats, and fixed identity plus
+occlusion fraction 0.80 evaluation over 10 LIBERO-Goal tasks with 40 trials per
+task. It is not a relaxed protocol: BGR must beat both official and matched
+random by at least 10/400 occlusion episodes and at least 0.02 absolute success
+rate while not trailing the best identity comparator by more than one episode.
+Submitted on `athena` at 2026-06-10 15:14 BST after canceling an accidental
+default blur/brightness/shift perturb submission and replacing it with
+identity+occlusion-only evals. BGR train/merge/clean-eval jobs are
+`776998`/`777000`/`777001`; matched-random train/merge/clean-eval jobs are
+`777003`/`777004`/`777006`; official identity/occlusion eval jobs are
+`777037`/`777039`; BGR identity/occlusion eval jobs are `777040`/`777041`;
+matched-random identity/occlusion eval jobs are `777042`/`777043`.
+Initial `squeue` showed BGR train `776998` and official identity `777037`
+priority-pending, with BGR/random merges, clean evals, and dependent perturb
+jobs pending. Poll/sync with
+`scripts/sync_openvla_oft_hard_occlusion080_identityanchor_micro_results.sh --poll --sync --no-check`.
+Do not incorporate this route into `paper/main.tex` unless a complete
+`summary.csv` exists and the fixed gate passes.
+
 Newest active learned-policy route: hard-occlusion 0.90 strict
 identity-anchored OpenVLA-OFT adaptation. This was queued after the 0.65
 transfer gate completed negative and the 0.80 transfer route showed a near-miss
