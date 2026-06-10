@@ -2793,6 +2793,8 @@ Slurm chain:
 774849  BGR hard-occlusion eval, afterok:774848
 774850  matched-random identity eval, afterok:774821
 774851  matched-random hard-occlusion eval, afterok:774850
+775102  replacement BGR identity eval, afterok:774819
+775103  replacement BGR hard-occlusion eval, afterok:774819 and afterok:775102
 ```
 
 The initial wrapper perturb submission accidentally used the default
@@ -2883,6 +2885,27 @@ adaptation `774820`, and BGR identity eval `774848` were pending on
 `BeginTime`; random merge/clean, official hard occlusion, and BGR/random
 occlusion evals were dependency-pending. No compact summary exists yet, so no
 fixed promotion gate can be run and no paper claim changes.
+
+Latest status at 2026-06-10 10:43:45 BST: the 0.65 transfer route had all
+identity rows completed and all three hard-occlusion rows running, but remained
+ungateable. The local incomplete transfer summary contains only identity rows:
+official 393/400, BGR 391/400, and matched random 389/400. Direct early
+hard-occlusion tails were official 48/56, BGR 47/59, and matched random 49/59.
+The A6000 adaptation route remained in prep/official-identity progress: prep
+`774717` was running at 15:52 and official identity `774724` at 15:28, with
+all BGR/random children dependency-pending. The A40 fallback diagnosed one
+infrastructure failure: BGR identity eval `774848` failed after 25 seconds
+while OpenVLA was reading a transiently invalid merged-checkpoint `config.json`;
+the same file validated as JSON immediately afterward, consistent with a
+checkpoint-config mutation race against BGR clean eval `774819`. Replacement
+BGR identity/occlusion jobs `775102`/`775103` were submitted with the same
+fixed identity plus occlusion-fraction-0.65 protocol, with `775102` waiting on
+`afterok:774819` and `775103` waiting on `afterok:774819,afterok:775102`.
+At the same poll, BGR clean `774819`, random clean `774822`, official identity
+`774846`, and random identity `774850` were running; official occlusion
+`774847` and random occlusion `774851` were dependency-pending. No compact
+summary exists yet, so no fixed promotion gate can be run and no paper claim
+changes.
 
 Sync/poll helper:
 

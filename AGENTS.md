@@ -231,6 +231,14 @@ BGR identity `774713` with 391/400, and matched-random identity `774715` with
 had early occlusion partials only: official 9/11, BGR 16/18, and matched
 random 16/18. The remote compact `summary.csv` is still missing, the fixed
 gate remains incomplete, and the route is not paper evidence.
+Latest poll/sync at 2026-06-10 10:43:45 BST showed the 0.65 transfer route
+still in hard-occlusion progress: official `774712` was running at 11:31,
+BGR `774714` at 13:26, and matched random `774716` at 13:26. The local
+`summary_available.csv` has only completed identity rows so far: official
+393/400, BGR 391/400, and matched random 389/400. Direct hard-occlusion tails
+were early and not gateable: official 48/56, BGR 47/59, and matched random
+49/59. The remote compact `summary.csv` is still missing, so no fixed gate can
+be run and no paper claim changes.
 
 Active learned-policy diagnostic route: fixed hard-occlusion 0.80 transfer
 eval of the completed OpenVLA-OFT occlusion-bottleneck checkpoints. This was
@@ -286,6 +294,11 @@ still identity-only and incomplete: official identity `774917` was running at
 pending on `BeginTime`, and all occlusion jobs remained dependency-pending.
 Direct tails showed official identity 180/187, BGR identity 124/129, and
 matched-random identity 9/9. No compact summary exists and no gate can be run.
+Latest poll/sync at 2026-06-10 10:41:25 BST showed the 0.80 transfer route
+still identity-only: official identity `774917` was running at 31:09, BGR
+identity `774920` at 22:38, and matched-random identity `774922` at 5:36.
+Occlusion jobs `774919`, `774921`, and `774923` remained dependency-pending.
+No compact summary exists and no gate can be run.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -354,6 +367,11 @@ official identity `774724` at 9:18, and all BGR/random adaptation, merge,
 clean-eval, identity-eval, and occlusion-eval child jobs were still
 dependency-pending. The official identity tail reached 49/51 successes. No
 compact summary exists.
+Latest poll/sync at 2026-06-10 10:41:25 BST showed the A6000 adaptation route
+still in prep/official-identity progress: prep `774717` was running at 15:52
+on `c2-g4-20`, official identity `774724` was running at 15:28, and every
+BGR/random adaptation, merge, clean-eval, identity-eval, and hard-occlusion
+child remained dependency-pending. The route still has no compact summary.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000
@@ -431,6 +449,19 @@ matched-random adaptation `774820`, and BGR identity eval `774848` were pending
 on `BeginTime`; random merge/clean, BGR/random occlusion evals, and official
 occlusion remained dependency-pending. No compact summary exists, so the fixed
 gate remains incomplete.
+Latest A40 poll/sync at 2026-06-10 10:43:45 BST showed the original BGR
+identity eval `774848` failed after 25 seconds with exit `1:0`, leaving the
+original BGR occlusion job `774849` in `DependencyNeverSatisfied`. The Slurm
+stdout shows an OpenVLA startup race while reading the merged checkpoint
+`config.json`; the file was valid JSON immediately after the failure, so this
+is infrastructure, not a scientific result. Replacement BGR identity/occlusion
+jobs `775102`/`775103` were submitted with the same fixed perturbation protocol,
+with `775102` depending on BGR clean eval `774819` and `775103` depending on
+both `774819` and `775102`, to avoid concurrent checkpoint config mutation.
+At the same poll, BGR clean `774819`, random clean `774822`, official identity
+`774846`, and random identity `774850` were running; official occlusion
+`774847` and random occlusion `774851` were dependency-pending. The compact
+summary is still missing and the fixed gate remains incomplete.
 
 Completed learned-policy route (negative, not active): preregistered OpenVLA-OFT occlusion-bottleneck
 adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.
