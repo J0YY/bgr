@@ -74,16 +74,16 @@ evaluates official, interpolated BGR, and interpolated matched random on
 identity plus occlusion fraction 0.80 over 10 LIBERO-Goal tasks x 40 trials.
 Jobs are prep `779973`, official identity/occlusion `779974`/`779975`, BGR
 identity/occlusion `779976`/`779977`, and matched-random identity/occlusion
-`779978`/`779979`. Latest poll/sync at 2026-06-10 21:56 BST showed prep
-`779973` completed successfully at 21:16:12; official identity `779974` was
-still running on `c1-g4-02` after 40:29, and BGR identity `779976` was running
-on `c1-g4-03` after 12:15. Official/BGR occlusion evals `779975`/`779977`
-were dependency-pending behind their identity evals, matched-random identity
-`779978` was priority-pending with estimated start 2026-06-11 07:15:44 BST,
-and matched-random occlusion `779979` was dependency-pending. The remote log
-directory exists with official/BGR identity logs, but no compact summary or
-summarizable completed eval row exists yet. This route is not paper
-evidence unless the full `summary.csv` passes the unchanged fixed gate:
+`779978`/`779979`. Latest poll/sync at 2026-06-10 22:03 BST showed prep
+`779973` completed successfully at 21:16:12 and official identity `779974`
+completed successfully at 393/400. BGR identity `779976` was still running on
+`c1-g4-03` after 18:28, matched-random identity `779978` was running on
+`c1-g4-05` after 2:53, official occlusion `779975` was priority-pending, and
+BGR/random occlusion `779977`/`779979` remained dependency-pending behind their
+identity evals. The synced incomplete summary has only the official identity
+row; live log tails showed BGR identity around 89/94 and matched random around
+20/20, which is not gateable evidence. This route is not paper evidence unless
+the full `summary.csv` passes the unchanged fixed gate:
 BGR must beat both official and matched random by at least 10/400 occlusion
 episodes and at least 0.02 absolute success rate while not trailing the best
 identity comparator by more than one episode. A stronger head-only repair
@@ -94,11 +94,11 @@ whether identity can be repaired without shrinking the occlusion adaptation
 signal. Jobs are prep `780059`, official identity/occlusion `780060`/`780061`,
 BGR identity/occlusion `780062`/`780063`, and matched-random
 identity/occlusion `780064`/`780065`. Latest poll/sync at 2026-06-10
-21:56 BST showed prep `780059` pending on resources with estimated start
-2026-06-11 05:11:21 BST and official identity `780060` priority-pending with
-estimated start 2026-06-11 06:21:43 BST; downstream official occlusion and
-BGR/random evals were dependency-pending, with still no logs or summary. This
-is also not evidence unless
+22:03 BST showed prep `780059` running after starting at 22:03:06, official
+identity `780060` pending on resources with estimated start
+2026-06-11 06:21:43 BST, and all downstream official occlusion and BGR/random
+evals dependency-pending. No logs or summary were available yet. This is also
+not evidence unless
 the same fixed +10/400, +0.02, and identity-preservation gate passes. The
 latest partial identity-anchored 0.80 variants are already non-promotable on
 identity: BGR identity is 389/400 for the base identity-anchored route,
