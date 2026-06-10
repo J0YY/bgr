@@ -502,6 +502,20 @@ improves clean success to 0.8750, but both compact and wide radius grids are
 still rejected with `decision=reject-calibration-radius-saturated`: recovery
 only ranges from 0.7500 to 0.8750 and r80 remains at the tested maximum.
 
+FetchPush-v4 object-state perturbation calibration:
+
+```bash
+PYTHONPATH=src:. /tmp/bgr_fetch_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --env-id FetchPush-v4 --seeds 2 --replay-states 4 --trials 2 --radii 0.00,0.02,0.04,0.06,0.08,0.12,0.16,0.20 --horizon 250 --controller scripted_push_sweep --controller-gain 8.0 --perturbation-target object --out results/fetchpush_object_state_calibration_sweep_g8_h250_2seed_v1
+```
+
+This materially different reset interface moves the seeded `object0:joint`
+state while keeping the original goal fixed. It is a usable calibration, not a
+BGR method result: clean success is 0.8750, recovery ranges from 0.2500 to
+0.8750, RAUC is 0.4125, r80 is 0.0140, and the summary decision is
+`usable-calibration`. A first linear-imitator method-probe scaffold failed
+basic viability checks with zero clean success and zero RAUC, so do not scale
+that learner without a better preregistered controller.
+
 FetchSlide-v4 command:
 
 ```bash

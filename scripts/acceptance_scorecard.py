@@ -514,6 +514,10 @@ CALIBRATION_SCREENS = [
         "results/fetchpush_object_goal_calibration_far_push_2seed_v1/summary.json",
     ),
     (
+        "FetchPush-v4 object-state calibration",
+        "results/fetchpush_object_state_calibration_sweep_g8_h250_2seed_v1/summary.json",
+    ),
+    (
         "FetchSlide-v4 object-goal calibration",
         "results/fetchslide_object_goal_calibration_2seed_v1/summary.json",
     ),

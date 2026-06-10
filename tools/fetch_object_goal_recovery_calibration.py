@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Calibrate package-backed Fetch object-goal recovery curves.
+"""Calibrate package-backed Fetch recovery curves.
 
 This is a pre-comparison diagnostic for harder Gymnasium-Robotics Fetch tasks.
-It uses exact reset seeds, perturbs the object goal, and evaluates a fixed
-scripted controller. It does not compare BGR methods.
+It uses exact reset seeds, perturbs either the object goal or initial object
+state, and evaluates a fixed scripted controller. It does not compare BGR
+methods.
 """
 
 from __future__ import annotations
@@ -24,7 +25,9 @@ class FetchObjectReplayState:
     seed: int
     replay_index: int
     base_goal: list[float]
+    base_object: list[float]
     center: list[float]
+    obj_range: float
     target_range: float
     direction: list[float]
 
@@ -85,6 +88,25 @@ def clipped_goal(base_goal: np.ndarray, direction: np.ndarray, sigma: float, cen
     goal = np.clip(base_goal + float(sigma) * direction, low, high)
     goal[2] = base_goal[2]
     return goal
+
+
+def clipped_object(base_object: np.ndarray, direction: np.ndarray, sigma: float, center: np.ndarray, obj_range: float) -> np.ndarray:
+    low = center[:2] - float(obj_range)
+    high = center[:2] + float(obj_range)
+    obj = np.array(base_object, dtype=float)
+    obj[:2] = np.clip(base_object[:2] + float(sigma) * direction[:2], low, high)
+    return obj
+
+
+def set_object_position(unwrapped, object_position: np.ndarray) -> None:
+    object_qpos = unwrapped._utils.get_joint_qpos(unwrapped.model, unwrapped.data, "object0:joint")
+    if object_qpos.shape != (7,):
+        raise RuntimeError(f"unexpected object0:joint qpos shape: {object_qpos.shape}")
+    object_qpos[:3] = np.array(object_position, dtype=float)[:3]
+    unwrapped._utils.set_joint_qpos(unwrapped.model, unwrapped.data, "object0:joint", object_qpos)
+    object_qvel = unwrapped._utils.get_joint_qvel(unwrapped.model, unwrapped.data, "object0:joint")
+    unwrapped._utils.set_joint_qvel(unwrapped.model, unwrapped.data, "object0:joint", np.zeros_like(object_qvel))
+    unwrapped._mujoco.mj_forward(unwrapped.model, unwrapped.data)
 
 
 def push_action(
@@ -226,6 +248,7 @@ def rollout_success(
     *,
     base_seed: int,
     goal: np.ndarray,
+    object_position: np.ndarray | None,
     horizon: int,
     gain: float,
     controller: str,
@@ -233,6 +256,8 @@ def rollout_success(
     obs, _info = env.reset(seed=base_seed)
     unwrapped = env.unwrapped
     unwrapped.goal = np.array(goal, dtype=float)
+    if object_position is not None:
+        set_object_position(unwrapped, object_position)
     obs = unwrapped._get_obs()
     threshold = float(unwrapped.distance_threshold)
     for step in range(horizon + 1):
@@ -262,13 +287,25 @@ def make_replay_states(env, args: argparse.Namespace) -> list[FetchObjectReplayS
             unwrapped = env.unwrapped
             center = np.array(unwrapped.initial_gripper_xpos, dtype=float)
             base_goal = np.array(obs["desired_goal"], dtype=float)
-            direction = adverse_direction(base_goal, center, rng, args.direction_jitter)
+            base_object = np.array(obs["achieved_goal"], dtype=float)
+            if args.perturbation_target == "object":
+                direction = adverse_direction(base_object, base_goal, rng, args.direction_jitter)
+                direction[2] = 0.0
+                norm = float(np.linalg.norm(direction))
+                if norm < 1e-12:
+                    direction = np.array([1.0, 0.0, 0.0], dtype=float)
+                else:
+                    direction = direction / norm
+            else:
+                direction = adverse_direction(base_goal, center, rng, args.direction_jitter)
             states.append(
                 FetchObjectReplayState(
                     seed=seed,
                     replay_index=replay_index,
                     base_goal=base_goal.tolist(),
+                    base_object=base_object.tolist(),
                     center=center.tolist(),
+                    obj_range=float(unwrapped.obj_range),
                     target_range=float(unwrapped.target_range),
                     direction=direction.tolist(),
                 )
@@ -288,15 +325,22 @@ def calibrate(args: argparse.Namespace) -> tuple[list[CalibrationRow], dict[str,
         states = make_replay_states(env, args)
         for state in states:
             base_goal = np.array(state.base_goal, dtype=float)
+            base_object = np.array(state.base_object, dtype=float)
             center = np.array(state.center, dtype=float)
             direction = np.array(state.direction, dtype=float)
             for sigma in radii:
-                goal = clipped_goal(base_goal, direction, float(sigma), center, float(state.target_range))
+                if args.perturbation_target == "object":
+                    goal = base_goal
+                    object_position = clipped_object(base_object, direction, float(sigma), center, float(state.obj_range))
+                else:
+                    goal = clipped_goal(base_goal, direction, float(sigma), center, float(state.target_range))
+                    object_position = None
                 for trial in range(args.trials):
                     success, distance, steps = rollout_success(
                         env,
                         base_seed=state.seed * 1000 + args.seed_offset + state.replay_index,
                         goal=goal,
+                        object_position=object_position,
                         horizon=args.horizon,
                         gain=args.controller_gain,
                         controller=args.controller,
@@ -338,6 +382,7 @@ def calibrate(args: argparse.Namespace) -> tuple[list[CalibrationRow], dict[str,
         "horizon": args.horizon,
         "controller": args.controller,
         "controller_gain": args.controller_gain,
+        "perturbation_target": args.perturbation_target,
         "direction_jitter": args.direction_jitter,
         "clean_success": float(curve[0]),
         "rauc": float(recovery_auc(radii, curve, sigma_max=float(radii[-1]))),
@@ -379,6 +424,7 @@ def main() -> int:
         default="scripted_push",
     )
     parser.add_argument("--controller-gain", type=float, default=6.0)
+    parser.add_argument("--perturbation-target", choices=["goal", "object"], default="goal")
     parser.add_argument("--direction-jitter", type=float, default=0.10)
     parser.add_argument("--alpha", type=float, default=0.80)
     parser.add_argument("--seed-offset", type=int, default=121_000)

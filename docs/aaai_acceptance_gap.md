@@ -1380,6 +1380,18 @@ risk.
   r80 at 0.6000 and the same rejection decision. This route should not proceed
   to replay-method comparison without a new perturbation premise that produces
   a non-saturated success-failure boundary.
+  A materially different 2026-06-10 object-state perturbation calibration does
+  produce a non-saturated boundary by moving `object0:joint` after reset while
+  keeping the seeded FetchPush goal fixed:
+  `PYTHONPATH=src:. /tmp/bgr_fetch_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --env-id FetchPush-v4 --seeds 2 --replay-states 4 --trials 2 --radii 0.00,0.02,0.04,0.06,0.08,0.12,0.16,0.20 --horizon 250 --controller scripted_push_sweep --controller-gain 8.0 --perturbation-target object --out results/fetchpush_object_state_calibration_sweep_g8_h250_2seed_v1`.
+  It is a usable calibration only: clean success is 0.8750, recovery is
+  0.2500--0.8750, RAUC is 0.4125, r80 is 0.0140, and the summary decision is
+  `usable-calibration`. A first local method-probe scaffold,
+  `tools/fetchpush_object_state_recovery_probe.py`, uses a linear
+  teacher-forced imitator of the sweep controller, but viability checks stayed
+  at zero clean success and zero RAUC. Do not scale or promote that learner
+  without a better preregistered controller; the object-state calibration is
+  only an active reset-interface candidate.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
   same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:

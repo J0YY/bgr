@@ -104,6 +104,7 @@ OPENVLA_PROXIMAL_ANCHOR_JOB_IDS = {
 CALIBRATION_SUMMARIES = [
     ("FetchPush calibration", "results/fetchpush_object_goal_calibration_2seed_v1/summary.json"),
     ("FetchPush far-push calibration", "results/fetchpush_object_goal_calibration_far_push_2seed_v1/summary.json"),
+    ("FetchPush object-state calibration", "results/fetchpush_object_state_calibration_sweep_g8_h250_2seed_v1/summary.json"),
     ("FetchSlide calibration", "results/fetchslide_object_goal_calibration_2seed_v1/summary.json"),
     ("FetchPickAndPlace calibration", "results/fetchpickplace_object_goal_calibration_2seed_v1/summary.json"),
     ("HandReach-v3 calibration", "results/handreach_recovery_calibration_8seed_v1/summary.json"),

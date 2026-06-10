@@ -68,6 +68,18 @@ saturated at the tested maximum (`decision:
 reject-calibration-radius-saturated`). Do not build a FetchPush method
 comparison from this interface without a new perturbation premise that first
 creates a non-saturated boundary.
+A materially different 2026-06-10 FetchPush object-state perturbation
+calibration now gives one usable reset-interface route, but not paper evidence
+yet. The fixed command
+`PYTHONPATH=src:. /tmp/bgr_fetch_venv/bin/python tools/fetch_object_goal_recovery_calibration.py --env-id FetchPush-v4 --seeds 2 --replay-states 4 --trials 2 --radii 0.00,0.02,0.04,0.06,0.08,0.12,0.16,0.20 --horizon 250 --controller scripted_push_sweep --controller-gain 8.0 --perturbation-target object --out results/fetchpush_object_state_calibration_sweep_g8_h250_2seed_v1`
+reports clean success 0.8750, recovery 0.2500--0.8750, RAUC 0.4125, r80
+0.0140, and `decision: usable-calibration`. This is only a pre-method
+calibration. A first local linear-imitator method-probe scaffold was added in
+`tools/fetchpush_object_state_recovery_probe.py`, but its viability checks are
+rejected before promotion: uniform training stayed at zero clean success and
+zero RAUC even with teacher-forced behavior cloning. Do not scale that learner;
+the active route requires a better preregistered learned controller or a
+separate fixed method comparison that first proves nonzero clean recovery.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,

@@ -1,0 +1,18 @@
+{
+  "clean_success": 0.875,
+  "controller": "scripted_push_sweep",
+  "controller_gain": 8.0,
+  "decision": "usable-calibration",
+  "direction_jitter": 0.1,
+  "env_id": "FetchPush-v4",
+  "horizon": 250,
+  "max_recovery": 0.875,
+  "min_recovery": 0.25,
+  "perturbation_target": "object",
+  "r80": 0.013999999999999995,
+  "radii": "0.0000,0.0200,0.0400,0.0600,0.0800,0.1200,0.1600,0.2000",
+  "rauc": 0.4124999999999999,
+  "replay_states": 4,
+  "seeds": 2,
+  "trials": 2
+}
