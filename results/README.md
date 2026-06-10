@@ -3566,11 +3566,33 @@ classic-control, PointMaze, or FetchReach screen while this learned-policy
 route is pending, because those screens already fail through saturation,
 stronger-baseline losses, or state-priority ablation failures.
 
+Latest status at 2026-06-10 13:25:30 BST: no active hard-occlusion route is
+gateable. The 0.80 transfer route is still missing matched-random occlusion
+`774923`, now priority-pending with estimated start 2026-06-12 06:40:53 BST;
+its partial summary has BGR identity/occlusion 391/400 and 305/400, official
+identity/occlusion 393/400 and 296/400, and random identity 389/400. The A6000
+0.80 identity-anchored route has BGR clean eval `776035`, matched-random
+adaptation `776036`, official identity `776040`, and BGR identity `776042`
+priority-pending, with only incomplete official-identity logs available. The
+A6000 0.65 adaptation has BGR occlusion `774727` running and random occlusion
+`774729` priority-pending. The A40 0.65 fallback has replacement BGR identity
+`775102` and official occlusion `774847` running, random occlusion `774851`
+pending on resources, and replacement BGR occlusion `775103`
+dependency-pending. A same-protocol 0.80 identity-anchored A40 fallback was
+submitted as a separate artifact using the completed 0.80 identity-anchor TFDS
+roots: BGR train/merge/clean-eval `776291`/`776292`/`776294`, matched-random
+train/merge/clean-eval `776295`/`776296`/`776297`, and perturb eval jobs
+`776300`--`776305`. It uses the same fixed identity/occlusion-0.80 gate and
+is not paper evidence unless `summary.csv` exists and the gate passes. Sync it
+with
+`scripts/sync_openvla_oft_hard_occlusion080_identityanchor_a40_results.sh --poll --sync --no-check`.
+
 Sync/poll helper:
 
 ```bash
 scripts/sync_openvla_oft_hard_occlusion_adapt_a40_results.sh --poll --no-check
 scripts/sync_openvla_oft_hard_occlusion_adapt_a40_results.sh --sync
+scripts/sync_openvla_oft_hard_occlusion080_identityanchor_a40_results.sh --poll --sync --no-check
 ```
 
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up

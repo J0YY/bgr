@@ -105,6 +105,52 @@ class AcceptanceScorecardTest(unittest.TestCase):
         self.assertIn("Perturb-only anchored OpenVLA route is preregistered, not yet evidence", text)
         self.assertIn("Active route: Perturb-only anchored OpenVLA route is preregistered", text)
 
+    def test_render_markdown_reports_identity_anchor_a40_inflight_marker(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write(
+                root / "results/grid_margin_full_30seed_v1/summary.csv",
+                "method,seed,final_rauc\nbgr,0,0.44\nuniform,0,0.40\n",
+            )
+            _write(
+                root / "results/grid_margin_full_replication_30seed_v1/summary.csv",
+                "method,seed,final_rauc\nbgr,30,0.43\nuniform,30,0.39\n",
+            )
+            _write(
+                root / OPENVLA_PROXIMAL_ANCHOR_COMPLETE,
+                "\n".join(
+                    [
+                        "method,perturbation,episodes,successes,success_rate",
+                        "bgr,identity,100,98,0.98",
+                        "bgr,blur,100,98,0.98",
+                        "bgr,brightness,100,99,0.99",
+                        "bgr,occlusion,100,73,0.73",
+                        "bgr,shift,100,98,0.98",
+                        "official,identity,100,99,0.99",
+                        "official,blur,100,97,0.97",
+                        "official,brightness,100,98,0.98",
+                        "official,occlusion,100,74,0.74",
+                        "official,shift,100,98,0.98",
+                        "random,identity,100,98,0.98",
+                        "random,blur,100,99,0.99",
+                        "random,brightness,100,98,0.98",
+                        "random,occlusion,100,73,0.73",
+                        "random,shift,100,98,0.98",
+                        "",
+                    ]
+                ),
+            )
+            _write(
+                root / "AGENTS.md",
+                "scripts/sync_openvla_oft_hard_occlusion080_identityanchor_a40_results.sh is queued.\n",
+            )
+
+            text = render_markdown(root)
+
+        self.assertIn("hard-occlusion 0.80 identity-anchored A40 adaptation", text)
+        self.assertIn("missing a complete summary", text)
+        self.assertIn("Active route: hard-occlusion 0.80 identity-anchored A40", text)
+
     def test_render_markdown_prefers_completed_perturb_only_anchor_summary(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

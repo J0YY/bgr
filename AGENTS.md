@@ -684,6 +684,35 @@ were all priority-pending with zero current elapsed time; official occlusion
 2026-06-11 00:14--14:21 BST for the runnable jobs. The remote perturb-log
 directory exists but contains no complete perturb-eval logs, so no
 `summary_available.csv` or `summary.csv` exists locally for this route.
+Latest poll/sync at 2026-06-10 13:25:30 BST showed the same non-gateable
+state for the A6000 identity-anchored route: BGR clean eval `776035`,
+matched-random adaptation `776036`, official identity `776040`, and BGR
+identity `776042` were priority-pending, while official/BGR/random occlusion
+and matched-random identity jobs were dependency-pending. Estimated starts
+remained 2026-06-11 00:14--14:21 BST for the runnable jobs. The remote perturb
+log directory exists with only incomplete official-identity output, no compact
+summary is available, and no paper claim should change.
+
+Companion learned-policy route: fixed hard-occlusion 0.80 identity-anchored
+OpenVLA-OFT A40 fallback. This reuses the completed
+`p2048unique_hardocc080_identityanchor_prereg` TFDS roots and keeps the same
+fixed identity/occlusion-0.80 gate, but requests A40 GPUs and writes separate
+checkpoint and perturb artifacts:
+`ADAPT_TAG=cleanmix_p2048unique_hardocc080_identityanchor_a40_prereg_proxanchor_l2_2em1_step50200_lr1em7_identitylora_imageaug_officialtrainstats_v1`,
+`PERTURB_TAG=cleanmix_p2048unique_hardocc080_identityanchor_a40_prereg_proxanchor_l2_2em1_step50200_lr1em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1`.
+It is not a new claim or relaxed protocol. Submitted on `athena`: BGR
+train/merge/clean-eval `776291`/`776292`/`776294`;
+matched-random train/merge/clean-eval `776295`/`776296`/`776297`; official
+identity/occlusion `776300`/`776301`; BGR identity/occlusion
+`776302`/`776303`; matched-random identity/occlusion `776304`/`776305`.
+Initial poll at 2026-06-10 13:25:17 BST showed BGR training `776291` and
+official identity `776300` priority-pending, with all dependent merge,
+clean-eval, BGR perturb, and matched-random jobs dependency-pending. Poll/sync
+with
+`scripts/sync_openvla_oft_hard_occlusion080_identityanchor_a40_results.sh --poll --sync --no-check`.
+Do not incorporate this route into `paper/main.tex` unless a complete
+`summary.csv` exists and the fixed +10/400, +0.02, and identity side-condition
+gate passes.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer

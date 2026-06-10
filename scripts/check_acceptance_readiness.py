@@ -40,6 +40,10 @@ OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_COMPLETE = (
     "results/openvla_oft_perturb_eval_cleanmix_p2048unique_hardocc080_identityanchor_prereg_proxanchor_l2_2em1_"
     "step50200_lr1em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary.csv"
 )
+OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_COMPLETE = (
+    "results/openvla_oft_perturb_eval_cleanmix_p2048unique_hardocc080_identityanchor_a40_prereg_proxanchor_l2_2em1_"
+    "step50200_lr1em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary.csv"
+)
 OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE = (
     "results/openvla_oft_perturb_eval_hardocc065_adapt_step50400_lr2em7_v1/summary.csv"
 )
@@ -50,6 +54,9 @@ OPENVLA_PERTURB_ONLY_ANCHOR_MARKER = "queue_openvla_oft_preregistered_perturb_on
 OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion_transfer_results.sh"
 OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion080_transfer_results.sh"
 OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MARKER = "sync_openvla_oft_hard_occlusion080_identityanchor_results.sh"
+OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_MARKER = (
+    "sync_openvla_oft_hard_occlusion080_identityanchor_a40_results.sh"
+)
 OPENVLA_HARD_OCCLUSION_ADAPT_MARKER = "sync_openvla_oft_hard_occlusion_adapt_results.sh"
 OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER = "sync_openvla_oft_hard_occlusion_adapt_a40_results.sh"
 OPENVLA_PROXIMAL_ANCHOR_JOB_IDS = {
@@ -207,6 +214,13 @@ def learned_policy_inflight_detail(root: Path) -> str | None:
     ):
         inflight.append(
             "hard-occlusion 0.80 identity-anchored OpenVLA adaptation route is queued/running and still missing a complete summary"
+        )
+    if (
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_MARKER in ledger_text
+        and not (root / OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_COMPLETE).exists()
+    ):
+        inflight.append(
+            "hard-occlusion 0.80 identity-anchored A40 OpenVLA adaptation route is queued/running and still missing a complete summary"
         )
     if (
         OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER in ledger_text
@@ -1055,6 +1069,10 @@ def learned_policy_gate(root: Path) -> GateResult:
         (
             OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_COMPLETE,
             "hard-occlusion 0.80 identity-anchored adaptation audit",
+        ),
+        (
+            OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_COMPLETE,
+            "hard-occlusion 0.80 identity-anchored A40 adaptation audit",
         ),
         (
             OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE,

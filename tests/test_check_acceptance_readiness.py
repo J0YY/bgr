@@ -141,6 +141,23 @@ class CheckAcceptanceReadinessTest(unittest.TestCase):
         self.assertIn("perturb-only anchored OpenVLA route preregistered", gate.detail)
         self.assertIn("+10/400 and +0.02", gate.detail)
 
+    def test_learned_policy_gate_reports_identity_anchor_a40_inflight(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _write_weighted_summary(root)
+            _write_proximal_summary(root, bgr_shift=98, random_shift=98)
+            (root / "AGENTS.md").write_text(
+                "scripts/sync_openvla_oft_hard_occlusion080_identityanchor_a40_results.sh is queued.\n",
+                encoding="utf-8",
+            )
+
+            gate = learned_policy_gate(root)
+
+        self.assertFalse(gate.passed)
+        self.assertIn("latest proximal-anchor audit", gate.detail)
+        self.assertIn("hard-occlusion 0.80 identity-anchored A40 OpenVLA", gate.detail)
+        self.assertIn("still missing a complete summary", gate.detail)
+
     def test_learned_policy_gate_prefers_completed_perturb_only_anchor_summary(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -33,6 +33,10 @@ OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_COMPLETE = (
     "results/openvla_oft_perturb_eval_cleanmix_p2048unique_hardocc080_identityanchor_prereg_proxanchor_l2_2em1_"
     "step50200_lr1em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary.csv"
 )
+OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_COMPLETE = (
+    "results/openvla_oft_perturb_eval_cleanmix_p2048unique_hardocc080_identityanchor_a40_prereg_proxanchor_l2_2em1_"
+    "step50200_lr1em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary.csv"
+)
 OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE = (
     "results/openvla_oft_perturb_eval_hardocc065_adapt_step50400_lr2em7_v1/summary.csv"
 )
@@ -42,6 +46,9 @@ OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE = (
 OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion_transfer_results.sh"
 OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion080_transfer_results.sh"
 OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MARKER = "sync_openvla_oft_hard_occlusion080_identityanchor_results.sh"
+OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_MARKER = (
+    "sync_openvla_oft_hard_occlusion080_identityanchor_a40_results.sh"
+)
 OPENVLA_HARD_OCCLUSION_ADAPT_MARKER = "sync_openvla_oft_hard_occlusion_adapt_results.sh"
 OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER = "sync_openvla_oft_hard_occlusion_adapt_a40_results.sh"
 
@@ -854,6 +861,10 @@ def learned_policy_summary(root: Path) -> str:
             "Hard-occlusion 0.80 identity-anchored adaptation",
         ),
         (
+            OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_COMPLETE,
+            "Hard-occlusion 0.80 identity-anchored A40 adaptation",
+        ),
+        (
             OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE,
             "Hard-occlusion 0.80 transfer",
         ),
@@ -938,6 +949,13 @@ def learned_policy_inflight_summary(root: Path) -> str | None:
     ):
         active.append(
             "hard-occlusion 0.80 identity-anchored adaptation is queued/running and missing a complete summary"
+        )
+    if (
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_MARKER in ledger_text
+        and not (root / OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_COMPLETE).exists()
+    ):
+        active.append(
+            "hard-occlusion 0.80 identity-anchored A40 adaptation is queued/running and missing a complete summary"
         )
     if (
         OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER in ledger_text
