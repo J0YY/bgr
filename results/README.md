@@ -2448,7 +2448,7 @@ gate. BGR beats the official checkpoint by only 4/400 non-identity episodes
 +10/400 and +0.02 margins. This is incorporated into the paper only as a
 negative OpenVLA/LIBERO audit, not as robotics fine-tuning evidence.
 
-## Queued OpenVLA-OFT Hard-Occlusion Transfer Diagnostic
+## Completed OpenVLA-OFT Hard-Occlusion Transfer Diagnostic
 
 Queued on 2026-06-10 as a fixed diagnostic/route scout after the completed
 occlusion-bottleneck adaptation failed the full blur/brightness/occlusion/shift
@@ -2461,8 +2461,11 @@ occlusion (`fraction=0.65`), and compares against the official checkpoint.
 Promotion gate: over the 400 hard-occlusion episodes, BGR must beat both
 official and matched random by at least 10 episodes and at least 0.02 absolute
 success rate, while not trailing the best identity comparator by more than one
-episode. Until the compact summary exists and this gate passes, this route is
-not paper evidence.
+episode. The compact summary now exists, but the gate fails: BGR reaches
+300/400 occlusion successes versus official 297/400 and matched random 296/400,
+only +3/+4 episodes and +0.0075/+0.0100 success rate, with a 2-episode identity
+deficit versus official. Treat this as a completed negative learned-policy
+diagnostic, not paper evidence.
 
 Submitted command:
 
@@ -3224,6 +3227,25 @@ fallback moved backward in the scheduler: official occlusion `774847` returned
 to pending on `BeginTime`, replacement BGR identity stayed priority-pending
 until 2026-06-11 22:02:14 BST, matched-random identity stayed resource-pending
 until 2026-06-10 23:36:39 BST, and replacement BGR/random occlusions remained
+dependency-pending. The latest readiness check still reports
+`NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim changes.
+
+Latest status at 2026-06-10 11:59:00 BST: the 0.65 transfer route completed
+and is negative/non-promotable under the fixed gate. Its compact summary is
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc065_transfer_step50400_lr2em7_v1/summary.csv`.
+BGR scores 300/400 on hard occlusion versus official 297/400 and matched random
+296/400, only +3/+4 episodes and +0.0075/+0.0100 success rate, below the
+required +10/400 and +0.02 margins; identity is BGR 391/400, official 393/400,
+and matched random 389/400, so BGR also has a 2-episode identity deficit. The
+0.80 transfer route remains incomplete: official and BGR occlusion are running,
+matched-random identity is priority-pending with estimated start
+2026-06-11 11:36:00 BST, and matched-random occlusion is dependency-pending.
+The A6000 adaptation route remains the main active learned-policy candidate:
+official occlusion, BGR identity, and matched-random identity are running, while
+BGR/random occlusions are dependency-pending. The A40 fallback remains
+scheduler-limited with official occlusion priority-pending, replacement BGR
+identity priority-pending until 2026-06-11 22:02:14 BST, matched-random identity
+resource-pending until 2026-06-10 23:36:39 BST, and replacement occlusions
 dependency-pending. The latest readiness check still reports
 `NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim changes.
 

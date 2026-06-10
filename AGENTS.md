@@ -152,7 +152,7 @@ lack of new independent positive evidence, the negative standard-environment
 record, incremental novelty, author-defined metric dependence, and robustness
 fragility. Do not just soften language around unchanged results.
 
-Active learned-policy diagnostic route: fixed hard-occlusion transfer eval of
+Completed learned-policy diagnostic route (negative): fixed hard-occlusion transfer eval of
 the completed OpenVLA-OFT occlusion-bottleneck checkpoints. This is a
 preregistered diagnostic/route scout, not a paper claim: the previous full
 perturbation gate failed because blur, brightness, and shift were near
@@ -340,6 +340,16 @@ in hard-occlusion progress: official `774712` was running at 1:21:59, while
 BGR `774714` and matched random `774716` were both running at 1:23:54. The
 compact `summary.csv` was still missing and the synced `summary_available.csv`
 remained identity-only. No fixed gate can be run.
+Latest poll/sync at 2026-06-10 11:57:34 BST completed the 0.65 transfer route:
+official/BGR/matched-random occlusion jobs `774712`/`774714`/`774716` all
+completed with exit `0:0`, and the compact
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc065_transfer_step50400_lr2em7_v1/summary.csv`
+now exists. The fixed gate fails: BGR is 300/400 on hard occlusion, official is
+297/400, and matched random is 296/400, so BGR leads by only +3/+4 episodes
+and +0.0075/+0.0100 success rate; identity is BGR 391/400, official 393/400,
+matched random 389/400, so BGR also has a 2-episode identity deficit. This is
+a completed negative/non-promotable learned-policy transfer diagnostic, not a
+paper claim.
 
 Active learned-policy diagnostic route: fixed hard-occlusion 0.80 transfer
 eval of the completed OpenVLA-OFT occlusion-bottleneck checkpoints. This was
@@ -516,6 +526,13 @@ Latest poll/sync at 2026-06-10 11:54:39 BST still left the 0.80 transfer route
 incomplete: official occlusion `774919` was running at 55:15 and BGR occlusion
 `774921` at 46:44, both on `c2-g4-17`; matched-random identity `774922`
 remained priority-pending with estimated start 2026-06-11 22:02:14 BST, and
+matched-random occlusion `774923` remained dependency-pending. The compact
+`summary.csv` was still missing; no gate can be run without the matched-random
+comparator.
+Latest poll/sync at 2026-06-10 11:58:18 BST still left the 0.80 transfer route
+incomplete: official occlusion `774919` was running at 58:54 and BGR occlusion
+`774921` at 50:23, both on `c2-g4-17`; matched-random identity `774922`
+remained priority-pending with estimated start 2026-06-11 11:36:00 BST, and
 matched-random occlusion `774923` remained dependency-pending. The compact
 `summary.csv` was still missing; no gate can be run without the matched-random
 comparator.
@@ -707,6 +724,12 @@ Latest poll/sync at 2026-06-10 11:55:02 BST showed the A6000 adaptation route
 still incomplete: official occlusion `774725` was running at 18:23, BGR
 identity `774726` was running at 43:04, and matched-random identity `774728`
 was running at 29:03. BGR and matched-random occlusion jobs `774727`/`774729`
+remained dependency-pending. The compact `summary.csv` was missing; the synced
+`summary_available.csv` still could not support a fixed gate.
+Latest poll/sync at 2026-06-10 11:58:42 BST showed the A6000 adaptation route
+still incomplete: official occlusion `774725` was running at 22:03, BGR
+identity `774726` was running at 46:44, and matched-random identity `774728`
+was running at 32:43. BGR and matched-random occlusion jobs `774727`/`774729`
 remained dependency-pending. The compact `summary.csv` was missing; the synced
 `summary_available.csv` still could not support a fixed gate.
 
@@ -929,6 +952,13 @@ replacement BGR identity `775102` was priority-pending with estimated start
 with estimated start 2026-06-10 23:36:39 BST, and replacement BGR/matched-random
 occlusions remained dependency-pending. The original failed BGR chain
 `774848`/`774849` remains ignored. The fixed gate remains incomplete.
+Latest A40 poll/sync at 2026-06-10 11:59:00 BST still had no compact summary:
+official occlusion `774847` was priority-pending, replacement BGR identity
+`775102` was priority-pending with estimated start 2026-06-11 22:02:14 BST,
+matched-random identity `774850` was resource-pending with estimated start
+2026-06-10 23:36:39 BST, and replacement BGR/matched-random occlusions remained
+dependency-pending. The original failed BGR chain `774848`/`774849` remains
+ignored. The fixed gate remains incomplete.
 
 Completed learned-policy route (negative, not active): preregistered OpenVLA-OFT occlusion-bottleneck
 adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.
