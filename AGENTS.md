@@ -194,6 +194,11 @@ still incomplete: identity jobs `774711`, `774713`, and `774715` were running
 at about 50:04 elapsed, and occlusion jobs `774712`, `774714`, and `774716`
 remained dependency-pending. Remote identity logs exist but the compact
 `summary.csv` is still missing, so no fixed hard-occlusion gate can be run.
+Latest poll/sync at 2026-06-10 10:19:18 BST showed the 0.65 transfer route
+still in identity-only progress: `774711`, `774713`, and `774715` were running
+at about 54:36 elapsed, while occlusion jobs `774712`, `774714`, and `774716`
+were still dependency-pending. The sync found only identity logs and could not
+build a compact summary yet, so the route remains incomplete.
 
 Active learned-policy diagnostic route: fixed hard-occlusion 0.80 transfer
 eval of the completed OpenVLA-OFT occlusion-bottleneck checkpoints. This was
@@ -217,6 +222,12 @@ all occlusion jobs dependency-pending. Poll/sync with
 `scripts/sync_openvla_oft_hard_occlusion080_transfer_results.sh --poll --no-check`
 and, when logs or summaries exist,
 `scripts/sync_openvla_oft_hard_occlusion080_transfer_results.sh --sync`.
+Latest poll/sync at 2026-06-10 10:19:18 BST showed official identity `774917`
+running at 9:02 elapsed and BGR identity `774920` running at 0:31 elapsed,
+both on `c2-g4-17`; matched-random identity `774922` remained priority-pending
+with estimated start 2026-06-10 12:56:05 BST, and occlusion jobs `774919`,
+`774921`, and `774923` remained dependency-pending. The sync found only
+identity logs and could not build a compact summary yet.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -259,6 +270,11 @@ Latest poll at 2026-06-10 10:14:46 BST showed no change for the A6000
 adaptation route: prep `774717` and official identity `774724` were still
 pending on `ReqNodeNotAvail`, all child jobs were dependency-pending, and no
 logs or compact summaries existed.
+Latest poll/sync at 2026-06-10 10:18:27 BST showed the A6000 adaptation prep
+`774717` now pending on `Resources` instead of unavailable nodes, with
+estimated start still 2026-06-10 10:59:06 BST. Official identity `774724` was
+still pending on `ReqNodeNotAvail`; every child job remained dependency-pending
+and no route logs or summary existed.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000
@@ -300,6 +316,13 @@ matched-random adaptation/merge/clean, and all dependent occlusion eval jobs
 remained dependency-pending. Remote perturb logs now exist for official
 identity, but the compact `summary.csv` is still missing and the fixed gate
 remains incomplete.
+Latest A40 poll/sync at 2026-06-10 10:19:18 BST showed BGR adaptation `774817`
+completed successfully with exit `0:0` after reaching step 50400 and saving the
+checkpoint. BGR merge `774818` and matched-random adaptation `774820` were
+pending on priority; official identity `774846` was still running at 14:09
+elapsed; all BGR/random perturb evals and occlusion evals were still
+dependency-pending. The sync found only official identity logs and could not
+build a compact summary yet.
 
 Completed learned-policy route (negative, not active): preregistered OpenVLA-OFT occlusion-bottleneck
 adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.

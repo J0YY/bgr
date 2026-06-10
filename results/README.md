@@ -2518,6 +2518,12 @@ dependency-pending behind their identity jobs. Remote identity logs exist, but
 the compact `summary.csv` is still missing, so the fixed hard-occlusion gate is
 incomplete.
 
+Latest poll/sync at 2026-06-10 10:19:18 BST: identity eval jobs `774711`,
+`774713`, and `774715` were still running at about 54:36 elapsed, and
+hard-occlusion jobs `774712`, `774714`, and `774716` remained
+dependency-pending. The sync found identity logs only and could not build a
+compact summary yet, so this route remains incomplete.
+
 ## Queued OpenVLA-OFT Hard-Occlusion 0.80 Transfer Diagnostic
 
 Queued on 2026-06-10 before any 0.65 occlusion rows were available. This is a
@@ -2587,6 +2593,13 @@ identity `774922` was pending on priority with estimated start 2026-06-10
 22:13:17 BST; and all hard-occlusion jobs were dependency-pending. Remote logs
 exist only for the running official identity job so far. No compact summary
 exists yet, so no fixed promotion gate can be run.
+
+Latest poll/sync at 2026-06-10 10:19:18 BST: official identity `774917` was
+running at 9:02 elapsed and BGR identity `774920` had started on `c2-g4-17` at
+0:31 elapsed. Matched-random identity `774922` remained priority-pending with
+estimated start 2026-06-10 12:56:05 BST, and hard-occlusion jobs `774919`,
+`774921`, and `774923` were dependency-pending. The sync found identity logs
+only and could not build a compact summary yet.
 
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
@@ -2749,6 +2762,18 @@ was running on `c2-g4-17`. BGR merge/clean, matched-random adaptation/merge/
 clean, and all dependent occlusion eval jobs were still dependency-pending.
 Remote perturb logs exist for official identity, but no compact summary exists
 yet, so no fixed promotion gate can be run and no paper claim changes.
+
+Latest status at 2026-06-10 10:19:18 BST: the A6000 hard-occlusion prep
+`774717` moved from unavailable-node pending to `Resources` pending, while
+official identity `774724` remained unavailable-node pending and all A6000
+children stayed dependency-pending. The A40 fallback advanced again: BGR
+adaptation `774817` completed with exit `0:0` after reaching step 50400 and
+saving the checkpoint; BGR merge `774818` and matched-random adaptation
+`774820` were priority-pending, official identity `774846` was running at
+14:09 elapsed, and all dependent BGR/random perturb eval and occlusion jobs
+were still pending. The sync found only official identity logs and could not
+build a compact summary yet, so no fixed promotion gate can be run and no paper
+claim changes.
 
 Sync/poll helper:
 
