@@ -27,7 +27,9 @@ after its usable calibration. New MinAtar Freeway and Space Invaders routes
 cleared pre-method calibration but their fixed all-method screens tied every
 method, so they are retired. A Seaquest scout found a fragile 20-seed
 calibration window, but the method scout lost to fixed-radius replay and is
-rejected before promotion. There is no active independent route. The latest completed
+rejected before promotion. A new Gymnasium Blackjack package-state recovery
+scout is currently running on `athena` as Slurm job `774192`; this is only a
+scout for a different independent reset interface, not paper evidence. The latest completed
 OpenVLA/LIBERO occlusion-bottleneck route is negative: BGR reaches 365/400
 non-identity successes versus official 367/400 and matched random 369/400,
 with identity BGR 99/100, official 99/100, and random 98/100. The
@@ -286,6 +288,25 @@ while BGR reaches only 0.0677 RAUC with clean 0.2708 and uniform reaches 0.0938
 RAUC. Do not build a formal Seaquest screen unless a new preregistered
 controller first clears a stable clean-success gate and avoids fixed-radius
 dominance.
+
+In-flight independent-route scout: Gymnasium Blackjack package-state recovery.
+This route is deliberately different from the prior MiniGrid/classic-control
+screens: it uses Gymnasium `Blackjack-v1` package dynamics, exact internal
+player/dealer state resets, stochastic card draws, and player-total
+perturbations around decision states. A first local scout was too slow, so a
+bounded CPU Slurm scout was submitted to `athena` on 2026-06-10 as job
+`774192` after an initial environment-setup failure in job `774184`
+(`numpy==2.4.6` is unavailable for Athena's Python 3.10). The resubmitted job
+uses `/work/joy/bgr/.venv-blackjack-scout` with `gymnasium==1.3.0` and
+`numpy==2.2.6`, runs 9 perturbation/target-radius configs over 8 seeds and all
+required baselines, and writes to
+`/work/joy/bgr/runs/blackjack_recovery_scout_20260610_080506_774192`.
+Poll with:
+`ssh athena 'squeue -j 774192 -o "%.18i %.9P %.32j %.8T %.10M %.20R"; tail -80 /work/joy/bgr/logs/bgr-blackjack-scout-774192.out; find /work/joy/bgr/runs/blackjack_recovery_scout_20260610_080506_774192 -maxdepth 1 -type f -print'`.
+If `config_summary.csv` appears and a BGR-family method beats uniform,
+fixed-radius, failure-only, TD-loss, and BGR-uniform-radius with non-saturated
+r80, then implement a repo-native fixed follow-up before making any paper
+claim. If it ties or loses, record it as a rejected scout.
 
 Operational defaults:
 
