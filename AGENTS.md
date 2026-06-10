@@ -92,15 +92,14 @@ the full `summary.csv` passes the unchanged fixed gate:
 BGR must beat both official and matched random by at least 10/400 occlusion
 episodes and at least 0.02 absolute success rate while not trailing the best
 identity comparator by more than one episode. Latest poll/sync at 2026-06-10
-22:10 BST showed official occlusion `779975` running, BGR identity `779976`
-running, and matched-random identity `779978` running; BGR and random occlusion
-remained dependency-pending. The incomplete local summary had official identity
-393/400, partial official occlusion 21/27, partial BGR identity 126/134, and
-partial random identity 92/96. Direct log tails moments later showed BGR
-identity 127/135 and random identity 94/98. The BGR identity side condition is
-therefore still technically alive but one additional BGR identity failure would
-make it impossible to stay within one episode of official 393/400. A stronger
-head-only repair
+22:13 BST closed this route early as non-promotable on identity: BGR identity
+reached 134/144, so even perfect success afterward could finish no better than
+390/400 against official identity 393/400. The remaining route-A jobs were
+cancelled to save cluster time: official occlusion `779975`, BGR identity
+`779976`, BGR occlusion `779977`, random identity `779978`, and random
+occlusion `779979` are all cancelled, while official identity `779974`
+completed at 393/400. This route is negative and must not be incorporated into
+`paper/main.tex`. A stronger head-only repair
 variant was queued at 2026-06-10 21:12 BST before any head-interpolation
 summary was available: it uses the same `ALPHA=0.75` head interpolation but
 keeps adapted LoRA-B tensors at full scale with `LORA_B_SCALE=1.0`, testing
@@ -114,10 +113,10 @@ identity `780060` pending on resources with estimated start
 evals dependency-pending. No logs or summary were available yet. This is also
 not evidence unless
 the same fixed +10/400, +0.02, and identity-preservation gate passes. Latest
-poll/sync at 2026-06-10 22:10 BST showed this LoRA-full route past prep:
-official identity `780060` was running with partial tail 55/57, BGR identity
-`780062` and random identity `780064` were priority-pending, and all occlusion
-jobs were dependency-pending. The
+poll/sync at 2026-06-10 22:13 BST showed this LoRA-full route past prep:
+official identity `780060` was running, BGR identity `780062` and random
+identity `780064` were priority-pending, and all occlusion jobs were
+dependency-pending. The
 latest 0.80 identity-anchored base route is closed negative with complete
 rows: BGR identity/occlusion are 389/400 and 303/400, official is 393/400 and
 296/400, and matched random is 393/400 and 302/400. The fixed gate reports
