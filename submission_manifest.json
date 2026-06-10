@@ -7,8 +7,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "d968b4f4bca55543227a53d145b0a32a890836b71a9cbabeace57357c6cd1b58",
-      "size_bytes": 34293
+      "sha256": "6af760bf24da60a96beef4136e82f35886a12cc4d9563c50858bd9da7a26a5b6",
+      "size_bytes": 34373
     },
     {
       "path": "configs/estimator_bgr_full.yaml",
@@ -202,8 +202,8 @@
     },
     {
       "path": "paper/README.md",
-      "sha256": "8626fe17ab416c96b930121a5ad7fdc30f16974c2556415aaa2fabb2113ce5f3",
-      "size_bytes": 9107
+      "sha256": "5e99ca04ce20f6dc4507d8fe2dba887cd2e87318567ddb79adbc19d90e8db2b1",
+      "size_bytes": 9217
     },
     {
       "path": "paper/ReproducibilityChecklist.log",
@@ -417,18 +417,18 @@
     },
     {
       "path": "paper/main.log",
-      "sha256": "dcdca3f5ccecc337ab517d9fe5f65bb549f657327685b664dbd049bea808e641",
-      "size_bytes": 13369
+      "sha256": "6ba570908dfc7d2fc3ffd3a9924d3ebb8d527f941232d2e9c49724db1db7f425",
+      "size_bytes": 15609
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "2dcba969deffa2c5377893b0802c5f7bc6a6cb84730de3b876ad61f3dd3ae70e",
-      "size_bytes": 294877
+      "sha256": "2c0d3a10628637636e8c80abcd75f05cd6877d3363d789fac6ffaf53a88b1606",
+      "size_bytes": 295308
     },
     {
       "path": "paper/main.tex",
-      "sha256": "5d3f6d99723c8ee67b9616e7986a669e18005401bfd0f3526a6e94517c812ee7",
-      "size_bytes": 37284
+      "sha256": "9bce9604efabb153f577be6b57dbd76e2ddb1dfe7e23aee16544698a7d5d6e7e",
+      "size_bytes": 38223
     },
     {
       "path": "paper/references.bib",
@@ -442,8 +442,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "e1085e5b4abd74e7a2ba0c1ce2404fcd42e0b922847c544dbf5770c2a2e6b1ca",
-      "size_bytes": 306553
+      "sha256": "41696c0580313d6c2d1e72d75d63a657e9626a213e83ea3e0878dbc74d7b5037",
+      "size_bytes": 414042
     },
     {
       "path": "results/bsuite_cartpole_recovery_probe_4seed_v1/package_versions.json",
@@ -896,6 +896,41 @@
       "size_bytes": 2575
     },
     {
+      "path": "results/openml_all_binary_numeric_target15_30seed_v1_780049/package_versions.json",
+      "sha256": "1606ec6cb5b69d62b9542122471e57faceaec043d28745ef5348f2041ebea5e9",
+      "size_bytes": 2471
+    },
+    {
+      "path": "results/openml_all_binary_numeric_target15_30seed_v1_780049/per_seed.csv",
+      "sha256": "862293c785a3f233d7292ae9c1a8aedf52ae3f3d4037a6b2d2457cfb12e34fa0",
+      "size_bytes": 106096
+    },
+    {
+      "path": "results/openml_all_binary_numeric_target15_30seed_v1_780049/summary.csv",
+      "sha256": "657ff5df302a0e65935beb2208ee9606cbb931e6c7a948e68b87b9053d5039ec",
+      "size_bytes": 6548
+    },
+    {
+      "path": "results/openml_all_binary_numeric_target15_analysis_780049_780050.txt",
+      "sha256": "d0b42707f28f45cb09fc27edad8518d6ac60939fb37efe89da5b2c55f57efed6",
+      "size_bytes": 12919
+    },
+    {
+      "path": "results/openml_all_binary_numeric_target15_replication_30seed_v1_780050/package_versions.json",
+      "sha256": "1606ec6cb5b69d62b9542122471e57faceaec043d28745ef5348f2041ebea5e9",
+      "size_bytes": 2471
+    },
+    {
+      "path": "results/openml_all_binary_numeric_target15_replication_30seed_v1_780050/per_seed.csv",
+      "sha256": "10d01ec8974fba34bc961e681f4bdbc5508b5143fa711ddb9758f1498d6ba14a",
+      "size_bytes": 107056
+    },
+    {
+      "path": "results/openml_all_binary_numeric_target15_replication_30seed_v1_780050/summary.csv",
+      "sha256": "5b10cf7ac27fcf2934ce9e7cab3705c5c377629f71202a5b30650cf90dda2481",
+      "size_bytes": 6550
+    },
+    {
       "path": "results/openml_blood_transfusion_margin_replication_30seed_v1/package_versions.json",
       "sha256": "fd534f7cfced9093b4652d71d32d67ecdf3584ee0058d2d6bc0ca0e2348c0dd8",
       "size_bytes": 210
@@ -909,6 +944,66 @@
       "path": "results/openml_blood_transfusion_margin_replication_30seed_v1/summary.csv",
       "sha256": "9dbbf3fcdcf7244dc496b5490de5eda46ece52153ad65745950aeef5858640b4",
       "size_bytes": 385
+    },
+    {
+      "path": "results/openml_broad_numeric_target2_30seed_v1/package_versions.json",
+      "sha256": "2209152df27b360ec17447d4d380b7ba3906fb77b0ad5cec4f7388eff4373e51",
+      "size_bytes": 877
+    },
+    {
+      "path": "results/openml_broad_numeric_target2_30seed_v1/per_seed.csv",
+      "sha256": "5d43165b08ba7a90ac62e1c68502a20064f87d0aedc69284973ebe7eb21b66d0",
+      "size_bytes": 34125
+    },
+    {
+      "path": "results/openml_broad_numeric_target2_30seed_v1/summary.csv",
+      "sha256": "6cb18bf7dc741c1dd8d63884ca5c2aeb11da02f753edf3dfb2654a0fb1cac73b",
+      "size_bytes": 2179
+    },
+    {
+      "path": "results/openml_broad_numeric_target2_replication_30seed_v1/package_versions.json",
+      "sha256": "2209152df27b360ec17447d4d380b7ba3906fb77b0ad5cec4f7388eff4373e51",
+      "size_bytes": 877
+    },
+    {
+      "path": "results/openml_broad_numeric_target2_replication_30seed_v1/per_seed.csv",
+      "sha256": "005e59834618afad48b05097014647f70dae9cf3846cace17c379427e3ad147b",
+      "size_bytes": 34425
+    },
+    {
+      "path": "results/openml_broad_numeric_target2_replication_30seed_v1/summary.csv",
+      "sha256": "f5e11852934bdc8cf6560ad9124a76767ef3e3c6ca06fca423cd3e521fe84a9a",
+      "size_bytes": 2162
+    },
+    {
+      "path": "results/openml_broad_positive_target_sensitivity_30seed_v1/package_versions.json",
+      "sha256": "4f24de6af56a3e6f1740cdb22a6e0f0566323449dc7ba2a9dc980e118ac30a4c",
+      "size_bytes": 245
+    },
+    {
+      "path": "results/openml_broad_positive_target_sensitivity_30seed_v1/per_seed.csv",
+      "sha256": "41580482fabde4ff8e0f89da19a9d36170263800929a70799b39d9d75909da54",
+      "size_bytes": 19845
+    },
+    {
+      "path": "results/openml_broad_positive_target_sensitivity_30seed_v1/summary.csv",
+      "sha256": "9d148bf1d26879d18a62619a3e9eed00d4af531a726efbc9064fa264910b9e18",
+      "size_bytes": 1335
+    },
+    {
+      "path": "results/openml_broad_positive_target_sensitivity_replication_30seed_v1/package_versions.json",
+      "sha256": "4f24de6af56a3e6f1740cdb22a6e0f0566323449dc7ba2a9dc980e118ac30a4c",
+      "size_bytes": 245
+    },
+    {
+      "path": "results/openml_broad_positive_target_sensitivity_replication_30seed_v1/per_seed.csv",
+      "sha256": "6d26ee2d4475851447117ffa55e4f0fc61019c72cc63cf6e13f903e0b86c637a",
+      "size_bytes": 20025
+    },
+    {
+      "path": "results/openml_broad_positive_target_sensitivity_replication_30seed_v1/summary.csv",
+      "sha256": "c886a130f73dbc076172121076f932eef8fbae66591c7a29602ef61d27f4e760",
+      "size_bytes": 1321
     },
     {
       "path": "results/openml_diabetes_margin_30seed_v1/package_versions.json",
@@ -1014,6 +1109,81 @@
       "path": "results/openml_positive_target_sensitivity_30seed_v1/summary.csv",
       "sha256": "1cc04d0935637b300c716f4feaac1d3279722ec79255b1ce6f4a6049d86c7996",
       "size_bytes": 2068
+    },
+    {
+      "path": "results/openml_positive_target_sensitivity_replication_30seed_v1/package_versions.json",
+      "sha256": "37b17031dd1eb9b659f04704e6fc867db890906c465be72b65b690171033fa74",
+      "size_bytes": 348
+    },
+    {
+      "path": "results/openml_positive_target_sensitivity_replication_30seed_v1/per_seed.csv",
+      "sha256": "72c577ffc99facee6ad1c7314fdd92ca9c2bec5b0f7dc663cbb9b287921aead4",
+      "size_bytes": 33795
+    },
+    {
+      "path": "results/openml_positive_target_sensitivity_replication_30seed_v1/summary.csv",
+      "sha256": "81d1479dfeb39a415300e28a620a176355781a1a8a00689197c8a161f63951f6",
+      "size_bytes": 2051
+    },
+    {
+      "path": "results/openml_secondary_numeric_target2_30seed_v1/package_versions.json",
+      "sha256": "a9767d7b1921e645ea83bc71ba5a9ffaf85e7115dfeb77f71ddccf1930fb68ef",
+      "size_bytes": 753
+    },
+    {
+      "path": "results/openml_secondary_numeric_target2_30seed_v1/per_seed.csv",
+      "sha256": "5645da6e9a4f99db95c3f99e146298d8e2e3d841a4556d07732504b77786524a",
+      "size_bytes": 28545
+    },
+    {
+      "path": "results/openml_secondary_numeric_target2_30seed_v1/summary.csv",
+      "sha256": "cd571261ac7322f4e8644be318490cd9edfe8fc21a13bb8f93a94b22d5790bfa",
+      "size_bytes": 1979
+    },
+    {
+      "path": "results/openml_secondary_numeric_target2_replication_30seed_v1/package_versions.json",
+      "sha256": "a9767d7b1921e645ea83bc71ba5a9ffaf85e7115dfeb77f71ddccf1930fb68ef",
+      "size_bytes": 753
+    },
+    {
+      "path": "results/openml_secondary_numeric_target2_replication_30seed_v1/per_seed.csv",
+      "sha256": "95eea71c57a8bd044799dc3b13bb3549ed000108549f03b1c3a61f1255bd922f",
+      "size_bytes": 28845
+    },
+    {
+      "path": "results/openml_secondary_numeric_target2_replication_30seed_v1/summary.csv",
+      "sha256": "ac3ad80ad631852c8ca0c3ae3a4470c3a11bdf5258a2aa64382999bfe4635c04",
+      "size_bytes": 1978
+    },
+    {
+      "path": "results/openml_secondary_positive_target_sensitivity_30seed_v1/package_versions.json",
+      "sha256": "d4fa71f63775cdd7170554f74b0f5d8165552660b42ba09917b97185ed19fb86",
+      "size_bytes": 213
+    },
+    {
+      "path": "results/openml_secondary_positive_target_sensitivity_30seed_v1/per_seed.csv",
+      "sha256": "f231e37c5319c0410074efb582ec7833529b0649d967d1a07e023c562aba45a0",
+      "size_bytes": 15525
+    },
+    {
+      "path": "results/openml_secondary_positive_target_sensitivity_30seed_v1/summary.csv",
+      "sha256": "e9ed523855ed849c15bf6436db205a020b450b04eaccafb35279b453f08093f8",
+      "size_bytes": 1177
+    },
+    {
+      "path": "results/openml_secondary_positive_target_sensitivity_replication_30seed_v1/package_versions.json",
+      "sha256": "d4fa71f63775cdd7170554f74b0f5d8165552660b42ba09917b97185ed19fb86",
+      "size_bytes": 213
+    },
+    {
+      "path": "results/openml_secondary_positive_target_sensitivity_replication_30seed_v1/per_seed.csv",
+      "sha256": "c46ecd62098e3e469efef4a7f2ed0de00cb5789d68393296265625df22060a6a",
+      "size_bytes": 15705
+    },
+    {
+      "path": "results/openml_secondary_positive_target_sensitivity_replication_30seed_v1/summary.csv",
+      "sha256": "76b6597dbc66d449eb6fb33f1a3896bed1570f481dab8715c2456c9c166745b9",
+      "size_bytes": 1176
     },
     {
       "path": "results/openvla_action_tfds_validation_v1/summary.json",
@@ -1197,8 +1367,8 @@
     },
     {
       "path": "scripts/acceptance_scorecard.py",
-      "sha256": "9353aa2e0ebb41bc27e0b2be99fd9d8ff88c0e50bcba756b9d420d535c28c9a3",
-      "size_bytes": 52159
+      "sha256": "3d16ad56b74dce5dd659bccfb60417dd0dac62cb321ee85b76da729e55e6555c",
+      "size_bytes": 64935
     },
     {
       "path": "scripts/aggregate_results.py",
@@ -1212,8 +1382,8 @@
     },
     {
       "path": "scripts/check_acceptance_readiness.py",
-      "sha256": "3784e01692dcb35963472c222efa7d2998c6901b99cceed3ff5a0cd505adf168",
-      "size_bytes": 54357
+      "sha256": "025e974d49fb21ff80729f3be1ae64efaf70bbd95bc4ab4f3b0a3dab793fdfca",
+      "size_bytes": 81755
     },
     {
       "path": "scripts/check_openvla_perturb_gate.py",
@@ -1222,13 +1392,13 @@
     },
     {
       "path": "scripts/check_paper_claims.py",
-      "sha256": "311f814e53ac367ca6421c543e99cc461936d05f231cfcaa8cc9d00a01befdfa",
-      "size_bytes": 126699
+      "sha256": "c8e833985ce695d3567d7209b94ff77f05d2e722b8e754b8e972ece578d22a5d",
+      "size_bytes": 138775
     },
     {
       "path": "scripts/check_submission_package.py",
-      "sha256": "6dff4a6af1f9ffc1d8fdf02813e7f98b904a1a90f270197b81a09f083399d9a8",
-      "size_bytes": 246585
+      "sha256": "85678ea151a108051d43dcdf16f2f73c8514b546b5066ca566c8ef8e05b8b837",
+      "size_bytes": 249465
     },
     {
       "path": "scripts/collect_environment.py",
@@ -1332,8 +1502,8 @@
     },
     {
       "path": "scripts/render_openvla_teacher_examples.py",
-      "sha256": "69fc19f05981d726048bee4a2e335ae5d4be6c15b6206d0b12876dc1b113e531",
-      "size_bytes": 15568
+      "sha256": "d6bde02486d1edc7027e146d75d02b96b6e21df4bbf2a189249efbde54e8b250",
+      "size_bytes": 17870
     },
     {
       "path": "scripts/run_estimator_experiment.py",
@@ -1532,8 +1702,8 @@
     },
     {
       "path": "tests/test_acceptance_scorecard.py",
-      "sha256": "477164560fd6ec00617f0af4bc57b5b816d4f45960a51817d51578199964fb9d",
-      "size_bytes": 38132
+      "sha256": "ae3aebb8ce358a60b3bc03b810fb417ca4457a48218654b098ae769300315072",
+      "size_bytes": 40216
     },
     {
       "path": "tests/test_aggregate_results.py",
@@ -1552,8 +1722,8 @@
     },
     {
       "path": "tests/test_check_acceptance_readiness.py",
-      "sha256": "85d1439b409cc6c577b7c1d8c5776c6934e22686be2ac855c94940ee77313e81",
-      "size_bytes": 17359
+      "sha256": "3ee0e0eafecb9d00a6cee5905d6be3b43f71c7ed4e6d795c45e7ceacf134ee9f",
+      "size_bytes": 18149
     },
     {
       "path": "tests/test_check_candidate_promotion.py",
@@ -1787,8 +1957,8 @@
     },
     {
       "path": "tests/test_render_openvla_teacher_examples.py",
-      "sha256": "387e4c4d21ed27f0ed593a4bacbd78d1eb5dd7ccca9afa3f84ffeb6f1eae946b",
-      "size_bytes": 4391
+      "sha256": "b8e7406f4c64ffd1c2d8786103b5a8e20eb15e3e494d89391dfa21d7dadc863c",
+      "size_bytes": 5248
     },
     {
       "path": "tests/test_robot_suffix.py",
@@ -1832,8 +2002,8 @@
     },
     {
       "path": "tools/fetch_object_goal_recovery_calibration.py",
-      "sha256": "016f80c986049431d3778d4560ee6dbd3b593de1528f601e2117bb2541b45294",
-      "size_bytes": 13253
+      "sha256": "b0247c16a6b37f621e89bb9c6180c9df6811f7e372b0708635ce4538802e815d",
+      "size_bytes": 17759
     },
     {
       "path": "tools/grid_margin_witness_sensitivity.py",

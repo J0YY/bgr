@@ -1,0 +1,135 @@
+{
+  "datasets": {
+    "Bioresponse": {
+      "name": "Bioresponse",
+      "version": 1
+    },
+    "MagicTelescope": {
+      "name": "MagicTelescope",
+      "version": 1
+    },
+    "banknote-authentication": {
+      "name": "banknote-authentication",
+      "version": 1
+    },
+    "blood-transfusion-service-center": {
+      "name": "blood-transfusion-service-center",
+      "version": 1
+    },
+    "breast-w": {
+      "name": "breast-w",
+      "version": 1
+    },
+    "climate-model-simulation-crashes": {
+      "name": "climate-model-simulation-crashes",
+      "version": 1
+    },
+    "diabetes": {
+      "name": "diabetes",
+      "version": 1
+    },
+    "eeg-eye-state": {
+      "name": "eeg-eye-state",
+      "version": 1
+    },
+    "electricity": {
+      "name": "electricity",
+      "version": 1
+    },
+    "gina_agnostic": {
+      "name": "gina_agnostic",
+      "version": 1
+    },
+    "haberman": {
+      "name": "haberman",
+      "version": 1
+    },
+    "heart-statlog": {
+      "name": "heart-statlog",
+      "version": 1
+    },
+    "hill-valley": {
+      "name": "hill-valley",
+      "version": 1
+    },
+    "ionosphere": {
+      "name": "ionosphere",
+      "version": 1
+    },
+    "jm1": {
+      "name": "jm1",
+      "version": 1
+    },
+    "kc1": {
+      "name": "kc1",
+      "version": 1
+    },
+    "kc2": {
+      "name": "kc2",
+      "version": 1
+    },
+    "madelon": {
+      "name": "madelon",
+      "version": 1
+    },
+    "mammography": {
+      "name": "mammography",
+      "version": 1
+    },
+    "mc1": {
+      "name": "mc1",
+      "version": 1
+    },
+    "mozilla4": {
+      "name": "mozilla4",
+      "version": 1
+    },
+    "ozone-level-8hr": {
+      "name": "ozone-level-8hr",
+      "version": 1
+    },
+    "pc1": {
+      "name": "pc1",
+      "version": 1
+    },
+    "pc2": {
+      "name": "pc2",
+      "version": 1
+    },
+    "pc3": {
+      "name": "pc3",
+      "version": 1
+    },
+    "pc4": {
+      "name": "pc4",
+      "version": 1
+    },
+    "phoneme": {
+      "name": "phoneme",
+      "version": 1
+    },
+    "qsar-biodeg": {
+      "name": "qsar-biodeg",
+      "version": 1
+    },
+    "sonar": {
+      "name": "sonar",
+      "version": 1
+    },
+    "spambase": {
+      "name": "spambase",
+      "version": 1
+    },
+    "steel-plates-fault": {
+      "name": "steel-plates-fault",
+      "version": 1
+    },
+    "wdbc": {
+      "name": "wdbc",
+      "version": 1
+    }
+  },
+  "numpy": "2.2.6",
+  "python": "3.10.12",
+  "scikit_learn": "1.7.2"
+}

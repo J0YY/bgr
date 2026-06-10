@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.8)  10 JUN 2026 07:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.8)  10 JUN 2026 13:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -6,9 +6,9 @@ entering extended mode
 (./main.tex
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-05-26>
-(/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/base/article.cls
+(<local-home>/Library/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2025/01/22 v1.4n Standard LaTeX document class
-(/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/base/size10.clo
+(<local-home>/Library/TinyTeX/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count276
@@ -29,20 +29,20 @@ LaTeX Warning: You have requested package `AuthorKit27/aaai2027',
 
 Package: aaai2027 2027/05/04 AAAI 2027 Submission format
 Conference Style for AAAI for LaTeX 2e
-(/Users/joyyang/Library/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty
+(<local-home>/Library/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty
 Package: iftex 2024/12/12 v1.0g TeX engine tests
-) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
+) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
 ) (./newtxtext.sty
 Package: newtxtext 2026/06/01 local build shim for minimal TeX installs
-) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/psnfss/times.sty
+) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/psnfss/times.sty
 Package: times 2020/03/25 PSNFSS-v9.3 (SPQR) 
-) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/psnfss/helvet.sty
+) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/psnfss/helvet.sty
 Package: helvet 2020/03/25 PSNFSS-v9.3 (WaS) 
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/graphics/keyval.sty
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2026-05-17 v1.15 key=value parser (DPC)
 \KV@toks@=\toks17
-)) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/psnfss/courier.sty
+)) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/psnfss/courier.sty
 Package: courier 2020/03/25 PSNFSS-v9.3 (WaS) 
 ) (./placeins.sty
 Package: placeins 2026/06/01 local build shim for minimal TeX installs
@@ -50,15 +50,15 @@ Package: placeins 2026/06/01 local build shim for minimal TeX installs
 \titlebox=\skip51
 \aaai@thanksins=\insert252
 \aaai@copyrightins=\insert251
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.sty
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: pdftex.def on input line 274.
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/graphics-def/pdftex.def
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2025/09/29 v1.2d Graphics/color driver for pdftex
-) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)
+) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
 Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1353.
 Package xcolor Info: Model `RGB' extended on input line 1365.
@@ -68,43 +68,43 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1370.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
-)) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/url/url.sty
+)) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/graphics/graphicx.sty
+) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2026-05-17 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/graphics/graphics.sty
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2026-05-17 v1.4h Standard LaTeX Graphics (DPC,SPQR)
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/graphics/trig.sty
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
-) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 106.
 )
 \Gin@req@height=\dimen151
 \Gin@req@width=\dimen152
-) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/natbib/natbib.sty
+) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip52
 \bibsep=\skip53
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count284
-) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
+) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2026/05/19 v2.18d AMS math features
 \@mathmargin=\skip54
 
 For additional information on amsmath, use the `?' option.
-(/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty
+(<local-home>/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2024/11/17 v2.01 AMS text
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks18
 \ex@=\dimen153
-)) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty
+)) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen154
-) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty
+) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
 \inf@bad=\count285
@@ -154,9 +154,9 @@ LaTeX Info: Redefining \Relbar on input line 970.
 \mathdisplay@stack=\toks22
 LaTeX Info: Redefining \[ on input line 2965.
 LaTeX Info: Redefining \] on input line 2966.
-) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty
+) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
@@ -165,9 +165,9 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
 LaTeX Font Info:    Trying to load font information for T1+ptm on input line 21.
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/psnfss/t1ptm.fd
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
-) (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+) (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2026-02-18 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count297
 ) (./main.aux)
@@ -187,128 +187,133 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
 LaTeX Font Info:    ... okay on input line 21.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
 LaTeX Font Info:    ... okay on input line 21.
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 \c@aaai@eqfn=\count298
 \c@aaai@corrfn=\count299
 \titlearea=\box55
 \actualheight=\skip57
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 57.
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 59.
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-Underfull \hbox (badness 1028) in paragraph at lines 59--60
+Underfull \hbox (badness 1028) in paragraph at lines 61--62
 []\T1/ptm/m/n/10 active-estimation, syn-thetic, grid-margin, robot-suffix
  []
 
 
-Underfull \hbox (badness 1603) in paragraph at lines 67--68
-\T1/ptm/m/n/10 potential prox-ies (Jiang, Grefen-stette, and Rock-t‰schel
+Underfull \hbox (badness 1603) in paragraph at lines 69--70
+\T1/ptm/m/n/10 potential prox-ies (Jiang, Grefen-stette, and Rock-t√§schel
  []
 
-[1{/Users/joyyang/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/Users/joyyang/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}
+[1{<local-home>/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{<local-home>/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}
 
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 69--70
+Underfull \hbox (badness 10000) in paragraph at lines 71--72
 []\T1/ptm/m/n/10 Prioritized ex-pe-ri-ence re-play ranks tran-si-tions by
  []
 
 
-Underfull \hbox (badness 1859) in paragraph at lines 69--70
+Underfull \hbox (badness 1859) in paragraph at lines 71--72
 \T1/ptm/m/n/10 dis-tinct from adversarial-example train-ing (Good-fel-low,
  []
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 75.
-(/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
+LaTeX Font Info:    Trying to load font information for U+msa on input line 77.
+(<local-home>/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 75.
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
+LaTeX Font Info:    Trying to load font information for U+msb on input line 77.
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 <figures/boundary_intuition.pdf, id=8, 520.34402pt x 147.4308pt>
 File: figures/boundary_intuition.pdf Graphic file (type pdf)
 <use figures/boundary_intuition.pdf>
-Package pdftex.def Info: figures/boundary_intuition.pdf  used on input line 115.
+Package pdftex.def Info: figures/boundary_intuition.pdf  used on input line 117.
 (pdftex.def)             Requested size: 239.39438pt x 67.83023pt.
- [2 <./figures/boundary_intuition.pdf>]
-Underfull \hbox (badness 1087) in paragraph at lines 173--175
-\T1/ptm/m/n/10 environment probes and Open-VLA/LIBERO re-sults are
- []
-
-
-Underfull \vbox (badness 2096) has occurred while \output is active []
-
- [3] (./figures/summary_table.tex) (./figures/significance_table.tex) (./figures/estimator_table.tex)
+ [2 <./figures/boundary_intuition.pdf>] [3] (./figures/summary_table.tex) (./figures/significance_table.tex) (./figures/estimator_table.tex)
 <figures/grid_margin_learning_curve.pdf, id=49, 462.52798pt x 169.8345pt>
 File: figures/grid_margin_learning_curve.pdf Graphic file (type pdf)
 <use figures/grid_margin_learning_curve.pdf>
-Package pdftex.def Info: figures/grid_margin_learning_curve.pdf  used on input line 224.
+Package pdftex.def Info: figures/grid_margin_learning_curve.pdf  used on input line 226.
 (pdftex.def)             Requested size: 239.39438pt x 87.90239pt.
  (./figures/grid_margin_full_table.tex) (./figures/grid_margin_ablation_table.tex) [4 <./figures/grid_margin_learning_curve.pdf>]
-Underfull \hbox (badness 1303) in paragraph at lines 253--254
-\T1/ptm/m/n/10 i-da-tion suite at the same tar-get ra-dius over banknote-
+Underfull \hbox (badness 1033) in paragraph at lines 255--256
+[]\T1/ptm/m/n/10 The fixed ex-ter-nal nu-meric suite is mixed but pos-i-
  []
 
 
-Underfull \hbox (badness 2134) in paragraph at lines 253--254
-\T1/ptm/m/n/10 authentication, blood-transfusion-service-center, climate-
+Underfull \hbox (badness 1377) in paragraph at lines 255--256
+\T1/ptm/m/n/10 tive at suite level: original/held-out macro means are
  []
 
 
-Underfull \hbox (badness 1122) in paragraph at lines 253--254
-\T1/ptm/m/n/10 uni-form 0.7939/0.7943, and fixed-radius 0.7864/0.7839;
+Underfull \hbox (badness 1354) in paragraph at lines 255--256
+\T1/ptm/m/n/10 is ahead on 6/8 dataset means vs. uni-form and 7/8
  []
 
 
-Underfull \hbox (badness 1122) in paragraph at lines 253--254
-\T1/ptm/m/n/10 means vs. uni-form and 7/8 vs. fixed-radius (macro
+Underfull \hbox (badness 1033) in paragraph at lines 255--256
+\T1/ptm/m/n/10 transfusion reaches 0.7625 ver-sus 0.6657 uni-form (gap
  []
 
 
-Underfull \hbox (badness 3058) in paragraph at lines 253--254
-\T1/ptm/m/n/10 reaches 0.7625 ver-sus 0.6657 uni-form (gap +0.0968;
+Underfull \hbox (badness 1881) in paragraph at lines 255--256
+\T1/ptm/m/n/10 +0.0968; W/L/T=30/0/0) and 0.6920 fixed-radius (gap
  []
 
 
-Underfull \hbox (badness 2503) in paragraph at lines 253--254
-\T1/ptm/m/n/10 W/L/T=30/0/0) and 0.6920 fixed-radius (gap +0.0705;
+Underfull \hbox (badness 1824) in paragraph at lines 255--256
+\T1/ptm/m/n/10 +0.0705; W/L/T=27/1/2), with held-out 0.7595 ver-sus
  []
 
 
-Underfull \hbox (badness 2503) in paragraph at lines 253--254
-\T1/ptm/m/n/10 W/L/T=21/9/0) and 0.6792 fixed-radius (gap +0.0332;
+Underfull \hbox (badness 1194) in paragraph at lines 255--256
+\T1/ptm/m/n/10 fixed-radius (gap +0.0332; W/L/T=25/5/0), and pooled
  []
 
 
-Underfull \hbox (badness 1325) in paragraph at lines 255--256
-\T1/ptm/m/n/10 BGR is ahead by +0.1026 over uni-form and +0.0599
+Underfull \hbox (badness 2119) in paragraph at lines 257--258
+\T1/ptm/m/n/10 broad target-2.0 suite is macro-negative (pooled BGR
+ []
+
+
+Underfull \hbox (badness 1231) in paragraph at lines 257--258
+\T1/ptm/m/n/10 radius. The broad-suite target-radius sen-si-tiv-ity check
+ []
+
+
+Underfull \hbox (badness 1072) in paragraph at lines 257--258
+\T1/ptm/m/n/10 vs. uni-form 0.7197 and fixed-radius 0.7468, held-out
  []
 
 
 Underfull \vbox (badness 6047) has occurred while \output is active []
 
  [5]
-Underfull \hbox (badness 2173) in paragraph at lines 263--264
+Underfull \hbox (badness 2173) in paragraph at lines 265--266
 []\T1/ptm/m/n/10 A four-condition 30-seed suf-fix stress sweep varies
  []
 
 
-Underfull \hbox (badness 2726) in paragraph at lines 267--268
+Underfull \hbox (badness 2726) in paragraph at lines 269--270
 []\T1/ptm/m/n/10 The OpenVLA-OFT bridge ex-ports 11,776 teacher-
  []
 
-[6] (./main.bbl) [7] (./ReproducibilityChecklist.tex
+[6]
+Underfull \vbox (badness 1117) has occurred while \output is active []
+
+ (./main.bbl) [7] (./ReproducibilityChecklist.tex
 \c@checksubsection=\count300
 \c@checkitem=\count301
 LaTeX Font Info:    Trying to load font information for T1+pcr on input line 51.
- (/Users/joyyang/Library/TinyTeX/texmf-dist/tex/latex/psnfss/t1pcr.fd
+ (<local-home>/Library/TinyTeX/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 ) [8
 
@@ -321,13 +326,13 @@ L3 programming layer <2026-05-26>
 Here is how much of TeX's memory you used:
  3892 strings out of 469157
  57474 string characters out of 5459492
- 499481 words of memory out of 5000000
+ 498481 words of memory out of 5000000
  32816 multiletter control sequences out of 15000+600000
  669832 words of font info for 89 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 57i,10n,76p,1644b,411s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></Users/joyyang/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (9 pages, 296490 bytes).
+ 57i,10n,76p,1640b,411s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><<local-home>/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (9 pages, 295890 bytes).
 PDF statistics:
  162 PDF objects out of 1000 (max. 8388607)
  97 compressed objects within 1 object stream

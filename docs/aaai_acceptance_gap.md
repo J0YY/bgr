@@ -74,7 +74,7 @@ official checkpoint with `ALPHA=0.75`, scales LoRA-B tensors by the same alpha,
 and evaluates identity plus occlusion fraction 0.80 over 10 LIBERO-Goal tasks x
 40 trials. Submitted jobs are prep `779973`, official `779974`/`779975`, BGR
 `779976`/`779977`, and matched random `779978`/`779979`. Latest poll/sync at
-2026-06-10 21:29 BST showed prep `779973` completed at 21:16:12 and official
+2026-06-10 21:32 BST showed prep `779973` completed at 21:16:12 and official
 identity `779974` still running since 21:16:24 on `c1-g4-02`; BGR identity
 `779976` and matched-random identity `779978` were priority-pending, and the
 occlusion evals were dependency-pending. Logs exist, but no compact summary or
@@ -86,7 +86,7 @@ shrinking them with the heads. This tests the concrete failure mode from the
 0.80 transfer near miss: repair identity without discarding the occlusion
 adaptation. Submitted jobs are prep `780059`, official `780060`/`780061`, BGR
 `780062`/`780063`, and matched random `780064`/`780065`; latest poll/sync at
-2026-06-10 21:29 BST still showed prep `780059` and official identity
+2026-06-10 21:32 BST still showed prep `780059` and official identity
 `780060` priority-pending, downstream evals dependency-pending, and no logs or
 summary. Both
 head-interpolation routes remain non-evidence unless the full summary passes
@@ -1004,15 +1004,15 @@ risk.
   `tools/openml_margin_scout.py` from the default, external-validation, broad,
   and secondary numeric suites, uses `TARGETS=1.5` with the existing numeric
   preprocessing, and runs original seeds 0--29 plus held-out seeds 30--59.
-  Slurm jobs are `780049` and `780050`, both started at 21:02 BST. Latest sync
-  at 2026-06-10 21:29 BST showed both jobs still running on `cnode404`, with
-  no remote run directory or `per_seed.csv` available for paired analysis. Log
-  tails showed the original run finishing `mc1` and starting `jm1`, while the
-  held-out repeat was finishing `mc1`. Treat this as pending broad
-  supervised pre-existing benchmark evidence only; do not use it as a
-  learned-policy or standard-control claim, and do not promote it unless the
-  fixed synced readout beats both uniform and fixed-radius replay at macro or
-  clearly replicated dataset level.
+  Slurm jobs `780049` and `780050` both started at 21:02 BST and completed with
+  exit `0:0` at 21:34:24/21:34:48 BST. The synced fixed readout is a small
+  broad supervised macro win: original/held-out macro means are BGR
+  0.7842/0.7859, uniform 0.7774/0.7764, and fixed-radius 0.7790/0.7741; pooled
+  means are BGR 0.7851, uniform 0.7769, and fixed-radius 0.7766. BGR is ahead
+  on 22/32 pooled dataset means versus uniform and 24/32 versus fixed. This is
+  useful pre-existing supervised benchmark evidence, but the effect is small
+  and the suite still contains large negative rows, so do not use it as a
+  learned-policy, robotics, or standard-control claim.
 - The Blackjack independent-route scout completed negative: all nine configs in
   `results/blackjack_recovery_scout_8seed_v1/config_summary.csv` have
   `candidate=False`. Do not scale or promote it without a materially new

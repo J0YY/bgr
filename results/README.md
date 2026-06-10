@@ -129,21 +129,21 @@ Internal pre-existing-dataset route scout:
   BGR-minus-uniform gaps are +0.023/+0.083/+0.075 at radii 1.0/1.5/2.0, with
   BGR-minus-fixed +0.025/+0.074/+0.048. kc2 remains a near-miss because its
   pooled BGR-minus-fixed gaps are only +0.024/+0.027/+0.027.
-- Active mixed-type OpenML scout, opened 2026-06-10: `tools/openml_margin_scout.py`
+- Active mixed-type OpenML scout, opened 2026-06-10: tools/openml_margin_scout.py
   now has an opt-in `--mixed-binary-suite` using one-hot categorical
   preprocessing for credit-g, kr-vs-kp, tic-tac-toe, mushroom, bank-marketing,
   adult, PhishingWebsites, and credit-approval. This is a materially different
   pre-existing benchmark interface from the numeric-only OpenML sweeps, but it
   is still only a scout. A local smoke passed with
-  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets credit-g,tic-tac-toe --preprocessing mixed --targets 2.0 --seeds 1 --steps 1 --batch-size 8 --candidate-count 16 --eval-examples 50 --out /tmp/bgr_openml_mixed_smoke`.
+  PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets credit-g,tic-tac-toe --preprocessing mixed --targets 2.0 --seeds 1 --steps 1 --batch-size 8 --candidate-count 16 --eval-examples 50 --out /tmp/bgr_openml_mixed_smoke.
   The fixed 4-seed Athena scout was submitted as job `778553` with
-  `scripts/queue_openml_mixed_binary_suite.sh`, writing to
-  `/work/joy/bgr/runs/openml_mixed_binary_scout_v1_778553` and logging to
-  `/work/joy/bgr/logs/bgr-openml-mixed-binary-778553.out`. Do not promote it
+  scripts/queue_openml_mixed_binary_suite.sh, writing to
+  <athena-workspace>/bgr/runs/openml_mixed_binary_scout_v1_778553 and logging to
+  <athena-workspace>/bgr/logs/bgr-openml-mixed-binary-778553.out. Do not promote it
   unless a row clears the 4-seed scout gate and then passes fixed 30-seed and
   held-out 30-seed follow-ups.
   Job `778553` completed with exit `0:0` and synced to
-  `results/openml_mixed_binary_scout_v1_778553/`. No row cleared the strict
+  results/openml_mixed_binary_scout_v1_778553/. No row cleared the strict
   4-seed scout gate because all positive-looking rows had one paired loss.
   Top near-misses are credit-approval target 2.0, BGR 0.8447 vs. uniform
   0.7849 (+0.0598, W/L/T=3/1/0) and fixed 0.7949; credit-approval target 1.5,
@@ -153,14 +153,14 @@ Internal pre-existing-dataset route scout:
   W/L/T=3/1/0) and fixed 0.8631.
   Fixed all-dataset/all-target 30-seed diagnostics were queued before any
   manuscript use: original seeds 0--29 job `778596` writes to
-  `/work/joy/bgr/runs/openml_mixed_binary_target_sensitivity_30seed_v1_778596`,
+  <athena-workspace>/bgr/runs/openml_mixed_binary_target_sensitivity_30seed_v1_778596,
   and held-out seeds 30--59 job `778597` writes to
-  `/work/joy/bgr/runs/openml_mixed_binary_target_sensitivity_replication_30seed_v1_778597`.
+  <athena-workspace>/bgr/runs/openml_mixed_binary_target_sensitivity_replication_30seed_v1_778597.
   Initial poll showed `778596` running on `cnode401` and `778597` pending on
   resources. Jobs `778596`/`778597` completed with exit `0:0` and synced via
-  `scripts/sync_openml_mixed_binary_results.sh` to
-  `results/openml_mixed_binary_target_sensitivity_30seed_v1_778596/` and
-  `results/openml_mixed_binary_target_sensitivity_replication_30seed_v1_778597/`.
+  scripts/sync_openml_mixed_binary_results.sh to
+  results/openml_mixed_binary_target_sensitivity_30seed_v1_778596/ and
+  results/openml_mixed_binary_target_sensitivity_replication_30seed_v1_778597/.
   The pooled mixed suite is macro-negative: BGR 0.7891, uniform 0.7936,
   fixed-radius 0.8000. The adult target-1.5 row is a replicated positive:
   pooled BGR 0.7941 vs. uniform 0.7547 (+0.0394, W/L/T=43/17/0) and
@@ -168,35 +168,44 @@ Internal pre-existing-dataset route scout:
   do not clear the stricter fixed-radius margin. A locked adult target-1.5
   third-split confirmation over seeds 60--119 was submitted as job `778912`
   after a failed wrapper attempt `778905`; it writes to
-  `/work/joy/bgr/runs/openml_mixed_adult_target15_confirmation_60seed_v2_778912`.
+  <athena-workspace>/bgr/runs/openml_mixed_adult_target15_confirmation_60seed_v2_778912.
   It completed with exit `0:0` and synced to
-  `results/openml_mixed_adult_target15_confirmation_60seed_v2_778912/`, but is
+  results/openml_mixed_adult_target15_confirmation_60seed_v2_778912/, but is
   weak: BGR 0.7935 vs. uniform 0.7809 (+0.0126, W/L/T=37/23/0) and
   fixed-radius 0.7879 (+0.0055, W/L/T=29/31/0). Pooled over all 120 adult
   target-1.5 seeds, BGR is 0.7938 vs. uniform 0.7678 (+0.0260) and fixed
   0.7748 (+0.0190), below the +0.03 fixed follow-up standard. Treat this as a
   mixed-type OpenML near miss/fragility diagnostic, not manuscript evidence.
-- Active all-binary numeric OpenML target-1.5 sweep, opened 2026-06-10: this is
-  a fixed broad CPU check over the 32 numeric binary OpenML datasets currently
+- Completed all-binary numeric OpenML target-1.5 sweep, opened and completed
+  2026-06-10: this is a fixed broad CPU check over the 32 numeric binary OpenML datasets currently
   registered in `tools/openml_margin_scout.py`, combining the default,
   external-validation, broad, and secondary numeric suites. It uses the existing
   numeric preprocessing, `TARGETS=1.5`, `SEEDS=30`, `STEPS=8`,
   `BATCH_SIZE=64`, `CANDIDATE_COUNT=128`, and `EVAL_EXAMPLES=250`. Original
   seeds 0--29 were submitted as Slurm job `780049`, writing to
-  `/work/joy/bgr/runs/openml_all_binary_numeric_target15_30seed_v1_780049`;
+  <athena-workspace>/bgr/runs/openml_all_binary_numeric_target15_30seed_v1_780049;
   held-out seeds 30--59 were submitted as Slurm job `780050`, writing to
-  `/work/joy/bgr/runs/openml_all_binary_numeric_target15_replication_30seed_v1_780050`.
-  Both jobs started on 2026-06-10 at 21:02 BST. Latest sync at 2026-06-10
-  21:29 BST showed both jobs still running on `cnode404`; only Slurm logs were
-  available locally, with no `per_seed.csv` or valid paired analysis yet. Log
-  tails showed the original run finishing `mc1` and starting `jm1`, while the
-  held-out repeat was finishing `mc1`. This
-  route is not paper evidence unless the synced fixed readout shows a broad
-  macro or clearly replicated dataset-level win over both uniform and
-  fixed-radius replay; it remains supervised pre-existing benchmark evidence,
-  not standard-control or learned-policy evidence.
-  Sync with:
-  `ORIG_JOB_ID=780049 REP_JOB_ID=780050 ORIG_PREFIX=openml_all_binary_numeric_target15_30seed_v1 REP_PREFIX=openml_all_binary_numeric_target15_replication_30seed_v1 scripts/sync_openml_mixed_binary_results.sh`.
+  <athena-workspace>/bgr/runs/openml_all_binary_numeric_target15_replication_30seed_v1_780050.
+  Both jobs started on 2026-06-10 at 21:02 BST and completed with exit `0:0`
+  at 21:34:24/21:34:48 BST. Synced compact artifacts are
+  `results/openml_all_binary_numeric_target15_30seed_v1_780049/summary.csv`,
+  `results/openml_all_binary_numeric_target15_30seed_v1_780049/per_seed.csv`,
+  `results/openml_all_binary_numeric_target15_30seed_v1_780049/package_versions.json`,
+  `results/openml_all_binary_numeric_target15_replication_30seed_v1_780050/summary.csv`,
+  `results/openml_all_binary_numeric_target15_replication_30seed_v1_780050/per_seed.csv`,
+  `results/openml_all_binary_numeric_target15_replication_30seed_v1_780050/package_versions.json`,
+  and `results/openml_all_binary_numeric_target15_analysis_780049_780050.txt`.
+  The fixed readout is a small broad supervised macro win: original/held-out
+  macro means are BGR 0.7842/0.7859, uniform 0.7774/0.7764, and fixed-radius
+  0.7790/0.7741; pooled means are BGR 0.7851, uniform 0.7769, and fixed-radius
+  0.7766. BGR is ahead on 22/32 pooled dataset means versus uniform and 24/32
+  versus fixed. The analyzer's simple-screen rows are MagicTelescope,
+  blood-transfusion-service-center, diabetes, haberman, jm1, and kc2; keep kc2
+  caveated because its pooled fixed-radius gap is +0.0267, below the stricter
+  +0.03 dataset-level promotion margin. Treat this as a small macro-positive
+  supervised pre-existing benchmark aggregation, not standard-control or
+  learned-policy evidence. Reproduce with:
+  PYTHONPATH=src:. python3 tools/analyze_openml_margin_suite.py --original results/openml_all_binary_numeric_target15_30seed_v1_780049/per_seed.csv --replication results/openml_all_binary_numeric_target15_replication_30seed_v1_780050/per_seed.csv.
 
 Active OpenVLA hard-occlusion head-interpolation routes:
 
@@ -205,7 +214,7 @@ Active OpenVLA hard-occlusion head-interpolation routes:
   interpolated action/proprio heads and LoRA-B tensors scaled by the same
   alpha. Jobs are prep `779973`, official identity/occlusion `779974`/`779975`,
   BGR identity/occlusion `779976`/`779977`, and matched-random
-  identity/occlusion `779978`/`779979`. Latest poll at 2026-06-10 21:29 BST
+  identity/occlusion `779978`/`779979`. Latest poll at 2026-06-10 21:32 BST
   showed prep `779973` completed successfully at 21:16:12, official identity
   `779974` still running since 21:16:24 on `c1-g4-02`, BGR identity `779976` and
   matched-random identity `779978` priority-pending, and all occlusion evals
@@ -217,7 +226,7 @@ Active OpenVLA hard-occlusion head-interpolation routes:
   action/proprio heads toward the official checkpoint. Jobs are prep `780059`,
   official identity/occlusion `780060`/`780061`, BGR identity/occlusion
   `780062`/`780063`, and matched-random identity/occlusion `780064`/`780065`.
-  Latest poll at 2026-06-10 21:29 BST showed prep `780059` and official
+  Latest poll at 2026-06-10 21:32 BST showed prep `780059` and official
   identity `780060` priority-pending, downstream evals dependency-pending, and
   still no logs or summary. Sync with:
   `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp075_lorafull_v1 JOB_IDS=780060,780061,780062,780063,780064,780065 DETAIL_JOB_IDS=780059,780060,780061,780062,780063,780064,780065 GATE_PERTURBATIONS=occlusion ROUTE_LABEL='Hard-occlusion 0.80 head-only LoRA-full OpenVLA-OFT transfer' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
@@ -228,7 +237,7 @@ Active OpenVLA hard-occlusion head-interpolation routes:
 
 Completed external-package scope diagnostics:
 
-- `results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/summary.csv`:
+- results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/summary.csv:
   fixed official MiniGrid DynamicObstacles all-method screen submitted to
   `athena` as job `779232`. It uses exact restored package grid/obstacle
   state, stochastic package obstacle moves, and teacher-action replay from
@@ -240,13 +249,13 @@ Completed external-package scope diagnostics:
   failure-only, TD-loss, and BGR-uniform-radius; it rejects default BGR versus
   uniform (delta -0.0394, W/L/T=0/4/0), failure-only, TD-loss, and
   BGR-uniform-radius, with a median-r80 contradiction.
-- `results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/results.jsonl`,
-  `results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/package_versions.json`,
+- results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/results.jsonl,
+  results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/package_versions.json,
   and
-  `results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/slurm/bgr-minigrid-dynamic-779232.out`:
+  results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/slurm/bgr-minigrid-dynamic-779232.out:
   row-level, package-version, and Slurm records for the same negative route
   (`gymnasium==1.3.0`, `minigrid==3.0.0`).
-- `results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/summary.csv`:
+- results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/summary.csv:
   fixed clean-preservation follow-up for the same official MiniGrid
   DynamicObstacles interface, submitted to `athena` as job `779412`. The
   `bgr_clean_shield` premise trains at sigma 0 when selected-state clean
@@ -258,10 +267,10 @@ Completed external-package scope diagnostics:
   BGR-Clean-Shield versus uniform (delta -0.0394, W/L/T=1/3/0), fixed,
   failure-only, TD-loss, and BGR-uniform-radius; it rejects BGR-Coverage and
   default BGR as well.
-- `results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/results.jsonl`,
-  `results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/package_versions.json`,
+- results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/results.jsonl,
+  results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/package_versions.json,
   and
-  `results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/slurm/bgr-minigrid-dynamic-779412.out`:
+  results/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412/slurm/bgr-minigrid-dynamic-779412.out:
   row-level, package-version, and Slurm records for the clean-shield negative
   route (`gymnasium==1.3.0`, `minigrid==3.0.0`).
 
@@ -2717,13 +2726,13 @@ Submitted command:
 TAG=occlusion_bottleneck_hardocc065_transfer_step50400_lr2em7_v1 \
 EVAL_ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc065_transfer_step50400_lr2em7_v1 \
 REMOTE_HOST=athena \
-REMOTE_LOG_DIR=/work/joy/bgr/logs \
-REMOTE_RUN_ROOT=/work/joy/bgr/runs \
-REMOTE_HF_HOME=/work/joy/cache_home/huggingface \
-OPENVLA_OFT_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft \
-LIBERO_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/LIBERO \
-BGR_CKPT=/work/joy/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
-RANDOM_CKPT=/work/joy/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+REMOTE_LOG_DIR=<athena-workspace>/bgr/logs \
+REMOTE_RUN_ROOT=<athena-workspace>/bgr/runs \
+REMOTE_HF_HOME=<athena-workspace>/cache_home/huggingface \
+OPENVLA_OFT_ROOT=<athena-workspace>/external_validation/openvla_oft_smoke_746850/openvla-oft \
+LIBERO_ROOT=<athena-workspace>/external_validation/openvla_oft_smoke_746850/LIBERO \
+BGR_CKPT=<athena-workspace>/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=<athena-workspace>/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
 METHODS=official,bgr,random \
 PERTURBATIONS='identity={};occlusion={"fraction":0.65}' \
 EVAL_TASKS=10 \
@@ -2824,16 +2833,16 @@ Submitted command:
 
 ```bash
 REMOTE_HOST=athena \
-REMOTE_LOG_DIR=/work/joy/bgr/logs \
-REMOTE_RUN_ROOT=/work/joy/bgr/runs \
-REMOTE_HF_HOME=/work/joy/cache_home/huggingface \
-OPENVLA_OFT_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft \
-LIBERO_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/LIBERO \
+REMOTE_LOG_DIR=<athena-workspace>/bgr/logs \
+REMOTE_RUN_ROOT=<athena-workspace>/bgr/runs \
+REMOTE_HF_HOME=<athena-workspace>/cache_home/huggingface \
+OPENVLA_OFT_ROOT=<athena-workspace>/external_validation/openvla_oft_smoke_746850/openvla-oft \
+LIBERO_ROOT=<athena-workspace>/external_validation/openvla_oft_smoke_746850/LIBERO \
 TAG=occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_v1 \
 EVAL_ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_v1 \
 OFFICIAL_CKPT=moojink/openvla-7b-oft-finetuned-libero-goal \
-BGR_CKPT=/work/joy/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
-RANDOM_CKPT=/work/joy/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+BGR_CKPT=<athena-workspace>/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=<athena-workspace>/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
 METHODS=official,bgr,random \
 PERTURBATIONS='identity={};occlusion={"fraction":0.8}' \
 EVAL_TASKS=10 \
@@ -3055,13 +3064,13 @@ not paper evidence.
 Prep/adaptation command family:
 
 ```bash
-REMOTE_PROJECT=/work/joy/bgr \
-REMOTE_LOG_DIR=/work/joy/bgr/logs \
-REMOTE_RUN_ROOT=/work/joy/bgr/runs \
-REMOTE_HF_HOME=/work/joy/cache_home/huggingface \
-OPENVLA_OFT_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft \
-LIBERO_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/LIBERO \
-SOURCE_ARTIFACT_ROOT=/work/joy/dreamaudit_jobs/artifacts \
+REMOTE_PROJECT=<athena-workspace>/bgr \
+REMOTE_LOG_DIR=<athena-workspace>/bgr/logs \
+REMOTE_RUN_ROOT=<athena-workspace>/bgr/runs \
+REMOTE_HF_HOME=<athena-workspace>/cache_home/huggingface \
+OPENVLA_OFT_ROOT=<athena-workspace>/external_validation/openvla_oft_smoke_746850/openvla-oft \
+LIBERO_ROOT=<athena-workspace>/external_validation/openvla_oft_smoke_746850/LIBERO \
+SOURCE_ARTIFACT_ROOT=<athena-workspace>/dreamaudit_jobs/artifacts \
 PREP_TAG=p2048unique_hardocc065_prereg \
 ANCHOR_TAG=proxanchor_l2_5em0 \
 ADAPT_STEPS=400 \
@@ -3077,13 +3086,13 @@ Perturbation eval command:
 TAG=hardocc065_adapt_step50400_lr2em7_v1 \
 EVAL_ARTIFACT=openvla_oft_perturb_eval_hardocc065_adapt_step50400_lr2em7_v1 \
 REMOTE_HOST=athena \
-REMOTE_LOG_DIR=/work/joy/bgr/logs \
-REMOTE_RUN_ROOT=/work/joy/bgr/runs \
-REMOTE_HF_HOME=/work/joy/cache_home/huggingface \
-OPENVLA_OFT_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft \
-LIBERO_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/LIBERO \
-BGR_CKPT=/work/joy/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048unique_hardocc065_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
-RANDOM_CKPT=/work/joy/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048unique_hardocc065_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+REMOTE_LOG_DIR=<athena-workspace>/bgr/logs \
+REMOTE_RUN_ROOT=<athena-workspace>/bgr/runs \
+REMOTE_HF_HOME=<athena-workspace>/cache_home/huggingface \
+OPENVLA_OFT_ROOT=<athena-workspace>/external_validation/openvla_oft_smoke_746850/openvla-oft \
+LIBERO_ROOT=<athena-workspace>/external_validation/openvla_oft_smoke_746850/LIBERO \
+BGR_CKPT=<athena-workspace>/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048unique_hardocc065_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=<athena-workspace>/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048unique_hardocc065_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
 METHODS=official,bgr,random \
 PERTURBATIONS='identity={};occlusion={"fraction":0.65}' \
 EVAL_TASKS=10 \
@@ -7253,13 +7262,13 @@ Submitted jobs:
 
 | Method | Job | Remote output |
 |---|---:|---|
-| uniform | 778100 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_uniform_v1_778100` |
-| fixed | 778101 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_fixed_v1_778101` |
-| failure-only | 778102 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_failure_only_v1_778102` |
-| TD-loss | 778103 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_td_loss_v1_778103` |
-| BGR-uniform-radius | 778104 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_bgr_uniform_radius_v1_778104` |
-| BGR-Coverage | 778105 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_bgr_coverage_v1_778105` |
-| BGR | 778106 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_bgr_v1_778106` |
+| uniform | 778100 | `<athena-workspace>/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_uniform_v1_778100` |
+| fixed | 778101 | `<athena-workspace>/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_fixed_v1_778101` |
+| failure-only | 778102 | `<athena-workspace>/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_failure_only_v1_778102` |
+| TD-loss | 778103 | `<athena-workspace>/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_td_loss_v1_778103` |
+| BGR-uniform-radius | 778104 | `<athena-workspace>/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_bgr_uniform_radius_v1_778104` |
+| BGR-Coverage | 778105 | `<athena-workspace>/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_bgr_coverage_v1_778105` |
+| BGR | 778106 | `<athena-workspace>/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_bgr_v1_778106` |
 
 Latest poll at 2026-06-10 17:57--18:00 BST showed dense default BGR, TD-loss,
 and failure-only still running. Dense BGR-Coverage is already completed

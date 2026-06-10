@@ -605,7 +605,58 @@ def openml_positive_details(root: Path) -> list[str]:
     )
     if jm1:
         details.append(jm1)
+    all_binary = openml_macro_suite_detail(
+        root,
+        label="OpenML all-binary target-1.5",
+        original_path=root / "results/openml_all_binary_numeric_target15_30seed_v1_780049/per_seed.csv",
+        replication_path=root / "results/openml_all_binary_numeric_target15_replication_30seed_v1_780050/per_seed.csv",
+    )
+    if all_binary:
+        details.append(all_binary)
     return details
+
+
+def openml_macro_suite_detail(root: Path, *, label: str, original_path: Path, replication_path: Path) -> str | None:
+    del root
+    if not original_path.exists() or not replication_path.exists():
+        return None
+
+    def suite_stats(rows: list[dict[str, str]]) -> tuple[float, float, float, int, int, int]:
+        datasets = sorted({row["dataset"] for row in rows})
+        uniform_means = []
+        fixed_means = []
+        bgr_means = []
+        wins_uniform = 0
+        wins_fixed = 0
+        for dataset in datasets:
+            dataset_rows = [row for row in rows if row["dataset"] == dataset]
+            uniform = mean_metric(dataset_rows, "uniform", "final_rauc")
+            fixed = mean_metric(dataset_rows, "fixed", "final_rauc")
+            bgr = mean_metric(dataset_rows, "bgr", "final_rauc")
+            uniform_means.append(uniform)
+            fixed_means.append(fixed)
+            bgr_means.append(bgr)
+            wins_uniform += int(bgr > uniform)
+            wins_fixed += int(bgr > fixed)
+        return mean(uniform_means), mean(fixed_means), mean(bgr_means), wins_uniform, wins_fixed, len(datasets)
+
+    original = read_rows(original_path)
+    replication = read_rows(replication_path)
+    pooled = original + replication
+    orig_uniform, orig_fixed, orig_bgr, orig_wins_uniform, orig_wins_fixed, orig_n = suite_stats(original)
+    rep_uniform, rep_fixed, rep_bgr, rep_wins_uniform, rep_wins_fixed, rep_n = suite_stats(replication)
+    pooled_uniform, pooled_fixed, pooled_bgr, pooled_wins_uniform, pooled_wins_fixed, pooled_n = suite_stats(pooled)
+    if not (pooled_bgr > pooled_uniform and pooled_bgr > pooled_fixed):
+        return None
+    return (
+        f"{label} broad macro check: original macro BGR {orig_bgr:.4f} vs uniform {orig_uniform:.4f} "
+        f"and fixed {orig_fixed:.4f} ({orig_wins_uniform}/{orig_n} dataset means vs uniform, "
+        f"{orig_wins_fixed}/{orig_n} vs fixed); held-out macro BGR {rep_bgr:.4f} vs uniform "
+        f"{rep_uniform:.4f} and fixed {rep_fixed:.4f} ({rep_wins_uniform}/{rep_n}, "
+        f"{rep_wins_fixed}/{rep_n}); pooled macro BGR {pooled_bgr:.4f} vs uniform "
+        f"{pooled_uniform:.4f} and fixed {pooled_fixed:.4f} ({pooled_wins_uniform}/{pooled_n}, "
+        f"{pooled_wins_fixed}/{pooled_n})"
+    )
 
 
 def independent_benchmark_gate(root: Path) -> GateResult:

@@ -17,7 +17,12 @@ Current status: not there yet. The readiness gate still says
 `NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid mechanism result is the
 main mechanism evidence, and OpenML diabetes, blood-transfusion, phoneme,
 MagicTelescope, haberman, and jm1 are now replicated positive
-pre-existing-dataset margin-replay evidence.
+pre-existing-dataset margin-replay evidence. A fixed all-binary numeric OpenML
+target-1.5 aggregation over 32 datasets is also now complete and small
+macro-positive: pooled BGR 0.7851 vs. uniform 0.7769 and fixed-radius 0.7766,
+with BGR ahead on 22/32 dataset means versus uniform and 24/32 versus fixed.
+This strengthens the supervised pre-existing benchmark story but still does
+not solve the standard-environment or learned-policy evidence gap.
 Standard-environment recovery screens and OpenVLA/LIBERO learned-policy evidence
 remain failing or non-promotable. The latest bsuite Catch 30-seed scale-up,
 MiniGrid FourRooms radius-10 rescue,
@@ -69,7 +74,7 @@ evaluates official, interpolated BGR, and interpolated matched random on
 identity plus occlusion fraction 0.80 over 10 LIBERO-Goal tasks x 40 trials.
 Jobs are prep `779973`, official identity/occlusion `779974`/`779975`, BGR
 identity/occlusion `779976`/`779977`, and matched-random identity/occlusion
-`779978`/`779979`. Latest poll/sync at 2026-06-10 21:29 BST showed prep
+`779978`/`779979`. Latest poll/sync at 2026-06-10 21:32 BST showed prep
 `779973` completed successfully at 21:16:12, official identity `779974`
 still running since 21:16:24 on `c1-g4-02`, BGR identity `779976` and
 matched-random identity `779978` priority-pending, and the occlusion evals
@@ -86,7 +91,7 @@ whether identity can be repaired without shrinking the occlusion adaptation
 signal. Jobs are prep `780059`, official identity/occlusion `780060`/`780061`,
 BGR identity/occlusion `780062`/`780063`, and matched-random
 identity/occlusion `780064`/`780065`. Latest poll/sync at 2026-06-10
-21:29 BST showed prep `780059` and official identity `780060`
+21:32 BST showed prep `780059` and official identity `780060`
 priority-pending, downstream BGR/random evals dependency-pending, and still no logs
 or summary. This is also not evidence unless
 the same fixed +10/400, +0.02, and identity-preservation gate passes. The
@@ -96,7 +101,7 @@ identity: BGR identity is 389/400 for the base identity-anchored route,
 official identity 393/400 by more than one episode. The base route now also has
 BGR occlusion 303/400 and matched-random identity 393/400 available; official
 occlusion `776041` and matched-random occlusion `776045` were still running at
-the 21:29 BST poll. The micro route still has only BGR identity 387/400 and
+the 21:32 BST poll. The micro route still has only BGR identity 387/400 and
 official identity 393/400 summarized, with official occlusion `777039` and
 matched-random identity `777042` running and BGR occlusion `777041`
 priority-pending. The strict route partial summary now has official occlusion
@@ -115,15 +120,21 @@ sweep over all current numeric binary OpenML datasets already registered in
 `tools/openml_margin_scout.py`. Original seeds 0--29 were submitted as Slurm
 job `780049`, and held-out seeds 30--59 were submitted as job `780050`; both
 started on 2026-06-10 at 21:02 BST with `TARGETS=1.5`, `SEEDS=30`,
-`PREPROCESSING=numeric`, and 32 datasets. Latest sync at 2026-06-10
-21:29 BST showed both jobs still running on `cnode404`; only Slurm logs were
-available locally, with no `per_seed.csv` or valid paired analysis yet. Log
-tails showed the original run finishing `mc1` and starting `jm1`, while the
-held-out repeat was finishing `mc1`. This is
-not paper evidence unless the synced macro and dataset-level results beat
-uniform and fixed-radius replay under the same fixed readout; it is a broad
-pre-existing supervised benchmark check, not a learned-policy or
-standard-control win. The
+`PREPROCESSING=numeric`, and 32 datasets. Both jobs completed successfully on
+2026-06-10 (`780049` at 21:34:24 BST and `780050` at 21:34:48 BST) and synced
+to `results/openml_all_binary_numeric_target15_30seed_v1_780049/` and
+`results/openml_all_binary_numeric_target15_replication_30seed_v1_780050/`.
+The fixed readout is a small broad supervised macro win: original/held-out
+macro means are BGR 0.7842/0.7859, uniform 0.7774/0.7764, and fixed-radius
+0.7790/0.7741; pooled means are BGR 0.7851 vs. uniform 0.7769 and fixed-radius
+0.7766, with BGR ahead on 22/32 dataset means versus uniform and 24/32 versus
+fixed. The pooled simple-screen positive rows are MagicTelescope,
+blood-transfusion-service-center, diabetes, haberman, jm1, and kc2, but kc2 is
+still below the stricter +0.03 fixed-radius margin used for earlier
+dataset-level promotion. Treat this as a small macro-positive supervised
+pre-existing benchmark aggregation, not a learned-policy or standard-control
+win. The deterministic readout is saved at
+`results/openml_all_binary_numeric_target15_analysis_780049_780050.txt`. The
 internal sklearn-digits margin replay scout is also rejected before promotion:
 its best BGR target gives only 0.8271 vs. 0.8123 RAUC against uniform with a
 2/2/0 paired split, while fixed-radius replay is stronger at another target.
@@ -2045,9 +2056,10 @@ still missing, so the route remains incomplete.
 
 Latest paper checkpoint: OpenML diabetes, blood-transfusion, phoneme,
 MagicTelescope, haberman, jm1, the mixed full external/broad/secondary OpenML
-suite repeats, and OpenML positive-dataset target-sensitivity caveats are now
-incorporated as replicated pre-existing supervised margin-replay evidence plus
-scope/fragility evidence. This improves the "no new positive evidence",
+suite repeats, the all-binary numeric OpenML target-1.5 32-dataset aggregation,
+and OpenML positive-dataset target-sensitivity caveats are now incorporated as
+replicated pre-existing supervised margin-replay evidence plus scope/fragility
+evidence. This improves the "no new positive evidence",
 cherry-picking, and target-fragility weaknesses but does not
 change readiness because the learned-policy gate still fails.
 Latest poll at 2026-06-08 06:13:20 BST showed the occlusion route past data
