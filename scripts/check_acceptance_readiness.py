@@ -33,6 +33,9 @@ OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE = (
 OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE = (
     "results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc065_transfer_step50400_lr2em7_v1/summary.csv"
 )
+OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE = (
+    "results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_v1/summary.csv"
+)
 OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE = (
     "results/openvla_oft_perturb_eval_hardocc065_adapt_step50400_lr2em7_v1/summary.csv"
 )
@@ -41,6 +44,7 @@ OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE = (
 )
 OPENVLA_PERTURB_ONLY_ANCHOR_MARKER = "queue_openvla_oft_preregistered_perturb_only_anchor.sh"
 OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion_transfer_results.sh"
+OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion080_transfer_results.sh"
 OPENVLA_HARD_OCCLUSION_ADAPT_MARKER = "sync_openvla_oft_hard_occlusion_adapt_results.sh"
 OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER = "sync_openvla_oft_hard_occlusion_adapt_a40_results.sh"
 OPENVLA_PROXIMAL_ANCHOR_JOB_IDS = {
@@ -193,6 +197,13 @@ def learned_policy_inflight_detail(root: Path) -> str | None:
 
     inflight: list[str] = []
     if (
+        OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER in ledger_text
+        and not (root / OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE).exists()
+    ):
+        inflight.append(
+            "hard-occlusion 0.80 transfer OpenVLA route is queued/running and still missing a complete summary"
+        )
+    if (
         OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER in ledger_text
         and not (root / OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE).exists()
     ):
@@ -258,10 +269,17 @@ def learned_policy_inflight_detail(root: Path) -> str | None:
     )
 
 
-def learned_policy_summary_gate(root: Path, relative_path: str, *, label: str) -> GateResult:
+def learned_policy_summary_gate(
+    root: Path,
+    relative_path: str,
+    *,
+    label: str,
+    non_identity_perturbations: set[str] | None = None,
+) -> GateResult:
     rows = read_rows(root / relative_path)
     methods = {"bgr", "official", "random"}
-    required_perturbations = OPENVLA_NON_IDENTITY_PERTURBATIONS | {"identity"}
+    required_non_identity = non_identity_perturbations or OPENVLA_NON_IDENTITY_PERTURBATIONS
+    required_perturbations = required_non_identity | {"identity"}
     missing = missing_openvla_rows(rows, methods, required_perturbations)
     if missing:
         return GateResult(
@@ -270,9 +288,9 @@ def learned_policy_summary_gate(root: Path, relative_path: str, *, label: str) -
             f"{label} incomplete; missing {', '.join(missing)}",
         )
 
-    bgr_success, bgr_episodes = perturbation_total(rows, "bgr", OPENVLA_NON_IDENTITY_PERTURBATIONS)
-    official_success, official_episodes = perturbation_total(rows, "official", OPENVLA_NON_IDENTITY_PERTURBATIONS)
-    random_success, random_episodes = perturbation_total(rows, "random", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+    bgr_success, bgr_episodes = perturbation_total(rows, "bgr", required_non_identity)
+    official_success, official_episodes = perturbation_total(rows, "official", required_non_identity)
+    random_success, random_episodes = perturbation_total(rows, "random", required_non_identity)
     bgr_identity, identity_eps = success_total(
         [row for row in rows if row.get("perturbation") == "identity"], "bgr", exclude_identity=False
     )
@@ -1021,6 +1039,48 @@ def independent_benchmark_gate(root: Path) -> GateResult:
 
 def learned_policy_gate(root: Path) -> GateResult:
     inflight_detail = learned_policy_inflight_detail(root)
+    hard_occ_summaries = [
+        (
+            OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE,
+            "hard-occlusion 0.80 transfer audit",
+        ),
+        (
+            OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE,
+            "hard-occlusion 0.65 transfer audit",
+        ),
+        (
+            OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE,
+            "hard-occlusion 0.65 A40 adaptation audit",
+        ),
+        (
+            OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE,
+            "hard-occlusion 0.65 adaptation audit",
+        ),
+    ]
+    hard_occ_gates = [
+        learned_policy_summary_gate(
+            root,
+            relative_path,
+            label=label,
+            non_identity_perturbations={"occlusion"},
+        )
+        for relative_path, label in hard_occ_summaries
+        if (root / relative_path).exists()
+    ]
+    passed_hard_occ = next((gate for gate in hard_occ_gates if gate.passed), None)
+    if passed_hard_occ is not None:
+        if inflight_detail:
+            return GateResult(
+                passed_hard_occ.name,
+                passed_hard_occ.passed,
+                f"{passed_hard_occ.detail}; {inflight_detail}",
+            )
+        return passed_hard_occ
+    if hard_occ_gates:
+        gate = hard_occ_gates[0]
+        if inflight_detail:
+            return GateResult(gate.name, gate.passed, f"{gate.detail}; {inflight_detail}")
+        return gate
     if (root / OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE).exists():
         gate = learned_policy_summary_gate(
             root,

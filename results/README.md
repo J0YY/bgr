@@ -2511,6 +2511,83 @@ scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --no-check
 scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --sync
 ```
 
+Latest poll at 2026-06-10 10:14:46 BST: identity eval jobs `774711`,
+`774713`, and `774715` were still running at about 50:04 elapsed on A6000
+nodes. Hard-occlusion jobs `774712`, `774714`, and `774716` remained
+dependency-pending behind their identity jobs. Remote identity logs exist, but
+the compact `summary.csv` is still missing, so the fixed hard-occlusion gate is
+incomplete.
+
+## Queued OpenVLA-OFT Hard-Occlusion 0.80 Transfer Diagnostic
+
+Queued on 2026-06-10 before any 0.65 occlusion rows were available. This is a
+separate diagnostic/route scout using the completed occlusion-bottleneck BGR
+and matched-random checkpoints, not a paper claim. The premise is that a harder
+occlusion fraction may expose a less saturated visual bottleneck than the
+0.65 transfer diagnostic.
+
+Promotion gate: over the 400 hard-occlusion episodes, BGR must beat both
+official and matched random by at least 10 episodes and at least 0.02 absolute
+success rate, while not trailing the best identity comparator by more than one
+episode. Until the compact summary exists and this gate passes, this route is
+not paper evidence.
+
+Submitted command:
+
+```bash
+REMOTE_HOST=athena \
+REMOTE_LOG_DIR=/work/joy/bgr/logs \
+REMOTE_RUN_ROOT=/work/joy/bgr/runs \
+REMOTE_HF_HOME=/work/joy/cache_home/huggingface \
+OPENVLA_OFT_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft \
+LIBERO_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/LIBERO \
+TAG=occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_v1 \
+OFFICIAL_CKPT=moojink/openvla-7b-oft-finetuned-libero-goal \
+BGR_CKPT=/work/joy/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/joy/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+METHODS=official,bgr,random \
+PERTURBATIONS='identity={};occlusion={"fraction":0.8}' \
+EVAL_TASKS=10 \
+EVAL_TRIALS=40 \
+EVAL_SEED=7 \
+EVAL_TASK_OFFSET=0 \
+EVAL_INIT_STATE_OFFSET=0 \
+EVAL_TIME=12:00:00 \
+PARTITION=low-prio-gpu \
+GRES=gpu:a40:1 \
+CPUS=8 \
+MEM=90G \
+EXCLUDE=c2-g4-21,c2-g4-19,c2-g4-26,c2-g8-01,c2-g8-02,c2-g8-06,c2-g8-08 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Slurm jobs:
+
+```text
+774917  official identity, initially running on c2-g4-17
+774919  official hard occlusion, dependency-pending on 774917
+774920  BGR identity, pending on resources
+774921  BGR hard occlusion, dependency-pending on 774920
+774922  matched-random identity, pending on priority
+774923  matched-random hard occlusion, dependency-pending on 774922
+```
+
+Sync/poll helper:
+
+```bash
+scripts/sync_openvla_oft_hard_occlusion080_transfer_results.sh --poll --no-check
+scripts/sync_openvla_oft_hard_occlusion080_transfer_results.sh --sync
+```
+
+Initial poll at 2026-06-10 10:14:59 BST: official identity `774917` was
+running on `c2-g4-17` at 4:43 elapsed; BGR identity `774920` was pending on
+resources with estimated start 2026-06-10 12:56:05 BST; matched-random
+identity `774922` was pending on priority with estimated start 2026-06-10
+22:13:17 BST; and all hard-occlusion jobs were dependency-pending. Remote logs
+exist only for the running official identity job so far. No compact summary
+exists yet, so no fixed promotion gate can be run.
+
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
 Queued on 2026-06-10 as a fixed learned-policy intervention route after the
@@ -2663,6 +2740,15 @@ was resource-pending with estimated start 2026-06-10 12:56:05 BST, and the prep
 log had reached matched-random perturbation rendering at 2026-06-10 10:03:40
 BST. No hard-occlusion compact summary exists yet, so no fixed promotion gate
 can be run and no paper claim changes.
+
+Latest status at 2026-06-10 10:14:47 BST: the A6000 hard-occlusion adaptation
+route was unchanged and still pending on unavailable A6000 nodes. The A40
+fallback had advanced: prep `774816` completed successfully with exit `0:0`,
+BGR adaptation `774817` started on `c2-g4-17`, and official identity `774846`
+was running on `c2-g4-17`. BGR merge/clean, matched-random adaptation/merge/
+clean, and all dependent occlusion eval jobs were still dependency-pending.
+Remote perturb logs exist for official identity, but no compact summary exists
+yet, so no fixed promotion gate can be run and no paper claim changes.
 
 Sync/poll helper:
 

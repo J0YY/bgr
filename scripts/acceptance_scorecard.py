@@ -26,6 +26,9 @@ OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE = (
 OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE = (
     "results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc065_transfer_step50400_lr2em7_v1/summary.csv"
 )
+OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE = (
+    "results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_v1/summary.csv"
+)
 OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE = (
     "results/openvla_oft_perturb_eval_hardocc065_adapt_step50400_lr2em7_v1/summary.csv"
 )
@@ -33,6 +36,7 @@ OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE = (
     "results/openvla_oft_perturb_eval_hardocc065_a40_adapt_step50400_lr2em7_v1/summary.csv"
 )
 OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion_transfer_results.sh"
+OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion080_transfer_results.sh"
 OPENVLA_HARD_OCCLUSION_ADAPT_MARKER = "sync_openvla_oft_hard_occlusion_adapt_results.sh"
 OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER = "sync_openvla_oft_hard_occlusion_adapt_a40_results.sh"
 
@@ -784,25 +788,31 @@ def identity_total(rows: list[dict[str, str]], method: str) -> tuple[int, int]:
     return successes, episodes
 
 
-def missing_openvla_rows(rows: list[dict[str, str]]) -> list[str]:
+def missing_openvla_rows(rows: list[dict[str, str]], perturbations: set[str] | None = None) -> list[str]:
     methods = ("bgr", "official", "random")
-    perturbations = tuple(sorted(OPENVLA_NON_IDENTITY_PERTURBATIONS | {"identity"}))
+    required_perturbations = tuple(sorted((perturbations or OPENVLA_NON_IDENTITY_PERTURBATIONS) | {"identity"}))
     present = {(row.get("method"), row.get("perturbation")) for row in rows}
     return [
         f"{method}/{perturbation}"
         for method in methods
-        for perturbation in perturbations
+        for perturbation in required_perturbations
         if (method, perturbation) not in present
     ]
 
 
-def openvla_gate_summary(label: str, rows: list[dict[str, str]]) -> str:
-    missing = missing_openvla_rows(rows)
+def openvla_gate_summary(
+    label: str,
+    rows: list[dict[str, str]],
+    *,
+    non_identity_perturbations: set[str] | None = None,
+) -> str:
+    required_non_identity = non_identity_perturbations or OPENVLA_NON_IDENTITY_PERTURBATIONS
+    missing = missing_openvla_rows(rows, required_non_identity)
     if missing:
         return f"{label} OpenVLA audit summary is incomplete; missing {', '.join(missing)}."
-    bgr_success, bgr_episodes = perturbation_total(rows, "bgr", OPENVLA_NON_IDENTITY_PERTURBATIONS)
-    official_success, official_episodes = perturbation_total(rows, "official", OPENVLA_NON_IDENTITY_PERTURBATIONS)
-    random_success, random_episodes = perturbation_total(rows, "random", OPENVLA_NON_IDENTITY_PERTURBATIONS)
+    bgr_success, bgr_episodes = perturbation_total(rows, "bgr", required_non_identity)
+    official_success, official_episodes = perturbation_total(rows, "official", required_non_identity)
+    random_success, random_episodes = perturbation_total(rows, "random", required_non_identity)
     bgr_identity, identity_episodes = identity_total(rows, "bgr")
     official_identity, _ = identity_total(rows, "official")
     random_identity, _ = identity_total(rows, "random")
@@ -833,6 +843,32 @@ def openvla_gate_summary(label: str, rows: list[dict[str, str]]) -> str:
 
 
 def learned_policy_summary(root: Path) -> str:
+    hard_occ_summaries = [
+        (
+            OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE,
+            "Hard-occlusion 0.80 transfer",
+        ),
+        (
+            OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE,
+            "Hard-occlusion 0.65 transfer",
+        ),
+        (
+            OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE,
+            "Hard-occlusion 0.65 A40 adaptation",
+        ),
+        (
+            OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE,
+            "Hard-occlusion 0.65 adaptation",
+        ),
+    ]
+    hard_occ_readouts = [
+        openvla_gate_summary(label, read_rows(root / relative_path), non_identity_perturbations={"occlusion"})
+        for relative_path, label in hard_occ_summaries
+        if (root / relative_path).exists()
+    ]
+    if hard_occ_readouts:
+        return hard_occ_readouts[0]
+
     occlusion_bottleneck = root / OPENVLA_OCCLUSION_BOTTLENECK_COMPLETE
     if occlusion_bottleneck.exists():
         return openvla_gate_summary("Occlusion-bottleneck", read_rows(occlusion_bottleneck))
@@ -887,6 +923,11 @@ def learned_policy_inflight_summary(root: Path) -> str | None:
     ledger_paths = [root / "AGENTS.md", root / "results/README.md", root / "docs/aaai_acceptance_gap.md"]
     ledger_text = "\n".join(path.read_text(encoding="utf-8") for path in ledger_paths if path.exists())
     active: list[str] = []
+    if (
+        OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER in ledger_text
+        and not (root / OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE).exists()
+    ):
+        active.append("hard-occlusion 0.80 transfer eval is queued/running and missing a complete summary")
     if (
         OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER in ledger_text
         and not (root / OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE).exists()
