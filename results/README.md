@@ -129,6 +129,19 @@ Internal pre-existing-dataset route scout:
   BGR-minus-uniform gaps are +0.023/+0.083/+0.075 at radii 1.0/1.5/2.0, with
   BGR-minus-fixed +0.025/+0.074/+0.048. kc2 remains a near-miss because its
   pooled BGR-minus-fixed gaps are only +0.024/+0.027/+0.027.
+- Active mixed-type OpenML scout, opened 2026-06-10: `tools/openml_margin_scout.py`
+  now has an opt-in `--mixed-binary-suite` using one-hot categorical
+  preprocessing for credit-g, kr-vs-kp, tic-tac-toe, mushroom, bank-marketing,
+  adult, PhishingWebsites, and credit-approval. This is a materially different
+  pre-existing benchmark interface from the numeric-only OpenML sweeps, but it
+  is still only a scout. A local smoke passed with
+  `PYTHONPATH=src:. python3 tools/openml_margin_scout.py --datasets credit-g,tic-tac-toe --preprocessing mixed --targets 2.0 --seeds 1 --steps 1 --batch-size 8 --candidate-count 16 --eval-examples 50 --out /tmp/bgr_openml_mixed_smoke`.
+  The fixed 4-seed Athena scout was submitted as job `778553` with
+  `scripts/queue_openml_mixed_binary_suite.sh`, writing to
+  `/work/joy/bgr/runs/openml_mixed_binary_scout_v1_778553` and logging to
+  `/work/joy/bgr/logs/bgr-openml-mixed-binary-778553.out`. Do not promote it
+  unless a row clears the 4-seed scout gate and then passes fixed 30-seed and
+  held-out 30-seed follow-ups.
 
 Completed external-package scope diagnostic:
 

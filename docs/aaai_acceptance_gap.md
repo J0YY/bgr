@@ -1455,6 +1455,16 @@ risk.
   both BGR-family treatments versus uniform, failure-only, and the
   BGR-uniform-radius ablation, with median-r80 contradictions. This route is
   negative scope evidence, not an independent benchmark win.
+- A new fixed mixed-type binary OpenML scout was opened on 2026-06-10 as a
+  materially different pre-existing benchmark interface from the existing
+  numeric-only OpenML sweeps. The implementation adds `--mixed-binary-suite` to
+  `tools/openml_margin_scout.py`, using one-hot categorical preprocessing for
+  credit-g, kr-vs-kp, tic-tac-toe, mushroom, bank-marketing, adult,
+  PhishingWebsites, and credit-approval. A local smoke on credit-g and
+  tic-tac-toe passed. The fixed 4-seed Athena scout was submitted as job
+  `778553` via `scripts/queue_openml_mixed_binary_suite.sh`, using target
+  radii 0.5, 1.0, 1.5, and 2.0. This is not paper evidence unless a row clears
+  the scout gate and then survives fixed 30-seed plus held-out replication.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
   same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:

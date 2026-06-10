@@ -162,6 +162,23 @@ default BGR versus uniform (delta -0.0250, W/L/T=0/2/2), failure-only (delta
 -0.0187), and BGR-uniform-radius (delta -0.0125), also with median-r80
 contradiction. Treat the dense FetchPush object-state route as completed
 negative, not paper evidence.
+New active CPU independent-benchmark scout: a fixed mixed-type binary OpenML
+suite was added to `tools/openml_margin_scout.py` behind
+`--mixed-binary-suite`, using one-hot categorical preprocessing instead of the
+existing numeric-only pipeline. The suite is credit-g, kr-vs-kp, tic-tac-toe,
+mushroom, bank-marketing, adult, PhishingWebsites, and credit-approval at
+target radii 0.5, 1.0, 1.5, and 2.0 with the same uniform/fixed/BGR methods.
+This is a scout for a materially different pre-existing benchmark interface,
+not paper evidence. A local smoke on credit-g and tic-tac-toe with
+`--preprocessing mixed` passed. The fixed 4-seed Athena scout was submitted at
+2026-06-10 18:17 BST as job `778553` via
+`scripts/queue_openml_mixed_binary_suite.sh`; it writes to
+`/work/joy/bgr/runs/openml_mixed_binary_scout_v1_778553` and logs to
+`/work/joy/bgr/logs/bgr-openml-mixed-binary-778553.out`. Initial log tails
+showed healthy credit-g rows, including some BGR-positive target-1.0/1.5 rows,
+but no conclusion should be drawn until `summary.csv` exists. If candidates
+clear the 4-seed scout gate, run fixed 30-seed and held-out 30-seed follow-ups
+before making any manuscript claim.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,

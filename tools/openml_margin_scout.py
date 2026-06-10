@@ -66,6 +66,14 @@ OPENML_DATASETS = {
     "pc1": {"name": "pc1", "version": 1},
     "phoneme": {"name": "phoneme", "version": 1},
     "wdbc": {"name": "wdbc", "version": 1},
+    "credit-g": {"name": "credit-g", "version": 1},
+    "kr-vs-kp": {"name": "kr-vs-kp", "version": 1},
+    "tic-tac-toe": {"name": "tic-tac-toe", "version": 1},
+    "mushroom": {"name": "mushroom", "version": 1},
+    "bank-marketing": {"name": "bank-marketing", "version": 1},
+    "adult": {"name": "adult", "version": 1},
+    "PhishingWebsites": {"name": "PhishingWebsites", "version": 1},
+    "credit-approval": {"name": "credit-approval", "version": 1},
 }
 EXTERNAL_VALIDATION_DATASETS = (
     "banknote-authentication",
@@ -112,6 +120,16 @@ SECONDARY_NUMERIC_DATASETS = (
     "madelon",
     "gina_agnostic",
     "electricity",
+)
+MIXED_BINARY_DATASETS = (
+    "credit-g",
+    "kr-vs-kp",
+    "tic-tac-toe",
+    "mushroom",
+    "bank-marketing",
+    "adult",
+    "PhishingWebsites",
+    "credit-approval",
 )
 
 
@@ -176,6 +194,35 @@ def load_openml_dataset(
     return x_all, y_all
 
 
+def load_openml_mixed_dataset(
+    dataset: str,
+    cache: dict[str, tuple[object, np.ndarray]] | None = None,
+) -> tuple[object, np.ndarray]:
+    if cache is not None and dataset in cache:
+        return cache[dataset]
+    try:
+        from sklearn.datasets import fetch_openml
+        from sklearn.preprocessing import LabelEncoder
+    except ImportError as exc:  # pragma: no cover - optional scout dependency.
+        raise RuntimeError(
+            "scikit-learn is required for this optional internal scout; "
+            "install it in a temporary environment instead of adding it to "
+            "submission runtime dependencies."
+        ) from exc
+    spec = OPENML_DATASETS[dataset]
+    data = fetch_openml(
+        name=spec["name"],
+        version=spec["version"],
+        as_frame=True,
+        parser="auto",
+    )
+    x_all = data.data
+    y_all = LabelEncoder().fit_transform(np.asarray(data.target))
+    if cache is not None:
+        cache[dataset] = (x_all, y_all)
+    return x_all, y_all
+
+
 def evaluate_rauc(model, x_eval: np.ndarray, y_eval: np.ndarray, radii: np.ndarray, rng: np.random.Generator) -> float:
     values = []
     for radius in radii:
@@ -203,13 +250,20 @@ def run_trial(
     candidate_count: int,
     max_radius: float,
     eval_examples: int,
-    dataset_cache: dict[str, tuple[np.ndarray, np.ndarray]] | None = None,
+    preprocessing: str,
+    dataset_cache: dict[str, tuple[object, np.ndarray]] | None = None,
 ) -> TrialResult:
     from sklearn.linear_model import SGDClassifier
     from sklearn.model_selection import train_test_split
-    from sklearn.preprocessing import StandardScaler
 
-    x_all, y_all = load_openml_dataset(dataset, dataset_cache)
+    if preprocessing == "numeric":
+        from sklearn.preprocessing import StandardScaler
+
+        x_all, y_all = load_openml_dataset(dataset, dataset_cache)  # type: ignore[arg-type]
+    elif preprocessing == "mixed":
+        x_all, y_all = load_openml_mixed_dataset(dataset, dataset_cache)
+    else:
+        raise ValueError(f"unknown preprocessing: {preprocessing}")
     classes = np.unique(y_all)
     x_train, x_eval, y_train, y_eval = train_test_split(
         x_all,
@@ -218,9 +272,39 @@ def run_trial(
         random_state=seed,
         stratify=y_all,
     )
-    scaler = StandardScaler().fit(x_train)
-    x_train = scaler.transform(x_train)
-    x_eval = scaler.transform(x_eval)
+    if preprocessing == "numeric":
+        scaler = StandardScaler().fit(x_train)
+        x_train = scaler.transform(x_train)
+        x_eval = scaler.transform(x_eval)
+    else:
+        from sklearn.compose import ColumnTransformer
+        from sklearn.impute import SimpleImputer
+        from sklearn.pipeline import make_pipeline
+        from sklearn.preprocessing import OneHotEncoder
+        from sklearn.preprocessing import StandardScaler
+
+        numeric_columns = list(x_train.select_dtypes(include=["number", "bool"]).columns)
+        categorical_columns = [column for column in x_train.columns if column not in numeric_columns]
+        preprocessor = ColumnTransformer(
+            transformers=[
+                (
+                    "num",
+                    make_pipeline(SimpleImputer(strategy="median"), StandardScaler()),
+                    numeric_columns,
+                ),
+                (
+                    "cat",
+                    make_pipeline(
+                        SimpleImputer(strategy="most_frequent"),
+                        OneHotEncoder(handle_unknown="ignore", sparse_output=False),
+                    ),
+                    categorical_columns,
+                ),
+            ],
+            sparse_threshold=0.0,
+        )
+        x_train = np.asarray(preprocessor.fit_transform(x_train), dtype=float)
+        x_eval = np.asarray(preprocessor.transform(x_eval), dtype=float)
 
     rng = np.random.default_rng(1000 * len(dataset) + seed)
     initial_indices: list[int] = []
@@ -406,6 +490,17 @@ def main() -> int:
         action="store_true",
         help="Use a second fixed suite of binary numeric OpenML datasets that pass the existing numeric pipeline.",
     )
+    parser.add_argument(
+        "--mixed-binary-suite",
+        action="store_true",
+        help="Use a fixed suite of binary OpenML datasets with mixed numeric/categorical preprocessing.",
+    )
+    parser.add_argument(
+        "--preprocessing",
+        choices=("numeric", "mixed"),
+        default="numeric",
+        help="Feature preprocessing pipeline. Fixed suite flags set this automatically when needed.",
+    )
     parser.add_argument("--targets", type=parse_float_csv, default=list(DEFAULT_TARGETS))
     parser.add_argument("--seeds", type=int, default=4)
     parser.add_argument("--seed-start", type=int, default=0)
@@ -420,6 +515,7 @@ def main() -> int:
         args.broad_numeric_suite,
         args.multiclass_numeric_suite,
         args.secondary_numeric_suite,
+        args.mixed_binary_suite,
     ]
     if sum(bool(selected) for selected in selected_suites) > 1:
         raise ValueError("choose at most one fixed suite")
@@ -431,13 +527,16 @@ def main() -> int:
         args.datasets = list(MULTICLASS_NUMERIC_DATASETS)
     if args.secondary_numeric_suite:
         args.datasets = list(SECONDARY_NUMERIC_DATASETS)
+    if args.mixed_binary_suite:
+        args.datasets = list(MIXED_BINARY_DATASETS)
+        args.preprocessing = "mixed"
 
     unknown = sorted(set(args.datasets) - set(OPENML_DATASETS))
     if unknown:
         raise ValueError(f"unknown dataset(s): {', '.join(unknown)}")
 
     results = []
-    dataset_cache: dict[str, tuple[np.ndarray, np.ndarray]] = {}
+    dataset_cache: dict[str, tuple[object, np.ndarray]] = {}
     for dataset in args.datasets:
         for target_radius in args.targets:
             for seed in range(args.seed_start, args.seed_start + args.seeds):
@@ -452,6 +551,7 @@ def main() -> int:
                         candidate_count=args.candidate_count,
                         max_radius=args.max_radius,
                         eval_examples=args.eval_examples,
+                        preprocessing=args.preprocessing,
                         dataset_cache=dataset_cache,
                     )
                     results.append(result)

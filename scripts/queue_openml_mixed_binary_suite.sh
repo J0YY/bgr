@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REMOTE_HOST="${REMOTE_HOST:-athena}"
+REMOTE_PROJECT="${REMOTE_PROJECT:-/work/joy/bgr}"
+REMOTE_PYTHON="${REMOTE_PYTHON:-${REMOTE_PROJECT}/.venv-openml-broad/bin/python}"
+REMOTE_RUN_ROOT="${REMOTE_RUN_ROOT:-${REMOTE_PROJECT}/runs}"
+REMOTE_LOG_ROOT="${REMOTE_LOG_ROOT:-${REMOTE_PROJECT}/logs}"
+OUT_PREFIX="${OUT_PREFIX:-openml_mixed_binary_scout_v1}"
+TIME_LIMIT="${TIME_LIMIT:-24:00:00}"
+MEMORY="${MEMORY:-32G}"
+CPUS="${CPUS:-4}"
+TARGETS="${TARGETS:-0.5,1.0,1.5,2.0}"
+SEEDS="${SEEDS:-4}"
+SEED_START="${SEED_START:-0}"
+STEPS="${STEPS:-8}"
+BATCH_SIZE="${BATCH_SIZE:-64}"
+CANDIDATE_COUNT="${CANDIDATE_COUNT:-128}"
+EVAL_EXAMPLES="${EVAL_EXAMPLES:-250}"
+
+SBATCH_PARTITION_ARG=""
+if [[ -n "${SLURM_PARTITION:-}" ]]; then
+  SBATCH_PARTITION_ARG="--partition='${SLURM_PARTITION}'"
+fi
+
+rsync -az tools/openml_margin_scout.py "${REMOTE_HOST}:${REMOTE_PROJECT}/tools/openml_margin_scout.py"
+
+ssh "${REMOTE_HOST}" "mkdir -p '${REMOTE_LOG_ROOT}' '${REMOTE_RUN_ROOT}'"
+
+job_id="$(ssh "${REMOTE_HOST}" \
+  "cd '${REMOTE_PROJECT}' && sbatch --parsable \
+    --job-name='bgr-openml-mixed-binary' \
+    ${SBATCH_PARTITION_ARG} \
+    --cpus-per-task='${CPUS}' \
+    --mem='${MEMORY}' \
+    --time='${TIME_LIMIT}' \
+    --output='${REMOTE_LOG_ROOT}/%x-%j.out'" <<EOF
+#!/usr/bin/env bash
+set -euo pipefail
+cd '${REMOTE_PROJECT}'
+PYTHONPATH='${REMOTE_PROJECT}/src:${REMOTE_PROJECT}' \
+  '${REMOTE_PYTHON}' \
+  '${REMOTE_PROJECT}/tools/openml_margin_scout.py' \
+  --mixed-binary-suite \
+  --targets '${TARGETS}' \
+  --seed-start '${SEED_START}' \
+  --seeds '${SEEDS}' \
+  --steps '${STEPS}' \
+  --batch-size '${BATCH_SIZE}' \
+  --candidate-count '${CANDIDATE_COUNT}' \
+  --eval-examples '${EVAL_EXAMPLES}' \
+  --out "${REMOTE_RUN_ROOT}/${OUT_PREFIX}_\${SLURM_JOB_ID}"
+EOF
+)"
+
+printf 'submitted mixed OpenML binary scout job: %s\n' "${job_id}"
+printf 'remote output: %s/%s_%s\n' "${REMOTE_RUN_ROOT}" "${OUT_PREFIX}" "${job_id}"
+printf 'remote log: %s/bgr-openml-mixed-binary-%s.out\n' "${REMOTE_LOG_ROOT}" "${job_id}"
