@@ -378,6 +378,24 @@ def openml_positive_details(root: Path) -> list[str]:
     )
     if phoneme:
         details.append(phoneme)
+    magic = openml_replicated_positive_detail(
+        root,
+        label="OpenML MagicTelescope",
+        original_path=root / "results/openml_broad_numeric_target2_30seed_v1/per_seed.csv",
+        replication_path=root / "results/openml_broad_numeric_target2_replication_30seed_v1/per_seed.csv",
+        dataset="MagicTelescope",
+    )
+    if magic:
+        details.append(magic)
+    haberman = openml_replicated_positive_detail(
+        root,
+        label="OpenML haberman",
+        original_path=root / "results/openml_broad_numeric_target2_30seed_v1/per_seed.csv",
+        replication_path=root / "results/openml_broad_numeric_target2_replication_30seed_v1/per_seed.csv",
+        dataset="haberman",
+    )
+    if haberman:
+        details.append(haberman)
     return details
 
 

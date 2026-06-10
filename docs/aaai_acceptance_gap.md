@@ -89,6 +89,34 @@ uniform 0.6846 (+0.0749, W/L/T=25/5/0) and fixed-radius 0.7133. Phoneme also
 clears after held-out replication: original BGR 0.7228 versus uniform 0.6896
 and fixed-radius 0.6704, held-out BGR 0.7124 versus uniform 0.6758 (+0.0366,
 W/L/T=21/9/0) and fixed-radius 0.6792 (+0.0332, W/L/T=25/5/0).
+A broader fixed 10-dataset numeric OpenML suite then reduced some
+cherry-picking risk but also added a macro caveat. The suite was submitted as
+job `774312`, and the held-out seeds 30--59 replication was submitted as job
+`774346` before the first summary was known. Both completed with exit `0:0`.
+Original/held-out macro means are BGR 0.7756/0.7820, uniform 0.7817/0.7800,
+and fixed-radius 0.7815/0.7845; pooled across both runs, BGR is ahead on 6/10
+dataset means versus uniform and 6/10 versus fixed-radius. This is therefore
+not a broad macro win. It does add two replicated dataset-level positives:
+MagicTelescope reaches BGR 0.7395 vs. uniform 0.6884 and fixed-radius 0.6827
+in the original run, then BGR 0.7339 vs. uniform 0.6694 and fixed-radius
+0.6780 on held-out seeds; haberman reaches BGR 0.7258 vs. uniform 0.6155 and
+fixed-radius 0.6644 in the original run, then BGR 0.7275 vs. uniform 0.6327
+and fixed-radius 0.6690 on held-out seeds. This strengthens the supervised
+pre-existing-dataset story but still does not solve the standard-environment or
+learned-policy gap.
+A fixed target-radius sensitivity diagnostic has completed for the two new
+broad-suite positives, MagicTelescope and haberman. Initial Athena jobs
+`774495`/`774496` failed immediately because the Slurm batch environment had
+`python3` but not `python` on PATH; jobs `774509`/`774510` then failed because
+bare `python3` lacked `sklearn`. Corrected jobs `774520` and `774521` used
+`/work/joy/bgr/.venv-openml-broad/bin/python` and completed with exit `0:0`.
+The result is supportive at target radii 1.5 and 2.0 but keeps a target-1.0
+fragility caveat: pooled BGR-minus-uniform gaps for MagicTelescope are
++0.014/+0.047/+0.058 at radii 1.0/1.5/2.0, and haberman gives
++0.016/+0.089/+0.103. Versus fixed-radius replay, pooled gaps are
++0.008/+0.043/+0.056 and +0.002/+0.054/+0.060, respectively. Treat this as a
+robustness/caveat check for the supervised OpenML story, not a
+standard-environment or learned-policy claim.
 A 60-seed target-radius sensitivity check over the three positive OpenML
 datasets is now recorded as a fragility caveat rather than a new headline:
 pooled BGR-minus-uniform gaps for diabetes/blood/phoneme are
@@ -103,6 +131,15 @@ saturated r80, and bsuite Cartpole loses to uniform and TD-loss. Any further
 acceptance-moving benchmark attempt therefore needs a materially different
 reset/interface premise, not another rerun of the same small recovery-probe
 family.
+Gymnasium Blackjack was tested as a materially different package-backed reset
+interface with stochastic card draws and exact internal player/dealer state
+resets. The 8-seed Athena scout `774192` completed all nine perturbation and
+target-radius configs, and every config is rejected before promotion. The
+closest row is `down` target radius 3.0, where BGR-Coverage reaches 0.3859
+RAUC versus uniform 0.3790, but it still trails failure-only 0.3898 and has
+only a 5/3 paired split; the `dealer_signed` target 3.0 row trails uniform,
+failure-only, and the BGR-uniform-radius ablation. Treat Blackjack as a
+negative scope result, not an active route.
 
 After the weak-reject style review, the immediate paper-defense priority is not
 to amplify p-values or add more authored toy wins. The manuscript should instead
@@ -871,20 +908,21 @@ risk.
   data generation and can plausibly beat both matched random and the official
   checkpoint. The current OpenVLA-OFT clean-mix/visual-perturbation recipe
   family is exhausted for acceptance purposes.
-- A broader fixed OpenML numeric-suite run is now queued as an attempt to
-  reduce the cherry-picking risk around the current supervised margin-replay
-  evidence. This is not a standard-environment or learned-policy route. The
-  predeclared suite uses `tools/openml_margin_scout.py --broad-numeric-suite`
-  at target radius 2.0 with 30 seeds over heart-statlog, qsar-biodeg,
-  mammography, breast-w, haberman, MagicTelescope, eeg-eye-state,
-  ozone-level-8hr, Bioresponse, and steel-plates-fault. Initial Slurm job
-  `774306` failed before running because the wrapper used `/bin/sh` with
-  `pipefail`; corrected Bash job `774312` is running on `athena`. A held-out
-  seeds 30--59 replication using the same fixed suite and target radius was
-  submitted as job `774346` before the first suite summary was known. Treat any
-  result as pre-existing supervised margin-replay evidence only, and do not
-  incorporate it unless the completed suite summaries materially strengthen the
-  benchmark story.
+- The broader fixed OpenML numeric-suite run has completed and should be
+  framed narrowly. It reduces cherry-picking risk by adding replicated
+  MagicTelescope and haberman positives, but the 10-dataset macro result is
+  mixed/negative and remains supervised margin-replay evidence only. The fixed
+  readout command is
+  `PYTHONPATH=src:. python3 tools/analyze_openml_margin_suite.py --original results/openml_broad_numeric_target2_30seed_v1/per_seed.csv --replication results/openml_broad_numeric_target2_replication_30seed_v1/per_seed.csv`.
+- The target-radius sensitivity diagnostic for MagicTelescope/haberman is
+  complete and synced to
+  `results/openml_broad_positive_target_sensitivity_30seed_v1/` and
+  `results/openml_broad_positive_target_sensitivity_replication_30seed_v1/`.
+  It supports radii 1.5 and 2.0 but leaves radius 1.0 as a fragility caveat.
+- The Blackjack independent-route scout completed negative: all nine configs in
+  `results/blackjack_recovery_scout_8seed_v1/config_summary.csv` have
+  `candidate=False`. Do not scale or promote it without a materially new
+  preregistered premise.
 - If no such empirical route is ready, work on theory/presentation only when it
   directly answers a cited weakness: novelty over state-priority replay,
   estimator/sample-complexity guarantees, metric transparency, or clearer

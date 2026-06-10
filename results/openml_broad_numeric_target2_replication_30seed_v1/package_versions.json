@@ -1,0 +1,47 @@
+{
+  "datasets": {
+    "Bioresponse": {
+      "name": "Bioresponse",
+      "version": 1
+    },
+    "MagicTelescope": {
+      "name": "MagicTelescope",
+      "version": 1
+    },
+    "breast-w": {
+      "name": "breast-w",
+      "version": 1
+    },
+    "eeg-eye-state": {
+      "name": "eeg-eye-state",
+      "version": 1
+    },
+    "haberman": {
+      "name": "haberman",
+      "version": 1
+    },
+    "heart-statlog": {
+      "name": "heart-statlog",
+      "version": 1
+    },
+    "mammography": {
+      "name": "mammography",
+      "version": 1
+    },
+    "ozone-level-8hr": {
+      "name": "ozone-level-8hr",
+      "version": 1
+    },
+    "qsar-biodeg": {
+      "name": "qsar-biodeg",
+      "version": 1
+    },
+    "steel-plates-fault": {
+      "name": "steel-plates-fault",
+      "version": 1
+    }
+  },
+  "numpy": "2.2.6",
+  "python": "3.10.12",
+  "scikit_learn": "1.7.2"
+}

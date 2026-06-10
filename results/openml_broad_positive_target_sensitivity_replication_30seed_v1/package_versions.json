@@ -1,0 +1,15 @@
+{
+  "datasets": {
+    "MagicTelescope": {
+      "name": "MagicTelescope",
+      "version": 1
+    },
+    "haberman": {
+      "name": "haberman",
+      "version": 1
+    }
+  },
+  "numpy": "2.2.6",
+  "python": "3.10.12",
+  "scikit_learn": "1.7.2"
+}

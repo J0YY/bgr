@@ -199,7 +199,7 @@ class RouteScout:
                     "openml_numeric_external_fixed_target2_30seed_v1" in self.path
                     and "blood-transfusion-service-center" not in self.name
                     and "phoneme" not in self.name
-                ):
+                ) or "openml_broad_numeric_target2_30seed_v1" in self.path:
                     return "candidate-for-replication"
                 return "positive-follow-up"
             return "reject-follow-up"
@@ -228,6 +228,10 @@ def route_scout_evidence_key(scout: RouteScout) -> str:
         return "openml_blood_transfusion_margin"
     if "phoneme" in scout.name or scout.name.startswith("OpenML phoneme margin"):
         return "openml_phoneme_margin"
+    if "MagicTelescope" in scout.name:
+        return "openml_magic_telescope_margin"
+    if "haberman" in scout.name:
+        return "openml_haberman_margin"
     return scout.name
 
 
@@ -517,6 +521,14 @@ ROUTE_SCOUTS = [
     (
         "OpenML numeric external fixed target2 replication 30-seed",
         "results/openml_numeric_external_fixed_target2_replication_30seed_v1/summary.csv",
+    ),
+    (
+        "OpenML broad numeric fixed target2 30-seed",
+        "results/openml_broad_numeric_target2_30seed_v1/summary.csv",
+    ),
+    (
+        "OpenML broad numeric fixed target2 replication 30-seed",
+        "results/openml_broad_numeric_target2_replication_30seed_v1/summary.csv",
     ),
 ]
 
@@ -1065,7 +1077,7 @@ def render_markdown(root: Path) -> str:
     if positive_followups:
         names = ", ".join(f"`{scout.name}`" for scout in positive_followups)
         lines.append(
-            f"- Positive pre-existing-dataset follow-up(s): {names} clear the internal 30-seed margin-replay follow-up gate and are incorporated into the paper as supervised margin-replay evidence."
+            f"- Positive pre-existing-dataset follow-up(s): {names} clear the internal 30-seed margin-replay follow-up gate and are available only as supervised margin-replay evidence."
         )
     if inflight is None and active_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in active_calibrations)
@@ -1207,7 +1219,7 @@ def render_markdown(root: Path) -> str:
         names = ", ".join(f"`{scout.name}`" for scout in superseded_scouts)
         priority_lines.insert(
             2,
-            f"- {names} is superseded by fixed positive OpenML diabetes follow-ups, so it is no longer a pending preregistration item.",
+            f"- {names} is superseded by fixed positive OpenML follow-ups, so it is no longer a pending preregistration item.",
         )
     if positive_followups:
         names = ", ".join(f"`{scout.name}`" for scout in positive_followups)

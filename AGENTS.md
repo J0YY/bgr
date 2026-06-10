@@ -15,8 +15,9 @@ genuinely plausibly 90%+ likely to get into AAAI main track.
 
 Current status: not there yet. The readiness gate still says
 `NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid mechanism result is the
-main mechanism evidence, and OpenML diabetes, blood-transfusion, and phoneme
-are now replicated positive pre-existing-dataset margin-replay evidence.
+main mechanism evidence, and OpenML diabetes, blood-transfusion, phoneme,
+MagicTelescope, and haberman are now replicated positive pre-existing-dataset
+margin-replay evidence.
 Standard-environment recovery screens and OpenVLA/LIBERO learned-policy evidence
 remain failing or non-promotable. The latest bsuite Catch 30-seed scale-up,
 MiniGrid FourRooms radius-10 rescue,
@@ -28,16 +29,17 @@ cleared pre-method calibration but their fixed all-method screens tied every
 method, so they are retired. A Seaquest scout found a fragile 20-seed
 calibration window, but the method scout lost to fixed-radius replay and is
 rejected before promotion. A new Gymnasium Blackjack package-state recovery
-scout is currently running on `athena` as Slurm job `774192`; this is only a
-scout for a different independent reset interface, not paper evidence, and the
-first three completed `up` perturbation configs are already negative. A broader
-fixed OpenML numeric-suite target-2.0 run is also in flight on `athena` as
-Slurm job `774312`; it is a predeclared 10-dataset, 30-seed suite meant to test
-whether the supervised pre-existing-dataset evidence broadens beyond the
-current positives, not a standard-environment or learned-policy win. A held-out
-replication with the same fixed suite and seeds 30--59 is also queued as Slurm
-job `774346`, before the first suite summary is known. The latest completed
-OpenVLA/LIBERO occlusion-bottleneck route is negative: BGR reaches 365/400
+scout completed negative on `athena` as Slurm job `774192`; this was only a
+scout for a different independent reset interface, not paper evidence, and all
+nine perturbation/target-radius configs are rejected before promotion. A broader
+fixed OpenML numeric-suite
+target-2.0 run and held-out seeds 30--59 replication completed on `athena` as
+jobs `774312` and `774346`: the 10-dataset suite is mixed and not a macro win
+(pooled macro BGR 0.7788 vs. uniform 0.7809 and fixed-radius 0.7830), but it
+adds replicated dataset-level positives on MagicTelescope and haberman. This is
+additional supervised pre-existing-dataset evidence only, not a
+standard-environment or learned-policy win. The latest completed OpenVLA/LIBERO
+occlusion-bottleneck route is negative: BGR reaches 365/400
 non-identity successes versus official 367/400 and matched random 369/400,
 with identity BGR 99/100, official 99/100, and random 98/100. The
 internal sklearn-digits margin replay scout is also rejected before promotion:
@@ -77,6 +79,36 @@ BGR is 0.7176 vs. uniform 0.6827 (+0.0349, W/L/T=42/18/0) and vs.
 fixed-radius 0.6748 (+0.0428, W/L/T=48/12/0). This is acceptance-moving
 supervised margin-replay evidence, but it still does not solve the
 learned-policy or standard-environment failures by itself.
+A completed fixed broad numeric OpenML suite added two more replicated
+pre-existing-dataset positives while also sharpening the macro caveat. The
+original/held-out broad-suite macro means are uniform 0.7817/0.7800,
+fixed-radius 0.7815/0.7845, and BGR 0.7756/0.7820; pooled across both runs,
+BGR is ahead on 6/10 dataset means versus uniform and 6/10 versus fixed-radius,
+so this is not a broad macro win. The replicated positive dataset rows are:
+MagicTelescope original BGR 0.7395 vs. uniform 0.6884 (+0.0511, W/L/T=25/5/0)
+and fixed 0.6827, held-out BGR 0.7339 vs. uniform 0.6694 (+0.0645,
+W/L/T=26/4/0) and fixed 0.6780; haberman original BGR 0.7258 vs. uniform
+0.6155 (+0.1103, W/L/T=29/0/1) and fixed 0.6644, held-out BGR 0.7275 vs.
+uniform 0.6327 (+0.0948, W/L/T=27/3/0) and fixed 0.6690. Treat these as
+additional supervised margin-replay evidence, not the missing standard-
+environment or learned-policy result.
+Completed robustness diagnostic: MagicTelescope/haberman target-radius
+sensitivity. This is a caveat/robustness check for the two new broad-suite
+positives, not a new headline route. Initial jobs `774495`/`774496` failed
+immediately because Slurm had `python3` but not `python` on PATH; follow-up
+jobs `774509`/`774510` then failed because bare `python3` did not have
+`sklearn`. The corrected OpenML-venv jobs `774520` and `774521` completed with
+exit `0:0` and were synced to
+`results/openml_broad_positive_target_sensitivity_30seed_v1/` and
+`results/openml_broad_positive_target_sensitivity_replication_30seed_v1/`.
+The result strengthens MagicTelescope/haberman at target radii 1.5 and 2.0 but
+keeps a target-1.0 fragility caveat. Pooled across original and held-out seeds:
+MagicTelescope BGR-minus-uniform gaps are +0.014/+0.047/+0.058 at radii
+1.0/1.5/2.0, with BGR-minus-fixed +0.008/+0.043/+0.056; haberman gaps are
++0.016/+0.089/+0.103 versus uniform and +0.002/+0.054/+0.060 versus fixed.
+Use
+`PYTHONPATH=src:. python3 tools/analyze_openml_margin_suite.py --original results/openml_broad_positive_target_sensitivity_30seed_v1/per_seed.csv --replication results/openml_broad_positive_target_sensitivity_replication_30seed_v1/per_seed.csv`
+for the full readout.
 The new grid-margin witness-sensitivity diagnostic improves scope support for the
 feasibility-witness assumption but is controlled mechanism evidence, not an
 independent-benchmark win.
@@ -296,7 +328,7 @@ RAUC. Do not build a formal Seaquest screen unless a new preregistered
 controller first clears a stable clean-success gate and avoids fixed-radius
 dominance.
 
-In-flight independent-route scout: Gymnasium Blackjack package-state recovery.
+Completed independent-route scout: Gymnasium Blackjack package-state recovery.
 This route is deliberately different from the prior MiniGrid/classic-control
 screens: it uses Gymnasium `Blackjack-v1` package dynamics, exact internal
 player/dealer state resets, stochastic card draws, and player-total
@@ -307,23 +339,17 @@ bounded CPU Slurm scout was submitted to `athena` on 2026-06-10 as job
 uses `/work/joy/bgr/.venv-blackjack-scout` with `gymnasium==1.3.0` and
 `numpy==2.2.6`, runs 9 perturbation/target-radius configs over 8 seeds and all
 required baselines, and writes to
-`/work/joy/bgr/runs/blackjack_recovery_scout_20260610_080506_774192`.
-Poll with:
-`ssh athena 'squeue -j 774192 -o "%.18i %.9P %.32j %.8T %.10M %.20R"; tail -80 /work/joy/bgr/logs/bgr-blackjack-scout-774192.out; find /work/joy/bgr/runs/blackjack_recovery_scout_20260610_080506_774192 -maxdepth 1 -type f -print'`.
-If `config_summary.csv` appears and a BGR-family method beats uniform,
-fixed-radius, failure-only, TD-loss, and BGR-uniform-radius with non-saturated
-r80, then implement a repo-native fixed follow-up before making any paper
-claim. If it ties or loses, record it as a rejected scout.
-Latest poll on 2026-06-10 showed the job still running on `cnode401` with the
-three `up` configs completed negative:
-target/fixed radius 1.0 gives best BGR-family 0.4925 RAUC vs. uniform 0.5071,
-fixed 0.5068, failure-only 0.5188, and BGR-uniform-radius 0.4933;
-radius 2.0 gives best BGR-family 0.5007 vs. uniform 0.5071, fixed 0.5085,
-failure-only 0.5188, and ablation 0.5073; radius 3.0 gives best BGR-family
-0.5036 vs. uniform 0.5071 and failure-only 0.5188, though it narrowly beats
-fixed and the ablation. None is a candidate.
+`/work/joy/bgr/runs/blackjack_recovery_scout_20260610_080506_774192`, synced
+locally to `results/blackjack_recovery_scout_8seed_v1/`. All nine configs are
+negative with `candidate=False`. The best BGR-family rows by mode are:
+`up` target 3.0 BGR-Coverage 0.5036 vs. uniform 0.5071 and failure-only
+0.5188; `down` target 3.0 BGR-Coverage 0.3859 vs. uniform 0.3790 but
+failure-only 0.3898 and only 5/3 paired wins; and `dealer_signed` target 3.0
+BGR-Coverage 0.4402 vs. uniform 0.4414, failure-only 0.4498, and
+BGR-uniform-radius 0.4514. Do not scale or promote Blackjack without a
+materially new preregistered premise.
 
-In-flight pre-existing-dataset broadening run: fixed broad numeric OpenML suite.
+Completed pre-existing-dataset broadening run: fixed broad numeric OpenML suite.
 `tools/openml_margin_scout.py` now has `--broad-numeric-suite`, a predeclared
 set of numeric binary OpenML datasets that pass the existing median-impute plus
 standardized numeric-feature pipeline without adding categorical preprocessing:
@@ -334,18 +360,18 @@ target radius 2.0, 30 seeds, and the same uniform/fixed/BGR methods:
 `PYTHONPATH=/work/joy/bgr/src:/work/joy/bgr python /work/joy/bgr/tools/openml_margin_scout.py --broad-numeric-suite --targets 2.0 --seeds 30 --out /work/joy/bgr/runs/openml_broad_numeric_target2_30seed_${SLURM_JOB_ID}`.
 The first submission `774306` failed before running because Slurm executed the
 wrapper under `/bin/sh` and rejected `set -o pipefail`. The corrected Bash
-submission is Slurm job `774312`, running on `cnode403` at the first poll. Poll
-with:
-`ssh athena 'squeue -j 774312 -o "%.18i %.9P %.32j %.8T %.10M %.20R"; tail -80 /work/joy/bgr/logs/bgr-openml-broad-774312.out; find /work/joy/bgr/runs -maxdepth 1 -type d -name "openml_broad_numeric_target2_30seed_774312" -print'`.
+submission was Slurm job `774312`, completed with exit `0:0` and synced to
+`results/openml_broad_numeric_target2_30seed_v1/`.
 To avoid post-hoc replication selection, a held-out seeds 30--59 repeat was
 also submitted before seeing the first suite summary as Slurm job `774346`:
 `PYTHONPATH=/work/joy/bgr/src:/work/joy/bgr python /work/joy/bgr/tools/openml_margin_scout.py --broad-numeric-suite --targets 2.0 --seed-start 30 --seeds 30 --out /work/joy/bgr/runs/openml_broad_numeric_target2_replication_30seed_${SLURM_JOB_ID}`.
-Poll both with:
-`ssh athena 'squeue -j 774312,774346 -o "%.18i %.9P %.32j %.8T %.10M %.20R"; tail -80 /work/joy/bgr/logs/bgr-openml-broad-774312.out; tail -80 /work/joy/bgr/logs/bgr-openml-broad-rep-774346.out'`.
-Do not incorporate this into the paper unless the completed suite summary
-supports a materially stronger pre-existing benchmark claim; even if positive,
-it is supervised margin-replay evidence rather than the missing learned-policy
-or standard-environment win.
+It completed with exit `0:0` and was synced to
+`results/openml_broad_numeric_target2_replication_30seed_v1/`. Use
+`PYTHONPATH=src:. python3 tools/analyze_openml_margin_suite.py --original results/openml_broad_numeric_target2_30seed_v1/per_seed.csv --replication results/openml_broad_numeric_target2_replication_30seed_v1/per_seed.csv`
+for the deterministic readout. The broad suite is mixed and macro-negative
+(pooled BGR 0.7788 vs. uniform 0.7809 and fixed 0.7830), but MagicTelescope
+and haberman replicate as positive dataset-level signals. Do not present it as
+a standard-environment, learned-policy, or broad macro win.
 
 Operational defaults:
 
