@@ -332,6 +332,34 @@ estimated for 2026-06-11 22:02:14 BST. The main 0.80 identity-anchor A6000
 route remains mixed-priority/dependency pending, with random train `776036`
 estimated for 2026-06-10 20:44:00 BST and official/BGR identity rows delayed.
 No paper claim should change.
+Latest all-route OpenVLA poll at 2026-06-10 16:02 BST again found no complete
+gateable positive result. The 0.80 transfer route is still incomplete because
+matched-random occlusion `774923` is priority-pending with estimated start
+2026-06-11 08:44:00 BST; available rows are BGR identity/occlusion 391/400 and
+305/400, official 393/400 and 296/400, and matched-random identity 389/400,
+so it already violates the fixed identity side condition despite the partial
++9/400 occlusion edge over official. The 0.65 A6000 adaptation is incomplete
+because matched-random occlusion `774729` is priority-pending; available rows
+are BGR identity/occlusion 389/400 and 301/400, official 393/400 and 297/400,
+and matched-random identity 390/400, so it is already non-promotable. The 0.65
+A40 fallback remains incomplete because replacement BGR occlusion `775103` and
+matched-random occlusion `774851` are priority-pending, while available
+identity rows already put BGR at 391/400 behind official 393/400 and matched
+random 392/400. The 0.80 micro A40 fallback, 0.80 identity-anchor A40 fallback,
+and 0.90 strict A40 route are still priority/dependency-pending with front jobs
+estimated for 2026-06-11 22:02:14 BST and no logs or summaries. The A6000
+micro and strict routes remain priority/dependency-pending with front jobs
+estimated for 2026-06-13 14:07:41 BST; the main 0.80 identity-anchor A6000
+route has random train `776036` estimated for 2026-06-10 20:00:00 BST and
+official/BGR identity work delayed to 2026-06-13 14:07:41 BST. Explicit gate
+checks on the available partial summaries returned `[INCOMPLETE]`. No new
+same-protocol standard-environment or duplicate OpenVLA job was launched in
+this checkpoint: the existing scorecard already rejects the obvious
+standard-environment route family, and the active queue already covers the
+current identity-preserving hard-occlusion learned-policy premises. The next
+empirical addition should be a materially different external reset interface or
+a genuinely different learned-policy intervention, not another minor rerun of
+the exhausted recipes.
 
 Newest acceleration route: hard-occlusion 0.80 micro identity-anchored
 OpenVLA-OFT A40 fallback. This is a resource fallback for the already fixed
