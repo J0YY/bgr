@@ -186,11 +186,14 @@ Internal pre-existing-dataset route scout:
   `/work/joy/bgr/runs/openml_all_binary_numeric_target15_30seed_v1_780049`;
   held-out seeds 30--59 were submitted as Slurm job `780050`, writing to
   `/work/joy/bgr/runs/openml_all_binary_numeric_target15_replication_30seed_v1_780050`.
-  Both jobs started on 2026-06-10 at 21:02 BST. This route is not paper evidence
-  unless the synced fixed readout shows a broad macro or clearly replicated
-  dataset-level win over both uniform and fixed-radius replay; it remains
-  supervised pre-existing benchmark evidence, not standard-control or
-  learned-policy evidence.
+  Both jobs started on 2026-06-10 at 21:02 BST. Latest sync at 2026-06-10
+  21:21 BST showed both jobs still running on `cnode404`; only Slurm logs were
+  available locally, with no `per_seed.csv` or valid paired analysis yet. Log
+  tails had advanced past ozone-level-8hr into Bioresponse seeds. This
+  route is not paper evidence unless the synced fixed readout shows a broad
+  macro or clearly replicated dataset-level win over both uniform and
+  fixed-radius replay; it remains supervised pre-existing benchmark evidence,
+  not standard-control or learned-policy evidence.
   Sync with:
   `ORIG_JOB_ID=780049 REP_JOB_ID=780050 ORIG_PREFIX=openml_all_binary_numeric_target15_30seed_v1 REP_PREFIX=openml_all_binary_numeric_target15_replication_30seed_v1 scripts/sync_openml_mixed_binary_results.sh`.
 
@@ -201,9 +204,11 @@ Active OpenVLA hard-occlusion head-interpolation routes:
   interpolated action/proprio heads and LoRA-B tensors scaled by the same
   alpha. Jobs are prep `779973`, official identity/occlusion `779974`/`779975`,
   BGR identity/occlusion `779976`/`779977`, and matched-random
-  identity/occlusion `779978`/`779979`. Latest poll at 2026-06-10 21:09 BST
-  showed prep and official identity still priority-pending, downstream evals
-  dependency-pending, and no summary. Sync with:
+  identity/occlusion `779978`/`779979`. Latest poll at 2026-06-10 21:21 BST
+  showed prep `779973` completed successfully at 21:16:12, official identity
+  `779974` running since 21:16:24 on `c1-g4-02`, BGR identity `779976` and
+  matched-random identity `779978` priority-pending, and all occlusion evals
+  dependency-pending. Logs exist, but no compact summary exists yet. Sync with:
   `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp075_v1 JOB_IDS=779974,779975,779976,779977,779978,779979 DETAIL_JOB_IDS=779973,779974,779975,779976,779977,779978,779979 GATE_PERTURBATIONS=occlusion ROUTE_LABEL='Hard-occlusion 0.80 head-interpolated OpenVLA-OFT transfer' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
 - `openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp075_lorafull_v1`:
   fixed head-only repair route queued on 2026-06-10 with `ALPHA=0.75` and
@@ -211,9 +216,9 @@ Active OpenVLA hard-occlusion head-interpolation routes:
   action/proprio heads toward the official checkpoint. Jobs are prep `780059`,
   official identity/occlusion `780060`/`780061`, BGR identity/occlusion
   `780062`/`780063`, and matched-random identity/occlusion `780064`/`780065`.
-  Initial poll at 2026-06-10 21:12 BST showed prep and official identity
-  priority-pending, downstream evals dependency-pending, and no summary. Sync
-  with:
+  Latest poll at 2026-06-10 21:18 BST showed prep `780059` and official
+  identity `780060` priority-pending, downstream evals dependency-pending, and
+  no logs or summary. Sync with:
   `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp075_lorafull_v1 JOB_IDS=780060,780061,780062,780063,780064,780065 DETAIL_JOB_IDS=780059,780060,780061,780062,780063,780064,780065 GATE_PERTURBATIONS=occlusion ROUTE_LABEL='Hard-occlusion 0.80 head-only LoRA-full OpenVLA-OFT transfer' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
   This route is not evidence unless the full `summary.csv` passes the unchanged
   learned-policy promotion gate: BGR must beat official and matched random by

@@ -1,0 +1,4 @@
+method,perturbation,episodes,successes,success_rate
+bgr,identity,400,388,0.9700
+official,identity,400,393,0.9825
+official,occlusion,400,296,0.7400

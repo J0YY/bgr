@@ -69,10 +69,13 @@ evaluates official, interpolated BGR, and interpolated matched random on
 identity plus occlusion fraction 0.80 over 10 LIBERO-Goal tasks x 40 trials.
 Jobs are prep `779973`, official identity/occlusion `779974`/`779975`, BGR
 identity/occlusion `779976`/`779977`, and matched-random identity/occlusion
-`779978`/`779979`. Latest poll/sync at 2026-06-10 21:09 BST showed prep
-`779973` and official identity `779974` still priority-pending, with all
-downstream evals dependency-pending and no logs or summary. This route is not
-paper evidence unless the full `summary.csv` passes the unchanged fixed gate:
+`779978`/`779979`. Latest poll/sync at 2026-06-10 21:21 BST showed prep
+`779973` completed successfully at 21:16:12, official identity `779974`
+running since 21:16:24 on `c1-g4-02`, BGR identity `779976` and matched-random
+identity `779978` priority-pending, and the occlusion evals dependency-pending
+behind their identity evals. The remote log directory exists, but no compact
+summary or summarizable completed eval row exists yet. This route is not paper
+evidence unless the full `summary.csv` passes the unchanged fixed gate:
 BGR must beat both official and matched random by at least 10/400 occlusion
 episodes and at least 0.02 absolute success rate while not trailing the best
 identity comparator by more than one episode. A stronger head-only repair
@@ -82,14 +85,21 @@ keeps adapted LoRA-B tensors at full scale with `LORA_B_SCALE=1.0`, testing
 whether identity can be repaired without shrinking the occlusion adaptation
 signal. Jobs are prep `780059`, official identity/occlusion `780060`/`780061`,
 BGR identity/occlusion `780062`/`780063`, and matched-random
-identity/occlusion `780064`/`780065`. Initial poll showed prep `780059` and
-official identity `780060` priority-pending, downstream BGR/random evals
-dependency-pending, and no logs or summary. This is also not evidence unless
+identity/occlusion `780064`/`780065`. Latest poll/sync at 2026-06-10
+21:18 BST showed prep `780059` and official identity `780060`
+priority-pending, downstream BGR/random evals dependency-pending, and no logs
+or summary. This is also not evidence unless
 the same fixed +10/400, +0.02, and identity-preservation gate passes. The
 latest partial identity-anchored 0.80 variants are already non-promotable on
 identity: BGR identity is 389/400 for the base identity-anchored route,
 387/400 for the micro route, and 388/400 for the strict route, each trailing
-official identity 393/400 by more than one episode. The earlier completed full
+official identity 393/400 by more than one episode. The base route now also has
+BGR occlusion 303/400 available while official occlusion and matched-random
+occlusion were still running at the 21:19 BST poll. The strict route partial
+summary now has official occlusion 296/400, while BGR occlusion and
+matched-random identity/occlusion are still running or missing; the micro and
+strict routes cannot be promoted because their identity rows already fail the
+side condition. The earlier completed full
 perturbation
 occlusion-bottleneck route was negative as well: BGR reaches 365/400
 non-identity successes versus official 367/400 and matched random 369/400,
@@ -99,10 +109,14 @@ sweep over all current numeric binary OpenML datasets already registered in
 `tools/openml_margin_scout.py`. Original seeds 0--29 were submitted as Slurm
 job `780049`, and held-out seeds 30--59 were submitted as job `780050`; both
 started on 2026-06-10 at 21:02 BST with `TARGETS=1.5`, `SEEDS=30`,
-`PREPROCESSING=numeric`, and 32 datasets. This is not paper evidence unless the
-synced macro and dataset-level results beat uniform and fixed-radius replay
-under the same fixed readout; it is a broad pre-existing supervised benchmark
-check, not a learned-policy or standard-control win. The
+`PREPROCESSING=numeric`, and 32 datasets. Latest sync at 2026-06-10
+21:21 BST showed both jobs still running on `cnode404`; only Slurm logs were
+available locally, with no `per_seed.csv` or valid paired analysis yet. Log
+tails had advanced past ozone-level-8hr into Bioresponse seeds. This is
+not paper evidence unless the synced macro and dataset-level results beat
+uniform and fixed-radius replay under the same fixed readout; it is a broad
+pre-existing supervised benchmark check, not a learned-policy or
+standard-control win. The
 internal sklearn-digits margin replay scout is also rejected before promotion:
 its best BGR target gives only 0.8271 vs. 0.8123 RAUC against uniform with a
 2/2/0 paired split, while fixed-radius replay is stronger at another target.
