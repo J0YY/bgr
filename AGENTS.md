@@ -640,6 +640,12 @@ jobs were dependency-pending. Direct prep-log tail showed the route had moved
 past rendering into TFDS generation, with `Generating train examples...` at
 26 examples. There is still no compact `summary.csv`, so this route remains
 the live acceptance-moving candidate but is not gateable.
+Latest poll/sync at 2026-06-10 12:53:42 BST showed the same scheduler state
+for the identity-anchored route: prep `776029` running, official identity
+`776040` priority-pending, and all downstream BGR/random training and eval jobs
+dependency-pending. Direct prep-log tail showed TFDS generation progressing to
+49 train examples. There is still no compact `summary.csv`; no paper claim can
+change.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -897,6 +903,10 @@ occlusion jobs were running, with direct partial tails official 263/362, BGR
 82/146, and matched random 85/119. The partial occlusion evidence also points
 away from a BGR win, but the formal blocker is already the identity side
 condition.
+Latest poll/sync at 2026-06-10 12:53:42 BST still left the A6000 0.65
+adaptation route incomplete. Direct occlusion tails were official 275/375,
+BGR 82/154, and matched random 86/126. This route remains non-promotable by
+identity and the partial occlusion trajectory is also unfavorable to BGR.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000

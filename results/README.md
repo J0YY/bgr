@@ -2740,6 +2740,11 @@ downstream BGR/random adaptation plus perturb-eval jobs dependency-pending.
 Direct prep-log inspection showed the job had moved past rendering into TFDS
 generation (`Generating train examples...` at 26 examples). No compact
 `summary.csv` exists, so this route is still incomplete.
+Latest poll/sync at 2026-06-10 12:53:42 BST showed the same scheduler state:
+prep `776029` running, official identity `776040` priority-pending, and all
+downstream BGR/random adaptation plus perturb-eval jobs dependency-pending.
+Direct prep-log inspection showed TFDS generation had reached 49 train
+examples. No compact `summary.csv` exists.
 
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
@@ -3443,6 +3448,19 @@ is dependency-pending. The A6000 0.65 adaptation route remains incomplete and
 already non-promotable by identity; direct occlusion tails are official
 263/362, BGR 82/146, and matched random 85/119. The A40 fallback remains
 incomplete with random identity `774850` running at direct tail 374/381,
+official occlusion `774847` and replacement BGR identity `775102` pending, and
+occlusion children dependency-pending. Readiness still reports
+`NOT_READY_FOR_90P_AAAI_CLAIM`.
+
+Latest status at 2026-06-10 12:53:42 BST: no active hard-occlusion route is
+gateable. The 0.80 identity-anchored prep `776029` is healthy and generating
+TFDS examples, but all train/eval children are still dependency-pending. The
+0.80 transfer route still lacks matched-random rows; random identity `774922`
+is running with direct tail 335/345 and random occlusion `774923` is
+dependency-pending. The A6000 0.65 adaptation route remains incomplete and
+already non-promotable by identity; direct occlusion tails are official
+275/375, BGR 82/154, and matched random 86/126. The A40 fallback remains
+incomplete with random identity `774850` running at direct tail 390/398,
 official occlusion `774847` and replacement BGR identity `775102` pending, and
 occlusion children dependency-pending. Readiness still reports
 `NOT_READY_FOR_90P_AAAI_CLAIM`.
