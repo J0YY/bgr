@@ -314,6 +314,11 @@ in hard-occlusion progress: official `774712` was running at 1:04:03, BGR
 `774714` at 1:05:58, and matched random `774716` at 1:05:58. The compact
 `summary.csv` was still missing; the synced `summary_available.csv` remained
 identity-only. No fixed gate can be run.
+Latest poll/sync at 2026-06-10 11:39:18 BST still had the 0.65 transfer route
+in hard-occlusion progress: official `774712` was running at 1:07:04, BGR
+`774714` at 1:08:59, and matched random `774716` at 1:08:59. The compact
+`summary.csv` was still missing; the synced `summary_available.csv` remained
+identity-only. No fixed gate can be run.
 
 Active learned-policy diagnostic route: fixed hard-occlusion 0.80 transfer
 eval of the completed OpenVLA-OFT occlusion-bottleneck checkpoints. This was
@@ -458,6 +463,12 @@ Latest poll/sync at 2026-06-10 11:36:43 BST still left the 0.80 transfer route
 incomplete: official occlusion `774919` was running at 37:19, BGR occlusion
 `774921` at 28:48, matched-random identity `774922` remained priority-pending
 with estimated start 2026-06-11 11:25:00 BST, and matched-random occlusion
+`774923` remained dependency-pending. The compact `summary.csv` was still
+missing; no gate can be run without the matched-random comparator.
+Latest poll/sync at 2026-06-10 11:39:44 BST still left the 0.80 transfer route
+incomplete: official occlusion `774919` was running at 40:20, BGR occlusion
+`774921` at 31:49, matched-random identity `774922` remained priority-pending
+with estimated start 2026-06-11 11:36:00 BST, and matched-random occlusion
 `774923` remained dependency-pending. The compact `summary.csv` was still
 missing; no gate can be run without the matched-random comparator.
 
@@ -619,6 +630,12 @@ BGR identity `774726` was running at 25:07, matched-random identity `774728`
 was running at 11:06, and BGR/random occlusion jobs `774727`/`774729` remained
 dependency-pending. The synced `summary_available.csv` still contains only
 official identity 393/400, so no fixed gate can be run.
+Latest poll/sync at 2026-06-10 11:40:07 BST showed the A6000 adaptation route
+still progressing but incomplete: official occlusion `774725` was running at
+3:28, BGR identity `774726` was running at 28:09, matched-random identity
+`774728` was running at 14:08, and BGR/random occlusion jobs `774727`/`774729`
+remained dependency-pending. The synced `summary_available.csv` still contains
+only official identity 393/400, so no fixed gate can be run.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000
@@ -799,6 +816,13 @@ dependency-pending. The original failed BGR chain `774848`/`774849` remains
 ignored. The fixed gate remains incomplete.
 Latest A40 poll/sync at 2026-06-10 11:37:22 BST still had no compact summary:
 official occlusion `774847` was running at 42:59, replacement BGR identity
+`775102` was priority-pending with estimated start 2026-06-11 22:02:14 BST,
+matched-random identity `774850` was resource-pending with estimated start
+2026-06-10 23:36:39 BST, and replacement BGR/matched-random occlusions remained
+dependency-pending. The original failed BGR chain `774848`/`774849` remains
+ignored. The fixed gate remains incomplete.
+Latest A40 poll/sync at 2026-06-10 11:40:24 BST still had no compact summary:
+official occlusion `774847` was running at 46:01, replacement BGR identity
 `775102` was priority-pending with estimated start 2026-06-11 22:02:14 BST,
 matched-random identity `774850` was resource-pending with estimated start
 2026-06-10 23:36:39 BST, and replacement BGR/matched-random occlusions remained
