@@ -1186,6 +1186,41 @@ with a 2/1/1 paired split, below the pre-set 3/4 wins and +0.01 mean-delta
 thresholds. Keep Acrobot out of the paper unless a new fixed protocol first
 produces a visible boundary-radius effect.
 
+## Internal Package-Free CartPole Diagnostic
+
+`results/cartpole_recovery_probe_4seed_v1/summary.csv` is a 4-seed internal
+scout using the repo's package-free CartPole-v1 dynamics approximation,
+bounded exact restart states, and teacher-imitation updates. The fixed command
+was:
+
+```bash
+PYTHONPATH=src:. python3 tools/cartpole_recovery_probe.py --out results/cartpole_recovery_probe_4seed_v1
+```
+
+The route is saturated and tied, not promotable. Clean success is 1.0000 for
+every method, and final RAUC means are BGR-Coverage 0.9026, failure-only
+0.9006, TD-loss 0.9001, uniform 0.8985, fixed-radius 0.8985, and BGR 0.8987.
+Treat this only as an internal scout; do not convert it into paper evidence
+unless a materially new official-package protocol first produces a
+non-saturated boundary-radius effect.
+
+## Internal Package-Free MountainCar Diagnostic
+
+`results/mountaincar_recovery_probe_4seed_v1/summary.csv` is a 4-seed internal
+scout using the repo's package-free MountainCar-v0 dynamics approximation,
+right-moving replay states, and exact continuous restart perturbations. The
+fixed command was:
+
+```bash
+PYTHONPATH=src:. python3 tools/mountaincar_recovery_probe.py --out results/mountaincar_recovery_probe_4seed_v1
+```
+
+The route is negative. Fixed-radius replay is strongest at 0.1420 RAUC and
+0.5208 clean, while BGR-Coverage is 0.0553 RAUC, BGR is 0.0532, uniform is
+0.0497, and failure-only is 0.0653. Median r80 remains saturated at 1.0000 for
+BGR, BGR-Coverage, uniform, and failure-only. Treat this as a rejected internal
+scout, not an official-package scale-up candidate.
+
 ## Internal Pendulum Diagnostic
 
 `results/pendulum_recovery_probe_4seed_v1/summary.csv` is a 4-seed
@@ -3598,7 +3633,7 @@ is only +4/400. Treat this as negative/incomplete scope information, not paper
 evidence. The 0.80 transfer and both 0.80 identity-anchored routes remain the
 live learned-policy paths, but they are still missing complete summaries.
 
-Latest status at 2026-06-10 13:49:03 BST: fresh syncs keep the readiness
+Latest status at 2026-06-10 14:03:54 BST: fresh syncs keep the readiness
 decision unchanged. The A6000 0.65 adaptation route remains incomplete and is
 already non-promotable: partial rows are BGR identity/occlusion 389/400 and
 301/400, official identity/occlusion 393/400 and 297/400, and matched-random
@@ -3610,13 +3645,54 @@ so it also fails the fixed identity side condition by trailing the best
 identity comparator by two episodes; official occlusion `774847` was running,
 replacement BGR occlusion `775103` and matched-random occlusion `774851` were
 priority-pending, and original failed child `774849` remains ignored. The 0.80
-transfer route is still missing matched-random occlusion `774923` and is
-already identity-deficient with BGR 391/400 vs. official 393/400. The A6000
+transfer route now has official identity/occlusion 393/400 and 296/400,
+BGR identity/occlusion 391/400 and 305/400, and matched-random identity
+389/400; matched-random occlusion `774923` is still priority-pending, so the
+route remains incomplete and is already identity-deficient with BGR 391/400 vs.
+official 393/400. The A6000
 0.80 identity-anchored route has official identity `776040` and BGR identity
 `776042` priority-pending with estimated starts on 2026-06-11, while the
 same-protocol A40 fallback has BGR train `776291` and official identity
 `776300` priority-pending with estimated starts on 2026-06-12. No active
 0.80 identity-anchored route has a compact summary yet; no paper claim changes.
+
+Strict identity-preservation companion queued on 2026-06-10 14:07 BST: fixed
+hard-occlusion 0.80 strict identity-anchored OpenVLA-OFT adaptation. This
+reuses the completed `p2048unique_hardocc080_identityanchor_prereg` TFDS roots
+and changes only the adaptation strength relative to the 200-step
+identity-anchor route: `ADAPT_STEPS=100`, `LR=5e-8`,
+`PROXIMAL_ANCHOR_L2=50.0`, identity-LoRA, image augmentation, and official
+dataset statistics. It keeps the same fixed identity plus occlusion fraction
+0.80 evaluation over 10 LIBERO-Goal tasks with 40 trials per task. Promotion
+requires the unchanged hard-occlusion gate: BGR must beat both official and
+matched random by at least 10/400 occlusion episodes and at least 0.02 absolute
+success rate while not trailing the best identity comparator by more than one
+episode.
+
+Strict-route Slurm jobs:
+
+```text
+776541  BGR train
+776542  BGR merge, afterok:776541
+776543  BGR clean eval, afterok:776542
+776544  matched-random train, afterok:776541
+776545  matched-random merge, afterok:776544
+776546  matched-random clean eval, afterok:776545
+776548  official identity eval
+776549  official hard-occlusion eval, afterok:776548
+776550  BGR identity eval, afterok:776542
+776551  BGR hard-occlusion eval, afterok:776542 and afterok:776550
+776553  matched-random identity eval, afterok:776545
+776554  matched-random hard-occlusion eval, afterok:776545 and afterok:776553
+```
+
+Initial strict-route poll at 2026-06-10 14:07:46 BST showed BGR train `776541`
+and official identity `776548` priority-pending with estimated starts at
+2026-06-11 14:21:02 BST; all other strict-route jobs were dependency-pending,
+and no remote logs or compact summaries existed. Poll/sync with
+`scripts/sync_openvla_oft_hard_occlusion080_identityanchor_strict_results.sh --poll --sync --no-check`.
+Do not incorporate this route into `paper/main.tex` unless a complete
+`summary.csv` exists and the fixed gate passes.
 
 Sync/poll helper:
 
@@ -3624,6 +3700,7 @@ Sync/poll helper:
 scripts/sync_openvla_oft_hard_occlusion_adapt_a40_results.sh --poll --no-check
 scripts/sync_openvla_oft_hard_occlusion_adapt_a40_results.sh --sync
 scripts/sync_openvla_oft_hard_occlusion080_identityanchor_a40_results.sh --poll --sync --no-check
+scripts/sync_openvla_oft_hard_occlusion080_identityanchor_strict_results.sh --poll --sync --no-check
 ```
 
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up

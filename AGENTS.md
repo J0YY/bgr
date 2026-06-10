@@ -146,6 +146,19 @@ near-miss supervised route, not paper evidence.
 The new grid-margin witness-sensitivity diagnostic improves scope support for the
 feasibility-witness assumption but is controlled mechanism evidence, not an
 independent-benchmark win.
+Completed internal package-free CartPole and MountainCar scouts are also
+negative and should not be promoted. The fixed CartPole scout command
+`PYTHONPATH=src:. python3 tools/cartpole_recovery_probe.py --out results/cartpole_recovery_probe_4seed_v1`
+gives saturated clean success 1.0000 for every method and tightly tied final
+RAUC means: BGR-Coverage 0.9026, failure-only 0.9006, TD-loss 0.9001,
+uniform 0.8985, fixed 0.8985, and BGR 0.8987. The fixed MountainCar scout
+command
+`PYTHONPATH=src:. python3 tools/mountaincar_recovery_probe.py --out results/mountaincar_recovery_probe_4seed_v1`
+is dominated by fixed-radius replay and has poor clean success: fixed-radius
+0.1420 RAUC and 0.5208 clean versus BGR-Coverage 0.0553 RAUC, BGR 0.0532,
+uniform 0.0497, and failure-only 0.0653. Treat both as internal diagnostics
+only; they do not justify an official-package scale-up without a materially new
+premise.
 
 Immediate priority: fix the weaknesses called out by the review, especially the
 lack of new independent positive evidence, the negative standard-environment
@@ -163,7 +176,7 @@ promotion gate: BGR must beat both official and matched random by at least
 trailing the best identity comparator by more than one episode. It is not paper
 evidence unless `summary.csv` exists and the fixed gate passes. Poll/sync with
 `scripts/sync_openvla_oft_hard_occlusion080_identityanchor_results.sh --poll --sync --no-check`.
-Latest poll/sync at 2026-06-10 13:49:03 BST showed this A6000 0.80
+Latest poll/sync at 2026-06-10 14:03:54 BST showed this A6000 0.80
 identity-anchored route still scheduler-limited rather than gateable:
 official identity `776040` and BGR identity `776042` were priority-pending
 with estimated starts on 2026-06-11, official/BGR occlusion and all random
@@ -175,7 +188,7 @@ or summary existed. Do not incorporate either 0.80 identity-anchored route into
 `paper/main.tex` unless a complete `summary.csv` exists and the fixed
 identity/occlusion gate passes.
 
-Latest hard-occlusion status at 2026-06-10 13:49:03 BST also closes two
+Latest hard-occlusion status at 2026-06-10 14:03:54 BST also closes two
 nearby learned-policy routes as non-promotable even though their full summaries
 are incomplete. The A6000 0.65 adaptation route has BGR identity 389/400,
 official identity 393/400, matched-random identity 390/400, BGR occlusion
@@ -739,6 +752,28 @@ with
 Do not incorporate this route into `paper/main.tex` unless a complete
 `summary.csv` exists and the fixed +10/400, +0.02, and identity side-condition
 gate passes.
+
+Companion learned-policy route: fixed hard-occlusion 0.80 strict
+identity-anchored OpenVLA-OFT adaptation. This reuses the completed
+`p2048unique_hardocc080_identityanchor_prereg` TFDS roots and targets the
+observed identity-regression failure more conservatively than the 200-step
+identity-anchor route: `ADAPT_STEPS=100`, `LR=5e-8`, and
+`PROXIMAL_ANCHOR_L2=50.0`, with identity-LoRA, image augmentation, official
+stats, and the same fixed identity plus occlusion fraction 0.80 evaluation over
+10 LIBERO-Goal tasks with 40 trials per task. It is not a relaxed protocol:
+BGR must still beat both official and matched random by at least 10/400
+occlusion episodes and at least 0.02 absolute success rate while not trailing
+the best identity comparator by more than one episode. Submitted on `athena` at
+2026-06-10 14:07 BST: BGR train/merge/clean-eval `776541`/`776542`/`776543`;
+matched-random train/merge/clean-eval `776544`/`776545`/`776546`; official
+identity/occlusion `776548`/`776549`; BGR identity/occlusion `776550`/`776551`;
+matched-random identity/occlusion `776553`/`776554`. Initial poll showed BGR
+train `776541` and official identity `776548` priority-pending with estimated
+starts at 2026-06-11 14:21:02 BST, all dependent strict-route jobs
+dependency-pending, and no remote logs or compact summaries. Poll/sync with
+`scripts/sync_openvla_oft_hard_occlusion080_identityanchor_strict_results.sh --poll --sync --no-check`.
+Do not incorporate this route into `paper/main.tex` unless a complete
+`summary.csv` exists and the fixed gate passes.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
