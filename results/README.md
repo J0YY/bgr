@@ -2409,6 +2409,69 @@ gate. BGR beats the official checkpoint by only 4/400 non-identity episodes
 +10/400 and +0.02 margins. This is incorporated into the paper only as a
 negative OpenVLA/LIBERO audit, not as robotics fine-tuning evidence.
 
+## Queued OpenVLA-OFT Hard-Occlusion Transfer Diagnostic
+
+Queued on 2026-06-10 as a fixed diagnostic/route scout after the completed
+occlusion-bottleneck adaptation failed the full blur/brightness/occlusion/shift
+gate. The rationale is narrow: blur, brightness, and shift are near saturated
+in the full-goal audit, while occlusion is the only persistent non-identity
+bottleneck. This run reuses the completed occlusion-bottleneck BGR and matched
+random checkpoints, evaluates identity plus a harder centered primary-camera
+occlusion (`fraction=0.65`), and compares against the official checkpoint.
+
+Promotion gate: over the 400 hard-occlusion episodes, BGR must beat both
+official and matched random by at least 10 episodes and at least 0.02 absolute
+success rate, while not trailing the best identity comparator by more than one
+episode. Until the compact summary exists and this gate passes, this route is
+not paper evidence.
+
+Submitted command:
+
+```bash
+TAG=occlusion_bottleneck_hardocc065_transfer_step50400_lr2em7_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc065_transfer_step50400_lr2em7_v1 \
+REMOTE_HOST=athena \
+REMOTE_LOG_DIR=/work/joy/bgr/logs \
+REMOTE_RUN_ROOT=/work/joy/bgr/runs \
+REMOTE_HF_HOME=/work/joy/cache_home/huggingface \
+OPENVLA_OFT_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft \
+LIBERO_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/LIBERO \
+BGR_CKPT=/work/joy/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/joy/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048unique_occlusion_bottleneck_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+METHODS=official,bgr,random \
+PERTURBATIONS='identity={};occlusion={"fraction":0.65}' \
+EVAL_TASKS=10 \
+EVAL_TRIALS=40 \
+EVAL_SEED=7 \
+EVAL_TASK_OFFSET=0 \
+EVAL_INIT_STATE_OFFSET=0 \
+EVAL_TIME=12:00:00 \
+PARTITION=low-prio-gpu \
+GRES=gpu:a6000:1 \
+CPUS=8 \
+MEM=90G \
+EXCLUDE=c2-g4-21,c2-g4-19 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Slurm jobs:
+
+```text
+774711  official identity, initially running on c1-g4-03
+774712  official hard occlusion, dependency-pending on 774711
+774713  BGR identity, initially running on c2-g4-20
+774714  BGR hard occlusion, dependency-pending on 774713
+774715  matched-random identity, initially running on c2-g4-20
+774716  matched-random hard occlusion, dependency-pending on 774715
+```
+
+Sync/poll helper:
+
+```bash
+scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --no-check
+scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --sync
+```
+
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 
 Launched on 2026-06-02 after the p1024 offset-3 follow-up showed only a small
