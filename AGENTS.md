@@ -284,6 +284,25 @@ standard-environment job was launched: the current scorecard still rejects that
 route family by saturation, stronger-baseline losses, or state-priority
 ablation failures, and the only acceptance-moving active work remains the
 pending hard-occlusion identity-anchored OpenVLA routes.
+Latest all-route OpenVLA poll at 2026-06-10 15:36 BST showed no material
+change from the 15:33 checkpoint and no complete gateable summary. Micro
+`776998`/`777037`, 0.80 strict A6000 `776541`/`776548`, 0.90 strict A40
+`776601`/`776611`, and 0.80 identity-anchor A40 `776291`/`776300` remain
+priority/dependency-pending with the same estimated front-job starts. The main
+0.80 identity-anchor route remains incomplete with matched-random train
+`776036` priority-pending for 2026-06-10 20:24:00 BST, BGR identity `776042`
+for 2026-06-11 15:23:58 BST, and official identity `776040` for
+2026-06-13 14:07:41 BST; only incomplete official-identity output exists. The
+0.80 transfer route is still missing matched-random occlusion `774923`, and
+the 0.65 A6000 route is still missing matched-random occlusion `774729`; both
+remain incomplete and already violate the fixed identity side condition. The
+0.65 A40 fallback is still missing replacement BGR occlusion `775103` and
+matched-random occlusion `774851`, and already violates the identity side
+condition. Explicit partial gate checks on the three available
+`summary_available.csv` files returned `[INCOMPLETE]`. No additional micro A40
+fallback was launched because it would duplicate the already queued micro
+premise rather than create independent or learned-policy evidence with a new
+intervention.
 
 Newest active learned-policy route: hard-occlusion 0.90 strict
 identity-anchored OpenVLA-OFT adaptation. This was queued after the 0.65
