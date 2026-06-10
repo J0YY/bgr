@@ -240,39 +240,60 @@ seeds, BGR is 0.7938 vs. uniform 0.7678 (+0.0260, W/L/T=80/40/0) and fixed
 Treat the mixed-type OpenML route as a fragility/near-miss diagnostic, not an
 acceptance-moving independent benchmark win.
 
-New active CPU independent-benchmark scout: an official MiniGrid
-DynamicObstacles recovery probe was added in
-`tools/minigrid_dynamic_obstacles_recovery_probe.py`. This is a materially
-different package-owned reset interface from the retired FourRooms/DoorKey and
-classic-control routes: it uses `MiniGrid-Dynamic-Obstacles-6x6-v0`, exact
-restoration of the package grid/obstacle list, stochastic package obstacle
-moves, and teacher-action replay from reset states near the package-generated
-shortest path. Local seed-0 scouts were non-promotable: 6x6 gave BGR 0.4023
-RAUC versus uniform 0.3516 but tied fixed-radius and lost to failure-only
-0.4688; 8x8 gave BGR 0.1380 versus uniform 0.1198 but tied TD-loss, had low
-clean success, and saturated median-r80. A fixed 4-seed CPU cluster screen was
-still submitted to close the route under the common promotion checker as Slurm
-job `779232` via `scripts/queue_minigrid_dynamic_obstacles_probe.sh`; sync
-with `JOB_ID=779232 scripts/sync_minigrid_dynamic_obstacles_probe.sh`. Treat
-this as a scout only. Do not add it to `paper/main.tex` unless the completed
-summary beats uniform, fixed, failure-only, TD-loss, and BGR-uniform-radius
-under `tools/check_candidate_promotion.py` without contradictory/saturated
-radius metrics.
+Completed MiniGrid DynamicObstacles independent-benchmark scout: the official
+package-owned reset interface in
+`tools/minigrid_dynamic_obstacles_recovery_probe.py` uses
+`MiniGrid-Dynamic-Obstacles-6x6-v0`, exact restoration of the package
+grid/obstacle list, stochastic package obstacle moves, and teacher-action
+replay from reset states near the package-generated shortest path. Local
+seed-0 scouts were non-promotable, and the fixed 4-seed CPU cluster screen
+submitted as Slurm job `779232` completed negative with exit `0:0`, synced to
+`results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/`. Mean
+RAUC is failure-only 0.6513, TD-loss 0.6195, uniform 0.6082, fixed 0.6047,
+BGR-uniform-radius 0.5923, default BGR 0.5689, and BGR-Coverage 0.5307.
+`tools/check_candidate_promotion.py` rejects BGR-Coverage versus uniform
+(delta -0.0775, W/L/T=0/4/0), fixed, failure-only, TD-loss, and the
+uniform-radius ablation; it also rejects default BGR versus uniform
+(delta -0.0394, W/L/T=0/4/0), failure-only, TD-loss, and BGR-uniform-radius,
+with a median-r80 contradiction. Treat this fixed DynamicObstacles route as
+completed negative, not paper evidence.
+Active DynamicObstacles follow-up: a separate `bgr_clean_shield` scout was
+added to the same tool to test a new clean-preservation premise after the fixed
+screen showed BGR-family clean recovery collapse. The clean-shield rule trains
+at sigma 0 when selected-state clean success falls below 0.65 and adds a clean
+anchor after boundary updates with probability 0.25. A bounded 4-seed common
+baseline scout was submitted on `athena` as Slurm job `779412` with
+`ARTIFACT_PREFIX=minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1` and
+`METHODS=uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_clean_shield,bgr_coverage,bgr`.
+It writes to
+`/work/joy/bgr/runs/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412`
+and syncs with
+`JOB_ID=779412 ARTIFACT_PREFIX=minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1 scripts/sync_minigrid_dynamic_obstacles_probe.sh`.
+This is not paper evidence unless the completed summary clears
+`tools/check_candidate_promotion.py` for `bgr_clean_shield` against uniform,
+fixed, failure-only, TD-loss, and BGR-uniform-radius without contradictory or
+saturated radius metrics.
 
-Latest OpenVLA poll/sync at 2026-06-10 19:14 BST: the near-term hard-occlusion
+Latest OpenVLA poll/sync at 2026-06-10 19:43 BST: the near-term hard-occlusion
 transfer/adaptation routes are still not paper evidence. The 0.80 transfer
 route synced an incomplete compact summary with BGR identity 391/400, official
 identity 393/400, random identity 389/400, BGR occlusion 305/400, and official
 occlusion 296/400 while matched-random occlusion job `774923` was still
-running. This is already one episode short of the fixed +10/400 official
-promotion margin, before the random comparator is known. The 0.65 adapted route
+running at about 58 minutes. This is already one episode short of the fixed
++10/400 official promotion margin, before the random comparator is known. The
+0.65 adapted route
 synced BGR identity 389/400, official identity 393/400, random identity
 390/400, BGR occlusion 301/400, and official occlusion 297/400 while
-matched-random occlusion job `774729` was still running; this also fails the
-official margin. The A40 0.65 adapted fallback synced only identity and
+matched-random occlusion job `774729` was still running at about 54 minutes;
+this also fails the official margin. The A40 0.65 adapted fallback synced only identity and
 official rows after original BGR identity job `774848` failed and replacement
 `775102` completed; BGR occlusion replacement job `775103` is pending into
-2026-06-11 and random occlusion `774851` was running. Keep polling/syncing for
+2026-06-11 and random occlusion `774851` was running. The A6000 0.80
+identity-anchor route had official identity `776040`, BGR identity `776042`,
+and random identity `776044` running, with occlusion jobs dependency-pending;
+the strict route had official identity complete and BGR identity running.
+Micro/A40/0.90 variants remain priority- or dependency-pending. Keep
+polling/syncing for
 closure, but do not promote these partial routes. The still-active
 hard-occlusion 0.80/0.90 identity-anchor, strict, micro, and A40 variants
 remain queued/running and require complete summaries plus the fixed gate before

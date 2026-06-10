@@ -310,7 +310,15 @@ def run_method(args: argparse.Namespace, method: str, seed: int) -> ProbeResult:
             break
         for _ in range(args.train_batch_size):
             replay_idx, sigma = sample_training_pair(method, bench, records, scorer, rng, args, step)
+            if method == "bgr_clean_shield" and bench.success_prob(replay_idx, 0.0, rng, args.eval_trials) < args.clean_shield_threshold:
+                sigma = 0.0
             bench.train_step(replay_idx, sigma, rng)
+            if (
+                method == "bgr_clean_shield"
+                and sigma > 0.0
+                and rng.random() < args.clean_shield_anchor_mix
+            ):
+                bench.train_step(replay_idx, 0.0, rng)
             if method.startswith("bgr"):
                 success = bench.rollout(replay_idx, sigma, rng, train=False)
                 records[replay_idx].add_observation(sigma, success)
@@ -485,6 +493,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--radius-uniform-mix", type=float, default=0.25)
     parser.add_argument("--priority-temperature", type=float, default=0.8)
     parser.add_argument("--uniform-mix", type=float, default=0.10)
+    parser.add_argument("--clean-shield-threshold", type=float, default=0.65)
+    parser.add_argument("--clean-shield-anchor-mix", type=float, default=0.25)
     return parser
 
 

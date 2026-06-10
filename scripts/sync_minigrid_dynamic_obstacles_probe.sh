@@ -34,6 +34,10 @@ if ssh "${REMOTE_HOST}" "test -f '${remote_log}'"; then
 fi
 if [[ -f "${local_run}/summary.csv" ]]; then
   echo "[summary] ${local_run}/summary.csv"
+  if grep -q '^bgr_clean_shield,' "${local_run}/summary.csv"; then
+    PYTHONPATH=src:. python3 tools/check_candidate_promotion.py "${local_run}/summary.csv" \
+      --treatment bgr_clean_shield --min-seeds 4 --min-wins 3 --min-delta 0.01 || true
+  fi
   PYTHONPATH=src:. python3 tools/check_candidate_promotion.py "${local_run}/summary.csv" \
     --treatment bgr_coverage --min-seeds 4 --min-wins 3 --min-delta 0.01 || true
   PYTHONPATH=src:. python3 tools/check_candidate_promotion.py "${local_run}/summary.csv" \

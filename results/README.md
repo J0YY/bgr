@@ -179,20 +179,44 @@ Internal pre-existing-dataset route scout:
 
 Active external-package scout:
 
-- `tools/minigrid_dynamic_obstacles_recovery_probe.py` adds an official
-  MiniGrid DynamicObstacles recovery replay scout using exact restored package
-  grid/obstacle state and stochastic package obstacle moves. Local seed-0
-  scouts were non-promotable: the 6x6 setting put BGR above uniform but tied
-  fixed-radius and lost to failure-only, while the 8x8 setting had low clean
-  success and saturated median-r80. The fixed 4-seed CPU screen was submitted
-  to `athena` as job `779232` with
-  `scripts/queue_minigrid_dynamic_obstacles_probe.sh`, writing to
-  `/work/joy/bgr/runs/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232`.
-  Sync with `JOB_ID=779232 scripts/sync_minigrid_dynamic_obstacles_probe.sh`.
+- `tools/minigrid_dynamic_obstacles_recovery_probe.py` now also includes a
+  `bgr_clean_shield` follow-up for official MiniGrid DynamicObstacles. This is
+  a separate clean-preservation premise motivated by the fixed screen below:
+  when selected-state clean success is below 0.65, it trains at sigma 0, and it
+  adds a clean anchor after nonzero boundary updates with probability 0.25. A
+  bounded common-baseline 4-seed scout was submitted to `athena` as job
+  `779412` with
+  `ARTIFACT_PREFIX=minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1` and
+  `METHODS=uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_clean_shield,bgr_coverage,bgr`.
+  It writes to
+  `/work/joy/bgr/runs/minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1_779412`
+  and syncs with
+  `JOB_ID=779412 ARTIFACT_PREFIX=minigrid_dynamic_obstacles_clean_shield_probe_4seed_v1 scripts/sync_minigrid_dynamic_obstacles_probe.sh`.
   This is not manuscript evidence unless the completed summary clears
-  `tools/check_candidate_promotion.py` for BGR or BGR-Coverage against uniform,
+  `tools/check_candidate_promotion.py` for `bgr_clean_shield` against uniform,
   fixed, failure-only, TD-loss, and BGR-uniform-radius without saturated or
   contradictory radius metrics.
+
+Completed external-package scope diagnostic:
+
+- `results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/summary.csv`:
+  fixed official MiniGrid DynamicObstacles all-method screen submitted to
+  `athena` as job `779232`. It uses exact restored package grid/obstacle
+  state, stochastic package obstacle moves, and teacher-action replay from
+  reset states near the package-generated shortest path. This route is
+  negative and should not be scaled or promoted: mean RAUC is failure-only
+  0.6513, TD-loss 0.6195, uniform 0.6082, fixed 0.6047, BGR-uniform-radius
+  0.5923, default BGR 0.5689, and BGR-Coverage 0.5307. The candidate checker
+  rejects BGR-Coverage versus uniform (delta -0.0775, W/L/T=0/4/0), fixed,
+  failure-only, TD-loss, and BGR-uniform-radius; it rejects default BGR versus
+  uniform (delta -0.0394, W/L/T=0/4/0), failure-only, TD-loss, and
+  BGR-uniform-radius, with a median-r80 contradiction.
+- `results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/results.jsonl`,
+  `results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/package_versions.json`,
+  and
+  `results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/slurm/bgr-minigrid-dynamic-779232.out`:
+  row-level, package-version, and Slurm records for the same negative route
+  (`gymnasium==1.3.0`, `minigrid==3.0.0`).
 
 Completed external-package scope diagnostic:
 

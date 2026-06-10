@@ -12,6 +12,7 @@ CPUS="${CPUS:-2}"
 ARTIFACT_PREFIX="${ARTIFACT_PREFIX:-minigrid_dynamic_obstacles_recovery_probe_4seed_v1}"
 ENV_ID="${ENV_ID:-MiniGrid-Dynamic-Obstacles-6x6-v0}"
 SEEDS="${SEEDS:-0,1,2,3}"
+METHODS="${METHODS:-uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr}"
 
 SBATCH_PARTITION_ARG=""
 if [[ -n "${SLURM_PARTITION:-}" ]]; then
@@ -45,6 +46,7 @@ PYTHONPATH='${REMOTE_PROJECT}/src:${REMOTE_PROJECT}' \
   '${REMOTE_PROJECT}/tools/minigrid_dynamic_obstacles_recovery_probe.py' \
   --env-id '${ENV_ID}' \
   --seeds '${SEEDS}' \
+  --methods '${METHODS}' \
   --out "${REMOTE_RUN_ROOT}/${ARTIFACT_PREFIX}_\${SLURM_JOB_ID}"
 EOF
 )"
