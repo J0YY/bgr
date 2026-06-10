@@ -213,6 +213,16 @@ identity 348/355, and matched-random identity 378/389. No compact summary
 exists yet. A transient rsync drop during the incomplete-log sync left no
 evidence artifact after cleanup; the sync helper now treats rsync drops and
 incomplete logs as pending and removes temporary paths.
+Latest poll/sync at 2026-06-10 10:30:56 BST showed the 0.65 transfer route
+past two identity rows but still incomplete: BGR identity `774713` completed
+with 391/400 successes and matched-random identity `774715` completed with
+389/400 successes. Official identity `774711` was still marked running, though
+the log tail had reached 393/400 successes. BGR and matched-random occlusion
+jobs `774714` and `774716` had just started on `c2-g4-23`; official occlusion
+`774712` remained dependency-pending. Direct log tails showed the first BGR and
+matched-random hard-occlusion episodes were failures, which is not yet a
+summary. The compact `summary.csv` is still missing, the fixed gate remains
+incomplete, and readiness is unchanged.
 
 Active learned-policy diagnostic route: fixed hard-occlusion 0.80 transfer
 eval of the completed OpenVLA-OFT occlusion-bottleneck checkpoints. This was
@@ -255,6 +265,13 @@ identity `774920` at 5:06 elapsed, matched-random identity `774922` was still
 priority-pending with estimated start 2026-06-10 22:18:47 BST, and all
 occlusion jobs remained dependency-pending. Log tails showed official identity
 101/107 and BGR identity 32/32. No compact summary exists yet.
+Latest poll/sync at 2026-06-10 10:30:56 BST showed the 0.80 transfer route
+moving but still identity-only: official identity `774917` was running at
+20:40, BGR identity `774920` at 12:09, and matched-random identity `774922`
+had started on `c2-g8-07` at 0:25. Occlusion jobs `774919`, `774921`, and
+`774923` remained dependency-pending. Log tails showed official identity
+150/157, BGR identity 99/104, and matched-random identity 2/2 so far. No
+compact summary exists and no gate can be run.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -310,6 +327,13 @@ Latest poll/sync at 2026-06-10 10:23:53 BST showed the A6000 adaptation route
 still unchanged: prep `774717` remained resource-pending, official identity
 `774724` remained unavailable-node pending, all child jobs were
 dependency-pending, and no route logs or summary existed.
+Latest poll/sync at 2026-06-10 10:30:56 BST showed the A6000 adaptation route
+finally started: prep `774717` was running on `c2-g4-20` at 5:23, and official
+identity `774724` was running on `c2-g4-20` at 4:59. BGR/random adaptation,
+merge, clean-eval, identity eval, and occlusion eval children remained
+dependency-pending. The official identity log tail was healthy at 30/30
+successes so far, but no compact summary exists and the route is not evidence
+yet.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000
@@ -372,6 +396,14 @@ official identity `774846` was running at 18:44 elapsed, and all BGR/random
 perturb evals plus all occlusion evals were dependency-pending. The official
 identity log tail reached 133/139 successes. No compact summary exists, so the
 fixed gate remains incomplete.
+Latest A40 poll/sync at 2026-06-10 10:30:56 BST showed more movement but still
+no gateable summary: prep `774816` and BGR adaptation `774817` remained
+completed, BGR merge `774818` was running, matched-random adaptation `774820`
+was running, and official identity `774846` was running at 25:48 elapsed. BGR
+clean eval `774819`, random merge/clean `774821`/`774822`, BGR/random perturb
+evals `774848`--`774851`, and official occlusion `774847` were still
+dependency-pending. The official identity log tail reached 196/203 successes.
+No compact summary exists, so the fixed gate remains incomplete.
 
 Completed learned-policy route (negative, not active): preregistered OpenVLA-OFT occlusion-bottleneck
 adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.

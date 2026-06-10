@@ -2540,6 +2540,16 @@ A transient rsync drop during incomplete-log sync produced no evidence
 artifact after cleanup; the sync helper now treats rsync drops and incomplete
 logs as pending and removes temporary paths.
 
+Latest poll/sync at 2026-06-10 10:30:56 BST: BGR identity `774713` completed
+successfully with 391/400 successes, and matched-random identity `774715`
+completed with 389/400 successes. Official identity `774711` was still marked
+running, though the log tail had reached 393/400 successes. BGR and
+matched-random hard-occlusion jobs `774714` and `774716` had just started on
+`c2-g4-23`; official hard-occlusion `774712` remained dependency-pending.
+Direct log tails showed the first BGR and matched-random hard-occlusion
+episodes were failures. The compact `summary.csv` is still missing, so the
+fixed gate remains incomplete.
+
 ## Queued OpenVLA-OFT Hard-Occlusion 0.80 Transfer Diagnostic
 
 Queued on 2026-06-10 before any 0.65 occlusion rows were available. This is a
@@ -2630,6 +2640,13 @@ random identity `774922` was still priority-pending with estimated start
 2026-06-10 22:18:47 BST, and hard-occlusion jobs `774919`, `774921`, and
 `774923` remained dependency-pending. Log tails showed official identity
 101/107 and BGR identity 32/32. No compact summary exists yet.
+
+Latest poll/sync at 2026-06-10 10:30:56 BST: official identity `774917` was
+running at 20:40 elapsed, BGR identity `774920` at 12:09 elapsed, and
+matched-random identity `774922` had started on `c2-g8-07` at 0:25 elapsed.
+Hard-occlusion jobs `774919`, `774921`, and `774923` remained
+dependency-pending. Log tails showed official identity 150/157, BGR identity
+99/104, and matched-random identity 2/2 so far. No compact summary exists yet.
 
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
@@ -2824,6 +2841,19 @@ matched-random adaptation `774820` were priority-pending, official identity
 and all dependent BGR/random perturb eval and occlusion jobs were still
 dependency-pending. No compact summary exists yet, so no fixed promotion gate
 can be run and no paper claim changes.
+
+Latest status at 2026-06-10 10:30:56 BST: the A6000 adaptation route finally
+started. Prep `774717` was running on `c2-g4-20` at 5:23 elapsed, official
+identity `774724` was running on `c2-g4-20` at 4:59 elapsed with a log tail of
+30/30 successes, and every BGR/random adaptation, merge, clean-eval, identity,
+and hard-occlusion child job was still dependency-pending. The A40 fallback also
+advanced: prep `774816` and BGR adaptation `774817` were completed, BGR merge
+`774818` and matched-random adaptation `774820` were running on `c2-g8-07`,
+and official identity `774846` was running at 25:48 elapsed with a log tail of
+196/203 successes. A40 BGR clean eval `774819`, random merge/clean
+`774821`/`774822`, official hard occlusion `774847`, and BGR/random perturb
+evals `774848`--`774851` were dependency-pending. No compact summary exists
+yet, so no fixed promotion gate can be run and no paper claim changes.
 
 Sync/poll helper:
 
