@@ -151,6 +151,17 @@ with median-r80 lower than uniform. Dense BGR-Coverage remains rejected at
 row for final dense route closure is the completed four-seed failure-only
 summary; sync `778102` when it finishes, but neither BGR-family treatment can
 be promoted because both already fail versus uniform.
+Final dense FetchPush object-state closure: failure-only `778102` completed at
+2026-06-10 18:10:47 BST and synced cleanly. The completed dense common-protocol
+means are uniform 0.3000, failure-only 0.2938, BGR-uniform-radius 0.2875,
+BGR-Coverage 0.2812, default BGR 0.2750, TD-loss 0.2687, and fixed 0.2563
+RAUC. `tools/check_candidate_promotion.py` rejects BGR-Coverage versus uniform
+(delta -0.0188, W/L/T=1/2/1), failure-only (delta -0.0125), and
+BGR-uniform-radius (delta -0.0063), with median-r80 contradiction. It rejects
+default BGR versus uniform (delta -0.0250, W/L/T=0/2/2), failure-only (delta
+-0.0187), and BGR-uniform-radius (delta -0.0125), also with median-r80
+contradiction. Treat the dense FetchPush object-state route as completed
+negative, not paper evidence.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,

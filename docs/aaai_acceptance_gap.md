@@ -1448,6 +1448,13 @@ risk.
   lower median-r80 than uniform. Failure-only `778102` is still running, but
   the BGR-family dense route is already not promotable because both default
   BGR and BGR-Coverage fail the uniform comparison.
+  Final sync at 2026-06-10 18:10 BST completed failure-only, closing the dense
+  common-protocol route negative. Completed mean RAUC is uniform 0.3000,
+  failure-only 0.2938, BGR-uniform-radius 0.2875, BGR-Coverage 0.2812, default
+  BGR 0.2750, TD-loss 0.2687, and fixed 0.2563. The promotion checker rejects
+  both BGR-family treatments versus uniform, failure-only, and the
+  BGR-uniform-radius ablation, with median-r80 contradictions. This route is
+  negative scope evidence, not an independent benchmark win.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
   same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:

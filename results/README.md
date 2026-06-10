@@ -7076,6 +7076,17 @@ BGR-Coverage remains rejected at 0.2812 versus uniform 0.3000. Failure-only
 `778102` was still running at the 18:09 BST poll, so sync it before writing the
 final dense-common closure, but neither BGR-family treatment is promotable.
 
+Final sync at 2026-06-10 18:10 BST completed failure-only, closing the matched
+dense-probe route negative. Completed mean RAUC is uniform 0.3000,
+failure-only 0.2938, BGR-uniform-radius 0.2875, BGR-Coverage 0.2812, default
+BGR 0.2750, TD-loss 0.2687, and fixed 0.2563. The fixed promotion checker
+rejects BGR-Coverage versus uniform (delta -0.0188, W/L/T=1/2/1),
+failure-only (delta -0.0125), and BGR-uniform-radius (delta -0.0063), with a
+median-r80 contradiction. It rejects default BGR versus uniform (delta -0.0250,
+W/L/T=0/2/2), failure-only (delta -0.0187), and BGR-uniform-radius (delta
+-0.0125), also with a median-r80 contradiction. Treat this as completed
+negative scope evidence.
+
 ```bash
 PYTHONPATH=src:. python3 tools/check_candidate_promotion.py <combined-summary.csv> --treatment bgr_coverage --min-seeds 4 --min-wins 3 --min-delta 0.01
 PYTHONPATH=src:. python3 tools/check_candidate_promotion.py <combined-summary.csv> --treatment bgr --min-seeds 4 --min-wins 3 --min-delta 0.01
