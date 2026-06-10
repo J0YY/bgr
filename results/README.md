@@ -2757,6 +2757,13 @@ running on `c1-g4-02`. Downstream BGR/random merge, clean-eval, identity-eval,
 and occlusion-eval children remained dependency-pending. Direct official
 identity parsing showed 41/42 successes so far. No compact `summary.csv`
 exists.
+Latest poll/sync at 2026-06-10 13:04:14 BST showed BGR adaptation `776033`
+completed successfully at 13:03:27, BGR merge `776034` running since 13:03:53
+on `c1-g4-03`, and official identity `776040` still running. Matched-random
+adaptation `776036` was priority-pending with estimated start
+2026-06-10 15:03:53 BST; downstream BGR/random clean and perturb eval children
+remained dependency-pending. Direct official identity parsing showed 71/74
+successes so far. No compact `summary.csv` exists.
 
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
@@ -3505,6 +3512,26 @@ replacement BGR identity `775102` running with direct parsed tail 34/34,
 official occlusion `774847` pending on resources, random occlusion `774851`
 pending on priority, and replacement BGR occlusion `775103`
 dependency-pending. Readiness still reports `NOT_READY_FOR_90P_AAAI_CLAIM`.
+
+Latest status at 2026-06-10 13:04:14 BST: no active hard-occlusion route is
+gateable. The 0.80 identity-anchored route has BGR adaptation completed and
+BGR merge running, official identity running with direct parsed tail 71/74,
+and matched-random adaptation priority-pending until 2026-06-10 15:03:53 BST.
+The 0.80 transfer route now has matched-random identity complete at 389/400,
+so its incomplete `summary_available.csv` contains BGR identity/occlusion
+391/400 and 305/400, official identity/occlusion 393/400 and 296/400, and
+random identity 389/400; random occlusion `774923` is priority-pending with
+estimated start 2026-06-11 22:02:14 BST. The route remains non-promotable by
+identity. The A6000 0.65 adaptation route has official occlusion complete at
+297/400 and direct parsed partials BGR 123/209 and matched random 88/156; its
+identity side condition is already failed. The A40 fallback remains incomplete
+with replacement BGR identity running at 58/60 and official occlusion running
+at 12/14 by direct parse. Readiness still reports
+`NOT_READY_FOR_90P_AAAI_CLAIM`.
+
+Sync helper note: `scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh`
+now excludes `rollouts/` media while syncing remote logs, so compact summaries
+can be rebuilt from text logs without repeated rsync disconnects.
 
 Sync/poll helper:
 

@@ -661,6 +661,13 @@ after 5:48 elapsed. BGR/random merge, clean-eval, identity-eval, and
 occlusion-eval children remained dependency-pending. Direct official identity
 log parsing showed 41/42 successes so far. No compact `summary.csv` exists, so
 the route is still incomplete and cannot support a paper claim.
+Latest poll/sync at 2026-06-10 13:04:14 BST showed BGR adaptation `776033`
+completed successfully at 13:03:27 and BGR merge `776034` running since
+13:03:53 on `c1-g4-03`. Matched-random adaptation `776036` was priority-pending
+with estimated start 2026-06-10 15:03:53 BST; BGR/random clean and perturb eval
+children remained dependency-pending. Official identity `776040` was still
+running with direct parsed tail 71/74. The compact `summary.csv` is still
+missing and the route remains incomplete.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -933,6 +940,17 @@ occlusion `774729` were still running with direct parsed tails of 119/198 and
 88/147. The completed identity rows remain BGR 389/400, official 393/400, and
 matched random 390/400, so the route already violates the identity side
 condition.
+Latest poll/sync at 2026-06-10 13:04:14 BST still left the A6000 0.65
+adaptation route incomplete and non-promotable. The synced incomplete
+`summary_available.csv` now has official occlusion complete at 297/400 plus all
+three identity rows. Direct parsed tails for the still-running occlusion jobs
+were BGR 123/209 and matched random 88/156. The identity side condition remains
+failed.
+
+Operational sync update: `scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh`
+now excludes `rollouts/` media during remote-log sync and copies only text logs
+needed for compact summaries. This fixes repeated rsync code 12/255 drops while
+preserving the local gate path.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000

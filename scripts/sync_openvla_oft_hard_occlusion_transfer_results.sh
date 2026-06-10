@@ -31,7 +31,7 @@ least 10 episodes and 0.02 success rate while preserving identity competence.
 
 Options:
   --poll      run remote squeue/sacct, selected scontrol details, and summary checks
-  --sync      rsync remote logs and build local compact summaries when possible
+  --sync      rsync remote text logs and build local compact summaries when possible
   --no-check  skip local gate/readiness commands after sync/dry-run output
   -h, --help  show this message
 
@@ -136,7 +136,8 @@ sync_summary() {
   elif ssh -o BatchMode=yes -o ConnectTimeout=8 "${REMOTE_HOST}" "test -d '${REMOTE_LOGS}'"; then
     local tmp_logs
     tmp_logs="$(mktemp -d "${TMPDIR:-/tmp}/hardocc-openvla-logs.XXXXXX")"
-    if ! rsync -az "${REMOTE_HOST}:${REMOTE_LOGS}/" "${tmp_logs}/"; then
+    if ! rsync -az --exclude='rollouts/**' --exclude='*/rollouts/**' \
+        "${REMOTE_HOST}:${REMOTE_LOGS}/" "${tmp_logs}/"; then
       echo "[pending] failed to rsync ${REMOTE_LOGS}"
       rm -rf "${tmp_logs}"
       rm -f "${tmp_path}"
