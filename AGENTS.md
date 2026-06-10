@@ -536,6 +536,13 @@ remained priority-pending with estimated start 2026-06-11 11:36:00 BST, and
 matched-random occlusion `774923` remained dependency-pending. The compact
 `summary.csv` was still missing; no gate can be run without the matched-random
 comparator.
+Latest poll/sync at 2026-06-10 12:02:04 BST still left the 0.80 transfer route
+incomplete: official occlusion `774919` was running at 1:02:40 and BGR
+occlusion `774921` at 54:09, both on `c2-g4-17`; matched-random identity
+`774922` remained priority-pending with estimated start 2026-06-11 11:36:00
+BST, and matched-random occlusion `774923` remained dependency-pending. The
+compact `summary.csv` was still missing; no gate can be run without the
+matched-random comparator.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -730,6 +737,12 @@ Latest poll/sync at 2026-06-10 11:58:42 BST showed the A6000 adaptation route
 still incomplete: official occlusion `774725` was running at 22:03, BGR
 identity `774726` was running at 46:44, and matched-random identity `774728`
 was running at 32:43. BGR and matched-random occlusion jobs `774727`/`774729`
+remained dependency-pending. The compact `summary.csv` was missing; the synced
+`summary_available.csv` still could not support a fixed gate.
+Latest poll/sync at 2026-06-10 12:02:28 BST showed the A6000 adaptation route
+still incomplete: official occlusion `774725` was running at 25:49, BGR
+identity `774726` was running at 50:30, and matched-random identity `774728`
+was running at 36:29. BGR and matched-random occlusion jobs `774727`/`774729`
 remained dependency-pending. The compact `summary.csv` was missing; the synced
 `summary_available.csv` still could not support a fixed gate.
 
@@ -953,6 +966,13 @@ with estimated start 2026-06-10 23:36:39 BST, and replacement BGR/matched-random
 occlusions remained dependency-pending. The original failed BGR chain
 `774848`/`774849` remains ignored. The fixed gate remains incomplete.
 Latest A40 poll/sync at 2026-06-10 11:59:00 BST still had no compact summary:
+official occlusion `774847` was priority-pending, replacement BGR identity
+`775102` was priority-pending with estimated start 2026-06-11 22:02:14 BST,
+matched-random identity `774850` was resource-pending with estimated start
+2026-06-10 23:36:39 BST, and replacement BGR/matched-random occlusions remained
+dependency-pending. The original failed BGR chain `774848`/`774849` remains
+ignored. The fixed gate remains incomplete.
+Latest A40 poll/sync at 2026-06-10 12:02:47 BST still had no compact summary:
 official occlusion `774847` was priority-pending, replacement BGR identity
 `775102` was priority-pending with estimated start 2026-06-11 22:02:14 BST,
 matched-random identity `774850` was resource-pending with estimated start
