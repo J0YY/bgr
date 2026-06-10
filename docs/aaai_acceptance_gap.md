@@ -86,7 +86,16 @@ running after 2:53 on `c1-g4-05`, official occlusion `779975` was
 priority-pending, and BGR/random occlusion evals were dependency-pending behind
 their identity evals. The synced incomplete summary has only the official
 identity row; live log tails showed BGR identity around 89/94 and matched
-random around 20/20, which is not gateable evidence. A second fixed
+random around 20/20, which is not gateable evidence. Latest poll/sync at
+2026-06-10 22:10 BST showed official occlusion `779975`, BGR identity
+`779976`, and matched-random identity `779978` running, with BGR/random
+occlusion dependency-pending. The incomplete summary had official identity
+393/400, partial official occlusion 21/27, partial BGR identity 126/134, and
+partial random identity 92/96; direct tails moments later showed BGR identity
+127/135 and random identity 94/98. Route A is still incomplete and not
+gateable, but BGR identity is already tight: one more BGR identity failure
+would make the fixed one-episode identity side condition impossible against
+official 393/400. A second fixed
 head-only repair route was queued before any head-interpolation summary was
 available: it keeps the same `ALPHA=0.75` action/proprio head interpolation but
 sets `LORA_B_SCALE=1.0`, preserving the adapted LoRA-B tensors rather than
@@ -97,7 +106,10 @@ adaptation. Submitted jobs are prep `780059`, official `780060`/`780061`, BGR
 2026-06-10 22:03 BST showed prep `780059` running after starting at 22:03:06,
 official identity `780060` pending on resources with estimated start
 2026-06-11 06:21:43 BST, and downstream evals dependency-pending, with no logs
-or summary. Both
+or summary. Latest poll/sync at 2026-06-10 22:10 BST showed official identity
+`780060` running with partial tail 55/57, BGR identity `780062` and matched
+random identity `780064` priority-pending, and all occlusion jobs
+dependency-pending. Both
 head-interpolation routes remain non-evidence unless the full summary passes
 the same fixed +10/400, +0.02, and identity-preservation gate. The latest
 0.80 identity-anchored base route is closed negative with complete rows:
