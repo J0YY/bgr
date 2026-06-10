@@ -2907,6 +2907,26 @@ At the same poll, BGR clean `774819`, random clean `774822`, official identity
 summary exists yet, so no fixed promotion gate can be run and no paper claim
 changes.
 
+Latest status at 2026-06-10 10:47:48 BST: no hard-occlusion route had a
+complete compact `summary.csv`, so no fixed promotion gate could be run. The
+0.65 transfer route was still in hard-occlusion evaluation: official `774712`
+was running at 15:34, BGR `774714` at 17:29, and matched random `774716` at
+17:29; direct partial tails were official 60/74, BGR 58/76, and matched random
+59/76. The 0.80 transfer route remained identity-only: official identity
+`774917` was running at 37:32, BGR identity `774920` at 29:01, matched-random
+identity `774922` at 11:59, and all three occlusion jobs were
+dependency-pending; direct tails were official 293/300, BGR 214/222, and
+matched random 93/97 in the active log. The A6000 adaptation route had prep
+`774717` completed with exit `0:0`, BGR adaptation `774718` running at 4:14,
+official identity `774724` running at 21:51 with direct tail 130/136, and all
+BGR/random downstream evals dependency-pending. The A40 fallback still had
+BGR clean `774819`, random clean `774822`, official identity `774846`, and
+random identity `774850` running; the replacement BGR identity/occlusion chain
+`775102`/`775103` was correctly pending on `afterok:774819` and
+`afterok:774819,afterok:775102`. Direct A40 tails were official identity
+352/359 and matched-random identity 38/39. The readiness gate still reports
+`NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim changes.
+
 Sync/poll helper:
 
 ```bash
