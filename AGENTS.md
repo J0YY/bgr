@@ -69,13 +69,27 @@ evaluates official, interpolated BGR, and interpolated matched random on
 identity plus occlusion fraction 0.80 over 10 LIBERO-Goal tasks x 40 trials.
 Jobs are prep `779973`, official identity/occlusion `779974`/`779975`, BGR
 identity/occlusion `779976`/`779977`, and matched-random identity/occlusion
-`779978`/`779979`. Initial poll/sync at 2026-06-10 20:56:11 BST showed prep
-`779973` and official identity `779974` pending on priority, with all
+`779978`/`779979`. Latest poll/sync at 2026-06-10 21:09 BST showed prep
+`779973` and official identity `779974` still priority-pending, with all
 downstream evals dependency-pending and no logs or summary. This route is not
 paper evidence unless the full `summary.csv` passes the unchanged fixed gate:
 BGR must beat both official and matched random by at least 10/400 occlusion
 episodes and at least 0.02 absolute success rate while not trailing the best
-identity comparator by more than one episode. The earlier completed full
+identity comparator by more than one episode. A stronger head-only repair
+variant was queued at 2026-06-10 21:12 BST before any head-interpolation
+summary was available: it uses the same `ALPHA=0.75` head interpolation but
+keeps adapted LoRA-B tensors at full scale with `LORA_B_SCALE=1.0`, testing
+whether identity can be repaired without shrinking the occlusion adaptation
+signal. Jobs are prep `780059`, official identity/occlusion `780060`/`780061`,
+BGR identity/occlusion `780062`/`780063`, and matched-random
+identity/occlusion `780064`/`780065`. Initial poll showed prep `780059` and
+official identity `780060` priority-pending, downstream BGR/random evals
+dependency-pending, and no logs or summary. This is also not evidence unless
+the same fixed +10/400, +0.02, and identity-preservation gate passes. The
+latest partial identity-anchored 0.80 variants are already non-promotable on
+identity: BGR identity is 389/400 for the base identity-anchored route,
+387/400 for the micro route, and 388/400 for the strict route, each trailing
+official identity 393/400 by more than one episode. The earlier completed full
 perturbation
 occlusion-bottleneck route was negative as well: BGR reaches 365/400
 non-identity successes versus official 367/400 and matched random 369/400,

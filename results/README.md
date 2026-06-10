@@ -194,6 +194,32 @@ Internal pre-existing-dataset route scout:
   Sync with:
   `ORIG_JOB_ID=780049 REP_JOB_ID=780050 ORIG_PREFIX=openml_all_binary_numeric_target15_30seed_v1 REP_PREFIX=openml_all_binary_numeric_target15_replication_30seed_v1 scripts/sync_openml_mixed_binary_results.sh`.
 
+Active OpenVLA hard-occlusion head-interpolation routes:
+
+- `openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp075_v1`:
+  fixed head-interpolation route queued on 2026-06-10 with `ALPHA=0.75`, using
+  interpolated action/proprio heads and LoRA-B tensors scaled by the same
+  alpha. Jobs are prep `779973`, official identity/occlusion `779974`/`779975`,
+  BGR identity/occlusion `779976`/`779977`, and matched-random
+  identity/occlusion `779978`/`779979`. Latest poll at 2026-06-10 21:09 BST
+  showed prep and official identity still priority-pending, downstream evals
+  dependency-pending, and no summary. Sync with:
+  `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp075_v1 JOB_IDS=779974,779975,779976,779977,779978,779979 DETAIL_JOB_IDS=779973,779974,779975,779976,779977,779978,779979 GATE_PERTURBATIONS=occlusion ROUTE_LABEL='Hard-occlusion 0.80 head-interpolated OpenVLA-OFT transfer' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+- `openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp075_lorafull_v1`:
+  fixed head-only repair route queued on 2026-06-10 with `ALPHA=0.75` and
+  `LORA_B_SCALE=1.0`, preserving adapted LoRA-B tensors while interpolating
+  action/proprio heads toward the official checkpoint. Jobs are prep `780059`,
+  official identity/occlusion `780060`/`780061`, BGR identity/occlusion
+  `780062`/`780063`, and matched-random identity/occlusion `780064`/`780065`.
+  Initial poll at 2026-06-10 21:12 BST showed prep and official identity
+  priority-pending, downstream evals dependency-pending, and no summary. Sync
+  with:
+  `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp075_lorafull_v1 JOB_IDS=780060,780061,780062,780063,780064,780065 DETAIL_JOB_IDS=780059,780060,780061,780062,780063,780064,780065 GATE_PERTURBATIONS=occlusion ROUTE_LABEL='Hard-occlusion 0.80 head-only LoRA-full OpenVLA-OFT transfer' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+  This route is not evidence unless the full `summary.csv` passes the unchanged
+  learned-policy promotion gate: BGR must beat official and matched random by
+  at least 10/400 occlusion episodes and at least 0.02 absolute success rate,
+  while trailing the best identity comparator by no more than one episode.
+
 Completed external-package scope diagnostics:
 
 - `results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/summary.csv`:

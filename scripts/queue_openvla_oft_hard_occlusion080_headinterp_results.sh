@@ -22,6 +22,7 @@ EVAL_TIME="${EVAL_TIME:-12:00:00}"
 EXCLUDE="${EXCLUDE:-c2-g4-21,c2-g4-19}"
 
 ALPHA="${ALPHA:-0.75}"
+LORA_B_SCALE="${LORA_B_SCALE:-${ALPHA}}"
 TAG="${TAG:-occlusion_bottleneck_hardocc080_transfer_headinterp075_v1}"
 EVAL_ARTIFACT="${EVAL_ARTIFACT:-openvla_oft_perturb_eval_${TAG}}"
 INTERP_ROOT="${INTERP_ROOT:-${REMOTE_RUN_ROOT}/openvla_oft_headinterp_${TAG}}"
@@ -48,6 +49,9 @@ checkpoints, moves trainable heads toward the official checkpoint by
 alpha=${ALPHA}, scales LoRA B matrices by the same alpha, then evaluates
 official, interpolated BGR, and interpolated random on identity plus
 occlusion fraction 0.80 over 10 LIBERO-Goal tasks x 40 trials.
+
+Set LORA_B_SCALE separately to preserve or shrink the adapted LoRA-B tensors
+independently of the head interpolation alpha.
 
 This is not a relaxed gate. Promotion requires interpolated BGR to beat both
 official and interpolated matched-random by >=10/400 occlusion episodes and
@@ -107,13 +111,14 @@ $(exclude_directive)
 set -euo pipefail
 source ~/.bashrc || true
 
-echo "Preparing alpha=${ALPHA} interpolated hard-occlusion checkpoints on \$(hostname) at \$(date -Is)"
+echo "Preparing alpha=${ALPHA}, lora_b_scale=${LORA_B_SCALE} interpolated hard-occlusion checkpoints on \$(hostname) at \$(date -Is)"
 rm -rf "${BGR_INTERP_CKPT}" "${RANDOM_INTERP_CKPT}"
 mkdir -p "\$(dirname "${BGR_INTERP_CKPT}")" "\$(dirname "${RANDOM_INTERP_CKPT}")"
 cp -al "${BGR_SOURCE_CKPT}" "${BGR_INTERP_CKPT}"
 cp -al "${RANDOM_SOURCE_CKPT}" "${RANDOM_INTERP_CKPT}"
 
 env ALPHA="${ALPHA}" \\
+  LORA_B_SCALE="${LORA_B_SCALE}" \\
   OFFICIAL_CKPT_DIR="${OFFICIAL_CKPT_DIR}" \\
   BGR_SOURCE_CKPT="${BGR_SOURCE_CKPT}" \\
   RANDOM_SOURCE_CKPT="${RANDOM_SOURCE_CKPT}" \\
@@ -130,6 +135,7 @@ from safetensors.torch import load_file, save_file
 
 
 alpha = float(os.environ["ALPHA"])
+lora_b_scale = float(os.environ["LORA_B_SCALE"])
 official = Path(os.environ["OFFICIAL_CKPT_DIR"])
 pairs = [
     (Path(os.environ["BGR_SOURCE_CKPT"]), Path(os.environ["BGR_INTERP_CKPT"])),
@@ -167,14 +173,14 @@ def scale_adapter(adapter_path: Path) -> None:
     lora_b_count = 0
     for key, value in state.items():
         if torch.is_tensor(value) and value.is_floating_point() and "lora_B" in key:
-            out[key] = (value.float() * alpha).to(dtype=value.dtype)
+            out[key] = (value.float() * lora_b_scale).to(dtype=value.dtype)
             lora_b_count += 1
         else:
             out[key] = value
     tmp_path = adapter_path.with_suffix(adapter_path.suffix + ".tmp")
     save_file(out, str(tmp_path))
     tmp_path.replace(adapter_path)
-    print(f"scaled {lora_b_count} LoRA-B tensors in {adapter_path}", flush=True)
+    print(f"scaled {lora_b_count} LoRA-B tensors by {lora_b_scale} in {adapter_path}", flush=True)
 
 
 for source, out_dir in pairs:
@@ -193,6 +199,7 @@ for source, out_dir in pairs:
     marker.write_text(
         "{\\n"
         f'  "alpha": {alpha},\\n'
+        f'  "lora_b_scale": {lora_b_scale},\\n'
         f'  "source_checkpoint": "{source}",\\n'
         f'  "official_checkpoint": "{official}",\\n'
         '  "interpolated": ["action_head", "proprio_projector", "lora_B"]\\n'
@@ -211,6 +218,7 @@ write_prep_script "${prep_script}"
 echo "### Hard-occlusion 0.80 head interpolation"
 echo "TAG=${TAG}"
 echo "ALPHA=${ALPHA}"
+echo "LORA_B_SCALE=${LORA_B_SCALE}"
 echo "EVAL_ARTIFACT=${EVAL_ARTIFACT}"
 echo "BGR_INTERP_CKPT=${BGR_INTERP_CKPT}"
 echo "RANDOM_INTERP_CKPT=${RANDOM_INTERP_CKPT}"

@@ -75,8 +75,22 @@ and evaluates identity plus occlusion fraction 0.80 over 10 LIBERO-Goal tasks x
 40 trials. Submitted jobs are prep `779973`, official `779974`/`779975`, BGR
 `779976`/`779977`, and matched random `779978`/`779979`; initial poll at
 2026-06-10 20:56:11 BST showed only priority/dependency-pending jobs and no
-summary. This route remains non-evidence unless the full summary passes the
-same fixed +10/400, +0.02, and identity-preservation gate.
+summary, and the 21:09 BST poll was unchanged in substance. A second fixed
+head-only repair route was queued before any head-interpolation summary was
+available: it keeps the same `ALPHA=0.75` action/proprio head interpolation but
+sets `LORA_B_SCALE=1.0`, preserving the adapted LoRA-B tensors rather than
+shrinking them with the heads. This tests the concrete failure mode from the
+0.80 transfer near miss: repair identity without discarding the occlusion
+adaptation. Submitted jobs are prep `780059`, official `780060`/`780061`, BGR
+`780062`/`780063`, and matched random `780064`/`780065`; initial poll at
+2026-06-10 21:12 BST showed prep and official identity priority-pending,
+downstream evals dependency-pending, and no logs or summary. Both
+head-interpolation routes remain non-evidence unless the full summary passes
+the same fixed +10/400, +0.02, and identity-preservation gate. The latest
+partial identity-anchored 0.80 routes already fail the identity side condition:
+BGR identity is 389/400 for the base route, 387/400 for the micro route, and
+388/400 for the strict route, each trailing official identity 393/400 by more
+than one episode.
 An internal sklearn-digits margin scout was also opened as a genuinely
 pre-existing supervised dataset route, but it is rejected before paper
 promotion: the best BGR target in
