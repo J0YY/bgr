@@ -2651,6 +2651,18 @@ direct eval command used the fixed gate perturbation set:
 Initial status at 2026-06-10 09:57:47 BST: prep `774816` was running on
 `c2-g4-17`, official identity `774846` was pending on resources, and all
 adapted BGR/random jobs plus dependent occlusion evals were dependency-pending.
+Latest status at 2026-06-10 10:04:47 BST: transfer identity evals `774711`,
+`774713`, and `774715` were still running at about 40 minutes elapsed, with
+occlusion evals `774712`, `774714`, and `774716` dependency-pending. Transfer
+identity log tails were healthy but incomplete: BGR had reached 236/244
+successes, official 215/222, and matched random 230/240. The A6000 hard-
+occlusion adaptation route was still blocked on unavailable A6000 nodes
+(`774717` and `774724` pending; all children dependency-pending). The A40
+fallback prep `774816` was running at 9:54 elapsed, official identity `774846`
+was resource-pending with estimated start 2026-06-10 12:56:05 BST, and the prep
+log had reached matched-random perturbation rendering at 2026-06-10 10:03:40
+BST. No hard-occlusion compact summary exists yet, so no fixed promotion gate
+can be run and no paper claim changes.
 
 Sync/poll helper:
 

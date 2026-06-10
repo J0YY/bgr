@@ -181,6 +181,14 @@ Latest poll at 2026-06-10 09:45:12 BST showed identity jobs `774711`,
 `774712`, `774714`, and `774716` remained dependency-pending behind the
 corresponding identity jobs. Remote identity logs exist, but
 `summary.csv` is still missing, so no gate can be run yet.
+Latest poll at 2026-06-10 10:04:47 BST showed the same route still in
+identity-eval progress: `774711`, `774713`, and `774715` running at about
+40:05 elapsed on A6000 nodes, with `774712`, `774714`, and `774716`
+dependency-pending behind them. Remote log tails are healthy rather than stuck:
+BGR identity had reached 236/244 successes, official identity 215/222, and
+matched-random identity 230/240. The compact `summary.csv` is still missing,
+and the partial logs are incomplete by construction, so the fixed hard-occlusion
+gate cannot be run yet.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -213,6 +221,12 @@ unchanged from the earlier scheduler report (`774717` at 2026-06-10 10:59:06
 BST and `774724` at 2026-06-10 21:24:42 BST). All adapted BGR/random jobs and
 occlusion eval jobs remain dependency-pending; no logs or summary exist for the
 adapted route yet.
+Latest poll at 2026-06-10 10:04:47 BST still showed the A6000 adaptation
+blocked by unavailable nodes: prep `774717` and official identity `774724`
+pending on `ReqNodeNotAvail`, with the same estimated starts (`774717` at
+2026-06-10 10:59:06 BST and `774724` at 2026-06-10 21:24:42 BST). Every
+adaptation, merge, clean-eval, and occlusion-eval child job remained
+dependency-pending, and there were still no route logs or summaries.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000
@@ -240,6 +254,13 @@ perturb jobs dependency-pending. Poll/sync with
 `scripts/sync_openvla_oft_hard_occlusion_adapt_a40_results.sh --poll --no-check`
 and, when logs or summaries exist,
 `scripts/sync_openvla_oft_hard_occlusion_adapt_a40_results.sh --sync`.
+Latest A40 poll at 2026-06-10 10:04:47 BST showed prep `774816` still running
+on `c2-g4-17` at 9:54 elapsed; official identity `774846` was pending on
+resources with estimated start 2026-06-10 12:56:05 BST; all BGR/random
+adaptation and perturb jobs were dependency-pending. The prep log was healthy:
+it had advanced through BGR perturb rendering and into matched-random
+perturbation rendering at 2026-06-10 10:03:40 BST. No A40 perturb logs or
+summary existed yet, so this route is still incomplete and not paper evidence.
 
 Completed learned-policy route (negative, not active): preregistered OpenVLA-OFT occlusion-bottleneck
 adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.
