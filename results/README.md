@@ -3303,6 +3303,18 @@ official occlusion and replacement BGR identity are pending, and the
 replacement/random occlusion evals are dependency-pending. The latest readiness
 check still reports `NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim changes.
 
+Latest status at 2026-06-10 12:20:56 BST: all active hard-occlusion routes
+remain incomplete and not gateable. The 0.80 transfer route is waiting on
+matched-random identity `774922` and matched-random occlusion `774923`. The
+A6000 adaptation route advanced: BGR identity `774726` completed and BGR
+occlusion `774727` started, while official occlusion `774725` and
+matched-random identity `774728` are still running and matched-random
+occlusion `774729` is dependency-pending. The A40 fallback still has
+matched-random identity `774850` running, official occlusion `774847` and
+replacement BGR identity `775102` pending, and both occlusion children
+dependency-pending. No compact `summary.csv` exists for any active route, so no
+OpenVLA gate can be run and no paper claim changes.
+
 Sync/poll helper:
 
 ```bash

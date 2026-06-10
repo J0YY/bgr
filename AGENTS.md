@@ -566,6 +566,11 @@ occlusion 296/400. Matched-random identity `774922` had just started on
 `c2-g4-17`, and matched-random occlusion `774923` remained dependency-pending.
 The compact `summary.csv` is still missing, so the fixed hard-occlusion gate
 cannot be run and this is not paper evidence.
+Latest poll/sync at 2026-06-10 12:20:17 BST left the 0.80 transfer route
+unchanged in substance: matched-random identity `774922` was running on
+`c2-g4-17` at 7:32, matched-random occlusion `774923` remained
+dependency-pending, and the compact `summary.csv` was still missing. No fixed
+gate can be run yet.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -788,6 +793,12 @@ and matched-random occlusion jobs `774727`/`774729` remained
 dependency-pending. The compact `summary.csv` was still missing, and the
 synced `summary_available.csv` still contains only official identity, so no
 fixed gate can be run.
+Latest poll/sync at 2026-06-10 12:20:41 BST showed the A6000 adaptation route
+advancing but still incomplete: BGR identity `774726` completed successfully
+after 1:02:39, and BGR occlusion `774727` started on `c2-g4-23`. Official
+occlusion `774725` and matched-random identity `774728` were still running,
+matched-random occlusion `774729` remained dependency-pending, and the compact
+`summary.csv` was still missing. The fixed gate remains incomplete.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000
@@ -1045,6 +1056,13 @@ dependency-pending, and original failed child `774849` remained
 `DependencyNeverSatisfied` and ignored. The synced `summary_available.csv`
 still contains only official identity 393/400, so the fixed gate remains
 incomplete.
+Latest A40 poll/sync at 2026-06-10 12:20:56 BST still had no compact summary.
+Matched-random identity `774850` was running on `c2-g4-17` at 15:42; official
+occlusion `774847` and replacement BGR identity `775102` remained pending,
+with `775102` still estimated for 2026-06-11 02:41:01 BST. Replacement BGR
+occlusion `775103` and matched-random occlusion `774851` remained
+dependency-pending, and original failed child `774849` remained ignored. The
+fixed gate remains incomplete.
 
 Completed learned-policy route (negative, not active): preregistered OpenVLA-OFT occlusion-bottleneck
 adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.
