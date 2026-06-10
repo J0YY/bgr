@@ -97,16 +97,25 @@ checks beat uniform, fixed, failure-only, TD-loss, and the uniform-radius
 ablation.
 Latest partial FetchPush object-state method evidence is not promotable. The
 single serial scout job `777783` and split per-method jobs `777896`--`777901`
-are still running, but available rows already show sparse-probe BGR failing:
-uniform seeds 0--3 have RAUC 0.3125/0.3000/0.1500/0.2500; sparse
-BGR-Coverage seeds 0--2 have 0.1875/0.2250/0.1250; sparse BGR seeds 0--1 have
-0.1750/0.2375; and BGR-uniform-radius seeds 0--1 have 0.3250/0.2750. A
-corrected dense-probe BGR diagnostic was submitted as job `777969` after
-canceling mislabeled job `777958`; it uses `INITIAL_PROBES=0.00,0.02,0.08,0.20`,
-`TARGET_RADIUS=0.046`, and `RADIUS_BANDWIDTH=0.050`. Its first available row,
-BGR-Coverage seed 0, improves to RAUC 0.3125, matching uniform seed 0 but still
-below BGR-uniform-radius seed 0 at 0.3250. Treat this route as in-flight and
-currently negative/non-promotable unless later paired rows reverse the trend.
+are still running or partially complete, but available rows already show
+sparse-probe BGR failing: uniform seeds 0--3 have RAUC
+0.3125/0.3000/0.1500/0.2500; sparse BGR-Coverage seeds 0--3 have
+0.1875/0.2250/0.1250/0.2125; sparse BGR seeds 0--3 have
+0.1750/0.2375/0.1500/0.0500; and BGR-uniform-radius seeds 0--3 have
+0.3250/0.2750/0.1500/0.2125. A corrected dense-probe BGR diagnostic was
+submitted as job `777969` after canceling mislabeled job `777958`; it uses
+`INITIAL_PROBES=0.00,0.02,0.08,0.20`, `TARGET_RADIUS=0.046`, and
+`RADIUS_BANDWIDTH=0.050`. Its first two available rows improve BGR-Coverage to
+0.3125/0.3875 RAUC on seeds 0/1, matching uniform seed 0 and beating uniform
+seed 1, but dense warm-start probes can affect all methods. To avoid an unfair
+dense-vs-sparse comparison, matched dense-probe per-method jobs were submitted
+on `athena` at 2026-06-10 17:30 BST:
+`778100` uniform, `778101` fixed, `778102` failure-only, `778103` TD-loss,
+`778104` BGR-uniform-radius, `778105` BGR-Coverage, and `778106` BGR. They use
+the same dense probes, `TARGET_RADIUS=0.046`, `RADIUS_BANDWIDTH=0.050`, and
+write to `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_<method>_v1_<job>`.
+Treat this route as in-flight and not paper evidence unless the completed
+matched dense common-protocol summary clears the candidate-promotion checks.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,

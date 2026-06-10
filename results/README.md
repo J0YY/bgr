@@ -7010,3 +7010,45 @@ Interpretation: the fixed Asterix all-method screen is negative. BGR-Coverage
 beats uniform on mean RAUC but loses to the failure-only baseline and has only
 1/2/1 paired wins/losses/ties against uniform, so it fails the promotion gate
 and should not be scaled or promoted under this protocol.
+
+### `fetchpush_object_state_recovery_probe_densecommon_*_v1`
+
+Submitted on `athena` at 2026-06-10 17:30 BST after the sparse FetchPush
+object-state scout showed negative sparse BGR rows and the dense BGR diagnostic
+began to improve BGR-Coverage. The purpose is to make the dense-probe
+comparison fair: dense initial probes warm-start the trajectory-library policy,
+so dense BGR rows should be compared only to dense-probe baselines.
+
+Common submission settings:
+
+```bash
+METHODS='<one method>' \
+SEEDS='0,1,2,3' \
+INITIAL_PROBES='0.00,0.02,0.08,0.20' \
+TARGET_RADIUS='0.046' \
+RADIUS_BANDWIDTH='0.050' \
+TIME_LIMIT='4:00:00' \
+scripts/queue_fetchpush_object_state_probe.sh
+```
+
+Submitted jobs:
+
+| Method | Job | Remote output |
+|---|---:|---|
+| uniform | 778100 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_uniform_v1_778100` |
+| fixed | 778101 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_fixed_v1_778101` |
+| failure-only | 778102 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_failure_only_v1_778102` |
+| TD-loss | 778103 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_td_loss_v1_778103` |
+| BGR-uniform-radius | 778104 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_bgr_uniform_radius_v1_778104` |
+| BGR-Coverage | 778105 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_bgr_coverage_v1_778105` |
+| BGR | 778106 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_bgr_v1_778106` |
+
+Latest poll at 2026-06-10 17:32 BST showed all seven jobs running. This is
+not paper evidence. After completion, sync each output with
+`OUT_PREFIX=<prefix> JOB_ID=<job> scripts/sync_fetchpush_object_state_probe.sh`,
+combine the seven `summary.csv` files with structured CSV parsing, and run:
+
+```bash
+PYTHONPATH=src:. python3 tools/check_candidate_promotion.py <combined-summary.csv> --treatment bgr_coverage --min-seeds 4 --min-wins 3 --min-delta 0.01
+PYTHONPATH=src:. python3 tools/check_candidate_promotion.py <combined-summary.csv> --treatment bgr --min-seeds 4 --min-wins 3 --min-delta 0.01
+```
