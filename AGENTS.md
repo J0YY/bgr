@@ -650,6 +650,26 @@ identity `776548` for 07:35 BST. The 0.80 identity-anchor A40 fallback, 0.80
 micro A40 fallback, and 0.90 strict A40 route remain priority/dependency
 pending with front jobs estimated for 2026-06-11 22:02:14 BST. No OpenVLA
 paper claim should change.
+Latest all-route OpenVLA poll/sync at 2026-06-10 20:39 BST still found no
+complete gateable hard-occlusion summary. The 0.80 identity-anchor A6000 route
+has identity rows complete locally at BGR 389/400, official 393/400, and
+matched random 393/400, so it is already non-promotable on the fixed identity
+side condition; its official and BGR occlusion eval jobs `776041`/`776043` are
+running, and matched-random occlusion `776045` is priority-pending with
+estimated start 2026-06-11 07:15:44 BST. The 0.80 micro A6000 route has only
+official identity complete at 393/400; BGR identity `777040` is running,
+official occlusion `777039` and random identity `777042` are priority-pending,
+and BGR/random occlusion jobs are dependency-pending. The 0.80 strict A6000
+route has official identity complete at 393/400, official occlusion `776549`,
+BGR identity `776550`, and random identity `776553` running, with BGR/random
+occlusion dependency-pending. The 0.80 A40 fallback has official identity
+`776300` running while its BGR/random adaptation chains are still
+priority/dependency-pending; the 0.80 micro A40 fallback and 0.90 strict A40
+route remain pending without local logs or summaries. No new same-premise
+OpenVLA job was launched because the active queue already covers the
+identity-preserving hard-occlusion variants; do not incorporate any of these
+routes into `paper/main.tex` unless a complete `summary.csv` exists and the
+fixed gate passes.
 
 Newest acceleration route: hard-occlusion 0.80 micro identity-anchored
 OpenVLA-OFT A40 fallback. This is a resource fallback for the already fixed
