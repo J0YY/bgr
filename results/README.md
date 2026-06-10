@@ -3172,6 +3172,24 @@ pending, replacement BGR/random occlusions dependency-pending, and the original
 failed BGR chain ignored. The latest readiness check still reports
 `NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim changes.
 
+Latest status at 2026-06-10 11:48:06 BST: all four hard-occlusion routes still
+lacked complete compact `summary.csv` files, so no fixed promotion gate could
+be run. The 0.65 transfer route had official/BGR/matched-random hard-occlusion
+evals still running at 1:13:46/1:15:41/1:15:41, and the synced
+`summary_available.csv` remained identity-only with official 393/400, BGR
+391/400, and matched random 389/400. The 0.80 transfer route had official and
+BGR occlusion running at 47:05 and 38:34, while matched-random identity was
+priority-pending until 2026-06-11 11:36:00 BST and matched-random occlusion
+was dependency-pending. The A6000 adaptation route was past prep, both
+training/merge chains, and both clean evals, but official occlusion, BGR
+identity, and matched-random identity were still running; BGR/random occlusions
+were dependency-pending. The A40 fallback had official occlusion running,
+replacement BGR identity priority-pending until 2026-06-11 22:02:14 BST,
+matched-random identity resource-pending until 2026-06-10 23:36:39 BST, and
+replacement BGR/random occlusions dependency-pending, with the original failed
+BGR chain ignored. The latest readiness check still reports
+`NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim changes.
+
 Sync/poll helper:
 
 ```bash
