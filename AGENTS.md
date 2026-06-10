@@ -176,7 +176,7 @@ promotion gate: BGR must beat both official and matched random by at least
 trailing the best identity comparator by more than one episode. It is not paper
 evidence unless `summary.csv` exists and the fixed gate passes. Poll/sync with
 `scripts/sync_openvla_oft_hard_occlusion080_identityanchor_results.sh --poll --sync --no-check`.
-Latest poll/sync at 2026-06-10 14:03:54 BST showed this A6000 0.80
+Latest poll/sync at 2026-06-10 14:10:44 BST showed this A6000 0.80
 identity-anchored route still scheduler-limited rather than gateable:
 official identity `776040` and BGR identity `776042` were priority-pending
 with estimated starts on 2026-06-11, official/BGR occlusion and all random
@@ -188,7 +188,7 @@ or summary existed. Do not incorporate either 0.80 identity-anchored route into
 `paper/main.tex` unless a complete `summary.csv` exists and the fixed
 identity/occlusion gate passes.
 
-Latest hard-occlusion status at 2026-06-10 14:03:54 BST also closes two
+Latest hard-occlusion status at 2026-06-10 14:10:44 BST also closes two
 nearby learned-policy routes as non-promotable even though their full summaries
 are incomplete. The A6000 0.65 adaptation route has BGR identity 389/400,
 official identity 393/400, matched-random identity 390/400, BGR occlusion
@@ -198,7 +198,7 @@ condition and beats official occlusion by only +4/400. The A40 0.65 fallback
 has replacement BGR identity 391/400, official identity 393/400, and
 matched-random identity 392/400, so it also fails the fixed identity side
 condition by trailing the best identity comparator by two episodes; official
-occlusion `774847` was running, replacement BGR occlusion `775103` and
+occlusion `774847` completed at 295/400, replacement BGR occlusion `775103` and
 matched-random occlusion `774851` were priority-pending, and the original
 failed BGR child `774849` remains ignored. Treat both as negative/incomplete
 scope information, not paper evidence.

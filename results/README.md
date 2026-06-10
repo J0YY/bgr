@@ -3633,7 +3633,7 @@ is only +4/400. Treat this as negative/incomplete scope information, not paper
 evidence. The 0.80 transfer and both 0.80 identity-anchored routes remain the
 live learned-policy paths, but they are still missing complete summaries.
 
-Latest status at 2026-06-10 14:03:54 BST: fresh syncs keep the readiness
+Latest status at 2026-06-10 14:10:44 BST: fresh syncs keep the readiness
 decision unchanged. The A6000 0.65 adaptation route remains incomplete and is
 already non-promotable: partial rows are BGR identity/occlusion 389/400 and
 301/400, official identity/occlusion 393/400 and 297/400, and matched-random
@@ -3642,9 +3642,10 @@ The identity side condition fails and the BGR-over-official occlusion margin is
 only +4/400. The A40 0.65 fallback now has replacement BGR identity complete
 at 391/400, official identity 393/400, and matched-random identity 392/400,
 so it also fails the fixed identity side condition by trailing the best
-identity comparator by two episodes; official occlusion `774847` was running,
-replacement BGR occlusion `775103` and matched-random occlusion `774851` were
-priority-pending, and original failed child `774849` remains ignored. The 0.80
+identity comparator by two episodes; official occlusion `774847` completed at
+295/400, replacement BGR occlusion `775103` and matched-random occlusion
+`774851` were priority-pending, and original failed child `774849` remains
+ignored. The 0.80
 transfer route now has official identity/occlusion 393/400 and 296/400,
 BGR identity/occlusion 391/400 and 305/400, and matched-random identity
 389/400; matched-random occlusion `774923` is still priority-pending, so the
@@ -3693,6 +3694,11 @@ and no remote logs or compact summaries existed. Poll/sync with
 `scripts/sync_openvla_oft_hard_occlusion080_identityanchor_strict_results.sh --poll --sync --no-check`.
 Do not incorporate this route into `paper/main.tex` unless a complete
 `summary.csv` exists and the fixed gate passes.
+Latest strict-route poll at 2026-06-10 14:10:44 BST showed the same substantive
+state: BGR train `776541` and official identity `776548` remained
+priority-pending with estimated starts at 2026-06-11 14:21:02 BST, all other
+strict-route jobs remained dependency-pending, and no remote logs or compact
+summaries existed.
 
 Sync/poll helper:
 
