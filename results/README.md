@@ -3190,6 +3190,26 @@ replacement BGR/random occlusions dependency-pending, with the original failed
 BGR chain ignored. The latest readiness check still reports
 `NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim changes.
 
+Latest status at 2026-06-10 11:51:33 BST: all four hard-occlusion routes still
+lacked complete compact `summary.csv` files, so no fixed promotion gate could
+be run. The 0.65 transfer route had official/BGR/matched-random hard-occlusion
+evals still running at 1:18:10/1:20:05/1:20:05, with only identity rows in the
+synced `summary_available.csv`. The 0.80 transfer route had official and BGR
+occlusion running at 51:28 and 42:57, while matched-random identity was still
+priority-pending until 2026-06-11 11:36:00 BST and matched-random occlusion was
+dependency-pending. The A6000 adaptation route remained incomplete with
+official occlusion, BGR identity, and matched-random identity running, while
+BGR/random occlusions were dependency-pending. The A40 fallback had official
+occlusion running, replacement BGR identity priority-pending until
+2026-06-11 22:02:14 BST, matched-random identity resource-pending until
+2026-06-10 23:36:39 BST, and replacement BGR/random occlusions
+dependency-pending, with the original failed BGR chain ignored. The latest
+readiness check still reports `NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim
+changes. The scorecard still identifies these hard-occlusion learned-policy
+jobs as the current acceptance-moving work and warns against adding more
+same-protocol MiniGrid/classic-control/PointMaze/FetchReach screens while they
+are pending.
+
 Sync/poll helper:
 
 ```bash
