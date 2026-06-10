@@ -58,7 +58,24 @@ missing both the +10 episode and +0.02 rate gates. The A40 adaptation fallback
 is also already closed negative on identity side condition with BGR identity
 391/400 versus official 393/400. Still-running identity-anchored hard-occlusion
 routes remain incomplete and must not be incorporated into `paper/main.tex`
-unless their full summaries pass the fixed gate. The earlier completed full perturbation
+unless their full summaries pass the fixed gate. A new fixed hard-occlusion
+0.80 head-interpolation route was queued on 2026-06-10 after the completed
+transfer route missed promotion by one occlusion episode and two identity
+episodes. It copies the completed occlusion-bottleneck BGR and matched-random
+checkpoints, interpolates trainable action/proprio heads toward the official
+checkpoint with `ALPHA=0.75`, scales LoRA-B tensors by the same alpha, and
+evaluates official, interpolated BGR, and interpolated matched random on
+identity plus occlusion fraction 0.80 over 10 LIBERO-Goal tasks x 40 trials.
+Jobs are prep `779973`, official identity/occlusion `779974`/`779975`, BGR
+identity/occlusion `779976`/`779977`, and matched-random identity/occlusion
+`779978`/`779979`. Initial poll/sync at 2026-06-10 20:56:11 BST showed prep
+`779973` and official identity `779974` pending on priority, with all
+downstream evals dependency-pending and no logs or summary. This route is not
+paper evidence unless the full `summary.csv` passes the unchanged fixed gate:
+BGR must beat both official and matched random by at least 10/400 occlusion
+episodes and at least 0.02 absolute success rate while not trailing the best
+identity comparator by more than one episode. The earlier completed full
+perturbation
 occlusion-bottleneck route was negative as well: BGR reaches 365/400
 non-identity successes versus official 367/400 and matched random 369/400,
 with identity BGR 99/100, official 99/100, and random 98/100. The

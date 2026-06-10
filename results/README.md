@@ -3896,6 +3896,48 @@ micro A6000 route had official identity complete and BGR identity running; the
 0.80 identity-anchor A40 fallback had official identity running; the 0.80 micro
 A40 and 0.90 strict A40 routes had no summarizable logs yet.
 
+New hard-occlusion 0.80 head-interpolation route queued on 2026-06-10
+20:56 BST: `scripts/queue_openvla_oft_hard_occlusion080_headinterp_results.sh`
+copies the completed occlusion-bottleneck BGR and matched-random checkpoints,
+interpolates the trainable action and proprio heads toward the official
+checkpoint with `ALPHA=0.75`, scales LoRA-B adapter tensors by the same alpha,
+and evaluates official, interpolated BGR, and interpolated matched random on
+identity plus occlusion fraction 0.80 over 10 LIBERO-Goal tasks with 40 trials
+per task. This is a fixed follow-up to the completed transfer route that missed
+promotion by one occlusion episode while trailing official identity by two
+episodes; it is not a relaxed gate or paper evidence. Promotion still requires
+BGR to beat both official and matched random by at least 10/400 occlusion
+episodes and at least 0.02 absolute success rate while not trailing the best
+identity comparator by more than one episode.
+
+Head-interpolation Slurm jobs:
+
+```text
+779973  checkpoint interpolation prep
+779974  official identity eval
+779975  official hard-occlusion eval, afterok:779974
+779976  interpolated BGR identity eval, afterok:779973
+779977  interpolated BGR hard-occlusion eval, afterok:779973 and afterok:779976
+779978  interpolated matched-random identity eval, afterok:779973
+779979  interpolated matched-random hard-occlusion eval, afterok:779973 and afterok:779978
+```
+
+Initial sync command:
+
+```bash
+ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp075_v1 \
+JOB_IDS=779974,779975,779976,779977,779978,779979 \
+DETAIL_JOB_IDS=779973,779974,779975,779976,779977,779978,779979 \
+GATE_PERTURBATIONS=occlusion \
+ROUTE_LABEL='Hard-occlusion 0.80 head-interpolated OpenVLA-OFT transfer' \
+scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check
+```
+
+Initial poll/sync at 2026-06-10 20:56:11 BST showed prep `779973` and official
+identity `779974` pending on priority; official occlusion `779975` and all
+interpolated BGR/random eval jobs were dependency-pending. No remote logs or
+compact summary existed yet.
+
 Additional strict identity-preservation route queued on 2026-06-10 14:18 BST:
 fixed hard-occlusion 0.90 strict identity-anchored OpenVLA-OFT adaptation. This
 is a deliberately harder-bottleneck companion to the 0.80 strict route, not a

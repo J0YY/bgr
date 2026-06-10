@@ -67,6 +67,17 @@ occlusion rows synced after a failed original BGR identity job and a replacement
 completion; BGR occlusion was still pending. These rows should be closed out by
 syncing final summaries, but they must not be promoted unless a complete
 summary passes the fixed gate.
+A fixed head-interpolation follow-up was queued on 2026-06-10 to test whether
+the near-miss 0.80 transfer route can preserve the occlusion gain while
+recovering identity success. It copies the completed BGR and matched-random
+occlusion-bottleneck checkpoints, interpolates trainable heads toward the
+official checkpoint with `ALPHA=0.75`, scales LoRA-B tensors by the same alpha,
+and evaluates identity plus occlusion fraction 0.80 over 10 LIBERO-Goal tasks x
+40 trials. Submitted jobs are prep `779973`, official `779974`/`779975`, BGR
+`779976`/`779977`, and matched random `779978`/`779979`; initial poll at
+2026-06-10 20:56:11 BST showed only priority/dependency-pending jobs and no
+summary. This route remains non-evidence unless the full summary passes the
+same fixed +10/400, +0.02, and identity-preservation gate.
 An internal sklearn-digits margin scout was also opened as a genuinely
 pre-existing supervised dataset route, but it is rejected before paper
 promotion: the best BGR target in
