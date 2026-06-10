@@ -9,6 +9,8 @@ from scripts.render_openvla_teacher_examples import (
     _keep_row,
     _load_rows,
     _libero_oft_state,
+    _parse_perturbation_param_overrides,
+    _perturbation_params_for_row,
     _select_balanced_episode_rows,
     _suite_name,
 )
@@ -25,6 +27,17 @@ class RenderOpenVLATeacherExamplesTest(unittest.TestCase):
         self.assertEqual(out.shape, image.shape)
         self.assertEqual(int(out[5, 5, 0]), 0)
         self.assertEqual(int(out[0, 0, 0]), 255)
+
+    def test_perturbation_param_override_updates_matching_family(self):
+        overrides = _parse_perturbation_param_overrides(["occlusion.fraction=0.65", "shift.dx_fraction=0.2"])
+        self.assertEqual(overrides["occlusion"], {"fraction": 0.65})
+        row = {"perturbation_type": "occlusion", "perturbation_params": '{"fraction": 0.5}'}
+        self.assertEqual(_perturbation_params_for_row(row, overrides), {"fraction": 0.65})
+
+    def test_perturbation_param_override_leaves_other_families_unchanged(self):
+        overrides = _parse_perturbation_param_overrides(["occlusion.fraction=0.65"])
+        row = {"perturbation_type": "brightness", "perturbation_params": '{"factor": 0.5}'}
+        self.assertEqual(_perturbation_params_for_row(row, overrides), {"factor": 0.5})
 
     def test_first_per_family_selection(self):
         seen = set()

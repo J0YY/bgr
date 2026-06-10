@@ -52,6 +52,7 @@ CLEAN_EPISODES_PER_FAMILY="${CLEAN_EPISODES_PER_FAMILY:-64}"
 PERTURB_EPISODES_PER_FAMILY="${PERTURB_EPISODES_PER_FAMILY:-8}"
 OCCLUSION_CAP="${OCCLUSION_CAP:-512}"
 OCCLUSION_REPEAT="${OCCLUSION_REPEAT:-4}"
+OCCLUSION_FRACTION_OVERRIDE="${OCCLUSION_FRACTION_OVERRIDE:-}"
 DATASET_NAME="${DATASET_NAME:-libero_goal_no_noops}"
 PROXIMAL_ANCHOR_L2="${PROXIMAL_ANCHOR_L2:-5.0}"
 ADAPT_STEPS="${ADAPT_STEPS:-400}"
@@ -91,6 +92,8 @@ audit:
   - keep official stats, identity-LoRA, image augmentation, LR=${LR},
     ADAPT_STEPS=${ADAPT_STEPS}, PROXIMAL_ANCHOR_L2=${PROXIMAL_ANCHOR_L2}, and
     fixed 10-task x 10-trial LIBERO-Goal perturbation evaluation.
+  - optionally override rendered occlusion strength with
+    OCCLUSION_FRACTION_OVERRIDE, e.g. 0.65 for hard-occlusion training.
 
 Options:
   --prep-only        print or submit only clean+occlusion TFDS prep
@@ -154,6 +157,7 @@ BGR_DATA_ROOT=${BGR_DATA_ROOT}
 RANDOM_DATA_ROOT=${RANDOM_DATA_ROOT}
 OCCLUSION_CAP=${OCCLUSION_CAP}
 OCCLUSION_REPEAT=${OCCLUSION_REPEAT}
+OCCLUSION_FRACTION_OVERRIDE=${OCCLUSION_FRACTION_OVERRIDE}
 PROXIMAL_ANCHOR_L2=${PROXIMAL_ANCHOR_L2}
 Promotion gate: BGR must beat matched random and official by >=10/400 non-identity episodes and >=0.02, with clean identity no worse than -1/100.
 EOF
@@ -225,6 +229,10 @@ done
 export MUJOCO_GL=egl
 export PYOPENGL_PLATFORM=egl
 export PYTHONPATH="${REMOTE_PROJECT}/src:${REMOTE_PROJECT}:${LIBERO_ROOT}:${OPENVLA_OFT_ROOT}:${OPENVLA_OFT_SITE}:\${PYTHONPATH:-}"
+RENDER_OVERRIDE_ARGS=()
+if [[ -n "${OCCLUSION_FRACTION_OVERRIDE}" ]]; then
+  RENDER_OVERRIDE_ARGS+=(--override-perturbation-param "occlusion.fraction=${OCCLUSION_FRACTION_OVERRIDE}")
+fi
 
 echo "Exporting clean-anchor manifest at \$(date -Is)"
 "${OPENVLA_OFT_PY}" scripts/export_openvla_teacher_replay_manifest.py \\
@@ -259,6 +267,7 @@ echo "Rendering BGR boundary perturbations at \$(date -Is)"
   --manifest "${PERTURB_MANIFEST}" \\
   --out "${BGR_PERTURB_RENDER}" \\
   --method bgr_boundary \\
+  "\${RENDER_OVERRIDE_ARGS[@]}" \\
   --max-examples "${MAX_PERTURB_EXAMPLES}" \\
   --selection balanced_episodes \\
   --episodes-per-family "${PERTURB_EPISODES_PER_FAMILY}" \\
@@ -269,6 +278,7 @@ echo "Rendering matched-random perturbations at \$(date -Is)"
   --manifest "${PERTURB_MANIFEST}" \\
   --out "${RANDOM_PERTURB_RENDER}" \\
   --method random_balanced \\
+  "\${RENDER_OVERRIDE_ARGS[@]}" \\
   --max-examples "${MAX_PERTURB_EXAMPLES}" \\
   --selection balanced_episodes \\
   --episodes-per-family "${PERTURB_EPISODES_PER_FAMILY}" \\

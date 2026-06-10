@@ -45,7 +45,18 @@ def main() -> int:
     parser.add_argument("--image-size", type=int, default=224)
     parser.add_argument("--image-preprocess", choices=["raw", "official_libero"], default="official_libero")
     parser.add_argument("--camera-key", default="agentview_image")
+    parser.add_argument(
+        "--override-perturbation-param",
+        action="append",
+        default=[],
+        metavar="FAMILY.KEY=VALUE",
+        help=(
+            "Override a rendered perturbation parameter for a family, e.g. "
+            "occlusion.fraction=0.65. Can be repeated."
+        ),
+    )
     args = parser.parse_args()
+    perturbation_param_overrides = _parse_perturbation_param_overrides(args.override_perturbation_param)
 
     rows = _load_rows(
         Path(args.manifest),
@@ -75,6 +86,7 @@ def main() -> int:
         image_size=int(args.image_size),
         image_preprocess=str(args.image_preprocess),
         camera_key=str(args.camera_key),
+        perturbation_param_overrides=perturbation_param_overrides,
     )
     (out_dir / "examples.jsonl").write_text(
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in examples),
@@ -220,6 +232,7 @@ def _render_examples(
     image_size: int,
     image_preprocess: str,
     camera_key: str,
+    perturbation_param_overrides: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     patch_torch_load_for_libero()
     from libero.libero import benchmark, get_libero_path
@@ -256,7 +269,12 @@ def _render_examples(
                 break
             base_image = _preprocess_image(np.asarray(obs[camera_key]), image_preprocess, image_size)
             wrist_image = _preprocess_image(np.asarray(obs["robot0_eye_in_hand_image"]), image_preprocess, image_size)
-            perturbed = _apply_perturbation(base_image, str(row.get("perturbation_type", "")), _json_dict(row.get("perturbation_params", {})))
+            perturbation_type = str(row.get("perturbation_type", ""))
+            perturbation_params = _perturbation_params_for_row(
+                row,
+                perturbation_param_overrides or {},
+            )
+            perturbed = _apply_perturbation(base_image, perturbation_type, perturbation_params)
             image_path = image_dir / f"example_{index:05d}.png"
             wrist_path = wrist_dir / f"example_{index:05d}.png"
             array_path = array_dir / f"example_{index:05d}.npz"
@@ -288,7 +306,8 @@ def _render_examples(
                     "step_idx": target_step,
                     "candidate_name": str(row["candidate_name"]),
                     "candidate_spec": str(row.get("candidate_spec", "")),
-                    "perturbation_type": str(row.get("perturbation_type", "")),
+                    "perturbation_type": perturbation_type,
+                    "perturbation_params": json.dumps(perturbation_params, sort_keys=True),
                     "method": str(row.get("method", "")),
                     "run": str(row.get("run", "")),
                     "episode_uid": str(row.get("episode_uid", "")),
@@ -400,6 +419,50 @@ def _json_dict(value: Any) -> dict[str, Any]:
     if isinstance(value, dict):
         return value
     return json.loads(value or "{}")
+
+
+def _perturbation_params_for_row(
+    row: dict[str, Any],
+    overrides: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    perturbation_type = str(row.get("perturbation_type", ""))
+    params = dict(_json_dict(row.get("perturbation_params", {})))
+    if perturbation_type in overrides:
+        params.update(overrides[perturbation_type])
+    return params
+
+
+def _parse_perturbation_param_overrides(values: list[str]) -> dict[str, dict[str, Any]]:
+    overrides: dict[str, dict[str, Any]] = {}
+    for value in values:
+        if "=" not in value or "." not in value.split("=", 1)[0]:
+            raise argparse.ArgumentTypeError(
+                "--override-perturbation-param must be in FAMILY.KEY=VALUE form"
+            )
+        raw_key, raw_value = value.split("=", 1)
+        family, key = raw_key.split(".", 1)
+        family = family.strip()
+        key = key.strip()
+        if not family or not key:
+            raise argparse.ArgumentTypeError(
+                "--override-perturbation-param must include non-empty family and key"
+            )
+        overrides.setdefault(family, {})[key] = _parse_scalar(raw_value)
+    return overrides
+
+
+def _parse_scalar(value: str) -> Any:
+    text = value.strip()
+    if text.lower() == "true":
+        return True
+    if text.lower() == "false":
+        return False
+    try:
+        if any(marker in text.lower() for marker in (".", "e")):
+            return float(text)
+        return int(text)
+    except ValueError:
+        return text
 
 
 def _json_list(value: Any) -> list[float]:

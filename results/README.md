@@ -2472,6 +2472,102 @@ scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --no-check
 scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --sync
 ```
 
+## Queued OpenVLA-OFT Hard-Occlusion Adaptation
+
+Queued on 2026-06-10 as a fixed learned-policy intervention route after the
+hard-occlusion transfer diagnostic was started. Unlike the transfer diagnostic,
+this route changes the training data: both BGR and matched-random perturbation
+renders override occlusion parameters to `fraction=0.65`, then build matched
+clean-plus-hard-occlusion TFDS roots and train from the official checkpoint.
+
+The renderer change is explicit and shared across BGR/random:
+
+```text
+scripts/render_openvla_teacher_examples.py --override-perturbation-param occlusion.fraction=0.65
+scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh forwards OCCLUSION_FRACTION_OVERRIDE
+```
+
+Promotion gate: over the 400 hard-occlusion episodes, BGR must beat both
+official and matched random by at least 10 episodes and at least 0.02 absolute
+success rate, while not trailing the best identity comparator by more than one
+episode. Until the compact summary exists and this gate passes, this route is
+not paper evidence.
+
+Prep/adaptation command family:
+
+```bash
+REMOTE_PROJECT=/work/joy/bgr \
+REMOTE_LOG_DIR=/work/joy/bgr/logs \
+REMOTE_RUN_ROOT=/work/joy/bgr/runs \
+REMOTE_HF_HOME=/work/joy/cache_home/huggingface \
+OPENVLA_OFT_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft \
+LIBERO_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/LIBERO \
+SOURCE_ARTIFACT_ROOT=/work/joy/dreamaudit_jobs/artifacts \
+PREP_TAG=p2048unique_hardocc065_prereg \
+ANCHOR_TAG=proxanchor_l2_5em0 \
+ADAPT_STEPS=400 \
+LR=2e-7 \
+OCCLUSION_FRACTION_OVERRIDE=0.65 \
+GIT_PULL=0 \
+scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh --prep-only --submit-prep
+```
+
+Perturbation eval command:
+
+```bash
+TAG=hardocc065_adapt_step50400_lr2em7_v1 \
+EVAL_ARTIFACT=openvla_oft_perturb_eval_hardocc065_adapt_step50400_lr2em7_v1 \
+REMOTE_HOST=athena \
+REMOTE_LOG_DIR=/work/joy/bgr/logs \
+REMOTE_RUN_ROOT=/work/joy/bgr/runs \
+REMOTE_HF_HOME=/work/joy/cache_home/huggingface \
+OPENVLA_OFT_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/openvla-oft \
+LIBERO_ROOT=/work/joy/external_validation/openvla_oft_smoke_746850/LIBERO \
+BGR_CKPT=/work/joy/bgr/runs/openvla_oft_goal_adapt_bgr_cleanmix_p2048unique_hardocc065_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+RANDOM_CKPT=/work/joy/bgr/runs/openvla_oft_goal_adapt_random_cleanmix_p2048unique_hardocc065_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1/openvla-7b-oft-finetuned-libero-goal \
+METHODS=official,bgr,random \
+PERTURBATIONS='identity={};occlusion={"fraction":0.65}' \
+EVAL_TASKS=10 \
+EVAL_TRIALS=40 \
+EVAL_SEED=7 \
+EVAL_TASK_OFFSET=0 \
+EVAL_INIT_STATE_OFFSET=0 \
+EVAL_TIME=12:00:00 \
+PARTITION=low-prio-gpu \
+GRES=gpu:a6000:1 \
+CPUS=8 \
+MEM=90G \
+EXCLUDE=c2-g4-21,c2-g4-19 \
+BGR_DEPENDENCY=afterok:774719 \
+RANDOM_DEPENDENCY=afterok:774722 \
+scripts/queue_openvla_oft_perturb_eval.sh --submit
+```
+
+Slurm chain:
+
+```text
+774717  hard-occlusion prep
+774718  BGR adapt, afterok:774717
+774719  BGR merge, afterok:774718
+774720  BGR clean eval, afterok:774719
+774721  matched-random adapt, afterok:774717
+774722  matched-random merge, afterok:774721
+774723  matched-random clean eval, afterok:774722
+774724  official identity eval
+774725  official hard-occlusion eval, afterok:774724
+774726  BGR identity eval, afterok:774719
+774727  BGR hard-occlusion eval, afterok:774726
+774728  matched-random identity eval, afterok:774722
+774729  matched-random hard-occlusion eval, afterok:774728
+```
+
+Sync/poll helper:
+
+```bash
+scripts/sync_openvla_oft_hard_occlusion_adapt_results.sh --poll --no-check
+scripts/sync_openvla_oft_hard_occlusion_adapt_results.sh --sync
+```
+
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 
 Launched on 2026-06-02 after the p1024 offset-3 follow-up showed only a small

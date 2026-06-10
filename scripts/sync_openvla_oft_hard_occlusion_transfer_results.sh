@@ -8,6 +8,7 @@ CHECK_LOCAL=1
 REMOTE_HOST="${REMOTE_HOST:-athena}"
 REMOTE_RUN_ROOT="${REMOTE_RUN_ROOT:-/work/joy/bgr/runs}"
 LOCAL_RESULTS_ROOT="${LOCAL_RESULTS_ROOT:-results}"
+ROUTE_LABEL="${ROUTE_LABEL:-Hard-occlusion OpenVLA-OFT transfer}"
 
 ARTIFACT="${ARTIFACT:-openvla_oft_perturb_eval_occlusion_bottleneck_hardocc065_transfer_step50400_lr2em7_v1}"
 JOB_IDS="${JOB_IDS:-774711,774712,774713,774714,774715,774716}"
@@ -53,7 +54,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-echo "### Hard-occlusion OpenVLA-OFT transfer sync"
+echo "### ${ROUTE_LABEL} sync"
 echo "REMOTE_HOST=${REMOTE_HOST}"
 echo "JOB_IDS=${JOB_IDS}"
 echo "DETAIL_JOB_IDS=${DETAIL_JOB_IDS}"

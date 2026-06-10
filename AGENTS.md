@@ -172,6 +172,32 @@ and `774715` running, with occlusion jobs dependency-pending. Poll/sync with
 and, when logs or summaries exist,
 `scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --sync`.
 
+Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
+adaptation. This is a genuinely new training route, not just a transfer
+diagnostic: both BGR and matched-random TFDS roots render occlusion examples
+with `OCCLUSION_FRACTION_OVERRIDE=0.65`, then train from the official
+checkpoint with the same clean-plus-occlusion mix, official stats,
+identity-LoRA, image augmentation, `PROXIMAL_ANCHOR_L2=5.0`, `LR=2e-7`, and
+`ADAPT_STEPS=400`. The fixed evaluation is identity plus occlusion fraction
+0.65 on 10 LIBERO-Goal tasks with 40 trials per task. Promotion requires BGR
+to beat both official and matched random by at least 10/400 occlusion episodes
+and at least 0.02 absolute success rate while not trailing the best identity
+comparator by more than 1 episode. The route required a renderer update:
+`scripts/render_openvla_teacher_examples.py` now supports
+`--override-perturbation-param occlusion.fraction=0.65`, and
+`scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh` forwards
+`OCCLUSION_FRACTION_OVERRIDE` into both BGR and random perturb renders. Submitted
+on `athena`: prep `774717`; BGR train/merge/clean-eval `774718`/`774719`/`774720`;
+matched-random train/merge/clean-eval `774721`/`774722`/`774723`; official
+identity/occlusion eval `774724`/`774725`; BGR identity/occlusion eval
+`774726`/`774727`; matched-random identity/occlusion eval `774728`/`774729`.
+Initial `squeue` showed prep `774717` and official identity `774724` pending
+on unavailable nodes, with all adapted BGR/random jobs dependency-pending.
+Poll/sync with
+`scripts/sync_openvla_oft_hard_occlusion_adapt_results.sh --poll --no-check`
+and, when logs or summaries exist,
+`scripts/sync_openvla_oft_hard_occlusion_adapt_results.sh --sync`.
+
 Completed learned-policy route (negative, not active): preregistered OpenVLA-OFT occlusion-bottleneck
 adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.
 This route is motivated by the fixed full-goal visual audit: blur,
