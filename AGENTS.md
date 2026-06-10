@@ -269,23 +269,26 @@ BGR-Clean-Shield versus uniform (delta -0.0394, W/L/T=1/3/0), fixed,
 failure-only, TD-loss, and BGR-uniform-radius; it also rejects BGR-Coverage and
 default BGR. Treat this route as completed negative, not paper evidence.
 
-Latest OpenVLA poll/sync at 2026-06-10 20:16 BST: the hard-occlusion 0.80
-transfer route is now complete and negative under the fixed gate. The synced
-summary has BGR identity 391/400, official identity 393/400, matched-random
-identity 389/400, BGR occlusion 305/400, official occlusion 296/400, and
-matched-random occlusion 296/400. `scripts/check_openvla_perturb_gate.py`
-reports `[FAIL]`: BGR is only +9/400 over both comparators on hard occlusion
-and trails official identity by two, so it misses the +10/400 episode margin
-and the identity side condition. The 0.80 identity-anchored A6000 route remains
-incomplete with official and BGR occlusion running and matched-random occlusion
-pending; the 0.80 micro A6000 route has official identity complete and BGR
-identity running; the 0.80 strict A6000 route has official occlusion and BGR
-identity running; the 0.80 identity-anchor A40, 0.80 micro A40, and 0.90 strict
-A40 variants remain pending or dependency-pending. Keep polling/syncing for
-closure, but do not promote any partial route. No new same-protocol
-standard-environment job was launched: the current scorecard rejects that route
-family, and the active queue already covers the current identity-preserving
-hard-occlusion learned-policy premises.
+Latest OpenVLA poll/sync at 2026-06-10 20:31 BST: the hard-occlusion 0.80
+transfer route is complete and negative under the fixed gate, and the A6000
+0.80 identity-anchored route is now already closed negative on the fixed
+identity side condition. The 0.80 transfer summary has BGR identity 391/400,
+official identity 393/400, matched-random identity 389/400, BGR occlusion
+305/400, official occlusion 296/400, and matched-random occlusion 296/400;
+`scripts/check_openvla_perturb_gate.py` reports `[FAIL]` because BGR is only
++9/400 over both comparators on hard occlusion and trails official identity by
+two. The A6000 0.80 identity-anchored `summary_available.csv` has complete
+identity rows with BGR 389/400, official 393/400, and matched-random 393/400,
+so the route cannot pass the fixed gate even though official/BGR occlusion were
+still running and matched-random occlusion was priority-pending. The 0.80 micro
+A6000 route has official identity complete and BGR identity running; the 0.80
+strict A6000 route has official occlusion and BGR identity running; the 0.80
+identity-anchor A40, 0.80 micro A40, and 0.90 strict A40 variants remain
+pending or dependency-pending. Keep polling/syncing for closure, but do not
+promote any partial route. No new same-protocol standard-environment job was
+launched: the current scorecard rejects that route family, and the active queue
+already covers the current identity-preserving hard-occlusion learned-policy
+premises.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,

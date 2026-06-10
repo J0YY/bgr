@@ -3883,6 +3883,19 @@ identity-anchored, strict, micro, and A40 variants are still incomplete and
 must not be promoted unless a complete `summary.csv` passes the same fixed
 gate.
 
+Latest broad hard-occlusion poll/sync at 2026-06-10 20:31 BST also closes the
+A6000 0.80 identity-anchored route negative on partial identity rows. The local
+`summary_available.csv` at
+`results/openvla_oft_perturb_eval_cleanmix_p2048unique_hardocc080_identityanchor_prereg_proxanchor_l2_2em1_step50200_lr1em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary_available.csv`
+has BGR identity 389/400, official identity 393/400, and matched-random
+identity 393/400. Since the fixed gate allows at most a one-episode identity
+deficit, this route cannot be promoted even though official and BGR occlusion
+were still running and matched-random occlusion was priority-pending. The 0.80
+micro A6000 route had official identity complete and BGR identity running; the
+0.80 strict A6000 route had official occlusion and BGR identity running; the
+0.80 identity-anchor A40 fallback had official identity running; the 0.80 micro
+A40 and 0.90 strict A40 routes had no summarizable logs yet.
+
 Additional strict identity-preservation route queued on 2026-06-10 14:18 BST:
 fixed hard-occlusion 0.90 strict identity-anchored OpenVLA-OFT adaptation. This
 is a deliberately harder-bottleneck companion to the 0.80 strict route, not a
