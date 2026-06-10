@@ -31,6 +31,16 @@ OPENML_DATASETS = {
     "banknote-authentication": {"name": "banknote-authentication", "version": 1},
     "blood-transfusion-service-center": {"name": "blood-transfusion-service-center", "version": 1},
     "climate-model-simulation-crashes": {"name": "climate-model-simulation-crashes", "version": 1},
+    "heart-statlog": {"name": "heart-statlog", "version": 1},
+    "qsar-biodeg": {"name": "qsar-biodeg", "version": 1},
+    "mammography": {"name": "mammography", "version": 1},
+    "breast-w": {"name": "breast-w", "version": 1},
+    "haberman": {"name": "haberman", "version": 1},
+    "MagicTelescope": {"name": "MagicTelescope", "version": 1},
+    "eeg-eye-state": {"name": "eeg-eye-state", "version": 1},
+    "ozone-level-8hr": {"name": "ozone-level-8hr", "version": 1},
+    "Bioresponse": {"name": "Bioresponse", "version": 1},
+    "steel-plates-fault": {"name": "steel-plates-fault", "version": 1},
     "kc1": {"name": "kc1", "version": 1},
     "mozilla4": {"name": "mozilla4", "version": 1},
     "pc1": {"name": "pc1", "version": 1},
@@ -46,6 +56,18 @@ EXTERNAL_VALIDATION_DATASETS = (
     "pc1",
     "phoneme",
     "wdbc",
+)
+BROAD_NUMERIC_DATASETS = (
+    "heart-statlog",
+    "qsar-biodeg",
+    "mammography",
+    "breast-w",
+    "haberman",
+    "MagicTelescope",
+    "eeg-eye-state",
+    "ozone-level-8hr",
+    "Bioresponse",
+    "steel-plates-fault",
 )
 
 
@@ -325,6 +347,11 @@ def main() -> int:
         action="store_true",
         help="Use the fixed numeric OpenML external-validation suite instead of DEFAULT_DATASETS.",
     )
+    parser.add_argument(
+        "--broad-numeric-suite",
+        action="store_true",
+        help="Use a fixed broader suite of binary numeric OpenML datasets that pass the existing numeric pipeline.",
+    )
     parser.add_argument("--targets", type=parse_float_csv, default=list(DEFAULT_TARGETS))
     parser.add_argument("--seeds", type=int, default=4)
     parser.add_argument("--seed-start", type=int, default=0)
@@ -334,8 +361,12 @@ def main() -> int:
     parser.add_argument("--max-radius", type=float, default=2.0)
     parser.add_argument("--eval-examples", type=int, default=250)
     args = parser.parse_args()
+    if args.external_validation_suite and args.broad_numeric_suite:
+        raise ValueError("choose at most one fixed suite")
     if args.external_validation_suite:
         args.datasets = list(EXTERNAL_VALIDATION_DATASETS)
+    if args.broad_numeric_suite:
+        args.datasets = list(BROAD_NUMERIC_DATASETS)
 
     unknown = sorted(set(args.datasets) - set(OPENML_DATASETS))
     if unknown:

@@ -29,7 +29,12 @@ method, so they are retired. A Seaquest scout found a fragile 20-seed
 calibration window, but the method scout lost to fixed-radius replay and is
 rejected before promotion. A new Gymnasium Blackjack package-state recovery
 scout is currently running on `athena` as Slurm job `774192`; this is only a
-scout for a different independent reset interface, not paper evidence. The latest completed
+scout for a different independent reset interface, not paper evidence, and the
+first three completed `up` perturbation configs are already negative. A broader
+fixed OpenML numeric-suite target-2.0 run is also in flight on `athena` as
+Slurm job `774312`; it is a predeclared 10-dataset, 30-seed suite meant to test
+whether the supervised pre-existing-dataset evidence broadens beyond the
+current positives, not a standard-environment or learned-policy win. The latest completed
 OpenVLA/LIBERO occlusion-bottleneck route is negative: BGR reaches 365/400
 non-identity successes versus official 367/400 and matched random 369/400,
 with identity BGR 99/100, official 99/100, and random 98/100. The
@@ -307,6 +312,33 @@ If `config_summary.csv` appears and a BGR-family method beats uniform,
 fixed-radius, failure-only, TD-loss, and BGR-uniform-radius with non-saturated
 r80, then implement a repo-native fixed follow-up before making any paper
 claim. If it ties or loses, record it as a rejected scout.
+Latest poll on 2026-06-10 showed the job still running on `cnode401` with the
+three `up` configs completed negative:
+target/fixed radius 1.0 gives best BGR-family 0.4925 RAUC vs. uniform 0.5071,
+fixed 0.5068, failure-only 0.5188, and BGR-uniform-radius 0.4933;
+radius 2.0 gives best BGR-family 0.5007 vs. uniform 0.5071, fixed 0.5085,
+failure-only 0.5188, and ablation 0.5073; radius 3.0 gives best BGR-family
+0.5036 vs. uniform 0.5071 and failure-only 0.5188, though it narrowly beats
+fixed and the ablation. None is a candidate.
+
+In-flight pre-existing-dataset broadening run: fixed broad numeric OpenML suite.
+`tools/openml_margin_scout.py` now has `--broad-numeric-suite`, a predeclared
+set of numeric binary OpenML datasets that pass the existing median-impute plus
+standardized numeric-feature pipeline without adding categorical preprocessing:
+heart-statlog, qsar-biodeg, mammography, breast-w, haberman, MagicTelescope,
+eeg-eye-state, ozone-level-8hr, Bioresponse, and steel-plates-fault. A one-seed
+local smoke on heart-statlog succeeded. The intended Athena run is fixed
+target radius 2.0, 30 seeds, and the same uniform/fixed/BGR methods:
+`PYTHONPATH=/work/joy/bgr/src:/work/joy/bgr python /work/joy/bgr/tools/openml_margin_scout.py --broad-numeric-suite --targets 2.0 --seeds 30 --out /work/joy/bgr/runs/openml_broad_numeric_target2_30seed_${SLURM_JOB_ID}`.
+The first submission `774306` failed before running because Slurm executed the
+wrapper under `/bin/sh` and rejected `set -o pipefail`. The corrected Bash
+submission is Slurm job `774312`, running on `cnode403` at the first poll. Poll
+with:
+`ssh athena 'squeue -j 774312 -o "%.18i %.9P %.32j %.8T %.10M %.20R"; tail -80 /work/joy/bgr/logs/bgr-openml-broad-774312.out; find /work/joy/bgr/runs -maxdepth 1 -type d -name "openml_broad_numeric_target2_30seed_774312" -print'`.
+Do not incorporate this into the paper unless the completed suite summary
+supports a materially stronger pre-existing benchmark claim; even if positive,
+it is supervised margin-replay evidence rather than the missing learned-policy
+or standard-environment win.
 
 Operational defaults:
 
