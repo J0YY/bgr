@@ -12,6 +12,19 @@ MEMORY="${MEMORY:-16G}"
 CPUS="${CPUS:-4}"
 SEEDS="${SEEDS:-0,1,2,3}"
 METHODS="${METHODS:-uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr}"
+ITERATIONS="${ITERATIONS:-30}"
+EVAL_EVERY="${EVAL_EVERY:-10}"
+TRAIN_BATCH_SIZE="${TRAIN_BATCH_SIZE:-4}"
+EVAL_TRIALS="${EVAL_TRIALS:-2}"
+RECORD_TRIALS="${RECORD_TRIALS:-1}"
+QUICK_TRIALS="${QUICK_TRIALS:-1}"
+EVAL_RADII="${EVAL_RADII:-0.00,0.02,0.04,0.06,0.08,0.12,0.16,0.20}"
+INITIAL_PROBES="${INITIAL_PROBES:-0.00,0.20}"
+MAX_RADIUS="${MAX_RADIUS:-0.20}"
+FIXED_RADIUS="${FIXED_RADIUS:-0.02}"
+TARGET_RADIUS="${TARGET_RADIUS:-0.014}"
+RADIUS_BANDWIDTH="${RADIUS_BANDWIDTH:-0.025}"
+RADIUS_UNIFORM_MIX="${RADIUS_UNIFORM_MIX:-0.30}"
 
 SBATCH_PARTITION_ARG=""
 if [[ -n "${SLURM_PARTITION:-}" ]]; then
@@ -48,19 +61,20 @@ PYTHONPATH='${REMOTE_PROJECT}/src:${REMOTE_PROJECT}:${REMOTE_PROJECT}/tools' \
   --seeds '${SEEDS}' \
   --methods '${METHODS}' \
   --replay-states 4 \
-  --iterations 30 \
-  --eval-every 10 \
-  --train-batch-size 4 \
+  --iterations '${ITERATIONS}' \
+  --eval-every '${EVAL_EVERY}' \
+  --train-batch-size '${TRAIN_BATCH_SIZE}' \
   --horizon 250 \
-  --eval-trials 2 \
-  --record-trials 1 \
-  --quick-trials 1 \
-  --eval-radii 0.00,0.02,0.04,0.06,0.08,0.12,0.16,0.20 \
-  --initial-probes 0.00,0.20 \
-  --max-radius 0.20 \
-  --fixed-radius 0.02 \
-  --target-radius 0.014 \
-  --radius-bandwidth 0.025 \
+  --eval-trials '${EVAL_TRIALS}' \
+  --record-trials '${RECORD_TRIALS}' \
+  --quick-trials '${QUICK_TRIALS}' \
+  --eval-radii '${EVAL_RADII}' \
+  --initial-probes '${INITIAL_PROBES}' \
+  --max-radius '${MAX_RADIUS}' \
+  --fixed-radius '${FIXED_RADIUS}' \
+  --target-radius '${TARGET_RADIUS}' \
+  --radius-bandwidth '${RADIUS_BANDWIDTH}' \
+  --radius-uniform-mix '${RADIUS_UNIFORM_MIX}' \
   --policy trajectory \
   --max-trajectories 512 \
   --warmstart-policy

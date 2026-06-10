@@ -95,6 +95,18 @@ with `JOB_ID=777783 scripts/sync_fetchpush_object_state_probe.sh`. This is not
 paper evidence unless `summary.csv` exists and the fixed candidate-promotion
 checks beat uniform, fixed, failure-only, TD-loss, and the uniform-radius
 ablation.
+Latest partial FetchPush object-state method evidence is not promotable. The
+single serial scout job `777783` and split per-method jobs `777896`--`777901`
+are still running, but available rows already show sparse-probe BGR failing:
+uniform seeds 0--3 have RAUC 0.3125/0.3000/0.1500/0.2500; sparse
+BGR-Coverage seeds 0--2 have 0.1875/0.2250/0.1250; sparse BGR seeds 0--1 have
+0.1750/0.2375; and BGR-uniform-radius seeds 0--1 have 0.3250/0.2750. A
+corrected dense-probe BGR diagnostic was submitted as job `777969` after
+canceling mislabeled job `777958`; it uses `INITIAL_PROBES=0.00,0.02,0.08,0.20`,
+`TARGET_RADIUS=0.046`, and `RADIUS_BANDWIDTH=0.050`. Its first available row,
+BGR-Coverage seed 0, improves to RAUC 0.3125, matching uniform seed 0 but still
+below BGR-uniform-radius seed 0 at 0.3250. Treat this route as in-flight and
+currently negative/non-promotable unless later paired rows reverse the trend.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,

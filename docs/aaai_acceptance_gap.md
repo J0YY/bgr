@@ -1407,6 +1407,16 @@ risk.
   the completed `summary.csv` clears the existing candidate-promotion checks
   against uniform, fixed radius, failure-only, TD-loss, and the BGR
   uniform-radius ablation.
+  Partial method rows are already negative for the sparse-probe BGR settings:
+  uniform seeds 0--3 are 0.3125/0.3000/0.1500/0.2500 RAUC, sparse
+  BGR-Coverage seeds 0--2 are 0.1875/0.2250/0.1250, sparse BGR seeds 0--1 are
+  0.1750/0.2375, and BGR-uniform-radius seeds 0--1 are 0.3250/0.2750. A
+  corrected dense-probe BGR diagnostic is running as job `777969` with
+  `INITIAL_PROBES=0.00,0.02,0.08,0.20`, `TARGET_RADIUS=0.046`, and
+  `RADIUS_BANDWIDTH=0.050`; its first row has BGR-Coverage seed 0 at 0.3125,
+  matching uniform seed 0 but still below BGR-uniform-radius seed 0 at 0.3250.
+  Unless later paired rows reverse this, the FetchPush object-state
+  trajectory-library route should be treated as negative/non-promotable.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
   same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:

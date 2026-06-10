@@ -530,6 +530,15 @@ queued on `athena` as job `777783` and writes to
 It is not paper evidence unless the completed `summary.csv` clears the fixed
 candidate-promotion checks.
 
+Because the serial scout was slow, per-method split jobs were also queued:
+`777896` fixed, `777897` failure-only, `777898` TD-loss, `777899`
+BGR-uniform-radius, `777900` BGR-Coverage, and `777901` BGR. Sparse-probe BGR
+is currently negative on available rows. A dense-probe BGR follow-up, job
+`777969`, uses `INITIAL_PROBES=0.00,0.02,0.08,0.20`, `TARGET_RADIUS=0.046`,
+and `RADIUS_BANDWIDTH=0.050`; its first row matches uniform on seed 0 but does
+not beat the uniform-radius ablation. Treat all of these as in-flight scouts,
+not paper artifacts, until complete summaries are synced and checked.
+
 FetchSlide-v4 command:
 
 ```bash
