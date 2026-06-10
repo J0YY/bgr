@@ -152,6 +152,18 @@ lack of new independent positive evidence, the negative standard-environment
 record, incremental novelty, author-defined metric dependence, and robustness
 fragility. Do not just soften language around unchanged results.
 
+Newest active learned-policy route: hard-occlusion 0.80 identity-anchored
+OpenVLA-OFT adaptation. This was queued after the 0.80 transfer and A6000
+hard-occlusion adaptation partial identity rows already made those routes
+non-promotable under the fixed clean-identity side condition. The route trains
+on hard occlusion fraction 0.80 with a shorter, more strongly anchored update
+(`ADAPT_STEPS=200`, `LR=1e-7`, `PROXIMAL_ANCHOR_L2=20.0`) and uses the same
+promotion gate: BGR must beat both official and matched random by at least
+10/400 occlusion episodes and at least 0.02 absolute success rate while not
+trailing the best identity comparator by more than one episode. It is not paper
+evidence unless `summary.csv` exists and the fixed gate passes. Poll/sync with
+`scripts/sync_openvla_oft_hard_occlusion080_identityanchor_results.sh --poll --sync --no-check`.
+
 Completed learned-policy diagnostic route (negative): fixed hard-occlusion transfer eval of
 the completed OpenVLA-OFT occlusion-bottleneck checkpoints. This is a
 preregistered diagnostic/route scout, not a paper claim: the previous full
@@ -571,6 +583,35 @@ unchanged in substance: matched-random identity `774922` was running on
 `c2-g4-17` at 7:32, matched-random occlusion `774923` remained
 dependency-pending, and the compact `summary.csv` was still missing. No fixed
 gate can be run yet.
+
+Active learned-policy intervention route: fixed hard-occlusion 0.80
+identity-anchored OpenVLA-OFT adaptation. This is a new training route
+targeting the observed identity-regression failure in the hard-occlusion
+routes: the 0.80 transfer route already has BGR identity 391/400 vs. official
+393/400, and the A6000 0.65 adaptation has BGR identity 389/400 vs. official
+393/400 and matched random 390/400. The new route keeps the occlusion-specific
+premise but uses a shorter, more strongly anchored update:
+`PREP_TAG=p2048unique_hardocc080_identityanchor_prereg`,
+`ADAPT_TAG=cleanmix_p2048unique_hardocc080_identityanchor_prereg_proxanchor_l2_2em1_step50200_lr1em7_identitylora_imageaug_officialtrainstats_v1`,
+`PERTURB_TAG=cleanmix_p2048unique_hardocc080_identityanchor_prereg_proxanchor_l2_2em1_step50200_lr1em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1`,
+`OCCLUSION_FRACTION_OVERRIDE=0.80`, `OCCLUSION_CAP=512`,
+`OCCLUSION_REPEAT=4`, `ADAPT_STEPS=200`, `LR=1e-7`,
+`PROXIMAL_ANCHOR_L2=20.0`, identity-LoRA, image augmentation, official stats,
+and fixed identity plus occlusion fraction 0.80 evaluation over 10 LIBERO-Goal
+tasks with 40 trials per task. Promotion uses the same hard-occlusion gate:
+BGR must beat both official and matched random by at least 10/400 occlusion
+episodes and at least 0.02 absolute success rate while not trailing the best
+identity comparator by more than one episode. Submitted on `athena`: prep
+`776029`; BGR train/merge/clean-eval `776033`/`776034`/`776035`;
+matched-random train/merge/clean-eval `776036`/`776037`/`776038`; official
+identity/occlusion eval `776040`/`776041`; BGR identity/occlusion eval
+`776042`/`776043`; matched-random identity/occlusion eval `776044`/`776045`.
+Initial poll/sync at 2026-06-10 12:30:34 BST showed prep `776029` pending on
+priority with estimated start 2026-06-10 15:15:13 BST, official identity
+`776040` priority-pending with estimated start 2026-06-10 23:36:39 BST, and
+all BGR/random adaptation plus dependent perturb-eval jobs dependency-pending.
+No remote logs or compact summaries exist yet. Poll/sync with
+`scripts/sync_openvla_oft_hard_occlusion080_identityanchor_results.sh --poll --sync --no-check`.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer

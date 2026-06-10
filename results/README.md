@@ -2667,6 +2667,54 @@ jobs `774919`, `774921`, and `774923` remained dependency-pending. Direct log
 tails showed official identity 180/187, BGR identity 124/129, and matched
 random identity 9/9. No compact summary exists yet.
 
+## Queued OpenVLA-OFT Hard-Occlusion 0.80 Identity-Anchor Adaptation
+
+Queued on 2026-06-10 as a fixed learned-policy intervention after partial
+identity rows showed the 0.80 transfer route and A6000 0.65 hard-occlusion
+adaptation route were already non-promotable under the clean-identity side
+condition. This route keeps the hard-occlusion premise but changes the training
+intervention to preserve identity behavior: occlusion rendering uses
+`OCCLUSION_FRACTION_OVERRIDE=0.80`, the update is shorter
+(`ADAPT_STEPS=200`, `LR=1e-7`), and the official-checkpoint proximal anchor is
+stronger (`PROXIMAL_ANCHOR_L2=20.0`).
+
+Promotion gate: over the fixed 400 occlusion episodes, BGR must beat both the
+official checkpoint and matched random by at least 10 episodes and at least
+0.02 absolute success rate, while not trailing the best identity comparator by
+more than one episode. Until
+`results/openvla_oft_perturb_eval_cleanmix_p2048unique_hardocc080_identityanchor_prereg_proxanchor_l2_2em1_step50200_lr1em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary.csv`
+exists and the fixed gate passes, this route is not paper evidence.
+
+Slurm chain:
+
+```text
+776029  hard-occlusion 0.80 prep
+776033  BGR adapt, afterok:776029
+776034  BGR merge, afterok:776033
+776035  BGR clean eval, afterok:776034
+776036  matched-random adapt, afterok:776029 and afterok:776033
+776037  matched-random merge, afterok:776036
+776038  matched-random clean eval, afterok:776037
+776040  official identity eval
+776041  official hard-occlusion eval, afterok:776040
+776042  BGR identity eval, afterok:776034
+776043  BGR hard-occlusion eval, afterok:776034 and afterok:776042
+776044  matched-random identity eval, afterok:776037
+776045  matched-random hard-occlusion eval, afterok:776037 and afterok:776044
+```
+
+Sync/poll helper:
+
+```bash
+scripts/sync_openvla_oft_hard_occlusion080_identityanchor_results.sh --poll --sync --no-check
+```
+
+Initial poll/sync at 2026-06-10 12:30:34 BST showed prep `776029` pending on
+priority with estimated start 2026-06-10 15:15:13 BST, official identity
+`776040` priority-pending with estimated start 2026-06-10 23:36:39 BST, and
+all BGR/random adaptation plus dependent perturb-eval jobs dependency-pending.
+No logs or compact summaries existed yet.
+
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
 Queued on 2026-06-10 as a fixed learned-policy intervention route after the

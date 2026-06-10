@@ -29,6 +29,10 @@ OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE = (
 OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE = (
     "results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_v1/summary.csv"
 )
+OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_COMPLETE = (
+    "results/openvla_oft_perturb_eval_cleanmix_p2048unique_hardocc080_identityanchor_prereg_proxanchor_l2_2em1_"
+    "step50200_lr1em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary.csv"
+)
 OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE = (
     "results/openvla_oft_perturb_eval_hardocc065_adapt_step50400_lr2em7_v1/summary.csv"
 )
@@ -37,6 +41,7 @@ OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE = (
 )
 OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion_transfer_results.sh"
 OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion080_transfer_results.sh"
+OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MARKER = "sync_openvla_oft_hard_occlusion080_identityanchor_results.sh"
 OPENVLA_HARD_OCCLUSION_ADAPT_MARKER = "sync_openvla_oft_hard_occlusion_adapt_results.sh"
 OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER = "sync_openvla_oft_hard_occlusion_adapt_a40_results.sh"
 
@@ -845,6 +850,10 @@ def openvla_gate_summary(
 def learned_policy_summary(root: Path) -> str:
     hard_occ_summaries = [
         (
+            OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_COMPLETE,
+            "Hard-occlusion 0.80 identity-anchored adaptation",
+        ),
+        (
             OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE,
             "Hard-occlusion 0.80 transfer",
         ),
@@ -923,6 +932,13 @@ def learned_policy_inflight_summary(root: Path) -> str | None:
     ledger_paths = [root / "AGENTS.md", root / "results/README.md", root / "docs/aaai_acceptance_gap.md"]
     ledger_text = "\n".join(path.read_text(encoding="utf-8") for path in ledger_paths if path.exists())
     active: list[str] = []
+    if (
+        OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MARKER in ledger_text
+        and not (root / OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_COMPLETE).exists()
+    ):
+        active.append(
+            "hard-occlusion 0.80 identity-anchored adaptation is queued/running and missing a complete summary"
+        )
     if (
         OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER in ledger_text
         and not (root / OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE).exists()
