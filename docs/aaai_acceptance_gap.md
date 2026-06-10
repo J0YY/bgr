@@ -74,11 +74,14 @@ official checkpoint with `ALPHA=0.75`, scales LoRA-B tensors by the same alpha,
 and evaluates identity plus occlusion fraction 0.80 over 10 LIBERO-Goal tasks x
 40 trials. Submitted jobs are prep `779973`, official `779974`/`779975`, BGR
 `779976`/`779977`, and matched random `779978`/`779979`. Latest poll/sync at
-2026-06-10 21:32 BST showed prep `779973` completed at 21:16:12 and official
-identity `779974` still running since 21:16:24 on `c1-g4-02`; BGR identity
-`779976` and matched-random identity `779978` were priority-pending, and the
-occlusion evals were dependency-pending. Logs exist, but no compact summary or
-summarizable completed eval row exists yet. A second fixed
+2026-06-10 21:56 BST showed prep `779973` completed at 21:16:12; official
+identity `779974` was still running after 40:29 on `c1-g4-02`, and BGR
+identity `779976` was running after 12:15 on `c1-g4-03`. Official/BGR
+occlusion evals were dependency-pending, matched-random identity `779978` was
+priority-pending with estimated start 2026-06-11 07:15:44 BST, and
+matched-random occlusion was dependency-pending. Logs exist for the running
+official/BGR identity evals, but no compact summary or summarizable completed
+eval row exists yet. A second fixed
 head-only repair route was queued before any head-interpolation summary was
 available: it keeps the same `ALPHA=0.75` action/proprio head interpolation but
 sets `LORA_B_SCALE=1.0`, preserving the adapted LoRA-B tensors rather than
@@ -86,9 +89,10 @@ shrinking them with the heads. This tests the concrete failure mode from the
 0.80 transfer near miss: repair identity without discarding the occlusion
 adaptation. Submitted jobs are prep `780059`, official `780060`/`780061`, BGR
 `780062`/`780063`, and matched random `780064`/`780065`; latest poll/sync at
-2026-06-10 21:32 BST still showed prep `780059` and official identity
-`780060` priority-pending, downstream evals dependency-pending, and no logs or
-summary. Both
+2026-06-10 21:56 BST showed prep `780059` pending on resources with estimated
+start 2026-06-11 05:11:21 BST and official identity `780060` priority-pending
+with estimated start 2026-06-11 06:21:43 BST. Downstream evals were
+dependency-pending, with no logs or summary. Both
 head-interpolation routes remain non-evidence unless the full summary passes
 the same fixed +10/400, +0.02, and identity-preservation gate. The latest
 partial identity-anchored 0.80 routes already fail the identity side condition:
