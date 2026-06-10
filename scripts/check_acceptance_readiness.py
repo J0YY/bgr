@@ -48,6 +48,10 @@ OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_STRICT_COMPLETE = (
     "results/openvla_oft_perturb_eval_cleanmix_p2048unique_hardocc080_identityanchor_strict_prereg_proxanchor_l2_5em1_"
     "step50100_lr5em8_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary.csv"
 )
+OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_COMPLETE = (
+    "results/openvla_oft_perturb_eval_cleanmix_p2048unique_hardocc090_identityanchor_strict_prereg_proxanchor_l2_5em1_"
+    "step50100_lr5em8_identitylora_imageaug_officialtrainstats_hardocc090_fullgoal10x40_v1/summary.csv"
+)
 OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE = (
     "results/openvla_oft_perturb_eval_hardocc065_adapt_step50400_lr2em7_v1/summary.csv"
 )
@@ -63,6 +67,9 @@ OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_MARKER = (
 )
 OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_STRICT_MARKER = (
     "sync_openvla_oft_hard_occlusion080_identityanchor_strict_results.sh"
+)
+OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_MARKER = (
+    "sync_openvla_oft_hard_occlusion090_identityanchor_strict_results.sh"
 )
 OPENVLA_HARD_OCCLUSION_ADAPT_MARKER = "sync_openvla_oft_hard_occlusion_adapt_results.sh"
 OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER = "sync_openvla_oft_hard_occlusion_adapt_a40_results.sh"
@@ -235,6 +242,13 @@ def learned_policy_inflight_detail(root: Path) -> str | None:
     ):
         inflight.append(
             "hard-occlusion 0.80 strict identity-anchored OpenVLA adaptation route is queued/running and still missing a complete summary"
+        )
+    if (
+        OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_MARKER in ledger_text
+        and not (root / OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_COMPLETE).exists()
+    ):
+        inflight.append(
+            "hard-occlusion 0.90 strict identity-anchored OpenVLA adaptation route is queued/running and still missing a complete summary"
         )
     if (
         OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER in ledger_text
@@ -1080,6 +1094,10 @@ def independent_benchmark_gate(root: Path) -> GateResult:
 def learned_policy_gate(root: Path) -> GateResult:
     inflight_detail = learned_policy_inflight_detail(root)
     hard_occ_summaries = [
+        (
+            OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_COMPLETE,
+            "hard-occlusion 0.90 strict identity-anchored adaptation audit",
+        ),
         (
             OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_COMPLETE,
             "hard-occlusion 0.80 identity-anchored adaptation audit",

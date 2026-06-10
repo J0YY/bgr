@@ -3700,6 +3700,44 @@ priority-pending with estimated starts at 2026-06-11 14:21:02 BST, all other
 strict-route jobs remained dependency-pending, and no remote logs or compact
 summaries existed.
 
+Additional strict identity-preservation route queued on 2026-06-10 14:18 BST:
+fixed hard-occlusion 0.90 strict identity-anchored OpenVLA-OFT adaptation. This
+is a deliberately harder-bottleneck companion to the 0.80 strict route, not a
+relaxed gate: it uses `OCCLUSION_FRACTION_OVERRIDE=0.90`, `ADAPT_STEPS=100`,
+`LR=5e-8`, `PROXIMAL_ANCHOR_L2=50.0`, identity-LoRA, image augmentation, and
+official train statistics. The fixed evaluation remains identity plus a single
+hard-occlusion family over 10 LIBERO-Goal tasks with 40 trials per task, and
+promotion still requires BGR to beat both official and matched random by at
+least 10/400 occlusion episodes and at least 0.02 absolute success rate while
+not trailing the best identity comparator by more than one episode.
+
+0.90 strict-route Slurm jobs:
+
+```text
+776601  hard-occlusion 0.90 prep
+776602  BGR train, afterok:776601
+776603  BGR merge, afterok:776602
+776604  BGR clean eval, afterok:776603
+776605  matched-random train, afterok:776601 and afterok:776602
+776606  matched-random merge, afterok:776605
+776607  matched-random clean eval, afterok:776606
+776611  official identity eval
+776613  official hard-occlusion eval, afterok:776611
+776615  BGR identity eval, afterok:776603
+776616  BGR hard-occlusion eval, afterok:776603 and afterok:776615
+776617  matched-random identity eval, afterok:776606
+776619  matched-random hard-occlusion eval, afterok:776606 and afterok:776617
+```
+
+Initial 0.90 strict-route poll at 2026-06-10 14:18:41 BST showed prep
+`776601` and official identity `776611` priority-pending with estimated starts
+at 2026-06-11 22:02:14 BST, all adaptation, merge, clean-eval, and downstream
+perturb-eval jobs dependency-pending, and no remote logs or compact summaries.
+Poll/sync with
+`scripts/sync_openvla_oft_hard_occlusion090_identityanchor_strict_results.sh --poll --sync --no-check`.
+Do not incorporate this route into `paper/main.tex` unless a complete
+`summary.csv` exists and the fixed gate passes.
+
 Sync/poll helper:
 
 ```bash
@@ -3707,6 +3745,7 @@ scripts/sync_openvla_oft_hard_occlusion_adapt_a40_results.sh --poll --no-check
 scripts/sync_openvla_oft_hard_occlusion_adapt_a40_results.sh --sync
 scripts/sync_openvla_oft_hard_occlusion080_identityanchor_a40_results.sh --poll --sync --no-check
 scripts/sync_openvla_oft_hard_occlusion080_identityanchor_strict_results.sh --poll --sync --no-check
+scripts/sync_openvla_oft_hard_occlusion090_identityanchor_strict_results.sh --poll --sync --no-check
 ```
 
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up

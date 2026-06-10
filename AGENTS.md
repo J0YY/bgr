@@ -165,30 +165,50 @@ lack of new independent positive evidence, the negative standard-environment
 record, incremental novelty, author-defined metric dependence, and robustness
 fragility. Do not just soften language around unchanged results.
 
-Newest active learned-policy route: hard-occlusion 0.80 identity-anchored
+Newest active learned-policy route: hard-occlusion 0.90 strict
+identity-anchored OpenVLA-OFT adaptation. This was queued after the 0.65
+transfer gate completed negative and the 0.80 transfer route showed a near-miss
+occlusion gain with an identity deficit. The route trains on hard occlusion
+fraction 0.90 with a strict identity-preservation update (`ADAPT_STEPS=100`,
+`LR=5e-8`, `PROXIMAL_ANCHOR_L2=50.0`) and uses the unchanged promotion gate:
+BGR must beat both official and matched random by at least 10/400 occlusion
+episodes and at least 0.02 absolute success rate while not trailing the best
+identity comparator by more than one episode. Submitted on `athena` at
+2026-06-10 14:18 BST: prep `776601`; BGR train/merge/clean-eval
+`776602`/`776603`/`776604`; matched-random train/merge/clean-eval
+`776605`/`776606`/`776607`; official identity/occlusion `776611`/`776613`;
+BGR identity/occlusion `776615`/`776616`; matched-random identity/occlusion
+`776617`/`776619`. Initial poll showed prep `776601` and official identity
+`776611` priority-pending with estimated starts at 2026-06-11 22:02:14 BST,
+all other jobs dependency-pending, and no remote logs or compact summaries.
+Poll/sync with
+`scripts/sync_openvla_oft_hard_occlusion090_identityanchor_strict_results.sh --poll --sync --no-check`.
+Do not incorporate this route into `paper/main.tex` unless a complete
+`summary.csv` exists and the fixed gate passes.
+
+Active companion learned-policy route: hard-occlusion 0.80 identity-anchored
 OpenVLA-OFT adaptation. This was queued after the 0.80 transfer and A6000
 hard-occlusion adaptation partial identity rows already made those routes
 non-promotable under the fixed clean-identity side condition. The route trains
 on hard occlusion fraction 0.80 with a shorter, more strongly anchored update
 (`ADAPT_STEPS=200`, `LR=1e-7`, `PROXIMAL_ANCHOR_L2=20.0`) and uses the same
-promotion gate: BGR must beat both official and matched random by at least
-10/400 occlusion episodes and at least 0.02 absolute success rate while not
-trailing the best identity comparator by more than one episode. It is not paper
-evidence unless `summary.csv` exists and the fixed gate passes. Poll/sync with
+promotion gate. It is not paper evidence unless `summary.csv` exists and the
+fixed gate passes. Poll/sync with
 `scripts/sync_openvla_oft_hard_occlusion080_identityanchor_results.sh --poll --sync --no-check`.
-Latest poll/sync at 2026-06-10 14:10:44 BST showed this A6000 0.80
+Latest poll/sync at 2026-06-10 14:14:23 BST showed this A6000 0.80
 identity-anchored route still scheduler-limited rather than gateable:
 official identity `776040` and BGR identity `776042` were priority-pending
-with estimated starts on 2026-06-11, official/BGR occlusion and all random
+with estimated starts at 2026-06-11 14:21:02 BST, official/BGR occlusion and all random
 perturb evals were dependency-pending, and no compact summary exists. The
 same-protocol A40 fallback remained earlier in the queue: BGR train `776291`
-and official identity `776300` were priority-pending with estimated starts on
-2026-06-12, all downstream A40 jobs were dependency-pending, and no remote logs
-or summary existed. Do not incorporate either 0.80 identity-anchored route into
+and official identity `776300` were priority-pending with estimated starts at
+2026-06-11 22:02:14 BST, all downstream A40 jobs were dependency-pending, and
+no remote logs or summary existed. Do not incorporate either 0.80
+identity-anchored route into
 `paper/main.tex` unless a complete `summary.csv` exists and the fixed
 identity/occlusion gate passes.
 
-Latest hard-occlusion status at 2026-06-10 14:10:44 BST also closes two
+Latest hard-occlusion status at 2026-06-10 14:14:37 BST also closes two
 nearby learned-policy routes as non-promotable even though their full summaries
 are incomplete. The A6000 0.65 adaptation route has BGR identity 389/400,
 official identity 393/400, matched-random identity 390/400, BGR occlusion
