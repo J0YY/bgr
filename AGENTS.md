@@ -228,6 +228,25 @@ seeds, BGR is 0.7938 vs. uniform 0.7678 (+0.0260, W/L/T=80/40/0) and fixed
 0.7748 (+0.0190, W/L/T=67/53/0), below the +0.03 fixed follow-up standard.
 Treat the mixed-type OpenML route as a fragility/near-miss diagnostic, not an
 acceptance-moving independent benchmark win.
+
+Latest OpenVLA poll/sync at 2026-06-10 19:14 BST: the near-term hard-occlusion
+transfer/adaptation routes are still not paper evidence. The 0.80 transfer
+route synced an incomplete compact summary with BGR identity 391/400, official
+identity 393/400, random identity 389/400, BGR occlusion 305/400, and official
+occlusion 296/400 while matched-random occlusion job `774923` was still
+running. This is already one episode short of the fixed +10/400 official
+promotion margin, before the random comparator is known. The 0.65 adapted route
+synced BGR identity 389/400, official identity 393/400, random identity
+390/400, BGR occlusion 301/400, and official occlusion 297/400 while
+matched-random occlusion job `774729` was still running; this also fails the
+official margin. The A40 0.65 adapted fallback synced only identity and
+official rows after original BGR identity job `774848` failed and replacement
+`775102` completed; BGR occlusion replacement job `775103` is pending into
+2026-06-11 and random occlusion `774851` was running. Keep polling/syncing for
+closure, but do not promote these partial routes. The still-active
+hard-occlusion 0.80/0.90 identity-anchor, strict, micro, and A40 variants
+remain queued/running and require complete summaries plus the fixed gate before
+any manuscript claim.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,

@@ -56,6 +56,17 @@ random 369/400, with identity rows BGR 99/100, official 99/100, and random
 98/100. This replaces the older perturb-only audit as the latest
 learned-policy gate read and remains a failure against the +10/400 and +0.02
 promotion rule.
+The 2026-06-10 hard-occlusion follow-ups are also not promotable on partial
+evidence. At 19:14 BST, the 0.80 transfer route had BGR occlusion 305/400
+versus official 296/400, one episode short of the +10/400 official-margin gate,
+with identity BGR 391/400 versus official 393/400 and matched-random occlusion
+still running. The 0.65 adapted route had BGR occlusion 301/400 versus
+official 297/400, well below the fixed margin, with matched-random occlusion
+still running. The A40 0.65 adapted fallback had only identity and official
+occlusion rows synced after a failed original BGR identity job and a replacement
+completion; BGR occlusion was still pending. These rows should be closed out by
+syncing final summaries, but they must not be promoted unless a complete
+summary passes the fixed gate.
 An internal sklearn-digits margin scout was also opened as a genuinely
 pre-existing supervised dataset route, but it is rejected before paper
 promotion: the best BGR target in
