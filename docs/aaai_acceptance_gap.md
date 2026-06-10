@@ -113,7 +113,16 @@ running, with occlusion jobs `780061`/`780063`/`780065` still
 dependency-pending. Live identity tails were official 131/137, BGR 51/53, and
 matched random 26/27, so the route is neither promotable nor impossible yet.
 Do not launch another overlapping OpenVLA variant while this LoRA-full
-head-interpolation route is unresolved. Both
+head-interpolation route is unresolved. Latest poll/sync at 2026-06-10
+22:33 BST showed all three identity jobs requeued or preempted back to
+`PENDING` on `Priority`: official `780060` and BGR `780062` have estimated
+starts at 2026-06-11 10:04:52 BST, matched-random `780064` has estimated start
+at 2026-06-11 17:11:00 BST, and all occlusion jobs remain dependency-pending.
+The full summary is still missing; direct identity log tails before preemption
+reached official 178/185, BGR 112/119, and matched random 65/68. This remains
+incomplete non-evidence; BGR's seven identity failures weaken the side
+condition but do not yet mathematically close the route because comparator
+identity rows are incomplete. Both
 head-interpolation routes remain non-evidence unless the full summary passes
 the same fixed +10/400, +0.02, and identity-preservation gate. The latest
 0.80 identity-anchored base route is closed negative with complete rows:
@@ -212,7 +221,12 @@ closest row is `down` target radius 3.0, where BGR-Coverage reaches 0.3859
 RAUC versus uniform 0.3790, but it still trails failure-only 0.3898 and has
 only a 5/3 paired split; the `dealer_signed` target 3.0 row trails uniform,
 failure-only, and the BGR-uniform-radius ablation. Treat Blackjack as a
-negative scope result, not an active route.
+negative scope result, not an active route. A smaller local diagnostic script,
+`tools/blackjack_recovery_probe.py`, also has a negative default 4-seed run at
+`results/blackjack_recovery_probe_4seed_scout_v1/`: BGR-Coverage reaches
+0.3850 RAUC versus uniform 0.3787, but trails failure-only 0.3954 and
+BGR-uniform-radius 0.3851; default BGR is 0.3778. The script is useful for
+diagnostics only and does not reopen Blackjack as a promotion route.
 A fixed numeric multiclass OpenML suite was tested as a materially different
 pre-existing supervised benchmark route from the binary OpenML sweeps. It used
 the existing median-impute plus standardized numeric-feature perturbation

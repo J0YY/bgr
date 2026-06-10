@@ -123,7 +123,18 @@ official/BGR/random occlusion jobs `780061`/`780063`/`780065` remained
 dependency-pending. Live identity log tails at 2026-06-10 22:20 BST showed
 official 131/137, BGR 51/53, and matched random 26/27; this is not gateable
 evidence and does not yet rule the route out. Do not launch another
-overlapping OpenVLA variant while this LoRA-full route remains unresolved. The
+overlapping OpenVLA variant while this LoRA-full route remains unresolved.
+Latest poll/sync at 2026-06-10 22:33 BST showed all three identity jobs
+requeued or preempted back to `PENDING` on `Priority`: official `780060` and
+BGR `780062` have estimated starts at 2026-06-11 10:04:52 BST, and
+matched-random `780064` has estimated start at 2026-06-11 17:11:00 BST. The
+occlusion jobs `780061`/`780063`/`780065` remain dependency-pending, the full
+remote `summary.csv` is still missing, and the synced local file is only
+`summary_available.csv`. Direct log tails before preemption reached official
+178/185, BGR 112/119, and matched random 65/68 identity successes. This still
+is not gateable evidence; BGR has seven identity failures by 119 episodes, so
+identity-side feasibility is weak but not yet mathematically closed because
+the comparator identity rows are also incomplete. The
 latest 0.80 identity-anchored base route is closed negative with complete
 rows: BGR identity/occlusion are 389/400 and 303/400, official is 393/400 and
 296/400, and matched random is 393/400 and 302/400. The fixed gate reports
@@ -2240,8 +2251,13 @@ negative with `candidate=False`. The best BGR-family rows by mode are:
 0.5188; `down` target 3.0 BGR-Coverage 0.3859 vs. uniform 0.3790 but
 failure-only 0.3898 and only 5/3 paired wins; and `dealer_signed` target 3.0
 BGR-Coverage 0.4402 vs. uniform 0.4414, failure-only 0.4498, and
-BGR-uniform-radius 0.4514. Do not scale or promote Blackjack without a
-materially new preregistered premise.
+BGR-uniform-radius 0.4514. A smaller local diagnostic script now exists at
+`tools/blackjack_recovery_probe.py`; its default 4-seed run at
+`results/blackjack_recovery_probe_4seed_scout_v1/` is also negative
+(BGR-Coverage 0.3850 vs. uniform 0.3787, failure-only 0.3954, and
+BGR-uniform-radius 0.3851; default BGR 0.3778). Treat the script as a reusable
+diagnostic only. Do not scale or promote Blackjack without a materially new
+preregistered premise.
 
 Completed independent-route scout: Gymnasium Taxi-v3 package-state recovery.
 This route uses exact tabular Taxi dynamics, resettable package states, and
