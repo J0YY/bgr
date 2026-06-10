@@ -126,23 +126,34 @@ sync_summary() {
   mkdir -p "$(dirname "${LOCAL_SUMMARY}")"
 
   local tmp_path
-  tmp_path="$(mktemp "$(dirname "${LOCAL_SUMMARY}")/.hardocc-summary.XXXXXX.csv")"
+  tmp_path="$(mktemp "$(dirname "${LOCAL_SUMMARY}")/.hardocc-summary.XXXXXX")"
   if ssh -o BatchMode=yes -o ConnectTimeout=8 "${REMOTE_HOST}" "test -f '${REMOTE_SUMMARY}'"; then
-    rsync -az "${REMOTE_HOST}:${REMOTE_SUMMARY}" "${tmp_path}"
+    if ! rsync -az "${REMOTE_HOST}:${REMOTE_SUMMARY}" "${tmp_path}"; then
+      echo "[pending] failed to rsync ${REMOTE_SUMMARY}"
+      rm -f "${tmp_path}"
+      return
+    fi
   elif ssh -o BatchMode=yes -o ConnectTimeout=8 "${REMOTE_HOST}" "test -d '${REMOTE_LOGS}'"; then
     local tmp_logs
     tmp_logs="$(mktemp -d "${TMPDIR:-/tmp}/hardocc-openvla-logs.XXXXXX")"
-    rsync -az "${REMOTE_HOST}:${REMOTE_LOGS}/" "${tmp_logs}/"
+    if ! rsync -az "${REMOTE_HOST}:${REMOTE_LOGS}/" "${tmp_logs}/"; then
+      echo "[pending] failed to rsync ${REMOTE_LOGS}"
+      rm -rf "${tmp_logs}"
+      rm -f "${tmp_path}"
+      return
+    fi
     local tmp_out
     tmp_out="$(mktemp -d "${TMPDIR:-/tmp}/hardocc-openvla-summary.XXXXXX")"
     if ! PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_perturb_eval.py \
         --logs-root "${tmp_logs}" \
         --out "${tmp_out}"; then
       echo "[pending] ${REMOTE_LOGS} exists but is not summarizable yet"
+      rm -rf "${tmp_logs}" "${tmp_out}"
       rm -f "${tmp_path}"
       return
     fi
     strip_summary "${tmp_out}/summary.csv" "${tmp_path}"
+    rm -rf "${tmp_logs}" "${tmp_out}"
   else
     echo "[missing] ${REMOTE_SUMMARY} and ${REMOTE_LOGS}"
     rm -f "${tmp_path}"

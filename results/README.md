@@ -2531,6 +2531,15 @@ dependency-pending. Log tails were healthy: BGR identity had reached 370/378
 successes, official identity 328/335, and matched random identity 365/375. No
 compact summary exists yet.
 
+Latest poll/sync at 2026-06-10 10:23:53 BST: identity eval jobs `774711`,
+`774713`, and `774715` were still running at about 59:11 elapsed, and
+hard-occlusion jobs `774712`, `774714`, and `774716` remained
+dependency-pending. Log tails showed BGR identity 383/392, official identity
+348/355, and matched random identity 378/389. No compact summary exists yet.
+A transient rsync drop during incomplete-log sync produced no evidence
+artifact after cleanup; the sync helper now treats rsync drops and incomplete
+logs as pending and removes temporary paths.
+
 ## Queued OpenVLA-OFT Hard-Occlusion 0.80 Transfer Diagnostic
 
 Queued on 2026-06-10 before any 0.65 occlusion rows were available. This is a
@@ -2614,6 +2623,13 @@ matched-random identity `774922` remained priority-pending with estimated start
 2026-06-10 12:56:05 BST. Hard-occlusion jobs `774919`, `774921`, and `774923`
 were still dependency-pending. Log tails showed official identity 80/84 and
 BGR identity 12/12 so far. No compact summary exists yet.
+
+Latest poll/sync at 2026-06-10 10:23:53 BST: official identity `774917` was
+running at 13:37 elapsed and BGR identity `774920` at 5:06 elapsed. Matched-
+random identity `774922` was still priority-pending with estimated start
+2026-06-10 22:18:47 BST, and hard-occlusion jobs `774919`, `774921`, and
+`774923` remained dependency-pending. Log tails showed official identity
+101/107 and BGR identity 32/32. No compact summary exists yet.
 
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
@@ -2796,6 +2812,16 @@ still unavailable-node pending. The A40 fallback had no gateable change: prep
 `774818` and matched-random adaptation `774820` were priority-pending, official
 identity `774846` was running at 15:58 elapsed with a log tail of 118/124
 successes, and all BGR/random perturb eval and occlusion jobs were still
+dependency-pending. No compact summary exists yet, so no fixed promotion gate
+can be run and no paper claim changes.
+
+Latest status at 2026-06-10 10:23:53 BST: the A6000 adaptation route was still
+unchanged, with prep `774717` resource-pending and official identity `774724`
+unavailable-node pending. The A40 fallback also had no gateable change: prep
+`774816` and BGR adaptation `774817` were completed, BGR merge `774818` and
+matched-random adaptation `774820` were priority-pending, official identity
+`774846` was running at 18:44 elapsed with a log tail of 133/139 successes,
+and all dependent BGR/random perturb eval and occlusion jobs were still
 dependency-pending. No compact summary exists yet, so no fixed promotion gate
 can be run and no paper claim changes.
 
