@@ -1057,23 +1057,33 @@ risk.
   Slurm jobs `780049` and `780050` both started at 21:02 BST and completed with
   exit `0:0` at 21:34:24/21:34:48 BST. The synced fixed readout is a small
   broad supervised macro win: original/held-out macro means are BGR
-  0.7842/0.7859, uniform 0.7774/0.7764, and fixed-radius 0.7790/0.7741; pooled
-  means are BGR 0.7851, uniform 0.7769, and fixed-radius 0.7766. BGR is ahead
-  on 22/32 pooled dataset means versus uniform and 24/32 versus fixed. This is
+  0.7842/0.7859, uniform 0.7774/0.7764, and fixed-radius 0.7790/0.7741. A
+  third no-retuning seed block, rerun as checkpointed chunks after the initial
+  monolithic Slurm failure, gives BGR 0.7831, uniform 0.7762, and fixed-radius
+  0.7736. Pooled over seeds 0--89, BGR is 0.7844, uniform 0.7766, and
+  fixed-radius 0.7756. BGR is ahead on 22/32 pooled dataset means versus
+  uniform and 24/32 versus fixed. This is
   useful pre-existing supervised benchmark evidence, but the effect is small
   and the suite still contains large negative rows, so do not use it as a
   learned-policy, robotics, or standard-control claim.
-- A third all-binary numeric OpenML target-1.5 seed block was queued on
-  2026-06-10 as Slurm job `781423`, using `SEED_START=60`, `SEEDS=30`, and the
-  same 32 registered numeric binary datasets. It writes to
-  `/work/joy/bgr/runs/openml_all_binary_numeric_target15_thirdsplit_30seed_v1_781423`
-  and log `/work/joy/bgr/logs/bgr-openml-mixed-binary-781423.out`. It started
-  on `cnode401` but failed after 7:48 with exit `1:0` during
-  `eeg-eye-state`; no completed output directory or summary exists. Split
-  retries `781530`/`781536`/`781532`/`781531`, plus sequential chunk retry
-  `781548`, were all killed immediately by Slurm with `RaisedSignal:53` before
-  writing logs. There is no third-split result or paper claim. Do not
-  resubmit blindly until the Slurm launch failure is understood.
+- The third all-binary numeric OpenML target-1.5 seed block first failed on
+  2026-06-10 as monolithic Slurm job `781423`, using `SEED_START=60`,
+  `SEEDS=30`, and the same 32 registered numeric binary datasets. It ran on
+  `cnode401` but failed after 7:48 with exit `1:0` during `eeg-eye-state`, and
+  no completed summary was produced because `tools/openml_margin_scout.py`
+  wrote outputs only at the end. Split retries `781530`/`781536`/`781532`/
+  `781531`, plus sequential chunk retry `781548`, were killed immediately by
+  Slurm with `RaisedSignal:53` before writing logs while `/work/joy` was at
+  100% use. On 2026-06-10, 35,696 remote generated OpenVLA rollout `.mp4`
+  files were deleted from `/work/joy/bgr/runs` to free quota, the OpenML queue
+  wrapper was changed to submit materialized remote `.sbatch` files, and
+  `tools/openml_margin_scout.py` gained checkpoint/resume output. A smoke job
+  `781672` completed successfully, then four fixed third-block chunks
+  `781682`/`781683`/`781684`/`781685` completed with exit `0:0` and 720 rows
+  each. The merged artifact is
+  `results/openml_all_binary_numeric_target15_thirdsplit_30seed_v1_781682_781685/`,
+  with deterministic readout
+  `results/openml_all_binary_numeric_target15_thirdsplit_analysis_781682_781685.txt`.
 - The Blackjack independent-route scout completed negative: all nine configs in
   `results/blackjack_recovery_scout_8seed_v1/config_summary.csv` have
   `candidate=False`. Do not scale or promote it without a materially new

@@ -1,0 +1,37 @@
+original_0_29: macro bgr=0.784241 uniform=0.777385 fixed=0.779028; gaps vs uniform=+0.006856, vs fixed=+0.005213; dataset means ahead 23/32 vs uniform, 24/32 vs fixed
+heldout_30_59: macro bgr=0.785903 uniform=0.776351 fixed=0.774140; gaps vs uniform=+0.009552, vs fixed=+0.011763; dataset means ahead 22/32 vs uniform, 24/32 vs fixed
+third_60_89: macro bgr=0.783072 uniform=0.776161 fixed=0.773570; gaps vs uniform=+0.006911, vs fixed=+0.009502; dataset means ahead 24/32 vs uniform, 24/32 vs fixed
+pooled_0_89: macro bgr=0.784405 uniform=0.776632 fixed=0.775580; gaps vs uniform=+0.007773, vs fixed=+0.008826; dataset means ahead 22/32 vs uniform, 24/32 vs fixed
+pooled dataset-level means:
+Bioresponse: bgr=0.587356 uniform=0.653406 fixed=0.650506 gaps -0.066050/-0.063150
+MagicTelescope: bgr=0.722758 uniform=0.685511 fixed=0.685486 gaps +0.037247/+0.037272
+banknote-authentication: bgr=0.706928 uniform=0.796944 fixed=0.753883 gaps -0.090017/-0.046956
+blood-transfusion-service-center: bgr=0.737447 uniform=0.679447 fixed=0.674358 gaps +0.058000/+0.063089
+breast-w: bgr=0.958770 uniform=0.954640 fixed=0.949541 gaps +0.004130/+0.009229
+climate-model-simulation-crashes: bgr=0.904729 uniform=0.876551 fixed=0.876323 gaps +0.028178/+0.028406
+diabetes: bgr=0.703769 uniform=0.667100 fixed=0.676067 gaps +0.036669/+0.027703
+eeg-eye-state: bgr=0.530239 uniform=0.522158 fixed=0.519775 gaps +0.008081/+0.010464
+electricity: bgr=0.621278 uniform=0.623344 fixed=0.620161 gaps -0.002067/+0.001117
+gina_agnostic: bgr=0.716022 uniform=0.775222 fixed=0.780011 gaps -0.059200/-0.063989
+haberman: bgr=0.708494 uniform=0.622666 fixed=0.652887 gaps +0.085828/+0.055607
+heart-statlog: bgr=0.791213 uniform=0.768728 fixed=0.758026 gaps +0.022485/+0.033187
+hill-valley: bgr=0.502394 uniform=0.504803 fixed=0.505725 gaps -0.002408/-0.003331
+ionosphere: bgr=0.846793 uniform=0.839888 fixed=0.836162 gaps +0.006905/+0.010631
+jm1: bgr=0.794131 uniform=0.721978 fixed=0.728642 gaps +0.072153/+0.065489
+kc1: bgr=0.821892 uniform=0.797656 fixed=0.789686 gaps +0.024236/+0.032206
+kc2: bgr=0.824275 uniform=0.790680 fixed=0.792995 gaps +0.033595/+0.031280
+madelon: bgr=0.528433 uniform=0.528842 fixed=0.526694 gaps -0.000408/+0.001739
+mammography: bgr=0.973303 uniform=0.966108 fixed=0.965622 gaps +0.007194/+0.007681
+mc1: bgr=0.973753 uniform=0.970378 fixed=0.977664 gaps +0.003375/-0.003911
+mozilla4: bgr=0.676044 uniform=0.676642 fixed=0.661811 gaps -0.000597/+0.014233
+ozone-level-8hr: bgr=0.827753 uniform=0.895778 fixed=0.907208 gaps -0.068025/-0.079456
+pc1: bgr=0.917839 uniform=0.882069 fixed=0.897989 gaps +0.035769/+0.019850
+pc2: bgr=0.973661 uniform=0.978561 fixed=0.976211 gaps -0.004900/-0.002550
+pc3: bgr=0.866297 uniform=0.833919 fixed=0.833028 gaps +0.032378/+0.033269
+pc4: bgr=0.866800 uniform=0.860567 fixed=0.852722 gaps +0.006233/+0.014078
+phoneme: bgr=0.697994 uniform=0.684731 fixed=0.681789 gaps +0.013264/+0.016206
+qsar-biodeg: bgr=0.800742 uniform=0.794836 fixed=0.794625 gaps +0.005906/+0.006117
+sonar: bgr=0.745510 uniform=0.742675 fixed=0.730356 gaps +0.002835/+0.015154
+spambase: bgr=0.871239 uniform=0.852217 fixed=0.849917 gaps +0.019022/+0.021322
+steel-plates-fault: bgr=0.947431 uniform=0.954511 fixed=0.959894 gaps -0.007081/-0.012464
+wdbc: bgr=0.955687 uniform=0.949684 fixed=0.952781 gaps +0.006004/+0.002906

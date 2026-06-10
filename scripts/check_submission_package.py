@@ -503,6 +503,10 @@ OPENML_CLAIM_ARTIFACTS = [
     "results/openml_all_binary_numeric_target15_replication_30seed_v1_780050/per_seed.csv",
     "results/openml_all_binary_numeric_target15_replication_30seed_v1_780050/summary.csv",
     "results/openml_all_binary_numeric_target15_analysis_780049_780050.txt",
+    "results/openml_all_binary_numeric_target15_thirdsplit_30seed_v1_781682_781685/package_versions.json",
+    "results/openml_all_binary_numeric_target15_thirdsplit_30seed_v1_781682_781685/per_seed.csv",
+    "results/openml_all_binary_numeric_target15_thirdsplit_30seed_v1_781682_781685/summary.csv",
+    "results/openml_all_binary_numeric_target15_thirdsplit_analysis_781682_781685.txt",
 ]
 CHECKED_CLAIM_ARTIFACTS = [
     "paper/figures/estimator_stats.csv",

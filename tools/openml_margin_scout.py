@@ -153,6 +153,22 @@ def parse_float_csv(raw: str) -> list[float]:
     return [float(value) for value in parse_csv(raw)]
 
 
+def read_existing_results(path: Path) -> list[TrialResult]:
+    if not path.exists():
+        return []
+    with path.open("r", encoding="utf-8", newline="") as handle:
+        return [
+            TrialResult(
+                dataset=row["dataset"],
+                target_radius=float(row["target_radius"]),
+                method=row["method"],
+                seed=int(row["seed"]),
+                final_rauc=float(row["final_rauc"]),
+            )
+            for row in csv.DictReader(handle)
+        ]
+
+
 def perturb(x: np.ndarray, radius: float, rng: np.random.Generator) -> np.ndarray:
     noise = rng.normal(size=x.shape)
     return x + noise / (float(np.linalg.norm(noise)) + 1e-12) * radius
@@ -388,6 +404,7 @@ def paired_counts(left: list[float], right: list[float]) -> tuple[int, int, int]
 
 def write_outputs(results: list[TrialResult], out_dir: Path, datasets: list[str]) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
+    results = sorted(results, key=lambda row: (row.dataset, row.target_radius, row.seed, row.method))
     with (out_dir / "per_seed.csv").open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(
             handle,
@@ -427,15 +444,24 @@ def write_outputs(results: list[TrialResult], out_dir: Path, datasets: list[str]
         targets = sorted({row.target_radius for row in results})
         for dataset in sorted(datasets):
             for target_radius in targets:
-                uniform = sorted(by_key[(dataset, target_radius, "uniform")], key=lambda row: row.seed)
-                uniform_values = [row.final_rauc for row in uniform]
+                uniform_rows = by_key.get((dataset, target_radius, "uniform"), [])
+                if not uniform_rows:
+                    continue
+                uniform_by_seed = {row.seed: row.final_rauc for row in uniform_rows}
                 for method in METHODS:
-                    rows = sorted(by_key[(dataset, target_radius, method)], key=lambda row: row.seed)
-                    values = [row.final_rauc for row in rows]
+                    rows = by_key.get((dataset, target_radius, method), [])
+                    if not rows:
+                        continue
+                    values_by_seed = {row.seed: row.final_rauc for row in rows}
+                    paired_seeds = sorted(set(values_by_seed) & set(uniform_by_seed))
+                    if not paired_seeds:
+                        continue
+                    values = [values_by_seed[seed] for seed in paired_seeds]
+                    uniform_values = [uniform_by_seed[seed] for seed in paired_seeds]
                     wins, losses, ties = paired_counts(values, uniform_values)
                     delta = float(np.mean(values) - np.mean(uniform_values))
                     decision = "reject-scout"
-                    if method == "bgr" and delta >= 0.03 and wins >= 3 and losses == 0:
+                    if method == "bgr" and len(values) >= 4 and delta >= 0.03 and wins >= 3 and losses == 0:
                         decision = "candidate-for-preregistration"
                     writer.writerow(
                         {
@@ -509,6 +535,17 @@ def main() -> int:
     parser.add_argument("--candidate-count", type=int, default=128)
     parser.add_argument("--max-radius", type=float, default=2.0)
     parser.add_argument("--eval-examples", type=int, default=250)
+    parser.add_argument(
+        "--checkpoint-every",
+        type=int,
+        default=0,
+        help="Write partial outputs after this many newly completed trial rows; 0 disables checkpointing.",
+    )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Load an existing per_seed.csv from --out and skip completed dataset/target/seed/method rows.",
+    )
     args = parser.parse_args()
     selected_suites = [
         args.external_validation_suite,
@@ -535,12 +572,27 @@ def main() -> int:
     if unknown:
         raise ValueError(f"unknown dataset(s): {', '.join(unknown)}")
 
-    results = []
+    results = read_existing_results(args.out / "per_seed.csv") if args.resume else []
+    completed = {
+        (row.dataset, row.target_radius, row.seed, row.method)
+        for row in results
+    }
+    if results:
+        print(f"[resume] loaded {len(results)} existing trial rows from {args.out / 'per_seed.csv'}", flush=True)
     dataset_cache: dict[str, tuple[object, np.ndarray]] = {}
+    completed_since_checkpoint = 0
     for dataset in args.datasets:
         for target_radius in args.targets:
             for seed in range(args.seed_start, args.seed_start + args.seeds):
                 for method in METHODS:
+                    key = (dataset, float(target_radius), seed, method)
+                    if key in completed:
+                        print(
+                            f"[skip] dataset={dataset} target={target_radius:.4f} "
+                            f"seed={seed} method={method}",
+                            flush=True,
+                        )
+                        continue
                     result = run_trial(
                         dataset=dataset,
                         seed=seed,
@@ -555,11 +607,17 @@ def main() -> int:
                         dataset_cache=dataset_cache,
                     )
                     results.append(result)
+                    completed.add(key)
+                    completed_since_checkpoint += 1
                     print(
                         f"[run] dataset={dataset} target={target_radius:.4f} "
                         f"seed={seed} method={method} final_rauc={result.final_rauc:.6f}",
                         flush=True,
                     )
+                    if args.checkpoint_every > 0 and completed_since_checkpoint >= args.checkpoint_every:
+                        write_outputs(results, args.out, list(args.datasets))
+                        print(f"[checkpoint] wrote {len(results)} trial rows to {args.out}", flush=True)
+                        completed_since_checkpoint = 0
     write_outputs(results, args.out, list(args.datasets))
     print(f"wrote {args.out}")
     return 0

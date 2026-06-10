@@ -19,6 +19,8 @@ CANDIDATE_COUNT="${CANDIDATE_COUNT:-128}"
 EVAL_EXAMPLES="${EVAL_EXAMPLES:-250}"
 DATASETS="${DATASETS:-}"
 PREPROCESSING="${PREPROCESSING:-mixed}"
+CHECKPOINT_EVERY="${CHECKPOINT_EVERY:-1}"
+RESUME="${RESUME:-1}"
 
 if [[ -n "${DATASETS}" ]]; then
   DATASET_ARGS="--datasets '${DATASETS}' --preprocessing '${PREPROCESSING}'"
@@ -33,18 +35,20 @@ fi
 
 rsync -az tools/openml_margin_scout.py "${REMOTE_HOST}:${REMOTE_PROJECT}/tools/openml_margin_scout.py"
 
-ssh "${REMOTE_HOST}" "mkdir -p '${REMOTE_LOG_ROOT}' '${REMOTE_RUN_ROOT}'"
+ssh "${REMOTE_HOST}" "mkdir -p '${REMOTE_LOG_ROOT}' '${REMOTE_RUN_ROOT}' '${REMOTE_LOG_ROOT}/sbatch'"
 
-job_id="$(ssh "${REMOTE_HOST}" \
-  "cd '${REMOTE_PROJECT}' && sbatch --parsable \
-    --job-name='bgr-openml-mixed-binary' \
-    ${SBATCH_PARTITION_ARG} \
-    --cpus-per-task='${CPUS}' \
-    --mem='${MEMORY}' \
-    --time='${TIME_LIMIT}' \
-    --output='${REMOTE_LOG_ROOT}/%x-%j.out'" <<EOF
+remote_script="${REMOTE_LOG_ROOT}/sbatch/${OUT_PREFIX}_$(date +%Y%m%d_%H%M%S)_$$.sbatch"
+resume_arg=""
+if [[ "${RESUME}" != "0" ]]; then
+  resume_arg="--resume"
+fi
+
+ssh "${REMOTE_HOST}" "cat > '${remote_script}'" <<EOF
 #!/usr/bin/env bash
 set -euo pipefail
+echo "[start] \$(date -Is)"
+echo "[host] \$(hostname)"
+echo "[job] \${SLURM_JOB_ID:-manual}"
 cd '${REMOTE_PROJECT}'
 PYTHONPATH='${REMOTE_PROJECT}/src:${REMOTE_PROJECT}' \
   '${REMOTE_PYTHON}' \
@@ -57,10 +61,23 @@ PYTHONPATH='${REMOTE_PROJECT}/src:${REMOTE_PROJECT}' \
   --batch-size '${BATCH_SIZE}' \
   --candidate-count '${CANDIDATE_COUNT}' \
   --eval-examples '${EVAL_EXAMPLES}' \
+  --checkpoint-every '${CHECKPOINT_EVERY}' \
+  ${resume_arg} \
   --out "${REMOTE_RUN_ROOT}/${OUT_PREFIX}_\${SLURM_JOB_ID}"
+echo "[done] \$(date -Is)"
 EOF
-)"
+
+job_id="$(ssh "${REMOTE_HOST}" \
+  "cd '${REMOTE_PROJECT}' && sbatch --parsable \
+    --job-name='bgr-openml-mixed-binary' \
+    ${SBATCH_PARTITION_ARG} \
+    --cpus-per-task='${CPUS}' \
+    --mem='${MEMORY}' \
+    --time='${TIME_LIMIT}' \
+    --output='${REMOTE_LOG_ROOT}/%x-%j.out' \
+    '${remote_script}'")"
 
 printf 'submitted mixed OpenML binary scout job: %s\n' "${job_id}"
 printf 'remote output: %s/%s_%s\n' "${REMOTE_RUN_ROOT}" "${OUT_PREFIX}" "${job_id}"
 printf 'remote log: %s/bgr-openml-mixed-binary-%s.out\n' "${REMOTE_LOG_ROOT}" "${job_id}"
+printf 'remote script: %s\n' "${remote_script}"

@@ -610,13 +610,21 @@ def openml_positive_details(root: Path) -> list[str]:
         label="OpenML all-binary target-1.5",
         original_path=root / "results/openml_all_binary_numeric_target15_30seed_v1_780049/per_seed.csv",
         replication_path=root / "results/openml_all_binary_numeric_target15_replication_30seed_v1_780050/per_seed.csv",
+        third_path=root / "results/openml_all_binary_numeric_target15_thirdsplit_30seed_v1_781682_781685/per_seed.csv",
     )
     if all_binary:
         details.append(all_binary)
     return details
 
 
-def openml_macro_suite_detail(root: Path, *, label: str, original_path: Path, replication_path: Path) -> str | None:
+def openml_macro_suite_detail(
+    root: Path,
+    *,
+    label: str,
+    original_path: Path,
+    replication_path: Path,
+    third_path: Path | None = None,
+) -> str | None:
     del root
     if not original_path.exists() or not replication_path.exists():
         return None
@@ -642,9 +650,17 @@ def openml_macro_suite_detail(root: Path, *, label: str, original_path: Path, re
 
     original = read_rows(original_path)
     replication = read_rows(replication_path)
-    pooled = original + replication
+    third = read_rows(third_path) if third_path is not None and third_path.exists() else []
+    pooled = original + replication + third
     orig_uniform, orig_fixed, orig_bgr, orig_wins_uniform, orig_wins_fixed, orig_n = suite_stats(original)
     rep_uniform, rep_fixed, rep_bgr, rep_wins_uniform, rep_wins_fixed, rep_n = suite_stats(replication)
+    third_summary = ""
+    if third:
+        third_uniform, third_fixed, third_bgr, third_wins_uniform, third_wins_fixed, third_n = suite_stats(third)
+        third_summary = (
+            f"; third-block macro BGR {third_bgr:.4f} vs uniform {third_uniform:.4f} "
+            f"and fixed {third_fixed:.4f} ({third_wins_uniform}/{third_n}, {third_wins_fixed}/{third_n})"
+        )
     pooled_uniform, pooled_fixed, pooled_bgr, pooled_wins_uniform, pooled_wins_fixed, pooled_n = suite_stats(pooled)
     if not (pooled_bgr > pooled_uniform and pooled_bgr > pooled_fixed):
         return None
@@ -653,7 +669,7 @@ def openml_macro_suite_detail(root: Path, *, label: str, original_path: Path, re
         f"and fixed {orig_fixed:.4f} ({orig_wins_uniform}/{orig_n} dataset means vs uniform, "
         f"{orig_wins_fixed}/{orig_n} vs fixed); held-out macro BGR {rep_bgr:.4f} vs uniform "
         f"{rep_uniform:.4f} and fixed {rep_fixed:.4f} ({rep_wins_uniform}/{rep_n}, "
-        f"{rep_wins_fixed}/{rep_n}); pooled macro BGR {pooled_bgr:.4f} vs uniform "
+        f"{rep_wins_fixed}/{rep_n}){third_summary}; pooled macro BGR {pooled_bgr:.4f} vs uniform "
         f"{pooled_uniform:.4f} and fixed {pooled_fixed:.4f} ({pooled_wins_uniform}/{pooled_n}, "
         f"{pooled_wins_fixed}/{pooled_n})"
     )

@@ -19,8 +19,9 @@ main mechanism evidence, and OpenML diabetes, blood-transfusion, phoneme,
 MagicTelescope, haberman, and jm1 are now replicated positive
 pre-existing-dataset margin-replay evidence. A fixed all-binary numeric OpenML
 target-1.5 aggregation over 32 datasets is also now complete and small
-macro-positive: pooled BGR 0.7851 vs. uniform 0.7769 and fixed-radius 0.7766,
-with BGR ahead on 22/32 dataset means versus uniform and 24/32 versus fixed.
+macro-positive across three independent 30-seed blocks: pooled BGR 0.7844 vs.
+uniform 0.7766 and fixed-radius 0.7756, with BGR ahead on 22/32 dataset means
+versus uniform and 24/32 versus fixed.
 This strengthens the supervised pre-existing benchmark story but still does
 not solve the standard-environment or learned-policy evidence gap.
 Standard-environment recovery screens and OpenVLA/LIBERO learned-policy evidence
@@ -187,22 +188,21 @@ dataset-level promotion. Treat this as a small macro-positive supervised
 pre-existing benchmark aggregation, not a learned-policy or standard-control
 win. The deterministic readout is saved at
 `results/openml_all_binary_numeric_target15_analysis_780049_780050.txt`. A
-third independent seed block was queued on 2026-06-10 as Slurm job `781423`
-using the same 32-dataset numeric target-1.5 protocol, `SEED_START=60`, and
-`SEEDS=30`, with output
-`/work/joy/bgr/runs/openml_all_binary_numeric_target15_thirdsplit_30seed_v1_781423`
-and log `/work/joy/bgr/logs/bgr-openml-mixed-binary-781423.out`. Initial
-`squeue` showed it `PENDING` on `Resources`, then it ran on `cnode401` but
-failed after 7:48 with exit `1:0` during `eeg-eye-state`; no completed output
-directory or summary was produced. Four split retries were submitted as
-`781530`/`781536`/`781532`/`781531`, and a sequential chunk-1 retry was
-submitted as `781548`; all were killed immediately by Slurm with
-`RaisedSignal:53` before writing logs. There is therefore no third-split
-readout or new claim. Do not keep resubmitting this OpenML third split until
-the Slurm signal-53 launch failure is understood. If it is eventually rerun
-successfully and stays macro-positive, it only strengthens the supervised
-pre-existing benchmark aggregation and still does not solve the standard-control
-or learned-policy gap. The
+third independent seed block initially failed as monolithic Slurm job `781423`
+and several opaque signal-53 retries while `/work/joy` was full. The OpenML
+queue path now submits materialized remote `.sbatch` files and
+`tools/openml_margin_scout.py` has checkpoint/resume support. After deleting
+remote generated OpenVLA rollout videos to free quota, a Slurm smoke `781672`
+passed, and the fixed third block was rerun in four checkpointed chunks:
+`781682`/`781683`/`781684`/`781685`. All completed with exit `0:0`, were
+synced locally as intermediate chunk directories, and were merged into
+`results/openml_all_binary_numeric_target15_thirdsplit_30seed_v1_781682_781685/`.
+The third block remains small macro-positive: BGR 0.7831 vs. uniform 0.7762
+and fixed-radius 0.7736, ahead on 24/32 dataset means against each comparator.
+Pooled over seeds 0--89, BGR is 0.7844 vs. uniform 0.7766 and fixed-radius
+0.7756, ahead on 22/32 and 24/32 dataset means. This strengthens the
+supervised pre-existing benchmark aggregation but still does not solve the
+standard-control or learned-policy gap. The
 internal sklearn-digits margin replay scout is also rejected before promotion:
 its best BGR target gives only 0.8271 vs. 0.8123 RAUC against uniform with a
 2/2/0 paired split, while fixed-radius replay is stronger at another target.
