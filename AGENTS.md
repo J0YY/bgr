@@ -80,6 +80,21 @@ rejected before promotion: uniform training stayed at zero clean success and
 zero RAUC even with teacher-forced behavior cloning. Do not scale that learner;
 the active route requires a better preregistered learned controller or a
 separate fixed method comparison that first proves nonzero clean recovery.
+Follow-up implementation added opt-in MLP, KNN, and trajectory-library policies
+to the same probe and fixed the probe seed offset to match the calibrated
+`121000` reset family. The MLP/KNN behavior-cloning variants are still rejected
+by local viability checks, but the trajectory-library policy with common
+warm-start demonstrations gives a nonzero local viability row on calibrated
+states: uniform seed 0, clean 0.7500 and RAUC 0.5312 under
+`--policy trajectory --warmstart-policy`. A bounded all-baseline CPU Slurm
+scout was submitted on `athena` as job `777783` at 2026-06-10 16:49 BST using
+`scripts/queue_fetchpush_object_state_probe.sh`. It writes to
+`/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_scout_v1_777783`
+and logs to `/work/joy/bgr/logs/bgr-fetchpush-object-state-777783.out`; sync
+with `JOB_ID=777783 scripts/sync_fetchpush_object_state_probe.sh`. This is not
+paper evidence unless `summary.csv` exists and the fixed candidate-promotion
+checks beat uniform, fixed, failure-only, TD-loss, and the uniform-radius
+ablation.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,

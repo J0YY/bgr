@@ -1392,6 +1392,21 @@ risk.
   at zero clean success and zero RAUC. Do not scale or promote that learner
   without a better preregistered controller; the object-state calibration is
   only an active reset-interface candidate.
+  The follow-up probe now also supports opt-in MLP, KNN, and
+  trajectory-library policies. MLP and KNN behavior cloning remained zero in
+  local viability checks, but after aligning the probe default seed offset with
+  the calibrated `121000` reset family, the trajectory-library policy with
+  common warm-start demonstrations produced a nonzero sanity row: uniform seed
+  0, clean 0.7500 and RAUC 0.5312. A bounded all-baseline scout was therefore
+  queued on `athena` as Slurm job `777783` using
+  `scripts/queue_fetchpush_object_state_probe.sh`. The remote output path is
+  `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_scout_v1_777783`,
+  the log is `/work/joy/bgr/logs/bgr-fetchpush-object-state-777783.out`, and
+  the sync command is `JOB_ID=777783 scripts/sync_fetchpush_object_state_probe.sh`.
+  Treat this as an in-flight method scout only; no paper claim follows unless
+  the completed `summary.csv` clears the existing candidate-promotion checks
+  against uniform, fixed radius, failure-only, TD-loss, and the BGR
+  uniform-radius ablation.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
   same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:

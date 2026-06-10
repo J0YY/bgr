@@ -70,6 +70,118 @@ class LinearPushPolicy:
         return float(np.mean(error * error))
 
 
+class MLPPushPolicy:
+    def __init__(
+        self,
+        rng: np.random.Generator,
+        *,
+        feature_dim: int,
+        hidden_dim: int,
+        init_noise: float,
+        learning_rate: float,
+    ) -> None:
+        scale = float(init_noise)
+        self.w1 = rng.normal(0.0, scale, size=(int(hidden_dim), feature_dim))
+        self.b1 = np.zeros(int(hidden_dim), dtype=float)
+        self.w2 = rng.normal(0.0, scale, size=(4, int(hidden_dim)))
+        self.b2 = np.zeros(4, dtype=float)
+        self.learning_rate = float(learning_rate)
+
+    def _forward(self, features: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+        hidden = np.tanh(self.w1 @ features + self.b1)
+        action = np.tanh(self.w2 @ hidden + self.b2)
+        return hidden, action
+
+    def action(self, features: np.ndarray) -> np.ndarray:
+        _hidden, action = self._forward(features)
+        return np.clip(action, -1.0, 1.0)
+
+    def update(self, features: np.ndarray, target: np.ndarray) -> float:
+        hidden, action = self._forward(features)
+        error = action - target
+        grad_out = (2.0 / len(error)) * error * (1.0 - action * action)
+        grad_w2 = np.outer(grad_out, hidden)
+        grad_b2 = grad_out
+        grad_hidden = (self.w2.T @ grad_out) * (1.0 - hidden * hidden)
+        grad_w1 = np.outer(grad_hidden, features)
+        grad_b1 = grad_hidden
+        clip = 5.0
+        self.w2 -= self.learning_rate * np.clip(grad_w2, -clip, clip)
+        self.b2 -= self.learning_rate * np.clip(grad_b2, -clip, clip)
+        self.w1 -= self.learning_rate * np.clip(grad_w1, -clip, clip)
+        self.b1 -= self.learning_rate * np.clip(grad_b1, -clip, clip)
+        return float(np.mean(error * error))
+
+
+class KNNPushPolicy:
+    def __init__(self, *, max_memory: int, neighbors: int) -> None:
+        self.max_memory = int(max_memory)
+        self.neighbors = int(neighbors)
+        self.features: list[np.ndarray] = []
+        self.actions: list[np.ndarray] = []
+
+    def action(self, features: np.ndarray) -> np.ndarray:
+        if not self.features:
+            return np.zeros(4, dtype=float)
+        matrix = np.vstack(self.features)
+        dists = np.sum((matrix - features) ** 2, axis=1)
+        count = min(self.neighbors, len(self.features))
+        idx = np.argpartition(dists, count - 1)[:count]
+        weights = 1.0 / (dists[idx] + 1e-6)
+        actions = np.vstack([self.actions[int(i)] for i in idx])
+        return np.clip(np.average(actions, axis=0, weights=weights), -1.0, 1.0)
+
+    def update(self, features: np.ndarray, target: np.ndarray) -> float:
+        pred = self.action(features)
+        self.features.append(np.array(features, dtype=float))
+        self.actions.append(np.array(target, dtype=float))
+        overflow = len(self.features) - self.max_memory
+        if overflow > 0:
+            del self.features[:overflow]
+            del self.actions[:overflow]
+        error = pred - target
+        return float(np.mean(error * error))
+
+
+class TrajectoryLibraryPolicy:
+    def __init__(self, *, max_trajectories: int) -> None:
+        self.max_trajectories = int(max_trajectories)
+        self.trajectories: list[dict[str, Any]] = []
+        self.active_actions: list[np.ndarray] | None = None
+
+    def start_episode(self, replay_idx: int, sigma: float) -> None:
+        if not self.trajectories:
+            self.active_actions = None
+            return
+        best = min(
+            self.trajectories,
+            key=lambda item: (
+                0.0 if int(item["replay_idx"]) == int(replay_idx) else 1.0,
+                abs(float(item["sigma"]) - float(sigma)),
+            ),
+        )
+        self.active_actions = [np.array(action, dtype=float) for action in best["actions"]]
+
+    def action(self, _features: np.ndarray, step: int = 0) -> np.ndarray:
+        if self.active_actions is None or int(step) >= len(self.active_actions):
+            return np.zeros(4, dtype=float)
+        return np.clip(self.active_actions[int(step)], -1.0, 1.0)
+
+    def add_trajectory(self, replay_idx: int, sigma: float, actions: list[np.ndarray]) -> None:
+        if not actions:
+            return
+        self.trajectories.append(
+            {
+                "replay_idx": int(replay_idx),
+                "sigma": float(sigma),
+                "actions": [np.array(action, dtype=float) for action in actions],
+            }
+        )
+        overflow = len(self.trajectories) - self.max_trajectories
+        if overflow > 0:
+            del self.trajectories[:overflow]
+
+
 def parse_floats(value: str) -> list[float]:
     return [float(item.strip()) for item in value.split(",") if item.strip()]
 
@@ -124,12 +236,28 @@ class FetchPushObjectProbe:
         self.env = gym.make(args.env_id, max_episode_steps=args.horizon)
         self.args = args
         self.rng = np.random.default_rng(args.seed_offset + seed)
-        self.policy = LinearPushPolicy(
-            self.rng,
-            feature_dim=len(obs_features(self.env.reset(seed=args.seed_offset + seed)[0])),
-            init_noise=args.init_noise,
-            learning_rate=args.learning_rate,
-        )
+        feature_dim = len(obs_features(self.env.reset(seed=args.seed_offset + seed)[0]))
+        if args.policy == "linear":
+            self.policy = LinearPushPolicy(
+                self.rng,
+                feature_dim=feature_dim,
+                init_noise=args.init_noise,
+                learning_rate=args.learning_rate,
+            )
+        elif args.policy == "mlp":
+            self.policy = MLPPushPolicy(
+                self.rng,
+                feature_dim=feature_dim,
+                hidden_dim=args.hidden_dim,
+                init_noise=args.init_noise,
+                learning_rate=args.learning_rate,
+            )
+        elif args.policy == "knn":
+            self.policy = KNNPushPolicy(max_memory=args.max_memory, neighbors=args.neighbors)
+        elif args.policy == "trajectory":
+            self.policy = TrajectoryLibraryPolicy(max_trajectories=args.max_trajectories)
+        else:
+            raise ValueError(f"unknown policy: {args.policy}")
         self.states = self._init_states(seed)
 
     def close(self) -> None:
@@ -176,17 +304,27 @@ class FetchPushObjectProbe:
     def rollout(self, replay_idx: int, sigma: float, trial_seed: int, *, train: bool) -> tuple[bool, float]:
         obs = self.reset_perturbed(replay_idx, sigma, trial_seed)
         threshold = float(self.env.unwrapped.distance_threshold)
+        if hasattr(self.policy, "start_episode"):
+            self.policy.start_episode(replay_idx, sigma)
         losses: list[float] = []
+        trajectory_actions: list[np.ndarray] = []
         for step in range(self.args.horizon + 1):
             distance = float(
                 np.linalg.norm(np.array(obs["achieved_goal"], dtype=float) - np.array(obs["desired_goal"], dtype=float))
             )
             if distance <= threshold:
+                if train and hasattr(self.policy, "add_trajectory"):
+                    self.policy.add_trajectory(replay_idx, sigma, trajectory_actions)
                 return True, float(np.mean(losses)) if losses else 0.0
             if step == self.args.horizon:
+                if train and hasattr(self.policy, "add_trajectory"):
+                    self.policy.add_trajectory(replay_idx, sigma, trajectory_actions)
                 return False, float(np.mean(losses)) if losses else 0.0
             features = obs_features(obs)
-            action = self.policy.action(features)
+            try:
+                action = self.policy.action(features, step)
+            except TypeError:
+                action = self.policy.action(features)
             if train:
                 target = controller_action(
                     self.args.teacher_controller,
@@ -194,11 +332,15 @@ class FetchPushObjectProbe:
                     threshold=threshold,
                     gain=self.args.teacher_gain,
                 )
-                losses.append(self.policy.update(features, target))
+                trajectory_actions.append(np.array(target, dtype=float))
+                if hasattr(self.policy, "update"):
+                    losses.append(self.policy.update(features, target))
                 if self.args.teacher_force_train:
                     action = target
             obs, _reward, _terminated, truncated, _info = self.env.step(action)
             if bool(truncated):
+                if train and hasattr(self.policy, "add_trajectory"):
+                    self.policy.add_trajectory(replay_idx, sigma, trajectory_actions)
                 distance = float(
                     np.linalg.norm(np.array(obs["achieved_goal"], dtype=float) - np.array(obs["desired_goal"], dtype=float))
                 )
@@ -242,9 +384,12 @@ def init_records(bench: FetchPushObjectProbe, rng: np.random.Generator, args: ar
         estimator = IsotonicCurveEstimator(args.max_radius, args.alpha)
         for sigma in args.initial_probes:
             for _ in range(args.record_trials):
-                success, _loss = bench.rollout(replay_idx, sigma, int(rng.integers(1_000_000_000)), train=False)
+                trial_seed = int(rng.integers(1_000_000_000))
+                success, _loss = bench.rollout(replay_idx, sigma, trial_seed, train=False)
                 record.add_observation(sigma, success)
                 estimator.update_bernoulli(sigma, success)
+                if args.warmstart_policy:
+                    bench.rollout(replay_idx, sigma, trial_seed, train=True)
         write_estimate(record, estimator.fit())
         records.append(record)
     return records
@@ -423,6 +568,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--teacher-controller", choices=["scripted_push", "scripted_push_far", "scripted_push_sweep"], default="scripted_push_sweep")
     parser.add_argument("--teacher-gain", type=float, default=8.0)
     parser.add_argument("--teacher-force-train", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument("--warmstart-policy", action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument("--policy", choices=["linear", "mlp", "knn", "trajectory"], default="linear")
+    parser.add_argument("--hidden-dim", type=int, default=64)
+    parser.add_argument("--max-memory", type=int, default=20000)
+    parser.add_argument("--max-trajectories", type=int, default=512)
+    parser.add_argument("--neighbors", type=int, default=5)
     parser.add_argument("--init-noise", type=float, default=0.01)
     parser.add_argument("--learning-rate", type=float, default=0.03)
     parser.add_argument("--max-radius", type=float, default=0.20)
@@ -444,7 +595,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--refresh-trials", type=int, default=2)
     parser.add_argument("--refresh-jitter", type=float, default=0.02)
     parser.add_argument("--direction-jitter", type=float, default=0.10)
-    parser.add_argument("--seed-offset", type=int, default=123_000)
+    parser.add_argument("--seed-offset", type=int, default=121_000)
     return parser
 
 

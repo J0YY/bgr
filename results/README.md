@@ -516,6 +516,20 @@ BGR method result: clean success is 0.8750, recovery ranges from 0.2500 to
 basic viability checks with zero clean success and zero RAUC, so do not scale
 that learner without a better preregistered controller.
 
+FetchPush-v4 object-state trajectory-library scout:
+
+```bash
+scripts/queue_fetchpush_object_state_probe.sh
+JOB_ID=777783 scripts/sync_fetchpush_object_state_probe.sh
+```
+
+The scout uses the calibrated `seed_offset=121000` reset family, all required
+baselines, `--policy trajectory`, and common warm-start demonstrations. It was
+queued on `athena` as job `777783` and writes to
+`results/fetchpush_object_state_recovery_probe_scout_v1_777783/` after sync.
+It is not paper evidence unless the completed `summary.csv` clears the fixed
+candidate-promotion checks.
+
 FetchSlide-v4 command:
 
 ```bash
