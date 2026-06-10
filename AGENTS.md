@@ -283,6 +283,14 @@ in hard-occlusion progress: official `774712` was running at 40:42, BGR
 were partial and not gateable: official 83/158, BGR 86/158, and matched random
 84/158. The compact `summary.csv` is still missing, the fixed gate remains
 incomplete, and no paper claim changes.
+Latest poll/sync at 2026-06-10 11:17:49 BST still had the 0.65 transfer route
+in hard-occlusion progress: official `774712` was running at 45:35, BGR
+`774714` at 47:30, and matched random `774716` at 47:30. The remote
+`summary.csv` was missing and a live-log rsync dropped with code 12/255, so the
+local `summary_available.csv` remained identity-only. A direct log-tail check
+afterward showed partial hard-occlusion tails official 110/188, BGR 111/187,
+and matched random 109/187. These partials are not gateable; the fixed gate
+remains incomplete and no paper claim changes.
 
 Active learned-policy diagnostic route: fixed hard-occlusion 0.80 transfer
 eval of the completed OpenVLA-OFT occlusion-bottleneck checkpoints. This was
@@ -392,6 +400,14 @@ were official occlusion 55/78, BGR occlusion 28/32, and active matched-random
 identity 317/327. The synced `summary_available.csv` still contains only
 official/BGR identity rows, so no compact `summary.csv` exists and no gate can
 be run.
+Latest poll/sync at 2026-06-10 11:17:49 BST showed the 0.80 transfer route
+still incomplete and affected by scheduling: official occlusion `774919` was
+running at 18:25, BGR occlusion `774921` at 9:54, matched-random identity
+`774922` had returned to pending on `Priority` with an estimated start
+2026-06-11 22:02:14 BST, and matched-random occlusion `774923` remained
+dependency-pending. Direct tails were official occlusion 68/103, BGR occlusion
+47/60, and the interrupted matched-random identity log 317/327. The compact
+`summary.csv` is still missing and no gate can be run.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -512,6 +528,13 @@ resources, official identity `774724` was running at 46:59, and BGR identity
 occlusion `774727`, and matched-random identity/occlusion `774728`/`774729`
 remained dependency-pending. Direct tails were official identity 302/309 and
 BGR identity 6/6. No compact summary exists and no gate can be run.
+Latest poll/sync at 2026-06-10 11:17:49 BST showed the A6000 adaptation route
+still incomplete: matched-random merge `774722` was running at 2:46, official
+identity `774724` was running at 51:52, BGR identity `774726` was running at
+5:51, and official/BGR/matched-random occlusion plus matched-random identity
+children remained dependency-pending. Direct tails were official identity
+347/354 and BGR identity 33/33. No compact summary exists and no gate can be
+run.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000
@@ -656,6 +679,15 @@ BGR occlusion `775103` and matched-random occlusion `774851` remained
 dependency-pending, and original failed child `774849` remains ignored. Direct
 partials were BGR identity 204/211, official occlusion 73/107, and
 matched-random identity 256/263. The fixed gate remains incomplete.
+Latest A40 poll/sync at 2026-06-10 11:17:49 BST still had no compact summary
+and showed scheduler interruption on the adapted identity evals: official
+occlusion `774847` was running at 23:26, replacement BGR identity `775102` was
+pending on `Priority` after reaching 204/211 in the log, and matched-random
+identity `774850` was pending on `Resources` after reaching 256/263.
+Replacement BGR occlusion `775103` and matched-random occlusion `774851`
+remained dependency-pending; original failed child `774849` remains ignored.
+The official occlusion direct tail reached 78/128. The fixed gate remains
+incomplete.
 
 Completed learned-policy route (negative, not active): preregistered OpenVLA-OFT occlusion-bottleneck
 adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.
