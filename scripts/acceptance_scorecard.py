@@ -530,6 +530,14 @@ ROUTE_SCOUTS = [
         "OpenML broad numeric fixed target2 replication 30-seed",
         "results/openml_broad_numeric_target2_replication_30seed_v1/summary.csv",
     ),
+    (
+        "OpenML multiclass numeric fixed target2 30-seed",
+        "results/openml_multiclass_numeric_target2_30seed_v1/summary.csv",
+    ),
+    (
+        "OpenML multiclass numeric fixed target2 replication 30-seed",
+        "results/openml_multiclass_numeric_target2_replication_30seed_v1/summary.csv",
+    ),
 ]
 
 

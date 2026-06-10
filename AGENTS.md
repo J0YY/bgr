@@ -109,6 +109,21 @@ MagicTelescope BGR-minus-uniform gaps are +0.014/+0.047/+0.058 at radii
 Use
 `PYTHONPATH=src:. python3 tools/analyze_openml_margin_suite.py --original results/openml_broad_positive_target_sensitivity_30seed_v1/per_seed.csv --replication results/openml_broad_positive_target_sensitivity_replication_30seed_v1/per_seed.csv`
 for the full readout.
+Completed negative pre-existing-dataset route: fixed numeric multiclass OpenML
+suite. This was a materially different supervised benchmark route from the
+binary OpenML sweeps because it used multiclass OpenML version-1 datasets with
+the same median-impute plus standardized numeric-feature perturbation pipeline:
+optdigits, pendigits, satimage, segment, letter, vehicle, texture,
+mfeat-fourier, mfeat-karhunen, and mfeat-pixel. Original and held-out
+target-2.0 30-seed jobs `774591` and `774592` completed with exit `0:0` and
+were synced to `results/openml_multiclass_numeric_target2_30seed_v1/` and
+`results/openml_multiclass_numeric_target2_replication_30seed_v1/`. The route
+is rejected: pooled macro means are BGR 0.6418, uniform 0.6948, and
+fixed-radius 0.6837; BGR is ahead on 0/10 dataset means versus uniform and
+2/10 versus fixed-radius, with no promotable-like rows. Treat this as a
+negative supervised scope result, not manuscript evidence or an active route.
+Full readout:
+`PYTHONPATH=src:. python3 tools/analyze_openml_margin_suite.py --original results/openml_multiclass_numeric_target2_30seed_v1/per_seed.csv --replication results/openml_multiclass_numeric_target2_replication_30seed_v1/per_seed.csv`.
 The new grid-margin witness-sensitivity diagnostic improves scope support for the
 feasibility-witness assumption but is controlled mechanism evidence, not an
 independent-benchmark win.

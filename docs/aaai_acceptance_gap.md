@@ -140,6 +140,19 @@ RAUC versus uniform 0.3790, but it still trails failure-only 0.3898 and has
 only a 5/3 paired split; the `dealer_signed` target 3.0 row trails uniform,
 failure-only, and the BGR-uniform-radius ablation. Treat Blackjack as a
 negative scope result, not an active route.
+A fixed numeric multiclass OpenML suite was tested as a materially different
+pre-existing supervised benchmark route from the binary OpenML sweeps. It used
+the existing median-impute plus standardized numeric-feature perturbation
+pipeline on OpenML version-1 optdigits, pendigits, satimage, segment, letter,
+vehicle, texture, mfeat-fourier, mfeat-karhunen, and mfeat-pixel. All ten
+datasets were validated as numeric arrays under the Athena OpenML venv, and
+optdigits passed local and Athena smokes. Jobs `774591` and `774592` completed
+original and held-out seeds at fixed target radius 2.0 with exit `0:0`. The
+result is negative: pooled macro means are BGR 0.6418, uniform 0.6948, and
+fixed-radius 0.6837; BGR is ahead on 0/10 dataset means versus uniform and
+2/10 versus fixed-radius. There are no promotable-like rows. Treat this as a
+negative supervised scope result, not a standard-environment or learned-policy
+win.
 
 After the weak-reject style review, the immediate paper-defense priority is not
 to amplify p-values or add more authored toy wins. The manuscript should instead
@@ -919,6 +932,9 @@ risk.
   `results/openml_broad_positive_target_sensitivity_30seed_v1/` and
   `results/openml_broad_positive_target_sensitivity_replication_30seed_v1/`.
   It supports radii 1.5 and 2.0 but leaves radius 1.0 as a fragility caveat.
+- The fixed multiclass numeric OpenML suite completed negative in Athena jobs
+  `774591` and `774592`; it should not be scaled or promoted without a new
+  premise because BGR trails uniform on every pooled dataset mean.
 - The Blackjack independent-route scout completed negative: all nine configs in
   `results/blackjack_recovery_scout_8seed_v1/config_summary.csv` have
   `candidate=False`. Do not scale or promote it without a materially new

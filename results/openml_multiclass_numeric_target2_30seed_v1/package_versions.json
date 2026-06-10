@@ -1,0 +1,47 @@
+{
+  "datasets": {
+    "letter": {
+      "name": "letter",
+      "version": 1
+    },
+    "mfeat-fourier": {
+      "name": "mfeat-fourier",
+      "version": 1
+    },
+    "mfeat-karhunen": {
+      "name": "mfeat-karhunen",
+      "version": 1
+    },
+    "mfeat-pixel": {
+      "name": "mfeat-pixel",
+      "version": 1
+    },
+    "optdigits": {
+      "name": "optdigits",
+      "version": 1
+    },
+    "pendigits": {
+      "name": "pendigits",
+      "version": 1
+    },
+    "satimage": {
+      "name": "satimage",
+      "version": 1
+    },
+    "segment": {
+      "name": "segment",
+      "version": 1
+    },
+    "texture": {
+      "name": "texture",
+      "version": 1
+    },
+    "vehicle": {
+      "name": "vehicle",
+      "version": 1
+    }
+  },
+  "numpy": "2.2.6",
+  "python": "3.10.12",
+  "scikit_learn": "1.7.2"
+}
