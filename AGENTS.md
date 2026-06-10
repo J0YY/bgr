@@ -16,8 +16,8 @@ genuinely plausibly 90%+ likely to get into AAAI main track.
 Current status: not there yet. The readiness gate still says
 `NOT_READY_FOR_90P_AAAI_CLAIM`; the controlled grid mechanism result is the
 main mechanism evidence, and OpenML diabetes, blood-transfusion, phoneme,
-MagicTelescope, and haberman are now replicated positive pre-existing-dataset
-margin-replay evidence.
+MagicTelescope, haberman, and jm1 are now replicated positive
+pre-existing-dataset margin-replay evidence.
 Standard-environment recovery screens and OpenVLA/LIBERO learned-policy evidence
 remain failing or non-promotable. The latest bsuite Catch 30-seed scale-up,
 MiniGrid FourRooms radius-10 rescue,
@@ -97,22 +97,36 @@ W/L/T=26/4/0) and fixed 0.6780; haberman original BGR 0.7258 vs. uniform
 uniform 0.6327 (+0.0948, W/L/T=27/3/0) and fixed 0.6690. Treat these as
 additional supervised margin-replay evidence, not the missing standard-
 environment or learned-policy result.
-Active independent/pre-existing broadening route: fixed secondary numeric
-OpenML suite. This is queued to test another predeclared set of active
-version-1 numeric OpenML datasets that pass the existing median-impute plus
+Completed secondary numeric OpenML suite: another predeclared active
+version-1 numeric OpenML set was run through the existing median-impute plus
 standardized numeric-feature pipeline: kc2, pc2, pc3, pc4, mc1, jm1,
-hill-valley, madelon, gina_agnostic, and electricity. The route was added in
-`tools/openml_margin_scout.py` as `--secondary-numeric-suite` after a
-full-suite one-seed smoke passed locally. It is not paper evidence unless both
-the fixed original and held-out runs complete and the results pass the existing
-BGR-vs-uniform and BGR-vs-fixed comparisons. Submitted on `athena` with
-`scripts/queue_openml_secondary_numeric_suite.sh`: original target-2.0
-30-seed job `776728` and held-out seeds 30--59 job `776729`. Initial scheduler
-check showed `776728` running on `cnode403` and `776729` pending on resources.
-Expected remote output prefixes are
-`/work/joy/bgr/runs/openml_secondary_numeric_target2_30seed_${SLURM_JOB_ID}`
-and
-`/work/joy/bgr/runs/openml_secondary_numeric_target2_replication_30seed_${SLURM_JOB_ID}`.
+hill-valley, madelon, gina_agnostic, and electricity. Slurm jobs `776728` and
+`776729` completed with exit `0:0` and were synced to
+`results/openml_secondary_numeric_target2_30seed_v1/` and
+`results/openml_secondary_numeric_target2_replication_30seed_v1/`. The suite
+is macro-neutral/negative, not a broad win: pooled macro means are BGR 0.7597,
+uniform 0.7600, and fixed-radius 0.7616, with BGR ahead on 4/10 dataset means
+versus uniform and 4/10 versus fixed. It adds one replicated dataset-level
+positive, jm1: original BGR 0.7894 vs. uniform 0.7196 (+0.0698, W/L/T=28/2/0)
+and fixed 0.7468 (+0.0426, W/L/T=23/7/0), held-out BGR 0.7888 vs. uniform
+0.7081 (+0.0806, W/L/T=26/4/0) and fixed 0.7358 (+0.0529, W/L/T=26/4/0).
+kc2 is a near-miss rather than a promoted positive: pooled BGR is +0.0320 vs.
+uniform but only +0.0270 vs. fixed, and the original split is below the +0.03
+fixed-radius margin. Use
+`PYTHONPATH=src:. python3 tools/analyze_openml_margin_suite.py --original results/openml_secondary_numeric_target2_30seed_v1/per_seed.csv --replication results/openml_secondary_numeric_target2_replication_30seed_v1/per_seed.csv`
+for the deterministic readout. Treat jm1 as supervised pre-existing-dataset
+margin evidence only, not the missing standard-environment or learned-policy
+win.
+Completed robustness follow-up: jm1/kc2 target-radius sensitivity. Slurm jobs
+`776811` and `776812` completed with exit `0:0` and were synced to
+`results/openml_secondary_positive_target_sensitivity_30seed_v1/` and
+`results/openml_secondary_positive_target_sensitivity_replication_30seed_v1/`.
+The result supports jm1 at radii 1.5 and 2.0 but not at 1.0: pooled
+BGR-minus-uniform gaps are +0.023/+0.083/+0.075 at radii 1.0/1.5/2.0, with
+BGR-minus-fixed +0.025/+0.074/+0.048. kc2 remains a near-miss: pooled
+BGR-minus-uniform is +0.008/+0.034/+0.032, but BGR-minus-fixed is only
++0.024/+0.027/+0.027. Treat this as a target-radius caveat for jm1 and a
+rejection of kc2 before promotion.
 Completed robustness diagnostic: MagicTelescope/haberman target-radius
 sensitivity. This is a caveat/robustness check for the two new broad-suite
 positives, not a new headline route. Initial jobs `774495`/`774496` failed
@@ -1471,11 +1485,12 @@ with about 96% success so far. Only the partial official/identity
 `summary_available.csv` exists locally; full perturb and adapt summaries are
 still missing, so the route remains incomplete.
 
-Latest paper checkpoint: OpenML diabetes, blood-transfusion, phoneme, the mixed
-full external OpenML suite repeat, and the OpenML positive-dataset target
-sensitivity caveat are now incorporated as replicated pre-existing supervised
-margin-replay evidence plus scope/fragility evidence. This improves the "no new
-positive evidence", cherry-picking, and target-fragility weaknesses but does not
+Latest paper checkpoint: OpenML diabetes, blood-transfusion, phoneme,
+MagicTelescope, haberman, jm1, the mixed full external/broad/secondary OpenML
+suite repeats, and OpenML positive-dataset target-sensitivity caveats are now
+incorporated as replicated pre-existing supervised margin-replay evidence plus
+scope/fragility evidence. This improves the "no new positive evidence",
+cherry-picking, and target-fragility weaknesses but does not
 change readiness because the learned-policy gate still fails.
 Latest poll at 2026-06-08 06:13:20 BST showed the occlusion route past data
 prep and training: prep `767850`, BGR train/merge `767851`/`767852`, and random

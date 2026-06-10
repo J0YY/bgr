@@ -1,0 +1,47 @@
+{
+  "datasets": {
+    "electricity": {
+      "name": "electricity",
+      "version": 1
+    },
+    "gina_agnostic": {
+      "name": "gina_agnostic",
+      "version": 1
+    },
+    "hill-valley": {
+      "name": "hill-valley",
+      "version": 1
+    },
+    "jm1": {
+      "name": "jm1",
+      "version": 1
+    },
+    "kc2": {
+      "name": "kc2",
+      "version": 1
+    },
+    "madelon": {
+      "name": "madelon",
+      "version": 1
+    },
+    "mc1": {
+      "name": "mc1",
+      "version": 1
+    },
+    "pc2": {
+      "name": "pc2",
+      "version": 1
+    },
+    "pc3": {
+      "name": "pc3",
+      "version": 1
+    },
+    "pc4": {
+      "name": "pc4",
+      "version": 1
+    }
+  },
+  "numpy": "2.2.6",
+  "python": "3.10.12",
+  "scikit_learn": "1.7.2"
+}

@@ -111,20 +111,24 @@ Internal pre-existing-dataset route scout:
   `results/openml_diabetes_margin_replication_30seed_v1/package_versions.json`:
   compact per-seed and package-version records for the fixed OpenML diabetes
   follow-up and held-out replication.
-- Active fixed secondary numeric OpenML route: `tools/openml_margin_scout.py`
-  now exposes `--secondary-numeric-suite`, covering kc2, pc2, pc3, pc4, mc1,
-  jm1, hill-valley, madelon, gina_agnostic, and electricity under the existing
-  numeric median-impute plus standardized feature-perturbation pipeline. Local
-  one-seed smokes for kc2 and the full suite succeeded before submission.
-  `scripts/queue_openml_secondary_numeric_suite.sh` submitted both fixed
-  target-radius-2.0 runs before results were inspected: Slurm job `776728` for
-  seeds 0--29 and Slurm job `776729` for held-out seeds 30--59. Expected remote
-  output prefixes are
-  `/work/joy/bgr/runs/openml_secondary_numeric_target2_30seed_${SLURM_JOB_ID}`
+- `results/openml_secondary_numeric_target2_30seed_v1/summary.csv` and
+  `results/openml_secondary_numeric_target2_replication_30seed_v1/summary.csv`:
+  fixed secondary numeric OpenML suite over kc2, pc2, pc3, pc4, mc1, jm1,
+  hill-valley, madelon, gina_agnostic, and electricity. Slurm jobs `776728`
+  and `776729` completed with exit `0:0`. The suite is not a macro win:
+  pooled macro means are BGR 0.7597, uniform 0.7600, and fixed-radius 0.7616.
+  It adds one replicated dataset-level positive on jm1: pooled BGR 0.7891 vs.
+  uniform 0.7139 (+0.0752, W/L/T=54/6/0) and fixed-radius 0.7413 (+0.0478,
+  W/L/T=49/11/0). kc2 is a near-miss, not promoted, because the original split
+  and pooled fixed-radius margins are below the +0.03 screen.
+- `results/openml_secondary_positive_target_sensitivity_30seed_v1/summary.csv`
   and
-  `/work/joy/bgr/runs/openml_secondary_numeric_target2_replication_30seed_${SLURM_JOB_ID}`.
-  This route is not submission evidence unless compact summaries exist and pass
-  the same BGR-vs-uniform and BGR-vs-fixed-radius checks.
+  `results/openml_secondary_positive_target_sensitivity_replication_30seed_v1/summary.csv`:
+  completed jm1/kc2 target-radius sensitivity from Slurm jobs `776811` and
+  `776812`. jm1 is positive at radii 1.5 and 2.0 but not 1.0: pooled
+  BGR-minus-uniform gaps are +0.023/+0.083/+0.075 at radii 1.0/1.5/2.0, with
+  BGR-minus-fixed +0.025/+0.074/+0.048. kc2 remains a near-miss because its
+  pooled BGR-minus-fixed gaps are only +0.024/+0.027/+0.027.
 
 Completed external-package scope diagnostic:
 

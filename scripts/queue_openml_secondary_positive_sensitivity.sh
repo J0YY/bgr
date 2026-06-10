@@ -9,6 +9,8 @@ REMOTE_LOG_ROOT="${REMOTE_LOG_ROOT:-${REMOTE_PROJECT}/logs}"
 TIME_LIMIT="${TIME_LIMIT:-24:00:00}"
 MEMORY="${MEMORY:-24G}"
 CPUS="${CPUS:-4}"
+DATASETS="${DATASETS:-jm1,kc2}"
+TARGETS="${TARGETS:-1.0,1.5,2.0}"
 
 SBATCH_PARTITION_ARG=""
 if [[ -n "${SLURM_PARTITION:-}" ]]; then
@@ -39,21 +41,21 @@ cd '${REMOTE_PROJECT}'
 PYTHONPATH='${REMOTE_PROJECT}/src:${REMOTE_PROJECT}' \
   '${REMOTE_PYTHON}' \
   '${REMOTE_PROJECT}/tools/openml_margin_scout.py' \
-  --secondary-numeric-suite \
-  --targets 2.0 \
+  --datasets '${DATASETS}' \
+  --targets '${TARGETS}' \
   ${seed_args} \
   --out "${REMOTE_RUN_ROOT}/${out_prefix}_\${SLURM_JOB_ID}"
 EOF
 }
 
 original_job="$(submit_job \
-  bgr-openml-secondary-target2 \
+  bgr-openml-secondary-positive-targets \
   '--seeds 30' \
-  openml_secondary_numeric_target2_30seed)"
+  openml_secondary_positive_target_sensitivity_30seed)"
 replication_job="$(submit_job \
-  bgr-openml-secondary-target2-rep \
+  bgr-openml-secondary-positive-targets-rep \
   '--seed-start 30 --seeds 30' \
-  openml_secondary_numeric_target2_replication_30seed)"
+  openml_secondary_positive_target_sensitivity_replication_30seed)"
 
-printf 'submitted original job: %s\n' "${original_job}"
-printf 'submitted held-out replication job: %s\n' "${replication_job}"
+printf 'submitted original sensitivity job: %s\n' "${original_job}"
+printf 'submitted held-out sensitivity job: %s\n' "${replication_job}"

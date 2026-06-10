@@ -1,0 +1,15 @@
+{
+  "datasets": {
+    "jm1": {
+      "name": "jm1",
+      "version": 1
+    },
+    "kc2": {
+      "name": "kc2",
+      "version": 1
+    }
+  },
+  "numpy": "2.2.6",
+  "python": "3.10.12",
+  "scikit_learn": "1.7.2"
+}

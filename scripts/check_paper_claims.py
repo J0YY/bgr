@@ -649,6 +649,110 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         )
     )
 
+    openml_secondary_original_per_seed = results_dir / "openml_secondary_numeric_target2_30seed_v1" / "per_seed.csv"
+    openml_secondary_replication_per_seed = (
+        results_dir / "openml_secondary_numeric_target2_replication_30seed_v1" / "per_seed.csv"
+    )
+    openml_secondary_original_seeds = read_csv_rows(openml_secondary_original_per_seed)
+    openml_secondary_replication_seeds = read_csv_rows(openml_secondary_replication_per_seed)
+    pooled_secondary = openml_secondary_original_seeds + openml_secondary_replication_seeds
+    secondary_macro = dataset_macro_means(pooled_secondary)
+    if not (secondary_macro["bgr"] < secondary_macro["uniform"] and secondary_macro["bgr"] < secondary_macro["fixed"]):
+        raise ValueError("Expected secondary OpenML suite to remain macro-neutral/negative")
+    claims.append(
+        Claim(
+            "OpenML secondary suite macro caveat",
+            (
+                f"pooled BGR {fmt(secondary_macro['bgr'], 4)} vs. uniform "
+                f"{fmt(secondary_macro['uniform'], 4)} and fixed-radius {fmt(secondary_macro['fixed'], 4)}"
+            ),
+            "results/openml_secondary_numeric_target2*_30seed_v1/per_seed.csv",
+        )
+    )
+
+    jm1_original = [row for row in openml_secondary_original_seeds if row.get("dataset") == "jm1"]
+    jm1_replication = [row for row in openml_secondary_replication_seeds if row.get("dataset") == "jm1"]
+    jm1_pooled = jm1_original + jm1_replication
+    jm1_original_uniform_wlt = paired_wins(jm1_original, "bgr", "uniform", "final_rauc")
+    jm1_original_fixed_wlt = paired_wins(jm1_original, "bgr", "fixed", "final_rauc")
+    jm1_replication_uniform_wlt = paired_wins(jm1_replication, "bgr", "uniform", "final_rauc")
+    jm1_replication_fixed_wlt = paired_wins(jm1_replication, "bgr", "fixed", "final_rauc")
+    jm1_pooled_uniform_delta = mean_metric(jm1_pooled, "bgr", "final_rauc") - mean_metric(
+        jm1_pooled, "uniform", "final_rauc"
+    )
+    jm1_pooled_fixed_delta = mean_metric(jm1_pooled, "bgr", "final_rauc") - mean_metric(
+        jm1_pooled, "fixed", "final_rauc"
+    )
+    if not (
+        jm1_pooled_uniform_delta >= 0.03
+        and jm1_pooled_fixed_delta >= 0.03
+        and jm1_original_uniform_wlt[0] >= 20
+        and jm1_original_fixed_wlt[0] >= 18
+        and jm1_replication_uniform_wlt[0] >= 20
+        and jm1_replication_fixed_wlt[0] >= 18
+    ):
+        raise ValueError("Expected OpenML jm1 secondary-suite result to be replicated positive")
+    claims.extend(
+        [
+            Claim(
+                "OpenML jm1 original",
+                (
+                    f"original BGR {fmt(mean_metric(jm1_original, 'bgr', 'final_rauc'), 4)} vs. uniform "
+                    f"{fmt(mean_metric(jm1_original, 'uniform', 'final_rauc'), 4)} and fixed-radius "
+                    f"{fmt(mean_metric(jm1_original, 'fixed', 'final_rauc'), 4)}"
+                ),
+                "results/openml_secondary_numeric_target2_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML jm1 replication",
+                (
+                    f"held-out BGR {fmt(mean_metric(jm1_replication, 'bgr', 'final_rauc'), 4)} vs. uniform "
+                    f"{fmt(mean_metric(jm1_replication, 'uniform', 'final_rauc'), 4)} and fixed-radius "
+                    f"{fmt(mean_metric(jm1_replication, 'fixed', 'final_rauc'), 4)}"
+                ),
+                "results/openml_secondary_numeric_target2_replication_30seed_v1/per_seed.csv",
+            ),
+            Claim(
+                "OpenML jm1 pooled gaps",
+                f"pooled gaps {fmt_signed(jm1_pooled_uniform_delta, 4)}/{fmt_signed(jm1_pooled_fixed_delta, 4)}",
+                "results/openml_secondary_numeric_target2*_30seed_v1/per_seed.csv",
+            ),
+        ]
+    )
+
+    secondary_target_sensitivity = read_csv_rows(
+        results_dir / "openml_secondary_positive_target_sensitivity_30seed_v1" / "per_seed.csv"
+    )
+    secondary_target_sensitivity_replication = read_csv_rows(
+        results_dir / "openml_secondary_positive_target_sensitivity_replication_30seed_v1" / "per_seed.csv"
+    )
+    pooled_secondary_target_sensitivity = secondary_target_sensitivity + secondary_target_sensitivity_replication
+    secondary_target_gaps: dict[tuple[str, str], float] = {}
+    for dataset in ("jm1", "kc2"):
+        for target in ("1.0000", "1.5000", "2.0000"):
+            rows = [
+                row
+                for row in pooled_secondary_target_sensitivity
+                if row["dataset"] == dataset and row["target_radius"] == target
+            ]
+            secondary_target_gaps[(dataset, target)] = mean_metric(rows, "bgr", "final_rauc") - mean_metric(
+                rows, "uniform", "final_rauc"
+            )
+    if not (
+        secondary_target_gaps[("jm1", "1.0000")] < 0.03
+        and secondary_target_gaps[("jm1", "1.5000")] > 0.03
+        and secondary_target_gaps[("jm1", "2.0000")] > 0.03
+        and secondary_target_gaps[("kc2", "1.0000")] < 0.03
+    ):
+        raise ValueError("Expected secondary OpenML sensitivity to strengthen jm1 at 1.5/2.0 but not 1.0")
+    claims.append(
+        Claim(
+            "OpenML secondary target sensitivity caveat",
+            "Target-radius sensitivity strengthens jm1 at radii 1.5 and 2.0, not radius 1.0",
+            "results/openml_secondary_positive_target_sensitivity*_30seed_v1/per_seed.csv",
+        )
+    )
+
     openml_target_sensitivity = read_csv_rows(results_dir / "openml_positive_target_sensitivity_30seed_v1" / "per_seed.csv")
     openml_target_sensitivity_replication = read_csv_rows(
         results_dir / "openml_positive_target_sensitivity_replication_30seed_v1" / "per_seed.csv"

@@ -505,6 +505,15 @@ def openml_positive_details(root: Path) -> list[str]:
     )
     if haberman:
         details.append(haberman)
+    jm1 = openml_replicated_positive_detail(
+        root,
+        label="OpenML jm1",
+        original_path=root / "results/openml_secondary_numeric_target2_30seed_v1/per_seed.csv",
+        replication_path=root / "results/openml_secondary_numeric_target2_replication_30seed_v1/per_seed.csv",
+        dataset="jm1",
+    )
+    if jm1:
+        details.append(jm1)
     return details
 
 
