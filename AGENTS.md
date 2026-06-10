@@ -34,7 +34,9 @@ first three completed `up` perturbation configs are already negative. A broader
 fixed OpenML numeric-suite target-2.0 run is also in flight on `athena` as
 Slurm job `774312`; it is a predeclared 10-dataset, 30-seed suite meant to test
 whether the supervised pre-existing-dataset evidence broadens beyond the
-current positives, not a standard-environment or learned-policy win. The latest completed
+current positives, not a standard-environment or learned-policy win. A held-out
+replication with the same fixed suite and seeds 30--59 is also queued as Slurm
+job `774346`, before the first suite summary is known. The latest completed
 OpenVLA/LIBERO occlusion-bottleneck route is negative: BGR reaches 365/400
 non-identity successes versus official 367/400 and matched random 369/400,
 with identity BGR 99/100, official 99/100, and random 98/100. The
@@ -335,6 +337,11 @@ wrapper under `/bin/sh` and rejected `set -o pipefail`. The corrected Bash
 submission is Slurm job `774312`, running on `cnode403` at the first poll. Poll
 with:
 `ssh athena 'squeue -j 774312 -o "%.18i %.9P %.32j %.8T %.10M %.20R"; tail -80 /work/joy/bgr/logs/bgr-openml-broad-774312.out; find /work/joy/bgr/runs -maxdepth 1 -type d -name "openml_broad_numeric_target2_30seed_774312" -print'`.
+To avoid post-hoc replication selection, a held-out seeds 30--59 repeat was
+also submitted before seeing the first suite summary as Slurm job `774346`:
+`PYTHONPATH=/work/joy/bgr/src:/work/joy/bgr python /work/joy/bgr/tools/openml_margin_scout.py --broad-numeric-suite --targets 2.0 --seed-start 30 --seeds 30 --out /work/joy/bgr/runs/openml_broad_numeric_target2_replication_30seed_${SLURM_JOB_ID}`.
+Poll both with:
+`ssh athena 'squeue -j 774312,774346 -o "%.18i %.9P %.32j %.8T %.10M %.20R"; tail -80 /work/joy/bgr/logs/bgr-openml-broad-774312.out; tail -80 /work/joy/bgr/logs/bgr-openml-broad-rep-774346.out'`.
 Do not incorporate this into the paper unless the completed suite summary
 supports a materially stronger pre-existing benchmark claim; even if positive,
 it is supervised margin-replay evidence rather than the missing learned-policy

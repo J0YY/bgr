@@ -879,9 +879,11 @@ risk.
   mammography, breast-w, haberman, MagicTelescope, eeg-eye-state,
   ozone-level-8hr, Bioresponse, and steel-plates-fault. Initial Slurm job
   `774306` failed before running because the wrapper used `/bin/sh` with
-  `pipefail`; corrected Bash job `774312` is running on `athena`. Treat any
+  `pipefail`; corrected Bash job `774312` is running on `athena`. A held-out
+  seeds 30--59 replication using the same fixed suite and target radius was
+  submitted as job `774346` before the first suite summary was known. Treat any
   result as pre-existing supervised margin-replay evidence only, and do not
-  incorporate it unless the completed suite summary materially strengthens the
+  incorporate it unless the completed suite summaries materially strengthen the
   benchmark story.
 - If no such empirical route is ready, work on theory/presentation only when it
   directly answers a cited weakness: novelty over state-priority replay,
