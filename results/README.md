@@ -3277,6 +3277,19 @@ identity remain priority-pending, and replacement occlusions remain
 dependency-pending. The latest readiness check still reports
 `NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim changes.
 
+Latest status at 2026-06-10 12:08:40 BST: the completed 0.65 transfer route
+remains negative/non-promotable, and the remaining active hard-occlusion routes
+are still incomplete. In the 0.80 transfer route, official occlusion completed
+successfully, BGR occlusion is still running, matched-random identity is
+resource-pending with estimated start 2026-06-10 23:36:39 BST, and
+matched-random occlusion is dependency-pending. The A6000 adaptation route
+remains the main active learned-policy candidate: official occlusion, BGR
+identity, and matched-random identity are running, while BGR/random occlusions
+are dependency-pending. The A40 fallback has matched-random identity running,
+but official occlusion and replacement BGR identity are still priority-pending,
+and replacement occlusions remain dependency-pending. The latest readiness check
+still reports `NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim changes.
+
 Sync/poll helper:
 
 ```bash
