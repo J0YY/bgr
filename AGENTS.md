@@ -97,6 +97,22 @@ W/L/T=26/4/0) and fixed 0.6780; haberman original BGR 0.7258 vs. uniform
 uniform 0.6327 (+0.0948, W/L/T=27/3/0) and fixed 0.6690. Treat these as
 additional supervised margin-replay evidence, not the missing standard-
 environment or learned-policy result.
+Active independent/pre-existing broadening route: fixed secondary numeric
+OpenML suite. This is queued to test another predeclared set of active
+version-1 numeric OpenML datasets that pass the existing median-impute plus
+standardized numeric-feature pipeline: kc2, pc2, pc3, pc4, mc1, jm1,
+hill-valley, madelon, gina_agnostic, and electricity. The route was added in
+`tools/openml_margin_scout.py` as `--secondary-numeric-suite` after a
+full-suite one-seed smoke passed locally. It is not paper evidence unless both
+the fixed original and held-out runs complete and the results pass the existing
+BGR-vs-uniform and BGR-vs-fixed comparisons. Submitted on `athena` with
+`scripts/queue_openml_secondary_numeric_suite.sh`: original target-2.0
+30-seed job `776728` and held-out seeds 30--59 job `776729`. Initial scheduler
+check showed `776728` running on `cnode403` and `776729` pending on resources.
+Expected remote output prefixes are
+`/work/joy/bgr/runs/openml_secondary_numeric_target2_30seed_${SLURM_JOB_ID}`
+and
+`/work/joy/bgr/runs/openml_secondary_numeric_target2_replication_30seed_${SLURM_JOB_ID}`.
 Completed robustness diagnostic: MagicTelescope/haberman target-radius
 sensitivity. This is a caveat/robustness check for the two new broad-suite
 positives, not a new headline route. Initial jobs `774495`/`774496` failed
@@ -1652,6 +1668,23 @@ for the deterministic readout. The broad suite is mixed and macro-negative
 (pooled BGR 0.7788 vs. uniform 0.7809 and fixed 0.7830), but MagicTelescope
 and haberman replicate as positive dataset-level signals. Do not present it as
 a standard-environment, learned-policy, or broad macro win.
+
+Active pre-existing-dataset broadening run: fixed secondary numeric OpenML
+suite. `tools/openml_margin_scout.py` now has `--secondary-numeric-suite`, a
+predeclared set of active numeric OpenML version-1 datasets that pass the
+existing numeric pipeline without adding categorical preprocessing: kc2, pc2,
+pc3, pc4, mc1, jm1, hill-valley, madelon, gina_agnostic, and electricity.
+Local one-seed smokes over kc2 and the full secondary suite succeeded before
+submission. The queued Athena route is fixed target radius 2.0, 30 seeds, and
+the same uniform/fixed/BGR methods:
+`PYTHONPATH=/work/joy/bgr/src:/work/joy/bgr /work/joy/bgr/.venv-openml-broad/bin/python /work/joy/bgr/tools/openml_margin_scout.py --secondary-numeric-suite --targets 2.0 --seeds 30 --out /work/joy/bgr/runs/openml_secondary_numeric_target2_30seed_${SLURM_JOB_ID}`.
+To avoid post-hoc replication selection, the held-out seeds 30--59 repeat was
+submitted in the same launcher invocation:
+`PYTHONPATH=/work/joy/bgr/src:/work/joy/bgr /work/joy/bgr/.venv-openml-broad/bin/python /work/joy/bgr/tools/openml_margin_scout.py --secondary-numeric-suite --targets 2.0 --seed-start 30 --seeds 30 --out /work/joy/bgr/runs/openml_secondary_numeric_target2_replication_30seed_${SLURM_JOB_ID}`.
+Slurm jobs are `776728` for the original run and `776729` for the held-out
+replication. At submission, `776728` was running on `cnode403` and `776729`
+was pending on resources. Treat this as an active broadening route only, not a
+paper claim.
 
 Operational defaults:
 

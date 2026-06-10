@@ -111,6 +111,20 @@ Internal pre-existing-dataset route scout:
   `results/openml_diabetes_margin_replication_30seed_v1/package_versions.json`:
   compact per-seed and package-version records for the fixed OpenML diabetes
   follow-up and held-out replication.
+- Active fixed secondary numeric OpenML route: `tools/openml_margin_scout.py`
+  now exposes `--secondary-numeric-suite`, covering kc2, pc2, pc3, pc4, mc1,
+  jm1, hill-valley, madelon, gina_agnostic, and electricity under the existing
+  numeric median-impute plus standardized feature-perturbation pipeline. Local
+  one-seed smokes for kc2 and the full suite succeeded before submission.
+  `scripts/queue_openml_secondary_numeric_suite.sh` submitted both fixed
+  target-radius-2.0 runs before results were inspected: Slurm job `776728` for
+  seeds 0--29 and Slurm job `776729` for held-out seeds 30--59. Expected remote
+  output prefixes are
+  `/work/joy/bgr/runs/openml_secondary_numeric_target2_30seed_${SLURM_JOB_ID}`
+  and
+  `/work/joy/bgr/runs/openml_secondary_numeric_target2_replication_30seed_${SLURM_JOB_ID}`.
+  This route is not submission evidence unless compact summaries exist and pass
+  the same BGR-vs-uniform and BGR-vs-fixed-radius checks.
 
 Completed external-package scope diagnostic:
 

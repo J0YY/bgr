@@ -52,6 +52,16 @@ OPENML_DATASETS = {
     "mfeat-karhunen": {"name": "mfeat-karhunen", "version": 1},
     "mfeat-pixel": {"name": "mfeat-pixel", "version": 1},
     "kc1": {"name": "kc1", "version": 1},
+    "kc2": {"name": "kc2", "version": 1},
+    "pc2": {"name": "pc2", "version": 1},
+    "pc3": {"name": "pc3", "version": 1},
+    "pc4": {"name": "pc4", "version": 1},
+    "mc1": {"name": "mc1", "version": 1},
+    "jm1": {"name": "jm1", "version": 1},
+    "hill-valley": {"name": "hill-valley", "version": 1},
+    "madelon": {"name": "madelon", "version": 1},
+    "gina_agnostic": {"name": "gina_agnostic", "version": 1},
+    "electricity": {"name": "electricity", "version": 1},
     "mozilla4": {"name": "mozilla4", "version": 1},
     "pc1": {"name": "pc1", "version": 1},
     "phoneme": {"name": "phoneme", "version": 1},
@@ -90,6 +100,18 @@ MULTICLASS_NUMERIC_DATASETS = (
     "mfeat-fourier",
     "mfeat-karhunen",
     "mfeat-pixel",
+)
+SECONDARY_NUMERIC_DATASETS = (
+    "kc2",
+    "pc2",
+    "pc3",
+    "pc4",
+    "mc1",
+    "jm1",
+    "hill-valley",
+    "madelon",
+    "gina_agnostic",
+    "electricity",
 )
 
 
@@ -379,6 +401,11 @@ def main() -> int:
         action="store_true",
         help="Use a fixed broader suite of multiclass numeric OpenML datasets that pass the existing numeric pipeline.",
     )
+    parser.add_argument(
+        "--secondary-numeric-suite",
+        action="store_true",
+        help="Use a second fixed suite of binary numeric OpenML datasets that pass the existing numeric pipeline.",
+    )
     parser.add_argument("--targets", type=parse_float_csv, default=list(DEFAULT_TARGETS))
     parser.add_argument("--seeds", type=int, default=4)
     parser.add_argument("--seed-start", type=int, default=0)
@@ -392,6 +419,7 @@ def main() -> int:
         args.external_validation_suite,
         args.broad_numeric_suite,
         args.multiclass_numeric_suite,
+        args.secondary_numeric_suite,
     ]
     if sum(bool(selected) for selected in selected_suites) > 1:
         raise ValueError("choose at most one fixed suite")
@@ -401,6 +429,8 @@ def main() -> int:
         args.datasets = list(BROAD_NUMERIC_DATASETS)
     if args.multiclass_numeric_suite:
         args.datasets = list(MULTICLASS_NUMERIC_DATASETS)
+    if args.secondary_numeric_suite:
+        args.datasets = list(SECONDARY_NUMERIC_DATASETS)
 
     unknown = sorted(set(args.datasets) - set(OPENML_DATASETS))
     if unknown:
