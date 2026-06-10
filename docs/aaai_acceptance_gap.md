@@ -1472,7 +1472,21 @@ risk.
   cherry-picking, fixed all-dataset/all-target 30-seed diagnostics were queued:
   original seeds 0--29 as job `778596` and held-out seeds 30--59 as job
   `778597`. Treat these as route-closing/route-promoting diagnostics only, not
-  manuscript evidence.
+  manuscript evidence. Jobs `778596`/`778597` completed with exit `0:0` and
+  synced locally. The mixed suite is macro-negative: pooled macro means are BGR
+  0.7891, uniform 0.7936, and fixed-radius 0.8000. The fixed all-target check
+  did find one replicated adult row at target radius 1.5: original BGR 0.7981
+  vs. uniform 0.7544 and fixed 0.7677, held-out BGR 0.7901 vs. uniform 0.7550
+  and fixed 0.7557, pooled BGR 0.7941 vs. uniform 0.7547 (+0.0394) and fixed
+  0.7617 (+0.0324). This is supervised margin-replay evidence only. A locked
+  third-split adult-only confirmation was submitted as job `778912` after
+  failed wrapper attempt `778905`; it uses adult target 1.5, seeds 60--119, and
+  the same mixed preprocessing. The confirmation is weak and closes the route
+  as a near-miss rather than paper evidence: BGR 0.7935 vs. uniform 0.7809
+  (+0.0126, W/L/T=37/23/0) and fixed 0.7879 (+0.0055, W/L/T=29/31/0). Pooled
+  over all 120 adult target-1.5 seeds, BGR reaches 0.7938 vs. uniform 0.7678
+  (+0.0260) and fixed 0.7748 (+0.0190), below the +0.03 fixed follow-up
+  standard.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
   same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:

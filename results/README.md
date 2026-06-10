@@ -157,8 +157,25 @@ Internal pre-existing-dataset route scout:
   and held-out seeds 30--59 job `778597` writes to
   `/work/joy/bgr/runs/openml_mixed_binary_target_sensitivity_replication_30seed_v1_778597`.
   Initial poll showed `778596` running on `cnode401` and `778597` pending on
-  resources. Treat these as diagnostics until fixed summaries exist and pass
-  follow-up gates.
+  resources. Jobs `778596`/`778597` completed with exit `0:0` and synced via
+  `scripts/sync_openml_mixed_binary_results.sh` to
+  `results/openml_mixed_binary_target_sensitivity_30seed_v1_778596/` and
+  `results/openml_mixed_binary_target_sensitivity_replication_30seed_v1_778597/`.
+  The pooled mixed suite is macro-negative: BGR 0.7891, uniform 0.7936,
+  fixed-radius 0.8000. The adult target-1.5 row is a replicated positive:
+  pooled BGR 0.7941 vs. uniform 0.7547 (+0.0394, W/L/T=43/17/0) and
+  fixed-radius 0.7617 (+0.0324, W/L/T=38/22/0). Credit-approval and credit-g
+  do not clear the stricter fixed-radius margin. A locked adult target-1.5
+  third-split confirmation over seeds 60--119 was submitted as job `778912`
+  after a failed wrapper attempt `778905`; it writes to
+  `/work/joy/bgr/runs/openml_mixed_adult_target15_confirmation_60seed_v2_778912`.
+  It completed with exit `0:0` and synced to
+  `results/openml_mixed_adult_target15_confirmation_60seed_v2_778912/`, but is
+  weak: BGR 0.7935 vs. uniform 0.7809 (+0.0126, W/L/T=37/23/0) and
+  fixed-radius 0.7879 (+0.0055, W/L/T=29/31/0). Pooled over all 120 adult
+  target-1.5 seeds, BGR is 0.7938 vs. uniform 0.7678 (+0.0260) and fixed
+  0.7748 (+0.0190), below the +0.03 fixed follow-up standard. Treat this as a
+  mixed-type OpenML near miss/fragility diagnostic, not manuscript evidence.
 
 Completed external-package scope diagnostic:
 

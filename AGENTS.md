@@ -197,6 +197,37 @@ and held-out seeds 30--59 job `778597`, writing to
 Initial poll showed `778596` running on `cnode401` and `778597` pending on
 resources. These jobs are route-closing/route-promoting diagnostics only; no
 paper claim should change unless fixed summaries pass the follow-up gates.
+The mixed-suite 30-seed diagnostics completed at 2026-06-10 18:59 BST with
+exit `0:0` and synced via `scripts/sync_openml_mixed_binary_results.sh` to
+`results/openml_mixed_binary_target_sensitivity_30seed_v1_778596/` and
+`results/openml_mixed_binary_target_sensitivity_replication_30seed_v1_778597/`.
+The overall mixed suite is not a macro win: pooled macro means are BGR 0.7891,
+uniform 0.7936, and fixed-radius 0.8000, with BGR ahead on 17/32
+dataset-target means versus uniform and 16/32 versus fixed. The one clean
+replicated row by the fixed follow-up screen is adult target radius 1.5:
+original BGR 0.7981 vs. uniform 0.7544 (+0.0437, W/L/T=22/8/0) and fixed
+0.7677 (+0.0304), held-out BGR 0.7901 vs. uniform 0.7550 (+0.0350,
+W/L/T=21/9/0) and fixed 0.7557 (+0.0344), pooled BGR 0.7941 vs. uniform
+0.7547 (+0.0394, W/L/T=43/17/0) and fixed 0.7617 (+0.0324, W/L/T=38/22/0).
+Credit-approval and credit-g have positive BGR-vs-uniform rows but do not
+clear the stricter fixed-radius margin. Treat the mixed-suite result as
+supervised margin-replay evidence only, not a standard-environment or robotics
+win, and do not make a manuscript claim until the additional confirmation
+below completes and the claim/checker policy is updated.
+Locked adult-only confirmation: an initial job `778905` failed immediately
+because the Slurm wrapper quoted the dataset override as one argument. The
+wrapper was fixed, and corrected job `778912` ran with `DATASETS=adult`,
+`TARGETS=1.5`, `SEED_START=60`, `SEEDS=60`, writing to
+`/work/joy/bgr/runs/openml_mixed_adult_target15_confirmation_60seed_v2_778912`
+and syncing to
+`results/openml_mixed_adult_target15_confirmation_60seed_v2_778912/`. This
+third split is weak and rejects adult target-1.5 as new paper evidence:
+confirmation BGR is 0.7935 vs. uniform 0.7809 (+0.0126, W/L/T=37/23/0) and
+fixed 0.7879 (+0.0055, W/L/T=29/31/0). Pooled over all 120 adult target-1.5
+seeds, BGR is 0.7938 vs. uniform 0.7678 (+0.0260, W/L/T=80/40/0) and fixed
+0.7748 (+0.0190, W/L/T=67/53/0), below the +0.03 fixed follow-up standard.
+Treat the mixed-type OpenML route as a fragility/near-miss diagnostic, not an
+acceptance-moving independent benchmark win.
 The OpenML diabetes margin replay route was the first replicated positive
 pre-existing-dataset signal in this thread: the fixed 30-seed follow-up gives
 BGR 0.7062 vs. uniform 0.6689 RAUC (W/L/T=24/6/0) and vs. fixed-radius 0.6759,
@@ -545,6 +576,19 @@ A40 fallback and 0.90 strict A40 route remain priority/dependency-pending with
 front jobs estimated for 2026-06-11 22:02:14 BST. No new same-protocol OpenVLA
 job was launched in this checkpoint because the active queue already covers the
 current identity-preserving hard-occlusion premises.
+Latest all-route OpenVLA poll at 2026-06-10 18:38 BST still found no complete
+gateable summary. The hard-occlusion 0.80 transfer route remains incomplete:
+matched-random occlusion `774923` is priority-pending with estimated start
+2026-06-11 08:25 BST, while available identity rows already block promotion.
+The 0.80 identity-anchor A6000 route has front jobs now estimated around
+2026-06-10 20:18--20:22 BST, but all perturb summaries are still missing. The
+0.80 micro A6000 route has BGR train `776998` estimated for
+2026-06-11 07:35 BST and official identity `777037` for 08:22 BST; the 0.80
+strict A6000 route has BGR train `776541` estimated for 07:32 BST and official
+identity `776548` for 07:35 BST. The 0.80 identity-anchor A40 fallback, 0.80
+micro A40 fallback, and 0.90 strict A40 route remain priority/dependency
+pending with front jobs estimated for 2026-06-11 22:02:14 BST. No OpenVLA
+paper claim should change.
 
 Newest acceleration route: hard-occlusion 0.80 micro identity-anchored
 OpenVLA-OFT A40 fallback. This is a resource fallback for the already fixed

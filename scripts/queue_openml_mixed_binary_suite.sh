@@ -17,6 +17,14 @@ STEPS="${STEPS:-8}"
 BATCH_SIZE="${BATCH_SIZE:-64}"
 CANDIDATE_COUNT="${CANDIDATE_COUNT:-128}"
 EVAL_EXAMPLES="${EVAL_EXAMPLES:-250}"
+DATASETS="${DATASETS:-}"
+PREPROCESSING="${PREPROCESSING:-mixed}"
+
+if [[ -n "${DATASETS}" ]]; then
+  DATASET_ARGS="--datasets '${DATASETS}' --preprocessing '${PREPROCESSING}'"
+else
+  DATASET_ARGS="--mixed-binary-suite"
+fi
 
 SBATCH_PARTITION_ARG=""
 if [[ -n "${SLURM_PARTITION:-}" ]]; then
@@ -41,7 +49,7 @@ cd '${REMOTE_PROJECT}'
 PYTHONPATH='${REMOTE_PROJECT}/src:${REMOTE_PROJECT}' \
   '${REMOTE_PYTHON}' \
   '${REMOTE_PROJECT}/tools/openml_margin_scout.py' \
-  --mixed-binary-suite \
+  ${DATASET_ARGS} \
   --targets '${TARGETS}' \
   --seed-start '${SEED_START}' \
   --seeds '${SEEDS}' \
