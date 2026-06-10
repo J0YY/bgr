@@ -612,6 +612,12 @@ priority with estimated start 2026-06-10 15:15:13 BST, official identity
 all BGR/random adaptation plus dependent perturb-eval jobs dependency-pending.
 No remote logs or compact summaries exist yet. Poll/sync with
 `scripts/sync_openvla_oft_hard_occlusion080_identityanchor_results.sh --poll --sync --no-check`.
+Latest poll/sync at 2026-06-10 12:37:32 BST showed no substantive change:
+prep `776029` remained priority-pending with estimated start 2026-06-10
+15:15:13 BST, official identity `776040` remained priority-pending with
+estimated start 2026-06-10 23:36:39 BST, and every BGR/random adaptation and
+dependent perturb-eval job remained dependency-pending. There are still no
+remote logs or compact summaries, so the route is not gateable.
 
 Active learned-policy intervention route: fixed hard-occlusion OpenVLA-OFT
 adaptation. This is a genuinely new training route, not just a transfer
@@ -840,6 +846,15 @@ after 1:02:39, and BGR occlusion `774727` started on `c2-g4-23`. Official
 occlusion `774725` and matched-random identity `774728` were still running,
 matched-random occlusion `774729` remained dependency-pending, and the compact
 `summary.csv` was still missing. The fixed gate remains incomplete.
+Latest poll/sync at 2026-06-10 12:37:32 BST showed this A6000 adaptation route
+still incomplete and already non-promotable under the clean-identity side
+condition: BGR identity is 389/400, official identity is 393/400, and
+matched-random identity is 390/400, so BGR trails the best identity comparator
+by 4 episodes before occlusion rows are complete. Official occlusion `774725`,
+BGR occlusion `774727`, and matched-random occlusion `774729` were running;
+matched-random identity `774728` completed with 390/400. The synced
+`summary_available.csv` has only identity rows, and no complete `summary.csv`
+exists, so no positive paper claim can be made from this route.
 
 Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
 adaptation on A40 GPUs, queued under separate artifact tags after the A6000
@@ -1104,6 +1119,14 @@ with `775102` still estimated for 2026-06-11 02:41:01 BST. Replacement BGR
 occlusion `775103` and matched-random occlusion `774851` remained
 dependency-pending, and original failed child `774849` remained ignored. The
 fixed gate remains incomplete.
+Latest A40 poll/sync at 2026-06-10 12:37:32 BST still had no compact summary:
+matched-random identity `774850` was running on `c2-g4-17` at 32:18, official
+occlusion `774847` was priority-pending, replacement BGR identity `775102`
+was resource-pending with estimated start 2026-06-11 02:41:01 BST, replacement
+BGR occlusion `775103` and matched-random occlusion `774851` remained
+dependency-pending, and original failed child `774849` remained ignored. The
+synced `summary_available.csv` still contains only official identity 393/400,
+so the fixed gate remains incomplete.
 
 Completed learned-policy route (negative, not active): preregistered OpenVLA-OFT occlusion-bottleneck
 adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.

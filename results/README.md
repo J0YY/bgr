@@ -2714,6 +2714,12 @@ priority with estimated start 2026-06-10 15:15:13 BST, official identity
 `776040` priority-pending with estimated start 2026-06-10 23:36:39 BST, and
 all BGR/random adaptation plus dependent perturb-eval jobs dependency-pending.
 No logs or compact summaries existed yet.
+Latest poll/sync at 2026-06-10 12:37:32 BST showed the same substantive
+state: prep `776029` remained priority-pending with estimated start
+2026-06-10 15:15:13 BST, official identity `776040` remained
+priority-pending with estimated start 2026-06-10 23:36:39 BST, and every
+BGR/random adaptation plus dependent perturb-eval job remained
+dependency-pending. No logs or compact summaries existed yet.
 
 ## Queued OpenVLA-OFT Hard-Occlusion Adaptation
 
@@ -3362,6 +3368,20 @@ matched-random identity `774850` running, official occlusion `774847` and
 replacement BGR identity `775102` pending, and both occlusion children
 dependency-pending. No compact `summary.csv` exists for any active route, so no
 OpenVLA gate can be run and no paper claim changes.
+
+Latest status at 2026-06-10 12:37:32 BST: no active hard-occlusion route is
+gateable. The 0.80 transfer route has BGR identity/occlusion 391/400 and
+305/400 versus official 393/400 and 296/400, but matched-random identity
+`774922` is still running and matched-random occlusion `774923` remains
+dependency-pending; the 2-episode BGR identity deficit already violates the
+fixed identity side condition. The A6000 0.65 adaptation route has identity
+rows BGR 389/400, official 393/400, and matched-random 390/400, so it is also
+already non-promotable by identity; official/BGR/random occlusion jobs are
+still running. The A40 fallback still has matched-random identity `774850`
+running, official occlusion `774847` and replacement BGR identity `775102`
+pending, and both occlusion children dependency-pending. The 0.80
+identity-anchored route remains the live acceptance-moving candidate, but its
+prep and official identity jobs are still priority-pending with no logs.
 
 Sync/poll helper:
 
