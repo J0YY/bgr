@@ -532,23 +532,139 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
             ),
         ]
     )
-    openml_target_sensitivity = read_csv_rows(results_dir / "openml_positive_target_sensitivity_30seed_v1" / "summary.csv")
+
+    openml_broad_original_per_seed = results_dir / "openml_broad_numeric_target2_30seed_v1" / "per_seed.csv"
+    openml_broad_replication_per_seed = results_dir / "openml_broad_numeric_target2_replication_30seed_v1" / "per_seed.csv"
+    openml_broad_original_seeds = read_csv_rows(openml_broad_original_per_seed)
+    openml_broad_replication_seeds = read_csv_rows(openml_broad_replication_per_seed)
+    pooled_broad = openml_broad_original_seeds + openml_broad_replication_seeds
+    broad_macro = dataset_macro_means(pooled_broad)
+    if not (broad_macro["bgr"] < broad_macro["uniform"] and broad_macro["bgr"] < broad_macro["fixed"]):
+        raise ValueError("Expected broad OpenML suite to remain macro-negative")
+    claims.append(
+        Claim(
+            "OpenML broad suite macro-negative caveat",
+            (
+                f"pooled BGR {fmt(broad_macro['bgr'], 4)} vs. uniform "
+                f"{fmt(broad_macro['uniform'], 4)} and fixed-radius {fmt(broad_macro['fixed'], 4)}"
+            ),
+            "results/openml_broad_numeric_target2*_30seed_v1/per_seed.csv",
+        )
+    )
+
+    for dataset, label, min_uniform_wins, min_fixed_wins in [
+        ("MagicTelescope", "MagicTelescope", 22, 22),
+        ("haberman", "Haberman", 23, 18),
+    ]:
+        original = [row for row in openml_broad_original_seeds if row.get("dataset") == dataset]
+        replication = [row for row in openml_broad_replication_seeds if row.get("dataset") == dataset]
+        pooled = original + replication
+        original_uniform_wlt = paired_wins(original, "bgr", "uniform", "final_rauc")
+        original_fixed_wlt = paired_wins(original, "bgr", "fixed", "final_rauc")
+        replication_uniform_wlt = paired_wins(replication, "bgr", "uniform", "final_rauc")
+        replication_fixed_wlt = paired_wins(replication, "bgr", "fixed", "final_rauc")
+        pooled_uniform_delta = mean_metric(pooled, "bgr", "final_rauc") - mean_metric(pooled, "uniform", "final_rauc")
+        pooled_fixed_delta = mean_metric(pooled, "bgr", "final_rauc") - mean_metric(pooled, "fixed", "final_rauc")
+        if not (
+            pooled_uniform_delta >= 0.03
+            and pooled_fixed_delta >= 0.03
+            and original_uniform_wlt[0] >= min_uniform_wins
+            and original_fixed_wlt[0] >= min_fixed_wins
+            and replication_uniform_wlt[0] >= min_uniform_wins
+            and replication_fixed_wlt[0] >= min_fixed_wins
+        ):
+            raise ValueError(f"Expected OpenML {dataset} broad-suite result to be replicated positive")
+        claims.extend(
+            [
+                Claim(
+                    f"OpenML {label} original",
+                    (
+                        f"{fmt(mean_metric(original, 'bgr', 'final_rauc'), 4)} versus "
+                        f"{fmt(mean_metric(original, 'uniform', 'final_rauc'), 4)} uniform and "
+                        f"{fmt(mean_metric(original, 'fixed', 'final_rauc'), 4)} fixed-radius"
+                    ),
+                    "results/openml_broad_numeric_target2_30seed_v1/per_seed.csv",
+                ),
+                Claim(
+                    f"OpenML {label} original WLT",
+                    f"W/L/T={original_uniform_wlt[0]}/{original_uniform_wlt[1]}/{original_uniform_wlt[2]}",
+                    "results/openml_broad_numeric_target2_30seed_v1/per_seed.csv",
+                ),
+                Claim(
+                    f"OpenML {label} replication",
+                    (
+                        f"{fmt(mean_metric(replication, 'bgr', 'final_rauc'), 4)} versus "
+                        f"{fmt(mean_metric(replication, 'uniform', 'final_rauc'), 4)} uniform and "
+                        f"{fmt(mean_metric(replication, 'fixed', 'final_rauc'), 4)} fixed-radius"
+                    ),
+                    "results/openml_broad_numeric_target2_replication_30seed_v1/per_seed.csv",
+                ),
+                Claim(
+                    f"OpenML {label} replication WLT",
+                    f"W/L/T={replication_uniform_wlt[0]}/{replication_uniform_wlt[1]}/{replication_uniform_wlt[2]}",
+                    "results/openml_broad_numeric_target2_replication_30seed_v1/per_seed.csv",
+                ),
+                Claim(
+                    f"OpenML {label} pooled gaps",
+                    (
+                        f"pooled over 60 seeds, BGR is ahead by {fmt_signed(pooled_uniform_delta, 4)} "
+                        f"over uniform and {fmt_signed(pooled_fixed_delta, 4)} over fixed-radius"
+                    ),
+                    "results/openml_broad_numeric_target2*_30seed_v1/per_seed.csv",
+                ),
+            ]
+        )
+
+    openml_broad_target_sensitivity = read_csv_rows(
+        results_dir / "openml_broad_positive_target_sensitivity_30seed_v1" / "per_seed.csv"
+    )
+    openml_broad_target_sensitivity_replication = read_csv_rows(
+        results_dir / "openml_broad_positive_target_sensitivity_replication_30seed_v1" / "per_seed.csv"
+    )
+    pooled_broad_target_sensitivity = openml_broad_target_sensitivity + openml_broad_target_sensitivity_replication
+    broad_target_gaps: dict[tuple[str, str], float] = {}
+    for dataset in ("MagicTelescope", "haberman"):
+        for target in ("1.0000", "1.5000", "2.0000"):
+            rows = [
+                row
+                for row in pooled_broad_target_sensitivity
+                if row["dataset"] == dataset and row["target_radius"] == target
+            ]
+            broad_target_gaps[(dataset, target)] = mean_metric(rows, "bgr", "final_rauc") - mean_metric(
+                rows, "uniform", "final_rauc"
+            )
+    if not (
+        broad_target_gaps[("MagicTelescope", "1.5000")] > 0.03
+        and broad_target_gaps[("MagicTelescope", "2.0000")] > 0.03
+        and broad_target_gaps[("haberman", "1.5000")] > 0.03
+        and broad_target_gaps[("haberman", "2.0000")] > 0.03
+        and broad_target_gaps[("haberman", "1.0000")] < 0.03
+    ):
+        raise ValueError("Expected broad OpenML target sensitivity to be positive at 1.5/2.0 but not uniformly at 1.0")
+    claims.append(
+        Claim(
+            "OpenML broad positive target sensitivity caveat",
+            "target-radius sensitivity check strengthens both datasets at radii 1.5 and 2.0 but not uniformly at radius 1.0",
+            "results/openml_broad_positive_target_sensitivity*_30seed_v1/per_seed.csv",
+        )
+    )
+
+    openml_target_sensitivity = read_csv_rows(results_dir / "openml_positive_target_sensitivity_30seed_v1" / "per_seed.csv")
+    openml_target_sensitivity_replication = read_csv_rows(
+        results_dir / "openml_positive_target_sensitivity_replication_30seed_v1" / "per_seed.csv"
+    )
+    pooled_target_sensitivity = openml_target_sensitivity + openml_target_sensitivity_replication
     target_datasets = ("diabetes", "blood-transfusion-service-center", "phoneme")
     target_gaps: dict[str, list[float]] = {}
     for target in ("1.0000", "1.5000", "2.0000"):
-        target_gaps[target] = [
-            float(
-                matching_row(
-                    openml_target_sensitivity,
-                    dataset=dataset,
-                    target_radius=target,
-                    method="bgr",
-                )["delta_vs_uniform"]
+        target_gaps[target] = []
+        for dataset in target_datasets:
+            rows = [row for row in pooled_target_sensitivity if row["dataset"] == dataset and row["target_radius"] == target]
+            target_gaps[target].append(
+                mean_metric(rows, "bgr", "final_rauc") - mean_metric(rows, "uniform", "final_rauc")
             )
-            for dataset in target_datasets
-        ]
     if not (
-        target_gaps["1.0000"][0] < 0.01
+        abs(target_gaps["1.0000"][0]) < 0.01
         and target_gaps["1.0000"][1] < 0.0
         and target_gaps["1.0000"][2] < 0.0
         and target_gaps["1.5000"][0] > 0.03
@@ -561,7 +677,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
         Claim(
             "OpenML positive-dataset target sensitivity caveat",
             (
-                "BGR--uniform gaps for diabetes/blood/phoneme are "
+                "pooled BGR--uniform gaps for diabetes/blood/phoneme are "
                 f"{fmt_signed(target_gaps['1.0000'][0], 3)}/{fmt_signed(target_gaps['1.0000'][1], 3)}/"
                 f"{fmt_signed(target_gaps['1.0000'][2], 3)} at radius 1.0, "
                 f"{fmt_signed(target_gaps['1.5000'][0], 3)}/{fmt_signed(target_gaps['1.5000'][1], 3)}/"
@@ -569,7 +685,7 @@ def build_claims(results_dir: Path, figures_dir: Path) -> list[Claim]:
                 f"{fmt_signed(target_gaps['2.0000'][0], 3)}/{fmt_signed(target_gaps['2.0000'][1], 3)}/"
                 f"{fmt_signed(target_gaps['2.0000'][2], 3)} at 2.0"
             ),
-            "results/openml_positive_target_sensitivity_30seed_v1/summary.csv",
+            "results/openml_positive_target_sensitivity*_30seed_v1/per_seed.csv",
         )
     )
     witness = read_csv_rows(results_dir / "grid_margin_witness_sensitivity_30seed_v1" / "summary.csv")
