@@ -63,9 +63,14 @@ BGR 391/400 versus official 393/400. The completed 0.65 adapted route has BGR
 identity/occlusion 389/400 and 301/400, official 393/400 and 297/400, and
 matched random 390/400 and 304/400; it fails by identity, matched-random
 occlusion, and the small official margin. The A40 0.65 adapted fallback remains
-already non-promotable on partial identity rows. Remaining identity-anchored
-0.80/0.90 variants are incomplete and must not be promoted unless complete
-summaries pass the fixed gate.
+already non-promotable on partial identity rows. The completed 0.80
+identity-anchored route is also negative: BGR identity/occlusion are 389/400
+and 303/400, official is 393/400 and 296/400, and matched random is 393/400
+and 302/400. It fails the fixed gate with episode_margin=1,
+rate_margin=+0.0025 against the best occlusion comparator, and
+identity_deficit=4. Remaining identity-anchored 0.80/0.90 variants are
+incomplete or already non-promotable on partial identity rows and must not be
+promoted unless complete summaries pass the fixed gate.
 A fixed head-interpolation follow-up was queued on 2026-06-10 to test whether
 the near-miss 0.80 transfer route can preserve the occlusion gain while
 recovering identity success. It copies the completed BGR and matched-random
@@ -95,16 +100,19 @@ official identity `780060` pending on resources with estimated start
 or summary. Both
 head-interpolation routes remain non-evidence unless the full summary passes
 the same fixed +10/400, +0.02, and identity-preservation gate. The latest
-partial identity-anchored 0.80 routes already fail the identity side condition:
-BGR identity is 389/400 for the base route, 387/400 for the micro route, and
-388/400 for the strict route, each trailing official identity 393/400 by more
-than one episode. The base route now also has BGR occlusion 303/400 available,
-plus matched-random identity 393/400, while official and matched-random
-occlusion rows were still running at the latest poll. The strict route partial
-summary now has official occlusion 296/400, while BGR occlusion and
-matched-random rows are still running or missing; these routes are already
-non-promotable on identity. The 0.90 strict A40 route still has only a running
-official identity eval and no summarized rows.
+0.80 identity-anchored base route is closed negative with complete rows:
+BGR identity/occlusion 389/400 and 303/400, official 393/400 and 296/400, and
+matched random 393/400 and 302/400. The sync helper previously left this route
+as incomplete because an old partial identity retry log sat beside the complete
+log; it now parses both total and progress-line formats and selects the
+highest-episode retry log per method/perturbation. The micro and strict 0.80
+routes already fail the identity side condition: BGR identity is 387/400 for
+the micro route and 388/400 for the strict route, each trailing official
+identity 393/400 by more than one episode. The strict route partial summary now
+has official occlusion 296/400 and matched-random identity 391/400, while BGR
+and matched-random occlusion rows are still running; these routes are already
+non-promotable on identity. The 0.90 strict A40 route has only official
+identity 393/400 summarized and no BGR/random rows.
 An internal sklearn-digits margin scout was also opened as a genuinely
 pre-existing supervised dataset route, but it is rejected before paper
 promotion: the best BGR target in

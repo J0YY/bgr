@@ -62,9 +62,14 @@ versus official 393/400 and BGR occlusion 301/400 versus official 297/400 and
 matched random 304/400, failing both the identity side condition and the
 matched-random comparison. The A40 adaptation fallback is also already closed
 negative on identity side condition with BGR identity
-391/400 versus official 393/400. Still-running identity-anchored hard-occlusion
-routes remain incomplete and must not be incorporated into `paper/main.tex`
-unless their full summaries pass the fixed gate. A new fixed hard-occlusion
+391/400 versus official 393/400. The completed hard-occlusion 0.80
+identity-anchored route is now also negative: BGR has identity 389/400 versus
+official and matched random at 393/400, and occlusion 303/400 versus official
+296/400 and matched random 302/400, so it fails the identity side condition
+and beats matched random by only +1/400. Still-running identity-anchored
+hard-occlusion routes remain incomplete and must not be incorporated into
+`paper/main.tex` unless their full summaries pass the fixed gate. A new fixed
+hard-occlusion
 0.80 head-interpolation route was queued on 2026-06-10 after the completed
 transfer route missed promotion by one occlusion episode and two identity
 episodes. It copies the completed occlusion-bottleneck BGR and matched-random
@@ -100,22 +105,26 @@ identity `780060` pending on resources with estimated start
 evals dependency-pending. No logs or summary were available yet. This is also
 not evidence unless
 the same fixed +10/400, +0.02, and identity-preservation gate passes. The
-latest partial identity-anchored 0.80 variants are already non-promotable on
-identity: BGR identity is 389/400 for the base identity-anchored route,
-387/400 for the micro route, and 388/400 for the strict route, each trailing
-official identity 393/400 by more than one episode. The base route now also has
-BGR occlusion 303/400 and matched-random identity 393/400 available; official
-occlusion `776041` and matched-random occlusion `776045` were still running at
-the 21:32 BST poll. The micro route still has only BGR identity 387/400 and
-official identity 393/400 summarized, with official occlusion `777039` and
-matched-random identity `777042` running and BGR occlusion `777041`
-priority-pending. The strict route partial summary now has official occlusion
-296/400, while BGR occlusion `776551` and matched-random identity `776553`
-were running and matched-random occlusion `776554` dependency-pending; the
-micro and strict routes cannot be promoted because their identity rows already
-fail the side condition. The 0.80 A40 fallback still only has official identity
-393/400 summarized, while the 0.90 strict A40 route has official identity
-`776611` running and downstream rows dependency-pending. The earlier completed full
+latest 0.80 identity-anchored base route is closed negative with complete
+rows: BGR identity/occlusion are 389/400 and 303/400, official is 393/400 and
+296/400, and matched random is 393/400 and 302/400. The fixed gate reports
+episode_margin=1, rate_margin=+0.0025 against the best occlusion comparator,
+and identity_deficit=4. The micro and strict 0.80 variants are also already
+non-promotable on partial identity rows: BGR identity is 387/400 for the micro
+route and 388/400 for the strict route, each trailing official identity
+393/400 by more than one episode. The micro route still has only BGR identity
+387/400 and official identity 393/400 summarized, with official occlusion
+`777039`, BGR occlusion `777041`, and matched-random identity `777042` running.
+The strict route partial summary now has official occlusion 296/400, while BGR
+occlusion `776551` and matched-random occlusion `776554` were running and
+matched-random identity has completed at 391/400; the micro and strict routes
+cannot be promoted because their identity rows already fail the side condition.
+The 0.80 A40 fallback still only has official identity 393/400 summarized,
+while the 0.90 strict A40 route has official identity 393/400 summarized and
+downstream rows dependency-pending. The shared sync helper now parses both
+final total lines and repeated progress lines, and selects the highest-episode
+retry log per method/perturbation so duplicate partial logs no longer hide
+completed compact summaries. The earlier completed full
 perturbation
 occlusion-bottleneck route was negative as well: BGR reaches 365/400
 non-identity successes versus official 367/400 and matched random 369/400,

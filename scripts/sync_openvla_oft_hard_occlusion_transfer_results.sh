@@ -135,6 +135,8 @@ logs_root = Path(sys.argv[1])
 final_re = re.compile(r"Overall success rate:\s*([0-9.]+)")
 episodes_re = re.compile(r"Total episodes:\s*(\d+)")
 successes_re = re.compile(r"Total successes:\s*(\d+)")
+progress_episodes_re = re.compile(r"# episodes completed so far:\s*(\d+)")
+progress_successes_re = re.compile(r"# successes:\s*(\d+)")
 perturbation_order = {
     "identity": 0,
     "blur": 1,
@@ -149,6 +151,24 @@ def last(pattern, text):
     return matches[-1].group(1) if matches else None
 
 
+def parse_log(log):
+    text = log.read_text(encoding="utf-8", errors="replace")
+    episodes = last(episodes_re, text) or last(progress_episodes_re, text)
+    successes = last(successes_re, text) or last(progress_successes_re, text)
+    success_rate = last(final_re, text)
+    if episodes is None or successes is None:
+        return None
+    if success_rate is None:
+        episode_count = int(episodes)
+        success_rate = f"{(int(successes) / episode_count if episode_count else 0.0):.4f}"
+    return {
+        "episodes": episodes,
+        "successes": successes,
+        "success_rate": success_rate,
+        "mtime": log.stat().st_mtime,
+    }
+
+
 rows = []
 if logs_root.exists():
     for method_dir in sorted(path for path in logs_root.iterdir() if path.is_dir()):
@@ -157,27 +177,27 @@ if logs_root.exists():
             key=lambda path: (perturbation_order.get(path.name, len(perturbation_order)), path.name),
         )
         for perturbation_dir in perturbation_dirs:
-            logs = sorted(perturbation_dir.glob("*.txt"), key=lambda path: path.stat().st_mtime)
-            for log in reversed(logs):
-                text = log.read_text(encoding="utf-8", errors="replace")
-                episodes = last(episodes_re, text)
-                successes = last(successes_re, text)
-                success_rate = last(final_re, text)
-                if episodes is None or successes is None or success_rate is None:
+            candidates = []
+            for log in sorted(perturbation_dir.glob("*.txt"), key=lambda path: path.stat().st_mtime):
+                parsed = parse_log(log)
+                if parsed is None:
                     continue
-                rows.append(
-                    {
-                        "method": method_dir.name,
-                        "perturbation": perturbation_dir.name,
-                        "episodes": episodes,
-                        "successes": successes,
-                        "success_rate": success_rate,
-                    }
-                )
-                break
+                candidates.append(parsed)
+            if not candidates:
+                continue
+            best = max(candidates, key=lambda row: (int(row["episodes"]), row["mtime"]))
+            rows.append(
+                {
+                    "method": method_dir.name,
+                    "perturbation": perturbation_dir.name,
+                    "episodes": best["episodes"],
+                    "successes": best["successes"],
+                    "success_rate": best["success_rate"],
+                }
+            )
 
 if not rows:
-    raise SystemExit(f"No complete perturbation eval logs found under {logs_root}")
+    raise SystemExit(f"No parseable perturbation eval logs found under {logs_root}")
 
 writer = csv.DictWriter(
     sys.stdout,
