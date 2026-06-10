@@ -29,8 +29,12 @@ OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE = (
 OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE = (
     "results/openvla_oft_perturb_eval_hardocc065_adapt_step50400_lr2em7_v1/summary.csv"
 )
+OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE = (
+    "results/openvla_oft_perturb_eval_hardocc065_a40_adapt_step50400_lr2em7_v1/summary.csv"
+)
 OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion_transfer_results.sh"
 OPENVLA_HARD_OCCLUSION_ADAPT_MARKER = "sync_openvla_oft_hard_occlusion_adapt_results.sh"
+OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER = "sync_openvla_oft_hard_occlusion_adapt_a40_results.sh"
 
 COMPLETED_METHOD_SCREEN_BY_CALIBRATION = {
     "Gymnasium MuJoCo Reacher-v5 calibration": "results/reacher_recovery_probe_12seed_v1/summary.csv",
@@ -893,6 +897,11 @@ def learned_policy_inflight_summary(root: Path) -> str | None:
         and not (root / OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE).exists()
     ):
         active.append("hard-occlusion adaptation is queued and missing logs/summary")
+    if (
+        OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER in ledger_text
+        and not (root / OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE).exists()
+    ):
+        active.append("hard-occlusion A40 fallback adaptation is queued/running and missing a complete summary")
     if active:
         return "; ".join(active)
 

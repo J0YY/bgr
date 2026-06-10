@@ -214,6 +214,33 @@ BST and `774724` at 2026-06-10 21:24:42 BST). All adapted BGR/random jobs and
 occlusion eval jobs remain dependency-pending; no logs or summary exist for the
 adapted route yet.
 
+Active learned-policy intervention fallback: fixed hard-occlusion OpenVLA-OFT
+adaptation on A40 GPUs, queued under separate artifact tags after the A6000
+adaptation route remained pending on unavailable nodes. This is the same fixed
+hard-occlusion training/eval premise, not a new claim or a relaxed gate: BGR
+must still beat both official and matched random by at least 10/400 occlusion
+episodes and at least 0.02 absolute success rate while not trailing the best
+identity comparator by more than 1 episode. The A40 fallback uses
+`PREP_TAG=p2048unique_hardocc065_a40_prereg`,
+`ADAPT_TAG=cleanmix_p2048unique_hardocc065_a40_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1`,
+`PERTURB_TAG=hardocc065_a40_adapt_step50400_lr2em7_v1`,
+`OCCLUSION_FRACTION_OVERRIDE=0.65`, `ADAPT_STEPS=400`, `LR=2e-7`,
+`PARTITION=low-prio-gpu`, and `GRES=gpu:a40:1`. Submitted jobs are prep
+`774816`; BGR train/merge/clean-eval `774817`/`774818`/`774819`;
+matched-random train/merge/clean-eval `774820`/`774821`/`774822`; official
+identity/occlusion eval `774846`/`774847`; BGR identity/occlusion eval
+`774848`/`774849`; and matched-random identity/occlusion eval
+`774850`/`774851`. An initial wrapper submission mistakenly queued default
+blur/brightness/shift eval jobs `774826`, `774828`--`774843`; these were
+canceled immediately and replaced with the fixed direct perturb eval using
+`PERTURBATIONS='identity={};occlusion={"fraction":0.65}'`. Initial A40 poll at
+2026-06-10 09:57:47 BST showed prep `774816` running on `c2-g4-17`, official
+identity `774846` pending on resources, and all BGR/random adaptation and
+perturb jobs dependency-pending. Poll/sync with
+`scripts/sync_openvla_oft_hard_occlusion_adapt_a40_results.sh --poll --no-check`
+and, when logs or summaries exist,
+`scripts/sync_openvla_oft_hard_occlusion_adapt_a40_results.sh --sync`.
+
 Completed learned-policy route (negative, not active): preregistered OpenVLA-OFT occlusion-bottleneck
 adaptation in `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`.
 This route is motivated by the fixed full-goal visual audit: blur,

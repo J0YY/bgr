@@ -36,9 +36,13 @@ OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE = (
 OPENVLA_HARD_OCCLUSION_ADAPT_COMPLETE = (
     "results/openvla_oft_perturb_eval_hardocc065_adapt_step50400_lr2em7_v1/summary.csv"
 )
+OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE = (
+    "results/openvla_oft_perturb_eval_hardocc065_a40_adapt_step50400_lr2em7_v1/summary.csv"
+)
 OPENVLA_PERTURB_ONLY_ANCHOR_MARKER = "queue_openvla_oft_preregistered_perturb_only_anchor.sh"
 OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion_transfer_results.sh"
 OPENVLA_HARD_OCCLUSION_ADAPT_MARKER = "sync_openvla_oft_hard_occlusion_adapt_results.sh"
+OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER = "sync_openvla_oft_hard_occlusion_adapt_a40_results.sh"
 OPENVLA_PROXIMAL_ANCHOR_JOB_IDS = {
     "bgr_train": "767657",
     "bgr_merge": "767658",
@@ -201,6 +205,13 @@ def learned_policy_inflight_detail(root: Path) -> str | None:
     ):
         inflight.append(
             "hard-occlusion adaptation OpenVLA route is queued and still missing logs/summary"
+        )
+    if (
+        OPENVLA_HARD_OCCLUSION_ADAPT_A40_MARKER in ledger_text
+        and not (root / OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE).exists()
+    ):
+        inflight.append(
+            "hard-occlusion A40 fallback OpenVLA adaptation route is queued/running and still missing a complete summary"
         )
     if inflight:
         return "; ".join(inflight)

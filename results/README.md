@@ -2607,6 +2607,58 @@ scripts/sync_openvla_oft_hard_occlusion_adapt_results.sh --poll --no-check
 scripts/sync_openvla_oft_hard_occlusion_adapt_results.sh --sync
 ```
 
+## Queued OpenVLA-OFT Hard-Occlusion A40 Adaptation Fallback
+
+Queued on 2026-06-10 after the A6000 hard-occlusion adaptation stayed pending
+on unavailable nodes. This fallback keeps the same intervention and fixed gate
+but requests `GRES=gpu:a40:1` and writes to separate artifact tags, so it will
+not overwrite the A6000 attempt. It is not paper evidence unless the compact
+summary exists and the same hard-occlusion gate passes.
+
+Route tags:
+
+```text
+PREP_TAG=p2048unique_hardocc065_a40_prereg
+ADAPT_TAG=cleanmix_p2048unique_hardocc065_a40_prereg_proxanchor_l2_5em0_step50400_lr2em7_identitylora_imageaug_officialtrainstats_v1
+PERTURB_TAG=hardocc065_a40_adapt_step50400_lr2em7_v1
+EVAL_ARTIFACT=openvla_oft_perturb_eval_hardocc065_a40_adapt_step50400_lr2em7_v1
+```
+
+Slurm chain:
+
+```text
+774816  hard-occlusion A40 prep
+774817  BGR adapt, afterok:774816
+774818  BGR merge, afterok:774817
+774819  BGR clean eval, afterok:774818
+774820  matched-random adapt, afterok:774816 and afterok:774817
+774821  matched-random merge, afterok:774820
+774822  matched-random clean eval, afterok:774821
+774846  official identity eval
+774847  official hard-occlusion eval, afterok:774846
+774848  BGR identity eval, afterok:774818
+774849  BGR hard-occlusion eval, afterok:774848
+774850  matched-random identity eval, afterok:774821
+774851  matched-random hard-occlusion eval, afterok:774850
+```
+
+The initial wrapper perturb submission accidentally used the default
+identity/blur/brightness/occlusion/shift set, producing eval jobs `774826`,
+`774828`--`774843`; those jobs were canceled immediately. The replacement
+direct eval command used the fixed gate perturbation set:
+`PERTURBATIONS='identity={};occlusion={"fraction":0.65}'`.
+
+Initial status at 2026-06-10 09:57:47 BST: prep `774816` was running on
+`c2-g4-17`, official identity `774846` was pending on resources, and all
+adapted BGR/random jobs plus dependent occlusion evals were dependency-pending.
+
+Sync/poll helper:
+
+```bash
+scripts/sync_openvla_oft_hard_occlusion_adapt_a40_results.sh --poll --no-check
+scripts/sync_openvla_oft_hard_occlusion_adapt_a40_results.sh --sync
+```
+
 ## Completed OpenVLA-OFT p2048 Clean-Mix Scale-Up
 
 Launched on 2026-06-02 after the p1024 offset-3 follow-up showed only a small
