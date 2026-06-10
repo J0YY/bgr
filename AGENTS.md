@@ -240,6 +240,25 @@ seeds, BGR is 0.7938 vs. uniform 0.7678 (+0.0260, W/L/T=80/40/0) and fixed
 Treat the mixed-type OpenML route as a fragility/near-miss diagnostic, not an
 acceptance-moving independent benchmark win.
 
+New active CPU independent-benchmark scout: an official MiniGrid
+DynamicObstacles recovery probe was added in
+`tools/minigrid_dynamic_obstacles_recovery_probe.py`. This is a materially
+different package-owned reset interface from the retired FourRooms/DoorKey and
+classic-control routes: it uses `MiniGrid-Dynamic-Obstacles-6x6-v0`, exact
+restoration of the package grid/obstacle list, stochastic package obstacle
+moves, and teacher-action replay from reset states near the package-generated
+shortest path. Local seed-0 scouts were non-promotable: 6x6 gave BGR 0.4023
+RAUC versus uniform 0.3516 but tied fixed-radius and lost to failure-only
+0.4688; 8x8 gave BGR 0.1380 versus uniform 0.1198 but tied TD-loss, had low
+clean success, and saturated median-r80. A fixed 4-seed CPU cluster screen was
+still submitted to close the route under the common promotion checker as Slurm
+job `779232` via `scripts/queue_minigrid_dynamic_obstacles_probe.sh`; sync
+with `JOB_ID=779232 scripts/sync_minigrid_dynamic_obstacles_probe.sh`. Treat
+this as a scout only. Do not add it to `paper/main.tex` unless the completed
+summary beats uniform, fixed, failure-only, TD-loss, and BGR-uniform-radius
+under `tools/check_candidate_promotion.py` without contradictory/saturated
+radius metrics.
+
 Latest OpenVLA poll/sync at 2026-06-10 19:14 BST: the near-term hard-occlusion
 transfer/adaptation routes are still not paper evidence. The 0.80 transfer
 route synced an incomplete compact summary with BGR identity 391/400, official

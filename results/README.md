@@ -177,6 +177,23 @@ Internal pre-existing-dataset route scout:
   0.7748 (+0.0190), below the +0.03 fixed follow-up standard. Treat this as a
   mixed-type OpenML near miss/fragility diagnostic, not manuscript evidence.
 
+Active external-package scout:
+
+- `tools/minigrid_dynamic_obstacles_recovery_probe.py` adds an official
+  MiniGrid DynamicObstacles recovery replay scout using exact restored package
+  grid/obstacle state and stochastic package obstacle moves. Local seed-0
+  scouts were non-promotable: the 6x6 setting put BGR above uniform but tied
+  fixed-radius and lost to failure-only, while the 8x8 setting had low clean
+  success and saturated median-r80. The fixed 4-seed CPU screen was submitted
+  to `athena` as job `779232` with
+  `scripts/queue_minigrid_dynamic_obstacles_probe.sh`, writing to
+  `/work/joy/bgr/runs/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232`.
+  Sync with `JOB_ID=779232 scripts/sync_minigrid_dynamic_obstacles_probe.sh`.
+  This is not manuscript evidence unless the completed summary clears
+  `tools/check_candidate_promotion.py` for BGR or BGR-Coverage against uniform,
+  fixed, failure-only, TD-loss, and BGR-uniform-radius without saturated or
+  contradictory radius metrics.
+
 Completed external-package scope diagnostic:
 
 - `results/minatar_breakout_recovery_calibration_12seed_v1/summary.json`:
