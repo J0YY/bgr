@@ -3290,6 +3290,19 @@ but official occlusion and replacement BGR identity are still priority-pending,
 and replacement occlusions remain dependency-pending. The latest readiness check
 still reports `NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim changes.
 
+Latest status at 2026-06-10 12:14:06 BST: the active hard-occlusion routes are
+still incomplete and not gateable. In the 0.80 transfer route, official and BGR
+identity/occlusion rows completed; the incomplete local summary has BGR
+occlusion 305/400 versus official occlusion 296/400, but matched-random
+identity is still running and matched-random occlusion is dependency-pending.
+In the A6000 adaptation route, prep/train/merge/clean chains completed and
+official identity is 393/400; official occlusion, BGR identity, and
+matched-random identity are running, while BGR/random occlusion evals are still
+dependency-pending. In the A40 fallback, matched-random identity is running,
+official occlusion and replacement BGR identity are pending, and the
+replacement/random occlusion evals are dependency-pending. The latest readiness
+check still reports `NOT_READY_FOR_90P_AAAI_CLAIM`; no paper claim changes.
+
 Sync/poll helper:
 
 ```bash
