@@ -122,7 +122,15 @@ The full summary is still missing; direct identity log tails before preemption
 reached official 178/185, BGR 112/119, and matched random 65/68. This remains
 incomplete non-evidence; BGR's seven identity failures weaken the side
 condition but do not yet mathematically close the route because comparator
-identity rows are incomplete. Both
+identity rows are incomplete. Latest poll/sync at 2026-06-10 22:53 BST showed
+the LoRA-full route closed by infrastructure failure rather than a complete
+gate result: official/BGR/matched-random identity jobs
+`780060`/`780062`/`780064` restarted and failed quickly with exit `1:0` after
+00:50/00:23/00:28, leaving occlusion jobs `780061`/`780063`/`780065` on
+`DependencyNeverSatisfied`. Those dependent occlusion jobs were cancelled at
+22:54 BST. No full `summary.csv` exists, so this route is not a paper result
+and should not be rerun unchanged without first diagnosing the restarted
+identity-eval failures. Both
 head-interpolation routes remain non-evidence unless the full summary passes
 the same fixed +10/400, +0.02, and identity-preservation gate. The latest
 0.80 identity-anchored base route is closed negative with complete rows:
@@ -1059,9 +1067,13 @@ risk.
   2026-06-10 as Slurm job `781423`, using `SEED_START=60`, `SEEDS=30`, and the
   same 32 registered numeric binary datasets. It writes to
   `/work/joy/bgr/runs/openml_all_binary_numeric_target15_thirdsplit_30seed_v1_781423`
-  and log `/work/joy/bgr/logs/bgr-openml-mixed-binary-781423.out`. Initial
-  `squeue` showed `PENDING` on `Resources`; no result or paper claim exists
-  until it syncs and the fixed readout is generated.
+  and log `/work/joy/bgr/logs/bgr-openml-mixed-binary-781423.out`. It started
+  on `cnode401` but failed after 7:48 with exit `1:0` during
+  `eeg-eye-state`; no completed output directory or summary exists. Split
+  retries `781530`/`781536`/`781532`/`781531`, plus sequential chunk retry
+  `781548`, were all killed immediately by Slurm with `RaisedSignal:53` before
+  writing logs. There is no third-split result or paper claim. Do not
+  resubmit blindly until the Slurm launch failure is understood.
 - The Blackjack independent-route scout completed negative: all nine configs in
   `results/blackjack_recovery_scout_8seed_v1/config_summary.csv` have
   `candidate=False`. Do not scale or promote it without a materially new

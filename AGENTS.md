@@ -134,7 +134,15 @@ remote `summary.csv` is still missing, and the synced local file is only
 178/185, BGR 112/119, and matched random 65/68 identity successes. This still
 is not gateable evidence; BGR has seven identity failures by 119 episodes, so
 identity-side feasibility is weak but not yet mathematically closed because
-the comparator identity rows are also incomplete. The
+the comparator identity rows are also incomplete. Latest poll/sync at
+2026-06-10 22:53 BST showed the LoRA-full route closed by infrastructure
+failure rather than a complete gate result: official/BGR/matched-random
+identity jobs `780060`/`780062`/`780064` restarted and failed quickly with
+exit `1:0` after 00:50/00:23/00:28, leaving occlusion jobs
+`780061`/`780063`/`780065` stuck on `DependencyNeverSatisfied`. Those
+dependent occlusion jobs were cancelled at 22:54 BST. No full `summary.csv`
+exists, so this route is not a paper result and should not be rerun unchanged
+without first diagnosing why the restarted identity evals failed. The
 latest 0.80 identity-anchored base route is closed negative with complete
 rows: BGR identity/occlusion are 389/400 and 303/400, official is 393/400 and
 296/400, and matched random is 393/400 and 302/400. The fixed gate reports
@@ -184,10 +192,17 @@ using the same 32-dataset numeric target-1.5 protocol, `SEED_START=60`, and
 `SEEDS=30`, with output
 `/work/joy/bgr/runs/openml_all_binary_numeric_target15_thirdsplit_30seed_v1_781423`
 and log `/work/joy/bgr/logs/bgr-openml-mixed-binary-781423.out`. Initial
-`squeue` showed it `PENDING` on `Resources`, with no log yet. This is not a
-new claim until synced and analyzed; if it stays macro-positive, it only
-strengthens the supervised pre-existing benchmark aggregation and still does
-not solve the standard-control or learned-policy gap. The
+`squeue` showed it `PENDING` on `Resources`, then it ran on `cnode401` but
+failed after 7:48 with exit `1:0` during `eeg-eye-state`; no completed output
+directory or summary was produced. Four split retries were submitted as
+`781530`/`781536`/`781532`/`781531`, and a sequential chunk-1 retry was
+submitted as `781548`; all were killed immediately by Slurm with
+`RaisedSignal:53` before writing logs. There is therefore no third-split
+readout or new claim. Do not keep resubmitting this OpenML third split until
+the Slurm signal-53 launch failure is understood. If it is eventually rerun
+successfully and stays macro-positive, it only strengthens the supervised
+pre-existing benchmark aggregation and still does not solve the standard-control
+or learned-policy gap. The
 internal sklearn-digits margin replay scout is also rejected before promotion:
 its best BGR target gives only 0.8271 vs. 0.8123 RAUC against uniform with a
 2/2/0 paired split, while fixed-radius replay is stronger at another target.
