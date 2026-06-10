@@ -232,6 +232,8 @@ def route_scout_evidence_key(scout: RouteScout) -> str:
         return "openml_magic_telescope_margin"
     if "haberman" in scout.name:
         return "openml_haberman_margin"
+    if "heart-statlog" in scout.name:
+        return "openml_heart_statlog_margin"
     return scout.name
 
 
@@ -529,6 +531,10 @@ ROUTE_SCOUTS = [
     (
         "OpenML broad numeric fixed target2 replication 30-seed",
         "results/openml_broad_numeric_target2_replication_30seed_v1/summary.csv",
+    ),
+    (
+        "OpenML heart-statlog fixed target2 extension 60-seed",
+        "results/openml_heart_statlog_target2_extension_60seed_v1/summary.csv",
     ),
     (
         "OpenML multiclass numeric fixed target2 30-seed",
@@ -989,6 +995,11 @@ def render_markdown(root: Path) -> str:
     positive_followups = [scout for scout in scouts if scout.positive_followup]
     positive_followup_keys = {route_scout_evidence_key(scout) for scout in positive_followups}
     rejected_scouts = [scout for scout in scouts if scout.rejected]
+    rejected_followup_keys = {
+        route_scout_evidence_key(scout)
+        for scout in rejected_scouts
+        if scout.seeds >= 30
+    }
     superseded_scouts = [
         scout
         for scout in scouts
@@ -997,7 +1008,9 @@ def render_markdown(root: Path) -> str:
     candidate_scouts = [
         scout
         for scout in scouts
-        if scout.needs_preregistration and route_scout_evidence_key(scout) not in positive_followup_keys
+        if scout.needs_preregistration
+        and route_scout_evidence_key(scout) not in positive_followup_keys
+        and route_scout_evidence_key(scout) not in rejected_followup_keys
     ]
     if rejected_scouts:
         names = ", ".join(

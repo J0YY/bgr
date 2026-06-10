@@ -153,6 +153,20 @@ fixed-radius 0.6837; BGR is ahead on 0/10 dataset means versus uniform and
 2/10 versus fixed-radius. There are no promotable-like rows. Treat this as a
 negative supervised scope result, not a standard-environment or learned-policy
 win.
+The only remaining broad OpenML candidate-like row, heart-statlog at fixed
+target radius 2.0, was tested with a no-retuning seed extension and is now a
+near miss rather than a promotable route. The original broad-suite row gives
+BGR 0.8075 versus uniform 0.7662 (+0.0412, W/L/T=21/9/0), but held-out seeds
+30--59 give BGR 0.7979 versus uniform 0.7707 (+0.0272, W/L/T=19/11/0), below
+the +0.03 follow-up screen. The fixed extension, submitted to `athena` as job
+`774696` and synced to
+`results/openml_heart_statlog_target2_extension_60seed_v1/`, gives BGR 0.7987
+versus uniform 0.7733 (+0.0255, W/L/T=41/18/1) and fixed-radius 0.7656
+(+0.0332, W/L/T=44/15/1) over seeds 60--119. Pooled across all 120
+heart-statlog seeds, BGR is 0.8007 versus uniform 0.7709 (+0.0298,
+W/L/T=81/38/1) and fixed-radius 0.7605 (+0.0402, W/L/T=88/31/1). Because the
+extension and pooled uniform gaps remain just below the +0.03 screen, retire
+heart-statlog as a near-miss supervised route, not paper evidence.
 
 After the weak-reject style review, the immediate paper-defense priority is not
 to amplify p-values or add more authored toy wins. The manuscript should instead
@@ -935,6 +949,10 @@ risk.
 - The fixed multiclass numeric OpenML suite completed negative in Athena jobs
   `774591` and `774592`; it should not be scaled or promoted without a new
   premise because BGR trails uniform on every pooled dataset mean.
+- The fixed heart-statlog target-2.0 seed extension completed as Slurm job
+  `774696` and is synced locally. It is a near miss: BGR clears fixed-radius
+  but misses the +0.03 uniform gap on the extension and pooled 120-seed
+  readout. Retire the row unless a genuinely new preregistered premise exists.
 - The Blackjack independent-route scout completed negative: all nine configs in
   `results/blackjack_recovery_scout_8seed_v1/config_summary.csv` have
   `candidate=False`. Do not scale or promote it without a materially new

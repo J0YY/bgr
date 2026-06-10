@@ -1,0 +1,11 @@
+{
+  "datasets": {
+    "heart-statlog": {
+      "name": "heart-statlog",
+      "version": 1
+    }
+  },
+  "numpy": "2.2.6",
+  "python": "3.10.12",
+  "scikit_learn": "1.7.2"
+}

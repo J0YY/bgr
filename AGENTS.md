@@ -124,6 +124,20 @@ fixed-radius 0.6837; BGR is ahead on 0/10 dataset means versus uniform and
 negative supervised scope result, not manuscript evidence or an active route.
 Full readout:
 `PYTHONPATH=src:. python3 tools/analyze_openml_margin_suite.py --original results/openml_multiclass_numeric_target2_30seed_v1/per_seed.csv --replication results/openml_multiclass_numeric_target2_replication_30seed_v1/per_seed.csv`.
+Completed near-miss/rejected supervised follow-up route: OpenML heart-statlog
+fixed target-2.0 seed extension. This was motivated by the broad numeric
+suite's only unresolved candidate-like row: original seeds 0--29 gave BGR
+0.8075 vs. uniform 0.7662 (+0.0412, W/L/T=21/9/0), but held-out seeds 30--59
+gave only 0.7979 vs. 0.7707 (+0.0272, W/L/T=19/11/0), below the +0.03
+follow-up screen. The no-retuning seed extension ran on `athena` as Slurm job
+`774696` and is synced to
+`results/openml_heart_statlog_target2_extension_60seed_v1/`. Extension seeds
+60--119 give BGR 0.7987 vs. uniform 0.7733 (+0.0255, W/L/T=41/18/1) and
+fixed-radius 0.7656 (+0.0332, W/L/T=44/15/1). Pooled across all 120
+heart-statlog seeds, BGR is 0.8007 vs. uniform 0.7709 (+0.0298, W/L/T=81/38/1)
+and fixed-radius 0.7605 (+0.0402, W/L/T=88/31/1). Because the extension and
+pooled uniform gaps remain just below the +0.03 screen, retire this as a
+near-miss supervised route, not paper evidence.
 The new grid-margin witness-sensitivity diagnostic improves scope support for the
 feasibility-witness assumption but is controlled mechanism evidence, not an
 independent-benchmark win.

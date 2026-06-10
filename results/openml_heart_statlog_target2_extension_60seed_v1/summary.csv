@@ -1,0 +1,4 @@
+dataset,target_radius,method,n,final_rauc_mean,delta_vs_uniform,wins_vs_uniform,losses_vs_uniform,ties_vs_uniform,decision
+heart-statlog,2.0000,uniform,60,0.773257,0.000000,0,0,60,reject-scout
+heart-statlog,2.0000,fixed,60,0.765581,-0.007675,26,33,1,reject-scout
+heart-statlog,2.0000,bgr,60,0.798739,0.025482,41,18,1,reject-scout
