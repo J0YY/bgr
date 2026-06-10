@@ -44,7 +44,13 @@ jobs `774312` and `774346`: the 10-dataset suite is mixed and not a macro win
 adds replicated dataset-level positives on MagicTelescope and haberman. This is
 additional supervised pre-existing-dataset evidence only, not a
 standard-environment or learned-policy win. The latest completed OpenVLA/LIBERO
-occlusion-bottleneck route is negative: BGR reaches 365/400
+hard-occlusion transfer diagnostic is also negative: at occlusion fraction
+0.65, BGR reaches 300/400 successes versus official 297/400 and matched random
+296/400, which is only +3/+4 episodes and +0.0075/+0.0100 success rate rather
+than the fixed +10/400 and +0.02 promotion margin; identity is BGR 391/400,
+official 393/400, and matched random 389/400, so BGR also violates the
+identity side condition. The earlier completed full perturbation
+occlusion-bottleneck route was negative as well: BGR reaches 365/400
 non-identity successes versus official 367/400 and matched random 369/400,
 with identity BGR 99/100, official 99/100, and random 98/100. The
 internal sklearn-digits margin replay scout is also rejected before promotion:
@@ -300,6 +306,32 @@ remain incomplete and already violate the fixed identity side condition. The
 matched-random occlusion `774851`, and already violates the identity side
 condition. Explicit partial gate checks on the three available
 `summary_available.csv` files returned `[INCOMPLETE]`.
+Latest all-route OpenVLA poll at 2026-06-10 15:53 BST synced one complete
+negative route and otherwise found no new gateable positive result. The fixed
+0.65 hard-occlusion transfer route is complete at
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc065_transfer_step50400_lr2em7_v1/summary.csv`;
+the fixed gate fails with BGR identity/occlusion 391/400 and 300/400, official
+393/400 and 297/400, and matched random 389/400 and 296/400. The 0.80
+transfer route remains incomplete because matched-random occlusion `774923` is
+priority-pending with an estimated start of 2026-06-11 08:44:00 BST; partial
+rows are BGR identity/occlusion 391/400 and 305/400, official 393/400 and
+296/400, and matched-random identity 389/400, so it already violates the fixed
+identity side condition. The 0.65 A6000 adaptation remains incomplete because
+matched-random occlusion `774729` is priority-pending; available rows are BGR
+identity/occlusion 389/400 and 301/400, official identity/occlusion 393/400
+and 297/400, and matched-random identity 390/400, so it is already
+non-promotable. The 0.65 A40 fallback remains incomplete because replacement
+BGR occlusion `775103` and matched-random occlusion `774851` are
+priority-pending, and it already has BGR identity 391/400 versus official
+393/400 and matched-random 392/400. The 0.80 micro A6000 route remains
+priority/dependency-pending with front jobs `776998` and `777037` estimated
+for 2026-06-13 14:07:41 BST; the 0.80 micro A40 fallback front jobs `777254`
+and `777264`, the 0.80 identity-anchor A40 fallback front jobs `776291` and
+`776300`, and the 0.90 strict A40 front jobs `776601` and `776611` are
+estimated for 2026-06-11 22:02:14 BST. The main 0.80 identity-anchor A6000
+route remains mixed-priority/dependency pending, with random train `776036`
+estimated for 2026-06-10 20:44:00 BST and official/BGR identity rows delayed.
+No paper claim should change.
 
 Newest acceleration route: hard-occlusion 0.80 micro identity-anchored
 OpenVLA-OFT A40 fallback. This is a resource fallback for the already fixed
