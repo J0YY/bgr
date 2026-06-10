@@ -1407,21 +1407,28 @@ risk.
   the completed `summary.csv` clears the existing candidate-promotion checks
   against uniform, fixed radius, failure-only, TD-loss, and the BGR
   uniform-radius ablation.
-  Partial method rows are already negative for the sparse-probe BGR settings:
-  uniform seeds 0--3 are 0.3125/0.3000/0.1500/0.2500 RAUC, sparse
-  BGR-Coverage seeds 0--3 are 0.1875/0.2250/0.1250/0.2125, sparse BGR seeds
-  0--3 are 0.1750/0.2375/0.1500/0.0500, and BGR-uniform-radius seeds 0--3 are
-  0.3250/0.2750/0.1500/0.2125. A corrected dense-probe BGR diagnostic is
-  running as job `777969` with `INITIAL_PROBES=0.00,0.02,0.08,0.20`,
-  `TARGET_RADIUS=0.046`, and `RADIUS_BANDWIDTH=0.050`; its first two
-  BGR-Coverage rows are 0.3125/0.3875 RAUC on seeds 0/1. Because the dense
-  initial probes also warm-start the trajectory-library policy, this diagnostic
-  must not be compared directly against sparse-probe baselines. A matched
-  dense-probe common-protocol comparison was therefore submitted on Athena at
-  2026-06-10 17:30 BST: jobs `778100` uniform, `778101` fixed, `778102`
-  failure-only, `778103` TD-loss, `778104` BGR-uniform-radius, `778105`
-  BGR-Coverage, and `778106` BGR. These jobs use the same dense probes,
-  `TARGET_RADIUS=0.046`, and `RADIUS_BANDWIDTH=0.050`. Do not promote or scale
+  Sparse-probe method rows are now rejected before promotion: uniform seeds
+  0--3 are 0.3125/0.3000/0.1500/0.2500 RAUC, sparse BGR-Coverage seeds 0--3
+  are 0.1875/0.2250/0.1250/0.2125, sparse BGR seeds 0--3 are
+  0.1750/0.2375/0.1500/0.0500, BGR-uniform-radius seeds 0--3 are
+  0.3250/0.2750/0.1500/0.2125, TD-loss seeds 0--3 are
+  0.3250/0.3625/0.1375/0.2000, and failure-only seeds 0--2 are
+  0.3000/0.3875/0.1500. `tools/check_candidate_promotion.py` rejects sparse
+  BGR-Coverage at 0.1875 mean RAUC versus uniform 0.2531 (W/L/T=0/4/0) and
+  rejects sparse BGR at 0.1531 versus uniform 0.2531 (W/L/T=0/3/1), with both
+  variants also losing to TD-loss and BGR-uniform-radius. A corrected
+  dense-probe BGR diagnostic is running as job `777969` with
+  `INITIAL_PROBES=0.00,0.02,0.08,0.20`, `TARGET_RADIUS=0.046`, and
+  `RADIUS_BANDWIDTH=0.050`; its first three BGR-Coverage rows are
+  0.3125/0.3875/0.1750 RAUC on seeds 0/1/2. Because the dense initial probes
+  also warm-start the trajectory-library policy, this diagnostic must not be
+  compared directly against sparse-probe baselines. A matched dense-probe
+  common-protocol comparison was therefore submitted on Athena at 2026-06-10
+  17:30 BST: jobs `778100` uniform, `778101` fixed, `778102` failure-only,
+  `778103` TD-loss, `778104` BGR-uniform-radius, `778105` BGR-Coverage, and
+  `778106` BGR. These jobs use the same dense probes, `TARGET_RADIUS=0.046`,
+  and `RADIUS_BANDWIDTH=0.050`; the 17:36--17:39 BST poll showed all seven
+  still running with only partial seed-0/seed-1 rows. Do not promote or scale
   FetchPush object-state unless the completed matched dense summary clears the
   fixed candidate-promotion checks.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the

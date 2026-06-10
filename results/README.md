@@ -7043,8 +7043,15 @@ Submitted jobs:
 | BGR-Coverage | 778105 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_bgr_coverage_v1_778105` |
 | BGR | 778106 | `/work/joy/bgr/runs/fetchpush_object_state_recovery_probe_densecommon_bgr_v1_778106` |
 
-Latest poll at 2026-06-10 17:32 BST showed all seven jobs running. This is
-not paper evidence. After completion, sync each output with
+Latest poll at 2026-06-10 17:36--17:39 BST showed all seven jobs still
+running. Partial synced rows are not paper evidence: uniform seed 0 has RAUC
+0.3875; fixed seeds 0/1 have 0.3375/0.3625; BGR-uniform-radius seed 0 has
+0.3625; BGR-Coverage seed 0 has 0.3125; and BGR seed 0 has 0.3125. The
+completed sparse-probe protocol is already rejected by
+`tools/check_candidate_promotion.py`: sparse BGR-Coverage has mean RAUC 0.1875
+versus uniform 0.2531 (W/L/T=0/4/0), and sparse BGR has mean RAUC 0.1531
+versus uniform 0.2531 (W/L/T=0/3/1), with both also trailing TD-loss and the
+BGR-uniform-radius ablation. After completion, sync each dense output with
 `OUT_PREFIX=<prefix> JOB_ID=<job> scripts/sync_fetchpush_object_state_probe.sh`,
 combine the seven `summary.csv` files with structured CSV parsing, and run:
 
