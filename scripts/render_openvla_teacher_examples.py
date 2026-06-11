@@ -26,6 +26,15 @@ def main() -> int:
         default=[],
         help="Optional manifest method filter. Can be passed multiple times, e.g. --method bgr_boundary.",
     )
+    parser.add_argument(
+        "--include-family",
+        action="append",
+        default=[],
+        help=(
+            "Optional perturbation family filter applied before row selection. "
+            "Can be passed multiple times, e.g. --include-family occlusion."
+        ),
+    )
     parser.add_argument("--max-examples", type=int, default=8)
     parser.add_argument("--selection", choices=["first", "first_per_family", "balanced_episodes"], default="first")
     parser.add_argument(
@@ -63,6 +72,7 @@ def main() -> int:
         int(args.max_examples),
         str(args.selection),
         methods=tuple(str(method) for method in args.method),
+        include_families=tuple(str(family) for family in args.include_family),
         episodes_per_family=int(args.episodes_per_family),
         max_steps_per_episode=args.max_steps_per_episode,
     )
@@ -99,6 +109,7 @@ def main() -> int:
                 "rendered_examples": len(examples),
                 "manifest": str(args.manifest),
                 "methods": [str(method) for method in args.method],
+                "include_families": [str(family) for family in args.include_family],
                 "image_size": int(args.image_size),
                 "note": "PNG/NPZ action smoke set for the teacher-replay to RLDS path.",
             },
@@ -117,10 +128,11 @@ def _load_rows(
     selection: str = "first",
     *,
     methods: tuple[str, ...] = (),
+    include_families: tuple[str, ...] = (),
     episodes_per_family: int = 1,
     max_steps_per_episode: int | None = None,
 ) -> list[dict[str, Any]]:
-    all_rows = [row for row in _iter_rows(path) if _matches_filters(row, methods)]
+    all_rows = [row for row in _iter_rows(path) if _matches_filters(row, methods, include_families)]
     if selection == "balanced_episodes":
         return _select_balanced_episode_rows(
             all_rows,
@@ -139,8 +151,10 @@ def _load_rows(
     return rows
 
 
-def _matches_filters(row: dict[str, Any], methods: tuple[str, ...]) -> bool:
+def _matches_filters(row: dict[str, Any], methods: tuple[str, ...], include_families: tuple[str, ...]) -> bool:
     if methods and str(row.get("method", "")) not in set(methods):
+        return False
+    if include_families and str(row.get("perturbation_type", "")) not in set(include_families):
         return False
     return True
 

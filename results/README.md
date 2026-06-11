@@ -7383,8 +7383,9 @@ ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only fallback scout' 
 scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check
 ```
 
-Latest 2026-06-11 04:43 BST partial is incomplete and not favorable versus
-official: BGR 52/70, official 56/68, and matched random 44/53 in
+Latest 2026-06-11 04:57 BST partial is incomplete and unfavorable on success
+rate versus both comparators: BGR 85/138, official 87/128, and matched random
+71/104 in
 `results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_occscout_v1/summary_available.csv`.
 Do not interpret this as router evidence.
 
@@ -7415,6 +7416,36 @@ PERTURB_TAG=occonly_p1024unique_hardocc080_router_step50300_lr5em7_identitylora_
 JOB_IDS=782649,782650,782651,782652,782653,782654,782655,782656,782657,782658 \
 DETAIL_JOB_IDS=782649,782650,782651,782653,782654,782656,782657,782658 \
 ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT premise' \
+GATE_PERTURBATIONS=occlusion \
+scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check
+```
+
+This first router-training attempt failed during prep, not during adaptation:
+matched-random perturbation rendering produced zero occlusion examples before
+the post-render family filter, so prep `782649` exited `1:0`; the dependent
+BGR/random adaptation and eval jobs were cancelled. The renderer now supports
+pre-selection family filtering with `--include-family`, and the occlusion
+bottleneck queue script passes `--include-family occlusion` to both BGR and
+matched-random perturb renders. Because the remote manifest has 1,600 BGR
+occlusion rows but only 512 matched-random occlusion rows, the corrected active
+route uses a fair matched cap of 512 and repeats both occlusion sources twice:
+`PREP_TAG=p512unique_occonly_hardocc080_router_randfix_prereg`,
+`OCCLUSION_CAP=512`, `OCCLUSION_REPEAT=2`, `INCLUDE_CLEAN_ANCHORS=0`,
+`OCCLUSION_FRACTION_OVERRIDE=0.80`, `PROXIMAL_ANCHOR_L2=0`,
+`ADAPT_STEPS=300`, and `LR=5e-7`. Submitted jobs are prep `782671`, BGR
+train/merge/clean-eval `782672`/`782673`/`782674`, matched-random
+train/merge/clean-eval `782675`/`782676`/`782677`, and official/BGR/random
+hard-occlusion evals `782679`/`782680`/`782681`. This remains router-premise
+evidence only; do not add it to the manuscript unless BGR beats both official
+and matched random by at least +10/400 and +0.02 on hard occlusion. Poll/sync:
+
+```bash
+PREP_TAG=p512unique_occonly_hardocc080_router_randfix_prereg \
+ADAPT_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 \
+PERTURB_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1 \
+JOB_IDS=782671,782672,782673,782674,782675,782676,782677,782679,782680,782681 \
+DETAIL_JOB_IDS=782671,782672,782673,782675,782676,782679,782680,782681 \
+ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT randfix premise' \
 GATE_PERTURBATIONS=occlusion \
 scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check
 ```

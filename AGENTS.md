@@ -226,7 +226,32 @@ Poll/sync with:
 Do not incorporate this scout into `paper/main.tex`; if it fails the occlusion
 margin, close the fallback/router premise. If it clears the occlusion margin,
 preregister a full router-style learned-policy gate before making any paper
-claim. The
+claim. The first router-specific occlusion-only training attempt
+`p1024unique_occonly_hardocc080_router_prereg` also failed before adaptation:
+prep `782649` rendered zero matched-random occlusion examples before the
+post-render family filter, exited `1:0`, and left dependent jobs
+`782650`--`782655`/`782657`/`782658` unsatisfied; those jobs and orphaned
+official eval `782656` were cancelled. The fix is now in code:
+`scripts/render_openvla_teacher_examples.py` supports a pre-selection
+`--include-family` filter, and
+`scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh` passes
+`--include-family occlusion` to both BGR and matched-random perturb renders.
+Because the remote manifest has 1,600 BGR occlusion rows but only 512
+matched-random occlusion rows, the corrected fair route uses cap 512 and
+repeat 2. Corrected active route queued at 2026-06-11 04:55 BST:
+prep `782671`, BGR train/merge/clean-eval `782672`/`782673`/`782674`,
+matched-random train/merge/clean-eval `782675`/`782676`/`782677`, and
+official/BGR/random hard-occlusion evals `782679`/`782680`/`782681`, with
+`PREP_TAG=p512unique_occonly_hardocc080_router_randfix_prereg`,
+`ADAPT_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1`,
+`PERTURB_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1`,
+`OCCLUSION_CAP=512`, `OCCLUSION_REPEAT=2`,
+`OCCLUSION_FRACTION_OVERRIDE=0.80`, `PROXIMAL_ANCHOR_L2=0`,
+`ADAPT_STEPS=300`, and `LR=5e-7`. It is only router-premise evidence unless
+BGR beats both official and matched random by at least +10/400 and +0.02 on
+hard occlusion. Poll/sync with:
+`PREP_TAG=p512unique_occonly_hardocc080_router_randfix_prereg ADAPT_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 PERTURB_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1 JOB_IDS=782671,782672,782673,782674,782675,782676,782677,782679,782680,782681 DETAIL_JOB_IDS=782671,782672,782673,782675,782676,782679,782680,782681 ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT randfix premise' GATE_PERTURBATIONS=occlusion scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check`.
+The
 latest 0.80 identity-anchored base route is closed negative with complete
 rows: BGR identity/occlusion are 389/400 and 303/400, official is 393/400 and
 296/400, and matched random is 393/400 and 302/400. The fixed gate reports

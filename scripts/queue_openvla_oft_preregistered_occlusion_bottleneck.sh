@@ -237,6 +237,7 @@ RENDER_OVERRIDE_ARGS=()
 if [[ -n "${OCCLUSION_FRACTION_OVERRIDE}" ]]; then
   RENDER_OVERRIDE_ARGS+=(--override-perturbation-param "occlusion.fraction=${OCCLUSION_FRACTION_OVERRIDE}")
 fi
+PERTURB_RENDER_FILTER_ARGS=(--include-family occlusion)
 
 if [[ "${INCLUDE_CLEAN_ANCHORS}" == "1" ]]; then
   echo "Exporting clean-anchor manifest at \$(date -Is)"
@@ -275,6 +276,7 @@ echo "Rendering BGR boundary perturbations at \$(date -Is)"
   --manifest "${PERTURB_MANIFEST}" \\
   --out "${BGR_PERTURB_RENDER}" \\
   --method bgr_boundary \\
+  "\${PERTURB_RENDER_FILTER_ARGS[@]}" \\
   "\${RENDER_OVERRIDE_ARGS[@]}" \\
   --max-examples "${MAX_PERTURB_EXAMPLES}" \\
   --selection balanced_episodes \\
@@ -286,6 +288,7 @@ echo "Rendering matched-random perturbations at \$(date -Is)"
   --manifest "${PERTURB_MANIFEST}" \\
   --out "${RANDOM_PERTURB_RENDER}" \\
   --method random_balanced \\
+  "\${PERTURB_RENDER_FILTER_ARGS[@]}" \\
   "\${RENDER_OVERRIDE_ARGS[@]}" \\
   --max-examples "${MAX_PERTURB_EXAMPLES}" \\
   --selection balanced_episodes \\
