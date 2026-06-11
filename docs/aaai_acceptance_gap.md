@@ -189,12 +189,25 @@ random train/merge/clean-eval jobs are `783006`/`783007`/`783008`, and clean
 hard-0.90 occlusion eval jobs are official/BGR/random `783034`/`783035`/`783036`.
 Earlier eval jobs `783009`--`783023` and `783028`--`783030` were cancelled
 because they were submitted under a contaminated/default perturb artifact; do
-not sync or interpret those rows. Latest poll/sync at 2026-06-11 08:56:23 BST
-showed prep `783002` and BGR train `783003` completed with exit `0:0`; BGR
-merge `783004`, random train `783006`, and official hard-occlusion eval
-`783034` were running; BGR/random hard-occlusion evals `783035`/`783036`
-remained dependency-held behind merge jobs. Poll/sync:
+not sync or interpret those rows. Latest poll/sync at 2026-06-11 09:48:26 BST
+showed prep, BGR/random train, BGR/random merge, and BGR/random clean evals
+completed with exit `0:0`; the clean/adapt summary has BGR 391/400 and matched
+random 391/400. Official hard-occlusion eval `783034` completed at 305/400,
+while BGR `783035` and matched random `783036` were still running. The
+incomplete local perturb summary had BGR 134/211, official 305/400, and
+matched random 123/203. This route is not gateable and is trending negative;
+do not interpret it until the complete 400-episode BGR/random rows are synced.
+Poll/sync:
 `PREP_TAG=p512unique_occonly_hardocc090_router_prereg ADAPT_TAG=occonly_p512unique_hardocc090_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 PERTURB_TAG=occonly_p512unique_hardocc090_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc090_occonly_fullgoal10x40_v1 JOB_IDS=783002,783003,783004,783005,783006,783007,783008,783034,783035,783036 DETAIL_JOB_IDS=783002,783003,783004,783006,783007,783034,783035,783036 ROUTE_LABEL='Hard-occlusion 0.90 occlusion-only router-trained OpenVLA-OFT premise' GATE_PERTURBATIONS=occlusion scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check`.
+A low-cost occlusion-fraction 0.75 scout was also queued for the original
+occlusion-bottleneck transfer checkpoints after the 0.90 trained-router partial
+looked weak. It uses a fresh artifact
+`openvla_oft_perturb_eval_occlusion_bottleneck_transfer_occ075_scout_v1`,
+`PERTURBATIONS='occlusion={"fraction":0.75}'`, `EVAL_TASKS=10`,
+`EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`; submitted jobs are
+official/BGR/matched-random `783104`/`783105`/`783106`. This is only a
+severity-window diagnostic for whether a future preregistered router-style gate
+is worth running, not paper evidence and not a moved gate.
 A new router-specific occlusion-only training premise was queued on
 2026-06-11 after the 0.80 held-out confirmation failed. This is not another
 same-checkpoint re-evaluation: `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`

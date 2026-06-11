@@ -7530,7 +7530,15 @@ exit `0:0`; BGR train/merge/clean-eval jobs are `783003`/`783004`/`783005`,
 random train/merge/clean-eval jobs are `783006`/`783007`/`783008`, and
 official/BGR/random hard-occlusion eval jobs are `783034`/`783035`/`783036`.
 Cancelled eval job sets `783009`--`783023` and `783028`--`783030` used a
-wrong or contaminated perturb artifact and must not be interpreted. Poll/sync:
+wrong or contaminated perturb artifact and must not be interpreted. Latest
+poll/sync at 2026-06-11 09:48:26 BST showed prep, BGR/random train,
+BGR/random merge, and BGR/random clean evals completed with exit `0:0`; the
+clean/adapt summary has BGR 391/400 and matched random 391/400. Official
+hard-occlusion eval `783034` completed at 305/400, while BGR `783035` and
+matched random `783036` were still running. The incomplete local perturb
+summary had BGR 134/211, official 305/400, and matched random 123/203. This
+route is not gateable and is trending negative until the BGR/random rows
+finish. Poll/sync:
 
 ```bash
 PREP_TAG=p512unique_occonly_hardocc090_router_prereg \
@@ -7542,6 +7550,16 @@ ROUTE_LABEL='Hard-occlusion 0.90 occlusion-only router-trained OpenVLA-OFT premi
 GATE_PERTURBATIONS=occlusion \
 scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check
 ```
+
+A low-cost occlusion-fraction 0.75 scout was queued for the original transfer
+checkpoints after the hard-0.90 trained-router partial looked weak. It writes
+to
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_transfer_occ075_scout_v1/`
+and uses `PERTURBATIONS='occlusion={"fraction":0.75}'`, `EVAL_TASKS=10`,
+`EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`. Submitted Athena jobs
+are official/BGR/matched-random `783104`/`783105`/`783106`. Treat it as a
+severity-window diagnostic only, not paper evidence and not a replacement for a
+fixed preregistered router-style gate.
 
 A new router-specific occlusion-only training premise was queued on
 2026-06-11 after the 0.80 held-out confirmation failed. This is different from
