@@ -382,18 +382,18 @@ primary-image shift in sequence. The scout uses artifact
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, `SAVE_ROLLOUTS=0`, and
 the completed p2048 occlusion-bottleneck BGR/matched-random checkpoints.
 Submitted on Athena at 2026-06-11 11:56 BST: official `783312`, BGR `783314`,
-and matched random `783315`; latest guarded advance at 2026-06-11 13:04:36 BST
+and matched random `783315`; latest guarded advance at 2026-06-11 13:05:56 BST
 ran `scripts/advance_openvla_oft_occlusion_shift_combo_scout.sh --submit`
 but did not submit a full gate because the scout remains `[INCOMPLETE]`.
-Official `783312` is now running on `c1-g4-05`, BGR `783314` is pending on
-`Resources`, and matched random `783315` is pending on `ReqNodeNotAvail` for
-unavailable GPU nodes; estimated starts remain 2026-06-11 14:21:02 BST for BGR
-and 2026-06-11 18:51:35 BST for matched random. A direct scheduler check at
+Official `783312` is running on `c1-g4-05`, BGR `783314` is running on
+`c1-g4-04`, and matched random `783315` is pending on `Resources`; estimated
+start is 2026-06-11 14:21:02 BST for matched random. A direct scheduler check at
 2026-06-11 12:47 BST showed no dependencies or feature constraints, priority
 611 for all three jobs, and only explicit
 exclusion `c2-g4-21`, which is down; leave the jobs untouched unless a new
 scheduler problem appears. The remote full summary is still missing, but the
-local incomplete summary has official occlusion_shift 18/40 successes. This is
+local incomplete summary has BGR occlusion_shift 0/2 and official
+occlusion_shift 28/52 successes. This is
 not manuscript evidence and not a moved gate. Only if the 100-episode scout
 shows a clear BGR edge over both official and matched random should it be
 promoted to a fixed 400-episode identity-plus-combined-perturbation gate.
