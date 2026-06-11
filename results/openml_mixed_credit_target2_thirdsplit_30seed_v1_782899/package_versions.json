@@ -1,0 +1,15 @@
+{
+  "datasets": {
+    "credit-approval": {
+      "name": "credit-approval",
+      "version": 1
+    },
+    "credit-g": {
+      "name": "credit-g",
+      "version": 1
+    }
+  },
+  "numpy": "2.2.6",
+  "python": "3.10.12",
+  "scikit_learn": "1.7.2"
+}

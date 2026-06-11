@@ -1,0 +1,7 @@
+dataset,target_radius,method,n,final_rauc_mean,delta_vs_uniform,wins_vs_uniform,losses_vs_uniform,ties_vs_uniform,decision
+credit-approval,2.0000,uniform,30,0.795377,0.000000,0,0,30,reject-scout
+credit-approval,2.0000,fixed,30,0.799785,0.004408,14,16,0,reject-scout
+credit-approval,2.0000,bgr,30,0.823580,0.028202,24,6,0,reject-scout
+credit-g,2.0000,uniform,30,0.667008,0.000000,0,0,30,reject-scout
+credit-g,2.0000,fixed,30,0.684233,0.017225,13,17,0,reject-scout
+credit-g,2.0000,bgr,30,0.702217,0.035208,19,11,0,reject-scout

@@ -195,6 +195,17 @@ Internal pre-existing-dataset route scout:
   0.0001; credit-g BGR is 0.7053 vs. uniform 0.6670 and fixed 0.6760, missing
   the fixed-radius +0.03 cutoff by 0.0007. Treat it as mixed-feature
   supervised near-miss/fragility evidence, not a new paper headline.
+  Completed fixed third-block target-2.0 check: job `782899` ran on 2026-06-11
+  for credit-approval and credit-g at target radius 2.0, seeds 60--89, using
+  the same mixed preprocessing. Launch command:
+  `OUT_PREFIX=openml_mixed_credit_target2_thirdsplit_30seed_v1 DATASETS=credit-approval,credit-g TARGETS=2.0 SEED_START=60 SEEDS=30 STEPS=8 BATCH_SIZE=64 CANDIDATE_COUNT=128 EVAL_EXAMPLES=250 TIME_LIMIT=12:00:00 MEMORY=24G CPUS=4 scripts/queue_openml_mixed_binary_suite.sh`.
+  It completed with exit `0:0` and synced to
+  `results/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899/`. The new
+  block is sub-threshold under the fixed rule: credit-approval BGR is 0.8236
+  vs. uniform 0.7954 and fixed 0.7998, missing the uniform +0.03 cutoff by
+  0.0018; credit-g BGR is 0.7022 vs. uniform 0.6670 and fixed 0.6842, clearing
+  uniform by +0.0352 but fixed by only +0.0180. Treat it as supervised
+  near-miss/fragility evidence only.
 - Completed all-binary numeric OpenML target-1.5 sweep, opened and completed
   2026-06-10: this is a fixed broad CPU check over the 32 numeric binary OpenML datasets currently
   registered in `tools/openml_margin_scout.py`, combining the default,

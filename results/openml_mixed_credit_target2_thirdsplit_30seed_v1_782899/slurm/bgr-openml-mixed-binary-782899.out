@@ -1,0 +1,365 @@
+[start] 2026-06-11T07:38:01+01:00
+[host] cnode404
+[job] 782899
+[run] dataset=credit-approval target=2.0000 seed=60 method=uniform final_rauc=0.827221
+[checkpoint] wrote 1 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=60 method=fixed final_rauc=0.642820
+[checkpoint] wrote 2 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=60 method=bgr final_rauc=0.837293
+[checkpoint] wrote 3 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=61 method=uniform final_rauc=0.841426
+[checkpoint] wrote 4 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=61 method=fixed final_rauc=0.823605
+[checkpoint] wrote 5 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=61 method=bgr final_rauc=0.847882
+[checkpoint] wrote 6 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=62 method=uniform final_rauc=0.776860
+[checkpoint] wrote 7 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=62 method=fixed final_rauc=0.766012
+[checkpoint] wrote 8 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=62 method=bgr final_rauc=0.760589
+[checkpoint] wrote 9 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=63 method=uniform final_rauc=0.827738
+[checkpoint] wrote 10 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=63 method=fixed final_rauc=0.819215
+[checkpoint] wrote 11 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=63 method=bgr final_rauc=0.849174
+[checkpoint] wrote 12 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=64 method=uniform final_rauc=0.826963
+[checkpoint] wrote 13 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=64 method=fixed final_rauc=0.784866
+[checkpoint] wrote 14 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=64 method=bgr final_rauc=0.830062
+[checkpoint] wrote 15 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=65 method=uniform final_rauc=0.802686
+[checkpoint] wrote 16 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=65 method=fixed final_rauc=0.818182
+[checkpoint] wrote 17 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=65 method=bgr final_rauc=0.835227
+[checkpoint] wrote 18 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=66 method=uniform final_rauc=0.806818
+[checkpoint] wrote 19 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=66 method=fixed final_rauc=0.790806
+[checkpoint] wrote 20 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=66 method=bgr final_rauc=0.847366
+[checkpoint] wrote 21 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=67 method=uniform final_rauc=0.808884
+[checkpoint] wrote 22 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=67 method=fixed final_rauc=0.844525
+[checkpoint] wrote 23 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=67 method=bgr final_rauc=0.803461
+[checkpoint] wrote 24 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=68 method=uniform final_rauc=0.829545
+[checkpoint] wrote 25 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=68 method=fixed final_rauc=0.811467
+[checkpoint] wrote 26 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=68 method=bgr final_rauc=0.827996
+[checkpoint] wrote 27 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=69 method=uniform final_rauc=0.779959
+[checkpoint] wrote 28 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=69 method=fixed final_rauc=0.825155
+[checkpoint] wrote 29 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=69 method=bgr final_rauc=0.833678
+[checkpoint] wrote 30 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=70 method=uniform final_rauc=0.839101
+[checkpoint] wrote 31 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=70 method=fixed final_rauc=0.804494
+[checkpoint] wrote 32 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=70 method=bgr final_rauc=0.745093
+[checkpoint] wrote 33 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=71 method=uniform final_rauc=0.779184
+[checkpoint] wrote 34 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=71 method=fixed final_rauc=0.816890
+[checkpoint] wrote 35 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=71 method=bgr final_rauc=0.850723
+[checkpoint] wrote 36 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=72 method=uniform final_rauc=0.784091
+[checkpoint] wrote 37 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=72 method=fixed final_rauc=0.816632
+[checkpoint] wrote 38 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=72 method=bgr final_rauc=0.818698
+[checkpoint] wrote 39 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=73 method=uniform final_rauc=0.726240
+[checkpoint] wrote 40 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=73 method=fixed final_rauc=0.770919
+[checkpoint] wrote 41 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=73 method=bgr final_rauc=0.784607
+[checkpoint] wrote 42 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=74 method=uniform final_rauc=0.738636
+[checkpoint] wrote 43 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=74 method=fixed final_rauc=0.786932
+[checkpoint] wrote 44 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=74 method=bgr final_rauc=0.802169
+[checkpoint] wrote 45 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=75 method=uniform final_rauc=0.815083
+[checkpoint] wrote 46 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=75 method=fixed final_rauc=0.799587
+[checkpoint] wrote 47 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=75 method=bgr final_rauc=0.840651
+[checkpoint] wrote 48 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=76 method=uniform final_rauc=0.813275
+[checkpoint] wrote 49 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=76 method=fixed final_rauc=0.859246
+[checkpoint] wrote 50 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=76 method=bgr final_rauc=0.838843
+[checkpoint] wrote 51 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=77 method=uniform final_rauc=0.837293
+[checkpoint] wrote 52 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=77 method=fixed final_rauc=0.746126
+[checkpoint] wrote 53 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=77 method=bgr final_rauc=0.863895
+[checkpoint] wrote 54 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=78 method=uniform final_rauc=0.764205
+[checkpoint] wrote 55 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=78 method=fixed final_rauc=0.824638
+[checkpoint] wrote 56 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=78 method=bgr final_rauc=0.834711
+[checkpoint] wrote 57 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=79 method=uniform final_rauc=0.777376
+[checkpoint] wrote 58 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=79 method=fixed final_rauc=0.840393
+[checkpoint] wrote 59 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=79 method=bgr final_rauc=0.846849
+[checkpoint] wrote 60 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=80 method=uniform final_rauc=0.714618
+[checkpoint] wrote 61 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=80 method=fixed final_rauc=0.853822
+[checkpoint] wrote 62 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=80 method=bgr final_rauc=0.853306
+[checkpoint] wrote 63 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=81 method=uniform final_rauc=0.765496
+[checkpoint] wrote 64 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=81 method=fixed final_rauc=0.808884
+[checkpoint] wrote 65 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=81 method=bgr final_rauc=0.835744
+[checkpoint] wrote 66 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=82 method=uniform final_rauc=0.825155
+[checkpoint] wrote 67 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=82 method=fixed final_rauc=0.819990
+[checkpoint] wrote 68 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=82 method=bgr final_rauc=0.833161
+[checkpoint] wrote 69 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=83 method=uniform final_rauc=0.829545
+[checkpoint] wrote 70 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=83 method=fixed final_rauc=0.776343
+[checkpoint] wrote 71 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=83 method=bgr final_rauc=0.820248
+[checkpoint] wrote 72 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=84 method=uniform final_rauc=0.701188
+[checkpoint] wrote 73 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=84 method=fixed final_rauc=0.771952
+[checkpoint] wrote 74 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=84 method=bgr final_rauc=0.793388
+[checkpoint] wrote 75 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=85 method=uniform final_rauc=0.844525
+[checkpoint] wrote 76 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=85 method=fixed final_rauc=0.816632
+[checkpoint] wrote 77 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=85 method=bgr final_rauc=0.811209
+[checkpoint] wrote 78 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=86 method=uniform final_rauc=0.817149
+[checkpoint] wrote 79 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=86 method=fixed final_rauc=0.841426
+[checkpoint] wrote 80 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=86 method=bgr final_rauc=0.841942
+[checkpoint] wrote 81 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=87 method=uniform final_rauc=0.776343
+[checkpoint] wrote 82 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=87 method=fixed final_rauc=0.758523
+[checkpoint] wrote 83 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=87 method=bgr final_rauc=0.808368
+[checkpoint] wrote 84 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=88 method=uniform final_rauc=0.807076
+[checkpoint] wrote 85 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=88 method=fixed final_rauc=0.795455
+[checkpoint] wrote 86 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=88 method=bgr final_rauc=0.808626
+[checkpoint] wrote 87 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=89 method=uniform final_rauc=0.777634
+[checkpoint] wrote 88 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=89 method=fixed final_rauc=0.758006
+[checkpoint] wrote 89 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-approval target=2.0000 seed=89 method=bgr final_rauc=0.802428
+[checkpoint] wrote 90 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=60 method=uniform final_rauc=0.639500
+[checkpoint] wrote 91 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=60 method=fixed final_rauc=0.722500
+[checkpoint] wrote 92 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=60 method=bgr final_rauc=0.771250
+[checkpoint] wrote 93 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=61 method=uniform final_rauc=0.696250
+[checkpoint] wrote 94 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=61 method=fixed final_rauc=0.723750
+[checkpoint] wrote 95 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=61 method=bgr final_rauc=0.713250
+[checkpoint] wrote 96 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=62 method=uniform final_rauc=0.703500
+[checkpoint] wrote 97 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=62 method=fixed final_rauc=0.656500
+[checkpoint] wrote 98 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=62 method=bgr final_rauc=0.716250
+[checkpoint] wrote 99 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=63 method=uniform final_rauc=0.507500
+[checkpoint] wrote 100 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=63 method=fixed final_rauc=0.697000
+[checkpoint] wrote 101 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=63 method=bgr final_rauc=0.679500
+[checkpoint] wrote 102 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=64 method=uniform final_rauc=0.620250
+[checkpoint] wrote 103 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=64 method=fixed final_rauc=0.707500
+[checkpoint] wrote 104 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=64 method=bgr final_rauc=0.692750
+[checkpoint] wrote 105 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=65 method=uniform final_rauc=0.727000
+[checkpoint] wrote 106 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=65 method=fixed final_rauc=0.695000
+[checkpoint] wrote 107 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=65 method=bgr final_rauc=0.704000
+[checkpoint] wrote 108 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=66 method=uniform final_rauc=0.492750
+[checkpoint] wrote 109 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=66 method=fixed final_rauc=0.693000
+[checkpoint] wrote 110 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=66 method=bgr final_rauc=0.709750
+[checkpoint] wrote 111 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=67 method=uniform final_rauc=0.711750
+[checkpoint] wrote 112 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=67 method=fixed final_rauc=0.707500
+[checkpoint] wrote 113 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=67 method=bgr final_rauc=0.695250
+[checkpoint] wrote 114 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=68 method=uniform final_rauc=0.703750
+[checkpoint] wrote 115 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=68 method=fixed final_rauc=0.587750
+[checkpoint] wrote 116 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=68 method=bgr final_rauc=0.719500
+[checkpoint] wrote 117 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=69 method=uniform final_rauc=0.646750
+[checkpoint] wrote 118 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=69 method=fixed final_rauc=0.672250
+[checkpoint] wrote 119 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=69 method=bgr final_rauc=0.710500
+[checkpoint] wrote 120 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=70 method=uniform final_rauc=0.741000
+[checkpoint] wrote 121 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=70 method=fixed final_rauc=0.729500
+[checkpoint] wrote 122 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=70 method=bgr final_rauc=0.694500
+[checkpoint] wrote 123 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=71 method=uniform final_rauc=0.731750
+[checkpoint] wrote 124 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=71 method=fixed final_rauc=0.709250
+[checkpoint] wrote 125 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=71 method=bgr final_rauc=0.687750
+[checkpoint] wrote 126 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=72 method=uniform final_rauc=0.725000
+[checkpoint] wrote 127 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=72 method=fixed final_rauc=0.670000
+[checkpoint] wrote 128 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=72 method=bgr final_rauc=0.646500
+[checkpoint] wrote 129 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=73 method=uniform final_rauc=0.721000
+[checkpoint] wrote 130 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=73 method=fixed final_rauc=0.672500
+[checkpoint] wrote 131 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=73 method=bgr final_rauc=0.709500
+[checkpoint] wrote 132 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=74 method=uniform final_rauc=0.741250
+[checkpoint] wrote 133 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=74 method=fixed final_rauc=0.690750
+[checkpoint] wrote 134 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=74 method=bgr final_rauc=0.757250
+[checkpoint] wrote 135 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=75 method=uniform final_rauc=0.541750
+[checkpoint] wrote 136 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=75 method=fixed final_rauc=0.634750
+[checkpoint] wrote 137 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=75 method=bgr final_rauc=0.705000
+[checkpoint] wrote 138 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=76 method=uniform final_rauc=0.631000
+[checkpoint] wrote 139 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=76 method=fixed final_rauc=0.650250
+[checkpoint] wrote 140 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=76 method=bgr final_rauc=0.728500
+[checkpoint] wrote 141 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=77 method=uniform final_rauc=0.664500
+[checkpoint] wrote 142 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=77 method=fixed final_rauc=0.694000
+[checkpoint] wrote 143 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=77 method=bgr final_rauc=0.707500
+[checkpoint] wrote 144 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=78 method=uniform final_rauc=0.489250
+[checkpoint] wrote 145 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=78 method=fixed final_rauc=0.745000
+[checkpoint] wrote 146 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=78 method=bgr final_rauc=0.700000
+[checkpoint] wrote 147 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=79 method=uniform final_rauc=0.647750
+[checkpoint] wrote 148 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=79 method=fixed final_rauc=0.530750
+[checkpoint] wrote 149 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=79 method=bgr final_rauc=0.555500
+[checkpoint] wrote 150 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=80 method=uniform final_rauc=0.536750
+[checkpoint] wrote 151 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=80 method=fixed final_rauc=0.616750
+[checkpoint] wrote 152 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=80 method=bgr final_rauc=0.695250
+[checkpoint] wrote 153 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=81 method=uniform final_rauc=0.665500
+[checkpoint] wrote 154 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=81 method=fixed final_rauc=0.711750
+[checkpoint] wrote 155 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=81 method=bgr final_rauc=0.704000
+[checkpoint] wrote 156 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=82 method=uniform final_rauc=0.654500
+[checkpoint] wrote 157 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=82 method=fixed final_rauc=0.657750
+[checkpoint] wrote 158 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=82 method=bgr final_rauc=0.724500
+[checkpoint] wrote 159 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=83 method=uniform final_rauc=0.693750
+[checkpoint] wrote 160 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=83 method=fixed final_rauc=0.676000
+[checkpoint] wrote 161 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=83 method=bgr final_rauc=0.710000
+[checkpoint] wrote 162 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=84 method=uniform final_rauc=0.676750
+[checkpoint] wrote 163 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=84 method=fixed final_rauc=0.665500
+[checkpoint] wrote 164 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=84 method=bgr final_rauc=0.759500
+[checkpoint] wrote 165 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=85 method=uniform final_rauc=0.687500
+[checkpoint] wrote 166 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=85 method=fixed final_rauc=0.675250
+[checkpoint] wrote 167 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=85 method=bgr final_rauc=0.690250
+[checkpoint] wrote 168 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=86 method=uniform final_rauc=0.750250
+[checkpoint] wrote 169 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=86 method=fixed final_rauc=0.712000
+[checkpoint] wrote 170 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=86 method=bgr final_rauc=0.681000
+[checkpoint] wrote 171 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=87 method=uniform final_rauc=0.747000
+[checkpoint] wrote 172 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=87 method=fixed final_rauc=0.735500
+[checkpoint] wrote 173 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=87 method=bgr final_rauc=0.689500
+[checkpoint] wrote 174 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=88 method=uniform final_rauc=0.763250
+[checkpoint] wrote 175 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=88 method=fixed final_rauc=0.761500
+[checkpoint] wrote 176 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=88 method=bgr final_rauc=0.705250
+[checkpoint] wrote 177 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=89 method=uniform final_rauc=0.751750
+[checkpoint] wrote 178 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=89 method=fixed final_rauc=0.725500
+[checkpoint] wrote 179 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[run] dataset=credit-g target=2.0000 seed=89 method=bgr final_rauc=0.703250
+[checkpoint] wrote 180 trial rows to /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+wrote /work/joy/bgr/runs/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899
+[done] 2026-06-11T07:40:01+01:00

@@ -527,6 +527,21 @@ seeds, BGR is 0.7938 vs. uniform 0.7678 (+0.0260, W/L/T=80/40/0) and fixed
 0.7748 (+0.0190, W/L/T=67/53/0), below the +0.03 fixed follow-up standard.
 Treat the mixed-type OpenML route as a fragility/near-miss diagnostic, not an
 acceptance-moving independent benchmark win.
+Completed low-priority supervised third-split target-2.0 check: because mixed
+credit-approval target radius 2.0 was positive in the original and held-out
+30-seed target-sensitivity blocks, a fixed no-retuning third block was queued on
+2026-06-11 for `credit-approval,credit-g` at target radius 2.0, seeds 60--89.
+This is not the standard-environment or learned-policy evidence gap, and it did
+not add a promotable mixed-feature OpenML positive. Athena job `782899`
+completed with exit `0:0`, writing to
+`results/openml_mixed_credit_target2_thirdsplit_30seed_v1_782899/`. Launch:
+`OUT_PREFIX=openml_mixed_credit_target2_thirdsplit_30seed_v1 DATASETS=credit-approval,credit-g TARGETS=2.0 SEED_START=60 SEEDS=30 STEPS=8 BATCH_SIZE=64 CANDIDATE_COUNT=128 EVAL_EXAMPLES=250 TIME_LIMIT=12:00:00 MEMORY=24G CPUS=4 scripts/queue_openml_mixed_binary_suite.sh`.
+Credit-approval gives BGR 0.8236, uniform 0.7954, and fixed-radius 0.7998, so
+it misses the +0.03 uniform margin at +0.0282. Credit-g gives BGR 0.7022,
+uniform 0.6670, and fixed-radius 0.6842, clearing uniform by +0.0352 but fixed
+by only +0.0180. Treat this as another mixed-feature supervised
+fragility/near-miss diagnostic, not a paper headline or an acceptance-moving
+independent benchmark win.
 
 Completed MiniGrid DynamicObstacles independent-benchmark scout: the official
 package-owned reset interface in
