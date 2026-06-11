@@ -1,0 +1,6 @@
+{
+  "bsuite": "0.3.6",
+  "bsuite-package": "0.3.6",
+  "dm-env": "1.6",
+  "numpy": "2.2.6"
+}

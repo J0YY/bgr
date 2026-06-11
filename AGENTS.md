@@ -58,14 +58,14 @@ TD-loss 0.5547, and uniform-radius 0.5422, but paired wins are only 3/8 versus
 uniform, 2/8 versus failure-only, 1/8 versus TD-loss, and 3/8 versus the
 radius ablation. Harder-budget SimpleCrossing variants are negative or
 dominated by uniform/failure-only/uniform-radius. Do not queue a SimpleCrossing
-scale-up without a materially new fixed premise. A new bsuite Cartpole Swingup
-package-state recovery scout is active as CPU Slurm job `782844`. This is a
-new package-owned bsuite interface, not paper evidence: it uses
-`tools/bsuite_cartpole_swingup_recovery_probe.py`, syncs with
-`scripts/sync_bsuite_cartpole_swingup_probe.sh`, and can only justify a
-30-seed follow-up if BGR or BGR-Coverage beats uniform, fixed-radius,
-failure-only, TD-loss, and BGR-uniform-radius on final RAUC with at least 3/4
-paired wins and non-saturated/non-contradictory median-r80 evidence. A broader
+scale-up without a materially new fixed premise. The 2026-06-11 bsuite
+Cartpole Swingup package-state recovery scout is also completed negative:
+Slurm job `782844` finished with exit `0:0`, but default BGR reaches only
+0.1044 RAUC versus uniform 0.0761, failure-only 0.1287, TD-loss 0.1456, and
+BGR-uniform-radius 0.0732. BGR-Coverage is weaker at 0.0806 RAUC. Median r80
+is saturated at 1.0000 for every method, so this route fails the strong-baseline
+and radius gates and must not be scaled without a materially new fixed premise.
+A broader
 fixed OpenML numeric-suite
 target-2.0 run and held-out seeds 30--59 replication completed on `athena` as
 jobs `774312` and `774346`: the 10-dataset suite is mixed and not a macro win

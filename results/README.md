@@ -465,22 +465,29 @@ Fixed 4-seed bsuite MountainCar pre-promotion command:
 PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_mountaincar_recovery_probe.py --out results/bsuite_mountaincar_recovery_probe_4seed_v1
 ```
 
-Active external-package pre-promotion route:
+Completed external-package pre-promotion route:
 
-- `tools/bsuite_cartpole_swingup_recovery_probe.py`: active 2026-06-11
+- `tools/bsuite_cartpole_swingup_recovery_probe.py`: completed 2026-06-11
   package-owned bsuite Cartpole Swingup recovery scout. This differs from the
   retired upright bsuite Cartpole screen by using bsuite's `CartpoleSwingup`
   task, exact `CartpoleState` restarts, near-upright recovery states, and a
   fixed perturbation family over cart position/velocity and pole
   angle/velocity.
 - Fixed 4-seed Slurm job `782844` was submitted with
-  `scripts/queue_bsuite_cartpole_swingup_probe.sh`, writes to
+  `scripts/queue_bsuite_cartpole_swingup_probe.sh`, wrote to
   `/work/joy/bgr/runs/bsuite_cartpole_swingup_recovery_probe_4seed_v1_782844`,
-  and syncs with `scripts/sync_bsuite_cartpole_swingup_probe.sh`.
-- Treat it as a pre-promotion scout only. A 30-seed follow-up requires BGR or
-  BGR-Coverage to beat uniform, fixed-radius, failure-only, TD-loss, and
-  BGR-uniform-radius with at least 3/4 paired wins over uniform and
-  non-saturated, non-contradictory median-r80 evidence.
+  and synced with `scripts/sync_bsuite_cartpole_swingup_probe.sh`.
+- `results/bsuite_cartpole_swingup_recovery_probe_4seed_v1_782844/summary.csv`:
+  fixed 4-seed screen. The route is negative and should not be scaled:
+  default BGR reaches 0.1044 final RAUC versus uniform 0.0761 (+0.0284,
+  W/L/T=3/1/0), but trails failure-only replay (0.1287) and TD-loss replay
+  (0.1456). BGR-Coverage reaches only 0.0806 RAUC and fails the uniform gate.
+  Both BGR variants tie uniform at median r80 1.0000, so the screen is
+  radius-ceiling saturated.
+- `results/bsuite_cartpole_swingup_recovery_probe_4seed_v1_782844/results.json`
+  and
+  `results/bsuite_cartpole_swingup_recovery_probe_4seed_v1_782844/package_versions.json`:
+  full per-method history and package-version record for the same scout.
 
 Completed external-package pre-promotion route:
 
