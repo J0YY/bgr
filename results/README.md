@@ -7440,12 +7440,13 @@ ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only fallback scout' 
 scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check
 ```
 
-Final local sync before cancellation is incomplete and unfavorable on success
-rate versus both comparators: BGR 89/157, official 90/145, and matched random
-79/121 in
+Final local sync before cancellation is incomplete and non-promotable: BGR
+123/194, official 93/159, and matched random 82/132 in
 `results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_occscout_v1/summary_available.csv`.
 Jobs `782638`--`782640` were cancelled to free GPUs for the trained router
-route. Do not interpret this as router evidence.
+route. This is not a fixed 400-episode result and BGR's partial edge is below
+the required +10/400 and +0.02 full-gate standard. Do not interpret this as
+router evidence.
 
 A new router-specific occlusion-only training premise was queued on
 2026-06-11 after the 0.80 held-out confirmation failed. This is different from
@@ -7478,16 +7479,18 @@ GATE_PERTURBATIONS=occlusion \
 scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check
 ```
 
-Latest poll at 2026-06-11 05:36 BST showed prep, train, and merge completed
-with exit `0:0`; BGR clean eval `782674`, matched-random clean eval `782677`,
-and official/BGR/random hard-occlusion evals `782679`--`782681` were still
-running. No full perturb or adapt `summary.csv` existed yet. The sync helper
-now writes a local partial nested-log summary at
+Final poll/sync at 2026-06-11 06:34 BST closed the corrected router-specific
+occlusion-only route as negative. Prep, BGR/random train/merge/clean evals,
+and official/BGR/random hard-occlusion evals all completed with exit `0:0`.
+The remote wrapper still did not write a full perturb `summary.csv`, but the
+sync helper reconstructed a complete local nested-log summary at
 `results/openvla_oft_perturb_eval_occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary_available.csv`.
-The current incomplete rows are BGR 73/122, official 158/251, and matched
-random 80/142, which remain non-gateable because task coverage is not aligned
-and identity/clean summaries are missing. Wait for complete summaries before
-making any claim.
+The clean/adapt summary has BGR 386/400 and matched random 388/400. The
+completed hard-occlusion rows are BGR 297/400, official 298/400, and matched
+random 300/400. BGR trails official by 1 episode and matched random by 3
+episodes, so it fails the decisive router occlusion criterion before any
+identity-side interpretation. Do not incorporate this route into
+`paper/main.tex`; it is another learned-policy negative result.
 
 This first router-training attempt failed during prep, not during adaptation:
 matched-random perturbation rendering produced zero occlusion examples before

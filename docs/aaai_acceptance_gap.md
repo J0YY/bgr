@@ -137,11 +137,12 @@ are official `782638`, BGR `782639`, and matched random `782640`, writing to
 This remains a router-premise scout only; it is useful only if BGR beats both
 comparators by at least +10/400 and +0.02 on hard occlusion. Poll/sync with:
 `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_occscout_v1 JOB_IDS=782638,782639,782640 DETAIL_JOB_IDS=782638,782639,782640 ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only fallback scout' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
-Final local sync before cancellation has BGR 89/157, official 90/145, and
-matched random 79/121. This was still incomplete but clearly unfavorable on
-success rate versus both comparators, so jobs `782638`--`782640` were cancelled
-to free GPUs for the trained router route. Treat the 0.90 alpha-0 no-video
-scout as closed unfavorable non-evidence for the router premise.
+Final local sync before cancellation has BGR 123/194, official 93/159, and
+matched random 82/132. This was still incomplete and not a fixed 400-episode
+result; BGR's partial edge is below the required +10/400 and +0.02 full-gate
+standard, so jobs `782638`--`782640` were cancelled to free GPUs for the
+trained router route. Treat the 0.90 alpha-0 no-video scout as closed
+non-promotable partial evidence for the router premise.
 A new router-specific occlusion-only training premise was queued on
 2026-06-11 after the 0.80 held-out confirmation failed. This is not another
 same-checkpoint re-evaluation: `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`
@@ -183,18 +184,21 @@ route, queued 2026-06-11 04:55 BST: prep `782671`, BGR train/merge/clean-eval
 eval. It is still only router-premise evidence unless BGR beats both official
 and matched random by at least +10/400 and +0.02 on hard occlusion. Poll/sync:
 `PREP_TAG=p512unique_occonly_hardocc080_router_randfix_prereg ADAPT_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 PERTURB_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1 JOB_IDS=782671,782672,782673,782674,782675,782676,782677,782679,782680,782681 DETAIL_JOB_IDS=782671,782672,782673,782675,782676,782679,782680,782681 ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT randfix premise' GATE_PERTURBATIONS=occlusion scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check`.
-Latest poll at 2026-06-11 06:12 BST showed prep, BGR/random train/merge,
-BGR/random clean evals, and official occlusion eval completed with exit `0:0`.
-The synced clean/adapt summary has BGR 386/400 and matched random 388/400.
-BGR and matched-random hard-occlusion evals `782680`/`782681` were still
-running, so no full perturb `summary.csv` existed yet. The sync helper writes
-a local partial nested-log summary at
+Final poll/sync at 2026-06-11 06:34 BST closed the corrected router-specific
+occlusion-only route as negative. Prep, BGR/random train/merge/clean evals,
+and official/BGR/random hard-occlusion evals all completed with exit `0:0`.
+The remote wrapper still did not write a full perturb `summary.csv`, but the
+sync helper reconstructed a complete local nested-log summary at
 `results/openvla_oft_perturb_eval_occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary_available.csv`.
-The current incomplete perturb rows are BGR 174/270, official 298/400, and
-matched random 294/393. This is non-gateable because BGR/random task coverage
-is still incomplete, but it is strongly unfavorable versus official and random
-on current success rate. Wait for complete summaries before making any paper
-claim or route closure.
+The clean/adapt summary has BGR 386/400 and matched random 388/400. The
+completed hard-occlusion rows are BGR 297/400, official 298/400, and matched
+random 300/400. BGR trails official by 1 episode and matched random by 3
+episodes, so it fails the decisive router occlusion criterion before any
+identity-side interpretation. Do not incorporate this route into
+`paper/main.tex`; it is another learned-policy negative result. No active
+learned-policy cluster jobs remain queued for BGR after this closure; current
+Athena GPU jobs are separate `rl4vla-*` work and should not be modified by this
+project.
 A fixed head-interpolation follow-up was queued on 2026-06-10 to test whether
 the near-miss 0.80 transfer route can preserve the occlusion gain while
 recovering identity success. It copies the completed BGR and matched-random
