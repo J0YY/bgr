@@ -609,6 +609,10 @@ CALIBRATION_SCREENS = [
         "results/reacher_recovery_calibration_12seed_v1/summary.json",
     ),
     (
+        "Gymnasium MuJoCo Swimmer-v5 calibration",
+        "results/swimmer_recovery_calibration_12seed_v1_784458/summary.json",
+    ),
+    (
         "Gymnasium MuJoCo InvertedPendulum-v5 calibration",
         "results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json",
     ),

@@ -83,7 +83,15 @@ default BGR 0.1383, failure-only 0.1390, fixed 0.1276, TD-loss 0.1273, and
 BGR-uniform-radius 0.1351. The promotion checker rejects BGR-Coverage with a
 -0.0107 mean RAUC gap and W/L/T=1/3/0 versus uniform, and rejects default BGR
 with a -0.0117 gap and W/L/T=1/3/0. Do not scale or promote Acrobot without a
-genuinely new fixed premise. A new Gymnasium
+genuinely new fixed premise. The new Gymnasium MuJoCo `Swimmer-v5`
+package-state calibration is also rejected before method comparison: Athena
+job `784458` completed with exit `0:0` and synced to
+`results/swimmer_recovery_calibration_12seed_v1_784458/`; summary decision is
+`reject-calibration-low-clean-success`, with clean success 0.7417, recovery
+range 0.0000--0.7417, RAUC 0.0464, and r80 0.0500 under
+`gymnasium==1.3.0`, `mujoco==3.9.0`, and `numpy==2.2.6`. Do not build a
+Swimmer method comparison without a genuinely new preregistered controller or
+success definition. A new Gymnasium
 Blackjack package-state recovery
 scout completed negative on `athena` as Slurm job `774192`; this was only a
 scout for a different independent reset interface, not paper evidence, and all
@@ -111,18 +119,16 @@ Slurm job `782844` finished with exit `0:0`, but default BGR reaches only
 BGR-uniform-radius 0.0732. BGR-Coverage is weaker at 0.0806 RAUC. Median r80
 is saturated at 1.0000 for every method, so this route fails the strong-baseline
 and radius gates and must not be scaled without a materially new fixed premise.
-A new preregistered independent pre-method calibration route is Gymnasium
-MuJoCo `Swimmer-v5`, which is materially different from the retired tabular,
-MiniGrid, Box2D, MinAtar, and OpenVLA routes. It uses Gymnasium's
-package-owned MuJoCo dynamics, exact `env.unwrapped.set_state` restoration,
-a fixed phase-preserving sinusoidal controller, and progress-after-perturbation
-success. The fixed calibration command is
-`OUT_PREFIX=swimmer_recovery_calibration_12seed_v1 scripts/queue_swimmer_calibration.sh`.
-The default fixed gate is clean success at least 0.80, recovery range at least
-0.20, and a non-saturated/non-floor `r80` before any BGR method comparison is
-implemented. This route is calibration only until `summary.json` exists and
-reports `decision=usable-calibration`; even then, it only permits a fixed
-method screen without retuning.
+The preregistered Gymnasium MuJoCo `Swimmer-v5` package-state calibration is
+closed negative. It changed benchmark family and reset interface, using
+Gymnasium's package-owned MuJoCo dynamics, exact `env.unwrapped.set_state`
+restoration, a fixed phase-preserving sinusoidal controller, and
+progress-after-perturbation success. Slurm job `784458` completed with exit
+`0:0`; compact artifacts are in
+`results/swimmer_recovery_calibration_12seed_v1_784458/`. The fixed gate fails
+because clean success is 0.7417, below the required 0.80, with recovery range
+0.0000--0.7417, RAUC 0.0464, and r80 0.0500. This is calibration-only negative
+scope evidence and does not permit a method screen.
 A broader
 fixed OpenML numeric-suite
 target-2.0 run and held-out seeds 30--59 replication completed on `athena` as
@@ -3238,19 +3244,16 @@ Treat the following as the current paper-weakness backlog:
   0.1383 versus uniform 0.1501, with W/L/T=1/3/0 for both treatment variants
   against uniform. Keep it out of the paper and do not run a 30-seed Acrobot
   follow-up without a genuinely new preregistered premise.
-- New preregistered CPU calibration: Gymnasium MuJoCo `Swimmer-v5`
-  package-state recovery. This uses Gymnasium's package-owned MuJoCo dynamics,
-  exact `env.unwrapped.set_state` restoration, a fixed sinusoidal controller
-  whose phase is preserved from the checkpoint, and progress over a 120-step
-  recovery horizon as the success criterion. Queue with
-  `OUT_PREFIX=swimmer_recovery_calibration_12seed_v1 scripts/queue_swimmer_calibration.sh`.
-  The fixed defaults are seeds 0--11, radii
-  `0,0.25,0.5,0.75,1.0,1.25,1.5,2.0`, 10 trials per radius, burn-in 80,
-  `min_progress=0.15`, `position_scale=0.20`, `velocity_scale=0.40`,
-  controller amplitude 1.0, and frequency 0.40. Calibration passes only with
-  clean success >=0.80, recovery range >=0.20, and non-saturated/non-floor
-  `r80`; passing calibration permits a fixed all-method screen, not a paper
-  claim.
+- Completed CPU calibration: Gymnasium MuJoCo `Swimmer-v5` package-state
+  recovery. Slurm job `784458` used the existing remote MuJoCo venv
+  `/work/joy/bgr/.venv-fetchpush` after a fresh venv attempt hit Athena's
+  known `ensurepip` issue. The fixed 12-seed calibration rejected before method
+  comparison: clean success 0.7417 is below the 0.80 gate, recovery range is
+  0.0000--0.7417, RAUC is 0.0464, and r80 is 0.0500. Compact artifacts are
+  `results/swimmer_recovery_calibration_12seed_v1_784458/summary.json`,
+  `package_versions.json`, and `recovery_rows.csv`. Do not build a Swimmer
+  all-method screen without a genuinely new preregistered controller or success
+  definition.
 
 ## Required Checks
 

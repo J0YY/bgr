@@ -126,6 +126,7 @@ CALIBRATION_SUMMARIES = [
     ),
     ("MinAtar Seaquest calibration", "results/minatar_seaquest_recovery_calibration_30seed_v1/summary.json"),
     ("Reacher-v5 calibration", "results/reacher_recovery_calibration_12seed_v1/summary.json"),
+    ("Swimmer-v5 calibration", "results/swimmer_recovery_calibration_12seed_v1_784458/summary.json"),
     ("InvertedPendulum-v5 calibration", "results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json"),
     (
         "InvertedDoublePendulum-v5 calibration",

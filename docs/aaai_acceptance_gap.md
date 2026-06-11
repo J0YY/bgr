@@ -1405,20 +1405,18 @@ risk.
   interface and tabular/linear update recipe. Official MiniGrid-FourRooms,
   DoorKey, LavaCrossing, LavaGap, PointMaze U-Maze variants, FetchReach, and
   hard-budget FetchReach are completed negative or non-promotable.
-- New fixed independent pre-method calibration: Gymnasium MuJoCo `Swimmer-v5`.
-  This changes the reset interface and benchmark family rather than retuning a
-  retired screen. The route uses package-owned Gymnasium/MuJoCo dynamics, exact
-  `env.unwrapped.set_state` restoration of `qpos`/`qvel`, a fixed
-  phase-preserving sinusoidal controller, and progress over a 120-step horizon
-  after perturbing restored package state. The preregistered command is:
-  `OUT_PREFIX=swimmer_recovery_calibration_12seed_v1 scripts/queue_swimmer_calibration.sh`.
-  Fixed defaults are seeds 0--11, radii
-  `0,0.25,0.5,0.75,1.0,1.25,1.5,2.0`, 10 trials per radius, burn-in 80,
-  `min_progress=0.15`, `position_scale=0.20`, `velocity_scale=0.40`, controller
-  amplitude 1.0, and controller frequency 0.40. The pre-method gate is clean
-  success >=0.80, recovery range >=0.20, and non-saturated/non-floor `r80`.
-  Passing this calibration only permits a fixed method screen without retuning;
-  it is not BGR evidence by itself.
+- The fixed independent pre-method calibration for Gymnasium MuJoCo
+  `Swimmer-v5` is completed negative. This changed the reset interface and
+  benchmark family rather than retuning a retired screen, using package-owned
+  Gymnasium/MuJoCo dynamics, exact `env.unwrapped.set_state` restoration of
+  `qpos`/`qvel`, a fixed phase-preserving sinusoidal controller, and progress
+  over a 120-step horizon after perturbing restored package state. Slurm job
+  `784458` completed with exit `0:0` and synced to
+  `results/swimmer_recovery_calibration_12seed_v1_784458/`. The pre-method
+  gate rejects the route because clean success is 0.7417, below the required
+  0.80; recovery range is 0.0000--0.7417, RAUC is 0.0464, and r80 is 0.0500.
+  Do not build a Swimmer method screen without a genuinely new preregistered
+  controller or success definition.
 - The next acceptance-moving empirical route must change the premise: either a
   genuinely different pre-existing benchmark package/reset interface, or a
   genuinely different learned-policy intervention that is preregistered before

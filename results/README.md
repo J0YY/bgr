@@ -1595,13 +1595,14 @@ follow-up.
 
 ## Gymnasium MuJoCo Swimmer-v5 Calibration
 
-Preregistered as a new independent pre-method calibration route. This changes
-benchmark family and reset interface from the retired MiniGrid, tabular,
-Box2D, MinAtar, and OpenVLA routes. `tools/swimmer_recovery_calibration.py`
-uses Gymnasium's package-owned `Swimmer-v5` MuJoCo dynamics, exact
-`env.unwrapped.set_state` restoration of `qpos`/`qvel`, a fixed sinusoidal
-controller whose phase is preserved from the checkpoint, and progress over a
-120-step recovery horizon after perturbing restored package state.
+Preregistered as a new independent pre-method calibration route, then completed
+negative. This changes benchmark family and reset interface from the retired
+MiniGrid, tabular, Box2D, MinAtar, and OpenVLA routes.
+`tools/swimmer_recovery_calibration.py` uses Gymnasium's package-owned
+`Swimmer-v5` MuJoCo dynamics, exact `env.unwrapped.set_state` restoration of
+`qpos`/`qvel`, a fixed sinusoidal controller whose phase is preserved from the
+checkpoint, and progress over a 120-step recovery horizon after perturbing
+restored package state.
 
 Fixed queue command:
 
@@ -1616,6 +1617,21 @@ amplitude 1.0, and controller frequency 0.40. The calibration gate is clean
 success >=0.80, recovery range >=0.20, and non-saturated/non-floor `r80`.
 Passing this pre-method screen is not paper evidence; it only permits a fixed
 all-method Swimmer replay screen without retuning.
+
+Slurm job `784458` completed with exit `0:0` and synced compact artifacts to
+`results/swimmer_recovery_calibration_12seed_v1_784458/summary.json`,
+`results/swimmer_recovery_calibration_12seed_v1_784458/package_versions.json`,
+and `results/swimmer_recovery_calibration_12seed_v1_784458/recovery_rows.csv`.
+The run used the existing remote MuJoCo venv `/work/joy/bgr/.venv-fetchpush`
+after a fresh `.venv-swimmer-mujoco` attempt hit Athena's known `ensurepip`
+issue. Package metadata records `gymnasium==1.3.0`, `mujoco==3.9.0`, and
+`numpy==2.2.6`.
+
+The calibration gate rejects this route before method comparison:
+`decision=reject-calibration-low-clean-success`, clean success 0.7417, recovery
+range 0.0000--0.7417, RAUC 0.0464, and r80 0.0500. Do not build a Swimmer
+method screen without a genuinely new preregistered controller or success
+definition.
 
 ## Internal Package-Free CartPole Diagnostic
 
