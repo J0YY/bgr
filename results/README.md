@@ -7605,7 +7605,7 @@ and uses
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Submitted Athena jobs are official `783312`, BGR `783314`, and matched random
-`783315`; latest poll/sync at 2026-06-11 12:26:49 BST showed all three still
+`783315`; latest poll/sync at 2026-06-11 12:28:53 BST showed all three still
 pending, with estimated starts of 2026-06-11 14:21:02 BST for official,
 2026-06-11 17:38:38 BST for BGR, and 2026-06-11 18:01:36 BST for matched
 random. The remote summary and log directory were still missing. This is only
