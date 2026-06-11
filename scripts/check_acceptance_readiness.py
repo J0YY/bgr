@@ -124,6 +124,7 @@ CALIBRATION_SUMMARIES = [
         "MinAtar Space Invaders calibration",
         "results/minatar_space_invaders_recovery_calibration_20seed_v1/summary.json",
     ),
+    ("MinAtar Seaquest calibration", "results/minatar_seaquest_recovery_calibration_30seed_v1/summary.json"),
     ("Reacher-v5 calibration", "results/reacher_recovery_calibration_12seed_v1/summary.json"),
     ("InvertedPendulum-v5 calibration", "results/inverted_pendulum_recovery_calibration_12seed_v1/summary.json"),
     (
@@ -1249,6 +1250,7 @@ def independent_benchmark_gate(root: Path) -> GateResult:
     for label, relative_path, radius_ceiling in [
         ("MinAtar Freeway", "results/minatar_freeway_recovery_probe_4seed_v1/summary.csv", 9.0),
         ("MinAtar Space Invaders", "results/minatar_space_invaders_recovery_probe_4seed_v1/summary.csv", 6.0),
+        ("MinAtar Seaquest", "results/minatar_seaquest_recovery_probe_4seed_v1/summary.csv", 5.0),
     ]:
         minatar_route_path = root / relative_path
         if not minatar_route_path.exists():

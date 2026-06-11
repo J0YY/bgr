@@ -319,6 +319,32 @@ Completed external-package scope diagnostic:
   compact aggregate, learning-history, and package-version records for the same
   negative scope diagnostic.
 
+Completed external-package scope diagnostic:
+
+- `results/minatar_seaquest_recovery_calibration_30seed_v1/summary.json`:
+  fixed MinAtar Seaquest pre-method calibration, run with
+  `PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_seaquest_recovery_calibration.py --out results/minatar_seaquest_recovery_calibration_30seed_v1`.
+  This route uses MinAtar's package-owned Seaquest dynamics, a fixed
+  safety-aware controller, and leftward submarine-column perturbations. It
+  clears the pre-method gate with clean survival 1.0000, recovery range
+  0.5333--1.0000, RAUC 0.9267, and r80 4.3333. Treat it as permission for the
+  fixed all-method screen below, not as BGR evidence.
+- `results/minatar_seaquest_recovery_probe_4seed_v1/summary.csv`: fixed
+  MinAtar Seaquest all-method screen, run with
+  `PYTHONPATH=src:. /tmp/bgr_minatar_venv/bin/python tools/minatar_seaquest_recovery_probe.py --out results/minatar_seaquest_recovery_probe_4seed_v1`.
+  This route is negative and should not be scaled or promoted: BGR-Coverage
+  reaches 0.9017 RAUC versus uniform 0.8958, fixed 0.9017, failure-only
+  0.9025, TD-loss 0.8992, and BGR-uniform-radius 0.9192, with only 2/4 wins
+  against uniform and saturated median r80 5.0000 for every method. Default
+  BGR is lower at 0.8892.
+- `results/minatar_seaquest_recovery_calibration_30seed_v1/package_versions.json`,
+  `results/minatar_seaquest_recovery_calibration_30seed_v1/rows.csv`,
+  `results/minatar_seaquest_recovery_probe_4seed_v1/aggregate.csv`,
+  `results/minatar_seaquest_recovery_probe_4seed_v1/history.csv`, and
+  `results/minatar_seaquest_recovery_probe_4seed_v1/package_versions.json`:
+  compact package-version, row-level, aggregate, and learning-history records
+  for the same rejected scope diagnostic.
+
 Completed external-package pre-method calibration:
 
 - `results/handreach_recovery_calibration_8seed_v1/summary.json`: fixed

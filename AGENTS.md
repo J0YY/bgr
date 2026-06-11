@@ -32,9 +32,13 @@ Breakout all-method screen are also negative, so they do not solve the
 independent-benchmark evidence gap. MinAtar Asterix also completed negative
 after its usable calibration. New MinAtar Freeway and Space Invaders routes
 cleared pre-method calibration but their fixed all-method screens tied every
-method, so they are retired. A Seaquest scout found a fragile 20-seed
-calibration window, but the method scout lost to fixed-radius replay and is
-rejected before promotion. A new Gymnasium Blackjack package-state recovery
+method, so they are retired. A new MinAtar Seaquest package-state route also
+cleared its 30-seed pre-method calibration, but the fixed 4-seed all-method
+screen is saturated and negative: BGR-Coverage reaches 0.9017 RAUC versus
+uniform 0.8958, fixed 0.9017, failure-only 0.9025, and BGR-uniform-radius
+0.9192, while default BGR is 0.8892 and every method has median r80 5.0000.
+Do not scale or promote Seaquest without a materially new premise. A new
+Gymnasium Blackjack package-state recovery
 scout completed negative on `athena` as Slurm job `774192`; this was only a
 scout for a different independent reset interface, not paper evidence, and all
 nine perturbation/target-radius configs are rejected before promotion. A new
@@ -263,15 +267,15 @@ official/BGR/random hard-occlusion evals `782679`/`782680`/`782681`, with
 BGR beats both official and matched random by at least +10/400 and +0.02 on
 hard occlusion. Poll/sync with:
 `PREP_TAG=p512unique_occonly_hardocc080_router_randfix_prereg ADAPT_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 PERTURB_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1 JOB_IDS=782671,782672,782673,782674,782675,782676,782677,782679,782680,782681 DETAIL_JOB_IDS=782671,782672,782673,782675,782676,782679,782680,782681 ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT randfix premise' GATE_PERTURBATIONS=occlusion scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check`.
-Latest poll at 2026-06-11 05:58 BST showed prep, BGR/random train/merge,
+Latest poll at 2026-06-11 06:12 BST showed prep, BGR/random train/merge,
 BGR/random clean evals, and official occlusion eval completed with exit `0:0`.
 The synced clean/adapt summary has BGR 386/400 and matched random 388/400.
 BGR and matched-random hard-occlusion evals `782680`/`782681` were still
 running, so no full perturb `summary.csv` existed yet. The sync helper writes
 a local partial nested-log summary at
 `results/openvla_oft_perturb_eval_occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary_available.csv`.
-The current incomplete perturb rows are BGR 123/209, official 298/400, and
-matched random 183/279. This is non-gateable because BGR/random task coverage
+The current incomplete perturb rows are BGR 174/270, official 298/400, and
+matched random 294/393. This is non-gateable because BGR/random task coverage
 is still incomplete, but it is strongly unfavorable versus official and random
 on current success rate. Wait for complete summaries before making any paper
 claim or route closure.

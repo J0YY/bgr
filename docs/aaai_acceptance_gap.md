@@ -55,16 +55,24 @@ a complete tie across BGR, BGR-Coverage, BGR-uniform-radius, uniform, fixed,
 failure-only, and TD-loss at 0.5667 final RAUC, clean 0.9000, median r80
 3.7000, and AULC 0.5667. Low-data Freeway scouts also tied, so this route
 should not be scaled without a new premise.
-The same 2026-06-10 MinAtar pass also closes Space Invaders and Seaquest. Space
+The same 2026-06-10 MinAtar pass also closes Space Invaders. Space
 Invaders cleared pre-method calibration with clean 1.0000, recovery range
 0.0000--1.0000, RAUC 0.4167, and r80 2.2000, but the fixed all-method screen
 is a complete tie across BGR, BGR-Coverage, BGR-uniform-radius, uniform, fixed,
 failure-only, and TD-loss at 0.4167 final RAUC, clean 1.0000, median r80
-2.2000, and AULC 0.4167. Seaquest is rejected before formal promotion: the
-best local controller window is fragile, falling below the clean gate at
-30 seeds, and a 4-seed method scout loses to fixed-radius replay (fixed 0.1667
-RAUC vs. BGR 0.0677 and uniform 0.0938). Neither route should be scaled
-without a genuinely new preregistered premise.
+2.2000, and AULC 0.4167.
+The 2026-06-11 MinAtar Seaquest package-state route also fails before scale-up.
+The new fixed 30-seed pre-method calibration
+`results/minatar_seaquest_recovery_calibration_30seed_v1/summary.json` is
+usable, with clean survival 1.0000, recovery range 0.5333--1.0000, RAUC
+0.9267, and r80 4.3333 under leftward submarine-column perturbations. The
+fixed 4-seed method screen
+`results/minatar_seaquest_recovery_probe_4seed_v1/summary.csv` is negative:
+BGR-Coverage gives 0.9017 RAUC versus uniform 0.8958, fixed 0.9017,
+failure-only 0.9025, TD-loss 0.8992, and BGR-uniform-radius 0.9192, with only
+2/4 paired wins versus uniform and saturated median r80 5.0000 for every
+method. Default BGR is lower at 0.8892. Do not scale Seaquest without a
+materially new preregistered premise.
 The latest OpenVLA/LIBERO occlusion-bottleneck route is completed negative:
 BGR reaches 365/400 non-identity successes versus official 367/400 and matched
 random 369/400, with identity rows BGR 99/100, official 99/100, and random
@@ -175,15 +183,15 @@ route, queued 2026-06-11 04:55 BST: prep `782671`, BGR train/merge/clean-eval
 eval. It is still only router-premise evidence unless BGR beats both official
 and matched random by at least +10/400 and +0.02 on hard occlusion. Poll/sync:
 `PREP_TAG=p512unique_occonly_hardocc080_router_randfix_prereg ADAPT_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 PERTURB_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1 JOB_IDS=782671,782672,782673,782674,782675,782676,782677,782679,782680,782681 DETAIL_JOB_IDS=782671,782672,782673,782675,782676,782679,782680,782681 ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT randfix premise' GATE_PERTURBATIONS=occlusion scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check`.
-Latest poll at 2026-06-11 05:58 BST showed prep, BGR/random train/merge,
+Latest poll at 2026-06-11 06:12 BST showed prep, BGR/random train/merge,
 BGR/random clean evals, and official occlusion eval completed with exit `0:0`.
 The synced clean/adapt summary has BGR 386/400 and matched random 388/400.
 BGR and matched-random hard-occlusion evals `782680`/`782681` were still
 running, so no full perturb `summary.csv` existed yet. The sync helper writes
 a local partial nested-log summary at
 `results/openvla_oft_perturb_eval_occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary_available.csv`.
-The current incomplete perturb rows are BGR 123/209, official 298/400, and
-matched random 183/279. This is non-gateable because BGR/random task coverage
+The current incomplete perturb rows are BGR 174/270, official 298/400, and
+matched random 294/393. This is non-gateable because BGR/random task coverage
 is still incomplete, but it is strongly unfavorable versus official and random
 on current success rate. Wait for complete summaries before making any paper
 claim or route closure.
