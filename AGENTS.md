@@ -379,7 +379,7 @@ primary-image shift in sequence. The scout uses artifact
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, `SAVE_ROLLOUTS=0`, and
 the completed p2048 occlusion-bottleneck BGR/matched-random checkpoints.
 Submitted on Athena at 2026-06-11 11:56 BST: official `783312`, BGR `783314`,
-and matched random `783315`; latest poll/sync at 2026-06-11 12:15:03 BST
+and matched random `783315`; latest poll/sync at 2026-06-11 12:16:29 BST
 showed all three still pending, with estimated starts of 2026-06-11
 14:21:02 BST for official, 2026-06-11 17:38:38 BST for BGR, and 2026-06-11
 18:01:36 BST for matched random. The remote summary and log directory were
@@ -389,6 +389,14 @@ shows a clear BGR edge over both official and matched random should it be
 promoted to a fixed 400-episode identity-plus-combined-perturbation gate.
 Poll/sync with:
 `scripts/sync_openvla_oft_occlusion_shift_combo_scout_results.sh --poll --sync --no-check`.
+If and only if the scout clearly beats both comparators, promote with the
+predeclared full-gate wrapper
+`scripts/queue_openvla_oft_occlusion_shift_combo_gate.sh --submit`. This locks
+identity plus `occlusion_shift` at fraction `0.80`, `dx_fraction=0.15`,
+`dy_fraction=0.0`, `EVAL_TASKS=10`, `EVAL_TRIALS=40`, `EVAL_SEED=237`,
+`SAVE_ROLLOUTS=0`, and the same completed occlusion-bottleneck BGR/random
+checkpoints. Do not submit it while the 100-episode scout is pending or
+negative.
 Pre-artifact CarRacing-v3 controller smoke on 2026-06-11 was rejected before
 creating repo files or cluster jobs: a simple track-following controller in
 `/tmp/bgr_lunar_venv` visited only about 1.5% of track tiles from clean starts,

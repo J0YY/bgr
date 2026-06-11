@@ -7605,7 +7605,7 @@ and uses
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Submitted Athena jobs are official `783312`, BGR `783314`, and matched random
-`783315`; latest poll/sync at 2026-06-11 12:15:03 BST showed all three still
+`783315`; latest poll/sync at 2026-06-11 12:16:29 BST showed all three still
 pending, with estimated starts of 2026-06-11 14:21:02 BST for official,
 2026-06-11 17:38:38 BST for BGR, and 2026-06-11 18:01:36 BST for matched
 random. The remote summary and log directory were still missing. This is only
@@ -7614,6 +7614,12 @@ it justifies and then passes a fixed 400-episode identity-plus-combined-
 perturbation gate.
 Poll/sync with:
 `scripts/sync_openvla_oft_occlusion_shift_combo_scout_results.sh --poll --sync --no-check`.
+If the scout clearly beats both comparators, the predeclared full-gate
+promotion command is
+`scripts/queue_openvla_oft_occlusion_shift_combo_gate.sh --submit`. It uses
+identity plus the same combined perturbation over 10 LIBERO-Goal tasks x
+40 trials with seed 237 and `SAVE_ROLLOUTS=0`; do not submit it while the
+scout is pending or negative.
 
 A 2026-06-11 12:06 BST sync also closes three stale learned-policy routes as
 incomplete infrastructure closures rather than live candidates. The 0.80 micro

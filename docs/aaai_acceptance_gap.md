@@ -253,7 +253,7 @@ with
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Athena jobs are official `783312`, BGR `783314`, and matched random `783315`;
-latest poll/sync at 2026-06-11 12:15:03 BST showed all pending, with
+latest poll/sync at 2026-06-11 12:16:29 BST showed all pending, with
 estimated starts of 2026-06-11 14:21:02 BST for official, 2026-06-11
 17:38:38 BST for BGR, and 2026-06-11 18:01:36 BST for matched random. The
 route-specific sync helper is
@@ -261,6 +261,13 @@ route-specific sync helper is
 Treat this as a 100-episode route-selection scout only. It should be promoted
 to a fixed identity-plus-combined-perturbation gate only if BGR clearly beats
 both comparators in the scout.
+That fixed gate is now locked in
+`scripts/queue_openvla_oft_occlusion_shift_combo_gate.sh`: identity plus
+`occlusion_shift` at fraction 0.80, dx fraction 0.15, dy fraction 0.0,
+10 LIBERO-Goal tasks x 40 trials, seed 237, no rollout videos, and the same
+completed occlusion-bottleneck BGR/random checkpoints. Do not submit this
+wrapper unless the 100-episode scout is clearly positive against both official
+and matched random.
 A pre-artifact CarRacing-v3 controller smoke was also rejected on 2026-06-11:
 the available `/tmp/bgr_lunar_venv` Gymnasium Box2D install can instantiate
 `CarRacing-v3`, but a simple track-following controller visited only about
