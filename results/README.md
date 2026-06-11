@@ -1563,6 +1563,24 @@ with a 2/1/1 paired split, below the pre-set 3/4 wins and +0.01 mean-delta
 thresholds. Keep Acrobot out of the paper unless a new fixed protocol first
 produces a visible boundary-radius effect.
 
+## Official Gymnasium Acrobot Package-State Scout
+
+Preregistered on 2026-06-11 as a different pre-existing reset interface:
+`tools/acrobot_recovery_probe.py` now supports `--dynamics-backend gymnasium`,
+which steps Gymnasium's package-owned `Acrobot-v1` transition and termination
+logic after exact `env.unwrapped.state` restoration. This preserves the fixed
+near-swing-up replay states, adverse perturbations toward the hanging state,
+value-table initialization, and existing BGR/baseline selection logic from the
+internal Acrobot diagnostic. The fixed 4-seed scout is queued with
+`scripts/queue_acrobot_package_probe.sh`, artifact prefix
+`acrobot_package_recovery_probe_4seed_v1`, seeds 0--3, and methods
+`uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr`.
+The scout gate is: BGR or BGR-Coverage must beat uniform by at least +0.01
+final RAUC with at least 3/4 paired wins, beat fixed-radius, failure-only,
+TD-loss, and BGR-uniform-radius on mean final RAUC, and avoid saturated or
+contradictory median-r80. Passing this 4-seed scout is not paper evidence; it
+only permits a fixed 30-seed follow-up without protocol retuning.
+
 ## Internal Package-Free CartPole Diagnostic
 
 `results/cartpole_recovery_probe_4seed_v1/summary.csv` is a 4-seed internal

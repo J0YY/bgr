@@ -3204,6 +3204,19 @@ Treat the following as the current paper-weakness backlog:
   a preregistered result clears the evidence policy. Do not name exploratory
   Taxi, CliffWalking, MountainCar, CartPole, Acrobot, or Pendulum probes in the
   manuscript as evidence.
+- New preregistered CPU scout: official Gymnasium Acrobot package-state
+  recovery. This is a different pre-existing reset interface from the internal
+  Acrobot diagnostic because `tools/acrobot_recovery_probe.py` now supports
+  `--dynamics-backend gymnasium`, stepping Gymnasium's package-owned
+  `Acrobot-v1` after exact `env.unwrapped.state` restoration. Queue with
+  `scripts/queue_acrobot_package_probe.sh` using artifact prefix
+  `acrobot_package_recovery_probe_4seed_v1`, seeds 0--3, and methods
+  `uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr`.
+  Scout promotion requires BGR or BGR-Coverage to beat uniform by at least
+  +0.01 final RAUC with at least 3/4 paired wins, beat fixed-radius,
+  failure-only, TD-loss, and BGR-uniform-radius on mean final RAUC, and avoid
+  saturated or contradictory median-r80. Passing the 4-seed scout is not paper
+  evidence; it only permits a fixed 30-seed follow-up without retuning.
 
 ## Required Checks
 

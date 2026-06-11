@@ -115,6 +115,8 @@ class AcrobotRecoveryProbe:
         self,
         *,
         seed: int,
+        env_id: str,
+        dynamics_backend: str,
         replay_state_count: int,
         theta1_bins: int,
         theta2_bins: int,
@@ -131,10 +133,22 @@ class AcrobotRecoveryProbe:
         optimal_q: np.ndarray | None = None,
     ) -> None:
         self.rng = np.random.default_rng(seed + 127_000)
+        self.env_id = str(env_id)
+        self.dynamics_backend = str(dynamics_backend)
         self.learning_rate = float(learning_rate)
         self.discount = float(discount)
         self.epsilon = float(epsilon)
         self.max_steps = int(max_steps)
+        self.env = None
+        self.unwrapped = None
+        if self.dynamics_backend == "gymnasium":
+            import gymnasium as gym
+
+            self.env = gym.make(self.env_id)
+            self.env.reset(seed=seed)
+            self.unwrapped = self.env.unwrapped
+        elif self.dynamics_backend != "internal":
+            raise ValueError(f"unknown Acrobot dynamics backend: {self.dynamics_backend}")
         self.theta1_grid = np.linspace(-np.pi, np.pi, int(theta1_bins))
         self.theta2_grid = np.linspace(-np.pi, np.pi, int(theta2_bins))
         self.vel1_grid = np.linspace(-MAX_VEL_1, MAX_VEL_1, int(vel1_bins))
@@ -161,11 +175,23 @@ class AcrobotRecoveryProbe:
                     for l, vel2 in enumerate(self.vel2_grid):
                         state = np.array([theta1, theta2, vel1, vel2], dtype=float)
                         for action in range(3):
-                            next_state, done = step_state(state, action)
+                            next_state, done = self._step_state(state, action)
                             next_idx = self._index(next_state)
                             cache[i, j, k, l, action, :4] = np.array(next_idx, dtype=float)
                             cache[i, j, k, l, action, 4] = 1.0 if done else 0.0
         return cache
+
+    def _step_state(self, state: np.ndarray, action: int) -> tuple[np.ndarray, bool]:
+        if self.dynamics_backend == "internal":
+            return step_state(state, action)
+        if self.unwrapped is None:
+            raise RuntimeError("gymnasium dynamics selected without an environment")
+        if hasattr(self.env, "_elapsed_steps"):
+            self.env._elapsed_steps = 0  # type: ignore[attr-defined]
+        self.unwrapped.state = np.array(state, dtype=np.float32)
+        _obs, _reward, terminated, truncated, _info = self.env.step(int(action))
+        next_state = self._clip_state(np.array(self.unwrapped.state, dtype=float))
+        return next_state, bool(terminated or truncated)
 
     def _value_iteration(self, iterations: int) -> np.ndarray:
         q = np.zeros(self.transition_cache.shape[:-1], dtype=float)
@@ -279,7 +305,7 @@ class AcrobotRecoveryProbe:
         state = self.sample_start(replay_idx, sigma, rng)
         state_idx = self._index(state)
         action = self._action(state, rng, epsilon=True)
-        next_state, done = step_state(state, action)
+        next_state, done = self._step_state(state, action)
         target = 0.0 if done else -1.0 + self.discount * float(np.max(self.q[self._index(next_state)]))
         return abs(target - float(self.q[state_idx + (action,)]))
 
@@ -297,7 +323,7 @@ class AcrobotRecoveryProbe:
         for _ in range(self.max_steps):
             action = self._action(state, rng, epsilon=epsilon)
             state_idx = self._index(state)
-            next_state, done = step_state(state, action)
+            next_state, done = self._step_state(state, action)
             if train:
                 target = 0.0 if done else -1.0 + self.discount * float(np.max(self.q[self._index(next_state)]))
                 self.q[state_idx + (action,)] += self.learning_rate * (target - float(self.q[state_idx + (action,)]))
@@ -323,6 +349,8 @@ def run_method(
     rng = np.random.default_rng(seed + 131_000)
     bench = AcrobotRecoveryProbe(
         seed=seed,
+        env_id=args.env_id,
+        dynamics_backend=args.dynamics_backend,
         replay_state_count=args.replay_states,
         theta1_bins=args.theta1_bins,
         theta2_bins=args.theta2_bins,
@@ -384,7 +412,7 @@ def init_records(bench: AcrobotRecoveryProbe, rng: np.random.Generator, args: ar
         record = LevelRecord(
             id=f"acrobot_{replay_idx}",
             domain="acrobot_v1_recovery",
-            task_id="Acrobot-v1",
+            task_id=args.env_id,
             clean_success_hat=bench.clean_success(replay_idx),
             feasibility_hat=1.0,
             perturbation_family="adverse_state_restart",
@@ -504,6 +532,8 @@ def parse_csv_strings(value: str) -> list[str]:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run an internal Acrobot-v1 recovery replay diagnostic.")
     parser.add_argument("--out", default="runs/acrobot_recovery_probe")
+    parser.add_argument("--env-id", default="Acrobot-v1")
+    parser.add_argument("--dynamics-backend", choices=["internal", "gymnasium"], default="internal")
     parser.add_argument("--seeds", default="0,1,2,3")
     parser.add_argument("--methods", default="uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr")
     parser.add_argument("--iterations", type=int, default=40)
@@ -548,6 +578,8 @@ def main() -> None:
     asset_start = time.perf_counter()
     asset_probe = AcrobotRecoveryProbe(
         seed=0,
+        env_id=args.env_id,
+        dynamics_backend=args.dynamics_backend,
         replay_state_count=1,
         theta1_bins=args.theta1_bins,
         theta2_bins=args.theta2_bins,
@@ -561,6 +593,13 @@ def main() -> None:
         max_steps=args.max_steps,
         value_iterations=args.value_iterations,
     )
+    if args.dynamics_backend == "gymnasium":
+        import gymnasium as gym
+
+        (out_dir / "package_versions.json").write_text(
+            json.dumps({"gymnasium": gym.__version__, "env_id": args.env_id}, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
     print(f"[setup] value_assets_elapsed={time.perf_counter() - asset_start:.2f}s", flush=True)
 
     rows: list[dict[str, float | int | str]] = []
