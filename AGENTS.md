@@ -382,7 +382,7 @@ primary-image shift in sequence. The scout uses artifact
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, `SAVE_ROLLOUTS=0`, and
 the completed p2048 occlusion-bottleneck BGR/matched-random checkpoints.
 Submitted on Athena at 2026-06-11 11:56 BST: official `783312`, BGR `783314`,
-and matched random `783315`; latest poll/sync at 2026-06-11 12:36:47 BST
+and matched random `783315`; latest poll/sync at 2026-06-11 12:39:38 BST
 showed all three still pending, with estimated starts of 2026-06-11
 14:21:02 BST for official, 2026-06-11 17:38:38 BST for BGR, and 2026-06-11
 18:01:36 BST for matched random. The remote summary and log directory were
@@ -395,6 +395,10 @@ Poll/sync with:
 The wrapper suppresses the shared 400-episode perturb gate and runs
 `scripts/check_openvla_route_scout.py` automatically when a local compact
 `summary.csv` or `summary_available.csv` exists.
+To combine sync, scout-check, and guarded full-gate launch, use
+`scripts/advance_openvla_oft_occlusion_shift_combo_scout.sh --submit`; it
+submits the locked full gate only when the scout checker returns
+`PROMOTE_FULL_GATE`.
 The route-selection threshold is BGR ahead of the best comparator by at least
 +5/100 episodes and +0.05 success rate. If and only if that checker returns
 `PROMOTE_FULL_GATE`, promote with the predeclared full-gate wrapper
