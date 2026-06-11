@@ -36,6 +36,10 @@ OPENVLA_HARD_OCCLUSION_TRANSFER_COMPLETE = (
 OPENVLA_HARD_OCCLUSION080_TRANSFER_COMPLETE = (
     "results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_v1/summary.csv"
 )
+OPENVLA_HARD_OCCLUSION080_TRANSFER_HEADINTERP000_LORAFULL_NOVIDEO_COMPLETE = (
+    "results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_v1/"
+    "summary.csv"
+)
 OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_COMPLETE = (
     "results/openvla_oft_perturb_eval_cleanmix_p2048unique_hardocc080_identityanchor_micro_prereg_proxanchor_l2_1em2_"
     "step50050_lr5em8_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary.csv"
@@ -69,6 +73,9 @@ OPENVLA_HARD_OCCLUSION_ADAPT_A40_COMPLETE = (
 OPENVLA_PERTURB_ONLY_ANCHOR_MARKER = "queue_openvla_oft_preregistered_perturb_only_anchor.sh"
 OPENVLA_HARD_OCCLUSION_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion_transfer_results.sh"
 OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER = "sync_openvla_oft_hard_occlusion080_transfer_results.sh"
+OPENVLA_HARD_OCCLUSION080_TRANSFER_HEADINTERP000_LORAFULL_NOVIDEO_MARKER = (
+    "headinterp000_lorafull_novideo_v1"
+)
 OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_MARKER = (
     "sync_openvla_oft_hard_occlusion080_identityanchor_micro_results.sh"
 )
@@ -297,6 +304,7 @@ def learned_policy_inflight_detail(root: Path) -> str | None:
             ledger_text += "\n" + path.read_text(encoding="utf-8")
 
     inflight: list[str] = []
+    no_active_cluster_jobs = "No active learned-policy cluster jobs remain queued" in ledger_text
 
     def append_openvla_route(marker: str, complete_path: str, label: str, pending_detail: str) -> None:
         if marker not in ledger_text or (root / complete_path).exists():
@@ -307,8 +315,16 @@ def learned_policy_inflight_detail(root: Path) -> str | None:
             label=label,
             non_identity_perturbations={"occlusion"},
         )
+        if partial_failure is None and no_active_cluster_jobs:
+            return
         inflight.append(partial_failure or pending_detail)
 
+    append_openvla_route(
+        OPENVLA_HARD_OCCLUSION080_TRANSFER_HEADINTERP000_LORAFULL_NOVIDEO_MARKER,
+        OPENVLA_HARD_OCCLUSION080_TRANSFER_HEADINTERP000_LORAFULL_NOVIDEO_COMPLETE,
+        "hard-occlusion 0.80 alpha0 official-head/full-LoRA no-video OpenVLA repair",
+        "hard-occlusion 0.80 alpha0 official-head/full-LoRA no-video OpenVLA repair is queued/running and still missing a complete summary",
+    )
     append_openvla_route(
         OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_MARKER,
         OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_COMPLETE,

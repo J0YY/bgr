@@ -136,10 +136,10 @@ identity-eval failures. The restart failure was diagnosed as infrastructure:
 `SAVE_ROLLOUTS=0`, patching the remote LIBERO video hook to skip MP4 writes.
 Obsolete reproducible alpha-0.75 interpolation copies and a UV temp cache were
 removed on Athena, raising free `/work/joy` space from about 1.6G to 5.6G.
-A fixed alpha-0.0 official-head/full-LoRA no-video repair is now queued as a
-new premise rather than an unchanged rerun. It restores official action/proprio
+A fixed alpha-0.0 official-head/full-LoRA no-video repair was queued as a
+new premise rather than an unchanged rerun. It restored official action/proprio
 heads exactly while preserving adapted LoRA tensors (`ALPHA=0.0`,
-`LORA_B_SCALE=1.0`, `SAVE_ROLLOUTS=0`). Submitted jobs are prep `782410`,
+`LORA_B_SCALE=1.0`, `SAVE_ROLLOUTS=0`). Submitted jobs were prep `782410`,
 official `782411`/`782412`, BGR `782413`/`782414`, and matched random
 `782415`/`782416`, excluding `c2-g4-17,c2-g4-18,c2-g4-19,c2-g4-21,c2-g4-23`.
 Latest poll/sync at 2026-06-11 01:33:40 BST showed prep completed, official,
@@ -153,12 +153,23 @@ BGR 136/143, official 141/147, and matched random 138/144; direct live tails
 were slightly ahead at BGR 137/144, official 143/149, and matched random
 139/145. The route is not gateable yet, and BGR's identity side-condition is
 precarious because it currently has one more failure than the best comparator.
-Poll with:
+The final identity rows then closed the route negative before occlusion:
+BGR identity `391/400`, official `393/400`, and matched random `392/400`.
+BGR trails the best identity comparator by two episodes, so the fixed
+identity-preservation side-condition fails. Occlusion jobs
+`782412`/`782414`/`782416` were cancelled at 2026-06-11 02:14 BST after only
+tiny partial fragments, so no occlusion comparison should be interpreted. The
+local compact closure artifact is
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_v1/summary_available.csv`.
+Use the sync command only for audit/log reproduction:
 `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_v1 JOB_IDS=782410,782411,782412,782413,782414,782415,782416 DETAIL_JOB_IDS=782410,782411,782412,782413,782414,782415,782416 ROUTE_LABEL='Hard-occlusion 0.80 alpha0 official-head/full-LoRA no-video OpenVLA-OFT repair' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
-Do not incorporate this route unless the full summary passes the unchanged
-`+10/400`, `+0.02`, and identity-preservation gate. Both
-head-interpolation routes remain non-evidence unless the full summary passes
-the same fixed +10/400, +0.02, and identity-preservation gate. The latest
+Do not incorporate this route; it is a completed negative learned-policy
+repair attempt. After cancelling stale dependency-held OpenVLA jobs from
+superseded routes, `squeue -u $(whoami)` was empty at 2026-06-11 02:16 BST.
+No active learned-policy cluster jobs remain queued. Both head-interpolation
+routes remain non-evidence or negative unless a genuinely different follow-up
+passes the same fixed +10/400, +0.02, and identity-preservation gate. The
+latest
 0.80 identity-anchored base route is closed negative with complete rows:
 BGR identity/occlusion 389/400 and 303/400, official 393/400 and 296/400, and
 matched random 393/400 and 302/400. The sync helper previously left this route
