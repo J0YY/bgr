@@ -186,7 +186,28 @@ Do not incorporate this route into `paper/main.tex`; it is a completed
 negative/non-promotable learned-policy repair attempt. After this closure, old
 dependency-held OpenVLA jobs from superseded routes were cancelled on Athena;
 `squeue -u $(whoami)` was empty at 2026-06-11 02:16 BST. No active
-learned-policy cluster jobs remain queued. The
+learned-policy cluster jobs remained queued at that checkpoint. A new
+occlusion-only learned-policy scout was then submitted at 2026-06-11
+03:35 BST to test a genuinely different intervention premise: an
+official-identity fallback/router would use the official checkpoint for clean
+identity and only use the adapted branch on known hard-occlusion inputs. This
+scout therefore evaluates only hard-occlusion 0.80 for the same alpha-0
+official-head/full-LoRA no-video checkpoints; it is not paper evidence and not
+a full gate because the router has not been formalized. The scout can only
+justify a follow-up if BGR beats both official and matched random on occlusion
+by at least +10/400 episodes and +0.02 absolute success rate. Submitted jobs:
+official occlusion `782556`, BGR occlusion `782557`, and matched-random
+occlusion `782558`. Initial poll at 2026-06-11 03:35:39 BST showed all three
+running on A6000 nodes with no parseable logs yet. Latest local compact
+partial after the 2026-06-11 03:41:24 BST poll had BGR occlusion `28/34`,
+official `28/36`, and matched random `32/38`, so the early signal is not
+positive but is far too small to close.
+Poll/sync with:
+`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_occscout_v1 JOB_IDS=782556,782557,782558 DETAIL_JOB_IDS=782556,782557,782558 ROUTE_LABEL='Hard-occlusion 0.80 alpha0 no-video occlusion-only fallback scout' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+Do not incorporate this scout into `paper/main.tex`; if it fails the occlusion
+margin, close the fallback/router premise. If it clears the occlusion margin,
+preregister a full router-style learned-policy gate before making any paper
+claim. The
 latest 0.80 identity-anchored base route is closed negative with complete
 rows: BGR identity/occlusion are 389/400 and 303/400, official is 393/400 and
 296/400, and matched random is 393/400 and 302/400. The fixed gate reports
@@ -2655,7 +2676,17 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   paired signs are only W/L/T=15/15/0 against uniform and median r80 is lower
   than uniform (0.3650 vs. 0.3863). Default BGR is worse at 0.6742. Do not
   scale or promote this LunarLander route without a genuinely new
-  preregistered premise.
+  preregistered premise. One such fixed follow-up is now queued because the
+  earlier 4-seed target-radius scout at `target_radius=0.70` repaired the
+  median-r80 contradiction on its small sample while keeping high BGR-Coverage
+  RAUC. The queue wrapper now accepts `EXTRA_ARGS`; target-0.70 split
+  all-method jobs were submitted on Athena as uniform/fixed/failure-only/
+  TD-loss/BGR-uniform-radius/BGR-Coverage/BGR `782561`--`782567`, with
+  `EXTRA_ARGS='--target-radius 0.70'` and 30 seeds. Initial poll showed
+  `782561` pending on resources and `782562`--`782567` pending on priority.
+  This route is not paper evidence unless BGR-Coverage beats uniform, all
+  required baselines, and BGR-uniform-radius on final RAUC while avoiding the
+  paired and median-r80 failures that closed the default 30-seed route.
 - The PointMaze U-Maze topology-bottleneck reset-interface screen is completed and negative. Failure-only reaches 0.3500 final RAUC, while BGR reaches 0.0854 and BGR-Coverage reaches 0.0573; do not scale or promote this protocol.
 - The MiniGrid-LavaGapS7 external-package screen is completed and negative. BGR-Coverage trails uniform on mean RAUC (0.4277 vs. 0.4461), default BGR is lower (0.4031), and the state-priority/uniform-radius ablation is highest (0.4627); do not scale or promote this protocol.
 - The hard-budget FetchReach-v4 reset-interface follow-up is completed and

@@ -166,9 +166,27 @@ Use the sync command only for audit/log reproduction:
 Do not incorporate this route; it is a completed negative learned-policy
 repair attempt. After cancelling stale dependency-held OpenVLA jobs from
 superseded routes, `squeue -u $(whoami)` was empty at 2026-06-11 02:16 BST.
-No active learned-policy cluster jobs remain queued. Both head-interpolation
-routes remain non-evidence or negative unless a genuinely different follow-up
-passes the same fixed +10/400, +0.02, and identity-preservation gate. The
+No active learned-policy cluster jobs remained queued at that checkpoint. A
+new occlusion-only scout was then submitted at 2026-06-11 03:35 BST for a
+different premise: an official-identity fallback/router would use the official
+checkpoint for clean identity and the adapted branch only when hard occlusion
+is known. This scout evaluates only hard-occlusion 0.80 for the same alpha-0
+official-head/full-LoRA no-video checkpoints, so it is not paper evidence and
+not a full gate. It is only worth formalizing if BGR beats both official and
+matched random on occlusion by at least +10/400 episodes and +0.02 absolute
+success rate. Submitted jobs are official `782556`, BGR `782557`, and
+matched random `782558`; initial poll at 2026-06-11 03:35:39 BST showed all
+three running with no parseable logs yet. Latest local compact partial after
+the 2026-06-11 03:41:24 BST poll had BGR occlusion `28/34`, official `28/36`,
+and matched random `32/38`; this is an early non-positive signal, not a
+gateable result. Poll/sync with:
+`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_occscout_v1 JOB_IDS=782556,782557,782558 DETAIL_JOB_IDS=782556,782557,782558 ROUTE_LABEL='Hard-occlusion 0.80 alpha0 no-video occlusion-only fallback scout' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+Do not incorporate this scout into `paper/main.tex`; close the fallback/router
+premise if it fails the occlusion margin, and preregister a full router-style
+learned-policy gate before making any paper claim if it clears. Both
+head-interpolation routes remain non-evidence or negative unless a genuinely
+different follow-up passes the same fixed +10/400, +0.02, and
+identity-preservation gate. The
 latest
 0.80 identity-anchored base route is closed negative with complete rows:
 BGR identity/occlusion 389/400 and 303/400, official 393/400 and 296/400, and
@@ -504,6 +522,19 @@ RAUC, but paired signs against uniform are only W/L/T=15/15/0, far below the
 24/30 gate, and median r80 is lower than uniform (0.3650 vs. 0.3863). Default
 BGR is 0.6742 and fails the uniform, TD-loss, and BGR-uniform-radius
 comparisons. Treat LunarLander as closed negative under this protocol.
+
+New fixed LunarLander premise queued 2026-06-11: the previous small
+target-radius scout at `target_radius=0.70` suggested BGR-Coverage might keep
+the RAUC advantage while avoiding the median-r80 contradiction that closed the
+default 30-seed route. This is a different parameter premise, not a paper
+claim. `scripts/queue_lunarlander_probe.sh` now accepts `EXTRA_ARGS`, and a
+30-seed target-0.70 all-method screen was queued on Athena as split jobs:
+uniform `782561`, fixed `782562`, failure-only `782563`, TD-loss `782564`,
+BGR-uniform-radius `782565`, BGR-Coverage `782566`, and BGR `782567`.
+Initial poll showed `782561` pending on resources and the remaining jobs
+pending on priority. Promote nothing unless BGR-Coverage beats uniform, fixed,
+failure-only, TD-loss, and BGR-uniform-radius on final RAUC with paired
+support and no contradictory median-r80 result.
 
 Completed independent-benchmark route, opened and evaluated 2026-06-07:
 official bsuite `deep_sea`. This route is materially different from the retired local

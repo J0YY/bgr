@@ -13,6 +13,7 @@ MEMORY="${MEMORY:-16G}"
 CPUS="${CPUS:-2}"
 SEEDS="${SEEDS:-0,1,2,3}"
 METHODS="${METHODS:-uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr}"
+EXTRA_ARGS="${EXTRA_ARGS:-}"
 
 SBATCH_PARTITION_ARG=""
 if [[ -n "${SLURM_PARTITION:-}" ]]; then
@@ -56,7 +57,8 @@ PYTHONPATH='${REMOTE_PROJECT}/src:${REMOTE_PROJECT}:${REMOTE_PROJECT}/tools' \
   '${REMOTE_PROJECT}/tools/lunarlander_recovery_probe.py' \
   --out '${REMOTE_RUN_ROOT}/${OUT_PREFIX}_'\${SLURM_JOB_ID} \
   --seeds '${SEEDS}' \
-  --methods '${METHODS}'
+  --methods '${METHODS}' \
+  ${EXTRA_ARGS}
 echo "[done] \$(date -Is) job=\${SLURM_JOB_ID}"
 EOF
 
