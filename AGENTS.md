@@ -311,9 +311,11 @@ random train/merge/clean-eval jobs are `783006`/`783007`/`783008`, and clean
 hard-0.90 occlusion eval jobs are official/BGR/random `783034`/`783035`/`783036`.
 Earlier eval jobs `783009`--`783023` and `783028`--`783030` were cancelled
 because they were submitted under a contaminated/default perturb artifact; do
-not sync or interpret those. Latest poll/sync at 2026-06-11 08:52:21 BST showed
-BGR train `783003` and official occlusion eval `783034` running, with BGR/random
-hard-occlusion evals dependency-held behind merge jobs. Poll/sync:
+not sync or interpret those. Latest poll/sync at 2026-06-11 08:56:23 BST showed
+prep `783002` and BGR train `783003` completed with exit `0:0`; BGR merge
+`783004`, random train `783006`, and official hard-occlusion eval `783034` were
+running; BGR/random hard-occlusion evals `783035`/`783036` remained
+dependency-held behind merge jobs. Poll/sync:
 `PREP_TAG=p512unique_occonly_hardocc090_router_prereg ADAPT_TAG=occonly_p512unique_hardocc090_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 PERTURB_TAG=occonly_p512unique_hardocc090_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc090_occonly_fullgoal10x40_v1 JOB_IDS=783002,783003,783004,783005,783006,783007,783008,783034,783035,783036 DETAIL_JOB_IDS=783002,783003,783004,783006,783007,783034,783035,783036 ROUTE_LABEL='Hard-occlusion 0.90 occlusion-only router-trained OpenVLA-OFT premise' GATE_PERTURBATIONS=occlusion scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check`.
 Do not modify separate `rl4vla-*` jobs on Athena for this project.
 The
