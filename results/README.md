@@ -7501,13 +7501,13 @@ scout was submitted on 2026-06-11 to close the unequal canceled partial. It uses
 `ALPHA=0.0`, `LORA_B_SCALE=1.0`, `PERTURBATIONS='occlusion={"fraction":0.90}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`.
 Submitted jobs are prep `782931`, official occlusion `782932`, BGR occlusion
-`782933`, and matched-random occlusion `782935`. This remains only a
-router-premise diagnostic unless BGR beats both comparators by at least +10/400
-and +0.02. Latest poll/sync at 2026-06-11 08:10:49 BST showed prep completed
-with exit `0:0` and all three occlusion evals still running. The incomplete
-local summary has BGR 83/124, official 86/129, and matched random 80/123 on
-hard occlusion 0.90, so the route is still incomplete and not paper evidence.
-Poll/sync with:
+`782933`, and matched-random occlusion `782935`; all completed with exit
+`0:0`. The final reconstructed local summary is
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1/summary_available.csv`.
+BGR is 307/400, official is 305/400, and matched random is 303/400 on hard
+occlusion 0.90. This is negative for promotion: BGR's margins are only +2 and
++4 episodes (+0.005 and +0.010), below the +10/400 and +0.02 router threshold.
+The sync command for provenance is:
 
 ```bash
 ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1 \
@@ -7515,6 +7515,32 @@ JOB_IDS=782931,782932,782933,782935 \
 DETAIL_JOB_IDS=782931,782932,782933,782935 \
 ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only full rerun' \
 scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check
+```
+
+A hard-0.90 occlusion-only router-trained route was queued afterward as a new
+training-distribution premise, not another same-checkpoint re-evaluation. It
+uses `PREP_TAG=p512unique_occonly_hardocc090_router_prereg`,
+`ADAPT_TAG=occonly_p512unique_hardocc090_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1`,
+`PERTURB_TAG=occonly_p512unique_hardocc090_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc090_occonly_fullgoal10x40_v1`,
+`OCCLUSION_CAP=512`, `OCCLUSION_REPEAT=2`, `INCLUDE_CLEAN_ANCHORS=0`,
+`OCCLUSION_FRACTION_OVERRIDE=0.90`, `PROXIMAL_ANCHOR_L2=0`, `ADAPT_STEPS=300`,
+`LR=5e-7`, and an occlusion-only 10-task x 40-trial eval with
+`PERTURBATIONS='occlusion={"fraction":0.90}'`. Prep `783002` completed with
+exit `0:0`; BGR train/merge/clean-eval jobs are `783003`/`783004`/`783005`,
+random train/merge/clean-eval jobs are `783006`/`783007`/`783008`, and
+official/BGR/random hard-occlusion eval jobs are `783034`/`783035`/`783036`.
+Cancelled eval job sets `783009`--`783023` and `783028`--`783030` used a
+wrong or contaminated perturb artifact and must not be interpreted. Poll/sync:
+
+```bash
+PREP_TAG=p512unique_occonly_hardocc090_router_prereg \
+ADAPT_TAG=occonly_p512unique_hardocc090_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 \
+PERTURB_TAG=occonly_p512unique_hardocc090_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc090_occonly_fullgoal10x40_v1 \
+JOB_IDS=783002,783003,783004,783005,783006,783007,783008,783034,783035,783036 \
+DETAIL_JOB_IDS=783002,783003,783004,783006,783007,783034,783035,783036 \
+ROUTE_LABEL='Hard-occlusion 0.90 occlusion-only router-trained OpenVLA-OFT premise' \
+GATE_PERTURBATIONS=occlusion \
+scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check
 ```
 
 A new router-specific occlusion-only training premise was queued on

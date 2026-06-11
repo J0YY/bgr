@@ -277,26 +277,44 @@ random 300/400. BGR trails official by 1 episode and matched random by 3
 episodes, so it fails the decisive router occlusion criterion before any
 identity-side interpretation. Do not incorporate this route into
 `paper/main.tex`; it is another learned-policy negative result.
-Active low-priority learned-policy diagnostic: because the canceled
+Completed low-priority learned-policy diagnostic: because the canceled
 hard-occlusion 0.90 alpha-0 no-video scout had unequal partial rows and a small
 BGR edge over matched random, a fixed full 400-episode rerun was submitted on
-2026-06-11 to close that severity cleanly. This is still only a router-premise
-diagnostic, not a paper claim. It uses
+2026-06-11 to close that severity cleanly. This was only a router-premise
+diagnostic, not a paper claim. It used
 `TAG=occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1`,
 `ALPHA=0.0`, `LORA_B_SCALE=1.0`, `PERTURBATIONS='occlusion={"fraction":0.90}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0` through
 `scripts/queue_openvla_oft_hard_occlusion080_headinterp_results.sh --submit`.
 Submitted jobs are prep `782931`, official occlusion `782932`, BGR occlusion
-`782933`, and matched-random occlusion `782935`. Latest poll/sync at
-2026-06-11 08:10:49 BST showed prep `782931` completed with exit `0:0`, while
-official `782932`, BGR `782933`, and matched random `782935` were all still
-running after about 20 minutes. The synced incomplete local
-`summary_available.csv` has BGR 83/124, official 86/129, and matched random
-80/123 on hard occlusion 0.90. This is not gateable evidence; the fixed
-400-episode readout is still missing. This can only motivate a formal router
-gate if BGR beats both official and matched random by at least +10/400 and
-+0.02 on the fixed occlusion readout. Poll/sync:
-`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1 JOB_IDS=782931,782932,782933,782935 DETAIL_JOB_IDS=782931,782932,782933,782935 ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only full rerun' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+`782933`, and matched-random occlusion `782935`; all completed with exit
+`0:0`. Final reconstructed local summary at
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1/summary_available.csv`
+has BGR 307/400, official 305/400, and matched random 303/400. BGR beats both
+comparators but only by +2 and +4 episodes (+0.005 and +0.010), far below the
+fixed +10/400 and +0.02 router gate, so this route is negative and must not be
+incorporated into `paper/main.tex`.
+New active learned-policy diagnostic: hard-occlusion 0.90 occlusion-only
+router-trained OpenVLA-OFT premise. This is a changed training distribution,
+not another same-checkpoint re-evaluation: it trains matched BGR and random
+branches only on hard-occlusion 0.90 examples while a hypothetical router uses
+the official checkpoint for clean identity. Fixed configuration:
+`PREP_TAG=p512unique_occonly_hardocc090_router_prereg`,
+`ADAPT_TAG=occonly_p512unique_hardocc090_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1`,
+`PERTURB_TAG=occonly_p512unique_hardocc090_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc090_occonly_fullgoal10x40_v1`,
+`OCCLUSION_CAP=512`, `OCCLUSION_REPEAT=2`, `INCLUDE_CLEAN_ANCHORS=0`,
+`OCCLUSION_FRACTION_OVERRIDE=0.90`, `PROXIMAL_ANCHOR_L2=0`, `ADAPT_STEPS=300`,
+`LR=5e-7`, `EVAL_TASKS=10`, `EVAL_TRIALS=40`, `EVAL_SEED=37`, and
+`PERTURBATIONS='occlusion={"fraction":0.90}'`. Prep job `783002` completed
+with exit `0:0`; BGR train/merge/clean-eval jobs are `783003`/`783004`/`783005`,
+random train/merge/clean-eval jobs are `783006`/`783007`/`783008`, and clean
+hard-0.90 occlusion eval jobs are official/BGR/random `783034`/`783035`/`783036`.
+Earlier eval jobs `783009`--`783023` and `783028`--`783030` were cancelled
+because they were submitted under a contaminated/default perturb artifact; do
+not sync or interpret those. Latest poll/sync at 2026-06-11 08:52:21 BST showed
+BGR train `783003` and official occlusion eval `783034` running, with BGR/random
+hard-occlusion evals dependency-held behind merge jobs. Poll/sync:
+`PREP_TAG=p512unique_occonly_hardocc090_router_prereg ADAPT_TAG=occonly_p512unique_hardocc090_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 PERTURB_TAG=occonly_p512unique_hardocc090_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc090_occonly_fullgoal10x40_v1 JOB_IDS=783002,783003,783004,783005,783006,783007,783008,783034,783035,783036 DETAIL_JOB_IDS=783002,783003,783004,783006,783007,783034,783035,783036 ROUTE_LABEL='Hard-occlusion 0.90 occlusion-only router-trained OpenVLA-OFT premise' GATE_PERTURBATIONS=occlusion scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check`.
 Do not modify separate `rl4vla-*` jobs on Athena for this project.
 The
 latest 0.80 identity-anchored base route is closed negative with complete
