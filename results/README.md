@@ -7611,7 +7611,7 @@ and uses
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Submitted Athena jobs are official `783312`, BGR `783314`, and matched random
-`783315`; latest poll/sync at 2026-06-11 12:33:02 BST showed all three still
+`783315`; latest poll/sync at 2026-06-11 12:36:47 BST showed all three still
 pending, with estimated starts of 2026-06-11 14:21:02 BST for official,
 2026-06-11 17:38:38 BST for BGR, and 2026-06-11 18:01:36 BST for matched
 random. The remote summary and log directory were still missing. This is only
@@ -7619,9 +7619,9 @@ a 100-episode route-selection scout. Do not treat it as paper evidence unless
 it justifies and then passes a fixed 400-episode identity-plus-combined-
 perturbation gate.
 Poll/sync with:
-`scripts/sync_openvla_oft_occlusion_shift_combo_scout_results.sh --poll --sync --no-check`.
-Evaluate a completed compact summary with:
-`scripts/check_openvla_route_scout.py results/openvla_oft_perturb_eval_occlusion_bottleneck_combo_occ080_shift015_scout_v1/summary_available.csv`.
+`scripts/sync_openvla_oft_occlusion_shift_combo_scout_results.sh --poll --sync`.
+The wrapper suppresses the shared 400-episode perturb gate and runs the
+scout-specific route checker automatically when a local compact summary exists.
 The route-selection threshold is BGR ahead of the best comparator by at least
 +5/100 episodes and +0.05 success rate. If the checker returns
 `PROMOTE_FULL_GATE`, the predeclared full-gate promotion command is
