@@ -382,7 +382,7 @@ primary-image shift in sequence. The scout uses artifact
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, `SAVE_ROLLOUTS=0`, and
 the completed p2048 occlusion-bottleneck BGR/matched-random checkpoints.
 Submitted on Athena at 2026-06-11 11:56 BST: official `783312`, BGR `783314`,
-and matched random `783315`; latest guarded advance at 2026-06-11 13:15:08 BST
+and matched random `783315`; latest guarded advance at 2026-06-11 13:16:22 BST
 ran `scripts/advance_openvla_oft_occlusion_shift_combo_scout.sh --submit`
 but did not submit a full gate because the scout remains `[INCOMPLETE]`.
 Official `783312` completed with exit `0:0`, BGR `783314` is running on
@@ -392,7 +392,7 @@ Official `783312` completed with exit `0:0`, BGR `783314` is running on
 exclusion `c2-g4-21`, which is down; leave the jobs untouched unless a new
 scheduler problem appears. The remote full summary is still missing, but the
 local incomplete summary has official occlusion_shift 69/100, BGR
-occlusion_shift 29/56, and matched-random occlusion_shift 12/18 successes. This is
+occlusion_shift 36/64, and matched-random occlusion_shift 15/25 successes. This is
 not manuscript evidence and not a moved gate. Only if the 100-episode scout
 shows a clear BGR edge over both official and matched random should it be
 promoted to a fixed 400-episode identity-plus-combined-perturbation gate.
