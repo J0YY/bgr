@@ -176,6 +176,12 @@ The fixed calibration clears with clean success 1.0000, recovery range
 `1.0000,0.9167,0.8611,0.6389,0.5000,0.3889,0.3056` over radii
 `0,0.5,1.0,1.5,2.0,2.5,3.0`. This is not paper evidence; it only permits a
 fixed continuous-action all-method screen without retuning.
+The fixed all-method screen is now preregistered after a local one-seed
+viability smoke at the fixed budget gave BGR-Coverage clean 1.0000 and RAUC
+0.7604 versus uniform clean 0.8750 and RAUC 0.4062. Queue with:
+`OUT_PREFIX=lunarlander_continuous_recovery_probe_4seed_v1 SETUP_REMOTE=0 EXTRA_ARGS='--env-id LunarLanderContinuous-v3 --continuous --radii 0,0.5,1.0,1.5,2.0,2.5,3.0 --iterations 80 --eval-every 20 --train-batch-size 8 --replay-states 24 --eval-states 8 --eval-trials 1 --record-trials 1 --burn-in 80 --horizon 500 --policy-init-steps 1000 --learning-rate 0.02 --target-radius 1.1375 --radius-bandwidth 0.6 --fixed-radius 1.1375 --initial-probes 0 1.0 1.5 3.0 --refresh-per-eval 8' scripts/queue_lunarlander_probe.sh`.
+This is the active standard-environment route; do not retune after seeing the
+four-seed method rows.
 A broader
 fixed OpenML numeric-suite
 target-2.0 run and held-out seeds 30--59 replication completed on `athena` as

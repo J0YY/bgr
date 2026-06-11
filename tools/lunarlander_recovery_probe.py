@@ -84,6 +84,31 @@ class LinearImitationPolicy:
         self.weights -= self.learning_rate * grad
 
 
+class ContinuousLinearImitationPolicy:
+    def __init__(self, *, rng: np.random.Generator, learning_rate: float, init_noise: float) -> None:
+        self.rng = rng
+        self.learning_rate = float(learning_rate)
+        self.weights = rng.normal(0.0, float(init_noise), size=(2, 9))
+
+    @staticmethod
+    def features(obs: np.ndarray) -> np.ndarray:
+        clipped = np.array(obs, dtype=float)
+        clipped[:6] = np.clip(clipped[:6], -2.5, 2.5)
+        return np.concatenate([clipped, np.ones(1, dtype=float)])
+
+    def action(self, obs: np.ndarray) -> np.ndarray:
+        return np.clip(self.weights @ self.features(obs), -1.0, 1.0)
+
+    def loss(self, obs: np.ndarray, target: np.ndarray) -> float:
+        error = self.action(obs) - np.asarray(target, dtype=float)
+        return float(np.mean(error * error))
+
+    def update(self, obs: np.ndarray, target: np.ndarray) -> None:
+        x = self.features(obs)
+        error = self.action(obs) - np.asarray(target, dtype=float)
+        self.weights -= self.learning_rate * np.clip(np.outer(error, x), -5.0, 5.0)
+
+
 class LunarLanderRecoveryProbe:
     def __init__(
         self,
@@ -102,25 +127,25 @@ class LunarLanderRecoveryProbe:
             ) from exc
 
         self.rng = np.random.default_rng(seed + 211_000)
-        self.env = gym.make(args.env_id, continuous=False, enable_wind=False)
+        self.env = gym.make(args.env_id, continuous=bool(args.continuous), enable_wind=False)
         self.args = args
         self.replay_checkpoints = replay_checkpoints
         self.eval_checkpoints = eval_checkpoints
         self.radii = parse_radii(args.radii)
-        self.policy = LinearImitationPolicy(
-            rng=self.rng,
-            learning_rate=args.learning_rate,
-            init_noise=args.policy_init_noise,
-        )
+        policy_cls = ContinuousLinearImitationPolicy if args.continuous else LinearImitationPolicy
+        self.policy = policy_cls(rng=self.rng, learning_rate=args.learning_rate, init_noise=args.policy_init_noise)
         self._pretrain(seed)
 
     def close(self) -> None:
         self.env.close()
 
-    def _teacher_action(self, obs: np.ndarray) -> int:
+    def _teacher_action(self, obs: np.ndarray) -> int | np.ndarray:
         from gymnasium.envs.box2d.lunar_lander import heuristic
 
-        return int(heuristic(self.env, obs))
+        action = heuristic(self.env, obs)
+        if self.args.continuous:
+            return np.asarray(action, dtype=float)
+        return int(action)
 
     def _pretrain(self, seed: int) -> None:
         for step in range(self.args.policy_init_steps):
@@ -214,7 +239,7 @@ def build_checkpoints(args: argparse.Namespace, *, count: int, seed_offset: int)
             "for example /tmp/bgr_lunar_venv."
         ) from exc
 
-    env = gym.make(args.env_id, continuous=False, enable_wind=False)
+    env = gym.make(args.env_id, continuous=bool(args.continuous), enable_wind=False)
     checkpoints: list[LanderCheckpoint] = []
     try:
         for idx in range(count):
@@ -457,6 +482,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", default="results/lunarlander_recovery_probe_4seed_v1")
     parser.add_argument("--env-id", default="LunarLander-v3")
+    parser.add_argument("--continuous", action="store_true")
     parser.add_argument("--seeds", default="0,1,2,3")
     parser.add_argument("--methods", default="uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr")
     parser.add_argument("--radii", default="0,0.2,0.4,0.6,0.8,1.0")
@@ -531,7 +557,10 @@ def main() -> None:
                 history_rows.append({"method": method, "seed": seed, **item})
 
     (out_dir / "results.json").write_text(json.dumps({"args": vars(args), "results": results}, indent=2), encoding="utf-8")
-    (out_dir / "package_versions.json").write_text(json.dumps(package_versions(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (out_dir / "package_versions.json").write_text(
+        json.dumps(package_versions(args.env_id, continuous=bool(args.continuous)), indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     with (out_dir / "summary.csv").open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()), lineterminator="\n")
         writer.writeheader()

@@ -1455,6 +1455,12 @@ risk.
   1.0000, recovery range 0.3056--1.0000, RAUC 0.6597, r80 1.1375, and curve
   `1.0000,0.9167,0.8611,0.6389,0.5000,0.3889,0.3056`. This is now the active
   standard-environment route for a fixed all-method screen.
+  The fixed method screen uses the continuous linear imitation policy in
+  `tools/lunarlander_recovery_probe.py`, `target_radius=fixed_radius=1.1375`,
+  `radius_bandwidth=0.6`, `iterations=80`, `policy_init_steps=1000`, and the
+  calibrated radius grid. A one-seed viability smoke at this fixed budget gave
+  BGR-Coverage clean 1.0000 and RAUC 0.7604 versus uniform clean 0.8750 and
+  RAUC 0.4062; the smoke is route-selection evidence only.
 - The next acceptance-moving empirical route must change the premise: either a
   genuinely different pre-existing benchmark package/reset interface, or a
   genuinely different learned-policy intervention that is preregistered before

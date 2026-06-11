@@ -1713,6 +1713,17 @@ clean success 1.0000, recovery range 0.3056--1.0000, RAUC 0.6597, r80 1.1375,
 and curve `1.0000,0.9167,0.8611,0.6389,0.5000,0.3889,0.3056`. This is now
 the active standard-environment route for a fixed all-method screen.
 
+Fixed all-method screen command:
+
+```bash
+OUT_PREFIX=lunarlander_continuous_recovery_probe_4seed_v1 SETUP_REMOTE=0 EXTRA_ARGS='--env-id LunarLanderContinuous-v3 --continuous --radii 0,0.5,1.0,1.5,2.0,2.5,3.0 --iterations 80 --eval-every 20 --train-batch-size 8 --replay-states 24 --eval-states 8 --eval-trials 1 --record-trials 1 --burn-in 80 --horizon 500 --policy-init-steps 1000 --learning-rate 0.02 --target-radius 1.1375 --radius-bandwidth 0.6 --fixed-radius 1.1375 --initial-probes 0 1.0 1.5 3.0 --refresh-per-eval 8' scripts/queue_lunarlander_probe.sh
+```
+
+A local one-seed viability smoke at this fixed budget gave BGR-Coverage clean
+1.0000 and RAUC 0.7604 versus uniform clean 0.8750 and RAUC 0.4062. This only
+justifies queueing the fixed all-method screen; do not retune after seeing the
+four-seed method rows.
+
 ## Internal Package-Free CartPole Diagnostic
 
 `results/cartpole_recovery_probe_4seed_v1/summary.csv` is a 4-seed internal
