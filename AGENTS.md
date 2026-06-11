@@ -379,10 +379,11 @@ primary-image shift in sequence. The scout uses artifact
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, `SAVE_ROLLOUTS=0`, and
 the completed p2048 occlusion-bottleneck BGR/matched-random checkpoints.
 Submitted on Athena at 2026-06-11 11:56 BST: official `783312`, BGR `783314`,
-and matched random `783315`; latest poll at 2026-06-11 12:02:50 BST showed
-all three pending, with estimated starts of 2026-06-11 14:21:02 BST for
-official, 2026-06-11 17:11:30 BST for BGR, and 2026-06-11 17:38:38 BST for
-matched random. This is
+and matched random `783315`; latest poll/sync at 2026-06-11 12:04:56 BST
+showed all three still pending, with estimated starts of 2026-06-11
+14:21:02 BST for official, 2026-06-11 17:38:38 BST for BGR, and 2026-06-11
+18:01:36 BST for matched random. The remote summary and log directory were
+still missing. This is
 not manuscript evidence and not a moved gate. Only if the 100-episode scout
 shows a clear BGR edge over both official and matched random should it be
 promoted to a fixed 400-episode identity-plus-combined-perturbation gate.
@@ -414,6 +415,20 @@ the radius ablation; S11N5 BGR-Coverage has 0.5052 vs. 0.5590 uniform and
 BGR has 0.5087 vs. 0.5590 uniform. Do not scale or promote these variants
 without a materially new fixed premise.
 Do not modify separate `rl4vla-*` jobs on Athena for this project.
+Latest 2026-06-11 12:06 BST sync closes three stale learned-policy routes as
+incomplete infrastructure closures rather than live candidates. The 0.80
+micro A40 route jobs `777264`--`777270` have only official identity
+`393/400` summarized; official occlusion and BGR identity failed immediately,
+and BGR occlusion plus random identity/occlusion were cancelled. The 0.80
+identity-anchor A40 route jobs `776300`--`776305` have official identity
+`393/400` and partial official occlusion `241/342`; official occlusion failed,
+BGR identity failed, and the remaining dependent BGR/random rows were
+cancelled. The 0.90 strict A40 route jobs `776611`/`776613`/`776615`--`776619`
+have only official identity `393/400`; official occlusion failed and all
+BGR/random rows were cancelled. Treat all three as non-evidence, not queued
+work and not promotable negative comparisons. The readiness and scorecard
+helpers now report these as closed incomplete after failed/cancelled Slurm
+jobs instead of queued/running.
 The
 latest 0.80 identity-anchored base route is closed negative with complete
 rows: BGR identity/occlusion are 389/400 and 303/400, official is 393/400 and

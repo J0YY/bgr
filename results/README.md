@@ -7605,12 +7605,26 @@ and uses
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Submitted Athena jobs are official `783312`, BGR `783314`, and matched random
-`783315`; latest poll at 2026-06-11 12:02:50 BST showed all three pending,
-with estimated starts of 2026-06-11 14:21:02 BST for official, 2026-06-11
-17:11:30 BST for BGR, and 2026-06-11 17:38:38 BST for matched random. This is
-only a 100-episode route-selection scout. Do not treat it as paper evidence
-unless it justifies and then passes a fixed 400-episode
-identity-plus-combined-perturbation gate.
+`783315`; latest poll/sync at 2026-06-11 12:04:56 BST showed all three still
+pending, with estimated starts of 2026-06-11 14:21:02 BST for official,
+2026-06-11 17:38:38 BST for BGR, and 2026-06-11 18:01:36 BST for matched
+random. The remote summary and log directory were still missing. This is only
+a 100-episode route-selection scout. Do not treat it as paper evidence unless
+it justifies and then passes a fixed 400-episode identity-plus-combined-
+perturbation gate.
+
+A 2026-06-11 12:06 BST sync also closes three stale learned-policy routes as
+incomplete infrastructure closures rather than live candidates. The 0.80 micro
+A40 route jobs `777264`--`777270` have only official identity `393/400`
+summarized; official occlusion and BGR identity failed immediately, and BGR
+occlusion plus random identity/occlusion were cancelled. The 0.80
+identity-anchor A40 route jobs `776300`--`776305` have official identity
+`393/400` and partial official occlusion `241/342`; official occlusion failed,
+BGR identity failed, and the remaining BGR/random rows were cancelled. The
+0.90 strict A40 route jobs `776611`/`776613`/`776615`--`776619` have only
+official identity `393/400`; official occlusion failed and all BGR/random rows
+were cancelled. Treat all three as non-evidence, not queued work and not
+promotable negative comparisons.
 
 A pre-artifact CarRacing-v3 controller smoke was rejected on 2026-06-11 before
 creating repo files or cluster jobs. Gymnasium `CarRacing-v3` is available in

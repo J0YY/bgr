@@ -1032,7 +1032,14 @@ def learned_policy_inflight_summary(root: Path) -> str | None:
     active: list[str] = []
     no_active_cluster_jobs = "No active learned-policy cluster jobs remain queued" in ledger_text
 
-    def append_openvla_route(marker: str, complete_path: str, label: str, pending_detail: str) -> None:
+    def append_openvla_route(
+        marker: str,
+        complete_path: str,
+        label: str,
+        pending_detail: str,
+        closed_marker: str | None = None,
+        closed_detail: str | None = None,
+    ) -> None:
         if marker not in ledger_text or (root / complete_path).exists():
             return
         partial_failure = partial_openvla_failure_detail(
@@ -1041,9 +1048,13 @@ def learned_policy_inflight_summary(root: Path) -> str | None:
             label=label,
             non_identity_perturbations={"occlusion"},
         )
-        if partial_failure is None and no_active_cluster_jobs:
-            return
-        active.append(partial_failure or pending_detail)
+        if partial_failure is not None:
+            active.append(partial_failure)
+        elif closed_marker is not None and closed_marker in ledger_text:
+            if closed_detail is not None:
+                active.append(closed_detail)
+        elif not no_active_cluster_jobs:
+            active.append(pending_detail)
 
     append_openvla_route(
         OPENVLA_HARD_OCCLUSION080_TRANSFER_HEADINTERP000_LORAFULL_NOVIDEO_MARKER,
@@ -1062,6 +1073,12 @@ def learned_policy_inflight_summary(root: Path) -> str | None:
         OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MICRO_A40_COMPLETE,
         "hard-occlusion 0.80 micro identity-anchored A40 OpenVLA adaptation",
         "hard-occlusion 0.80 micro identity-anchored A40 adaptation is queued/running and missing a complete summary",
+        closed_marker="micro A40 route jobs",
+        closed_detail=(
+            "hard-occlusion 0.80 micro identity-anchored A40 adaptation "
+            "closed incomplete after failed/cancelled Slurm jobs; only official identity "
+            "393/400 is summarized, so there is no gateable BGR/random comparison"
+        ),
     )
     append_openvla_route(
         OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_MARKER,
@@ -1074,6 +1091,12 @@ def learned_policy_inflight_summary(root: Path) -> str | None:
         OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_A40_COMPLETE,
         "hard-occlusion 0.80 identity-anchored A40 OpenVLA adaptation",
         "hard-occlusion 0.80 identity-anchored A40 adaptation is queued/running and missing a complete summary",
+        closed_marker="identity-anchor A40 route jobs",
+        closed_detail=(
+            "hard-occlusion 0.80 identity-anchored A40 adaptation "
+            "closed incomplete after failed/cancelled Slurm jobs; only official identity "
+            "393/400 and partial official occlusion 241/342 are summarized"
+        ),
     )
     append_openvla_route(
         OPENVLA_HARD_OCCLUSION080_IDENTITY_ANCHOR_STRICT_MARKER,
@@ -1086,6 +1109,12 @@ def learned_policy_inflight_summary(root: Path) -> str | None:
         OPENVLA_HARD_OCCLUSION090_IDENTITY_ANCHOR_STRICT_COMPLETE,
         "hard-occlusion 0.90 strict identity-anchored OpenVLA adaptation",
         "hard-occlusion 0.90 strict identity-anchored adaptation is queued/running and missing a complete summary",
+        closed_marker="0.90 strict A40 route jobs",
+        closed_detail=(
+            "hard-occlusion 0.90 strict identity-anchored adaptation "
+            "closed incomplete after failed/cancelled Slurm jobs; only official identity "
+            "393/400 is summarized, so there is no gateable BGR/random comparison"
+        ),
     )
     append_openvla_route(
         OPENVLA_HARD_OCCLUSION080_TRANSFER_MARKER,

@@ -462,10 +462,14 @@ highest-episode retry log per method/perturbation. The micro and strict 0.80
 routes already fail the identity side condition: BGR identity is 387/400 for
 the micro route and 388/400 for the strict route, each trailing official
 identity 393/400 by more than one episode. The strict route partial summary now
-has official occlusion 296/400 and matched-random identity 391/400, while BGR
-and matched-random occlusion rows are still running; these routes are already
-non-promotable on identity. The 0.90 strict A40 route has only official
-identity 393/400 summarized and no BGR/random rows.
+has official occlusion 296/400 and matched-random identity 391/400; these
+routes are already non-promotable on identity. A 2026-06-11 12:06 BST sync
+closed the stale A40 variants as incomplete infrastructure closures rather
+than live candidates: the 0.80 micro A40 route has only official identity
+393/400 summarized, the 0.80 identity-anchor A40 route has official identity
+393/400 plus partial official occlusion 241/342, and the 0.90 strict A40 route
+has only official identity 393/400. Their remaining BGR/random rows failed or
+were cancelled, so they are non-evidence and not promotable comparisons.
 An internal sklearn-digits margin scout was also opened as a genuinely
 pre-existing supervised dataset route, but it is rejected before paper
 promotion: the best BGR target in
