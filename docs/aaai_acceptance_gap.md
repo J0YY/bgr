@@ -249,7 +249,7 @@ more GPU time on a dead comparator. This scout is not a basis for another
 fixed route. This is only a severity-window diagnostic for whether a future
 preregistered router-style gate is worth running, not paper evidence and not a
 moved gate.
-A new learned-policy scout was queued after that closure: combined
+A learned-policy scout was queued after that closure: combined
 occlusion+shift visual corruption for the completed occlusion-bottleneck
 transfer checkpoints. This is a different perturbation family, implemented by
 adding `occlusion_shift` support to `scripts/queue_openvla_oft_perturb_eval.sh`
@@ -260,38 +260,22 @@ with
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Athena jobs are official `783312`, BGR `783314`, and matched random `783315`;
-latest guarded advance at 2026-06-11 13:16:22 BST ran
-`scripts/advance_openvla_oft_occlusion_shift_combo_scout.sh --submit` but did
-not submit a full gate because the scout remains `[INCOMPLETE]`. Official is
-completed with exit `0:0`, BGR is running on `c1-g4-04`, and matched random is
-running on `c1-g4-05`. A direct scheduler check showed no dependencies or feature constraints,
-priority 611 for all three jobs, and only explicit exclusion `c2-g4-21`, which
-is down; leave the jobs untouched unless a
-new scheduler problem appears. The remote full summary is still missing, but
-the local incomplete summary has official occlusion_shift 69/100, BGR
-occlusion_shift 36/64, and matched-random occlusion_shift 15/25 successes. The
-route-specific sync helper is
-`scripts/sync_openvla_oft_occlusion_shift_combo_scout_results.sh --poll --sync`.
-It suppresses the shared 400-episode perturb gate and runs the scout-specific
-route checker automatically when a local compact summary exists.
-The guarded advancement helper is
-`scripts/advance_openvla_oft_occlusion_shift_combo_scout.sh --submit`; it
-syncs, checks the scout, and submits the full gate only on
-`PROMOTE_FULL_GATE`.
-Treat this as a 100-episode route-selection scout only. It should be promoted
-to a fixed identity-plus-combined-perturbation gate only if BGR clearly beats
-both comparators in the scout.
-Use
+the route closed early as non-promotable at the 2026-06-11 13:20:29 BST sync.
+Official completed with exit `0:0` and 69/100 successes. BGR had only 66/98
+successes, so even a perfect finish could reach at most 68/100 and could not
+beat official, much less clear the +5/100 and +0.05 route-selection threshold.
+Matched random had 28/51 successes. BGR and matched-random jobs were cancelled
+at 13:20 BST to save GPU time. The remote full summary is missing; the local
+incomplete summary is
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_combo_occ080_shift015_scout_v1/summary_available.csv`.
+This is negative/non-promotable route-selection evidence only. Do not submit
+`scripts/queue_openvla_oft_occlusion_shift_combo_gate.sh --submit` for this
+premise, and do not incorporate this route into `paper/main.tex`.
+The checker command remains:
 `scripts/check_openvla_route_scout.py results/openvla_oft_perturb_eval_occlusion_bottleneck_combo_occ080_shift015_scout_v1/summary_available.csv`
-once a compact summary exists. The route-selection threshold is BGR ahead of
-the best comparator by at least +5/100 episodes and +0.05 success rate.
-That fixed gate is now locked in
-`scripts/queue_openvla_oft_occlusion_shift_combo_gate.sh`: identity plus
-`occlusion_shift` at fraction 0.80, dx fraction 0.15, dy fraction 0.0,
-10 LIBERO-Goal tasks x 40 trials, seed 237, no rollout videos, and the same
-completed occlusion-bottleneck BGR/random checkpoints. Do not submit this
-wrapper unless the 100-episode scout is clearly positive against both official
-and matched random.
+for reproducing the closure. It returns incomplete because the BGR/random jobs
+were intentionally cancelled after the route became mathematically
+non-promotable; it is not a promotion signal.
 A pre-artifact CarRacing-v3 controller smoke was also rejected on 2026-06-11:
 the available `/tmp/bgr_lunar_venv` Gymnasium Box2D install can instantiate
 `CarRacing-v3`, but a simple track-following controller visited only about

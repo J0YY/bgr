@@ -7611,34 +7611,17 @@ and uses
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Submitted Athena jobs are official `783312`, BGR `783314`, and matched random
-`783315`; latest guarded advance at 2026-06-11 13:16:22 BST ran
-`scripts/advance_openvla_oft_occlusion_shift_combo_scout.sh --submit` but did
-not submit a full gate because the scout remains `[INCOMPLETE]`. Official is
-completed with exit `0:0`, BGR is running on `c1-g4-04`, and matched random is
-running on `c1-g4-05`. A direct scheduler check showed no dependencies or feature constraints,
-priority 611 for all three jobs, and only explicit exclusion `c2-g4-21`, which
-is down; leave the jobs untouched unless a
-new scheduler problem appears. The remote full summary is still missing, but
-the local incomplete summary has official occlusion_shift 69/100, BGR
-occlusion_shift 36/64, and matched-random occlusion_shift 15/25 successes.
-This is only a 100-episode route-selection scout. Do not treat it as paper
-evidence unless it justifies and then passes a fixed 400-episode
-identity-plus-combined-perturbation gate.
-Poll/sync with:
-`scripts/sync_openvla_oft_occlusion_shift_combo_scout_results.sh --poll --sync`.
-The wrapper suppresses the shared 400-episode perturb gate and runs the
-scout-specific route checker automatically when a local compact summary exists.
-The guarded advancement helper is
-`scripts/advance_openvla_oft_occlusion_shift_combo_scout.sh --submit`; it
-syncs, checks the scout, and submits the full gate only on
-`PROMOTE_FULL_GATE`.
-The route-selection threshold is BGR ahead of the best comparator by at least
-+5/100 episodes and +0.05 success rate. If the checker returns
-`PROMOTE_FULL_GATE`, the predeclared full-gate promotion command is
-`scripts/queue_openvla_oft_occlusion_shift_combo_gate.sh --submit`. It uses
-identity plus the same combined perturbation over 10 LIBERO-Goal tasks x
-40 trials with seed 237 and `SAVE_ROLLOUTS=0`; do not submit it while the
-scout is pending or negative.
+`783315`. It closed early as non-promotable at the 2026-06-11 13:20:29 BST
+sync. Official completed with exit `0:0` and 69/100 successes. BGR had only
+66/98 successes, so even a perfect finish could reach at most 68/100 and could
+not beat official, much less clear the +5/100 and +0.05 route-selection
+threshold. Matched random had 28/51 successes. BGR and matched-random jobs
+were cancelled at 13:20 BST to save GPU time. The remote full summary is
+missing; the local incomplete summary is
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_combo_occ080_shift015_scout_v1/summary_available.csv`.
+This is negative/non-promotable route-selection evidence only. Do not submit
+`scripts/queue_openvla_oft_occlusion_shift_combo_gate.sh --submit` for this
+premise, and do not incorporate this route into `paper/main.tex`.
 
 A 2026-06-11 12:06 BST sync also closes three stale learned-policy routes as
 incomplete infrastructure closures rather than live candidates. The 0.80 micro

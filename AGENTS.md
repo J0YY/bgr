@@ -371,7 +371,7 @@ and not a replacement for the fixed gate. Use it only to decide whether a
 future preregistered router-style gate is worth running; promotion would still
 require BGR to beat both official and matched random by at least +10/400 and
 +0.02 on a fixed 400-episode readout.
-New active learned-policy scout: combined occlusion+shift visual corruption
+Latest learned-policy scout closure: combined occlusion+shift visual corruption
 for the completed occlusion-bottleneck transfer checkpoints. This is a
 different perturbation family, not another single-occlusion severity point:
 `scripts/queue_openvla_oft_perturb_eval.sh` now supports
@@ -382,38 +382,18 @@ primary-image shift in sequence. The scout uses artifact
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, `SAVE_ROLLOUTS=0`, and
 the completed p2048 occlusion-bottleneck BGR/matched-random checkpoints.
 Submitted on Athena at 2026-06-11 11:56 BST: official `783312`, BGR `783314`,
-and matched random `783315`; latest guarded advance at 2026-06-11 13:16:22 BST
-ran `scripts/advance_openvla_oft_occlusion_shift_combo_scout.sh --submit`
-but did not submit a full gate because the scout remains `[INCOMPLETE]`.
-Official `783312` completed with exit `0:0`, BGR `783314` is running on
-`c1-g4-04`, and matched random `783315` is running on `c1-g4-05`. A direct scheduler check at
-2026-06-11 12:47 BST showed no dependencies or feature constraints, priority
-611 for all three jobs, and only explicit
-exclusion `c2-g4-21`, which is down; leave the jobs untouched unless a new
-scheduler problem appears. The remote full summary is still missing, but the
-local incomplete summary has official occlusion_shift 69/100, BGR
-occlusion_shift 36/64, and matched-random occlusion_shift 15/25 successes. This is
-not manuscript evidence and not a moved gate. Only if the 100-episode scout
-shows a clear BGR edge over both official and matched random should it be
-promoted to a fixed 400-episode identity-plus-combined-perturbation gate.
-Poll/sync with:
-`scripts/sync_openvla_oft_occlusion_shift_combo_scout_results.sh --poll --sync`.
-The wrapper suppresses the shared 400-episode perturb gate and runs
-`scripts/check_openvla_route_scout.py` automatically when a local compact
-`summary.csv` or `summary_available.csv` exists.
-To combine sync, scout-check, and guarded full-gate launch, use
-`scripts/advance_openvla_oft_occlusion_shift_combo_scout.sh --submit`; it
-submits the locked full gate only when the scout checker returns
-`PROMOTE_FULL_GATE`.
-The route-selection threshold is BGR ahead of the best comparator by at least
-+5/100 episodes and +0.05 success rate. If and only if that checker returns
-`PROMOTE_FULL_GATE`, promote with the predeclared full-gate wrapper
-`scripts/queue_openvla_oft_occlusion_shift_combo_gate.sh --submit`. This locks
-identity plus `occlusion_shift` at fraction `0.80`, `dx_fraction=0.15`,
-`dy_fraction=0.0`, `EVAL_TASKS=10`, `EVAL_TRIALS=40`, `EVAL_SEED=237`,
-`SAVE_ROLLOUTS=0`, and the same completed occlusion-bottleneck BGR/random
-checkpoints. Do not submit it while the 100-episode scout is pending or
-negative.
+and matched random `783315`. It closed early as non-promotable at the
+2026-06-11 13:20:29 BST sync. Official `783312` completed with exit `0:0`
+and 69/100 successes; BGR `783314` had only 66/98 successes, so even a perfect
+finish could reach at most 68/100 and could not beat official, much less clear
+the +5/100 and +0.05 route-selection threshold. Matched random `783315` had
+28/51 successes. BGR and matched-random jobs were cancelled at 13:20 BST to
+save GPU time. The remote full summary is missing; the local incomplete
+summary is
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_combo_occ080_shift015_scout_v1/summary_available.csv`.
+This is negative/non-promotable route-selection evidence only. Do not submit
+`scripts/queue_openvla_oft_occlusion_shift_combo_gate.sh --submit` for this
+premise, and do not incorporate this route into `paper/main.tex`.
 Pre-artifact CarRacing-v3 controller smoke on 2026-06-11 was rejected before
 creating repo files or cluster jobs: a simple track-following controller in
 `/tmp/bgr_lunar_venv` visited only about 1.5% of track tiles from clean starts,
