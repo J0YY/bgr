@@ -7525,20 +7525,17 @@ uses `PREP_TAG=p512unique_occonly_hardocc090_router_prereg`,
 `OCCLUSION_CAP=512`, `OCCLUSION_REPEAT=2`, `INCLUDE_CLEAN_ANCHORS=0`,
 `OCCLUSION_FRACTION_OVERRIDE=0.90`, `PROXIMAL_ANCHOR_L2=0`, `ADAPT_STEPS=300`,
 `LR=5e-7`, and an occlusion-only 10-task x 40-trial eval with
-`PERTURBATIONS='occlusion={"fraction":0.90}'`. Prep `783002` completed with
-exit `0:0`; BGR train/merge/clean-eval jobs are `783003`/`783004`/`783005`,
-random train/merge/clean-eval jobs are `783006`/`783007`/`783008`, and
-official/BGR/random hard-occlusion eval jobs are `783034`/`783035`/`783036`.
+`PERTURBATIONS='occlusion={"fraction":0.90}'`. Prep, BGR train/merge/clean
+eval, random train/merge/clean eval, and official/BGR/random hard-occlusion
+eval jobs `783002`--`783008` and `783034`--`783036` all completed with exit
+`0:0`.
 Cancelled eval job sets `783009`--`783023` and `783028`--`783030` used a
-wrong or contaminated perturb artifact and must not be interpreted. Latest
-poll/sync at 2026-06-11 10:02:21 BST showed prep, BGR/random train,
-BGR/random merge, and BGR/random clean evals completed with exit `0:0`; the
-clean/adapt summary has BGR 391/400 and matched random 391/400. Official
-hard-occlusion eval `783034` completed at 305/400, while BGR `783035` and
-matched random `783036` were still running. The incomplete local perturb
-summary had BGR 210/294, official 305/400, and matched random 202/288. This
-route is not gateable yet, but it is effectively closed unless BGR succeeds on
-at least 105 of its remaining 106 episodes. Poll/sync:
+wrong or contaminated perturb artifact and must not be interpreted. Final
+poll/sync at 2026-06-11 10:23:38 BST closed the route negative. The
+clean/adapt summary has BGR 391/400 and matched random 391/400. The
+hard-occlusion summary has BGR 305/400, official 305/400, and matched random
+301/400. BGR ties official and beats matched random by only +4/400 (+0.0100),
+far below the +10/400 and +0.02 router gate. Reproduction sync:
 
 ```bash
 PREP_TAG=p512unique_occonly_hardocc090_router_prereg \
@@ -7558,9 +7555,9 @@ to
 and uses `PERTURBATIONS='occlusion={"fraction":0.75}'`, `EVAL_TASKS=10`,
 `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`. Submitted Athena jobs
 are official/BGR/matched-random `783104`/`783105`/`783106`. Latest poll/sync
-at 2026-06-11 10:02:48 BST showed official `783104` and BGR `783105` running,
-matched random `783106` pending on unavailable nodes, and an early incomplete
-summary of BGR 60/81 versus official 57/82. Treat it as a severity-window
+at 2026-06-11 10:20:00 BST showed official `783104` and BGR `783105` running,
+matched random `783106` pending on unavailable nodes, and a weakened incomplete
+summary of BGR 77/159 versus official 82/165. Treat it as a severity-window
 diagnostic only, not paper evidence and not a replacement for a fixed
 preregistered router-style gate.
 
