@@ -49,6 +49,16 @@ uniform, 2/8 vs. failure-only, 1/8 vs. TD-loss, and 3/8 vs.
 BGR-uniform-radius. Harder-budget SimpleCrossing variants are dominated by
 uniform/failure-only/uniform-radius. Do not scale either route without a
 materially new fixed premise.
+A new 2026-06-11 bsuite Cartpole Swingup scout is active as a package-owned
+CPU standard-environment route. It differs from the retired upright bsuite
+Cartpole route by using bsuite's `CartpoleSwingup` dynamics, exact
+`CartpoleState` restarts, and a fixed near-upright recovery interface. The
+fixed 4-seed Slurm job is `782844`, launched through
+`scripts/queue_bsuite_cartpole_swingup_probe.sh` and synced with
+`scripts/sync_bsuite_cartpole_swingup_probe.sh`. This is not paper evidence
+unless BGR or BGR-Coverage beats uniform, fixed-radius, failure-only, TD-loss,
+and BGR-uniform-radius with at least 3/4 paired wins and non-saturated,
+non-contradictory median-r80 evidence.
 The 2026-06-10 Freeway route also does not change this: it cleared pre-method
 calibration under MinAtar package dynamics, but the fixed all-method screen is
 a complete tie across BGR, BGR-Coverage, BGR-uniform-radius, uniform, fixed,

@@ -465,6 +465,23 @@ Fixed 4-seed bsuite MountainCar pre-promotion command:
 PYTHONPATH=src:. /tmp/bgr_bsuite_venv/bin/python tools/bsuite_mountaincar_recovery_probe.py --out results/bsuite_mountaincar_recovery_probe_4seed_v1
 ```
 
+Active external-package pre-promotion route:
+
+- `tools/bsuite_cartpole_swingup_recovery_probe.py`: active 2026-06-11
+  package-owned bsuite Cartpole Swingup recovery scout. This differs from the
+  retired upright bsuite Cartpole screen by using bsuite's `CartpoleSwingup`
+  task, exact `CartpoleState` restarts, near-upright recovery states, and a
+  fixed perturbation family over cart position/velocity and pole
+  angle/velocity.
+- Fixed 4-seed Slurm job `782844` was submitted with
+  `scripts/queue_bsuite_cartpole_swingup_probe.sh`, writes to
+  `/work/joy/bgr/runs/bsuite_cartpole_swingup_recovery_probe_4seed_v1_782844`,
+  and syncs with `scripts/sync_bsuite_cartpole_swingup_probe.sh`.
+- Treat it as a pre-promotion scout only. A 30-seed follow-up requires BGR or
+  BGR-Coverage to beat uniform, fixed-radius, failure-only, TD-loss, and
+  BGR-uniform-radius with at least 3/4 paired wins over uniform and
+  non-saturated, non-contradictory median-r80 evidence.
+
 Completed external-package pre-promotion route:
 
 - `tools/bsuite_cartpole_recovery_probe.py`: fixed bsuite Cartpole screen,
