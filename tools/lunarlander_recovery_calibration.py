@@ -13,7 +13,7 @@ import argparse
 import csv
 import json
 from dataclasses import asdict, dataclass
-from importlib.metadata import version
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
 import numpy as np
@@ -51,12 +51,16 @@ def package_versions() -> dict[str, str]:
             "LunarLander recovery calibration requires Gymnasium with Box2D in an isolated environment, "
             "for example /tmp/bgr_lunar_venv."
         ) from exc
+    try:
+        pygame_version = version("pygame-ce")
+    except PackageNotFoundError:
+        pygame_version = version("pygame")
     return {
         "gymnasium": gymnasium.__version__,
         "gymnasium-package": version("gymnasium"),
         "box2d": version("box2d"),
         "numpy": np.__version__,
-        "pygame-ce": version("pygame-ce"),
+        "pygame-ce": pygame_version,
         "swig": version("swig"),
     }
 

@@ -26,7 +26,7 @@ This strengthens the supervised pre-existing benchmark story but still does
 not solve the standard-environment or learned-policy evidence gap.
 Standard-environment recovery screens and OpenVLA/LIBERO learned-policy evidence
 remain failing or non-promotable. The latest bsuite Catch 30-seed scale-up,
-MiniGrid FourRooms radius-10 rescue,
+MiniGrid FourRooms radius-10 rescue, LunarLander 30-seed stress test,
 HandReach-v3 calibration, highway-fast-v0 lane calibration, and MinAtar
 Breakout all-method screen are also negative, so they do not solve the
 independent-benchmark evidence gap. MinAtar Asterix also completed negative
@@ -2593,11 +2593,24 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   This is not BGR evidence. The fixed 12-seed calibration cleared the
   pre-method gate with clean success 0.9167, recovery range 0.5833--0.9167,
   RAUC 0.7722, and median r80 0.5300. The fixed all-method screen in
-  `tools/lunarlander_recovery_probe.py` is completed and negative under the
-  preregistered gate: BGR-Coverage has the best mean final RAUC (0.7500 vs.
-  0.6222 uniform, 0.7375 fixed, 0.6799 failure-only, 0.7174 TD-loss, and
-  0.7160 BGR-uniform-radius), but it wins only 2/4 paired seeds against
-  uniform and has lower median r80 than uniform (0.4200 vs. 0.4825). Do not
+  `tools/lunarlander_recovery_probe.py` first completed as a negative 4-seed
+  near miss: BGR-Coverage had the best mean final RAUC (0.7500 vs. 0.6222
+  uniform, 0.7375 fixed, 0.6799 failure-only, 0.7174 TD-loss, and 0.7160
+  BGR-uniform-radius), but it won only 2/4 paired seeds against uniform and had
+  lower median r80 than uniform (0.4200 vs. 0.4825). A fixed 30-seed stress
+  test was then queued on `athena` as split method jobs `782056`--`782062`
+  after adding `scripts/queue_lunarlander_probe.sh` and
+  `scripts/sync_lunarlander_probe.sh`. The fast method jobs initially failed
+  after writing `results.json` because the reused remote venv had `pygame`
+  metadata rather than `pygame-ce`; the summaries were reconstructed from the
+  completed JSON rows, and `tools/lunarlander_recovery_calibration.py` now
+  accepts either package metadata name. The slow `failure_only` job completed
+  normally. The merged 30-seed artifact is
+  `results/lunarlander_recovery_probe_30seed_v3_782056_782062/`. It closes the
+  route negative: BGR-Coverage is 0.7193 vs. uniform 0.7006, fixed 0.6730,
+  failure-only 0.6196, TD-loss 0.7056, and BGR-uniform-radius 0.7031, but
+  paired signs are only W/L/T=15/15/0 against uniform and median r80 is lower
+  than uniform (0.3650 vs. 0.3863). Default BGR is worse at 0.6742. Do not
   scale or promote this LunarLander route without a genuinely new
   preregistered premise.
 - The PointMaze U-Maze topology-bottleneck reset-interface screen is completed and negative. Failure-only reaches 0.3500 final RAUC, while BGR reaches 0.0854 and BGR-Coverage reaches 0.0573; do not scale or promote this protocol.

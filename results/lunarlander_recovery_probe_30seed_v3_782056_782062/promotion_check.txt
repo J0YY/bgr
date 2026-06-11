@@ -1,0 +1,29 @@
+# LunarLander 30-seed v3 promotion check
+
+Merged artifact: results/lunarlander_recovery_probe_30seed_v3_782056_782062/summary.csv
+
+candidate=results/lunarlander_recovery_probe_30seed_v3_782056_782062/summary.csv
+[check] seed count 30 >= 30
+[check] uniform: treatment=0.7193 baseline=0.7006 delta=+0.0187 W/L/T=15/15/0
+[check] fixed: treatment=0.7193 baseline=0.6730 delta=+0.0463 W/L/T=20/9/1
+[check] failure_only: treatment=0.7193 baseline=0.6196 delta=+0.0996 W/L/T=21/8/1
+[check] td_loss: treatment=0.7193 baseline=0.7056 delta=+0.0136 W/L/T=18/12/0
+[check] bgr_uniform_radius: treatment=0.7193 baseline=0.7031 delta=+0.0161 W/L/T=17/11/2
+[check] final_median_r80 vs uniform: uniform: treatment=0.3650 baseline=0.3863 delta=-0.0213 W/L/T=10/14/6
+[decision] DO NOT PROMOTE
+[fail] bgr_coverage wins 15/30 vs uniform, below 24
+[fail] final_median_r80 contradicts final_rauc: delta -0.0213
+
+candidate=results/lunarlander_recovery_probe_30seed_v3_782056_782062/summary.csv
+[check] seed count 30 >= 30
+[check] uniform: treatment=0.6742 baseline=0.7006 delta=-0.0264 W/L/T=9/21/0
+[check] fixed: treatment=0.6742 baseline=0.6730 delta=+0.0012 W/L/T=14/16/0
+[check] failure_only: treatment=0.6742 baseline=0.6196 delta=+0.0545 W/L/T=18/12/0
+[check] td_loss: treatment=0.6742 baseline=0.7056 delta=-0.0315 W/L/T=12/18/0
+[check] bgr_uniform_radius: treatment=0.6742 baseline=0.7031 delta=-0.0290 W/L/T=11/19/0
+[check] final_median_r80 vs uniform: uniform: treatment=0.4147 baseline=0.3863 delta=+0.0283 W/L/T=10/11/9
+[decision] DO NOT PROMOTE
+[fail] bgr wins 9/30 vs uniform, below 24
+[fail] bgr mean delta -0.0264 vs uniform, below +0.0100
+[fail] bgr does not beat td_loss on final_rauc
+[fail] bgr does not beat state-priority/radius ablation bgr_uniform_radius

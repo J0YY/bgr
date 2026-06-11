@@ -907,7 +907,13 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"W/L/T={best_double_wins}"
             )
 
-    lunar_path = root / "results/lunarlander_recovery_probe_4seed_v1/summary.csv"
+    lunar_path = root / "results/lunarlander_recovery_probe_30seed_v3_782056_782062/summary.csv"
+    lunar_label = "LunarLander-v3 30-seed negative"
+    lunar_min_wins = 24
+    if not lunar_path.exists():
+        lunar_path = root / "results/lunarlander_recovery_probe_4seed_v1/summary.csv"
+        lunar_label = "LunarLander-v3 negative"
+        lunar_min_wins = 3
     if lunar_path.exists():
         lunar = read_rows(lunar_path)
         lunar_bgr = mean_metric(lunar, "bgr", "final_rauc")
@@ -928,13 +934,13 @@ def independent_benchmark_gate(root: Path) -> GateResult:
         if not (
             best_lunar > lunar_uniform
             and best_lunar > max(lunar_failure, lunar_fixed, lunar_td, lunar_ablation)
-            and best_lunar_wins[0] >= 3
+            and best_lunar_wins[0] >= lunar_min_wins
             and best_lunar_r80 >= lunar_uniform_r80
             and not (best_lunar_r80 >= 0.99 and lunar_uniform_r80 >= 0.99)
             and not (best_lunar_r80 <= 0.01 and lunar_uniform_r80 <= 0.01)
         ):
             failures.append(
-                f"LunarLander-v3 negative: BGR {lunar_bgr:.4f}, BGR-Coverage {lunar_coverage:.4f}, "
+                f"{lunar_label}: BGR {lunar_bgr:.4f}, BGR-Coverage {lunar_coverage:.4f}, "
                 f"uniform {lunar_uniform:.4f}, failure-only {lunar_failure:.4f}, fixed {lunar_fixed:.4f}, "
                 f"TD-loss {lunar_td:.4f}, uniform-radius {lunar_ablation:.4f}, "
                 f"best-r80 {best_lunar_r80:.4f} vs uniform {lunar_uniform_r80:.4f}, W/L/T={best_lunar_wins}"

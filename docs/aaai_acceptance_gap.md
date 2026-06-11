@@ -213,7 +213,8 @@ pooled BGR-minus-uniform gaps for diabetes/blood/phoneme are
 +0.002/-0.002/-0.007 at radius 1.0, +0.032/+0.065/+0.014 at 1.5, and
 +0.038/+0.086/+0.035 at 2.0.
 The newest standard-environment sequence sharpened the negative record:
-LunarLander is a 4-seed near miss rejected by paired signs and lower median r80,
+LunarLander is now a completed 30-seed negative stress test, not an unresolved
+near miss,
 bsuite DeepSea trails the state-priority/uniform-radius ablation and has lower
 median r80, the positive 4-seed bsuite Catch screen failed its fixed 30-seed
 scale-up, bsuite MountainCar has only a tiny sub-threshold RAUC edge with
@@ -454,6 +455,18 @@ The preregistered promotion checker still rejects it because BGR-Coverage wins
 only 2/4 paired seeds against uniform and median r80 is lower than uniform
 (0.4200 vs. 0.4825). Do not scale or promote this route without a genuinely new
 preregistered premise.
+
+Follow-up stress test, completed 2026-06-10/11: to close the near miss rather
+than leave it ambiguous, the same fixed LunarLander protocol was run at 30
+seeds as split Athena method jobs `782056`--`782062`. The merged artifact is
+`results/lunarlander_recovery_probe_30seed_v3_782056_782062/`, with checker
+transcript `promotion_check.txt`. This does not promote. BGR-Coverage has a
+small mean RAUC edge over uniform, 0.7193 vs. 0.7006, and beats fixed 0.6730,
+failure-only 0.6196, TD-loss 0.7056, and BGR-uniform-radius 0.7031 on mean
+RAUC, but paired signs against uniform are only W/L/T=15/15/0, far below the
+24/30 gate, and median r80 is lower than uniform (0.3650 vs. 0.3863). Default
+BGR is 0.6742 and fails the uniform, TD-loss, and BGR-uniform-radius
+comparisons. Treat LunarLander as closed negative under this protocol.
 
 Completed independent-benchmark route, opened and evaluated 2026-06-07:
 official bsuite `deep_sea`. This route is materially different from the retired local
