@@ -7495,6 +7495,24 @@ route. This is not a fixed 400-episode result and BGR's partial edge is below
 the required +10/400 and +0.02 full-gate standard. Do not interpret this as
 router evidence.
 
+A fixed full 400-episode rerun of that hard-occlusion 0.90 alpha-0 no-video
+scout was submitted on 2026-06-11 to close the unequal canceled partial. It uses
+`TAG=occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1`,
+`ALPHA=0.0`, `LORA_B_SCALE=1.0`, `PERTURBATIONS='occlusion={"fraction":0.90}'`,
+`EVAL_TASKS=10`, `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`.
+Submitted jobs are prep `782931`, official occlusion `782932`, BGR occlusion
+`782933`, and matched-random occlusion `782935`. This remains only a
+router-premise diagnostic unless BGR beats both comparators by at least +10/400
+and +0.02. Poll/sync with:
+
+```bash
+ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1 \
+JOB_IDS=782931,782932,782933,782935 \
+DETAIL_JOB_IDS=782931,782932,782933,782935 \
+ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only full rerun' \
+scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check
+```
+
 A new router-specific occlusion-only training premise was queued on
 2026-06-11 after the 0.80 held-out confirmation failed. This is different from
 the alpha-0 scouts: it trains matched BGR and random branches on hard-occlusion

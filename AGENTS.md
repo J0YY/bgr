@@ -277,9 +277,22 @@ random 300/400. BGR trails official by 1 episode and matched random by 3
 episodes, so it fails the decisive router occlusion criterion before any
 identity-side interpretation. Do not incorporate this route into
 `paper/main.tex`; it is another learned-policy negative result.
-No active learned-policy cluster jobs remain queued for BGR after this closure;
-current Athena GPU jobs are separate `rl4vla-*` work and should not be
-modified by this project.
+Active low-priority learned-policy diagnostic: because the canceled
+hard-occlusion 0.90 alpha-0 no-video scout had unequal partial rows and a small
+BGR edge over matched random, a fixed full 400-episode rerun was submitted on
+2026-06-11 to close that severity cleanly. This is still only a router-premise
+diagnostic, not a paper claim. It uses
+`TAG=occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1`,
+`ALPHA=0.0`, `LORA_B_SCALE=1.0`, `PERTURBATIONS='occlusion={"fraction":0.90}'`,
+`EVAL_TASKS=10`, `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0` through
+`scripts/queue_openvla_oft_hard_occlusion080_headinterp_results.sh --submit`.
+Submitted jobs are prep `782931`, official occlusion `782932`, BGR occlusion
+`782933`, and matched-random occlusion `782935`. Initial poll showed prep
+`782931` completed with exit `0:0` and all three occlusion evals running. This
+can only motivate a formal router gate if BGR beats both official and matched
+random by at least +10/400 and +0.02 on the fixed occlusion readout. Poll/sync:
+`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1 JOB_IDS=782931,782932,782933,782935 DETAIL_JOB_IDS=782931,782932,782933,782935 ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only full rerun' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+Do not modify separate `rl4vla-*` jobs on Athena for this project.
 The
 latest 0.80 identity-anchored base route is closed negative with complete
 rows: BGR identity/occlusion are 389/400 and 303/400, official is 393/400 and

@@ -155,6 +155,19 @@ result; BGR's partial edge is below the required +10/400 and +0.02 full-gate
 standard, so jobs `782638`--`782640` were cancelled to free GPUs for the
 trained router route. Treat the 0.90 alpha-0 no-video scout as closed
 non-promotable partial evidence for the router premise.
+A fixed full 400-episode rerun of the same hard-occlusion 0.90 alpha-0
+no-video scout was queued on 2026-06-11 only to close the unequal canceled
+partial cleanly. This remains a router-premise diagnostic, not paper evidence.
+It uses
+`TAG=occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1`,
+`ALPHA=0.0`, `LORA_B_SCALE=1.0`, `PERTURBATIONS='occlusion={"fraction":0.90}'`,
+`EVAL_TASKS=10`, `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`.
+Submitted jobs are prep `782931`, official occlusion `782932`, BGR occlusion
+`782933`, and matched-random occlusion `782935`; initial poll showed prep
+completed with exit `0:0` and the three occlusion evals running. This can only
+motivate a formal router gate if BGR beats both official and matched random by
+at least +10/400 and +0.02 on the fixed occlusion readout. Poll/sync with:
+`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1 JOB_IDS=782931,782932,782933,782935 DETAIL_JOB_IDS=782931,782932,782933,782935 ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only full rerun' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
 A new router-specific occlusion-only training premise was queued on
 2026-06-11 after the 0.80 held-out confirmation failed. This is not another
 same-checkpoint re-evaluation: `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`
