@@ -163,10 +163,14 @@ It uses
 `ALPHA=0.0`, `LORA_B_SCALE=1.0`, `PERTURBATIONS='occlusion={"fraction":0.90}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`.
 Submitted jobs are prep `782931`, official occlusion `782932`, BGR occlusion
-`782933`, and matched-random occlusion `782935`; initial poll showed prep
-completed with exit `0:0` and the three occlusion evals running. This can only
-motivate a formal router gate if BGR beats both official and matched random by
-at least +10/400 and +0.02 on the fixed occlusion readout. Poll/sync with:
+`782933`, and matched-random occlusion `782935`. Latest poll/sync at
+2026-06-11 08:10:49 BST showed prep completed with exit `0:0`; official,
+BGR, and matched-random occlusion evals were still running. The synced
+incomplete local `summary_available.csv` has BGR 83/124, official 86/129, and
+matched random 80/123 on hard occlusion 0.90. This is not gateable evidence;
+the fixed 400-episode readout is still missing. This can only motivate a
+formal router gate if BGR beats both official and matched random by at least
++10/400 and +0.02 on the fixed occlusion readout. Poll/sync with:
 `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1 JOB_IDS=782931,782932,782933,782935 DETAIL_JOB_IDS=782931,782932,782933,782935 ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only full rerun' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
 A new router-specific occlusion-only training premise was queued on
 2026-06-11 after the 0.80 held-out confirmation failed. This is not another

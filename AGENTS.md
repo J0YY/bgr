@@ -287,10 +287,15 @@ diagnostic, not a paper claim. It uses
 `EVAL_TASKS=10`, `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0` through
 `scripts/queue_openvla_oft_hard_occlusion080_headinterp_results.sh --submit`.
 Submitted jobs are prep `782931`, official occlusion `782932`, BGR occlusion
-`782933`, and matched-random occlusion `782935`. Initial poll showed prep
-`782931` completed with exit `0:0` and all three occlusion evals running. This
-can only motivate a formal router gate if BGR beats both official and matched
-random by at least +10/400 and +0.02 on the fixed occlusion readout. Poll/sync:
+`782933`, and matched-random occlusion `782935`. Latest poll/sync at
+2026-06-11 08:10:49 BST showed prep `782931` completed with exit `0:0`, while
+official `782932`, BGR `782933`, and matched random `782935` were all still
+running after about 20 minutes. The synced incomplete local
+`summary_available.csv` has BGR 83/124, official 86/129, and matched random
+80/123 on hard occlusion 0.90. This is not gateable evidence; the fixed
+400-episode readout is still missing. This can only motivate a formal router
+gate if BGR beats both official and matched random by at least +10/400 and
++0.02 on the fixed occlusion readout. Poll/sync:
 `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1 JOB_IDS=782931,782932,782933,782935 DETAIL_JOB_IDS=782931,782932,782933,782935 ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only full rerun' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
 Do not modify separate `rl4vla-*` jobs on Athena for this project.
 The

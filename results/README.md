@@ -7503,7 +7503,11 @@ scout was submitted on 2026-06-11 to close the unequal canceled partial. It uses
 Submitted jobs are prep `782931`, official occlusion `782932`, BGR occlusion
 `782933`, and matched-random occlusion `782935`. This remains only a
 router-premise diagnostic unless BGR beats both comparators by at least +10/400
-and +0.02. Poll/sync with:
+and +0.02. Latest poll/sync at 2026-06-11 08:10:49 BST showed prep completed
+with exit `0:0` and all three occlusion evals still running. The incomplete
+local summary has BGR 83/124, official 86/129, and matched random 80/123 on
+hard occlusion 0.90, so the route is still incomplete and not paper evidence.
+Poll/sync with:
 
 ```bash
 ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_fullrerun_v1 \
