@@ -1593,6 +1593,30 @@ W/L/T=1/3/0, and rejects default BGR because it loses to uniform by -0.0117
 with W/L/T=1/3/0. Do not promote this route or run a same-premise 30-seed
 follow-up.
 
+## Gymnasium MuJoCo Swimmer-v5 Calibration
+
+Preregistered as a new independent pre-method calibration route. This changes
+benchmark family and reset interface from the retired MiniGrid, tabular,
+Box2D, MinAtar, and OpenVLA routes. `tools/swimmer_recovery_calibration.py`
+uses Gymnasium's package-owned `Swimmer-v5` MuJoCo dynamics, exact
+`env.unwrapped.set_state` restoration of `qpos`/`qvel`, a fixed sinusoidal
+controller whose phase is preserved from the checkpoint, and progress over a
+120-step recovery horizon after perturbing restored package state.
+
+Fixed queue command:
+
+```bash
+OUT_PREFIX=swimmer_recovery_calibration_12seed_v1 scripts/queue_swimmer_calibration.sh
+```
+
+Fixed defaults are seeds 0--11, radii
+`0,0.25,0.5,0.75,1.0,1.25,1.5,2.0`, 10 trials per radius, burn-in 80,
+`min_progress=0.15`, `position_scale=0.20`, `velocity_scale=0.40`, controller
+amplitude 1.0, and controller frequency 0.40. The calibration gate is clean
+success >=0.80, recovery range >=0.20, and non-saturated/non-floor `r80`.
+Passing this pre-method screen is not paper evidence; it only permits a fixed
+all-method Swimmer replay screen without retuning.
+
 ## Internal Package-Free CartPole Diagnostic
 
 `results/cartpole_recovery_probe_4seed_v1/summary.csv` is a 4-seed internal

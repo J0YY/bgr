@@ -111,6 +111,18 @@ Slurm job `782844` finished with exit `0:0`, but default BGR reaches only
 BGR-uniform-radius 0.0732. BGR-Coverage is weaker at 0.0806 RAUC. Median r80
 is saturated at 1.0000 for every method, so this route fails the strong-baseline
 and radius gates and must not be scaled without a materially new fixed premise.
+A new preregistered independent pre-method calibration route is Gymnasium
+MuJoCo `Swimmer-v5`, which is materially different from the retired tabular,
+MiniGrid, Box2D, MinAtar, and OpenVLA routes. It uses Gymnasium's
+package-owned MuJoCo dynamics, exact `env.unwrapped.set_state` restoration,
+a fixed phase-preserving sinusoidal controller, and progress-after-perturbation
+success. The fixed calibration command is
+`OUT_PREFIX=swimmer_recovery_calibration_12seed_v1 scripts/queue_swimmer_calibration.sh`.
+The default fixed gate is clean success at least 0.80, recovery range at least
+0.20, and a non-saturated/non-floor `r80` before any BGR method comparison is
+implemented. This route is calibration only until `summary.json` exists and
+reports `decision=usable-calibration`; even then, it only permits a fixed
+method screen without retuning.
 A broader
 fixed OpenML numeric-suite
 target-2.0 run and held-out seeds 30--59 replication completed on `athena` as
@@ -3226,6 +3238,19 @@ Treat the following as the current paper-weakness backlog:
   0.1383 versus uniform 0.1501, with W/L/T=1/3/0 for both treatment variants
   against uniform. Keep it out of the paper and do not run a 30-seed Acrobot
   follow-up without a genuinely new preregistered premise.
+- New preregistered CPU calibration: Gymnasium MuJoCo `Swimmer-v5`
+  package-state recovery. This uses Gymnasium's package-owned MuJoCo dynamics,
+  exact `env.unwrapped.set_state` restoration, a fixed sinusoidal controller
+  whose phase is preserved from the checkpoint, and progress over a 120-step
+  recovery horizon as the success criterion. Queue with
+  `OUT_PREFIX=swimmer_recovery_calibration_12seed_v1 scripts/queue_swimmer_calibration.sh`.
+  The fixed defaults are seeds 0--11, radii
+  `0,0.25,0.5,0.75,1.0,1.25,1.5,2.0`, 10 trials per radius, burn-in 80,
+  `min_progress=0.15`, `position_scale=0.20`, `velocity_scale=0.40`,
+  controller amplitude 1.0, and frequency 0.40. Calibration passes only with
+  clean success >=0.80, recovery range >=0.20, and non-saturated/non-floor
+  `r80`; passing calibration permits a fixed all-method screen, not a paper
+  claim.
 
 ## Required Checks
 
