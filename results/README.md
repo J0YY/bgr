@@ -187,6 +187,14 @@ Internal pre-existing-dataset route scout:
   Treat rows as useful only if the new block clears +0.03 RAUC over both
   uniform and fixed-radius replay and the pooled three-block readout remains
   positive; otherwise record it as another mixed-type fragility diagnostic.
+  Job `782625` completed with exit `0:0` and synced locally to
+  `results/openml_mixed_positive_target15_thirdsplit_30seed_v1_782625/`. The
+  new block is sub-threshold under the fixed rule: adult BGR is 0.7818 vs.
+  uniform 0.7689 and fixed-radius 0.7870; credit-approval BGR is 0.8253 vs.
+  uniform 0.7954 and fixed 0.7926, missing the uniform +0.03 cutoff by
+  0.0001; credit-g BGR is 0.7053 vs. uniform 0.6670 and fixed 0.6760, missing
+  the fixed-radius +0.03 cutoff by 0.0007. Treat it as mixed-feature
+  supervised near-miss/fragility evidence, not a new paper headline.
 - Completed all-binary numeric OpenML target-1.5 sweep, opened and completed
   2026-06-10: this is a fixed broad CPU check over the 32 numeric binary OpenML datasets currently
   registered in `tools/openml_margin_scout.py`, combining the default,
@@ -7328,4 +7336,49 @@ negative scope evidence.
 ```bash
 PYTHONPATH=src:. python3 tools/check_candidate_promotion.py <combined-summary.csv> --treatment bgr_coverage --min-seeds 4 --min-wins 3 --min-delta 0.01
 PYTHONPATH=src:. python3 tools/check_candidate_promotion.py <combined-summary.csv> --treatment bgr --min-seeds 4 --min-wins 3 --min-delta 0.01
+```
+
+### OpenVLA Alpha-0 No-Video Occlusion-Only Scouts
+
+The alpha-0 official-head/full-LoRA no-video checkpoint repair failed the
+non-router identity side condition, but it opened a separate router-premise
+diagnostic: use the official checkpoint for clean identity and use the adapted
+branch only when the hard occlusion condition is known. These scouts are not
+paper evidence and are not full learned-policy gates; they only decide whether
+the router premise is worth preregistering.
+
+The hard-occlusion 0.80 scout submitted jobs official `782556`, BGR `782557`,
+and matched random `782558`, writing to
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_occscout_v1/`.
+Final 2026-06-11 04:33 BST sync has BGR 301/400, official 298/400, and
+matched random 298/400 in `summary_available.csv`. The +3 episode margin over
+both comparators is far below the +10/400 and +0.02 occlusion-only router
+threshold. Treat this scout as non-promotable unless a final `summary.csv`
+contradicts the compact log parse.
+
+The separate held-out offset40/trials10 confirmation for the older 0.80
+transfer near-miss also closed before promotion. Original occlusion totals were
+BGR 305/400, official 296/400, and matched random 296/400. Latest
+2026-06-11 04:35 BST held-out sync has official 71/100, matched random 71/100,
+and BGR 64/95 in
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_heldout_offset40_trials10_v1/summary_available.csv`.
+Even a perfect BGR finish would yield at most 374/500 versus 367/500 for each
+comparator, below the +10 episode and +0.02 router-style margin. Treat the
+held-out confirmation as non-promotable unless a later audit finds a parse
+error.
+
+A harder occlusion-only severity scout was queued next without retraining:
+occlusion fraction 0.90, same alpha-0 official-head/full-LoRA BGR/random
+checkpoints, official checkpoint comparator, `EVAL_TASKS=10`, `EVAL_TRIALS=40`,
+`EVAL_SEED=137`, and `SAVE_ROLLOUTS=0`. Submitted jobs are official `782638`,
+BGR `782639`, and matched random `782640`, writing to
+`/work/joy/bgr/runs/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_occscout_v1`.
+Poll/sync with:
+
+```bash
+ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_occscout_v1 \
+JOB_IDS=782638,782639,782640 \
+DETAIL_JOB_IDS=782638,782639,782640 \
+ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only fallback scout' \
+scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check
 ```

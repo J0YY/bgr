@@ -89,12 +89,32 @@ at least 0.02 absolute occlusion success rate; identity success would come from
 the official fallback branch and must not be silently mixed into the existing
 non-router gate. Poll/sync with:
 `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_heldout_offset40_trials10_v1 JOB_IDS=782609,782610,782611 DETAIL_JOB_IDS=782609,782610,782611 ROUTE_LABEL='Hard-occlusion 0.80 transfer held-out offset40 trials10 confirmation' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+Latest 2026-06-11 04:35 BST sync makes this held-out confirmation
+non-promotable even before the final BGR tail finishes: official and matched
+random completed at 71/100 each, while BGR was 64/95. Even if BGR wins all
+remaining held-out episodes, the combined original-plus-held-out total would be
+at most BGR 374/500 versus official/random 367/500, a +7 episode margin below
+the +10 and +0.02 router-style requirement. Treat the 0.80 transfer
+confirmation as closed negative unless a later audit discovers a parsing error.
 The alpha-0 official-head/full-LoRA no-video occlusion-only scout is a separate
 fallback diagnostic. Latest 2026-06-11 04:22 BST partial is BGR 216/312,
 official 209/308, and matched random 213/312 on hard occlusion 0.80. This is
 incomplete and the margin is far below the router-style promotion requirement,
 so it is not paper evidence. Do not formalize that alpha-0 fallback unless the
 complete row clears the same held-out occlusion margin.
+Final 2026-06-11 04:33 BST sync closes that hard-occlusion 0.80 alpha-0
+no-video occlusion-only scout as non-promotable: BGR is 301/400, official is
+298/400, and matched random is 298/400, only a +3 episode margin over both
+comparators and far below the required +10/400 and +0.02 router-style
+threshold. Treat this as another learned-policy near miss, not a paper claim.
+A harder occlusion-only alpha-0 no-video scout was queued as a
+new diagnostic severity, reusing the same official-head/full-LoRA checkpoints
+without retraining and evaluating only occlusion fraction 0.90. Submitted jobs
+are official `782638`, BGR `782639`, and matched random `782640`, writing to
+`/work/joy/bgr/runs/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_occscout_v1`.
+This remains a router-premise scout only; it is useful only if BGR beats both
+comparators by at least +10/400 and +0.02 on hard occlusion. Poll/sync with:
+`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_occscout_v1 JOB_IDS=782638,782639,782640 DETAIL_JOB_IDS=782638,782639,782640 ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only fallback scout' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
 A fixed head-interpolation follow-up was queued on 2026-06-10 to test whether
 the near-miss 0.80 transfer route can preserve the occlusion gain while
 recovering identity success. It copies the completed BGR and matched-random
@@ -1748,6 +1768,16 @@ risk.
   both uniform and fixed-radius replay by at least +0.03 RAUC in the new block
   and remain positive when pooled with the original and held-out 60 seeds;
   otherwise treat it as another mixed-type fragility caveat.
+  Job `782625` completed successfully at 2026-06-11 04:27:53 BST and synced to
+  `results/openml_mixed_positive_target15_thirdsplit_30seed_v1_782625/`. It
+  does not clear the fixed promotion bar. Adult gives BGR 0.7818, uniform
+  0.7689, and fixed-radius 0.7870, so BGR loses to fixed. Credit-approval
+  gives BGR 0.8253, uniform 0.7954, and fixed 0.7926; it clears fixed by
+  +0.0327 but is just under +0.03 vs. uniform at +0.0299. Credit-g gives BGR
+  0.7053, uniform 0.6670, and fixed 0.6760; it clears uniform by +0.0383 but
+  is just under +0.03 vs. fixed at +0.0293. Treat this as mixed-feature
+  supervised fragility/near-miss evidence, not a new headline or a solution to
+  the standard-environment or learned-policy gap.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
   same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:
