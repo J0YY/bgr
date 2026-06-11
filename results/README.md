@@ -7611,7 +7611,7 @@ and uses
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Submitted Athena jobs are official `783312`, BGR `783314`, and matched random
-`783315`; latest guarded advance at 2026-06-11 13:12:19 BST ran
+`783315`; latest guarded advance at 2026-06-11 13:13:51 BST ran
 `scripts/advance_openvla_oft_occlusion_shift_combo_scout.sh --submit` but did
 not submit a full gate because the scout remains `[INCOMPLETE]`. Official is
 completed with exit `0:0`, BGR is running on `c1-g4-04`, and matched random is
@@ -7619,8 +7619,8 @@ running on `c1-g4-05`. A direct scheduler check showed no dependencies or featur
 priority 611 for all three jobs, and only explicit exclusion `c2-g4-21`, which
 is down; leave the jobs untouched unless a
 new scheduler problem appears. The remote full summary is still missing, but
-the local incomplete summary has BGR occlusion_shift 17/37 and official
-occlusion_shift 69/100 successes; matched random has no compact row yet.
+the local incomplete summary has official occlusion_shift 69/100, BGR
+occlusion_shift 26/49, and matched-random occlusion_shift 6/9 successes.
 This is only a 100-episode route-selection scout. Do not treat it as paper
 evidence unless it justifies and then passes a fixed 400-episode
 identity-plus-combined-perturbation gate.
