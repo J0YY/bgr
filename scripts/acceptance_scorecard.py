@@ -1573,14 +1573,24 @@ def render_markdown(root: Path) -> str:
             3,
             f"- Active pre-method calibration route(s) awaiting fixed comparison result: {names}.",
         )
+    if any(screen.name == "Gymnasium MuJoCo HalfCheetah-v5 calibration" for screen in active_calibrations):
+        priority_lines.insert(
+            4,
+            "- The active HalfCheetah-v5 calibration has a usable reset interface, but the first local linear/phase imitation scaffold had zero clean recovery and was not queued; a better fixed learner/controller must pass a local clean-recovery smoke before the all-method screen.",
+        )
     priority_lines.insert(
         2 if not usable_calibrations else 4,
         "- Rejected pre-method calibrations should not be scaled into BGR comparisons until the reset interface and controller first produce clean, non-saturated recovery curves.",
     )
     if inflight is None and active_calibrations:
-        priority_lines.append(
-            "- The next acceptance-moving work is the fixed all-method screen for the active pre-method calibration route; do not tune the protocol after seeing its method results."
-        )
+        if any(screen.name == "Gymnasium MuJoCo HalfCheetah-v5 calibration" for screen in active_calibrations):
+            priority_lines.append(
+                "- The next acceptance-moving HalfCheetah work is a preregistered clean-viable learner/controller for the calibrated reset interface, followed by the fixed all-method screen if that viability smoke passes."
+            )
+        else:
+            priority_lines.append(
+                "- The next acceptance-moving work is the fixed all-method screen for the active pre-method calibration route; do not tune the protocol after seeing its method results."
+            )
     elif inflight is None and usable_calibrations:
         priority_lines.append(
             "- The next acceptance-moving work must find a genuinely different independent route, change the learned-policy intervention, or strengthen theory/presentation; retired calibrated routes are scope evidence, not acceptance evidence."

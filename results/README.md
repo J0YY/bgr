@@ -1673,7 +1673,11 @@ The calibration gate clears but is sharp:
 0.0000--1.0000, RAUC 0.0600, r80 0.0556, and curve
 `1.0,0.1,0,0,0,0,0,0` over the fixed radius grid. This is not paper evidence;
 it only permits a fixed all-method screen using the calibration-defined
-boundary scale without further radius retuning.
+boundary scale without further radius retuning. A first local linear/phase
+imitation scaffold was rejected before launch because it produced zero clean
+recovery even with heavy pretraining. Do not queue that learner; any
+HalfCheetah method comparison needs a better preregistered learner/controller
+and a local clean-recovery viability smoke first.
 
 ## Internal Package-Free CartPole Diagnostic
 

@@ -1434,7 +1434,12 @@ risk.
   pre-method gate with clean success 1.0000, recovery range 0.0000--1.0000,
   RAUC 0.0600, and r80 0.0556. The curve is very sharp, with success already
   down to 0.1 at radius 0.25, so this is an active but fragile route awaiting
-  only a fixed all-method comparison at the calibration-defined boundary scale.
+  a fixed all-method comparison at the calibration-defined boundary scale. A
+  first local linear/phase imitation scaffold was rejected before launch
+  because it produced zero clean recovery even with heavy pretraining; do not
+  queue that learner. A future HalfCheetah comparison needs a better
+  preregistered learner/controller and a local clean-recovery viability smoke
+  before Slurm.
 - The next acceptance-moving empirical route must change the premise: either a
   genuinely different pre-existing benchmark package/reset interface, or a
   genuinely different learned-policy intervention that is preregistered before

@@ -154,6 +154,11 @@ calibration clears the pre-method gate with
 `0,0.25,0.5,0.8,1.1,1.5,2.0,2.5`), so the route is active but fragile.
 Do not claim it as evidence; it only permits a fixed all-method screen using
 the calibration-defined boundary scale without additional radius retuning.
+Do not queue the first linear/phase HalfCheetah learner scaffold: local
+viability checks after the calibration produced zero clean recovery even with
+heavy pretraining, so that learner is invalid before method comparison. The
+route remains open only if a better preregistered learner/controller first
+shows nonzero clean recovery under the calibrated reset interface.
 A broader
 fixed OpenML numeric-suite
 target-2.0 run and held-out seeds 30--59 replication completed on `athena` as
@@ -3290,7 +3295,9 @@ Treat the following as the current paper-weakness backlog:
   clears with clean success 1.0000, recovery range 0.0000--1.0000, RAUC
   0.0600, and r80 0.0556. This is calibration-only; the next fixed comparison
   must use the calibration-defined boundary scale without additional radius
-  retuning.
+  retuning, and must first pass a local clean-recovery viability smoke. The
+  initial linear/phase imitation scaffold failed that viability check with zero
+  clean recovery and was not queued.
 
 ## Required Checks
 
