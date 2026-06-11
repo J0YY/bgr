@@ -114,9 +114,11 @@ are official `782638`, BGR `782639`, and matched random `782640`, writing to
 This remains a router-premise scout only; it is useful only if BGR beats both
 comparators by at least +10/400 and +0.02 on hard occlusion. Poll/sync with:
 `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_occscout_v1 JOB_IDS=782638,782639,782640 DETAIL_JOB_IDS=782638,782639,782640 ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only fallback scout' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
-Latest 2026-06-11 04:57 BST partial has BGR 85/138, official 87/128, and
-matched random 71/104. This is incomplete and unfavorable on success rate
-versus both comparators, so it is still not evidence for the router premise.
+Final local sync before cancellation has BGR 89/157, official 90/145, and
+matched random 79/121. This was still incomplete but clearly unfavorable on
+success rate versus both comparators, so jobs `782638`--`782640` were cancelled
+to free GPUs for the trained router route. Treat the 0.90 alpha-0 no-video
+scout as closed unfavorable non-evidence for the router premise.
 A new router-specific occlusion-only training premise was queued on
 2026-06-11 after the 0.80 held-out confirmation failed. This is not another
 same-checkpoint re-evaluation: `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`
@@ -158,6 +160,13 @@ route, queued 2026-06-11 04:55 BST: prep `782671`, BGR train/merge/clean-eval
 eval. It is still only router-premise evidence unless BGR beats both official
 and matched random by at least +10/400 and +0.02 on hard occlusion. Poll/sync:
 `PREP_TAG=p512unique_occonly_hardocc080_router_randfix_prereg ADAPT_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 PERTURB_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1 JOB_IDS=782671,782672,782673,782674,782675,782676,782677,782679,782680,782681 DETAIL_JOB_IDS=782671,782672,782673,782675,782676,782679,782680,782681 ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT randfix premise' GATE_PERTURBATIONS=occlusion scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check`.
+Latest poll at 2026-06-11 05:32 BST showed prep, train, and merge completed
+with exit `0:0`; BGR clean eval `782674`, matched-random clean eval `782677`,
+and official/BGR/random hard-occlusion evals `782679`--`782681` were still
+running. No full perturb or adapt `summary.csv` existed yet. Direct remote
+live-log tails were BGR 70/110, official 135/223, and matched random 77/127,
+which is not gateable because task coverage is not aligned. Wait for complete
+summaries before making any claim.
 A fixed head-interpolation follow-up was queued on 2026-06-10 to test whether
 the near-miss 0.80 transfer route can preserve the occlusion gain while
 recovering identity success. It copies the completed BGR and matched-random
@@ -611,27 +620,20 @@ RAUC, but paired signs against uniform are only W/L/T=15/15/0, far below the
 BGR is 0.6742 and fails the uniform, TD-loss, and BGR-uniform-radius
 comparisons. Treat LunarLander as closed negative under this protocol.
 
-New fixed LunarLander premise queued 2026-06-11: the previous small
-target-radius scout at `target_radius=0.70` suggested BGR-Coverage might keep
-the RAUC advantage while avoiding the median-r80 contradiction that closed the
-default 30-seed route. This is a different parameter premise, not a paper
-claim. `scripts/queue_lunarlander_probe.sh` now accepts `EXTRA_ARGS`, and a
-30-seed target-0.70 all-method screen was queued on Athena as split jobs:
+The fixed target-radius 0.70 LunarLander premise is now completed negative.
+The previous small target-radius scout suggested BGR-Coverage might keep the
+RAUC advantage while avoiding the median-r80 contradiction, so
+`scripts/queue_lunarlander_probe.sh` was extended with `EXTRA_ARGS` and a
+30-seed target-0.70 all-method screen was run on Athena as split jobs:
 uniform `782561`, fixed `782562`, failure-only `782563`, TD-loss `782564`,
-BGR-uniform-radius `782565`, BGR-Coverage `782566`, and BGR `782567`.
-Initial poll showed `782561` pending on resources and the remaining jobs
-pending on priority. Promote nothing unless BGR-Coverage beats uniform, fixed,
-failure-only, TD-loss, and BGR-uniform-radius on final RAUC with paired
-support and no contradictory median-r80 result.
-Latest sync at 2026-06-11 04:18 BST leaves the target-0.70 route formally
-incomplete because failure-only `782563` is still running and the promotion
-check is deferred. The merged partial already closes the intended premise:
-uniform is 0.7006 mean RAUC, TD-loss is 0.7056, fixed is 0.6730,
-BGR-uniform-radius is 0.6777, BGR-Coverage is 0.6886, and default BGR is
-0.6913. BGR-family methods trail uniform and TD-loss, so this route cannot
-become a clean independent benchmark win even if the remaining failure-only
-row completes unusually weakly. Wait for job `782563` only to write the final
-closure/promotion-check artifact; do not promote or rerun this premise.
+BGR-uniform-radius `782565`, BGR-Coverage `782566`, and BGR `782567`. The
+merged artifact is
+`results/lunarlander_recovery_probe_30seed_target070_merged/`. The promotion
+checker rejects it: BGR-Coverage is 0.6886 final RAUC versus uniform 0.7006
+(W/L/T=11/19/0), TD-loss 0.7056, fixed 0.6730, failure-only 0.6196, and
+BGR-uniform-radius 0.6777. Median r80 is no longer contradictory
+(0.4143 vs. uniform 0.3863), but the method loses to uniform and TD-loss.
+Treat target-0.70 LunarLander as closed negative under this protocol.
 
 Completed independent-benchmark route, opened and evaluated 2026-06-07:
 official bsuite `deep_sea`. This route is materially different from the retired local

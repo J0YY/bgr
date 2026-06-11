@@ -1,0 +1,12 @@
+candidate=results/lunarlander_recovery_probe_30seed_target070_merged/summary.csv
+[check] seed count 30 >= 30
+[check] uniform: treatment=0.6886 baseline=0.7006 delta=-0.0119 W/L/T=11/19/0
+[check] fixed: treatment=0.6886 baseline=0.6730 delta=+0.0156 W/L/T=14/16/0
+[check] failure_only: treatment=0.6886 baseline=0.6196 delta=+0.0690 W/L/T=16/14/0
+[check] td_loss: treatment=0.6886 baseline=0.7056 delta=-0.0170 W/L/T=11/19/0
+[check] bgr_uniform_radius: treatment=0.6886 baseline=0.6777 delta=+0.0109 W/L/T=12/17/1
+[check] final_median_r80 vs uniform: uniform: treatment=0.4143 baseline=0.3863 delta=+0.0280 W/L/T=13/10/7
+[decision] DO NOT PROMOTE
+[fail] bgr_coverage wins 11/30 vs uniform, below 24
+[fail] bgr_coverage mean delta -0.0119 vs uniform, below +0.0100
+[fail] bgr_coverage does not beat td_loss on final_rauc

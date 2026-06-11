@@ -251,6 +251,13 @@ official/BGR/random hard-occlusion evals `782679`/`782680`/`782681`, with
 BGR beats both official and matched random by at least +10/400 and +0.02 on
 hard occlusion. Poll/sync with:
 `PREP_TAG=p512unique_occonly_hardocc080_router_randfix_prereg ADAPT_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 PERTURB_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1 JOB_IDS=782671,782672,782673,782674,782675,782676,782677,782679,782680,782681 DETAIL_JOB_IDS=782671,782672,782673,782675,782676,782679,782680,782681 ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT randfix premise' GATE_PERTURBATIONS=occlusion scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check`.
+Latest poll at 2026-06-11 05:32 BST showed prep, train, and merge completed
+with exit `0:0`; BGR clean eval `782674`, matched-random clean eval `782677`,
+and official/BGR/random hard-occlusion evals `782679`--`782681` were still
+running. No full perturb or adapt `summary.csv` existed yet. Direct remote
+live-log tails were BGR 70/110, official 135/223, and matched random 77/127,
+which is not gateable because task coverage is not aligned. Wait for complete
+summaries before making any claim.
 The
 latest 0.80 identity-anchored base route is closed negative with complete
 rows: BGR identity/occlusion are 389/400 and 303/400, official is 393/400 and
@@ -2720,28 +2727,19 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   paired signs are only W/L/T=15/15/0 against uniform and median r80 is lower
   than uniform (0.3650 vs. 0.3863). Default BGR is worse at 0.6742. Do not
   scale or promote this LunarLander route without a genuinely new
-  preregistered premise. One such fixed follow-up is now queued because the
-  earlier 4-seed target-radius scout at `target_radius=0.70` repaired the
-  median-r80 contradiction on its small sample while keeping high BGR-Coverage
-  RAUC. The queue wrapper now accepts `EXTRA_ARGS`; target-0.70 split
-  all-method jobs were submitted on Athena as uniform/fixed/failure-only/
+  preregistered premise. The fixed target-0.70 follow-up is now also completed
+  negative. It was queued because the earlier 4-seed target-radius scout
+  repaired the median-r80 contradiction on its small sample while keeping high
+  BGR-Coverage RAUC. The queue wrapper accepts `EXTRA_ARGS`; target-0.70 split
+  all-method jobs ran on Athena as uniform/fixed/failure-only/
   TD-loss/BGR-uniform-radius/BGR-Coverage/BGR `782561`--`782567`, with
-  `EXTRA_ARGS='--target-radius 0.70'` and 30 seeds. Initial poll showed
-  `782561` pending on resources and `782562`--`782567` pending on priority.
-  This route is not paper evidence unless BGR-Coverage beats uniform, all
-  required baselines, and BGR-uniform-radius on final RAUC while avoiding the
-  paired and median-r80 failures that closed the default 30-seed route.
-  Latest sync at 2026-06-11 04:07 BST leaves the target-0.70 route
-  incomplete because failure-only `782563`, BGR-uniform-radius `782565`,
-  BGR-Coverage `782566`, and BGR `782567` were still running or missing final
-  summaries. The partial trend is already weak for BGR-family treatments:
-  uniform completed at 0.7006 mean RAUC, fixed at 0.6730, and TD-loss at
-  0.7056; log-tail partials give BGR-Coverage 28/30 seeds with mean RAUC
-  0.6875 and paired delta -0.0193 versus uniform (W/L/T=10/18/0), while
-  default BGR has 29/30 seeds with mean RAUC 0.6903 and paired delta -0.0081
-  versus uniform (W/L/T=11/18/0). This is not a formal closure until the
-  merged summary and promotion check exist, but it is not trending toward the
-  needed clean independent benchmark win.
+  `EXTRA_ARGS='--target-radius 0.70'` and 30 seeds. The merged artifact
+  `results/lunarlander_recovery_probe_30seed_target070_merged/` is rejected by
+  the promotion checker: BGR-Coverage is 0.6886 final RAUC versus uniform
+  0.7006 (W/L/T=11/19/0), TD-loss 0.7056, fixed 0.6730, failure-only 0.6196,
+  and BGR-uniform-radius 0.6777. Median r80 is no longer contradictory
+  (0.4143 vs. uniform 0.3863), but the method loses to uniform and TD-loss.
+  This route is closed negative and is not paper evidence.
 - The PointMaze U-Maze topology-bottleneck reset-interface screen is completed and negative. Failure-only reaches 0.3500 final RAUC, while BGR reaches 0.0854 and BGR-Coverage reaches 0.0573; do not scale or promote this protocol.
 - The MiniGrid-LavaGapS7 external-package screen is completed and negative. BGR-Coverage trails uniform on mean RAUC (0.4277 vs. 0.4461), default BGR is lower (0.4031), and the state-priority/uniform-radius ablation is highest (0.4627); do not scale or promote this protocol.
 - The hard-budget FetchReach-v4 reset-interface follow-up is completed and

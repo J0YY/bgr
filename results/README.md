@@ -854,6 +854,20 @@ Compact artifacts:
 - `results/lunarlander_recovery_probe_4seed_v1/results.json`
 - `results/lunarlander_recovery_probe_4seed_v1/package_versions.json`
 
+The 30-seed default-radius stress test is also negative:
+`results/lunarlander_recovery_probe_30seed_v3_782056_782062/` has
+BGR-Coverage 0.7193 final RAUC versus uniform 0.7006, fixed 0.6730,
+failure-only 0.6196, TD-loss 0.7056, and BGR-uniform-radius 0.7031, but paired
+signs are only W/L/T=15/15/0 against uniform and median r80 is lower than
+uniform (0.3650 vs. 0.3863). The target-radius 0.70 follow-up is now closed
+negative as well. Its merged artifact is
+`results/lunarlander_recovery_probe_30seed_target070_merged/`: BGR-Coverage is
+0.6886 final RAUC versus uniform 0.7006 (W/L/T=11/19/0), TD-loss 0.7056, fixed
+0.6730, failure-only 0.6196, and BGR-uniform-radius 0.6777. Median r80 is not
+contradictory at 0.4143 versus uniform 0.3863, but the method loses to uniform
+and TD-loss. Do not scale or promote LunarLander without a genuinely new
+pre-registered premise.
+
 ## Internal Gymnasium MuJoCo Reacher Calibration
 
 This is a pre-method calibration for a different official Gymnasium MuJoCo
@@ -7383,11 +7397,12 @@ ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only fallback scout' 
 scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check
 ```
 
-Latest 2026-06-11 04:57 BST partial is incomplete and unfavorable on success
-rate versus both comparators: BGR 85/138, official 87/128, and matched random
-71/104 in
+Final local sync before cancellation is incomplete and unfavorable on success
+rate versus both comparators: BGR 89/157, official 90/145, and matched random
+79/121 in
 `results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_occscout_v1/summary_available.csv`.
-Do not interpret this as router evidence.
+Jobs `782638`--`782640` were cancelled to free GPUs for the trained router
+route. Do not interpret this as router evidence.
 
 A new router-specific occlusion-only training premise was queued on
 2026-06-11 after the 0.80 held-out confirmation failed. This is different from
@@ -7419,6 +7434,14 @@ ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT premi
 GATE_PERTURBATIONS=occlusion \
 scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check
 ```
+
+Latest poll at 2026-06-11 05:32 BST showed prep, train, and merge completed
+with exit `0:0`; BGR clean eval `782674`, matched-random clean eval `782677`,
+and official/BGR/random hard-occlusion evals `782679`--`782681` were still
+running. No full perturb or adapt `summary.csv` existed yet. Direct remote
+live-log tails were BGR 70/110, official 135/223, and matched random 77/127,
+which is not gateable because task coverage is not aligned. Wait for complete
+summaries before making any claim.
 
 This first router-training attempt failed during prep, not during adaptation:
 matched-random perturbation rendering produced zero occlusion examples before
