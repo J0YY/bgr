@@ -89,13 +89,12 @@ at least 0.02 absolute occlusion success rate; identity success would come from
 the official fallback branch and must not be silently mixed into the existing
 non-router gate. Poll/sync with:
 `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_heldout_offset40_trials10_v1 JOB_IDS=782609,782610,782611 DETAIL_JOB_IDS=782609,782610,782611 ROUTE_LABEL='Hard-occlusion 0.80 transfer held-out offset40 trials10 confirmation' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
-Latest 2026-06-11 04:35 BST sync makes this held-out confirmation
-non-promotable even before the final BGR tail finishes: official and matched
-random completed at 71/100 each, while BGR was 64/95. Even if BGR wins all
-remaining held-out episodes, the combined original-plus-held-out total would be
-at most BGR 374/500 versus official/random 367/500, a +7 episode margin below
-the +10 and +0.02 router-style requirement. Treat the 0.80 transfer
-confirmation as closed negative unless a later audit discovers a parsing error.
+Final 2026-06-11 04:38 BST sync closes this held-out confirmation as negative:
+official and matched random are both 71/100, while BGR is 69/100. The combined
+original-plus-held-out readout is BGR 374/500 versus official/random 367/500,
+a +7 episode margin below the +10 and +0.02 router-style requirement. Treat the
+0.80 transfer confirmation as closed negative unless a later audit discovers a
+parsing error.
 The alpha-0 official-head/full-LoRA no-video occlusion-only scout is a separate
 fallback diagnostic. Latest 2026-06-11 04:22 BST partial is BGR 216/312,
 official 209/308, and matched random 213/312 on hard occlusion 0.80. This is
@@ -115,6 +114,26 @@ are official `782638`, BGR `782639`, and matched random `782640`, writing to
 This remains a router-premise scout only; it is useful only if BGR beats both
 comparators by at least +10/400 and +0.02 on hard occlusion. Poll/sync with:
 `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_occscout_v1 JOB_IDS=782638,782639,782640 DETAIL_JOB_IDS=782638,782639,782640 ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only fallback scout' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+Latest 2026-06-11 04:43 BST partial has BGR 52/70, official 56/68, and matched
+random 44/53. This is incomplete and not favorable versus official, so it is
+still not evidence for the router premise.
+A new router-specific occlusion-only training premise was queued on
+2026-06-11 after the 0.80 held-out confirmation failed. This is not another
+same-checkpoint re-evaluation: `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`
+now supports `INCLUDE_CLEAN_ANCHORS=0`, so the matched BGR and random branches
+train only on hard-occlusion 0.80 replay examples while a hypothetical router
+would keep the official checkpoint for clean identity. The fixed configuration
+uses `PREP_TAG=p1024unique_occonly_hardocc080_router_prereg`,
+`OCCLUSION_CAP=1024`, `OCCLUSION_REPEAT=1`, `OCCLUSION_FRACTION_OVERRIDE=0.80`,
+`PROXIMAL_ANCHOR_L2=0`, `ADAPT_STEPS=300`, `LR=5e-7`, official stats,
+identity-LoRA, image augmentation, and a 10-task x 40-trial occlusion-only eval
+at `EVAL_SEED=37`. Submitted jobs are prep `782649`, BGR train/merge/clean-eval
+`782650`/`782651`/`782652`, matched-random train/merge/clean-eval
+`782653`/`782654`/`782655`, and hard-occlusion evals official/BGR/random
+`782656`/`782657`/`782658`. It can only matter if BGR beats both official and
+matched random by at least +10/400 and +0.02 on the fixed occlusion readout.
+Poll/sync with:
+`PREP_TAG=p1024unique_occonly_hardocc080_router_prereg ADAPT_TAG=occonly_p1024unique_hardocc080_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 PERTURB_TAG=occonly_p1024unique_hardocc080_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1 JOB_IDS=782649,782650,782651,782652,782653,782654,782655,782656,782657,782658 DETAIL_JOB_IDS=782649,782650,782651,782653,782654,782656,782657,782658 ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT premise' GATE_PERTURBATIONS=occlusion scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check`.
 A fixed head-interpolation follow-up was queued on 2026-06-10 to test whether
 the near-miss 0.80 transfer route can preserve the occlusion gain while
 recovering identity success. It copies the completed BGR and matched-random

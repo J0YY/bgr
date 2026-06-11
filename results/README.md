@@ -7358,12 +7358,12 @@ contradicts the compact log parse.
 
 The separate held-out offset40/trials10 confirmation for the older 0.80
 transfer near-miss also closed before promotion. Original occlusion totals were
-BGR 305/400, official 296/400, and matched random 296/400. Latest
-2026-06-11 04:35 BST held-out sync has official 71/100, matched random 71/100,
-and BGR 64/95 in
+BGR 305/400, official 296/400, and matched random 296/400. Final
+2026-06-11 04:38 BST held-out sync has official 71/100, matched random 71/100,
+and BGR 69/100 in
 `results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_heldout_offset40_trials10_v1/summary_available.csv`.
-Even a perfect BGR finish would yield at most 374/500 versus 367/500 for each
-comparator, below the +10 episode and +0.02 router-style margin. Treat the
+The combined original-plus-held-out readout is BGR 374/500 versus 367/500 for
+each comparator, below the +10 episode and +0.02 router-style margin. Treat the
 held-out confirmation as non-promotable unless a later audit finds a parse
 error.
 
@@ -7381,4 +7381,40 @@ JOB_IDS=782638,782639,782640 \
 DETAIL_JOB_IDS=782638,782639,782640 \
 ROUTE_LABEL='Hard-occlusion 0.90 alpha0 no-video occlusion-only fallback scout' \
 scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check
+```
+
+Latest 2026-06-11 04:43 BST partial is incomplete and not favorable versus
+official: BGR 52/70, official 56/68, and matched random 44/53 in
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc090_transfer_headinterp000_lorafull_novideo_occscout_v1/summary_available.csv`.
+Do not interpret this as router evidence.
+
+A new router-specific occlusion-only training premise was queued on
+2026-06-11 after the 0.80 held-out confirmation failed. This is different from
+the alpha-0 scouts: it trains matched BGR and random branches on hard-occlusion
+0.80 examples only, using the new
+`INCLUDE_CLEAN_ANCHORS=0` option in
+`scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`. The intended
+router premise is that the official checkpoint handles clean identity and the
+adapted branch is used only when hard occlusion is known. Fixed configuration:
+`PREP_TAG=p1024unique_occonly_hardocc080_router_prereg`,
+`OCCLUSION_CAP=1024`, `OCCLUSION_REPEAT=1`,
+`OCCLUSION_FRACTION_OVERRIDE=0.80`, `PROXIMAL_ANCHOR_L2=0`,
+`ADAPT_STEPS=300`, `LR=5e-7`, official stats, identity-LoRA, image
+augmentation, and a 10-task x 40-trial occlusion-only eval at `EVAL_SEED=37`.
+Submitted jobs are prep `782649`, BGR train/merge/clean-eval
+`782650`/`782651`/`782652`, matched-random train/merge/clean-eval
+`782653`/`782654`/`782655`, and official/BGR/random hard-occlusion evals
+`782656`/`782657`/`782658`. This is not manuscript evidence unless BGR beats
+both official and matched random by at least +10/400 episodes and +0.02 on the
+fixed occlusion readout. Poll/sync with:
+
+```bash
+PREP_TAG=p1024unique_occonly_hardocc080_router_prereg \
+ADAPT_TAG=occonly_p1024unique_hardocc080_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 \
+PERTURB_TAG=occonly_p1024unique_hardocc080_router_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1 \
+JOB_IDS=782649,782650,782651,782652,782653,782654,782655,782656,782657,782658 \
+DETAIL_JOB_IDS=782649,782650,782651,782653,782654,782656,782657,782658 \
+ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT premise' \
+GATE_PERTURBATIONS=occlusion \
+scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check
 ```

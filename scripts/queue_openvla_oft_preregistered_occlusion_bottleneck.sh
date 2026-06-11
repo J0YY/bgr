@@ -50,6 +50,7 @@ MAX_PERTURB_EXAMPLES="${MAX_PERTURB_EXAMPLES:-2048}"
 MAX_STEPS_PER_EPISODE="${MAX_STEPS_PER_EPISODE:-64}"
 CLEAN_EPISODES_PER_FAMILY="${CLEAN_EPISODES_PER_FAMILY:-64}"
 PERTURB_EPISODES_PER_FAMILY="${PERTURB_EPISODES_PER_FAMILY:-8}"
+INCLUDE_CLEAN_ANCHORS="${INCLUDE_CLEAN_ANCHORS:-1}"
 OCCLUSION_CAP="${OCCLUSION_CAP:-512}"
 OCCLUSION_REPEAT="${OCCLUSION_REPEAT:-4}"
 OCCLUSION_FRACTION_OVERRIDE="${OCCLUSION_FRACTION_OVERRIDE:-}"
@@ -89,6 +90,8 @@ audit:
     BGR-boundary and matched-random data roots;
   - cap occlusion rows at OCCLUSION_CAP=${OCCLUSION_CAP} for both methods and
     duplicate that subset OCCLUSION_REPEAT=${OCCLUSION_REPEAT} times;
+  - set INCLUDE_CLEAN_ANCHORS=0 for a router-specific occlusion-only training
+    premise where clean identity is handled by the official checkpoint;
   - keep official stats, identity-LoRA, image augmentation, LR=${LR},
     ADAPT_STEPS=${ADAPT_STEPS}, PROXIMAL_ANCHOR_L2=${PROXIMAL_ANCHOR_L2}, and
     fixed 10-task x 10-trial LIBERO-Goal perturbation evaluation.
@@ -158,6 +161,7 @@ RANDOM_DATA_ROOT=${RANDOM_DATA_ROOT}
 OCCLUSION_CAP=${OCCLUSION_CAP}
 OCCLUSION_REPEAT=${OCCLUSION_REPEAT}
 OCCLUSION_FRACTION_OVERRIDE=${OCCLUSION_FRACTION_OVERRIDE}
+INCLUDE_CLEAN_ANCHORS=${INCLUDE_CLEAN_ANCHORS}
 PROXIMAL_ANCHOR_L2=${PROXIMAL_ANCHOR_L2}
 Promotion gate: BGR must beat matched random and official by >=10/400 non-identity episodes and >=0.02, with clean identity no worse than -1/100.
 EOF
@@ -234,33 +238,37 @@ if [[ -n "${OCCLUSION_FRACTION_OVERRIDE}" ]]; then
   RENDER_OVERRIDE_ARGS+=(--override-perturbation-param "occlusion.fraction=${OCCLUSION_FRACTION_OVERRIDE}")
 fi
 
-echo "Exporting clean-anchor manifest at \$(date -Is)"
-"${OPENVLA_OFT_PY}" scripts/export_openvla_teacher_replay_manifest.py \\
-  "\${BGR_DIR_ARGS[@]}" \\
-  "\${RANDOM_DIR_ARGS[@]}" \\
-  --native-anchors-only \\
-  --max-steps-per-episode "${MAX_STEPS_PER_EPISODE}" \\
-  --out "${CLEAN_MANIFEST_DIR}"
+if [[ "${INCLUDE_CLEAN_ANCHORS}" == "1" ]]; then
+  echo "Exporting clean-anchor manifest at \$(date -Is)"
+  "${OPENVLA_OFT_PY}" scripts/export_openvla_teacher_replay_manifest.py \\
+    "\${BGR_DIR_ARGS[@]}" \\
+    "\${RANDOM_DIR_ARGS[@]}" \\
+    --native-anchors-only \\
+    --max-steps-per-episode "${MAX_STEPS_PER_EPISODE}" \\
+    --out "${CLEAN_MANIFEST_DIR}"
 
-echo "Rendering clean BGR anchors at \$(date -Is)"
-"${OPENVLA_OFT_PY}" scripts/render_openvla_teacher_examples.py \\
-  --manifest "${CLEAN_MANIFEST_DIR}/teacher_replay_manifest.jsonl" \\
-  --out "${BGR_CLEAN_RENDER}" \\
-  --method bgr_boundary \\
-  --max-examples "${MAX_CLEAN_EXAMPLES}" \\
-  --selection balanced_episodes \\
-  --episodes-per-family "${CLEAN_EPISODES_PER_FAMILY}" \\
-  --max-steps-per-episode "${MAX_STEPS_PER_EPISODE}"
+  echo "Rendering clean BGR anchors at \$(date -Is)"
+  "${OPENVLA_OFT_PY}" scripts/render_openvla_teacher_examples.py \\
+    --manifest "${CLEAN_MANIFEST_DIR}/teacher_replay_manifest.jsonl" \\
+    --out "${BGR_CLEAN_RENDER}" \\
+    --method bgr_boundary \\
+    --max-examples "${MAX_CLEAN_EXAMPLES}" \\
+    --selection balanced_episodes \\
+    --episodes-per-family "${CLEAN_EPISODES_PER_FAMILY}" \\
+    --max-steps-per-episode "${MAX_STEPS_PER_EPISODE}"
 
-echo "Rendering clean random anchors at \$(date -Is)"
-"${OPENVLA_OFT_PY}" scripts/render_openvla_teacher_examples.py \\
-  --manifest "${CLEAN_MANIFEST_DIR}/teacher_replay_manifest.jsonl" \\
-  --out "${RANDOM_CLEAN_RENDER}" \\
-  --method random_balanced \\
-  --max-examples "${MAX_CLEAN_EXAMPLES}" \\
-  --selection balanced_episodes \\
-  --episodes-per-family "${CLEAN_EPISODES_PER_FAMILY}" \\
-  --max-steps-per-episode "${MAX_STEPS_PER_EPISODE}"
+  echo "Rendering clean random anchors at \$(date -Is)"
+  "${OPENVLA_OFT_PY}" scripts/render_openvla_teacher_examples.py \\
+    --manifest "${CLEAN_MANIFEST_DIR}/teacher_replay_manifest.jsonl" \\
+    --out "${RANDOM_CLEAN_RENDER}" \\
+    --method random_balanced \\
+    --max-examples "${MAX_CLEAN_EXAMPLES}" \\
+    --selection balanced_episodes \\
+    --episodes-per-family "${CLEAN_EPISODES_PER_FAMILY}" \\
+    --max-steps-per-episode "${MAX_STEPS_PER_EPISODE}"
+else
+  echo "Skipping clean anchors because INCLUDE_CLEAN_ANCHORS=${INCLUDE_CLEAN_ANCHORS} at \$(date -Is)"
+fi
 
 echo "Rendering BGR boundary perturbations at \$(date -Is)"
 "${OPENVLA_OFT_PY}" scripts/render_openvla_teacher_examples.py \\
@@ -296,9 +304,13 @@ echo "Filtering to the occlusion bottleneck family at \$(date -Is)"
   --include-family occlusion \\
   --cap "occlusion=${OCCLUSION_CAP}"
 
-echo "Combining clean anchors with repeated occlusion examples at \$(date -Is)"
-BGR_COMBINE_ARGS=(--source clean="${BGR_CLEAN_RENDER}")
-RANDOM_COMBINE_ARGS=(--source clean="${RANDOM_CLEAN_RENDER}")
+echo "Combining training examples at \$(date -Is)"
+BGR_COMBINE_ARGS=()
+RANDOM_COMBINE_ARGS=()
+if [[ "${INCLUDE_CLEAN_ANCHORS}" == "1" ]]; then
+  BGR_COMBINE_ARGS+=(--source clean="${BGR_CLEAN_RENDER}")
+  RANDOM_COMBINE_ARGS+=(--source clean="${RANDOM_CLEAN_RENDER}")
+fi
 for repeat_idx in \$(seq 1 "${OCCLUSION_REPEAT}"); do
   BGR_COMBINE_ARGS+=(--source "occlusion_\${repeat_idx}=${BGR_OCCLUSION_RENDER}")
   RANDOM_COMBINE_ARGS+=(--source "occlusion_\${repeat_idx}=${RANDOM_OCCLUSION_RENDER}")
