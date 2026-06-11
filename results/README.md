@@ -1702,6 +1702,17 @@ true continuous action interface gives clean success 1.0000, recovery range
 not paper evidence; it only permits a fixed all-method continuous-action
 LunarLander replay screen without retuning.
 
+Athena job `784643` completed with exit `0:0` and synced compact artifacts to
+`results/lunarlander_continuous_recovery_calibration_12seed_v1_784643/summary.json`,
+`results/lunarlander_continuous_recovery_calibration_12seed_v1_784643/package_versions.json`,
+and
+`results/lunarlander_continuous_recovery_calibration_12seed_v1_784643/recovery_rows.csv`.
+Package metadata records `continuous=true`, `gymnasium==1.3.0`,
+`box2d==2.3.10`, and `numpy==2.2.6` on Athena. The fixed calibration clears:
+clean success 1.0000, recovery range 0.3056--1.0000, RAUC 0.6597, r80 1.1375,
+and curve `1.0000,0.9167,0.8611,0.6389,0.5000,0.3889,0.3056`. This is now
+the active standard-environment route for a fixed all-method screen.
+
 ## Internal Package-Free CartPole Diagnostic
 
 `results/cartpole_recovery_probe_4seed_v1/summary.csv` is a 4-seed internal

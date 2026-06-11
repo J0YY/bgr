@@ -1449,6 +1449,12 @@ risk.
   `--continuous` gives clean success 1.0000, recovery range 0.0000--1.0000,
   RAUC 0.5139, and r80 1.0500. Queue only the fixed 12-seed calibration first;
   passing it would permit, but not itself justify, a fixed all-method screen.
+  Athena job `784643` completed with exit `0:0` and synced to
+  `results/lunarlander_continuous_recovery_calibration_12seed_v1_784643/`.
+  The fixed 12-seed readout clears the pre-method gate with clean success
+  1.0000, recovery range 0.3056--1.0000, RAUC 0.6597, r80 1.1375, and curve
+  `1.0000,0.9167,0.8611,0.6389,0.5000,0.3889,0.3056`. This is now the active
+  standard-environment route for a fixed all-method screen.
 - The next acceptance-moving empirical route must change the premise: either a
   genuinely different pre-existing benchmark package/reset interface, or a
   genuinely different learned-policy intervention that is preregistered before

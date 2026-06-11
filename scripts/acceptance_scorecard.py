@@ -97,6 +97,9 @@ COMPLETED_METHOD_SCREEN_BY_CALIBRATION = {
     "Gymnasium MuJoCo InvertedPendulum-v5 calibration": "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
     "Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration": "results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv",
     "Gymnasium Box2D LunarLander-v3 calibration": "results/lunarlander_recovery_probe_30seed_v3_782056_782062/summary.csv",
+    "Gymnasium Box2D LunarLanderContinuous-v3 calibration": (
+        "results/lunarlander_continuous_recovery_probe_4seed_v1_784643/summary.csv"
+    ),
     "MinAtar Breakout calibration": "results/minatar_breakout_recovery_probe_4seed_v1/summary.csv",
     "MinAtar Asterix calibration": "results/minatar_asterix_recovery_probe_4seed_v1/summary.csv",
     "MinAtar Freeway calibration": "results/minatar_freeway_recovery_probe_4seed_v1/summary.csv",
@@ -628,6 +631,10 @@ CALIBRATION_SCREENS = [
     (
         "Gymnasium Box2D LunarLander-v3 calibration",
         "results/lunarlander_recovery_calibration_12seed_v1/summary.json",
+    ),
+    (
+        "Gymnasium Box2D LunarLanderContinuous-v3 calibration",
+        "results/lunarlander_continuous_recovery_calibration_12seed_v1_784643/summary.json",
     ),
 ]
 

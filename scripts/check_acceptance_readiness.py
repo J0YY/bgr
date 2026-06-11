@@ -134,6 +134,10 @@ CALIBRATION_SUMMARIES = [
         "results/inverted_double_pendulum_recovery_calibration_12seed_v1/summary.json",
     ),
     ("LunarLander-v3 calibration", "results/lunarlander_recovery_calibration_12seed_v1/summary.json"),
+    (
+        "LunarLanderContinuous-v3 calibration",
+        "results/lunarlander_continuous_recovery_calibration_12seed_v1_784643/summary.json",
+    ),
 ]
 ROADMAP_DOCS = [
     "AGENTS.md",

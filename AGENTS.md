@@ -169,8 +169,13 @@ perturbation grid. A corrected pre-artifact local smoke with
 0.0000--1.0000, RAUC 0.5139, and r80 1.0500. The fixed 12-seed calibration is
 preregistered via
 `OUT_PREFIX=lunarlander_continuous_recovery_calibration_12seed_v1 scripts/queue_lunarlander_continuous_calibration.sh`.
-Do not build a method comparison unless that fixed calibration clears the same
-clean/non-flat/non-saturated gate.
+Athena job `784643` completed with exit `0:0` and synced to
+`results/lunarlander_continuous_recovery_calibration_12seed_v1_784643/`.
+The fixed calibration clears with clean success 1.0000, recovery range
+0.3056--1.0000, RAUC 0.6597, r80 1.1375, and curve
+`1.0000,0.9167,0.8611,0.6389,0.5000,0.3889,0.3056` over radii
+`0,0.5,1.0,1.5,2.0,2.5,3.0`. This is not paper evidence; it only permits a
+fixed continuous-action all-method screen without retuning.
 A broader
 fixed OpenML numeric-suite
 target-2.0 run and held-out seeds 30--59 replication completed on `athena` as
