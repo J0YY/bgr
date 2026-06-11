@@ -9,6 +9,13 @@ are explicit in the title, introduction, limitations, README, and package
 guards. That improves reviewability, but it does not by itself make the paper a
 90%+ AAAI main-track accept. The remaining acceptance blocker is evidence:
 
+A read-only independent Codex review on 2026-06-11 scored the current paper
+`3/6`, below the working target of at least `5/6`. The review agreed with the
+internal readiness gate: the paper is honest and coherent, but it still needs a
+clean standard-environment recovery win or a learned-policy win over both the
+official checkpoint and matched random to move from mechanism study to likely
+AAAI accept.
+
 - no clear positive result on a standard recovery environment, despite
   replicated OpenML diabetes, blood-transfusion, and phoneme
   pre-existing-dataset margin results;

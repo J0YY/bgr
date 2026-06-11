@@ -24,6 +24,9 @@ uniform 0.7766 and fixed-radius 0.7756, with BGR ahead on 22/32 dataset means
 versus uniform and 24/32 versus fixed.
 This strengthens the supervised pre-existing benchmark story but still does
 not solve the standard-environment or learned-policy evidence gap.
+An independent read-only Codex reviewer on 2026-06-11 scored the current paper
+`3/6`, below the target `5/6`, citing the lack of a clean standard-environment
+or learned-policy win as the decisive blocker.
 Standard-environment recovery screens and OpenVLA/LIBERO learned-policy evidence
 remain failing or non-promotable. The latest bsuite Catch 30-seed scale-up,
 MiniGrid FourRooms radius-10 rescue, LunarLander 30-seed stress test,
