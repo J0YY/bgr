@@ -98,7 +98,7 @@ COMPLETED_METHOD_SCREEN_BY_CALIBRATION = {
     "Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration": "results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv",
     "Gymnasium Box2D LunarLander-v3 calibration": "results/lunarlander_recovery_probe_30seed_v3_782056_782062/summary.csv",
     "Gymnasium Box2D LunarLanderContinuous-v3 calibration": (
-        "results/lunarlander_continuous_recovery_probe_4seed_v1_784643/summary.csv"
+        "results/lunarlander_continuous_recovery_probe_4seed_split_merged_v1_784713_784719/summary.csv"
     ),
     "MinAtar Breakout calibration": "results/minatar_breakout_recovery_probe_4seed_v1/summary.csv",
     "MinAtar Asterix calibration": "results/minatar_asterix_recovery_probe_4seed_v1/summary.csv",
@@ -471,7 +471,7 @@ BENCHMARK_SCREENS = [
     ),
     (
         "Gymnasium Box2D LunarLanderContinuous-v3",
-        "results/lunarlander_continuous_recovery_probe_4seed_v1_784643/summary.csv",
+        "results/lunarlander_continuous_recovery_probe_4seed_split_merged_v1_784713_784719/summary.csv",
         ["bgr_coverage", "bgr"],
         ["fixed", "failure_only", "td_loss"],
         "bgr_uniform_radius",
@@ -1265,6 +1265,8 @@ def render_markdown(root: Path) -> str:
     calibrations = calibration_screens(root)
     scouts = route_scouts(root)
     best = candidates[0] if candidates else None
+    promotable_candidates = [candidate for candidate in candidates if candidate.promotable_screen]
+    promotable_paths = {candidate.path for candidate in promotable_candidates}
     learned_summary = learned_policy_summary(root)
     lines = [
         "# Acceptance Scorecard",
@@ -1286,19 +1288,33 @@ def render_markdown(root: Path) -> str:
             f"ablation delta {fmt_comparison(best.vs_ablation)}, radius delta {fmt_comparison(best.radius_vs_uniform)}, "
             f"failure reason(s): {fmt_reasons(best)}."
         )
+    if promotable_candidates:
+        names = ", ".join(
+            f"`{candidate.name}`/`{candidate.treatment}` dRAUC {candidate.vs_uniform.delta:+.4f}"
+            for candidate in promotable_candidates
+        )
+        lines.append(f"- Positive standard-environment screen(s): {names}.")
     rejected_calibrations = [screen for screen in calibrations if not screen.usable]
     usable_calibrations = [screen for screen in calibrations if screen.usable]
+    promoted_calibrations = [
+        screen
+        for screen in usable_calibrations
+        if (screen.name in COMPLETED_METHOD_SCREEN_BY_CALIBRATION)
+        and COMPLETED_METHOD_SCREEN_BY_CALIBRATION[screen.name] in promotable_paths
+    ]
+    promoted_calibration_names = {screen.name for screen in promoted_calibrations}
     retired_calibrations = [
         screen
         for screen in usable_calibrations
         if (screen.name in COMPLETED_METHOD_SCREEN_BY_CALIBRATION)
         and (root / COMPLETED_METHOD_SCREEN_BY_CALIBRATION[screen.name]).exists()
+        and screen.name not in promoted_calibration_names
     ]
     retired_calibration_names = {screen.name for screen in retired_calibrations}
     active_calibrations = [
         screen
         for screen in usable_calibrations
-        if screen.name not in retired_calibration_names
+        if screen.name not in retired_calibration_names and screen.name not in promoted_calibration_names
     ]
     if rejected_calibrations:
         names = ", ".join(f"`{screen.name}`" for screen in rejected_calibrations)
@@ -1309,6 +1325,12 @@ def render_markdown(root: Path) -> str:
             for screen in retired_calibrations
         )
         lines.append(f"- Retired calibrated route(s) that cleared pre-method calibration: {names}.")
+    if promoted_calibrations:
+        names = ", ".join(
+            f"`{screen.name}` clean {screen.clean_success:.4f}, range {screen.min_recovery:.4f}--{screen.max_recovery:.4f}, r80 {screen.r80:.4f}"
+            for screen in promoted_calibrations
+        )
+        lines.append(f"- Calibrated route(s) with positive fixed method screen: {names}.")
     positive_followups = [scout for scout in scouts if scout.positive_followup]
     positive_followup_keys = {route_scout_evidence_key(scout) for scout in positive_followups}
     rejected_scouts = [scout for scout in scouts if scout.rejected]
@@ -1370,6 +1392,12 @@ def render_markdown(root: Path) -> str:
     )
     if best is None:
         lines.append("- Independent benchmark: no completed screen artifacts were found.")
+    elif promotable_candidates:
+        names = ", ".join(f"`{candidate.name}` with `{candidate.treatment}`" for candidate in promotable_candidates)
+        lines.append(
+            f"- Independent benchmark: {names} clears the 4/4 promotion screen; "
+            "a larger confirmation is still needed for the high-confidence paper target."
+        )
     else:
         lines.append(
             f"- Independent benchmark: no screen clears the 4/4 promotion screen. "
@@ -1539,9 +1567,14 @@ def render_markdown(root: Path) -> str:
     else:
         learned_priority = f"- {learned_summary}"
 
+    standard_environment_priority = (
+        "- A standard-environment recovery screen now clears the fixed 4-seed gate, but it should be confirmed at larger seed count before being treated as high-confidence AAAI evidence."
+        if promotable_candidates
+        else "- The standard-environment recovery route still has not produced a promotable screen: early promising screens either fail paired/radius checks or do not survive scale-up, and later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation."
+    )
     priority_lines = [
         "- The controlled grid mechanism is above its internal effect threshold, but it is still a constructed mechanism benchmark.",
-        "- The standard-environment recovery route still has not produced a promotable screen: early promising screens either fail paired/radius checks or do not survive scale-up, and later non-saturated screens trail uniform, stronger baselines, or the state-priority/uniform-radius ablation.",
+        standard_environment_priority,
         learned_priority,
     ]
     if rejected_scouts:

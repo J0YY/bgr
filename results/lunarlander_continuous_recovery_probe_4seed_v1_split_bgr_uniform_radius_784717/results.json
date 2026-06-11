@@ -1,0 +1,210 @@
+{
+  "args": {
+    "out": "/work/joy/bgr/runs/lunarlander_continuous_recovery_probe_4seed_v1_split_bgr_uniform_radius_784717",
+    "env_id": "LunarLanderContinuous-v3",
+    "continuous": true,
+    "seeds": "0,1,2,3",
+    "methods": "bgr_uniform_radius",
+    "radii": "0,0.5,1.0,1.5,2.0,2.5,3.0",
+    "iterations": 80,
+    "eval_every": 20,
+    "train_batch_size": 8,
+    "replay_states": 24,
+    "eval_states": 8,
+    "eval_trials": 1,
+    "record_trials": 1,
+    "burn_in": 80,
+    "horizon": 500,
+    "replay_seed_offset": 200,
+    "eval_seed_offset": 0,
+    "init_seed_offset": 10000,
+    "policy_init_steps": 1000,
+    "policy_init_noise": 0.05,
+    "learning_rate": 0.02,
+    "alpha": 0.8,
+    "target_radius": 1.1375,
+    "radius_bandwidth": 0.6,
+    "fixed_radius": 1.1375,
+    "baseline_candidates": 8,
+    "initial_probes": [
+      0.0,
+      1.0,
+      1.5,
+      3.0
+    ],
+    "min_trials": 1,
+    "refresh_per_eval": 8,
+    "refresh_trials": 1,
+    "refresh_jitter": 0.08,
+    "radius_noise": 0.08,
+    "radius_uniform_mix": 0.25,
+    "priority_temperature": 0.8,
+    "uniform_mix": 0.1
+  },
+  "results": [
+    {
+      "method": "bgr_uniform_radius",
+      "seed": 0,
+      "final_clean": 0.75,
+      "final_rauc": 0.5416666666666666,
+      "final_median_r80": 2.1,
+      "rauc_aulc": 0.4049479166666667,
+      "best_rauc": 0.5833333333333334,
+      "history": [
+        {
+          "clean": 0.875,
+          "rauc": 0.4479166666666667,
+          "median_r80": 1.35,
+          "step": 0.0
+        },
+        {
+          "clean": 0.0,
+          "rauc": 0.041666666666666664,
+          "median_r80": 3.0,
+          "step": 20.0
+        },
+        {
+          "clean": 1.0,
+          "rauc": 0.5,
+          "median_r80": 0.6,
+          "step": 40.0
+        },
+        {
+          "clean": 1.0,
+          "rauc": 0.5833333333333334,
+          "median_r80": 1.6,
+          "step": 60.0
+        },
+        {
+          "clean": 0.75,
+          "rauc": 0.5416666666666666,
+          "median_r80": 2.1,
+          "step": 80.0
+        }
+      ]
+    },
+    {
+      "method": "bgr_uniform_radius",
+      "seed": 1,
+      "final_clean": 0.75,
+      "final_rauc": 0.46875,
+      "final_median_r80": 0.6,
+      "rauc_aulc": 0.4622395833333333,
+      "best_rauc": 0.6666666666666666,
+      "history": [
+        {
+          "clean": 0.75,
+          "rauc": 0.3958333333333333,
+          "median_r80": 0.8500000000000001,
+          "step": 0.0
+        },
+        {
+          "clean": 0.25,
+          "rauc": 0.16666666666666666,
+          "median_r80": 3.0,
+          "step": 20.0
+        },
+        {
+          "clean": 0.875,
+          "rauc": 0.5833333333333334,
+          "median_r80": 1.6,
+          "step": 40.0
+        },
+        {
+          "clean": 1.0,
+          "rauc": 0.6666666666666666,
+          "median_r80": 1.6,
+          "step": 60.0
+        },
+        {
+          "clean": 0.75,
+          "rauc": 0.46875,
+          "median_r80": 0.6,
+          "step": 80.0
+        }
+      ]
+    },
+    {
+      "method": "bgr_uniform_radius",
+      "seed": 2,
+      "final_clean": 1.0,
+      "final_rauc": 0.4375,
+      "final_median_r80": 1.1,
+      "rauc_aulc": 0.5143229166666666,
+      "best_rauc": 0.6041666666666666,
+      "history": [
+        {
+          "clean": 0.875,
+          "rauc": 0.46875,
+          "median_r80": 1.35,
+          "step": 0.0
+        },
+        {
+          "clean": 1.0,
+          "rauc": 0.6041666666666666,
+          "median_r80": 1.1,
+          "step": 20.0
+        },
+        {
+          "clean": 0.875,
+          "rauc": 0.5625,
+          "median_r80": 1.6,
+          "step": 40.0
+        },
+        {
+          "clean": 0.875,
+          "rauc": 0.4375,
+          "median_r80": 1.1,
+          "step": 60.0
+        },
+        {
+          "clean": 1.0,
+          "rauc": 0.4375,
+          "median_r80": 1.1,
+          "step": 80.0
+        }
+      ]
+    },
+    {
+      "method": "bgr_uniform_radius",
+      "seed": 3,
+      "final_clean": 0.875,
+      "final_rauc": 0.4479166666666667,
+      "final_median_r80": 1.35,
+      "rauc_aulc": 0.45052083333333337,
+      "best_rauc": 0.5520833333333334,
+      "history": [
+        {
+          "clean": 0.875,
+          "rauc": 0.53125,
+          "median_r80": 1.35,
+          "step": 0.0
+        },
+        {
+          "clean": 0.875,
+          "rauc": 0.5520833333333334,
+          "median_r80": 1.6,
+          "step": 20.0
+        },
+        {
+          "clean": 0.5,
+          "rauc": 0.40625,
+          "median_r80": 2.55,
+          "step": 40.0
+        },
+        {
+          "clean": 1.0,
+          "rauc": 0.3541666666666667,
+          "median_r80": 0.6,
+          "step": 60.0
+        },
+        {
+          "clean": 0.875,
+          "rauc": 0.4479166666666667,
+          "median_r80": 1.35,
+          "step": 80.0
+        }
+      ]
+    }
+  ]
+}

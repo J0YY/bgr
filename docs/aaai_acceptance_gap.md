@@ -1440,7 +1440,7 @@ risk.
   queue that learner. A future HalfCheetah comparison needs a better
   preregistered learner/controller and a local clean-recovery viability smoke
   before Slurm.
-- New active independent pre-method calibration: Gymnasium Box2D
+- New positive independent standard-environment screen: Gymnasium Box2D
   `LunarLanderContinuous-v3`. This is a materially different action interface
   from the completed discrete `LunarLander-v3` screen. The route uses
   Gymnasium's continuous package heuristic, exact Box2D body-state restoration,
@@ -1453,14 +1453,26 @@ risk.
   `results/lunarlander_continuous_recovery_calibration_12seed_v1_784643/`.
   The fixed 12-seed readout clears the pre-method gate with clean success
   1.0000, recovery range 0.3056--1.0000, RAUC 0.6597, r80 1.1375, and curve
-  `1.0000,0.9167,0.8611,0.6389,0.5000,0.3889,0.3056`. This is now the active
-  standard-environment route for a fixed all-method screen.
+  `1.0000,0.9167,0.8611,0.6389,0.5000,0.3889,0.3056`.
   The fixed method screen uses the continuous linear imitation policy in
   `tools/lunarlander_recovery_probe.py`, `target_radius=fixed_radius=1.1375`,
   `radius_bandwidth=0.6`, `iterations=80`, `policy_init_steps=1000`, and the
   calibrated radius grid. A one-seed viability smoke at this fixed budget gave
   BGR-Coverage clean 1.0000 and RAUC 0.7604 versus uniform clean 0.8750 and
   RAUC 0.4062; the smoke is route-selection evidence only.
+  The fixed 4-seed all-method screen was completed through split Slurm jobs
+  `784713`--`784719` and merged at
+  `results/lunarlander_continuous_recovery_probe_4seed_split_merged_v1_784713_784719/summary.csv`.
+  BGR-Coverage clears the fixed promotion checker: final RAUC 0.6667 vs.
+  uniform 0.4896 (W/L/T=3/1/0), fixed-radius 0.4766, failure-only 0.5182,
+  TD-loss 0.4583, and BGR-uniform-radius 0.4740; median r80 is 1.7250 vs.
+  uniform 1.1000. Default BGR is not promotable because it wins only 2/4
+  against uniform. This is acceptance-moving standard-environment evidence,
+  but the high-confidence paper target still needs a larger confirmation.
+  A held-out seeds 4--33 split confirmation is now queued as jobs `784811`,
+  `784812`, `784814`, `784817`, `784819`, `784820`, and `784821`; do not
+  retune after seeing these rows. Poll/sync with
+  `OUT_PREFIX_BASE=lunarlander_continuous_recovery_probe_heldout30seed_v1 OUT_PREFIX_TEMPLATE='lunarlander_continuous_recovery_probe_heldout30seed_v1_split_{method}' LOCAL_MERGED=results/lunarlander_continuous_recovery_probe_heldout30seed_split_merged_v1_784811_784821 METHOD_JOB_IDS='uniform:784811,fixed:784812,failure_only:784814,td_loss:784817,bgr_uniform_radius:784819,bgr_coverage:784820,bgr:784821' TREATMENT=bgr_coverage scripts/sync_lunarlander_split_probe.sh`.
 - The next acceptance-moving empirical route must change the premise: either a
   genuinely different pre-existing benchmark package/reset interface, or a
   genuinely different learned-policy intervention that is preregistered before

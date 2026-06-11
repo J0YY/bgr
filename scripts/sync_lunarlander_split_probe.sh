@@ -2,6 +2,10 @@
 set -euo pipefail
 
 OUT_PREFIX_BASE="${OUT_PREFIX_BASE:-lunarlander_recovery_probe_30seed_target070}"
+if [[ -z "${OUT_PREFIX_TEMPLATE:-}" ]]; then
+  OUT_PREFIX_TEMPLATE="${OUT_PREFIX_BASE}_"
+  OUT_PREFIX_TEMPLATE+="{method}_v1"
+fi
 LOCAL_MERGED="${LOCAL_MERGED:-results/${OUT_PREFIX_BASE}_merged}"
 METHOD_JOB_IDS="${METHOD_JOB_IDS:-uniform:782561,fixed:782562,failure_only:782563,td_loss:782564,bgr_uniform_radius:782565,bgr_coverage:782566,bgr:782567}"
 TREATMENT="${TREATMENT:-bgr_coverage}"
@@ -21,7 +25,8 @@ for pair in "${pairs[@]}"; do
     continue
   fi
   expected=$((expected + 1))
-  out_prefix="${OUT_PREFIX_BASE}_${method}_v1"
+  placeholder="{method}"
+  out_prefix="${OUT_PREFIX_TEMPLATE//${placeholder}/${method}}"
   local_out="results/${out_prefix}_${job_id}"
   echo "### sync ${method} ${job_id}"
   if ! JOB_ID="${job_id}" OUT_PREFIX="${out_prefix}" LOCAL_OUT="${local_out}" scripts/sync_lunarlander_probe.sh; then

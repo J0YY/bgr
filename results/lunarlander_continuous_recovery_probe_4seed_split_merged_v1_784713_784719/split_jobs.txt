@@ -1,0 +1,7 @@
+uniform=784713
+fixed=784714
+failure_only=784715
+td_loss=784716
+bgr_uniform_radius=784717
+bgr_coverage=784718
+bgr=784719

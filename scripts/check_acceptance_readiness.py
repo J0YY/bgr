@@ -998,6 +998,44 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"best-r80 {best_lunar_r80:.4f} vs uniform {lunar_uniform_r80:.4f}, W/L/T={best_lunar_wins}"
             )
 
+    lunar_cont_path = root / "results/lunarlander_continuous_recovery_probe_4seed_split_merged_v1_784713_784719/summary.csv"
+    if lunar_cont_path.exists():
+        lunar_cont = read_rows(lunar_cont_path)
+        cont_coverage = mean_metric(lunar_cont, "bgr_coverage", "final_rauc")
+        cont_bgr = mean_metric(lunar_cont, "bgr", "final_rauc")
+        cont_uniform = mean_metric(lunar_cont, "uniform", "final_rauc")
+        cont_failure = mean_metric(lunar_cont, "failure_only", "final_rauc")
+        cont_fixed = mean_metric(lunar_cont, "fixed", "final_rauc")
+        cont_td = mean_metric(lunar_cont, "td_loss", "final_rauc")
+        cont_ablation = mean_metric(lunar_cont, "bgr_uniform_radius", "final_rauc")
+        cont_coverage_r80 = mean_metric(lunar_cont, "bgr_coverage", "final_median_r80")
+        cont_uniform_r80 = mean_metric(lunar_cont, "uniform", "final_median_r80")
+        cont_coverage_wins = paired_wins(lunar_cont, "bgr_coverage", "uniform", "final_rauc")
+        if (
+            cont_coverage - cont_uniform >= 0.01
+            and cont_coverage > max(cont_failure, cont_fixed, cont_td, cont_ablation)
+            and cont_coverage_wins[0] >= 3
+            and cont_coverage_r80 >= cont_uniform_r80
+            and not (cont_coverage_r80 >= 0.99 and cont_uniform_r80 >= 0.99 and abs(cont_coverage_r80 - cont_uniform_r80) < 1e-12)
+            and not (cont_coverage_r80 <= 0.01 and cont_uniform_r80 <= 0.01 and abs(cont_coverage_r80 - cont_uniform_r80) < 1e-12)
+        ):
+            positive_details.append(
+                f"LunarLanderContinuous-v3 BGR-Coverage standard-environment screen positive: "
+                f"BGR-Coverage {cont_coverage:.4f} vs uniform {cont_uniform:.4f} "
+                f"(W/L/T={cont_coverage_wins}), fixed {cont_fixed:.4f}, failure-only {cont_failure:.4f}, "
+                f"TD-loss {cont_td:.4f}, uniform-radius {cont_ablation:.4f}, "
+                f"median-r80 {cont_coverage_r80:.4f} vs uniform {cont_uniform_r80:.4f}; "
+                f"default BGR {cont_bgr:.4f}"
+            )
+        else:
+            failures.append(
+                f"LunarLanderContinuous-v3 not promotable: BGR-Coverage {cont_coverage:.4f}, "
+                f"BGR {cont_bgr:.4f}, uniform {cont_uniform:.4f}, failure-only {cont_failure:.4f}, "
+                f"fixed {cont_fixed:.4f}, TD-loss {cont_td:.4f}, uniform-radius {cont_ablation:.4f}, "
+                f"median-r80 {cont_coverage_r80:.4f} vs uniform {cont_uniform_r80:.4f}, "
+                f"W/L/T={cont_coverage_wins}"
+            )
+
     acrobot_package_path = root / "results/acrobot_package_recovery_probe_4seed_v1_783971/summary.csv"
     if acrobot_package_path.exists():
         acrobot = read_rows(acrobot_package_path)

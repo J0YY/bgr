@@ -1710,8 +1710,8 @@ and
 Package metadata records `continuous=true`, `gymnasium==1.3.0`,
 `box2d==2.3.10`, and `numpy==2.2.6` on Athena. The fixed calibration clears:
 clean success 1.0000, recovery range 0.3056--1.0000, RAUC 0.6597, r80 1.1375,
-and curve `1.0000,0.9167,0.8611,0.6389,0.5000,0.3889,0.3056`. This is now
-the active standard-environment route for a fixed all-method screen.
+and curve `1.0000,0.9167,0.8611,0.6389,0.5000,0.3889,0.3056`. This permits
+the fixed continuous-action all-method screen.
 
 Fixed all-method screen command:
 
@@ -1723,6 +1723,37 @@ A local one-seed viability smoke at this fixed budget gave BGR-Coverage clean
 1.0000 and RAUC 0.7604 versus uniform clean 0.8750 and RAUC 0.4062. This only
 justifies queueing the fixed all-method screen; do not retune after seeing the
 four-seed method rows.
+
+The fixed 4-seed screen completed through split per-method Slurm jobs after
+the duplicate serial job `784689` was cancelled. Compact raw split directories
+are:
+
+- `results/lunarlander_continuous_recovery_probe_4seed_v1_split_uniform_784713/`
+- `results/lunarlander_continuous_recovery_probe_4seed_v1_split_fixed_784714/`
+- `results/lunarlander_continuous_recovery_probe_4seed_v1_split_failure_only_784715/`
+- `results/lunarlander_continuous_recovery_probe_4seed_v1_split_td_loss_784716/`
+- `results/lunarlander_continuous_recovery_probe_4seed_v1_split_bgr_uniform_radius_784717/`
+- `results/lunarlander_continuous_recovery_probe_4seed_v1_split_bgr_coverage_784718/`
+- `results/lunarlander_continuous_recovery_probe_4seed_v1_split_bgr_784719/`
+
+Merged compact artifact:
+`results/lunarlander_continuous_recovery_probe_4seed_split_merged_v1_784713_784719/summary.csv`.
+BGR-Coverage clears the fixed 4-seed promotion checker: final RAUC 0.6667 vs.
+uniform 0.4896 (W/L/T=3/1/0), fixed 0.4766, failure-only 0.5182, TD-loss
+0.4583, and BGR-uniform-radius 0.4740; median r80 is 1.7250 vs. uniform
+1.1000. Default BGR is not promotable because it wins only 2/4 against
+uniform. This is the first clean standard-environment screen win, but the
+paper target still needs the held-out confirmation below.
+
+Held-out 30-seed confirmation, using seeds 4--33 and the same fixed arguments,
+was queued as split Slurm jobs: uniform `784811`, fixed `784812`,
+failure-only `784814`, TD-loss `784817`, BGR-uniform-radius `784819`,
+BGR-Coverage `784820`, and BGR `784821`.
+Poll/sync/merge command:
+
+```bash
+OUT_PREFIX_BASE=lunarlander_continuous_recovery_probe_heldout30seed_v1 OUT_PREFIX_TEMPLATE='lunarlander_continuous_recovery_probe_heldout30seed_v1_split_{method}' LOCAL_MERGED=results/lunarlander_continuous_recovery_probe_heldout30seed_split_merged_v1_784811_784821 METHOD_JOB_IDS='uniform:784811,fixed:784812,failure_only:784814,td_loss:784817,bgr_uniform_radius:784819,bgr_coverage:784820,bgr:784821' TREATMENT=bgr_coverage scripts/sync_lunarlander_split_probe.sh
+```
 
 ## Internal Package-Free CartPole Diagnostic
 

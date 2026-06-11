@@ -22,13 +22,20 @@ target-1.5 aggregation over 32 datasets is also now complete and small
 macro-positive across three independent 30-seed blocks: pooled BGR 0.7844 vs.
 uniform 0.7766 and fixed-radius 0.7756, with BGR ahead on 22/32 dataset means
 versus uniform and 24/32 versus fixed.
-This strengthens the supervised pre-existing benchmark story but still does
-not solve the standard-environment or learned-policy evidence gap.
+This strengthens the supervised pre-existing benchmark story. A new
+Gymnasium Box2D `LunarLanderContinuous-v3` fixed 4-seed screen is also the
+first standard-environment recovery route in this thread to clear the fixed
+4/4 promotion checker: BGR-Coverage reaches 0.6667 final RAUC vs. uniform
+0.4896, fixed-radius 0.4766, failure-only 0.5182, TD-loss 0.4583, and
+BGR-uniform-radius 0.4740, with median r80 1.7250 vs. uniform 1.1000. This
+is acceptance-moving evidence, but it still needs the queued held-out
+30-seed confirmation before it should be treated as a high-confidence paper
+result. The learned-policy evidence gap remains unresolved.
 An independent read-only Codex reviewer on 2026-06-11 scored the current paper
 `3/6`, below the target `5/6`, citing the lack of a clean standard-environment
 or learned-policy win as the decisive blocker.
-Standard-environment recovery screens and OpenVLA/LIBERO learned-policy evidence
-remain failing or non-promotable. The latest bsuite Catch 30-seed scale-up,
+Most earlier standard-environment recovery screens and OpenVLA/LIBERO
+learned-policy evidence remain failing or non-promotable. The latest bsuite Catch 30-seed scale-up,
 MiniGrid FourRooms radius-10 rescue, LunarLander 30-seed stress test,
 HandReach-v3 calibration, highway-fast-v0 lane calibration, and MinAtar
 Breakout all-method screen are also negative, so they do not solve the
@@ -176,12 +183,33 @@ The fixed calibration clears with clean success 1.0000, recovery range
 `1.0000,0.9167,0.8611,0.6389,0.5000,0.3889,0.3056` over radii
 `0,0.5,1.0,1.5,2.0,2.5,3.0`. This is not paper evidence; it only permits a
 fixed continuous-action all-method screen without retuning.
-The fixed all-method screen is now preregistered after a local one-seed
-viability smoke at the fixed budget gave BGR-Coverage clean 1.0000 and RAUC
-0.7604 versus uniform clean 0.8750 and RAUC 0.4062. Queue with:
+The fixed all-method screen was preregistered after a local one-seed viability
+smoke at the fixed budget gave BGR-Coverage clean 1.0000 and RAUC 0.7604
+versus uniform clean 0.8750 and RAUC 0.4062. Original serial job `784689` was
+cancelled after duplicate split jobs completed, to avoid wasting cluster time.
+The canonical fixed 4-seed artifact is the split merge
+`results/lunarlander_continuous_recovery_probe_4seed_split_merged_v1_784713_784719/summary.csv`
+from per-method jobs uniform/fixed/failure-only/TD-loss/BGR-uniform-radius/
+BGR-Coverage/BGR = `784713`/`784714`/`784715`/`784716`/`784717`/`784718`/
+`784719`. BGR-Coverage clears `tools/check_candidate_promotion.py` at the
+4-seed screen threshold: final RAUC 0.6667 vs. uniform 0.4896 (W/L/T=3/1/0),
+fixed 0.4766, failure-only 0.5182, TD-loss 0.4583, and BGR-uniform-radius
+0.4740; median r80 is 1.7250 vs. uniform 1.1000. Default BGR is not
+promotable because it wins only 2/4 against uniform. This is the first clean
+standard-environment screen win, but do not treat it as high-confidence paper
+evidence until the held-out 30-seed confirmation lands.
+
+Held-out 30-seed confirmation, seeds 4--33, queued with the same fixed
+arguments and split by method on 2026-06-11. Job ids are uniform `784811`,
+fixed `784812`, failure-only `784814`, TD-loss `784817`, BGR-uniform-radius
+`784819`, BGR-Coverage `784820`, and BGR `784821`. Merge only after all seven
+`summary.csv` files exist, then run the candidate checker with
+`--treatment bgr_coverage --min-seeds 30 --min-wins 24 --min-delta 0.01`.
+Poll/sync/merge with:
+`OUT_PREFIX_BASE=lunarlander_continuous_recovery_probe_heldout30seed_v1 OUT_PREFIX_TEMPLATE='lunarlander_continuous_recovery_probe_heldout30seed_v1_split_{method}' LOCAL_MERGED=results/lunarlander_continuous_recovery_probe_heldout30seed_split_merged_v1_784811_784821 METHOD_JOB_IDS='uniform:784811,fixed:784812,failure_only:784814,td_loss:784817,bgr_uniform_radius:784819,bgr_coverage:784820,bgr:784821' TREATMENT=bgr_coverage scripts/sync_lunarlander_split_probe.sh`.
+The original fixed 4-seed launch command was:
 `OUT_PREFIX=lunarlander_continuous_recovery_probe_4seed_v1 SETUP_REMOTE=0 EXTRA_ARGS='--env-id LunarLanderContinuous-v3 --continuous --radii 0,0.5,1.0,1.5,2.0,2.5,3.0 --iterations 80 --eval-every 20 --train-batch-size 8 --replay-states 24 --eval-states 8 --eval-trials 1 --record-trials 1 --burn-in 80 --horizon 500 --policy-init-steps 1000 --learning-rate 0.02 --target-radius 1.1375 --radius-bandwidth 0.6 --fixed-radius 1.1375 --initial-probes 0 1.0 1.5 3.0 --refresh-per-eval 8' scripts/queue_lunarlander_probe.sh`.
-This is the active standard-environment route; do not retune after seeing the
-four-seed method rows.
+Do not retune this route after seeing the four-seed or held-out method rows.
 A broader
 fixed OpenML numeric-suite
 target-2.0 run and held-out seeds 30--59 replication completed on `athena` as

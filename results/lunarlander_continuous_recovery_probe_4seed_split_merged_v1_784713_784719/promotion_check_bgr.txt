@@ -1,0 +1,10 @@
+candidate=results/lunarlander_continuous_recovery_probe_4seed_split_merged_v1_784713_784719/summary.csv
+[check] seed count 4 >= 4
+[check] uniform: treatment=0.5391 baseline=0.4896 delta=+0.0495 W/L/T=2/2/0
+[check] fixed: treatment=0.5391 baseline=0.4766 delta=+0.0625 W/L/T=2/2/0
+[check] failure_only: treatment=0.5391 baseline=0.5182 delta=+0.0208 W/L/T=3/1/0
+[check] td_loss: treatment=0.5391 baseline=0.4583 delta=+0.0807 W/L/T=1/2/1
+[check] bgr_uniform_radius: treatment=0.5391 baseline=0.4740 delta=+0.0651 W/L/T=3/1/0
+[check] final_median_r80 vs uniform: uniform: treatment=1.8875 baseline=1.1000 delta=+0.7875 W/L/T=2/0/2
+[decision] DO NOT PROMOTE
+[fail] bgr wins 2/4 vs uniform, below 3
