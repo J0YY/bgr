@@ -160,13 +160,16 @@ route, queued 2026-06-11 04:55 BST: prep `782671`, BGR train/merge/clean-eval
 eval. It is still only router-premise evidence unless BGR beats both official
 and matched random by at least +10/400 and +0.02 on hard occlusion. Poll/sync:
 `PREP_TAG=p512unique_occonly_hardocc080_router_randfix_prereg ADAPT_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 PERTURB_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1 JOB_IDS=782671,782672,782673,782674,782675,782676,782677,782679,782680,782681 DETAIL_JOB_IDS=782671,782672,782673,782675,782676,782679,782680,782681 ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT randfix premise' GATE_PERTURBATIONS=occlusion scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check`.
-Latest poll at 2026-06-11 05:32 BST showed prep, train, and merge completed
+Latest poll at 2026-06-11 05:36 BST showed prep, train, and merge completed
 with exit `0:0`; BGR clean eval `782674`, matched-random clean eval `782677`,
 and official/BGR/random hard-occlusion evals `782679`--`782681` were still
-running. No full perturb or adapt `summary.csv` existed yet. Direct remote
-live-log tails were BGR 70/110, official 135/223, and matched random 77/127,
-which is not gateable because task coverage is not aligned. Wait for complete
-summaries before making any claim.
+running. No full perturb or adapt `summary.csv` existed yet. The sync helper
+now writes a local partial nested-log summary at
+`results/openvla_oft_perturb_eval_occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary_available.csv`.
+The current incomplete rows are BGR 73/122, official 158/251, and matched
+random 80/142, which remain non-gateable because task coverage is not aligned
+and identity/clean summaries are missing. Wait for complete summaries before
+making any claim.
 A fixed head-interpolation follow-up was queued on 2026-06-10 to test whether
 the near-miss 0.80 transfer route can preserve the occlusion gain while
 recovering identity success. It copies the completed BGR and matched-random

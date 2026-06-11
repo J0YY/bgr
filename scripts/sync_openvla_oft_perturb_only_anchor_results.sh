@@ -16,6 +16,7 @@ ADAPT_TAG="${ADAPT_TAG:-${PREP_TAG}_${ANCHOR_TAG}_step50300_lr2em7_identitylora_
 PERTURB_TAG="${PERTURB_TAG:-${PREP_TAG}_${ANCHOR_TAG}_step50300_lr2em7_identitylora_imageaug_officialtrainstats_fullgoal10x10_perturb_v1}"
 ADAPT_ARTIFACT="${ADAPT_ARTIFACT:-openvla_oft_goal_adapt_eval_${ADAPT_TAG}}"
 PERTURB_ARTIFACT="${PERTURB_ARTIFACT:-openvla_oft_perturb_eval_${PERTURB_TAG}}"
+GATE_PERTURBATIONS="${GATE_PERTURBATIONS:-blur,brightness,occlusion,shift}"
 
 JOB_IDS="${JOB_IDS:-767789,767790,767791,767792,767793,767794,767795,767796,767797,767798,767799,767800,767801,767802,767803,767804,767805,767806,767807,767808,767809,767810}"
 DETAIL_JOB_IDS="${DETAIL_JOB_IDS:-767789,767790,767793,767796,767801,767806}"
@@ -78,6 +79,7 @@ echo "REMOTE_ADAPT_SUMMARY=${REMOTE_ADAPT_SUMMARY}"
 echo "LOCAL_ADAPT_SUMMARY=${LOCAL_ADAPT_SUMMARY}"
 echo "REMOTE_PERTURB_LOGS=${REMOTE_PERTURB_LOGS}"
 echo "REMOTE_ADAPT_LOGS=${REMOTE_ADAPT_LOGS}"
+echo "GATE_PERTURBATIONS=${GATE_PERTURBATIONS}"
 
 remote_poll_script=$(cat <<'REMOTE'
 date
@@ -167,6 +169,7 @@ sync_perturb_summary() {
       tmp_out="$(mktemp -d "${TMPDIR:-/tmp}/perturbonly-perturb-summary.XXXXXX")"
       if ! PYTHONPATH=src:. python3 scripts/summarize_openvla_oft_perturb_eval.py \
           --logs-root "${tmp_logs}" \
+          --allow-partial \
           --out "${tmp_out}"; then
         echo "[pending] ${REMOTE_PERTURB_LOGS} exists but is not summarizable yet"
         return
@@ -187,7 +190,9 @@ with open(dst, "w", newline="", encoding="utf-8") as handle:
         writer.writerow({key: row[key] for key in fieldnames})
 PY
       if PYTHONPATH=src:. python3 scripts/check_openvla_perturb_gate.py \
-          --perturb-summary "${tmp_path}" --require-complete >/dev/null 2>&1; then
+          --perturb-summary "${tmp_path}" \
+          --non-identity-perturbations "${GATE_PERTURBATIONS}" \
+          --require-complete >/dev/null 2>&1; then
         cp "${tmp_path}" "${LOCAL_PERTURB_SUMMARY}"
         echo "[summarized-complete-from-logs] ${REMOTE_PERTURB_LOGS} -> ${LOCAL_PERTURB_SUMMARY}"
       else
@@ -206,7 +211,9 @@ PY
   tmp_path="$(mktemp "$(dirname "${LOCAL_PERTURB_SUMMARY}")/.perturbonly-summary.XXXXXX.csv")"
   rsync -az "${REMOTE_HOST}:${REMOTE_PERTURB_SUMMARY}" "${tmp_path}"
   if PYTHONPATH=src:. python3 scripts/check_openvla_perturb_gate.py \
-      --perturb-summary "${tmp_path}" --require-complete >/dev/null 2>&1; then
+      --perturb-summary "${tmp_path}" \
+      --non-identity-perturbations "${GATE_PERTURBATIONS}" \
+      --require-complete >/dev/null 2>&1; then
     mv "${tmp_path}" "${LOCAL_PERTURB_SUMMARY}"
     echo "[synced-complete] ${REMOTE_PERTURB_SUMMARY} -> ${LOCAL_PERTURB_SUMMARY}"
   else
@@ -226,10 +233,12 @@ fi
 if [[ "${CHECK_LOCAL}" -eq 1 ]]; then
   if [[ -f "${LOCAL_PERTURB_SUMMARY}" ]]; then
     PYTHONPATH=src:. python3 scripts/check_openvla_perturb_gate.py \
-      --perturb-summary "${LOCAL_PERTURB_SUMMARY}"
+      --perturb-summary "${LOCAL_PERTURB_SUMMARY}" \
+      --non-identity-perturbations "${GATE_PERTURBATIONS}"
   elif [[ -f "${LOCAL_AVAILABLE_PERTURB_SUMMARY}" ]]; then
     PYTHONPATH=src:. python3 scripts/check_openvla_perturb_gate.py \
-      --perturb-summary "${LOCAL_AVAILABLE_PERTURB_SUMMARY}"
+      --perturb-summary "${LOCAL_AVAILABLE_PERTURB_SUMMARY}" \
+      --non-identity-perturbations "${GATE_PERTURBATIONS}"
   else
     echo "[skip] local perturb-only perturb summary missing"
   fi

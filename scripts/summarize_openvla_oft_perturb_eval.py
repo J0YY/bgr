@@ -18,9 +18,14 @@ def main() -> int:
         help="Root containing METHOD/PERTURBATION/*.txt eval logs.",
     )
     parser.add_argument("--out", required=True, help="Output directory.")
+    parser.add_argument(
+        "--allow-partial",
+        action="store_true",
+        help="If no complete eval log is available for a row, summarize latest partial episode counters.",
+    )
     args = parser.parse_args()
 
-    rows = summarize_perturbation_logs(Path(args.logs_root))
+    rows = summarize_perturbation_logs(Path(args.logs_root), allow_partial=args.allow_partial)
     if not rows:
         raise SystemExit(f"No perturbation eval logs found under {args.logs_root}")
 
@@ -43,7 +48,7 @@ def main() -> int:
     return 0
 
 
-def summarize_perturbation_logs(logs_root: Path) -> list[dict[str, Any]]:
+def summarize_perturbation_logs(logs_root: Path, *, allow_partial: bool = False) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     if not logs_root.exists():
         raise FileNotFoundError(logs_root)
@@ -54,7 +59,7 @@ def summarize_perturbation_logs(logs_root: Path) -> list[dict[str, Any]]:
         )
         for perturbation_dir in perturbation_dirs:
             try:
-                row = _summarize_method(method_dir.name, perturbation_dir)
+                row = _summarize_method(method_dir.name, perturbation_dir, allow_partial=allow_partial)
             except (FileNotFoundError, ValueError):
                 continue
             row["perturbation"] = perturbation_dir.name
