@@ -7555,11 +7555,13 @@ to
 and uses `PERTURBATIONS='occlusion={"fraction":0.75}'`, `EVAL_TASKS=10`,
 `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`. Submitted Athena jobs
 are official/BGR/matched-random `783104`/`783105`/`783106`. Latest poll/sync
-at 2026-06-11 10:20:00 BST showed official `783104` and BGR `783105` running,
-matched random `783106` pending on unavailable nodes, and a weakened incomplete
-summary of BGR 77/159 versus official 82/165. Treat it as a severity-window
-diagnostic only, not paper evidence and not a replacement for a fixed
-preregistered router-style gate.
+at 2026-06-11 10:25:51 BST showed official `783104`, BGR `783105`, and matched
+random `783106` all running; matched random started at 10:20:49 BST after an
+initial resource wait. The incomplete summary has BGR 118/209, official
+122/213, and matched random 14/16, so the scout is trending negative and is
+not a basis for another fixed route unless the completed rows recover
+substantially. Treat it as a severity-window diagnostic only, not paper
+evidence and not a replacement for a fixed preregistered router-style gate.
 
 A new router-specific occlusion-only training premise was queued on
 2026-06-11 after the 0.80 held-out confirmation failed. This is different from

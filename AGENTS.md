@@ -323,9 +323,12 @@ partial looked weak: an occlusion-fraction 0.75 scout of the original
 occlusion-bottleneck transfer checkpoints, with no rollout videos and a fresh
 artifact `openvla_oft_perturb_eval_occlusion_bottleneck_transfer_occ075_scout_v1`.
 Submitted jobs are official/BGR/matched-random `783104`/`783105`/`783106`.
-Latest poll/sync at 2026-06-11 10:20:00 BST showed official `783104` and BGR
-`783105` running, matched random `783106` pending on unavailable nodes, and a
-weakened incomplete summary of BGR 77/159 versus official 82/165. This is a
+Latest poll/sync at 2026-06-11 10:25:51 BST showed official `783104`, BGR
+`783105`, and matched random `783106` all running; matched random started at
+10:20:49 BST after an initial resource wait. The incomplete summary has BGR
+118/209, official 122/213, and matched random 14/16, so the scout is trending
+negative and is not a basis for another fixed route unless the completed rows
+recover substantially. This is a
 severity-window scout only, not a paper claim and not a replacement for the
 fixed gate. Use it only to decide whether a future preregistered router-style
 gate is worth running; promotion would still require BGR to beat both official
