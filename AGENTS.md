@@ -38,6 +38,18 @@ screen is saturated and negative: BGR-Coverage reaches 0.9017 RAUC versus
 uniform 0.8958, fixed 0.9017, failure-only 0.9025, and BGR-uniform-radius
 0.9192, while default BGR is 0.8892 and every method has median r80 5.0000.
 Do not scale or promote Seaquest without a materially new premise. A new
+Gymnasium Box2D BipedalWalker-v3 mid-gait route is now open and has cleared
+pre-method calibration but not method promotion. Athena calibration job
+`783139` completed with exit `0:0` and synced to
+`results/bipedalwalker_recovery_calibration_12seed_v1_783139/`: clean success
+1.0000, recovery range 0.0000--1.0000, mean RAUC 0.7024, and median r80
+0.7000 under exact Box2D body-state restoration, Gymnasium's package
+`BipedalWalkerHeuristics`, and an 80-step no-fall/progress recovery target.
+The fixed all-method BipedalWalker screen is running as Athena job `783140`;
+sync with `JOB_ID=783140 scripts/sync_bipedalwalker_probe.sh`. This is not
+paper evidence unless default BGR or BGR-Coverage clears
+`tools/check_candidate_promotion.py` against uniform, fixed, failure-only,
+TD-loss, and BGR-uniform-radius. A new
 Gymnasium Blackjack package-state recovery
 scout completed negative on `athena` as Slurm job `774192`; this was only a
 scout for a different independent reset interface, not paper evidence, and all
@@ -323,11 +335,11 @@ partial looked weak: an occlusion-fraction 0.75 scout of the original
 occlusion-bottleneck transfer checkpoints, with no rollout videos and a fresh
 artifact `openvla_oft_perturb_eval_occlusion_bottleneck_transfer_occ075_scout_v1`.
 Submitted jobs are official/BGR/matched-random `783104`/`783105`/`783106`.
-Latest poll/sync at 2026-06-11 10:48:41 BST showed official `783104` and BGR
+Latest poll/sync at 2026-06-11 10:56:51 BST showed official `783104` and BGR
 `783105` completed with exit `0:0`, while matched random `783106` was still
 running after its delayed start. The incomplete summary has BGR 293/400 and
 official 295/400, so BGR already trails official on the fixed 400-episode
-readout; matched random was 76/128. This scout is now closed as
+readout; matched random was 77/137. This scout is now closed as
 non-promotable against official even before the matched-random row completes,
 and it is not a basis for another fixed route. This is a
 severity-window scout only, not a paper claim and not a replacement for the
@@ -370,7 +382,8 @@ The strict route partial summary now has official occlusion 296/400, while BGR
 occlusion `776551` and matched-random occlusion `776554` were running and
 matched-random identity has completed at 391/400; the micro and strict routes
 cannot be promoted because their identity rows already fail the side condition.
-The 0.80 A40 fallback still only has official identity 393/400 summarized,
+The 0.80 A40 fallback has official identity 393/400 and partial official
+occlusion 241/342 summarized,
 while the 0.90 strict A40 route has official identity 393/400 summarized and
 downstream rows dependency-pending. The shared sync helper now parses both
 final total lines and repeated progress lines, and selects the highest-episode

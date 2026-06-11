@@ -1,2 +1,3 @@
 method,perturbation,episodes,successes,success_rate
 official,identity,400,393,0.9825
+official,occlusion,342,241,0.7047

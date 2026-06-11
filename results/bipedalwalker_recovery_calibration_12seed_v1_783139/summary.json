@@ -1,0 +1,21 @@
+{
+  "burn_in": 80,
+  "clean_success": 1.0,
+  "decision": "usable-calibration",
+  "env_id": "BipedalWalker-v3",
+  "horizon": 80,
+  "mean_rauc": 0.7023809523809524,
+  "median_r80": 0.7,
+  "radii": [
+    0.0,
+    0.2,
+    0.4,
+    0.7,
+    1.0,
+    1.4
+  ],
+  "recovery_max": 1.0,
+  "recovery_min": 0.0,
+  "seeds": 12,
+  "trials": 2
+}

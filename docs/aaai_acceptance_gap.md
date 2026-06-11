@@ -85,6 +85,20 @@ failure-only 0.9025, TD-loss 0.8992, and BGR-uniform-radius 0.9192, with only
 2/4 paired wins versus uniform and saturated median r80 5.0000 for every
 method. Default BGR is lower at 0.8892. Do not scale Seaquest without a
 materially new preregistered premise.
+New 2026-06-11 independent-benchmark route opened: Gymnasium Box2D
+`BipedalWalker-v3` mid-gait recovery. Athena calibration job `783139`
+completed with exit `0:0` and synced to
+`results/bipedalwalker_recovery_calibration_12seed_v1_783139/`. The fixed
+12-seed pre-method readout is usable: clean success 1.0000, recovery range
+0.0000--1.0000, mean RAUC 0.7024, and median r80 0.7000 using exact Box2D
+body-state restoration after an 80-step package-heuristic burn-in, Gymnasium's
+`BipedalWalkerHeuristics`, and an 80-step no-fall/progress recovery target.
+This only permits the fixed all-method screen. Athena job `783140` is running
+that 4-seed all-baseline screen via `tools/bipedalwalker_recovery_probe.py`;
+sync with `JOB_ID=783140 scripts/sync_bipedalwalker_probe.sh`. Do not scale or
+promote it unless default BGR or BGR-Coverage clears the existing
+candidate-promotion checks against uniform, fixed-radius, failure-only,
+TD-loss, and BGR-uniform-radius.
 The latest OpenVLA/LIBERO occlusion-bottleneck route is completed negative:
 BGR reaches 365/400 non-identity successes versus official 367/400 and matched
 random 369/400, with identity rows BGR 99/100, official 99/100, and random
@@ -204,11 +218,11 @@ looked weak. It uses a fresh artifact
 `PERTURBATIONS='occlusion={"fraction":0.75}'`, `EVAL_TASKS=10`,
 `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`; submitted jobs are
 official/BGR/matched-random `783104`/`783105`/`783106`. Latest poll/sync at
-2026-06-11 10:48:41 BST showed official `783104` and BGR `783105` completed
+2026-06-11 10:56:51 BST showed official `783104` and BGR `783105` completed
 with exit `0:0`, while matched random `783106` was still running after its
 delayed start. The incomplete summary has BGR 293/400 and official 295/400,
 so BGR already trails official on the fixed 400-episode readout; matched
-random was 76/128. This scout is closed as non-promotable against official
+random was 77/137. This scout is closed as non-promotable against official
 even before the matched-random row completes and is not a basis for another
 fixed route. This is only a severity-window
 diagnostic for whether a future preregistered router-style gate is worth

@@ -218,6 +218,18 @@ Internal pre-existing-dataset route scout:
   0.0018; credit-g BGR is 0.7022 vs. uniform 0.6670 and fixed 0.6842, clearing
   uniform by +0.0352 but fixed by only +0.0180. Treat it as supervised
   near-miss/fragility evidence only.
+- New Gymnasium Box2D BipedalWalker-v3 pre-method route, opened 2026-06-11:
+  Athena calibration job `783139` completed with exit `0:0` and synced to
+  `results/bipedalwalker_recovery_calibration_12seed_v1_783139/`. The fixed
+  12-seed readout is usable: clean success 1.0000, recovery range
+  0.0000--1.0000, mean RAUC 0.7024, and median r80 0.7000 under exact Box2D
+  body-state restoration, Gymnasium's package `BipedalWalkerHeuristics`, and
+  an 80-step no-fall/progress recovery target. This is calibration only, not
+  BGR evidence. The fixed all-method screen is running as Athena job `783140`
+  via `scripts/queue_bipedalwalker_probe.sh`; sync with
+  `JOB_ID=783140 scripts/sync_bipedalwalker_probe.sh`. Do not scale or promote
+  unless default BGR or BGR-Coverage passes `tools/check_candidate_promotion.py`
+  against uniform, fixed, failure-only, TD-loss, and BGR-uniform-radius.
 - Completed all-binary numeric OpenML target-1.5 sweep, opened and completed
   2026-06-10: this is a fixed broad CPU check over the 32 numeric binary OpenML datasets currently
   registered in `tools/openml_margin_scout.py`, combining the default,
@@ -7555,11 +7567,11 @@ to
 and uses `PERTURBATIONS='occlusion={"fraction":0.75}'`, `EVAL_TASKS=10`,
 `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`. Submitted Athena jobs
 are official/BGR/matched-random `783104`/`783105`/`783106`. Latest poll/sync
-at 2026-06-11 10:48:41 BST showed official `783104` and BGR `783105`
+at 2026-06-11 10:56:51 BST showed official `783104` and BGR `783105`
 completed with exit `0:0`, while matched random `783106` was still running
 after its delayed start. The incomplete summary has BGR 293/400 and official
 295/400, so BGR already trails official on the fixed 400-episode readout;
-matched random was 76/128. This scout is closed as non-promotable against
+matched random was 77/137. This scout is closed as non-promotable against
 official even before the matched-random row completes. Treat it as a
 severity-window diagnostic only, not paper evidence and not a replacement for a
 fixed preregistered router-style gate.
