@@ -1417,6 +1417,19 @@ risk.
   0.80; recovery range is 0.0000--0.7417, RAUC is 0.0464, and r80 is 0.0500.
   Do not build a Swimmer method screen without a genuinely new preregistered
   controller or success definition.
+- New active independent pre-method calibration: Gymnasium MuJoCo
+  `HalfCheetah-v5` package-state recovery. This changes both environment and
+  recovery interface from the retired standard-control routes: it uses exact
+  MuJoCo `qpos`/`qvel` restoration, perturbs restored torso/joint position and
+  velocity state, and rolls out a fixed open-loop sinusoidal controller whose
+  phase is preserved from the checkpoint. Fixed defaults are seeds 0--11,
+  radii `0,0.25,0.5,0.8,1.1,1.5,2.0,2.5`, 10 trials per radius, burn-in 80,
+  horizon 80, `min_progress=1.0`, `position_scale=0.35`,
+  `velocity_scale=1.0`, controller amplitude 0.80, and controller period 30.
+  The gate is calibration-only: clean success >=0.80, recovery range >=0.20,
+  and non-saturated/non-floor `r80`. Passing this route would only permit a
+  fixed all-method comparison; it would not by itself solve the acceptance
+  blocker.
 - The next acceptance-moving empirical route must change the premise: either a
   genuinely different pre-existing benchmark package/reset interface, or a
   genuinely different learned-policy intervention that is preregistered before

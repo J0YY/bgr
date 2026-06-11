@@ -129,6 +129,22 @@ progress-after-perturbation success. Slurm job `784458` completed with exit
 because clean success is 0.7417, below the required 0.80, with recovery range
 0.0000--0.7417, RAUC 0.0464, and r80 0.0500. This is calibration-only negative
 scope evidence and does not permit a method screen.
+New active CPU calibration route: Gymnasium MuJoCo `HalfCheetah-v5`
+package-state recovery. This is a materially different package-owned MuJoCo
+locomotion interface from Swimmer and BipedalWalker, using exact
+`env.unwrapped.set_state` restoration of `qpos`/`qvel`, a fixed open-loop
+sinusoidal controller with preserved phase, and forward progress over an
+80-step recovery horizon after perturbing restored package state. A
+pre-artifact local smoke showed clean success 1.0000 and a non-flat curve under
+the fixed defaults, but it is not paper evidence and not a method result. The
+fixed 12-seed calibration route is now preregistered in
+`tools/halfcheetah_recovery_calibration.py`; queue with
+`OUT_PREFIX=halfcheetah_recovery_calibration_12seed_v1 scripts/queue_halfcheetah_calibration.sh`
+and sync with
+`JOB_ID=<job> OUT_PREFIX=halfcheetah_recovery_calibration_12seed_v1 scripts/sync_halfcheetah_calibration.sh`.
+Do not build or claim a HalfCheetah all-method screen unless the fixed
+calibration clears clean success >=0.80, recovery range >=0.20, and
+non-saturated/non-floor `r80`.
 A broader
 fixed OpenML numeric-suite
 target-2.0 run and held-out seeds 30--59 replication completed on `athena` as
@@ -3254,6 +3270,15 @@ Treat the following as the current paper-weakness backlog:
   `package_versions.json`, and `recovery_rows.csv`. Do not build a Swimmer
   all-method screen without a genuinely new preregistered controller or success
   definition.
+- Active CPU calibration route: Gymnasium MuJoCo `HalfCheetah-v5`
+  package-state recovery. The preregistered route uses package-owned MuJoCo
+  dynamics, exact `env.unwrapped.set_state` restoration of `qpos`/`qvel`, a
+  fixed phase-preserving sinusoidal controller, and forward progress over an
+  80-step horizon after perturbing restored package state. Queue with
+  `OUT_PREFIX=halfcheetah_recovery_calibration_12seed_v1 scripts/queue_halfcheetah_calibration.sh`.
+  This is calibration-only; do not build a method comparison unless the fixed
+  gate clears clean success >=0.80, recovery range >=0.20, and
+  non-saturated/non-floor `r80`.
 
 ## Required Checks
 

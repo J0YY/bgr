@@ -1633,6 +1633,33 @@ range 0.0000--0.7417, RAUC 0.0464, and r80 0.0500. Do not build a Swimmer
 method screen without a genuinely new preregistered controller or success
 definition.
 
+## Gymnasium MuJoCo HalfCheetah-v5 Calibration
+
+Preregistered as a new independent pre-method calibration route. This changes
+benchmark family and reset interface from the retired MiniGrid, tabular,
+Box2D, MinAtar, Swimmer, and OpenVLA routes. The route is calibration-only
+until its fixed gate passes.
+
+`tools/halfcheetah_recovery_calibration.py` uses Gymnasium's package-owned
+`HalfCheetah-v5` MuJoCo dynamics, exact `env.unwrapped.set_state` restoration
+of `qpos`/`qvel`, a fixed open-loop sinusoidal controller whose phase is
+preserved from the checkpoint, and forward progress over an 80-step recovery
+horizon after perturbing restored package state.
+
+Fixed queue command:
+
+```bash
+OUT_PREFIX=halfcheetah_recovery_calibration_12seed_v1 scripts/queue_halfcheetah_calibration.sh
+```
+
+Fixed defaults are seeds 0--11, radii
+`0,0.25,0.5,0.8,1.1,1.5,2.0,2.5`, 10 trials per radius, burn-in 80,
+`min_progress=1.0`, `position_scale=0.35`, `velocity_scale=1.0`, controller
+amplitude 0.80, and controller period 30. The calibration gate is clean
+success >=0.80, recovery range >=0.20, and non-saturated/non-floor `r80`.
+Passing this pre-method screen is not paper evidence; it only permits a fixed
+all-method HalfCheetah replay screen without retuning.
+
 ## Internal Package-Free CartPole Diagnostic
 
 `results/cartpole_recovery_probe_4seed_v1/summary.csv` is a 4-seed internal
