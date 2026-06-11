@@ -278,6 +278,12 @@ Internal pre-existing-dataset route scout:
   supervised pre-existing benchmark aggregation, not standard-control or
   learned-policy evidence. Reproduce with:
   PYTHONPATH=src:. python3 tools/analyze_openml_margin_suite.py --original results/openml_all_binary_numeric_target15_30seed_v1_780049/per_seed.csv --replication results/openml_all_binary_numeric_target15_replication_30seed_v1_780050/per_seed.csv.
+  A local 2026-06-11 aggregation of existing target-2.0 numeric OpenML chunks
+  across the external, broad, secondary, and diabetes runs is weaker than this
+  target-1.5 readout: 29-dataset pooled macro means are BGR 0.7772, uniform
+  0.7734, and fixed-radius 0.7723, with BGR ahead on 17/29 dataset means
+  versus uniform and 18/29 versus fixed. Do not queue a duplicate all-binary
+  target-2.0 run as a likely acceptance-moving route.
 
 Active OpenVLA hard-occlusion head-interpolation routes:
 
@@ -7605,7 +7611,7 @@ and uses
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Submitted Athena jobs are official `783312`, BGR `783314`, and matched random
-`783315`; latest poll/sync at 2026-06-11 12:28:53 BST showed all three still
+`783315`; latest poll/sync at 2026-06-11 12:33:02 BST showed all three still
 pending, with estimated starts of 2026-06-11 14:21:02 BST for official,
 2026-06-11 17:38:38 BST for BGR, and 2026-06-11 18:01:36 BST for matched
 random. The remote summary and log directory were still missing. This is only

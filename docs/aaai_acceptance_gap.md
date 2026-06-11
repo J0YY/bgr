@@ -260,7 +260,7 @@ with
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Athena jobs are official `783312`, BGR `783314`, and matched random `783315`;
-latest poll/sync at 2026-06-11 12:28:53 BST showed all pending, with
+latest poll/sync at 2026-06-11 12:33:02 BST showed all pending, with
 estimated starts of 2026-06-11 14:21:02 BST for official, 2026-06-11
 17:38:38 BST for BGR, and 2026-06-11 18:01:36 BST for matched random. The
 route-specific sync helper is
@@ -1438,6 +1438,13 @@ risk.
   useful pre-existing supervised benchmark evidence, but the effect is small
   and the suite still contains large negative rows, so do not use it as a
   learned-policy, robotics, or standard-control claim.
+- A local aggregation of existing target-2.0 numeric OpenML chunks on
+  2026-06-11 is not a stronger broad route: across the 29 datasets covered by
+  the external, broad, secondary, and diabetes target-2.0 runs, pooled macro
+  means are BGR 0.7772, uniform 0.7734, and fixed-radius 0.7723, with BGR ahead
+  on only 17/29 dataset means versus uniform and 18/29 versus fixed. Do not
+  queue a duplicate all-binary target-2.0 run as a path to the requested
+  standard-environment or learned-policy win.
 - The third all-binary numeric OpenML target-1.5 seed block first failed on
   2026-06-10 as monolithic Slurm job `781423`, using `SEED_START=60`,
   `SEEDS=30`, and the same 32 registered numeric binary datasets. It ran on

@@ -382,7 +382,7 @@ primary-image shift in sequence. The scout uses artifact
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, `SAVE_ROLLOUTS=0`, and
 the completed p2048 occlusion-bottleneck BGR/matched-random checkpoints.
 Submitted on Athena at 2026-06-11 11:56 BST: official `783312`, BGR `783314`,
-and matched random `783315`; latest poll/sync at 2026-06-11 12:28:53 BST
+and matched random `783315`; latest poll/sync at 2026-06-11 12:33:02 BST
 showed all three still pending, with estimated starts of 2026-06-11
 14:21:02 BST for official, 2026-06-11 17:38:38 BST for BGR, and 2026-06-11
 18:01:36 BST for matched random. The remote summary and log directory were
@@ -489,7 +489,14 @@ dataset-level promotion. Treat this as a small macro-positive supervised
 pre-existing benchmark aggregation, not a learned-policy or standard-control
 win. The deterministic readout is saved at
 `results/openml_all_binary_numeric_target15_analysis_780049_780050.txt`. A
-third independent seed block initially failed as monolithic Slurm job `781423`
+local 2026-06-11 aggregation of existing target-2.0 numeric OpenML chunks
+across the external, broad, secondary, and diabetes runs covers 29 datasets
+and is weaker than the target-1.5 all-binary readout: pooled macro BGR 0.7772
+vs. uniform 0.7734 and fixed 0.7723, with BGR ahead on 17/29 dataset means
+versus uniform and 18/29 versus fixed. Do not spend cluster time on a duplicate
+all-binary target-2.0 OpenML run as if it would solve the standard-environment
+or learned-policy blocker.
+A third independent seed block initially failed as monolithic Slurm job `781423`
 and several opaque signal-53 retries while `/work/joy` was full. The OpenML
 queue path now submits materialized remote `.sbatch` files and
 `tools/openml_margin_scout.py` has checkpoint/resume support. After deleting
