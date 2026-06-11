@@ -162,8 +162,16 @@ official identity/occlusion `782411`/`782412`, BGR identity/occlusion
 with `EXCLUDE=c2-g4-17,c2-g4-18,c2-g4-19,c2-g4-21,c2-g4-23`. Latest poll at
 2026-06-11 01:33:40 BST showed prep completed, identity jobs running, and
 occlusion jobs dependency-pending. The early partial summary had only identity
-rows over 8--14 episodes, all at 100%, so it is not gateable evidence. Poll
-with:
+rows over 8--14 episodes, all at 100%, so it is not gateable evidence. Latest
+poll/sync at 2026-06-11 01:48:36 BST still showed official/BGR/matched-random
+identity jobs `782411`/`782413`/`782415` running and occlusion jobs
+`782412`/`782414`/`782416` dependency-pending. The synced incomplete
+`summary_available.csv` has only identity rows: BGR 136/143, official
+141/147, and matched random 138/144. Direct log tails were slightly ahead of
+the compact parse at BGR 137/144, official 143/149, and matched random
+139/145. This is still incomplete non-evidence; BGR is currently one identity
+failure behind the best comparator, so the identity side-condition remains
+precarious but not mathematically closed. Poll with:
 `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_v1 JOB_IDS=782410,782411,782412,782413,782414,782415,782416 DETAIL_JOB_IDS=782410,782411,782412,782413,782414,782415,782416 ROUTE_LABEL='Hard-occlusion 0.80 alpha0 official-head/full-LoRA no-video OpenVLA-OFT repair' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
 Do not incorporate this route into `paper/main.tex` unless the full summary
 passes the unchanged fixed gate: BGR must beat both official and matched random

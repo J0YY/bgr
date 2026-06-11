@@ -145,7 +145,15 @@ official `782411`/`782412`, BGR `782413`/`782414`, and matched random
 Latest poll/sync at 2026-06-11 01:33:40 BST showed prep completed, official,
 BGR, and matched-random identity jobs running, and occlusion jobs still
 dependency-pending. The early partial summary had only identity rows over
-8--14 episodes, all at 100%, so this is not paper evidence. Poll with:
+8--14 episodes, all at 100%, so this is not paper evidence. Latest poll/sync
+at 2026-06-11 01:48:36 BST still showed identity jobs
+`782411`/`782413`/`782415` running and occlusion jobs `782412`/`782414`/`782416`
+dependency-pending. The synced incomplete summary has only identity rows:
+BGR 136/143, official 141/147, and matched random 138/144; direct live tails
+were slightly ahead at BGR 137/144, official 143/149, and matched random
+139/145. The route is not gateable yet, and BGR's identity side-condition is
+precarious because it currently has one more failure than the best comparator.
+Poll with:
 `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_v1 JOB_IDS=782410,782411,782412,782413,782414,782415,782416 DETAIL_JOB_IDS=782410,782411,782412,782413,782414,782415,782416 ROUTE_LABEL='Hard-occlusion 0.80 alpha0 official-head/full-LoRA no-video OpenVLA-OFT repair' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
 Do not incorporate this route unless the full summary passes the unchanged
 `+10/400`, `+0.02`, and identity-preservation gate. Both
