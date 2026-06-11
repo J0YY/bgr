@@ -31,6 +31,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | MiniGrid FourRooms official-package | bgr_coverage | 4 | +0.1075 (4/0/0) | +0.0464 (3/1/0) | +0.0071 (2/2/0) | final_median_r80 | +0.0000 (0/0/4) | 3/4 | fail | final_median_r80-ceiling-saturated |
 | MiniGrid FourRooms abs-r10 follow-up | bgr_coverage | 4 | +0.1075 (4/0/0) | +0.0464 (3/1/0) | +0.0071 (2/2/0) | final_abs_r10 | +0.0000 (0/0/4) | 3/4 | fail | final_abs_r10-floor-saturated |
 | Gymnasium Box2D LunarLander-v3 30-seed | bgr_coverage | 30 | +0.0187 (15/15/0) | +0.0136 (18/12/0) | +0.0161 (17/11/2) | final_median_r80 | -0.0213 (10/14/6) | 3/4 | fail | final_median_r80-contradiction |
+| Gymnasium Acrobot package-state | bgr_coverage | 4 | -0.0107 (1/3/0) | +0.0003 (2/2/0) | +0.0042 (2/2/0) | final_median_r80 | +0.0711 (3/0/1) | 3/4 | fail | uniform-gate |
 | Gymnasium Box2D LunarLander-v3 4-seed | bgr_coverage | 4 | +0.1278 (2/2/0) | +0.0125 (3/1/0) | +0.0340 (3/1/0) | final_median_r80 | -0.0625 (3/1/0) | 2/4 | fail | uniform-gate, final_median_r80-contradiction |
 | Gymnasium MuJoCo InvertedDoublePendulum-v5 | bgr | 4 | +0.0799 (1/0/3) | +0.0833 (1/0/3) | +0.0833 (1/0/3) | final_median_r80 | -0.1900 (0/1/3) | 2/4 | fail | uniform-gate, final_median_r80-contradiction |
 | MiniGrid FourRooms official-package | bgr | 4 | +0.0641 (3/1/0) | +0.0030 (3/1/0) | -0.0362 (1/3/0) | final_median_r80 | +0.0000 (0/0/4) | 2/4 | fail | state-priority-ablation, final_median_r80-ceiling-saturated |
@@ -40,6 +41,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | FrozenLake8x8 | bgr | 30 | +0.0140 (14/16/0) | -0.0032 (14/16/0) | n/a | final_median_r80 | -0.0125 (12/18/0) | 2/4 | fail | required-baseline, final_median_r80-contradiction |
 | MiniGrid FourRooms max-radius-10 follow-up | bgr_coverage | 4 | +0.0017 (2/2/0) | +0.0400 (4/0/0) | +0.0064 (3/1/0) | final_median_r80 | +0.0000 (0/0/4) | 2/4 | fail | uniform-gate, final_median_r80-ceiling-saturated |
 | bsuite Cartpole | bgr_coverage | 4 | -0.0018 (2/2/0) | -0.0135 (2/2/0) | +0.0008 (2/2/0) | final_median_r80 | +0.0042 (1/2/1) | 2/4 | fail | uniform-gate, required-baseline |
+| Gymnasium Acrobot package-state | bgr | 4 | -0.0117 (1/3/0) | -0.0007 (1/3/0) | +0.0033 (3/1/0) | final_median_r80 | +0.0100 (2/2/0) | 2/4 | fail | uniform-gate, required-baseline |
 | MiniGrid LavaGapS7 | bgr_coverage | 4 | -0.0184 (3/1/0) | +0.0183 (1/2/1) | -0.0350 (1/2/1) | final_abs_r10 | +0.0180 (1/1/2) | 2/4 | fail | uniform-gate, state-priority-ablation |
 | Gymnasium Taxi-v3 hard budget | bgr_coverage | 4 | -0.1900 (0/4/0) | -0.3997 (0/4/0) | +0.0351 (4/0/0) | final_median_r80 | +0.4097 (3/1/0) | 2/4 | fail | uniform-gate, required-baseline |
 | Gymnasium Taxi-v3 hard budget | bgr | 4 | -0.2080 (0/4/0) | -0.4176 (0/4/0) | +0.0171 (2/2/0) | final_median_r80 | +0.2780 (3/1/0) | 2/4 | fail | uniform-gate, required-baseline |

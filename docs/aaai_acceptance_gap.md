@@ -1091,34 +1091,18 @@ risk.
      split, below the pre-set 3/4 wins and +0.01 mean-delta gates. Keep Acrobot
      out of the paper unless a new fixed protocol creates a visible effect
      before method comparison.
-   - A new official Gymnasium Acrobot package-state scout is preregistered on
-     2026-06-11 as a different pre-existing reset interface, not a same-result
-     scale-up. `tools/acrobot_recovery_probe.py` now supports
-     `--dynamics-backend gymnasium`, which uses Gymnasium's package-owned
-     `Acrobot-v1` transitions and termination while preserving the fixed
-     near-swing-up replay states, adverse restart perturbations, value-table
-     initialization, and BGR/baseline selection logic. The fixed 4-seed scout
-     command is launched through `scripts/queue_acrobot_package_probe.sh` with
-     `ARTIFACT_PREFIX=acrobot_package_recovery_probe_4seed_v1`, seeds 0--3,
-     and methods
-     `uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr`.
-     The preregistered scout gate is the same standard-environment screen used
-     elsewhere: BGR or BGR-Coverage must beat uniform by at least +0.01 final
-     RAUC with at least 3/4 paired wins, beat fixed-radius, failure-only,
-     TD-loss, and BGR-uniform-radius on mean final RAUC, and avoid saturated or
-     contradictory median-r80. Passing the 4-seed scout is not paper evidence;
-     it only permits a fixed 30-seed follow-up with no protocol retuning.
-     Preregistration was committed in `305e961`. The first launch attempt using
-     a fresh `.venv-gymnasium-classic` failed before Slurm because Athena's
-     system Python lacks `ensurepip`; the submitted job reuses
-     `/work/joy/bgr/.venv-minigrid-dynamic`, which already has
-     `gymnasium==1.3.0` and `numpy==2.2.6`. Submitted at 2026-06-11 13:30 BST
-     as Slurm job `783971`, writing to
-     `/work/joy/bgr/runs/acrobot_package_recovery_probe_4seed_v1_783971` and
-     local sync path `results/acrobot_package_recovery_probe_4seed_v1_783971/`.
-     Initial scheduler state was `PENDING (Resources)` with estimated start
-     `2026-06-11T14:16:15` on `compute`. Poll/sync with
-     `JOB_ID=783971 ARTIFACT_PREFIX=acrobot_package_recovery_probe_4seed_v1 scripts/sync_acrobot_package_probe.sh`.
+   - The official Gymnasium Acrobot package-state scout is completed negative.
+     It was preregistered on 2026-06-11 as a different pre-existing reset
+     interface, using `--dynamics-backend gymnasium` to step Gymnasium's
+     package-owned `Acrobot-v1` transitions and termination after exact
+     `env.unwrapped.state` restoration. Slurm job `783971` completed with exit
+     `0:0` and synced to
+     `results/acrobot_package_recovery_probe_4seed_v1_783971/`. Mean final
+     RAUC is uniform 0.1501, BGR-Coverage 0.1393, default BGR 0.1383,
+     failure-only 0.1390, fixed 0.1276, TD-loss 0.1273, and
+     BGR-uniform-radius 0.1351. The preregistered gate rejects BGR-Coverage
+     and default BGR because both lose to uniform with W/L/T=1/3/0, so there is
+     no fixed 30-seed follow-up under this premise.
    - Pendulum-v1 recovery replay now has an internal diagnostic at
      `tools/pendulum_recovery_probe.py`. The pre-promotion protocol uses
      canonical Pendulum-v1 dynamics implemented locally, near-upright restart

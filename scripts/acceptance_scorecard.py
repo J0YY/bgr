@@ -474,6 +474,14 @@ BENCHMARK_SCREENS = [
         "final_median_r80",
     ),
     (
+        "Gymnasium Acrobot package-state",
+        "results/acrobot_package_recovery_probe_4seed_v1_783971/summary.csv",
+        ["bgr_coverage", "bgr"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
+    (
         "bsuite DeepSea",
         "results/bsuite_deepsea_recovery_probe_4seed_v1/summary.csv",
         ["bgr", "bgr_coverage"],

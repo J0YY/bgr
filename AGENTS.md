@@ -73,8 +73,18 @@ failure-only 0.2526, uniform 0.2314, BGR-Coverage 0.2303, and default BGR
 0.1868. `tools/check_candidate_promotion.py` rejects both default BGR and
 BGR-Coverage against uniform, fixed, failure-only, TD-loss, and
 BGR-uniform-radius. Do not scale or promote either BipedalWalker route without
-a genuinely new preregistered premise. A new
-Gymnasium Blackjack package-state recovery
+a genuinely new preregistered premise. The official Gymnasium Acrobot
+package-state scout is also closed negative. Slurm job `783971` completed with
+exit `0:0` and synced to
+`results/acrobot_package_recovery_probe_4seed_v1_783971/`, using Gymnasium
+`Acrobot-v1` package transitions after exact `env.unwrapped.state` restoration
+(`gymnasium==1.3.0`). Mean final RAUC is uniform 0.1501, BGR-Coverage 0.1393,
+default BGR 0.1383, failure-only 0.1390, fixed 0.1276, TD-loss 0.1273, and
+BGR-uniform-radius 0.1351. The promotion checker rejects BGR-Coverage with a
+-0.0107 mean RAUC gap and W/L/T=1/3/0 versus uniform, and rejects default BGR
+with a -0.0117 gap and W/L/T=1/3/0. Do not scale or promote Acrobot without a
+genuinely new fixed premise. A new Gymnasium
+Blackjack package-state recovery
 scout completed negative on `athena` as Slurm job `774192`; this was only a
 scout for a different independent reset interface, not paper evidence, and all
 nine perturbation/target-radius configs are rejected before promotion. A new
@@ -3204,30 +3214,18 @@ Treat the following as the current paper-weakness backlog:
   a preregistered result clears the evidence policy. Do not name exploratory
   Taxi, CliffWalking, MountainCar, CartPole, Acrobot, or Pendulum probes in the
   manuscript as evidence.
-- New preregistered CPU scout: official Gymnasium Acrobot package-state
-  recovery. This is a different pre-existing reset interface from the internal
-  Acrobot diagnostic because `tools/acrobot_recovery_probe.py` now supports
+- Completed preregistered CPU scout: official Gymnasium Acrobot package-state
+  recovery. This was a different pre-existing reset interface from the internal
+  Acrobot diagnostic because `tools/acrobot_recovery_probe.py` supports
   `--dynamics-backend gymnasium`, stepping Gymnasium's package-owned
-  `Acrobot-v1` after exact `env.unwrapped.state` restoration. Queue with
-  `scripts/queue_acrobot_package_probe.sh` using artifact prefix
-  `acrobot_package_recovery_probe_4seed_v1`, seeds 0--3, and methods
-  `uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr`.
-  Scout promotion requires BGR or BGR-Coverage to beat uniform by at least
-  +0.01 final RAUC with at least 3/4 paired wins, beat fixed-radius,
-  failure-only, TD-loss, and BGR-uniform-radius on mean final RAUC, and avoid
-  saturated or contradictory median-r80. Passing the 4-seed scout is not paper
-  evidence; it only permits a fixed 30-seed follow-up without retuning.
-  Preregistration was committed in `305e961`. The first launch attempt using a
-  fresh `.venv-gymnasium-classic` failed before Slurm because Athena's system
-  Python lacks `ensurepip`; the submitted job reuses
-  `/work/joy/bgr/.venv-minigrid-dynamic`, which already has
-  `gymnasium==1.3.0` and `numpy==2.2.6`. Submitted at 2026-06-11 13:30 BST as
-  Slurm job `783971`, writing to
-  `/work/joy/bgr/runs/acrobot_package_recovery_probe_4seed_v1_783971` and
-  local sync path `results/acrobot_package_recovery_probe_4seed_v1_783971/`.
-  Initial scheduler state was `PENDING (Resources)` with estimated start
-  `2026-06-11T14:16:15` on `compute`; poll/sync with
-  `JOB_ID=783971 ARTIFACT_PREFIX=acrobot_package_recovery_probe_4seed_v1 scripts/sync_acrobot_package_probe.sh`.
+  `Acrobot-v1` after exact `env.unwrapped.state` restoration. Slurm job
+  `783971` completed with exit `0:0`; compact artifacts are synced at
+  `results/acrobot_package_recovery_probe_4seed_v1_783971/summary.csv` and
+  `results/acrobot_package_recovery_probe_4seed_v1_783971/package_versions.json`.
+  The result is negative: BGR-Coverage is 0.1393 final RAUC and default BGR is
+  0.1383 versus uniform 0.1501, with W/L/T=1/3/0 for both treatment variants
+  against uniform. Keep it out of the paper and do not run a 30-seed Acrobot
+  follow-up without a genuinely new preregistered premise.
 
 ## Required Checks
 

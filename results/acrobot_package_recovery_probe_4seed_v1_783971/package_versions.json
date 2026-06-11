@@ -1,0 +1,4 @@
+{
+  "env_id": "Acrobot-v1",
+  "gymnasium": "1.3.0"
+}

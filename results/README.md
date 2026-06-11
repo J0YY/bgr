@@ -1566,30 +1566,32 @@ produces a visible boundary-radius effect.
 ## Official Gymnasium Acrobot Package-State Scout
 
 Preregistered on 2026-06-11 as a different pre-existing reset interface:
-`tools/acrobot_recovery_probe.py` now supports `--dynamics-backend gymnasium`,
+`tools/acrobot_recovery_probe.py` supports `--dynamics-backend gymnasium`,
 which steps Gymnasium's package-owned `Acrobot-v1` transition and termination
 logic after exact `env.unwrapped.state` restoration. This preserves the fixed
 near-swing-up replay states, adverse perturbations toward the hanging state,
 value-table initialization, and existing BGR/baseline selection logic from the
-internal Acrobot diagnostic. The fixed 4-seed scout is queued with
+internal Acrobot diagnostic. The fixed 4-seed scout was launched with
 `scripts/queue_acrobot_package_probe.sh`, artifact prefix
 `acrobot_package_recovery_probe_4seed_v1`, seeds 0--3, and methods
 `uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr`.
-The scout gate is: BGR or BGR-Coverage must beat uniform by at least +0.01
-final RAUC with at least 3/4 paired wins, beat fixed-radius, failure-only,
-TD-loss, and BGR-uniform-radius on mean final RAUC, and avoid saturated or
-contradictory median-r80. Passing this 4-seed scout is not paper evidence; it
-only permits a fixed 30-seed follow-up without protocol retuning.
 Preregistration was committed in `305e961`. The first launch attempt using a
 fresh `.venv-gymnasium-classic` failed before Slurm because Athena's system
 Python lacks `ensurepip`; the submitted job reuses
 `/work/joy/bgr/.venv-minigrid-dynamic`, which already has `gymnasium==1.3.0`
-and `numpy==2.2.6`. Submitted at 2026-06-11 13:30 BST as Slurm job `783971`,
-writing to `/work/joy/bgr/runs/acrobot_package_recovery_probe_4seed_v1_783971`
-and local sync path `results/acrobot_package_recovery_probe_4seed_v1_783971/`.
-Initial scheduler state was `PENDING (Resources)` with estimated start
-`2026-06-11T14:16:15` on `compute`. Poll/sync with
-`JOB_ID=783971 ARTIFACT_PREFIX=acrobot_package_recovery_probe_4seed_v1 scripts/sync_acrobot_package_probe.sh`.
+available.
+
+Slurm job `783971` completed with exit `0:0` and synced compact artifacts to
+`results/acrobot_package_recovery_probe_4seed_v1_783971/summary.csv` and
+`results/acrobot_package_recovery_probe_4seed_v1_783971/package_versions.json`.
+The compact package metadata records `gymnasium==1.3.0`.
+This route is closed negative. Mean final RAUC is uniform 0.1501,
+BGR-Coverage 0.1393, default BGR 0.1383, failure-only 0.1390, fixed 0.1276,
+TD-loss 0.1273, and BGR-uniform-radius 0.1351. The preregistered scout gate
+rejects BGR-Coverage because it loses to uniform by -0.0107 final RAUC with
+W/L/T=1/3/0, and rejects default BGR because it loses to uniform by -0.0117
+with W/L/T=1/3/0. Do not promote this route or run a same-premise 30-seed
+follow-up.
 
 ## Internal Package-Free CartPole Diagnostic
 

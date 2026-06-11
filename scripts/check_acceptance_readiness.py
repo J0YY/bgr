@@ -992,6 +992,41 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"best-r80 {best_lunar_r80:.4f} vs uniform {lunar_uniform_r80:.4f}, W/L/T={best_lunar_wins}"
             )
 
+    acrobot_package_path = root / "results/acrobot_package_recovery_probe_4seed_v1_783971/summary.csv"
+    if acrobot_package_path.exists():
+        acrobot = read_rows(acrobot_package_path)
+        acrobot_bgr = mean_metric(acrobot, "bgr", "final_rauc")
+        acrobot_coverage = mean_metric(acrobot, "bgr_coverage", "final_rauc")
+        acrobot_uniform = mean_metric(acrobot, "uniform", "final_rauc")
+        acrobot_failure = mean_metric(acrobot, "failure_only", "final_rauc")
+        acrobot_fixed = mean_metric(acrobot, "fixed", "final_rauc")
+        acrobot_td = mean_metric(acrobot, "td_loss", "final_rauc")
+        acrobot_ablation = mean_metric(acrobot, "bgr_uniform_radius", "final_rauc")
+        acrobot_bgr_r80 = mean_metric(acrobot, "bgr", "final_median_r80")
+        acrobot_coverage_r80 = mean_metric(acrobot, "bgr_coverage", "final_median_r80")
+        acrobot_uniform_r80 = mean_metric(acrobot, "uniform", "final_median_r80")
+        acrobot_bgr_wins = paired_wins(acrobot, "bgr", "uniform", "final_rauc")
+        acrobot_coverage_wins = paired_wins(acrobot, "bgr_coverage", "uniform", "final_rauc")
+        best_acrobot = acrobot_bgr if acrobot_bgr >= acrobot_coverage else acrobot_coverage
+        best_acrobot_r80 = acrobot_bgr_r80 if acrobot_bgr >= acrobot_coverage else acrobot_coverage_r80
+        best_acrobot_wins = acrobot_bgr_wins if acrobot_bgr >= acrobot_coverage else acrobot_coverage_wins
+        if not (
+            best_acrobot - acrobot_uniform >= 0.01
+            and best_acrobot > max(acrobot_failure, acrobot_fixed, acrobot_td, acrobot_ablation)
+            and best_acrobot_wins[0] >= 3
+            and best_acrobot_r80 >= acrobot_uniform_r80
+            and not (best_acrobot_r80 >= 0.99 and acrobot_uniform_r80 >= 0.99)
+            and not (best_acrobot_r80 <= 0.01 and acrobot_uniform_r80 <= 0.01)
+        ):
+            failures.append(
+                f"Acrobot package-state negative: BGR {acrobot_bgr:.4f}, "
+                f"BGR-Coverage {acrobot_coverage:.4f}, uniform {acrobot_uniform:.4f}, "
+                f"failure-only {acrobot_failure:.4f}, fixed {acrobot_fixed:.4f}, "
+                f"TD-loss {acrobot_td:.4f}, uniform-radius {acrobot_ablation:.4f}, "
+                f"best-r80 {best_acrobot_r80:.4f} vs uniform {acrobot_uniform_r80:.4f}, "
+                f"W/L/T={best_acrobot_wins}"
+            )
+
     dynamic_path = root / "results/minigrid_dynamic_obstacles_recovery_probe_4seed_v1_779232/summary.csv"
     if dynamic_path.exists():
         dynamic = read_rows(dynamic_path)
