@@ -159,6 +159,18 @@ viability checks after the calibration produced zero clean recovery even with
 heavy pretraining, so that learner is invalid before method comparison. The
 route remains open only if a better preregistered learner/controller first
 shows nonzero clean recovery under the calibrated reset interface.
+New active CPU calibration route: Gymnasium Box2D `LunarLanderContinuous-v3`.
+This is distinct from the completed discrete-action LunarLander screen because
+it uses the package continuous action interface, Gymnasium's continuous
+heuristic controller, exact Box2D body-state restoration, and a wider fixed
+perturbation grid. A corrected pre-artifact local smoke with
+`--continuous` cleared the pre-method shape at radii
+`0,0.5,1.0,1.5,2.0,2.5,3.0`: clean success 1.0000, recovery range
+0.0000--1.0000, RAUC 0.5139, and r80 1.0500. The fixed 12-seed calibration is
+preregistered via
+`OUT_PREFIX=lunarlander_continuous_recovery_calibration_12seed_v1 scripts/queue_lunarlander_continuous_calibration.sh`.
+Do not build a method comparison unless that fixed calibration clears the same
+clean/non-flat/non-saturated gate.
 A broader
 fixed OpenML numeric-suite
 target-2.0 run and held-out seeds 30--59 replication completed on `athena` as

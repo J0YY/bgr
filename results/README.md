@@ -1679,6 +1679,29 @@ recovery even with heavy pretraining. Do not queue that learner; any
 HalfCheetah method comparison needs a better preregistered learner/controller
 and a local clean-recovery viability smoke first.
 
+## Gymnasium Box2D LunarLanderContinuous-v3 Calibration
+
+Preregistered as a new independent pre-method calibration route. This changes
+the action interface from the completed discrete `LunarLander-v3` route by
+using Gymnasium's package `LunarLanderContinuous-v3` environment with
+`--continuous`, the package continuous heuristic controller, exact Box2D
+body-state restoration, and a wider fixed perturbation grid.
+
+Fixed queue command:
+
+```bash
+OUT_PREFIX=lunarlander_continuous_recovery_calibration_12seed_v1 scripts/queue_lunarlander_continuous_calibration.sh
+```
+
+Fixed defaults are seeds 0--11, radii
+`0,0.5,1.0,1.5,2.0,2.5,3.0`, 3 trials per radius, burn-in 80, horizon 500,
+and alpha 0.80. The calibration gate is clean success >=0.80, recovery range
+>=0.20, and non-saturated `r80`. A corrected pre-artifact local smoke with the
+true continuous action interface gives clean success 1.0000, recovery range
+0.0000--1.0000, RAUC 0.5139, and r80 1.0500. Passing the fixed calibration is
+not paper evidence; it only permits a fixed all-method continuous-action
+LunarLander replay screen without retuning.
+
 ## Internal Package-Free CartPole Diagnostic
 
 `results/cartpole_recovery_probe_4seed_v1/summary.csv` is a 4-seed internal

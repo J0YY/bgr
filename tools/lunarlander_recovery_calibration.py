@@ -43,7 +43,7 @@ def parse_radii(value: str) -> np.ndarray:
     return radii
 
 
-def package_versions() -> dict[str, str]:
+def package_versions(env_id: str = "LunarLander-v3", *, continuous: bool = False) -> dict[str, str | bool]:
     try:
         import gymnasium
     except ImportError as exc:
@@ -56,6 +56,8 @@ def package_versions() -> dict[str, str]:
     except PackageNotFoundError:
         pygame_version = version("pygame")
     return {
+        "env_id": env_id,
+        "continuous": bool(continuous),
         "gymnasium": gymnasium.__version__,
         "gymnasium-package": version("gymnasium"),
         "box2d": version("box2d"),
@@ -280,7 +282,7 @@ def calibrate(args: argparse.Namespace) -> tuple[list[CalibrationRow], dict[str,
         ) from exc
 
     radii = parse_radii(args.radii)
-    env = gym.make(args.env_id, continuous=False, enable_wind=False)
+    env = gym.make(args.env_id, continuous=bool(args.continuous), enable_wind=False)
     rows: list[CalibrationRow] = []
     try:
         for seed_idx in range(args.seeds):
@@ -314,10 +316,17 @@ def calibrate(args: argparse.Namespace) -> tuple[list[CalibrationRow], dict[str,
     return rows, summary
 
 
-def write_outputs(out_dir: Path, rows: list[CalibrationRow], summary: dict[str, float | int | str | list[float]]) -> None:
+def write_outputs(
+    out_dir: Path,
+    rows: list[CalibrationRow],
+    summary: dict[str, float | int | str | bool | list[float]],
+    *,
+    env_id: str,
+    continuous: bool,
+) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     with (out_dir / "package_versions.json").open("w", encoding="utf-8") as handle:
-        json.dump(package_versions(), handle, indent=2, sort_keys=True)
+        json.dump(package_versions(env_id, continuous=continuous), handle, indent=2, sort_keys=True)
         handle.write("\n")
     with (out_dir / "summary.json").open("w", encoding="utf-8") as handle:
         json.dump(summary, handle, indent=2, sort_keys=True)
@@ -333,6 +342,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--env-id", default="LunarLander-v3")
+    parser.add_argument("--continuous", action="store_true")
     parser.add_argument("--seeds", type=int, default=12)
     parser.add_argument("--trials", type=int, default=3)
     parser.add_argument("--seed-offset", type=int, default=0)
@@ -343,7 +353,7 @@ def main() -> int:
     args = parser.parse_args()
 
     rows, summary = calibrate(args)
-    write_outputs(args.out, rows, summary)
+    write_outputs(args.out, rows, summary, env_id=args.env_id, continuous=bool(args.continuous))
     print(
         "LunarLander calibration: "
         f"clean={summary['clean_success']:.4f} "

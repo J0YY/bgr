@@ -1440,6 +1440,15 @@ risk.
   queue that learner. A future HalfCheetah comparison needs a better
   preregistered learner/controller and a local clean-recovery viability smoke
   before Slurm.
+- New active independent pre-method calibration: Gymnasium Box2D
+  `LunarLanderContinuous-v3`. This is a materially different action interface
+  from the completed discrete `LunarLander-v3` screen. The route uses
+  Gymnasium's continuous package heuristic, exact Box2D body-state restoration,
+  and a fixed wide perturbation grid
+  `0,0.5,1.0,1.5,2.0,2.5,3.0`. A corrected pre-artifact local smoke with
+  `--continuous` gives clean success 1.0000, recovery range 0.0000--1.0000,
+  RAUC 0.5139, and r80 1.0500. Queue only the fixed 12-seed calibration first;
+  passing it would permit, but not itself justify, a fixed all-method screen.
 - The next acceptance-moving empirical route must change the premise: either a
   genuinely different pre-existing benchmark package/reset interface, or a
   genuinely different learned-policy intervention that is preregistered before
