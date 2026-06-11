@@ -7605,11 +7605,19 @@ and uses
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Submitted Athena jobs are official `783312`, BGR `783314`, and matched random
-`783315`; latest poll at 2026-06-11 11:57 BST showed all three pending, with
-estimated starts of 2026-06-11 14:21:02 BST for official and 2026-06-11
-17:11:30 BST for BGR/random. This is only a 100-episode route-selection scout.
-Do not treat it as paper evidence unless it justifies and then passes a fixed 400-episode
+`783315`; latest poll at 2026-06-11 12:02:50 BST showed all three pending,
+with estimated starts of 2026-06-11 14:21:02 BST for official, 2026-06-11
+17:11:30 BST for BGR, and 2026-06-11 17:38:38 BST for matched random. This is
+only a 100-episode route-selection scout. Do not treat it as paper evidence
+unless it justifies and then passes a fixed 400-episode
 identity-plus-combined-perturbation gate.
+
+A pre-artifact CarRacing-v3 controller smoke was rejected on 2026-06-11 before
+creating repo files or cluster jobs. Gymnasium `CarRacing-v3` is available in
+`/tmp/bgr_lunar_venv`, but a simple track-following controller visited only
+about 1.5% of track tiles from clean starts, and a small steering-sign/gain/
+lookahead sweep produced no setting above 5%. Do not open this route without a
+materially better controller or policy that first clears clean progress.
 
 New 2026-06-11 independent-benchmark MiniGrid scouts:
 

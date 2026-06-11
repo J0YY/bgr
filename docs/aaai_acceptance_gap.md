@@ -253,12 +253,18 @@ with
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Athena jobs are official `783312`, BGR `783314`, and matched random `783315`;
-latest poll at 2026-06-11 11:57 BST showed all pending, with estimated starts
-of 2026-06-11 14:21:02 BST for official and 2026-06-11 17:11:30 BST for
-BGR/random. Treat this as a
+latest poll at 2026-06-11 12:02:50 BST showed all pending, with estimated
+starts of 2026-06-11 14:21:02 BST for official, 2026-06-11 17:11:30 BST for
+BGR, and 2026-06-11 17:38:38 BST for matched random. Treat this as a
 100-episode route-selection scout only. It should be promoted to a fixed
 identity-plus-combined-perturbation gate only if BGR clearly beats both
 comparators in the scout.
+A pre-artifact CarRacing-v3 controller smoke was also rejected on 2026-06-11:
+the available `/tmp/bgr_lunar_venv` Gymnasium Box2D install can instantiate
+`CarRacing-v3`, but a simple track-following controller visited only about
+1.5% of track tiles from clean starts, and a small steering-sign/gain/lookahead
+sweep produced no setting above 5%. Do not create a CarRacing recovery route
+without first finding a materially better controller or policy.
 Three low-cost independent-benchmark CPU scouts were queued at 2026-06-11
 10:45 BST and completed negative by 10:49 BST using the existing official
 MiniGrid package-state recovery harness and new reusable wrappers
