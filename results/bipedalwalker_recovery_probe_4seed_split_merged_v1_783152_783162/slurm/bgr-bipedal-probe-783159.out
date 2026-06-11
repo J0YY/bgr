@@ -1,0 +1,8 @@
+[start] 2026-06-11T11:12:38+01:00 host=cnode303 job=783159
+[done] method=td_loss seed=0 rauc=0.3244 clean=0.3333 r80=1.4000 elapsed=111.09s
+[done] method=td_loss seed=1 rauc=0.3646 clean=0.3333 r80=1.4000 elapsed=106.45s
+[done] method=td_loss seed=2 rauc=0.1741 clean=0.0833 r80=1.4000 elapsed=111.32s
+[done] method=td_loss seed=3 rauc=0.5625 clean=0.5000 r80=0.8400 elapsed=116.64s
+method,final_clean_mean,final_rauc_mean,final_median_r80_mean,rauc_aulc_mean,best_rauc_mean
+td_loss,0.3125,0.3564,1.2600,0.2760,0.4639
+[done] 2026-06-11T11:20:06+01:00 job=783159

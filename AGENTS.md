@@ -45,11 +45,32 @@ pre-method calibration but not method promotion. Athena calibration job
 1.0000, recovery range 0.0000--1.0000, mean RAUC 0.7024, and median r80
 0.7000 under exact Box2D body-state restoration, Gymnasium's package
 `BipedalWalkerHeuristics`, and an 80-step no-fall/progress recovery target.
-The fixed all-method BipedalWalker screen is running as Athena job `783140`;
-sync with `JOB_ID=783140 scripts/sync_bipedalwalker_probe.sh`. This is not
-paper evidence unless default BGR or BGR-Coverage clears
-`tools/check_candidate_promotion.py` against uniform, fixed, failure-only,
-TD-loss, and BGR-uniform-radius. A new
+The fixed all-method BipedalWalker screen was accelerated into per-method
+split jobs `783152`/`783153`/`783158`/`783159`/`783160`/`783161`/`783162`
+after canceling the slower serial job `783140`, and it is completed negative.
+The merged summary is
+`results/bipedalwalker_recovery_probe_4seed_split_merged_v1_783152_783162/summary.csv`.
+Mean final RAUC is fixed 0.4312, default BGR 0.3743, failure-only 0.3601,
+TD-loss 0.3564, uniform 0.3519, BGR-uniform-radius 0.2976, and BGR-Coverage
+0.2716. `tools/check_candidate_promotion.py` rejects default BGR because it
+has only 2/4 wins versus uniform, loses to fixed-radius, and has a
+median-r80 contradiction; it rejects BGR-Coverage versus every required
+baseline and the uniform-radius ablation. Treat this route as negative scope
+evidence, not a paper result.
+`BipedalWalkerHardcore-v3` with the same fixed pre-method premise is also
+closed negative. Athena calibration job `783167` completed with exit `0:0`,
+synced to
+`results/bipedalwalker_hardcore_recovery_calibration_12seed_v1_783167/`, and
+was usable: clean success 0.9167, recovery range 0.0000--1.0000, mean RAUC
+0.7560, and median r80 1.0000. The fixed all-method split jobs
+`783168`--`783174` completed and were merged at
+`results/bipedalwalker_hardcore_recovery_probe_4seed_split_merged_v1_783168_783174/summary.csv`.
+Mean final RAUC is fixed 0.4405, BGR-uniform-radius 0.4319, TD-loss 0.2604,
+failure-only 0.2526, uniform 0.2314, BGR-Coverage 0.2303, and default BGR
+0.1868. `tools/check_candidate_promotion.py` rejects both default BGR and
+BGR-Coverage against uniform, fixed, failure-only, TD-loss, and
+BGR-uniform-radius. Do not scale or promote either BipedalWalker route without
+a genuinely new preregistered premise. A new
 Gymnasium Blackjack package-state recovery
 scout completed negative on `athena` as Slurm job `774192`; this was only a
 scout for a different independent reset interface, not paper evidence, and all
@@ -335,11 +356,11 @@ partial looked weak: an occlusion-fraction 0.75 scout of the original
 occlusion-bottleneck transfer checkpoints, with no rollout videos and a fresh
 artifact `openvla_oft_perturb_eval_occlusion_bottleneck_transfer_occ075_scout_v1`.
 Submitted jobs are official/BGR/matched-random `783104`/`783105`/`783106`.
-Latest poll/sync at 2026-06-11 10:56:51 BST showed official `783104` and BGR
+Latest poll/sync at 2026-06-11 11:11:52 BST showed official `783104` and BGR
 `783105` completed with exit `0:0`, while matched random `783106` was still
 running after its delayed start. The incomplete summary has BGR 293/400 and
 official 295/400, so BGR already trails official on the fixed 400-episode
-readout; matched random was 77/137. This scout is now closed as
+readout; matched random was 119/203. This scout is now closed as
 non-promotable against official even before the matched-random row completes,
 and it is not a basis for another fixed route. This is a
 severity-window scout only, not a paper claim and not a replacement for the

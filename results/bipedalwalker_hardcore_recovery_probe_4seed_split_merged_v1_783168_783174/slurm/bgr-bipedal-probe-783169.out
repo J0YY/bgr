@@ -1,0 +1,8 @@
+[start] 2026-06-11T11:26:30+01:00 host=cnode301 job=783169
+[done] method=fixed seed=0 rauc=0.3274 clean=0.0833 r80=1.4000 elapsed=107.39s
+[done] method=fixed seed=1 rauc=0.6488 clean=0.6667 r80=0.9900 elapsed=110.22s
+[done] method=fixed seed=2 rauc=0.4509 clean=0.4167 r80=1.4000 elapsed=106.87s
+[done] method=fixed seed=3 rauc=0.3348 clean=0.4167 r80=1.4000 elapsed=107.87s
+method,final_clean_mean,final_rauc_mean,final_median_r80_mean,rauc_aulc_mean,best_rauc_mean
+fixed,0.3958,0.4405,1.2975,0.2572,0.4494
+[done] 2026-06-11T11:33:45+01:00 job=783169

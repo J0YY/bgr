@@ -225,11 +225,29 @@ Internal pre-existing-dataset route scout:
   0.0000--1.0000, mean RAUC 0.7024, and median r80 0.7000 under exact Box2D
   body-state restoration, Gymnasium's package `BipedalWalkerHeuristics`, and
   an 80-step no-fall/progress recovery target. This is calibration only, not
-  BGR evidence. The fixed all-method screen is running as Athena job `783140`
-  via `scripts/queue_bipedalwalker_probe.sh`; sync with
-  `JOB_ID=783140 scripts/sync_bipedalwalker_probe.sh`. Do not scale or promote
-  unless default BGR or BGR-Coverage passes `tools/check_candidate_promotion.py`
-  against uniform, fixed, failure-only, TD-loss, and BGR-uniform-radius.
+  BGR evidence. The fixed all-method screen was accelerated into per-method
+  split jobs `783152`/`783153`/`783158`/`783159`/`783160`/`783161`/`783162`
+  after canceling the slower serial job `783140`. It is completed negative.
+  The merged summary is
+  `results/bipedalwalker_recovery_probe_4seed_split_merged_v1_783152_783162/summary.csv`:
+  fixed 0.4312, default BGR 0.3743, failure-only 0.3601, TD-loss 0.3564,
+  uniform 0.3519, BGR-uniform-radius 0.2976, and BGR-Coverage 0.2716 mean
+  final RAUC. The candidate checker rejects default BGR because it has only
+  2/4 wins versus uniform, loses to fixed-radius, and has a median-r80
+  contradiction; it rejects BGR-Coverage versus all required baselines and the
+  uniform-radius ablation.
+  `BipedalWalkerHardcore-v3` cleared the same pre-method calibration on Athena
+  as job `783167`, synced to
+  `results/bipedalwalker_hardcore_recovery_calibration_12seed_v1_783167/`:
+  clean success 0.9167, recovery range 0.0000--1.0000, mean RAUC 0.7560, and
+  median r80 1.0000. Its fixed all-method split jobs `783168`--`783174` are
+  also completed negative. The merged summary is
+  `results/bipedalwalker_hardcore_recovery_probe_4seed_split_merged_v1_783168_783174/summary.csv`:
+  fixed 0.4405, BGR-uniform-radius 0.4319, TD-loss 0.2604, failure-only
+  0.2526, uniform 0.2314, BGR-Coverage 0.2303, and default BGR 0.1868 mean
+  final RAUC. The candidate checker rejects both BGR variants against uniform,
+  fixed, failure-only, TD-loss, and the uniform-radius ablation. Do not scale
+  either BipedalWalker route without a genuinely new preregistered premise.
 - Completed all-binary numeric OpenML target-1.5 sweep, opened and completed
   2026-06-10: this is a fixed broad CPU check over the 32 numeric binary OpenML datasets currently
   registered in `tools/openml_margin_scout.py`, combining the default,
@@ -7567,11 +7585,11 @@ to
 and uses `PERTURBATIONS='occlusion={"fraction":0.75}'`, `EVAL_TASKS=10`,
 `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`. Submitted Athena jobs
 are official/BGR/matched-random `783104`/`783105`/`783106`. Latest poll/sync
-at 2026-06-11 10:56:51 BST showed official `783104` and BGR `783105`
+at 2026-06-11 11:11:52 BST showed official `783104` and BGR `783105`
 completed with exit `0:0`, while matched random `783106` was still running
 after its delayed start. The incomplete summary has BGR 293/400 and official
 295/400, so BGR already trails official on the fixed 400-episode readout;
-matched random was 77/137. This scout is closed as non-promotable against
+matched random was 119/203. This scout is closed as non-promotable against
 official even before the matched-random row completes. Treat it as a
 severity-window diagnostic only, not paper evidence and not a replacement for a
 fixed preregistered router-style gate.

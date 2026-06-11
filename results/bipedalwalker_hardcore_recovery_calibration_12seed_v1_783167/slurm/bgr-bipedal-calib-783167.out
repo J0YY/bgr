@@ -1,0 +1,23 @@
+[start] 2026-06-11T11:25:41+01:00 host=cnode301 job=783167
+{
+  "burn_in": 80,
+  "clean_success": 0.9166666666666666,
+  "decision": "usable-calibration",
+  "env_id": "BipedalWalkerHardcore-v3",
+  "horizon": 80,
+  "mean_rauc": 0.755952380952381,
+  "median_r80": 1.0,
+  "radii": [
+    0.0,
+    0.2,
+    0.4,
+    0.7,
+    1.0,
+    1.4
+  ],
+  "recovery_max": 1.0,
+  "recovery_min": 0.0,
+  "seeds": 12,
+  "trials": 2
+}
+[done] 2026-06-11T11:25:50+01:00 job=783167

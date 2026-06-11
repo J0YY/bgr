@@ -93,12 +93,26 @@ completed with exit `0:0` and synced to
 0.0000--1.0000, mean RAUC 0.7024, and median r80 0.7000 using exact Box2D
 body-state restoration after an 80-step package-heuristic burn-in, Gymnasium's
 `BipedalWalkerHeuristics`, and an 80-step no-fall/progress recovery target.
-This only permits the fixed all-method screen. Athena job `783140` is running
-that 4-seed all-baseline screen via `tools/bipedalwalker_recovery_probe.py`;
-sync with `JOB_ID=783140 scripts/sync_bipedalwalker_probe.sh`. Do not scale or
-promote it unless default BGR or BGR-Coverage clears the existing
-candidate-promotion checks against uniform, fixed-radius, failure-only,
-TD-loss, and BGR-uniform-radius.
+This only permitted the fixed all-method screen. The plain BipedalWalker-v3
+screen is completed negative after split jobs
+`783152`/`783153`/`783158`/`783159`/`783160`/`783161`/`783162`. The merged
+summary is
+`results/bipedalwalker_recovery_probe_4seed_split_merged_v1_783152_783162/summary.csv`.
+Default BGR reaches 0.3743 RAUC versus uniform 0.3519 but has only 2/4 paired
+wins, loses to fixed-radius 0.4312, and has a median-r80 contradiction.
+BGR-Coverage is 0.2716 and loses to uniform, fixed, failure-only, TD-loss, and
+BGR-uniform-radius. Treat the route as negative scope evidence, not a standard
+benchmark win. A harder same-package follow-up was run only because
+`BipedalWalkerHardcore-v3` also cleared pre-method calibration: Athena job
+`783167` reports clean success 0.9167, recovery range 0.0000--1.0000, mean
+RAUC 0.7560, and median r80 1.0000. The fixed all-method split jobs
+`783168`--`783174` are also completed negative. The merged hardcore summary is
+`results/bipedalwalker_hardcore_recovery_probe_4seed_split_merged_v1_783168_783174/summary.csv`:
+fixed 0.4405, BGR-uniform-radius 0.4319, TD-loss 0.2604, failure-only 0.2526,
+uniform 0.2314, BGR-Coverage 0.2303, and default BGR 0.1868 mean final RAUC.
+The candidate checker rejects both BGR variants against uniform, fixed,
+failure-only, TD-loss, and the uniform-radius ablation. Do not scale either
+BipedalWalker route without a genuinely new preregistered premise.
 The latest OpenVLA/LIBERO occlusion-bottleneck route is completed negative:
 BGR reaches 365/400 non-identity successes versus official 367/400 and matched
 random 369/400, with identity rows BGR 99/100, official 99/100, and random
@@ -218,11 +232,11 @@ looked weak. It uses a fresh artifact
 `PERTURBATIONS='occlusion={"fraction":0.75}'`, `EVAL_TASKS=10`,
 `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`; submitted jobs are
 official/BGR/matched-random `783104`/`783105`/`783106`. Latest poll/sync at
-2026-06-11 10:56:51 BST showed official `783104` and BGR `783105` completed
+2026-06-11 11:11:52 BST showed official `783104` and BGR `783105` completed
 with exit `0:0`, while matched random `783106` was still running after its
 delayed start. The incomplete summary has BGR 293/400 and official 295/400,
 so BGR already trails official on the fixed 400-episode readout; matched
-random was 77/137. This scout is closed as non-promotable against official
+random was 119/203. This scout is closed as non-promotable against official
 even before the matched-random row completes and is not a basis for another
 fixed route. This is only a severity-window
 diagnostic for whether a future preregistered router-style gate is worth
