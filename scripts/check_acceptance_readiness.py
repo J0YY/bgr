@@ -1177,6 +1177,41 @@ def independent_benchmark_gate(root: Path) -> GateResult:
                 f"W/L/T={best_cartpole_wins}"
             )
 
+    swingup_path = root / "results/bsuite_cartpole_swingup_recovery_probe_4seed_v1_782844/summary.csv"
+    if swingup_path.exists():
+        swingup = read_rows(swingup_path)
+        swingup_bgr = mean_metric(swingup, "bgr", "final_rauc")
+        swingup_coverage = mean_metric(swingup, "bgr_coverage", "final_rauc")
+        swingup_uniform = mean_metric(swingup, "uniform", "final_rauc")
+        swingup_failure = mean_metric(swingup, "failure_only", "final_rauc")
+        swingup_fixed = mean_metric(swingup, "fixed", "final_rauc")
+        swingup_td = mean_metric(swingup, "td_loss", "final_rauc")
+        swingup_ablation = mean_metric(swingup, "bgr_uniform_radius", "final_rauc")
+        swingup_bgr_r80 = mean_metric(swingup, "bgr", "final_median_r80")
+        swingup_coverage_r80 = mean_metric(swingup, "bgr_coverage", "final_median_r80")
+        swingup_uniform_r80 = mean_metric(swingup, "uniform", "final_median_r80")
+        swingup_bgr_wins = paired_wins(swingup, "bgr", "uniform", "final_rauc")
+        swingup_coverage_wins = paired_wins(swingup, "bgr_coverage", "uniform", "final_rauc")
+        best_swingup = swingup_bgr if swingup_bgr >= swingup_coverage else swingup_coverage
+        best_swingup_r80 = swingup_bgr_r80 if swingup_bgr >= swingup_coverage else swingup_coverage_r80
+        best_swingup_wins = swingup_bgr_wins if swingup_bgr >= swingup_coverage else swingup_coverage_wins
+        if not (
+            best_swingup - swingup_uniform >= 0.01
+            and best_swingup > max(swingup_failure, swingup_fixed, swingup_td, swingup_ablation)
+            and best_swingup_wins[0] >= 3
+            and best_swingup_r80 >= swingup_uniform_r80
+            and not (best_swingup_r80 >= 0.99 and swingup_uniform_r80 >= 0.99)
+            and not (best_swingup_r80 <= 0.01 and swingup_uniform_r80 <= 0.01)
+        ):
+            failures.append(
+                f"bsuite Cartpole Swingup negative: BGR {swingup_bgr:.4f}, "
+                f"BGR-Coverage {swingup_coverage:.4f}, uniform {swingup_uniform:.4f}, "
+                f"failure-only {swingup_failure:.4f}, fixed {swingup_fixed:.4f}, "
+                f"TD-loss {swingup_td:.4f}, uniform-radius {swingup_ablation:.4f}, "
+                f"best-r80 {best_swingup_r80:.4f} vs uniform {swingup_uniform_r80:.4f}, "
+                f"W/L/T={best_swingup_wins}"
+            )
+
     minatar_path = root / "results/minatar_breakout_recovery_probe_4seed_v1/summary.csv"
     if minatar_path.exists():
         minatar = read_rows(minatar_path)

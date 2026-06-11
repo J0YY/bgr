@@ -506,6 +506,14 @@ BENCHMARK_SCREENS = [
         "final_median_r80",
     ),
     (
+        "bsuite Cartpole Swingup",
+        "results/bsuite_cartpole_swingup_recovery_probe_4seed_v1_782844/summary.csv",
+        ["bgr", "bgr_coverage"],
+        ["fixed", "failure_only", "td_loss"],
+        "bgr_uniform_radius",
+        "final_median_r80",
+    ),
+    (
         "MinAtar Breakout",
         "results/minatar_breakout_recovery_probe_4seed_v1/summary.csv",
         ["bgr", "bgr_coverage"],
