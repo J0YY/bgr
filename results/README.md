@@ -7559,7 +7559,7 @@ at 2026-06-11 10:48:41 BST showed official `783104` and BGR `783105`
 completed with exit `0:0`, while matched random `783106` was still running
 after its delayed start. The incomplete summary has BGR 293/400 and official
 295/400, so BGR already trails official on the fixed 400-episode readout;
-matched random was 69/111. This scout is closed as non-promotable against
+matched random was 76/128. This scout is closed as non-promotable against
 official even before the matched-random row completes. Treat it as a
 severity-window diagnostic only, not paper evidence and not a replacement for a
 fixed preregistered router-style gate.

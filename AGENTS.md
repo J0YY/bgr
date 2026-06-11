@@ -327,7 +327,7 @@ Latest poll/sync at 2026-06-11 10:48:41 BST showed official `783104` and BGR
 `783105` completed with exit `0:0`, while matched random `783106` was still
 running after its delayed start. The incomplete summary has BGR 293/400 and
 official 295/400, so BGR already trails official on the fixed 400-episode
-readout; matched random was 69/111. This scout is now closed as
+readout; matched random was 76/128. This scout is now closed as
 non-promotable against official even before the matched-random row completes,
 and it is not a basis for another fixed route. This is a
 severity-window scout only, not a paper claim and not a replacement for the

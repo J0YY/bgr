@@ -208,7 +208,7 @@ official/BGR/matched-random `783104`/`783105`/`783106`. Latest poll/sync at
 with exit `0:0`, while matched random `783106` was still running after its
 delayed start. The incomplete summary has BGR 293/400 and official 295/400,
 so BGR already trails official on the fixed 400-episode readout; matched
-random was 69/111. This scout is closed as non-promotable against official
+random was 76/128. This scout is closed as non-promotable against official
 even before the matched-random row completes and is not a basis for another
 fixed route. This is only a severity-window
 diagnostic for whether a future preregistered router-style gate is worth
