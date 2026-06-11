@@ -199,8 +199,8 @@ by at least +10/400 episodes and +0.02 absolute success rate. Submitted jobs:
 official occlusion `782556`, BGR occlusion `782557`, and matched-random
 occlusion `782558`. Initial poll at 2026-06-11 03:35:39 BST showed all three
 running on A6000 nodes with no parseable logs yet. Latest local compact
-partial after the 2026-06-11 03:55:30 BST poll had BGR occlusion `70/116`,
-official `74/120`, and matched random `75/121`, so BGR is trailing both
+partial after the 2026-06-11 03:57:37 BST poll had BGR occlusion `73/126`,
+official `75/128`, and matched random `76/130`, so BGR is still trailing both
 comparators on the occlusion-only scout. This is still not a complete
 400-episode gate result, but the fallback/router premise is not trending
 positive.
