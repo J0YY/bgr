@@ -54,7 +54,18 @@ hard-occlusion transfer diagnostics are also negative. At occlusion fraction
 0.80, BGR reaches 305/400 non-identity successes versus official 296/400 and
 matched random 296/400, but the +9 episode margin misses the fixed +10/400
 gate and identity is BGR 391/400 versus official 393/400, violating the
-identity side condition. At occlusion fraction 0.65, BGR reaches 300/400
+identity side condition. A held-out 800-episode occlusion-only confirmation of
+this same 0.80 transfer checkpoint was queued on 2026-06-11 as a router-style
+diagnostic, not a paper claim: official `782604`, BGR `782605`, and matched
+random `782606` evaluate only hard occlusion 0.80 with
+`EVAL_INIT_STATE_OFFSET=40`, `EVAL_TRIALS=80`, `EVAL_SEED=137`, and
+`SAVE_ROLLOUTS=0`. It can only motivate a full router-style learned-policy
+claim if BGR beats both official and matched random by at least 0.02 absolute
+success rate on the held-out occlusion episodes; clean identity would be
+handled by the official fallback branch and still needs preregistered
+full-gate wording before any `paper/main.tex` change. Poll/sync with:
+`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_heldout_occ800_v1 JOB_IDS=782604,782605,782606 DETAIL_JOB_IDS=782604,782605,782606 ROUTE_LABEL='Hard-occlusion 0.80 transfer held-out occlusion-only 800-episode confirmation' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+At occlusion fraction 0.65, BGR reaches 300/400
 successes versus official 297/400 and matched random 296/400, only +3/+4
 episodes and +0.0075/+0.0100 success rate rather than the fixed +10/400 and
 +0.02 promotion margin; identity is again BGR 391/400, official 393/400, and
@@ -2689,6 +2700,17 @@ Use `PYTHONPATH=src:. python3 scripts/acceptance_scorecard.py --root . --out doc
   This route is not paper evidence unless BGR-Coverage beats uniform, all
   required baselines, and BGR-uniform-radius on final RAUC while avoiding the
   paired and median-r80 failures that closed the default 30-seed route.
+  Latest sync at 2026-06-11 04:07 BST leaves the target-0.70 route
+  incomplete because failure-only `782563`, BGR-uniform-radius `782565`,
+  BGR-Coverage `782566`, and BGR `782567` were still running or missing final
+  summaries. The partial trend is already weak for BGR-family treatments:
+  uniform completed at 0.7006 mean RAUC, fixed at 0.6730, and TD-loss at
+  0.7056; log-tail partials give BGR-Coverage 28/30 seeds with mean RAUC
+  0.6875 and paired delta -0.0193 versus uniform (W/L/T=10/18/0), while
+  default BGR has 29/30 seeds with mean RAUC 0.6903 and paired delta -0.0081
+  versus uniform (W/L/T=11/18/0). This is not a formal closure until the
+  merged summary and promotion check exist, but it is not trending toward the
+  needed clean independent benchmark win.
 - The PointMaze U-Maze topology-bottleneck reset-interface screen is completed and negative. Failure-only reaches 0.3500 final RAUC, while BGR reaches 0.0854 and BGR-Coverage reaches 0.0573; do not scale or promote this protocol.
 - The MiniGrid-LavaGapS7 external-package screen is completed and negative. BGR-Coverage trails uniform on mean RAUC (0.4277 vs. 0.4461), default BGR is lower (0.4031), and the state-priority/uniform-radius ablation is highest (0.4627); do not scale or promote this protocol.
 - The hard-budget FetchReach-v4 reset-interface follow-up is completed and

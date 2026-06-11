@@ -71,6 +71,24 @@ rate_margin=+0.0025 against the best occlusion comparator, and
 identity_deficit=4. Remaining identity-anchored 0.80/0.90 variants are
 incomplete or already non-promotable on partial identity rows and must not be
 promoted unless complete summaries pass the fixed gate.
+Because the 0.80 transfer route was the closest learned-policy result, a
+held-out occlusion-only confirmation was queued on 2026-06-11 as a router-style
+diagnostic rather than a paper claim. It evaluates the same completed 0.80
+transfer BGR and matched-random checkpoints plus the official checkpoint on
+hard occlusion 0.80 only, with held-out initial states
+`EVAL_INIT_STATE_OFFSET=40`, `EVAL_TRIALS=80`, `EVAL_TASKS=10`, `EVAL_SEED=137`,
+and `SAVE_ROLLOUTS=0`. Submitted jobs are official `782604`, BGR `782605`, and
+matched random `782606`, all running at the first queue check. This route can
+only motivate a preregistered full router-style gate if held-out BGR beats both
+comparators by at least 0.02 absolute occlusion success rate; identity success
+would come from the official fallback branch and must not be silently mixed into
+the existing non-router gate. Poll/sync with:
+`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_heldout_occ800_v1 JOB_IDS=782604,782605,782606 DETAIL_JOB_IDS=782604,782605,782606 ROUTE_LABEL='Hard-occlusion 0.80 transfer held-out occlusion-only 800-episode confirmation' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+The alpha-0 official-head/full-LoRA no-video occlusion-only scout is a separate
+fallback diagnostic and is not trending positive: latest partial is BGR
+105/184, official 108/187, and matched random 116/193 on hard occlusion 0.80.
+Do not formalize that alpha-0 fallback unless the complete row reverses and
+clears the same held-out occlusion margin.
 A fixed head-interpolation follow-up was queued on 2026-06-10 to test whether
 the near-miss 0.80 transfer route can preserve the occlusion gain while
 recovering identity success. It copies the completed BGR and matched-random
@@ -536,6 +554,17 @@ Initial poll showed `782561` pending on resources and the remaining jobs
 pending on priority. Promote nothing unless BGR-Coverage beats uniform, fixed,
 failure-only, TD-loss, and BGR-uniform-radius on final RAUC with paired
 support and no contradictory median-r80 result.
+Latest sync at 2026-06-11 04:07 BST leaves the target-0.70 route incomplete
+because failure-only `782563`, BGR-uniform-radius `782565`, BGR-Coverage
+`782566`, and BGR `782567` were still running or missing final summaries. The
+partial trend is already weak for the intended treatment: uniform completed at
+0.7006 mean RAUC and fixed at 0.6730; TD-loss completed at 0.7056. From log
+tails, BGR-Coverage had 28/30 seeds with mean RAUC 0.6875 versus paired
+uniform delta -0.0193 (W/L/T=10/18/0), while default BGR had 29/30 seeds with
+mean RAUC 0.6903 versus paired uniform delta -0.0081 (W/L/T=11/18/0). This is
+not a valid route closure until the merged `summary.csv` and
+`promotion_check.txt` exist, but it is not trending toward the clean
+independent benchmark win.
 
 Completed independent-benchmark route, opened and evaluated 2026-06-07:
 official bsuite `deep_sea`. This route is materially different from the retired local
