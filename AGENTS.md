@@ -54,17 +54,23 @@ hard-occlusion transfer diagnostics are also negative. At occlusion fraction
 0.80, BGR reaches 305/400 non-identity successes versus official 296/400 and
 matched random 296/400, but the +9 episode margin misses the fixed +10/400
 gate and identity is BGR 391/400 versus official 393/400, violating the
-identity side condition. A held-out 800-episode occlusion-only confirmation of
-this same 0.80 transfer checkpoint was queued on 2026-06-11 as a router-style
-diagnostic, not a paper claim: official `782604`, BGR `782605`, and matched
-random `782606` evaluate only hard occlusion 0.80 with
-`EVAL_INIT_STATE_OFFSET=40`, `EVAL_TRIALS=80`, `EVAL_SEED=137`, and
-`SAVE_ROLLOUTS=0`. It can only motivate a full router-style learned-policy
-claim if BGR beats both official and matched random by at least 0.02 absolute
-success rate on the held-out occlusion episodes; clean identity would be
-handled by the official fallback branch and still needs preregistered
-full-gate wording before any `paper/main.tex` change. Poll/sync with:
-`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_heldout_occ800_v1 JOB_IDS=782604,782605,782606 DETAIL_JOB_IDS=782604,782605,782606 ROUTE_LABEL='Hard-occlusion 0.80 transfer held-out occlusion-only 800-episode confirmation' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+identity side condition. A held-out occlusion-only confirmation of this same
+0.80 transfer checkpoint was queued on 2026-06-11 as a router-style diagnostic,
+not a paper claim. The first attempt, official/BGR/random
+`782604`/`782605`/`782606`, incorrectly used `EVAL_INIT_STATE_OFFSET=40` with
+`EVAL_TRIALS=80`; LIBERO-Goal has only 50 initial states per task, so official
+failed at index 50 and BGR/random were cancelled. The corrected held-out slice
+uses the remaining 10 initial states per task: official `782609`, BGR
+`782610`, and matched random `782611` evaluate hard occlusion 0.80 with
+`EVAL_INIT_STATE_OFFSET=40`, `EVAL_TRIALS=10`, `EVAL_SEED=137`, and
+`SAVE_ROLLOUTS=0`. Interpretable evidence would be the combined 500 unique
+occlusion episodes from the original 400 plus this held-out 100; it can only
+motivate a full router-style learned-policy claim if combined BGR beats both
+official and matched random by at least 0.02 absolute occlusion success rate.
+Clean identity would be handled by the official fallback branch and still
+needs preregistered full-gate wording before any `paper/main.tex` change.
+Poll/sync with:
+`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_heldout_offset40_trials10_v1 JOB_IDS=782609,782610,782611 DETAIL_JOB_IDS=782609,782610,782611 ROUTE_LABEL='Hard-occlusion 0.80 transfer held-out offset40 trials10 confirmation' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
 At occlusion fraction 0.65, BGR reaches 300/400
 successes versus official 297/400 and matched random 296/400, only +3/+4
 episodes and +0.0075/+0.0100 success rate rather than the fixed +10/400 and
