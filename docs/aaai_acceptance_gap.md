@@ -177,8 +177,8 @@ matched random on occlusion by at least +10/400 episodes and +0.02 absolute
 success rate. Submitted jobs are official `782556`, BGR `782557`, and
 matched random `782558`; initial poll at 2026-06-11 03:35:39 BST showed all
 three running with no parseable logs yet. Latest local compact partial after
-the 2026-06-11 03:53:08 BST poll had BGR occlusion `66/104`, official
-`70/108`, and matched random `72/109`; BGR is trailing both comparators on the
+the 2026-06-11 03:55:30 BST poll had BGR occlusion `70/116`, official
+`74/120`, and matched random `75/121`; BGR is trailing both comparators on the
 occlusion-only scout. This is not a complete 400-episode gate result, but the
 fallback/router premise is not trending positive. Poll/sync with:
 `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_occscout_v1 JOB_IDS=782556,782557,782558 DETAIL_JOB_IDS=782556,782557,782558 ROUTE_LABEL='Hard-occlusion 0.80 alpha0 no-video occlusion-only fallback scout' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
