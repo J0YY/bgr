@@ -93,6 +93,7 @@ COMPLETED_METHOD_SCREEN_BY_CALIBRATION = {
         "results/fetchpush_object_state_recovery_probe_densecommon_bgr_v1_778106/summary.csv"
     ),
     "Gymnasium MuJoCo Reacher-v5 calibration": "results/reacher_recovery_probe_12seed_v1/summary.csv",
+    "Gymnasium MuJoCo HalfCheetah-v5 calibration": "results/halfcheetah_recovery_probe_4seed_v1_784535/summary.csv",
     "Gymnasium MuJoCo InvertedPendulum-v5 calibration": "results/inverted_pendulum_recovery_probe_4seed_v1/summary.csv",
     "Gymnasium MuJoCo InvertedDoublePendulum-v5 calibration": "results/inverted_double_pendulum_recovery_probe_4seed_v1/summary.csv",
     "Gymnasium Box2D LunarLander-v3 calibration": "results/lunarlander_recovery_probe_30seed_v3_782056_782062/summary.csv",
@@ -611,6 +612,10 @@ CALIBRATION_SCREENS = [
     (
         "Gymnasium MuJoCo Swimmer-v5 calibration",
         "results/swimmer_recovery_calibration_12seed_v1_784458/summary.json",
+    ),
+    (
+        "Gymnasium MuJoCo HalfCheetah-v5 calibration",
+        "results/halfcheetah_recovery_calibration_12seed_v1_784535/summary.json",
     ),
     (
         "Gymnasium MuJoCo InvertedPendulum-v5 calibration",

@@ -1660,6 +1660,21 @@ success >=0.80, recovery range >=0.20, and non-saturated/non-floor `r80`.
 Passing this pre-method screen is not paper evidence; it only permits a fixed
 all-method HalfCheetah replay screen without retuning.
 
+Slurm job `784535` completed with exit `0:0` and synced compact artifacts to
+`results/halfcheetah_recovery_calibration_12seed_v1_784535/summary.json`,
+`results/halfcheetah_recovery_calibration_12seed_v1_784535/package_versions.json`,
+and `results/halfcheetah_recovery_calibration_12seed_v1_784535/recovery_rows.csv`.
+The run used the existing remote MuJoCo venv `/work/joy/bgr/.venv-fetchpush`.
+Package metadata records `gymnasium==1.3.0`, `mujoco==3.9.0`, and
+`numpy==2.2.6`.
+
+The calibration gate clears but is sharp:
+`decision=usable-calibration`, clean success 1.0000, recovery range
+0.0000--1.0000, RAUC 0.0600, r80 0.0556, and curve
+`1.0,0.1,0,0,0,0,0,0` over the fixed radius grid. This is not paper evidence;
+it only permits a fixed all-method screen using the calibration-defined
+boundary scale without further radius retuning.
+
 ## Internal Package-Free CartPole Diagnostic
 
 `results/cartpole_recovery_probe_4seed_v1/summary.csv` is a 4-seed internal

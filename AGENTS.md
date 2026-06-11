@@ -145,10 +145,15 @@ and sync with
 Submitted on Athena after preregistration as Slurm job `784535`, writing to
 `/work/joy/bgr/runs/halfcheetah_recovery_calibration_12seed_v1_784535` with
 log `/work/joy/bgr/logs/bgr-halfcheetah-calib-784535.out`. Initial poll showed
-it pending on `Resources`; no compact result was available yet.
-Do not build or claim a HalfCheetah all-method screen unless the fixed
-calibration clears clean success >=0.80, recovery range >=0.20, and
-non-saturated/non-floor `r80`.
+it pending on `Resources`; it then completed with exit `0:0` and synced to
+`results/halfcheetah_recovery_calibration_12seed_v1_784535/`. The fixed
+calibration clears the pre-method gate with
+`decision=usable-calibration`, clean success 1.0000, recovery range
+0.0000--1.0000, RAUC 0.0600, and r80 0.0556. The curve is very sharp
+(`1.0,0.1,0,0,0,0,0,0` over radii
+`0,0.25,0.5,0.8,1.1,1.5,2.0,2.5`), so the route is active but fragile.
+Do not claim it as evidence; it only permits a fixed all-method screen using
+the calibration-defined boundary scale without additional radius retuning.
 A broader
 fixed OpenML numeric-suite
 target-2.0 run and held-out seeds 30--59 replication completed on `athena` as
@@ -3280,11 +3285,12 @@ Treat the following as the current paper-weakness backlog:
   fixed phase-preserving sinusoidal controller, and forward progress over an
   80-step horizon after perturbing restored package state. Queue with
   `OUT_PREFIX=halfcheetah_recovery_calibration_12seed_v1 scripts/queue_halfcheetah_calibration.sh`.
-  Submitted job `784535` on Athena; poll/sync with
-  `JOB_ID=784535 OUT_PREFIX=halfcheetah_recovery_calibration_12seed_v1 scripts/sync_halfcheetah_calibration.sh`.
-  This is calibration-only; do not build a method comparison unless the fixed
-  gate clears clean success >=0.80, recovery range >=0.20, and
-  non-saturated/non-floor `r80`.
+  Submitted job `784535` on Athena; it completed with exit `0:0` and synced to
+  `results/halfcheetah_recovery_calibration_12seed_v1_784535/`. The fixed gate
+  clears with clean success 1.0000, recovery range 0.0000--1.0000, RAUC
+  0.0600, and r80 0.0556. This is calibration-only; the next fixed comparison
+  must use the calibration-defined boundary scale without additional radius
+  retuning.
 
 ## Required Checks
 

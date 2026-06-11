@@ -1429,7 +1429,12 @@ risk.
   The gate is calibration-only: clean success >=0.80, recovery range >=0.20,
   and non-saturated/non-floor `r80`. Passing this route would only permit a
   fixed all-method comparison; it would not by itself solve the acceptance
-  blocker.
+  blocker. Slurm job `784535` completed with exit `0:0` and synced to
+  `results/halfcheetah_recovery_calibration_12seed_v1_784535/`. It clears the
+  pre-method gate with clean success 1.0000, recovery range 0.0000--1.0000,
+  RAUC 0.0600, and r80 0.0556. The curve is very sharp, with success already
+  down to 0.1 at radius 0.25, so this is an active but fragile route awaiting
+  only a fixed all-method comparison at the calibration-defined boundary scale.
 - The next acceptance-moving empirical route must change the premise: either a
   genuinely different pre-existing benchmark package/reset interface, or a
   genuinely different learned-policy intervention that is preregistered before
