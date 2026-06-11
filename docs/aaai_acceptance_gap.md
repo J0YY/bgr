@@ -242,6 +242,23 @@ more GPU time on a dead comparator. This scout is not a basis for another
 fixed route. This is only a severity-window diagnostic for whether a future
 preregistered router-style gate is worth running, not paper evidence and not a
 moved gate.
+A new learned-policy scout was queued after that closure: combined
+occlusion+shift visual corruption for the completed occlusion-bottleneck
+transfer checkpoints. This is a different perturbation family, implemented by
+adding `occlusion_shift` support to `scripts/queue_openvla_oft_perturb_eval.sh`
+so the existing central occlusion and zero-padded image shift are applied in
+sequence. The scout artifact is
+`openvla_oft_perturb_eval_occlusion_bottleneck_combo_occ080_shift015_scout_v1`,
+with
+`PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
+`EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
+Athena jobs are official `783312`, BGR `783314`, and matched random `783315`;
+latest poll at 2026-06-11 11:57 BST showed all pending, with estimated starts
+of 2026-06-11 14:21:02 BST for official and 2026-06-11 17:11:30 BST for
+BGR/random. Treat this as a
+100-episode route-selection scout only. It should be promoted to a fixed
+identity-plus-combined-perturbation gate only if BGR clearly beats both
+comparators in the scout.
 Three low-cost independent-benchmark CPU scouts were queued at 2026-06-11
 10:45 BST and completed negative by 10:49 BST using the existing official
 MiniGrid package-state recovery harness and new reusable wrappers

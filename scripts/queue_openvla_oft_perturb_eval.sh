@@ -121,6 +121,25 @@ def _apply_primary_perturbation(image):
         x0 = (arr.shape[1] - side) // 2
         arr[y0 : y0 + side, x0 : x0 + side, :] = 0
         return arr
+    if perturbation_type == 'occlusion_shift':
+        arr = np.asarray(pil, dtype=np.uint8).copy()
+        fraction = max(0.0, min(1.0, float(params.get('fraction', 0.0))))
+        side = max(1, int(round(min(arr.shape[0], arr.shape[1]) * fraction)))
+        y0 = (arr.shape[0] - side) // 2
+        x0 = (arr.shape[1] - side) // 2
+        arr[y0 : y0 + side, x0 : x0 + side, :] = 0
+        dx = int(round(float(params.get('dx_fraction', 0.0)) * arr.shape[1]))
+        dy = int(round(float(params.get('dy_fraction', 0.0)) * arr.shape[0]))
+        shifted = np.zeros_like(arr)
+        src_x0 = max(0, -dx)
+        src_y0 = max(0, -dy)
+        dst_x0 = max(0, dx)
+        dst_y0 = max(0, dy)
+        width = arr.shape[1] - abs(dx)
+        height = arr.shape[0] - abs(dy)
+        if width > 0 and height > 0:
+            shifted[dst_y0 : dst_y0 + height, dst_x0 : dst_x0 + width] = arr[src_y0 : src_y0 + height, src_x0 : src_x0 + width]
+        return shifted
     if perturbation_type == 'shift':
         arr = np.asarray(pil, dtype=np.uint8)
         dx = int(round(float(params.get('dx_fraction', 0.0)) * arr.shape[1]))

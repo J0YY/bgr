@@ -368,6 +368,25 @@ and not a replacement for the fixed gate. Use it only to decide whether a
 future preregistered router-style gate is worth running; promotion would still
 require BGR to beat both official and matched random by at least +10/400 and
 +0.02 on a fixed 400-episode readout.
+New active learned-policy scout: combined occlusion+shift visual corruption
+for the completed occlusion-bottleneck transfer checkpoints. This is a
+different perturbation family, not another single-occlusion severity point:
+`scripts/queue_openvla_oft_perturb_eval.sh` now supports
+`occlusion_shift`, applying the existing central occlusion and zero-padded
+primary-image shift in sequence. The scout uses artifact
+`openvla_oft_perturb_eval_occlusion_bottleneck_combo_occ080_shift015_scout_v1`,
+`PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
+`EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, `SAVE_ROLLOUTS=0`, and
+the completed p2048 occlusion-bottleneck BGR/matched-random checkpoints.
+Submitted on Athena at 2026-06-11 11:56 BST: official `783312`, BGR `783314`,
+and matched random `783315`; latest poll at 2026-06-11 11:57 BST showed all
+three pending, with estimated starts of 2026-06-11 14:21:02 BST for official
+and 2026-06-11 17:11:30 BST for BGR/random. This is
+not manuscript evidence and not a moved gate. Only if the 100-episode scout
+shows a clear BGR edge over both official and matched random should it be
+promoted to a fixed 400-episode identity-plus-combined-perturbation gate.
+Poll/sync with:
+`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_combo_occ080_shift015_scout_v1 JOB_IDS=783312,783314,783315 DETAIL_JOB_IDS=783312,783314,783315 ROUTE_LABEL='OpenVLA occlusion+shift combined perturbation scout' GATE_PERTURBATIONS=occlusion_shift scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
 New independent-benchmark CPU scouts queued at 2026-06-11 10:45 BST and
 completed negative by 10:49 BST. They tested
 materially different official MiniGrid package-state variants rather than

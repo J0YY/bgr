@@ -7595,6 +7595,22 @@ more GPU time on a dead comparator. Treat it as a severity-window diagnostic
 only, not paper evidence and not a replacement for a fixed preregistered
 router-style gate.
 
+A combined occlusion+shift learned-policy scout was queued next for the same
+completed occlusion-bottleneck transfer checkpoints. This extends
+`scripts/queue_openvla_oft_perturb_eval.sh` with an `occlusion_shift`
+perturbation that applies the existing central occlusion and zero-padded
+primary-image shift in sequence. The scout writes to
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_combo_occ080_shift015_scout_v1/`
+and uses
+`PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
+`EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
+Submitted Athena jobs are official `783312`, BGR `783314`, and matched random
+`783315`; latest poll at 2026-06-11 11:57 BST showed all three pending, with
+estimated starts of 2026-06-11 14:21:02 BST for official and 2026-06-11
+17:11:30 BST for BGR/random. This is only a 100-episode route-selection scout.
+Do not treat it as paper evidence unless it justifies and then passes a fixed 400-episode
+identity-plus-combined-perturbation gate.
+
 New 2026-06-11 independent-benchmark MiniGrid scouts:
 
 - `scripts/queue_minigrid_lavacrossing_probe.sh` and
