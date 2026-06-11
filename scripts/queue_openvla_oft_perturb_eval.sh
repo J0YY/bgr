@@ -39,6 +39,7 @@ EVAL_INIT_STATE_OFFSET="${EVAL_INIT_STATE_OFFSET:-0}"
 EVAL_MAX_STEPS="${EVAL_MAX_STEPS:--1}"
 EVAL_SEED="${EVAL_SEED:-7}"
 LORA_RANK="${LORA_RANK:-32}"
+SAVE_ROLLOUTS="${SAVE_ROLLOUTS:-0}"
 
 usage() {
   cat <<USAGE
@@ -60,6 +61,8 @@ Environment overrides:
   OFFICIAL_DEPENDENCY/BGR_DEPENDENCY/RANDOM_DEPENDENCY optional sbatch dependencies
   SERIAL_PERTURB_PER_METHOD=1 serializes perturbations per checkpoint to avoid
     shared checkpoint config mutation races during OpenVLA-OFT eval startup
+  SAVE_ROLLOUTS=0 disables MP4 rollout writing while keeping text logs; set
+    SAVE_ROLLOUTS=1 only when videos are explicitly needed
 
 Default mode is dry-run. Pass --submit to queue asynchronous Slurm jobs.
 USAGE
@@ -227,6 +230,21 @@ if old in src:
     path.write_text(src.replace(old, new))
 elif new not in src:
     raise RuntimeError("Could not patch LIBERO rollout directory")
+src = path.read_text()
+guard = '    if os.environ.get("BGR_EVAL_SAVE_ROLLOUTS", "1") == "0":'
+if guard not in src:
+    marker = 'def save_rollout_video(rollout_images, idx, success, task_description, log_file=None):\n    """Saves an MP4 replay of an episode."""\n'
+    replacement = marker + (
+        '    if os.environ.get("BGR_EVAL_SAVE_ROLLOUTS", "1") == "0":\n'
+        '        message = "Skipped rollout MP4 because BGR_EVAL_SAVE_ROLLOUTS=0"\n'
+        '        print(message)\n'
+        '        if log_file is not None:\n'
+        '            log_file.write(message + "\\\\n")\n'
+        '        return ""\n'
+    )
+    if marker not in src:
+        raise RuntimeError("Could not patch LIBERO rollout video save guard")
+    path.write_text(src.replace(marker, replacement))
 PY
 echo "Evaluating ${method} perturbation=${perturbation_name} type=${perturbation_type} params=${perturbation_params} on \$(hostname) at \$(date -Is)"
 env WANDB_MODE=disabled \\
@@ -235,6 +253,7 @@ env WANDB_MODE=disabled \\
   MUJOCO_GL=egl \\
   PYOPENGL_PLATFORM=egl \\
   BGR_EVAL_ROLLOUT_DIR="${local_log_dir}/rollouts" \\
+  BGR_EVAL_SAVE_ROLLOUTS="${SAVE_ROLLOUTS}" \\
   BGR_EVAL_PERTURBATION_TYPE='${perturbation_type}' \\
   BGR_EVAL_PERTURBATION_PARAMS='${perturbation_params}' \\
   PYTHONPATH="${OPENVLA_OFT_ROOT}:${LIBERO_ROOT}:${OPENVLA_OFT_SITE}" \\

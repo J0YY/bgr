@@ -143,7 +143,32 @@ exit `1:0` after 00:50/00:23/00:28, leaving occlusion jobs
 `780061`/`780063`/`780065` stuck on `DependencyNeverSatisfied`. Those
 dependent occlusion jobs were cancelled at 22:54 BST. No full `summary.csv`
 exists, so this route is not a paper result and should not be rerun unchanged
-without first diagnosing why the restarted identity evals failed. The
+without first diagnosing why the restarted identity evals failed. The restart
+failure was diagnosed as an infrastructure/quota issue rather than a policy
+result: `/work/joy` was full, the failed jobs stopped without a Python
+traceback, and `sacct` showed low MaxRSS. The queue path now supports
+`SAVE_ROLLOUTS=0` and patches the LIBERO video hook to skip MP4 writes while
+keeping text logs. Reproducible alpha-0.75 head-interpolation checkpoint copies
+and a UV temp cache were removed on `athena`, raising free `/work/joy` space
+from about 1.6G to 5.6G.
+A new fixed no-video alpha-0.0 repair route is active:
+`TAG=occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_v1`,
+`ALPHA=0.0`, `LORA_B_SCALE=1.0`, and
+`SAVE_ROLLOUTS=0`. This keeps adapted LoRA tensors but restores official
+action/proprio heads exactly, targeting the identity side-condition without
+discarding the occlusion adaptation. Submitted jobs are prep `782410`,
+official identity/occlusion `782411`/`782412`, BGR identity/occlusion
+`782413`/`782414`, and matched-random identity/occlusion `782415`/`782416`,
+with `EXCLUDE=c2-g4-17,c2-g4-18,c2-g4-19,c2-g4-21,c2-g4-23`. Latest poll at
+2026-06-11 01:33:40 BST showed prep completed, identity jobs running, and
+occlusion jobs dependency-pending. The early partial summary had only identity
+rows over 8--14 episodes, all at 100%, so it is not gateable evidence. Poll
+with:
+`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_v1 JOB_IDS=782410,782411,782412,782413,782414,782415,782416 DETAIL_JOB_IDS=782410,782411,782412,782413,782414,782415,782416 ROUTE_LABEL='Hard-occlusion 0.80 alpha0 official-head/full-LoRA no-video OpenVLA-OFT repair' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+Do not incorporate this route into `paper/main.tex` unless the full summary
+passes the unchanged fixed gate: BGR must beat both official and matched random
+by at least 10/400 occlusion episodes and at least 0.02 absolute success rate
+while trailing the best identity comparator by no more than one episode. The
 latest 0.80 identity-anchored base route is closed negative with complete
 rows: BGR identity/occlusion are 389/400 and 303/400, official is 393/400 and
 296/400, and matched random is 393/400 and 302/400. The fixed gate reports

@@ -130,7 +130,25 @@ gate result: official/BGR/matched-random identity jobs
 `DependencyNeverSatisfied`. Those dependent occlusion jobs were cancelled at
 22:54 BST. No full `summary.csv` exists, so this route is not a paper result
 and should not be rerun unchanged without first diagnosing the restarted
-identity-eval failures. Both
+identity-eval failures. The restart failure was diagnosed as infrastructure:
+`/work/joy` was full, the jobs stopped without a Python traceback, and
+`sacct` showed low MaxRSS rather than OOM. The perturb-eval queue now supports
+`SAVE_ROLLOUTS=0`, patching the remote LIBERO video hook to skip MP4 writes.
+Obsolete reproducible alpha-0.75 interpolation copies and a UV temp cache were
+removed on Athena, raising free `/work/joy` space from about 1.6G to 5.6G.
+A fixed alpha-0.0 official-head/full-LoRA no-video repair is now queued as a
+new premise rather than an unchanged rerun. It restores official action/proprio
+heads exactly while preserving adapted LoRA tensors (`ALPHA=0.0`,
+`LORA_B_SCALE=1.0`, `SAVE_ROLLOUTS=0`). Submitted jobs are prep `782410`,
+official `782411`/`782412`, BGR `782413`/`782414`, and matched random
+`782415`/`782416`, excluding `c2-g4-17,c2-g4-18,c2-g4-19,c2-g4-21,c2-g4-23`.
+Latest poll/sync at 2026-06-11 01:33:40 BST showed prep completed, official,
+BGR, and matched-random identity jobs running, and occlusion jobs still
+dependency-pending. The early partial summary had only identity rows over
+8--14 episodes, all at 100%, so this is not paper evidence. Poll with:
+`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_v1 JOB_IDS=782410,782411,782412,782413,782414,782415,782416 DETAIL_JOB_IDS=782410,782411,782412,782413,782414,782415,782416 ROUTE_LABEL='Hard-occlusion 0.80 alpha0 official-head/full-LoRA no-video OpenVLA-OFT repair' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+Do not incorporate this route unless the full summary passes the unchanged
+`+10/400`, `+0.02`, and identity-preservation gate. Both
 head-interpolation routes remain non-evidence unless the full summary passes
 the same fixed +10/400, +0.02, and identity-preservation gate. The latest
 0.80 identity-anchored base route is closed negative with complete rows:

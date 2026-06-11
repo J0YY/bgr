@@ -45,6 +45,7 @@ class QueueOpenVlaOftPerturbEvalTest(unittest.TestCase):
             'BGR_EVAL_ROLLOUT_DIR="/tmp/bgr-runs/unit_artifact/logs/bgr/identity/rollouts"',
             output,
         )
+        self.assertIn('BGR_EVAL_SAVE_ROLLOUTS="0"', output)
         self.assertIn(
             "### perturb-eval-bgr-blur-unit dependency=afterok:<bgr_identity_job>",
             output,
