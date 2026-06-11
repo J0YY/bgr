@@ -1442,6 +1442,8 @@ def render_markdown(root: Path) -> str:
             scout_decision = scout.decision
             if scout in superseded_scouts:
                 scout_decision = "superseded-by-positive-follow-up"
+            elif scout.needs_preregistration and route_scout_evidence_key(scout) in rejected_followup_keys:
+                scout_decision = "closed-by-rejected-follow-up"
             lines.append(
                 "| "
                 + " | ".join(

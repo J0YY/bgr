@@ -124,7 +124,7 @@ This scorecard is generated from local result artifacts. It is not an acceptance
 | OpenML broad numeric fixed target2 30-seed (breast-w) | 2.0000 | 0.9586 | 0.9552 | +0.0034 (19/11/0) | 0.9542 @ 2.0000 | reject-follow-up |
 | OpenML broad numeric fixed target2 30-seed (eeg-eye-state) | 2.0000 | 0.5475 | 0.5281 | +0.0194 (17/13/0) | 0.5224 @ 2.0000 | reject-follow-up |
 | OpenML broad numeric fixed target2 30-seed (haberman) | 2.0000 | 0.7258 | 0.6155 | +0.1103 (29/0/1) | 0.6644 @ 2.0000 | superseded-by-positive-follow-up |
-| OpenML broad numeric fixed target2 30-seed (heart-statlog) | 2.0000 | 0.8075 | 0.7662 | +0.0412 (21/9/0) | 0.7543 @ 2.0000 | candidate-for-replication |
+| OpenML broad numeric fixed target2 30-seed (heart-statlog) | 2.0000 | 0.8075 | 0.7662 | +0.0412 (21/9/0) | 0.7543 @ 2.0000 | closed-by-rejected-follow-up |
 | OpenML broad numeric fixed target2 30-seed (mammography) | 2.0000 | 0.9719 | 0.9669 | +0.0050 (17/13/0) | 0.9689 @ 2.0000 | reject-follow-up |
 | OpenML broad numeric fixed target2 30-seed (ozone-level-8hr) | 2.0000 | 0.7361 | 0.8958 | -0.1597 (5/25/0) | 0.8813 @ 2.0000 | reject-follow-up |
 | OpenML broad numeric fixed target2 30-seed (qsar-biodeg) | 2.0000 | 0.7877 | 0.7894 | -0.0017 (14/16/0) | 0.7917 @ 2.0000 | reject-follow-up |

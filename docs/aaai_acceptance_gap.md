@@ -260,16 +260,17 @@ with
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Athena jobs are official `783312`, BGR `783314`, and matched random `783315`;
-latest guarded advance at 2026-06-11 12:54:13 BST ran
+latest guarded advance at 2026-06-11 12:55:31 BST ran
 `scripts/advance_openvla_oft_occlusion_shift_combo_scout.sh --submit` but did
 not submit a full gate because the scout remains `[INCOMPLETE]`. Official is
 pending on `Resources`, while BGR and matched random are pending on
 `ReqNodeNotAvail` for unavailable GPU nodes; estimated starts remain
 2026-06-11 14:21:02 BST for official, 2026-06-11 18:01:36 BST for BGR, and
-2026-06-11 18:04:06 BST for matched random. A direct scheduler check showed no
+2026-06-11 18:51:35 BST for matched random. A direct scheduler check showed no
 dependencies or feature constraints, priority 611 for all three jobs, and only
 explicit exclusion `c2-g4-21`, which is down; leave the jobs untouched unless a
-new scheduler problem appears. The
+new scheduler problem appears. The remote summary and log directory were still
+missing at the 12:55:31 BST poll. The
 route-specific sync helper is
 `scripts/sync_openvla_oft_occlusion_shift_combo_scout_results.sh --poll --sync`.
 It suppresses the shared 400-episode perturb gate and runs the scout-specific
