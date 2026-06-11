@@ -1,0 +1,65 @@
+[done] method=uniform seed=0 rauc=0.9693 clean=1.0000 aulc=0.7414 elapsed=1.71s
+[done] method=uniform seed=1 rauc=0.7656 clean=1.0000 aulc=0.6233 elapsed=1.84s
+[done] method=uniform seed=2 rauc=0.2614 clean=0.3750 aulc=0.1568 elapsed=2.47s
+[done] method=uniform seed=3 rauc=0.5000 clean=1.0000 aulc=0.3330 elapsed=2.03s
+[done] method=uniform seed=4 rauc=0.8562 clean=1.0000 aulc=0.6820 elapsed=1.73s
+[done] method=uniform seed=5 rauc=0.9047 clean=1.0000 aulc=0.7239 elapsed=1.71s
+[done] method=uniform seed=6 rauc=0.4938 clean=1.0000 aulc=0.4320 elapsed=1.94s
+[done] method=uniform seed=7 rauc=0.8823 clean=1.0000 aulc=0.5927 elapsed=1.84s
+[done] method=fixed seed=0 rauc=0.7682 clean=0.5000 aulc=0.3936 elapsed=1.78s
+[done] method=fixed seed=1 rauc=0.7143 clean=1.0000 aulc=0.6046 elapsed=1.83s
+[done] method=fixed seed=2 rauc=0.1054 clean=0.1875 aulc=0.1018 elapsed=2.53s
+[done] method=fixed seed=3 rauc=0.8417 clean=1.0000 aulc=0.4145 elapsed=1.99s
+[done] method=fixed seed=4 rauc=0.8260 clean=1.0000 aulc=0.6152 elapsed=1.79s
+[done] method=fixed seed=5 rauc=0.8331 clean=1.0000 aulc=0.7062 elapsed=1.70s
+[done] method=fixed seed=6 rauc=0.4938 clean=1.0000 aulc=0.2891 elapsed=2.16s
+[done] method=fixed seed=7 rauc=0.8760 clean=1.0000 aulc=0.6083 elapsed=1.86s
+[done] method=failure_only seed=0 rauc=0.9693 clean=1.0000 aulc=0.8307 elapsed=2.09s
+[done] method=failure_only seed=1 rauc=0.7708 clean=1.0000 aulc=0.6135 elapsed=2.41s
+[done] method=failure_only seed=2 rauc=0.2936 clean=0.4688 aulc=0.1688 elapsed=3.07s
+[done] method=failure_only seed=3 rauc=0.9104 clean=1.0000 aulc=0.7761 elapsed=2.21s
+[done] method=failure_only seed=4 rauc=0.8562 clean=1.0000 aulc=0.5490 elapsed=2.44s
+[done] method=failure_only seed=5 rauc=0.9066 clean=1.0000 aulc=0.5400 elapsed=2.51s
+[done] method=failure_only seed=6 rauc=0.5250 clean=1.0000 aulc=0.4354 elapsed=2.51s
+[done] method=failure_only seed=7 rauc=0.5000 clean=1.0000 aulc=0.4499 elapsed=2.52s
+[done] method=td_loss seed=0 rauc=0.9651 clean=1.0000 aulc=0.6855 elapsed=2.24s
+[done] method=td_loss seed=1 rauc=0.7641 clean=1.0000 aulc=0.6332 elapsed=2.34s
+[done] method=td_loss seed=2 rauc=0.3007 clean=0.4688 aulc=0.2615 elapsed=3.09s
+[done] method=td_loss seed=3 rauc=0.8714 clean=1.0000 aulc=0.6810 elapsed=2.31s
+[done] method=td_loss seed=4 rauc=0.8562 clean=1.0000 aulc=0.6620 elapsed=2.31s
+[done] method=td_loss seed=5 rauc=0.6125 clean=1.0000 aulc=0.5246 elapsed=2.39s
+[done] method=td_loss seed=6 rauc=0.5224 clean=1.0000 aulc=0.4196 elapsed=2.53s
+[done] method=td_loss seed=7 rauc=0.9104 clean=1.0000 aulc=0.6039 elapsed=2.38s
+[done] method=bgr_uniform_radius seed=0 rauc=0.9651 clean=1.0000 aulc=0.7686 elapsed=2.32s
+[done] method=bgr_uniform_radius seed=1 rauc=0.7708 clean=1.0000 aulc=0.6495 elapsed=2.51s
+[done] method=bgr_uniform_radius seed=2 rauc=0.1054 clean=0.1875 aulc=0.1018 elapsed=3.69s
+[done] method=bgr_uniform_radius seed=3 rauc=0.8964 clean=1.0000 aulc=0.6973 elapsed=2.44s
+[done] method=bgr_uniform_radius seed=4 rauc=0.5719 clean=1.0000 aulc=0.4564 elapsed=2.71s
+[done] method=bgr_uniform_radius seed=5 rauc=0.9125 clean=1.0000 aulc=0.7005 elapsed=2.43s
+[done] method=bgr_uniform_radius seed=6 rauc=0.4938 clean=1.0000 aulc=0.4023 elapsed=2.82s
+[done] method=bgr_uniform_radius seed=7 rauc=0.7271 clean=1.0000 aulc=0.5036 elapsed=2.68s
+[done] method=bgr_coverage seed=0 rauc=0.9682 clean=1.0000 aulc=0.8022 elapsed=2.28s
+[done] method=bgr_coverage seed=1 rauc=0.7656 clean=1.0000 aulc=0.6699 elapsed=2.51s
+[done] method=bgr_coverage seed=2 rauc=0.3007 clean=0.4688 aulc=0.2525 elapsed=3.33s
+[done] method=bgr_coverage seed=3 rauc=0.7594 clean=1.0000 aulc=0.4906 elapsed=2.44s
+[done] method=bgr_coverage seed=4 rauc=0.7490 clean=1.0000 aulc=0.4434 elapsed=2.47s
+[done] method=bgr_coverage seed=5 rauc=0.8635 clean=1.0000 aulc=0.5240 elapsed=2.50s
+[done] method=bgr_coverage seed=6 rauc=0.4938 clean=1.0000 aulc=0.3430 elapsed=2.58s
+[done] method=bgr_coverage seed=7 rauc=0.8807 clean=1.0000 aulc=0.6018 elapsed=2.40s
+[done] method=bgr seed=0 rauc=0.9638 clean=1.0000 aulc=0.7098 elapsed=2.32s
+[done] method=bgr seed=1 rauc=0.7656 clean=1.0000 aulc=0.5383 elapsed=2.48s
+[done] method=bgr seed=2 rauc=0.2478 clean=0.3750 aulc=0.1885 elapsed=3.41s
+[done] method=bgr seed=3 rauc=0.6875 clean=1.0000 aulc=0.3896 elapsed=2.55s
+[done] method=bgr seed=4 rauc=0.7021 clean=1.0000 aulc=0.4549 elapsed=2.49s
+[done] method=bgr seed=5 rauc=0.6010 clean=1.0000 aulc=0.4565 elapsed=2.33s
+[done] method=bgr seed=6 rauc=0.4938 clean=1.0000 aulc=0.2727 elapsed=2.50s
+[done] method=bgr seed=7 rauc=0.5729 clean=1.0000 aulc=0.4010 elapsed=2.53s
+package_versions={'gymnasium': '1.3.0', 'minigrid': '3.0.0'}
+method,final_clean_mean,final_rauc_mean,final_median_r80_mean,final_abs_r10_mean,rauc_aulc_mean,best_rauc_mean
+bgr,0.9219,0.6293,0.5977,0.7859,0.4264,0.6293
+bgr_coverage,0.9336,0.7226,0.6539,0.8484,0.5159,0.7226
+bgr_uniform_radius,0.8984,0.6804,0.6305,0.8484,0.5350,0.6804
+failure_only,0.9336,0.7165,0.6539,0.8698,0.5454,0.7171
+fixed,0.8359,0.6823,0.6724,0.7866,0.4667,0.6823
+td_loss,0.9336,0.7253,0.6656,0.8530,0.5589,0.7255
+uniform,0.9219,0.7042,0.6331,0.8471,0.5356,0.7042

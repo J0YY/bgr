@@ -323,17 +323,37 @@ partial looked weak: an occlusion-fraction 0.75 scout of the original
 occlusion-bottleneck transfer checkpoints, with no rollout videos and a fresh
 artifact `openvla_oft_perturb_eval_occlusion_bottleneck_transfer_occ075_scout_v1`.
 Submitted jobs are official/BGR/matched-random `783104`/`783105`/`783106`.
-Latest poll/sync at 2026-06-11 10:25:51 BST showed official `783104`, BGR
-`783105`, and matched random `783106` all running; matched random started at
-10:20:49 BST after an initial resource wait. The incomplete summary has BGR
-118/209, official 122/213, and matched random 14/16, so the scout is trending
-negative and is not a basis for another fixed route unless the completed rows
-recover substantially. This is a
+Latest poll/sync at 2026-06-11 10:48:41 BST showed official `783104` and BGR
+`783105` completed with exit `0:0`, while matched random `783106` was still
+running after its delayed start. The incomplete summary has BGR 293/400 and
+official 295/400, so BGR already trails official on the fixed 400-episode
+readout; matched random was 69/111. This scout is now closed as
+non-promotable against official even before the matched-random row completes,
+and it is not a basis for another fixed route. This is a
 severity-window scout only, not a paper claim and not a replacement for the
 fixed gate. Use it only to decide whether a future preregistered router-style
 gate is worth running; promotion would still require BGR to beat both official
 and matched random by at least +10/400 and +0.02 on a fixed 400-episode
 readout.
+New independent-benchmark CPU scouts queued at 2026-06-11 10:45 BST and
+completed negative by 10:49 BST. They tested
+materially different official MiniGrid package-state variants rather than
+scaling rejected SimpleCrossing S9N3 rows. The reusable queue/sync wrappers are
+`scripts/queue_minigrid_lavacrossing_probe.sh` and
+`scripts/sync_minigrid_lavacrossing_probe.sh`. The jobs were
+MiniGrid-SimpleCrossingS9N2 job `783136` writing to
+`results/minigrid_simplecrossings9n2_scout_8seed_v1_783136/`,
+MiniGrid-SimpleCrossingS9N1 job `783137` writing to
+`results/minigrid_simplecrossings9n1_scout_8seed_v1_783137/`, and
+MiniGrid-LavaCrossingS11N5 job `783138` writing to
+`results/minigrid_lavacrossing_s11n5_scout_8seed_v1_783138/`. All three use
+seeds 0--7, the full all-method set, and the existing official
+MiniGrid-LavaCrossing/SimpleCrossing recovery harness. All fail the candidate
+checker: S9N2 BGR-Coverage has 0.7226 vs. 0.7042 uniform but only 2/8 paired
+wins and trails TD-loss; S9N1 is dominated by uniform/failure-only/TD-loss and
+the radius ablation; S11N5 BGR-Coverage has 0.5052 vs. 0.5590 uniform and
+BGR has 0.5087 vs. 0.5590 uniform. Do not scale or promote these variants
+without a materially new fixed premise.
 Do not modify separate `rl4vla-*` jobs on Athena for this project.
 The
 latest 0.80 identity-anchored base route is closed negative with complete

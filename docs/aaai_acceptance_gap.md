@@ -204,14 +204,29 @@ looked weak. It uses a fresh artifact
 `PERTURBATIONS='occlusion={"fraction":0.75}'`, `EVAL_TASKS=10`,
 `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`; submitted jobs are
 official/BGR/matched-random `783104`/`783105`/`783106`. Latest poll/sync at
-2026-06-11 10:25:51 BST showed official `783104`, BGR `783105`, and matched
-random `783106` all running; matched random started at 10:20:49 BST after an
-initial resource wait. The incomplete summary has BGR 118/209, official
-122/213, and matched random 14/16, so the scout is trending negative and is
-not a basis for another fixed route unless the completed rows recover
-substantially. This is only a severity-window
+2026-06-11 10:48:41 BST showed official `783104` and BGR `783105` completed
+with exit `0:0`, while matched random `783106` was still running after its
+delayed start. The incomplete summary has BGR 293/400 and official 295/400,
+so BGR already trails official on the fixed 400-episode readout; matched
+random was 69/111. This scout is closed as non-promotable against official
+even before the matched-random row completes and is not a basis for another
+fixed route. This is only a severity-window
 diagnostic for whether a future preregistered router-style gate is worth
 running, not paper evidence and not a moved gate.
+Three low-cost independent-benchmark CPU scouts were queued at 2026-06-11
+10:45 BST and completed negative by 10:49 BST using the existing official
+MiniGrid package-state recovery harness and new reusable wrappers
+`scripts/queue_minigrid_lavacrossing_probe.sh` and
+`scripts/sync_minigrid_lavacrossing_probe.sh`. They tested unscaled,
+materially different official variants after the SimpleCrossing S9N3 rows
+failed paired and radius checks: SimpleCrossing S9N2 job `783136`,
+SimpleCrossing S9N1 job `783137`, and LavaCrossing S11N5 job `783138`. All use
+seeds 0--7 and the full all-method set. All fail the candidate checker: S9N2
+BGR-Coverage has 0.7226 vs. 0.7042 uniform but only 2/8 paired wins and trails
+TD-loss; S9N1 is dominated by uniform, failure-only, TD-loss, and
+BGR-uniform-radius; S11N5 BGR-Coverage has 0.5052 vs. 0.5590 uniform and BGR
+has 0.5087 vs. 0.5590 uniform. Do not scale or promote these variants without
+a materially new fixed premise.
 A new router-specific occlusion-only training premise was queued on
 2026-06-11 after the 0.80 held-out confirmation failed. This is not another
 same-checkpoint re-evaluation: `scripts/queue_openvla_oft_preregistered_occlusion_bottleneck.sh`

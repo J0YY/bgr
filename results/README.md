@@ -7555,13 +7555,34 @@ to
 and uses `PERTURBATIONS='occlusion={"fraction":0.75}'`, `EVAL_TASKS=10`,
 `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`. Submitted Athena jobs
 are official/BGR/matched-random `783104`/`783105`/`783106`. Latest poll/sync
-at 2026-06-11 10:25:51 BST showed official `783104`, BGR `783105`, and matched
-random `783106` all running; matched random started at 10:20:49 BST after an
-initial resource wait. The incomplete summary has BGR 118/209, official
-122/213, and matched random 14/16, so the scout is trending negative and is
-not a basis for another fixed route unless the completed rows recover
-substantially. Treat it as a severity-window diagnostic only, not paper
-evidence and not a replacement for a fixed preregistered router-style gate.
+at 2026-06-11 10:48:41 BST showed official `783104` and BGR `783105`
+completed with exit `0:0`, while matched random `783106` was still running
+after its delayed start. The incomplete summary has BGR 293/400 and official
+295/400, so BGR already trails official on the fixed 400-episode readout;
+matched random was 69/111. This scout is closed as non-promotable against
+official even before the matched-random row completes. Treat it as a
+severity-window diagnostic only, not paper evidence and not a replacement for a
+fixed preregistered router-style gate.
+
+New 2026-06-11 independent-benchmark MiniGrid scouts:
+
+- `scripts/queue_minigrid_lavacrossing_probe.sh` and
+  `scripts/sync_minigrid_lavacrossing_probe.sh` are reusable wrappers for the
+  existing official MiniGrid LavaCrossing/SimpleCrossing recovery harness.
+- Submitted 8-seed all-method CPU scouts on Athena at 2026-06-11 10:45 BST;
+  all completed by 10:49 BST:
+  SimpleCrossing S9N2 job `783136` writes to
+  `results/minigrid_simplecrossings9n2_scout_8seed_v1_783136/`,
+  SimpleCrossing S9N1 job `783137` writes to
+  `results/minigrid_simplecrossings9n1_scout_8seed_v1_783137/`, and
+  LavaCrossing S11N5 job `783138` writes to
+  `results/minigrid_lavacrossing_s11n5_scout_8seed_v1_783138/`.
+- All three fail the candidate checker. S9N2 BGR-Coverage has 0.7226 RAUC vs.
+  0.7042 uniform but only 2/8 paired wins and trails TD-loss. S9N1 is
+  dominated by uniform, failure-only, TD-loss, and BGR-uniform-radius. S11N5
+  has BGR-Coverage 0.5052 vs. 0.5590 uniform and BGR 0.5087 vs. 0.5590
+  uniform. Do not scale or promote these variants without a materially new
+  fixed premise.
 
 A new router-specific occlusion-only training premise was queued on
 2026-06-11 after the 0.80 held-out confirmation failed. This is different from
