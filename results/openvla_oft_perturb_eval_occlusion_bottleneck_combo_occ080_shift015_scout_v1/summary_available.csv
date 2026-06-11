@@ -1,2 +1,2 @@
 method,perturbation,episodes,successes,success_rate
-official,occlusion_shift,32,17,0.5312
+official,occlusion_shift,40,18,0.4500
