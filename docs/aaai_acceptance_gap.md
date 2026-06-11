@@ -260,7 +260,7 @@ with
 `PERTURBATIONS='occlusion_shift={"fraction":0.80,"dx_fraction":0.15,"dy_fraction":0.0}'`,
 `EVAL_TASKS=10`, `EVAL_TRIALS=10`, `EVAL_SEED=237`, and `SAVE_ROLLOUTS=0`.
 Athena jobs are official `783312`, BGR `783314`, and matched random `783315`;
-latest guarded advance at 2026-06-11 12:45:01 BST ran
+latest guarded advance at 2026-06-11 12:46:53 BST ran
 `scripts/advance_openvla_oft_occlusion_shift_combo_scout.sh --submit` but did
 not submit a full gate because the scout remains `[INCOMPLETE]`. Official is
 pending on `Resources`, while BGR and matched random are pending on
