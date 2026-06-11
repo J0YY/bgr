@@ -176,6 +176,17 @@ Internal pre-existing-dataset route scout:
   target-1.5 seeds, BGR is 0.7938 vs. uniform 0.7678 (+0.0260) and fixed
   0.7748 (+0.0190), below the +0.03 fixed follow-up standard. Treat this as a
   mixed-type OpenML near miss/fragility diagnostic, not manuscript evidence.
+  A narrower fixed third-block mixed-feature diagnostic was preregistered on
+  2026-06-11 for adult, credit-approval, and credit-g at target radius 1.5,
+  seeds 60--89, using the same mixed preprocessing and version-1 OpenML data.
+  It is not a standard-environment or robotics result. Launch command:
+  `DATASETS=adult,credit-approval,credit-g PREPROCESSING=mixed TARGETS=1.5 SEED_START=60 SEEDS=30 OUT_PREFIX=openml_mixed_positive_target15_thirdsplit_30seed_v1 scripts/queue_openml_mixed_binary_suite.sh`.
+  Submitted as Athena job `782625`, writing to
+  `/work/joy/bgr/runs/openml_mixed_positive_target15_thirdsplit_30seed_v1_782625`
+  and logging to `/work/joy/bgr/logs/bgr-openml-mixed-binary-782625.out`.
+  Treat rows as useful only if the new block clears +0.03 RAUC over both
+  uniform and fixed-radius replay and the pooled three-block readout remains
+  positive; otherwise record it as another mixed-type fragility diagnostic.
 - Completed all-binary numeric OpenML target-1.5 sweep, opened and completed
   2026-06-10: this is a fixed broad CPU check over the 32 numeric binary OpenML datasets currently
   registered in `tools/openml_margin_scout.py`, combining the default,

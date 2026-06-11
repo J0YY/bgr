@@ -90,10 +90,11 @@ the official fallback branch and must not be silently mixed into the existing
 non-router gate. Poll/sync with:
 `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_heldout_offset40_trials10_v1 JOB_IDS=782609,782610,782611 DETAIL_JOB_IDS=782609,782610,782611 ROUTE_LABEL='Hard-occlusion 0.80 transfer held-out offset40 trials10 confirmation' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
 The alpha-0 official-head/full-LoRA no-video occlusion-only scout is a separate
-fallback diagnostic and is not trending positive: latest partial is BGR
-105/184, official 108/187, and matched random 116/193 on hard occlusion 0.80.
-Do not formalize that alpha-0 fallback unless the complete row reverses and
-clears the same held-out occlusion margin.
+fallback diagnostic. Latest 2026-06-11 04:22 BST partial is BGR 216/312,
+official 209/308, and matched random 213/312 on hard occlusion 0.80. This is
+incomplete and the margin is far below the router-style promotion requirement,
+so it is not paper evidence. Do not formalize that alpha-0 fallback unless the
+complete row clears the same held-out occlusion margin.
 A fixed head-interpolation follow-up was queued on 2026-06-10 to test whether
 the near-miss 0.80 transfer route can preserve the occlusion gain while
 recovering identity success. It copies the completed BGR and matched-random
@@ -559,17 +560,15 @@ Initial poll showed `782561` pending on resources and the remaining jobs
 pending on priority. Promote nothing unless BGR-Coverage beats uniform, fixed,
 failure-only, TD-loss, and BGR-uniform-radius on final RAUC with paired
 support and no contradictory median-r80 result.
-Latest sync at 2026-06-11 04:07 BST leaves the target-0.70 route incomplete
-because failure-only `782563`, BGR-uniform-radius `782565`, BGR-Coverage
-`782566`, and BGR `782567` were still running or missing final summaries. The
-partial trend is already weak for the intended treatment: uniform completed at
-0.7006 mean RAUC and fixed at 0.6730; TD-loss completed at 0.7056. From log
-tails, BGR-Coverage had 28/30 seeds with mean RAUC 0.6875 versus paired
-uniform delta -0.0193 (W/L/T=10/18/0), while default BGR had 29/30 seeds with
-mean RAUC 0.6903 versus paired uniform delta -0.0081 (W/L/T=11/18/0). This is
-not a valid route closure until the merged `summary.csv` and
-`promotion_check.txt` exist, but it is not trending toward the clean
-independent benchmark win.
+Latest sync at 2026-06-11 04:18 BST leaves the target-0.70 route formally
+incomplete because failure-only `782563` is still running and the promotion
+check is deferred. The merged partial already closes the intended premise:
+uniform is 0.7006 mean RAUC, TD-loss is 0.7056, fixed is 0.6730,
+BGR-uniform-radius is 0.6777, BGR-Coverage is 0.6886, and default BGR is
+0.6913. BGR-family methods trail uniform and TD-loss, so this route cannot
+become a clean independent benchmark win even if the remaining failure-only
+row completes unusually weakly. Wait for job `782563` only to write the final
+closure/promotion-check artifact; do not promote or rerun this premise.
 
 Completed independent-benchmark route, opened and evaluated 2026-06-07:
 official bsuite `deep_sea`. This route is materially different from the retired local
@@ -1734,6 +1733,21 @@ risk.
   over all 120 adult target-1.5 seeds, BGR reaches 0.7938 vs. uniform 0.7678
   (+0.0260) and fixed 0.7748 (+0.0190), below the +0.03 fixed follow-up
   standard.
+  A narrower mixed-feature third-block confirmation was preregistered on
+  2026-06-11 for the remaining stable positive-looking mixed rows rather than
+  as a broad route claim: adult, credit-approval, and credit-g at fixed target
+  radius 1.5, held-out seeds 60--89, same mixed preprocessing and OpenML
+  version-1 datasets. It is not standard-environment or robotics evidence and
+  should be used only if it improves the pre-existing supervised margin-replay
+  case without contradicting the earlier mixed-suite fragility. Fixed launch:
+  `DATASETS=adult,credit-approval,credit-g PREPROCESSING=mixed TARGETS=1.5 SEED_START=60 SEEDS=30 OUT_PREFIX=openml_mixed_positive_target15_thirdsplit_30seed_v1 scripts/queue_openml_mixed_binary_suite.sh`.
+  Submitted on Athena as job `782625`, writing to
+  `/work/joy/bgr/runs/openml_mixed_positive_target15_thirdsplit_30seed_v1_782625`
+  and logging to `/work/joy/bgr/logs/bgr-openml-mixed-binary-782625.out`.
+  Promotion bar for this narrow diagnostic: each reported dataset must beat
+  both uniform and fixed-radius replay by at least +0.03 RAUC in the new block
+  and remain positive when pooled with the original and held-out 60 seeds;
+  otherwise treat it as another mixed-type fragility caveat.
 - FetchSlide-v4 was the next Gymnasium-Robotics object calibration with the
   same exact reset-state and object-goal perturbation interface. It was
   pre-method calibration, not method evidence. The fixed command is:
