@@ -356,18 +356,18 @@ partial looked weak: an occlusion-fraction 0.75 scout of the original
 occlusion-bottleneck transfer checkpoints, with no rollout videos and a fresh
 artifact `openvla_oft_perturb_eval_occlusion_bottleneck_transfer_occ075_scout_v1`.
 Submitted jobs are official/BGR/matched-random `783104`/`783105`/`783106`.
-Latest poll/sync at 2026-06-11 11:11:52 BST showed official `783104` and BGR
+Latest poll/sync at 2026-06-11 11:42:26 BST showed official `783104` and BGR
 `783105` completed with exit `0:0`, while matched random `783106` was still
-running after its delayed start. The incomplete summary has BGR 293/400 and
-official 295/400, so BGR already trails official on the fixed 400-episode
-readout; matched random was 119/203. This scout is now closed as
-non-promotable against official even before the matched-random row completes,
-and it is not a basis for another fixed route. This is a
-severity-window scout only, not a paper claim and not a replacement for the
-fixed gate. Use it only to decide whether a future preregistered router-style
-gate is worth running; promotion would still require BGR to beat both official
-and matched random by at least +10/400 and +0.02 on a fixed 400-episode
-readout.
+pending after a delayed partial log. The incomplete summary has BGR 293/400,
+official 295/400, and matched random 279/378, so BGR already trails official
+on the fixed 400-episode readout and trails matched-random by success rate.
+Because the scout was already non-promotable, job `783106` was cancelled to
+avoid spending more GPU time on a dead comparator. This scout is not a basis
+for another fixed route. It is a severity-window scout only, not a paper claim
+and not a replacement for the fixed gate. Use it only to decide whether a
+future preregistered router-style gate is worth running; promotion would still
+require BGR to beat both official and matched random by at least +10/400 and
++0.02 on a fixed 400-episode readout.
 New independent-benchmark CPU scouts queued at 2026-06-11 10:45 BST and
 completed negative by 10:49 BST. They tested
 materially different official MiniGrid package-state variants rather than

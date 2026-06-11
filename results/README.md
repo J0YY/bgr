@@ -7585,14 +7585,15 @@ to
 and uses `PERTURBATIONS='occlusion={"fraction":0.75}'`, `EVAL_TASKS=10`,
 `EVAL_TRIALS=40`, `EVAL_SEED=37`, and `SAVE_ROLLOUTS=0`. Submitted Athena jobs
 are official/BGR/matched-random `783104`/`783105`/`783106`. Latest poll/sync
-at 2026-06-11 11:11:52 BST showed official `783104` and BGR `783105`
-completed with exit `0:0`, while matched random `783106` was still running
-after its delayed start. The incomplete summary has BGR 293/400 and official
-295/400, so BGR already trails official on the fixed 400-episode readout;
-matched random was 119/203. This scout is closed as non-promotable against
-official even before the matched-random row completes. Treat it as a
-severity-window diagnostic only, not paper evidence and not a replacement for a
-fixed preregistered router-style gate.
+at 2026-06-11 11:42:26 BST showed official `783104` and BGR `783105`
+completed with exit `0:0`, while matched random `783106` was still pending
+after a delayed partial log. The incomplete summary has BGR 293/400, official
+295/400, and matched random 279/378, so BGR already trails official on the
+fixed 400-episode readout and trails matched-random by success rate. Because
+the scout was already non-promotable, `783106` was cancelled to avoid spending
+more GPU time on a dead comparator. Treat it as a severity-window diagnostic
+only, not paper evidence and not a replacement for a fixed preregistered
+router-style gate.
 
 New 2026-06-11 independent-benchmark MiniGrid scouts:
 
