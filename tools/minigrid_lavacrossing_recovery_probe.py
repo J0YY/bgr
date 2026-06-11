@@ -549,6 +549,10 @@ def build_parser() -> argparse.ArgumentParser:
             "MiniGrid-LavaCrossingS9N2-v0",
             "MiniGrid-LavaCrossingS9N3-v0",
             "MiniGrid-LavaCrossingS11N5-v0",
+            "MiniGrid-SimpleCrossingS9N1-v0",
+            "MiniGrid-SimpleCrossingS9N2-v0",
+            "MiniGrid-SimpleCrossingS9N3-v0",
+            "MiniGrid-SimpleCrossingS11N5-v0",
         ],
     )
     parser.add_argument("--seeds", default="0,1,2,3")

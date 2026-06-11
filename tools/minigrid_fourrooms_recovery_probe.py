@@ -60,6 +60,7 @@ class OfficialMiniGridFourRoomsProbe:
         self,
         *,
         seed: int,
+        env_id: str,
         replay_state_count: int,
         max_radius: int,
         learning_rate: float,
@@ -75,7 +76,7 @@ class OfficialMiniGridFourRoomsProbe:
         import gymnasium as gym
 
         self.rng = np.random.default_rng(seed + 337_000)
-        self.env_id = "MiniGrid-FourRooms-v0"
+        self.env_id = str(env_id)
         self.env = gym.make(self.env_id)
         self.env.reset(seed=seed)
         self.unwrapped = self.env.unwrapped
@@ -293,6 +294,7 @@ def run_method(args: argparse.Namespace, method: str, seed: int) -> MiniGridProb
     rng = np.random.default_rng(seed + 339_000)
     bench = OfficialMiniGridFourRoomsProbe(
         seed=seed,
+        env_id=args.env_id,
         replay_state_count=args.replay_states,
         max_radius=args.max_radius,
         learning_rate=args.learning_rate,
@@ -481,6 +483,7 @@ def parse_csv_strings(value: str) -> list[str]:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run an internal official MiniGrid-FourRooms recovery replay diagnostic.")
     parser.add_argument("--out", default="runs/minigrid_fourrooms_recovery_probe")
+    parser.add_argument("--env-id", default="MiniGrid-FourRooms-v0")
     parser.add_argument("--seeds", default="0,1,2,3")
     parser.add_argument("--methods", default="uniform,fixed,failure_only,td_loss,bgr_uniform_radius,bgr_coverage,bgr")
     parser.add_argument("--iterations", type=int, default=80)

@@ -34,6 +34,21 @@ Asterix route cleared calibration, but the fixed all-method screen is negative
 because failure-only replay is the strongest baseline. The earlier MinAtar
 Breakout calibration also cleared pre-method checks, but its fixed all-method
 screen is tied/saturated negative.
+Two new 2026-06-11 CPU scouts also fail before scale-up. A deterministic-action
+bsuite DeepSea scout exposes `--no-randomize-actions` in
+`tools/bsuite_deepsea_recovery_probe.py`; its best row
+`results/bsuite_deepsea_deterministic_t085_mix080_scout_4seed_v1/summary.csv`
+has `bgr_coverage` 0.1594 RAUC versus uniform 0.1031 and positive mean gaps
+against fixed, failure-only, TD-loss, and the uniform-radius ablation, but the
+candidate checker rejects it because median `r80` is lower than uniform. The
+bsuite package also warns deterministic actions are debug mode. A MiniGrid
+SimpleCrossing S9N3 scout, enabled by expanding
+`tools/minigrid_lavacrossing_recovery_probe.py`, has an 8-seed mean gap for
+`bgr_coverage` (0.5714 vs. 0.4746 uniform), but paired wins are weak: 3/8 vs.
+uniform, 2/8 vs. failure-only, 1/8 vs. TD-loss, and 3/8 vs.
+BGR-uniform-radius. Harder-budget SimpleCrossing variants are dominated by
+uniform/failure-only/uniform-radius. Do not scale either route without a
+materially new fixed premise.
 The 2026-06-10 Freeway route also does not change this: it cleared pre-method
 calibration under MinAtar package dynamics, but the fixed all-method screen is
 a complete tie across BGR, BGR-Coverage, BGR-uniform-radius, uniform, fixed,
@@ -160,16 +175,18 @@ route, queued 2026-06-11 04:55 BST: prep `782671`, BGR train/merge/clean-eval
 eval. It is still only router-premise evidence unless BGR beats both official
 and matched random by at least +10/400 and +0.02 on hard occlusion. Poll/sync:
 `PREP_TAG=p512unique_occonly_hardocc080_router_randfix_prereg ADAPT_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 PERTURB_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1 JOB_IDS=782671,782672,782673,782674,782675,782676,782677,782679,782680,782681 DETAIL_JOB_IDS=782671,782672,782673,782675,782676,782679,782680,782681 ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT randfix premise' GATE_PERTURBATIONS=occlusion scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check`.
-Latest poll at 2026-06-11 05:36 BST showed prep, train, and merge completed
-with exit `0:0`; BGR clean eval `782674`, matched-random clean eval `782677`,
-and official/BGR/random hard-occlusion evals `782679`--`782681` were still
-running. No full perturb or adapt `summary.csv` existed yet. The sync helper
-now writes a local partial nested-log summary at
+Latest poll at 2026-06-11 05:58 BST showed prep, BGR/random train/merge,
+BGR/random clean evals, and official occlusion eval completed with exit `0:0`.
+The synced clean/adapt summary has BGR 386/400 and matched random 388/400.
+BGR and matched-random hard-occlusion evals `782680`/`782681` were still
+running, so no full perturb `summary.csv` existed yet. The sync helper writes
+a local partial nested-log summary at
 `results/openvla_oft_perturb_eval_occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary_available.csv`.
-The current incomplete rows are BGR 73/122, official 158/251, and matched
-random 80/142, which remain non-gateable because task coverage is not aligned
-and identity/clean summaries are missing. Wait for complete summaries before
-making any claim.
+The current incomplete perturb rows are BGR 123/209, official 298/400, and
+matched random 183/279. This is non-gateable because BGR/random task coverage
+is still incomplete, but it is strongly unfavorable versus official and random
+on current success rate. Wait for complete summaries before making any paper
+claim or route closure.
 A fixed head-interpolation follow-up was queued on 2026-06-10 to test whether
 the near-miss 0.80 transfer route can preserve the occlusion gain while
 recovering identity success. It copies the completed BGR and matched-random

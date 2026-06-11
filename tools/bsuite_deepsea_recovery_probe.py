@@ -83,7 +83,7 @@ class DeepSeaRecoveryProbe:
             size=args.size,
             deterministic=True,
             unscaled_move_cost=args.unscaled_move_cost,
-            randomize_actions=True,
+            randomize_actions=args.randomize_actions,
             seed=seed + 11_000,
             mapping_seed=seed + 17_000,
         )
@@ -370,6 +370,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--epsilon", type=float, default=0.12)
     parser.add_argument("--q-init-noise", type=float, default=0.01)
     parser.add_argument("--unscaled-move-cost", type=float, default=0.01)
+    parser.add_argument("--randomize-actions", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--success-return-threshold", type=float, default=0.5)
     parser.add_argument("--alpha", type=float, default=0.8)
     parser.add_argument("--target-radius", type=float, default=0.45)

@@ -42,7 +42,19 @@ Gymnasium Taxi-v3 package-state recovery screen is also completed negative:
 the default 4-seed protocol is saturated and trails failure-only/TD-loss, while
 the preregistered hard-budget follow-up calibrated from uniform-only runs gives
 BGR-Coverage 0.5696 and BGR 0.5516 RAUC versus uniform 0.7596 and failure-only
-0.9692. Do not scale or promote Taxi without a materially new premise. A broader
+0.9692. Do not scale or promote Taxi without a materially new premise. A
+2026-06-11 deterministic-action bsuite DeepSea scout is also rejected: the
+best `bgr_coverage` row at target 0.85/mix 0.80 gives 0.1594 RAUC versus
+uniform 0.1031 and beats fixed, failure-only, TD-loss, and uniform-radius in
+mean, but it has lower median `r80` than uniform. bsuite also warns this
+deterministic action setting is debug mode, so do not scale it. A new MiniGrid
+SimpleCrossing S9N3 scout is rejected before scale-up: the 8-seed default row
+has `bgr_coverage` 0.5714 RAUC versus uniform 0.4746, failure-only 0.5223,
+TD-loss 0.5547, and uniform-radius 0.5422, but paired wins are only 3/8 versus
+uniform, 2/8 versus failure-only, 1/8 versus TD-loss, and 3/8 versus the
+radius ablation. Harder-budget SimpleCrossing variants are negative or
+dominated by uniform/failure-only/uniform-radius. Do not queue a SimpleCrossing
+scale-up without a materially new fixed premise. A broader
 fixed OpenML numeric-suite
 target-2.0 run and held-out seeds 30--59 replication completed on `athena` as
 jobs `774312` and `774346`: the 10-dataset suite is mixed and not a macro win
@@ -251,16 +263,18 @@ official/BGR/random hard-occlusion evals `782679`/`782680`/`782681`, with
 BGR beats both official and matched random by at least +10/400 and +0.02 on
 hard occlusion. Poll/sync with:
 `PREP_TAG=p512unique_occonly_hardocc080_router_randfix_prereg ADAPT_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_v1 PERTURB_TAG=occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1 JOB_IDS=782671,782672,782673,782674,782675,782676,782677,782679,782680,782681 DETAIL_JOB_IDS=782671,782672,782673,782675,782676,782679,782680,782681 ROUTE_LABEL='Hard-occlusion 0.80 occlusion-only router-trained OpenVLA-OFT randfix premise' GATE_PERTURBATIONS=occlusion scripts/sync_openvla_oft_occlusion_bottleneck_results.sh --poll --sync --no-check`.
-Latest poll at 2026-06-11 05:36 BST showed prep, train, and merge completed
-with exit `0:0`; BGR clean eval `782674`, matched-random clean eval `782677`,
-and official/BGR/random hard-occlusion evals `782679`--`782681` were still
-running. No full perturb or adapt `summary.csv` existed yet. The sync helper
-now writes a local partial nested-log summary at
+Latest poll at 2026-06-11 05:58 BST showed prep, BGR/random train/merge,
+BGR/random clean evals, and official occlusion eval completed with exit `0:0`.
+The synced clean/adapt summary has BGR 386/400 and matched random 388/400.
+BGR and matched-random hard-occlusion evals `782680`/`782681` were still
+running, so no full perturb `summary.csv` existed yet. The sync helper writes
+a local partial nested-log summary at
 `results/openvla_oft_perturb_eval_occonly_p512unique_hardocc080_router_randfix_step50300_lr5em7_identitylora_imageaug_officialtrainstats_hardocc080_fullgoal10x40_v1/summary_available.csv`.
-The current incomplete rows are BGR 73/122, official 158/251, and matched
-random 80/142, which remain non-gateable because task coverage is not aligned
-and identity/clean summaries are missing. Wait for complete summaries before
-making any claim.
+The current incomplete perturb rows are BGR 123/209, official 298/400, and
+matched random 183/279. This is non-gateable because BGR/random task coverage
+is still incomplete, but it is strongly unfavorable versus official and random
+on current success rate. Wait for complete summaries before making any paper
+claim or route closure.
 The
 latest 0.80 identity-anchored base route is closed negative with complete
 rows: BGR identity/occlusion are 389/400 and 303/400, official is 393/400 and

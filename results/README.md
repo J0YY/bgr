@@ -347,6 +347,15 @@ Completed external-package scope diagnostic:
 - `results/minigrid_fourrooms_recovery_probe_maxr10_4seed_v1/package_versions.json`:
   compact package-version record for the same scope diagnostic
   (`gymnasium==1.3.0`, `minigrid==3.1.0`).
+- `results/minigrid_simplecrossings9n3_recovery_scout_8seed_v1/summary.csv`:
+  MiniGrid SimpleCrossing S9N3 changed-premise scout, run with
+  `/tmp/bgr_minigrid_venv2` after extending
+  `tools/minigrid_lavacrossing_recovery_probe.py` to accept SimpleCrossing
+  env ids. This scout is rejected before scale-up: BGR-Coverage has a large
+  mean RAUC gap (0.5714 vs. 0.4746 uniform), but paired wins are only 3/8 vs.
+  uniform, 2/8 vs. failure-only, 1/8 vs. TD-loss, and 3/8 vs.
+  BGR-uniform-radius. Hard-budget SimpleCrossing S9N3 scouts are also
+  negative or dominated by uniform, failure-only, or BGR-uniform-radius.
 
 Completed external-package pre-promotion route:
 
@@ -363,6 +372,14 @@ Completed external-package pre-promotion route:
   scale or promote this route without a genuinely new preregistered premise.
 - `results/bsuite_deepsea_recovery_probe_4seed_v1/package_versions.json`:
   compact package-version record for the same screen.
+- `results/bsuite_deepsea_deterministic_t085_mix080_scout_4seed_v1/summary.csv`:
+  deterministic-action DeepSea changed-premise scout enabled by the new
+  `--no-randomize-actions` option in
+  `tools/bsuite_deepsea_recovery_probe.py`. This is rejected before scale-up:
+  BGR-Coverage reaches 0.1594 RAUC versus 0.1031 uniform and positive mean
+  gaps against fixed, failure-only, TD-loss, and BGR-uniform-radius, but
+  median `r80` is lower than uniform and bsuite warns deterministic actions
+  are debug mode.
 
 Completed external-package pre-promotion route:
 
