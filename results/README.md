@@ -1580,6 +1580,16 @@ final RAUC with at least 3/4 paired wins, beat fixed-radius, failure-only,
 TD-loss, and BGR-uniform-radius on mean final RAUC, and avoid saturated or
 contradictory median-r80. Passing this 4-seed scout is not paper evidence; it
 only permits a fixed 30-seed follow-up without protocol retuning.
+Preregistration was committed in `305e961`. The first launch attempt using a
+fresh `.venv-gymnasium-classic` failed before Slurm because Athena's system
+Python lacks `ensurepip`; the submitted job reuses
+`/work/joy/bgr/.venv-minigrid-dynamic`, which already has `gymnasium==1.3.0`
+and `numpy==2.2.6`. Submitted at 2026-06-11 13:30 BST as Slurm job `783971`,
+writing to `/work/joy/bgr/runs/acrobot_package_recovery_probe_4seed_v1_783971`
+and local sync path `results/acrobot_package_recovery_probe_4seed_v1_783971/`.
+Initial scheduler state was `PENDING (Resources)` with estimated start
+`2026-06-11T14:16:15` on `compute`. Poll/sync with
+`JOB_ID=783971 ARTIFACT_PREFIX=acrobot_package_recovery_probe_4seed_v1 scripts/sync_acrobot_package_probe.sh`.
 
 ## Internal Package-Free CartPole Diagnostic
 
