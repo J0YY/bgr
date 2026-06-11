@@ -1,4 +1,4 @@
 method,perturbation,episodes,successes,success_rate
-bgr,occlusion,69,50,0.7246
-official,occlusion,72,52,0.7222
-random,occlusion,73,54,0.7397
+bgr,occlusion,91,61,0.6703
+official,occlusion,96,66,0.6875
+random,occlusion,97,67,0.6907
