@@ -80,23 +80,20 @@ gate and identity is BGR 391/400 versus official 393/400, violating the
 identity side condition. The corrected router-specific hard-occlusion 0.80
 training route is also completed negative: BGR reaches 297/400 versus official
 298/400 and matched random 300/400, failing the occlusion criterion directly.
-A held-out occlusion-only confirmation of this same
-0.80 transfer checkpoint was queued on 2026-06-11 as a router-style diagnostic,
-not a paper claim. The first attempt, official/BGR/random
-`782604`/`782605`/`782606`, incorrectly used `EVAL_INIT_STATE_OFFSET=40` with
-`EVAL_TRIALS=80`; LIBERO-Goal has only 50 initial states per task, so official
-failed at index 50 and BGR/random were cancelled. The corrected held-out slice
-uses the remaining 10 initial states per task: official `782609`, BGR
-`782610`, and matched random `782611` evaluate hard occlusion 0.80 with
-`EVAL_INIT_STATE_OFFSET=40`, `EVAL_TRIALS=10`, `EVAL_SEED=137`, and
-`SAVE_ROLLOUTS=0`. Interpretable evidence would be the combined 500 unique
-occlusion episodes from the original 400 plus this held-out 100; it can only
-motivate a full router-style learned-policy claim if combined BGR beats both
-official and matched random by at least 0.02 absolute occlusion success rate.
-Clean identity would be handled by the official fallback branch and still
-needs preregistered full-gate wording before any `paper/main.tex` change.
-Poll/sync with:
-`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_heldout_offset40_trials10_v1 JOB_IDS=782609,782610,782611 DETAIL_JOB_IDS=782609,782610,782611 ROUTE_LABEL='Hard-occlusion 0.80 transfer held-out offset40 trials10 confirmation' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
+A held-out occlusion-only confirmation of this same 0.80 transfer checkpoint is
+also completed negative as a router-style diagnostic, not a paper claim. The
+first attempt, official/BGR/random `782604`/`782605`/`782606`, incorrectly used
+`EVAL_INIT_STATE_OFFSET=40` with `EVAL_TRIALS=80`; LIBERO-Goal has only 50
+initial states per task, so official failed at index 50 and BGR/random were
+cancelled. The corrected held-out slice used the remaining 10 initial states per
+task: official `782609`, BGR `782610`, and matched random `782611` evaluated
+hard occlusion 0.80 with `EVAL_INIT_STATE_OFFSET=40`, `EVAL_TRIALS=10`,
+`EVAL_SEED=137`, and `SAVE_ROLLOUTS=0`. The compact local summary at
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_heldout_offset40_trials10_v1/summary_available.csv`
+has BGR 69/100, official 71/100, and matched random 71/100. The combined
+original-plus-held-out readout is BGR 374/500 versus official/random 367/500,
+only a +7 episode margin and below the +0.02 router-style requirement. Do not
+formalize this fallback/router premise from the transfer checkpoint.
 At occlusion fraction 0.65, BGR reaches 300/400
 successes versus official 297/400 and matched random 296/400, only +3/+4
 episodes and +0.0075/+0.0100 success rate rather than the fixed +10/400 and
@@ -234,25 +231,16 @@ occlusion-only learned-policy scout was then submitted at 2026-06-11
 03:35 BST to test a genuinely different intervention premise: an
 official-identity fallback/router would use the official checkpoint for clean
 identity and only use the adapted branch on known hard-occlusion inputs. This
-scout therefore evaluates only hard-occlusion 0.80 for the same alpha-0
-official-head/full-LoRA no-video checkpoints; it is not paper evidence and not
-a full gate because the router has not been formalized. The scout can only
-justify a follow-up if BGR beats both official and matched random on occlusion
-by at least +10/400 episodes and +0.02 absolute success rate. Submitted jobs:
-official occlusion `782556`, BGR occlusion `782557`, and matched-random
-occlusion `782558`. Initial poll at 2026-06-11 03:35:39 BST showed all three
-running on A6000 nodes with no parseable logs yet. Latest local compact
-partial after the 2026-06-11 03:57:37 BST poll had BGR occlusion `73/126`,
-official `75/128`, and matched random `76/130`, so BGR is still trailing both
-comparators on the occlusion-only scout. This is still not a complete
-400-episode gate result, but the fallback/router premise is not trending
-positive.
-Poll/sync with:
-`ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_occscout_v1 JOB_IDS=782556,782557,782558 DETAIL_JOB_IDS=782556,782557,782558 ROUTE_LABEL='Hard-occlusion 0.80 alpha0 no-video occlusion-only fallback scout' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
-Do not incorporate this scout into `paper/main.tex`; if it fails the occlusion
-margin, close the fallback/router premise. If it clears the occlusion margin,
-preregister a full router-style learned-policy gate before making any paper
-claim. The first router-specific occlusion-only training attempt
+scout evaluated only hard-occlusion 0.80 for the same alpha-0 official-head/
+full-LoRA no-video checkpoints. It is completed non-promotable and not paper
+evidence because the router was not formalized and the occlusion margin is too
+small. Jobs official/BGR/matched-random `782556`/`782557`/`782558` all
+completed with exit `0:0`. The compact local summary at
+`results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_occscout_v1/summary_available.csv`
+has BGR 301/400, official 298/400, and matched random 298/400, only a +3
+episode margin over both comparators and far below the required +10/400 and
++0.02 router-style threshold. Do not formalize this alpha-0 fallback/router
+premise. The first router-specific occlusion-only training attempt
 `p1024unique_occonly_hardocc080_router_prereg` also failed before adaptation:
 prep `782649` rendered zero matched-random occlusion examples before the
 post-render family filter, exited `1:0`, and left dependent jobs

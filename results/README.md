@@ -78,6 +78,18 @@ OpenVLA/LIBERO rows are recovery-curve, selection, and data-plumbing audits; the
 paper does not claim a stable OpenVLA fine-tuning gain over the official
 checkpoint.
 
+Recent OpenVLA/LIBERO negative router-style diagnostics:
+
+- `results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_step50400_lr2em7_heldout_offset40_trials10_v1/summary_available.csv`:
+  held-out 100-episode hard-occlusion 0.80 slice for the transfer checkpoint.
+  BGR is 69/100 versus official 71/100 and matched random 71/100; pooled with
+  the original 400-episode transfer readout, BGR is 374/500 versus 367/500 for
+  both comparators, below the +0.02 router-style margin.
+- `results/openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_occscout_v1/summary_available.csv`:
+  alpha-0 official-head/full-LoRA no-video occlusion-only scout. BGR is 301/400
+  versus official 298/400 and matched random 298/400, only +3 episodes and below
+  the +10/400 and +0.02 router-style follow-up threshold.
+
 Internal pre-existing-dataset route scout:
 
 - `results/openml_margin_scout_v0/summary.csv`: fixed 4-seed OpenML margin
