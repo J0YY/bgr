@@ -199,8 +199,8 @@ by at least +10/400 episodes and +0.02 absolute success rate. Submitted jobs:
 official occlusion `782556`, BGR occlusion `782557`, and matched-random
 occlusion `782558`. Initial poll at 2026-06-11 03:35:39 BST showed all three
 running on A6000 nodes with no parseable logs yet. Latest local compact
-partial after the 2026-06-11 03:43:39 BST poll had BGR occlusion `40/50`,
-official `41/53`, and matched random `45/55`, so the early signal is not
+partial after the 2026-06-11 03:46:46 BST poll had BGR occlusion `50/69`,
+official `52/72`, and matched random `54/73`, so the early signal is not
 positive against matched random but is still too small to close.
 Poll/sync with:
 `ARTIFACT=openvla_oft_perturb_eval_occlusion_bottleneck_hardocc080_transfer_headinterp000_lorafull_novideo_occscout_v1 JOB_IDS=782556,782557,782558 DETAIL_JOB_IDS=782556,782557,782558 ROUTE_LABEL='Hard-occlusion 0.80 alpha0 no-video occlusion-only fallback scout' scripts/sync_openvla_oft_hard_occlusion_transfer_results.sh --poll --sync --no-check`.
